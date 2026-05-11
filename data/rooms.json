@@ -1,0 +1,39 @@
+{
+	"hallway_1": {
+		"background":
+		"res://backgrounds/hallway1.png",
+		"forward": "hallway_2",
+		"door": "classroom_1",
+		"door_open": true
+	},
+	"hallway_2": {
+		"background":
+		"res://backgrounds/hallway2.png",
+		"forward": "hallway_3",
+		"back": "hallway_1",
+		"door": "classroom_2",
+		"door_open": false
+	},
+	"hallway_3": {
+		"background":
+		"res://backgrounds/hallway3.png",
+		"back": "hallway_2",
+		"door": "classroom_3",
+		"door_open": true
+	},
+	"classroom_1": {
+		"background":
+		"res://backgrounds/classroom1.png",
+		"back": "hallway_1"
+	},
+	"classroom_2": {
+		"background":
+		"res://backgrounds/classroom2.png",
+		"back": "hallway_2"
+	},
+	"classroom_3": {
+		"background":
+		"res://backgrounds/classroom3.png",
+		"back": "hallway_3"
+	}
+}
