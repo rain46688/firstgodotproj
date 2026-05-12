@@ -1,12 +1,13 @@
 [gd_scene format=3 uid="uid://db3x6hhv5s5yi"]
 
 [ext_resource type="Script" uid="uid://c4xwmh67fo8qc" path="res://scripts/main.gd" id="1_r0du0"]
-[ext_resource type="Texture2D" uid="uid://begjpk8f7p4li" path="res://backgrounds/hallway1.png" id="2_fos0i"]
+[ext_resource type="Texture2D" uid="uid://cqw1fjovgyeo7" path="res://backgrounds/classroom1.png" id="2_nxtc6"]
 [ext_resource type="AudioStream" uid="uid://c17uoa5rh4onj" path="res://sounds/footsteps.mp3" id="4_3dxm6"]
 [ext_resource type="Texture2D" uid="uid://r7yqri7sh84c" path="res://ui/arrow_forward.png" id="5_fos0i"]
-[ext_resource type="AudioStream" uid="uid://bxh3jmw5gqxg5" path="res://sounds/bgm1.mp3" id="5_lgr22"]
+[ext_resource type="AudioStream" uid="uid://c4tigttavfb3d" path="res://sounds/bgm2.mp3" id="5_nxtc6"]
 [ext_resource type="Texture2D" uid="uid://uhf2jgyr2c6d" path="res://ui/dialogue_10x300.png" id="6_3dxm6"]
 [ext_resource type="AudioStream" uid="uid://bd1nk2i0616gs" path="res://sounds/lockeddoor.mp3" id="7_lgr22"]
+[ext_resource type="AudioStream" uid="uid://b2p5y3ta6bfww" path="res://sounds/clcik.mp3" id="8_jlsqs"]
 
 [node name="Main" type="Control" unique_id=376732367]
 layout_mode = 3
@@ -24,7 +25,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_fos0i")
+texture = ExtResource("2_nxtc6")
 expand_mode = 1
 stretch_mode = 6
 
@@ -64,8 +65,8 @@ stream = ExtResource("4_3dxm6")
 volume_db = 20.0
 
 [node name="SchoolBackground" type="AudioStreamPlayer" parent="." unique_id=450576258]
-stream = ExtResource("5_lgr22")
-volume_db = -10.0
+stream = ExtResource("5_nxtc6")
+autoplay = true
 parameters/looping = true
 
 [node name="DialogueBox" type="TextureRect" parent="." unique_id=403670334]
@@ -79,10 +80,33 @@ texture = ExtResource("6_3dxm6")
 
 [node name="DialogueText" type="Label" parent="DialogueBox" unique_id=1625493669]
 layout_mode = 0
-offset_left = 60.0
+offset_left = 50.0
 offset_top = 40.0
-offset_right = 1560.0
-offset_bottom = 240.0
+offset_right = 1650.0
+offset_bottom = 160.0
+theme_override_font_sizes/font_size = 30
+
+[node name="ChoiceBox" type="VBoxContainer" parent="DialogueBox" unique_id=1066981331]
+layout_mode = 0
+offset_left = 50.0
+offset_top = 160.0
+offset_right = 1650.0
+offset_bottom = 280.0
+
+[node name="Choice1" type="Label" parent="DialogueBox/ChoiceBox" unique_id=618178001]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+
+[node name="Choice2" type="Label" parent="DialogueBox/ChoiceBox" unique_id=1239197474]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+
+[node name="Choice3" type="Label" parent="DialogueBox/ChoiceBox" unique_id=1641613655]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+
+[node name="Choice4" type="Label" parent="DialogueBox/ChoiceBox" unique_id=25649815]
+layout_mode = 2
 theme_override_font_sizes/font_size = 20
 
 [node name="DoorButton" type="Button" parent="." unique_id=198313971]
@@ -98,4 +122,35 @@ focus_behavior_recursive = 1
 stream = ExtResource("7_lgr22")
 volume_db = 10.0
 
+[node name="DeskButton" type="Button" parent="." unique_id=1965225340]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 1.0
+offset_top = 634.0
+offset_right = 1237.0
+offset_bottom = 897.0
+
+[node name="WindowButton" type="Button" parent="." unique_id=735586717]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = -3.0
+offset_top = 203.0
+offset_right = 200.0
+offset_bottom = 576.0
+
+[node name="ChoiceSound" type="AudioStreamPlayer" parent="." unique_id=699496763]
+stream = ExtResource("8_jlsqs")
+volume_db = -10.0
+
+[node name="LockerButton" type="Button" parent="." unique_id=153183788]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 258.0
+offset_top = 550.0
+offset_right = 998.0
+offset_bottom = 614.0
+
 [connection signal="pressed" from="DoorButton" to="." method="_on_door_button_pressed"]
+[connection signal="pressed" from="DeskButton" to="." method="_on_desk_button_pressed"]
+[connection signal="pressed" from="WindowButton" to="." method="_on_window_button_pressed"]
+[connection signal="pressed" from="LockerButton" to="." method="_on_locker_button_pressed"]
