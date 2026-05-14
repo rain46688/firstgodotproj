@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://uhf2jgyr2c6d"
-path="res://.godot/imported/dialogue_10x300.png-db88f8999ce73a63f3aab95c20501de5.ctex"
+uid="uid://0sqsgro5tr8p"
+path="res://.godot/imported/bag200x300.png-a2a3842c5a11b859abb7ba9113359981.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ui/dialogue_10x300.png"
-dest_files=["res://.godot/imported/dialogue_10x300.png-db88f8999ce73a63f3aab95c20501de5.ctex"]
+source_file="res://imgs/ui/bag200x300.png"
+dest_files=["res://.godot/imported/bag200x300.png-a2a3842c5a11b859abb7ba9113359981.ctex"]
 
 [params]
 

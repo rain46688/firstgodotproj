@@ -1,25 +1,28 @@
 {
 	"hallway_1": {
-		"background": "res://backgrounds/hallway1.png",
+		"background": "res://imgs/backgrounds/hallway_open.png",
 		"forward": "hallway_2",
 		"door": "classroom_1",
 		"door_open": true
 	},
 	"hallway_2": {
-		"background": "res://backgrounds/hallway2.png",
-		"forward": "hallway_3",
-		"back": "hallway_1",
-		"door": "classroom_2",
-		"door_open": false
+	  "background": "res://imgs/backgrounds/hallway_closed.png",
+	  "opened_background": "res://imgs/backgrounds/hallway_open.png",
+	  "forward": "hallway_3",
+	  "back": "hallway_1",
+	  "door": "classroom_2",
+	  "door_open": false,
+	  "required_item": "classroom_key",
+	  "open_flag": "opened_classroom_2"
 	},
 	"hallway_3": {
-		"background": "res://backgrounds/hallway3.png",
+		"background": "res://imgs/backgrounds/hallway_open.png",
 		"back": "hallway_2",
 		"door": "classroom_3",
 		"door_open": true
 	},
 	"classroom_1": {
-		"background": "res://backgrounds/classroom1.png",
+		"background": "res://imgs/backgrounds/classroom.png",
 		"back": "hallway_1",
 		"interactions": {
 			"desk": {
@@ -43,27 +46,29 @@
 				"choices": [
 					{
 						"text": "첫 번째 사물함을 연다",
-						"result_text": "텅 비어 있다."
+						"result_text": "비어 있다."
 					},
 					{
-						"text": "여섯 번째 사물함을 연다",
-						"result_text": "교실키를 얻었다.",
-						"item": "classroom_key"
+					  "text": "여섯 번째 사물함을 연다",
+					  "result_text": "교실키를 얻었다.",
+					  "item": "classroom_key",
+					  "flag": "got_classroom_key",
+					  "already_text": "이미 비어 있다."
 					},
 					{
 						"text": "열 번째 사물함을 연다",
-						"result_text": "안쪽에서 차가운 먼지 냄새가 난다."
+						"result_text": "비어 있다."
 					}
 				]
 			}
 		}
 	},
 	"classroom_2": {
-		"background": "res://backgrounds/classroom2.png",
+		"background": "res://imgs/backgrounds/classroom.png",
 		"back": "hallway_2"
 	},
 	"classroom_3": {
-		"background": "res://backgrounds/classroom3.png",
+		"background": "res://imgs/backgrounds/classroom.png",
 		"back": "hallway_3"
 	}
 }

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bt55beltuwg65"
-path="res://.godot/imported/hallway3.png-9ba1e1d9551c70f92f5ee261ea5e0292.ctex"
+uid="uid://b4x7lj7rxnyqb"
+path="res://.godot/imported/인벤토리1920x1080.png-467fc9f1ae97370183a4a449f7ed432d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://backgrounds/hallway3.png"
-dest_files=["res://.godot/imported/hallway3.png-9ba1e1d9551c70f92f5ee261ea5e0292.ctex"]
+source_file="res://imgs/ui/인벤토리1920x1080.png"
+dest_files=["res://.godot/imported/인벤토리1920x1080.png-467fc9f1ae97370183a4a449f7ed432d.ctex"]
 
 [params]
 

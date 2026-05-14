@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://r7yqri7sh84c"
-path="res://.godot/imported/arrow_forward.png-9ef3d10d87a24585c21fd37a453eaf02.ctex"
+uid="uid://blvshhg7mxqp6"
+path="res://.godot/imported/classroomKey200x300.png-85c35a89c4f74bcbbacb1d8342a96237.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ui/arrow_forward.png"
-dest_files=["res://.godot/imported/arrow_forward.png-9ef3d10d87a24585c21fd37a453eaf02.ctex"]
+source_file="res://imgs/items/classroomKey200x300.png"
+dest_files=["res://.godot/imported/classroomKey200x300.png-85c35a89c4f74bcbbacb1d8342a96237.ctex"]
 
 [params]
 

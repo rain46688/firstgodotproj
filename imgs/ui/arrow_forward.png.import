@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dbffrqe34sqh"
-path="res://.godot/imported/hallway2.png-e385bab5e8b0e97559aeafa74b4c9c11.ctex"
+uid="uid://r7yqri7sh84c"
+path="res://.godot/imported/arrow_forward.png-900f0366d51be2cf2e9ef3e52192d3ce.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://backgrounds/hallway2.png"
-dest_files=["res://.godot/imported/hallway2.png-e385bab5e8b0e97559aeafa74b4c9c11.ctex"]
+source_file="res://imgs/ui/arrow_forward.png"
+dest_files=["res://.godot/imported/arrow_forward.png-900f0366d51be2cf2e9ef3e52192d3ce.ctex"]
 
 [params]
 
