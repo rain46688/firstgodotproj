@@ -30,7 +30,7 @@ texture = ExtResource("2_q8u5g")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="ForwardArrow" type="TextureRect" parent="." unique_id=1167630047]
+[node name="ArrowUp" type="TextureRect" parent="." unique_id=1167630047]
 modulate = Color(1, 1, 1, 0.6666667)
 layout_mode = 0
 offset_left = 860.0
@@ -40,7 +40,7 @@ offset_bottom = 104.0
 scale = Vector2(1.2, 1.2)
 texture = ExtResource("3_lhr70")
 
-[node name="BackArrow" type="TextureRect" parent="." unique_id=998876559]
+[node name="ArrowDown" type="TextureRect" parent="." unique_id=998876559]
 modulate = Color(1, 1, 1, 0.6666667)
 layout_mode = 0
 offset_left = 900.0
@@ -48,6 +48,30 @@ offset_top = 950.0
 offset_right = 1000.0
 offset_bottom = 1024.0
 rotation = 3.1415927
+scale = Vector2(1.2, 1.2)
+pivot_offset = Vector2(50, 37)
+texture = ExtResource("3_lhr70")
+
+[node name="ArrowLeft" type="TextureRect" parent="." unique_id=1954101658]
+modulate = Color(1, 1, 1, 0.6666667)
+layout_mode = 0
+offset_left = 30.0
+offset_top = 440.0
+offset_right = 130.0
+offset_bottom = 514.0
+rotation = 4.712389
+scale = Vector2(1.2, 1.2)
+pivot_offset = Vector2(50, 37)
+texture = ExtResource("3_lhr70")
+
+[node name="ArrowRight" type="TextureRect" parent="." unique_id=689666813]
+modulate = Color(1, 1, 1, 0.6666667)
+layout_mode = 0
+offset_left = 1790.0
+offset_top = 440.0
+offset_right = 1890.0
+offset_bottom = 514.0
+rotation = 1.5707964
 scale = Vector2(1.2, 1.2)
 pivot_offset = Vector2(50, 37)
 texture = ExtResource("3_lhr70")
@@ -111,6 +135,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 
 [node name="DoorButton" type="Button" parent="." unique_id=198313971]
+visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_left = 1267.0
@@ -123,39 +148,17 @@ focus_behavior_recursive = 1
 stream = ExtResource("7_lgr22")
 volume_db = 10.0
 
-[node name="DeskButton" type="Button" parent="." unique_id=1965225340]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_left = 1.0
-offset_top = 634.0
-offset_right = 1237.0
-offset_bottom = 897.0
-
-[node name="WindowButton" type="Button" parent="." unique_id=735586717]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_left = -3.0
-offset_top = 203.0
-offset_right = 200.0
-offset_bottom = 576.0
-
 [node name="ChoiceSound" type="AudioStreamPlayer" parent="." unique_id=699496763]
 stream = ExtResource("8_jlsqs")
 volume_db = -10.0
-
-[node name="LockerButton" type="Button" parent="." unique_id=153183788]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_left = 258.0
-offset_top = 550.0
-offset_right = 998.0
-offset_bottom = 614.0
 
 [node name="UnLockedSound" type="AudioStreamPlayer" parent="." unique_id=793091637]
 stream = ExtResource("9_q8u5g")
 volume_db = 5.0
 
+[node name="InteractionButtons" type="Control" parent="." unique_id=1999727950]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
 [connection signal="pressed" from="DoorButton" to="." method="_on_door_button_pressed"]
-[connection signal="pressed" from="DeskButton" to="." method="_on_desk_button_pressed"]
-[connection signal="pressed" from="WindowButton" to="." method="_on_window_button_pressed"]
-[connection signal="pressed" from="LockerButton" to="." method="_on_locker_button_pressed"]

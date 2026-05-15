@@ -4,11 +4,12 @@ extends Control
 @onready var background = $Background
 @onready var footstep_sound = $FootstepSound
 @onready var fade = $Fade
-@onready var forward_arrow = $ForwardArrow
-@onready var back_arrow = $BackArrow
+@onready var arrow_up = $ArrowUp
+@onready var arrow_down = $ArrowDown
+@onready var arrow_left = $ArrowLeft
+@onready var arrow_right = $ArrowRight
 @onready var locked_sound = $LockedSound
 @onready var door_button = $DoorButton
-@onready var desk_button = $DeskButton
 @onready var choice_box = $DialogueBox/ChoiceBox
 @onready var choice_labels = [
 	$DialogueBox/ChoiceBox/Choice1,
@@ -16,10 +17,15 @@ extends Control
 	$DialogueBox/ChoiceBox/Choice3,
 	$DialogueBox/ChoiceBox/Choice4
 ]
-@onready var window_button = $WindowButton
 @onready var choice_sound = $ChoiceSound
-@onready var locker_button = $LockerButton
 @onready var unlocked_sound = $UnLockedSound
+@onready var move_arrows = {
+	"up": arrow_up,
+	"down": arrow_down,
+	"left": arrow_left,
+	"right": arrow_right
+}
+@onready var interaction_buttons = $InteractionButtons
 
 # 일반 변수 모음
 var arrow_time = 0.0
@@ -36,10 +42,15 @@ var is_typing = false
 var typing_finished = false
 var inventory = []
 var flags = {}
+# 현재 클릭 가능한 잠긴 출구 데이터
+var current_locked_exit_data = {}
+var arrow_base_positions = {}
 
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
 const MSG_NO_BACK = "더 이상 뒤로 갈 수 없다..."
+const MSG_NO_LEFT = "그쪽으로는 갈 수 없다..."
+const MSG_NO_RIGHT = "그쪽으로는 갈 수 없다..."
 const MSG_DOOR_LOCKED = "문이 굳게 잠겨있다..."
 const MSG_DOOR_UNLOCK = "교실키로 문을 열었다."
 
@@ -92,23 +103,43 @@ func _process(delta):
 
 	# 여기부터 일반 맵 이동 입력
 	if Input.is_action_just_pressed("move_forward"):
-		var room = rooms[current_room]
-		if room.has("forward"):
-			move_to_room(room["forward"])
-		else:
-			await show_dialogue(MSG_NO_FORWARD)
+		await try_move_to_exit("up")
 
 	if Input.is_action_just_pressed("move_back"):
-		var room = rooms[current_room]
-		if room.has("back"):
-			move_to_room(room["back"])
-		else:
-			await show_dialogue(MSG_NO_BACK)
+		await try_move_to_exit("down")
+
+	if Input.is_action_just_pressed("move_left"):
+		await try_move_to_exit("left")
+
+	if Input.is_action_just_pressed("move_right"):
+		await try_move_to_exit("right")
 
 	# 화살표 애니메이션
 	arrow_time += delta
-	forward_arrow.position.y = 30 + sin(arrow_time * 2.0) * 6
-	back_arrow.position.y = 950 + sin((arrow_time * 2.0) + PI) * 6
+
+	for dir in move_arrows.keys():
+		var arrow = move_arrows[dir]
+
+		if not arrow.visible:
+			continue
+
+		if not arrow_base_positions.has(dir):
+			continue
+
+		var base_pos = arrow_base_positions[dir]
+		var offset = sin(arrow_time * 2.0) * 6
+
+		if dir == "up":
+			arrow.position = base_pos + Vector2(0, offset)
+
+		elif dir == "down":
+			arrow.position = base_pos + Vector2(0, -offset)
+
+		elif dir == "left":
+			arrow.position = base_pos + Vector2(offset, 0)
+
+		elif dir == "right":
+			arrow.position = base_pos + Vector2(-offset, 0)
 # 처음에 한번 실행 함수
 func _ready():
 	
@@ -139,46 +170,69 @@ func update_room():
 	# 기본 배경 이미지
 	var background_path = room["background"]
 
-	# 문이 열린 상태라면 열린 배경 이미지 사용
-	if room.has("open_flag") and has_flag(room["open_flag"]):
-		if room.has("opened_background"):
-			background_path = room["opened_background"]
+	# 현재 방의 잠긴 출구 클릭 정보 초기화
+	current_locked_exit_data = {}
+	door_button.visible = false
+	door_button.disabled = true
+
+	# 모든 이동 화살표를 먼저 숨김
+	for dir in move_arrows.keys():
+		move_arrows[dir].visible = false
+
+	# exits 데이터가 있다면 출구 상태 확인
+	if room.has("exits"):
+		for dir in room["exits"].keys():
+			var exit_data = room["exits"][dir]
+
+			# 잠긴 출구인지 확인
+			var is_locked = exit_data.has("locked") and exit_data["locked"] == true
+
+			# 잠긴 출구가 이미 열렸는지 확인
+			var is_unlocked = false
+			if exit_data.has("open_flag") and has_flag(exit_data["open_flag"]):
+				is_unlocked = true
+
+			# 열린 플래그가 있으면 현재 방 배경을 열린 배경으로 변경
+			if is_unlocked and room.has("opened_background"):
+				background_path = room["opened_background"]
+
+			# 잠겨 있고 아직 열리지 않은 출구는 화살표를 숨기고 마우스 클릭 대상으로 사용
+			if is_locked and not is_unlocked:
+				current_locked_exit_data = exit_data
+				door_button.visible = true
+				door_button.disabled = false
+
+				# JSON에 적힌 클릭 영역으로 DoorButton 위치/크기 설정
+				if exit_data.has("click_rect"):
+					var rect = exit_data["click_rect"]
+					door_button.position = Vector2(rect[0], rect[1])
+					door_button.size = Vector2(rect[2], rect[3])
+
+				continue
+
+			# 열린 출구만 화살표 표시
+			if move_arrows.has(dir):
+				var arrow = move_arrows[dir]
+				arrow.visible = true
+
+				if exit_data.has("position"):
+					arrow.position = Vector2(
+						exit_data["position"][0],
+						exit_data["position"][1]
+					)
+					arrow_base_positions[dir] = arrow.position
 
 	background.texture = load(background_path)
 	
-	forward_arrow.visible = room.has("forward")
-	back_arrow.visible = room.has("back")
-	door_button.visible = room.has("door")
-	
-	desk_button.visible = false
-	locker_button.visible = false
-	window_button.visible = false
-	
-# interactions 체크하는 부분
-	if room.has("interactions"):
-		if room["interactions"].has("desk"):
-			desk_button.visible = true
-			
-	if room.has("interactions"):
-		if room["interactions"].has("locker"):
-			locker_button.visible = true
-			
-	if room.has("interactions"):
-		if room["interactions"].has("window"):
-			window_button.visible = true
+	# 현재 방의 interactions 데이터를 기준으로 클릭 버튼 자동 생성
+	create_interaction_buttons(room)
 # 방 이동 함수
-func move_to_room(target_room, use_shake = true):
-	
+func move_to_room(target_room, use_shake, direction):
 	# 이동 중에는 추가 입력을 막음
 	is_moving = true
 	
-	# 이동 방식에 따라 연출 선택
-	if use_shake:
-		# 복도 이동: 흔들림 + 암전
-		await play_move_effect()
-	else:
-		# 문 이동: 암전만
-		await play_door_move_effect()
+	# use_shake가 true면 흔들림 사용, false면 암전만 사용
+	await effect(true, use_shake, true, direction)
 	
 	# 실제 방 변경
 	current_room = target_room
@@ -189,53 +243,84 @@ func move_to_room(target_room, use_shake = true):
 	
 	# 다시 입력 허용
 	is_moving = false
-# 잠긴 문 상호작용 함수
+# 방향키 입력을 받아 exits 데이터 기준으로 이동하는 함수
+func try_move_to_exit(direction):
+
+	var room = rooms[current_room]
+
+	# 현재 방에 해당 방향 출구가 없으면 방향별 대사 출력
+	if not room.has("exits") or not room["exits"].has(direction):
+		if direction == "up":
+			await show_dialogue(MSG_NO_FORWARD)
+		elif direction == "down":
+			await show_dialogue(MSG_NO_BACK)
+		elif direction == "left":
+			await show_dialogue(MSG_NO_LEFT)
+		elif direction == "right":
+			await show_dialogue(MSG_NO_RIGHT)
+		return
+
+	var exit_data = room["exits"][direction]
+
+	# 잠긴 출구인지 확인
+	var is_locked = exit_data.has("locked") and exit_data["locked"] == true
+
+	# 잠긴 출구가 이미 열렸는지 확인
+	var is_unlocked = false
+	if exit_data.has("open_flag") and has_flag(exit_data["open_flag"]):
+		is_unlocked = true
+
+	# 잠겨 있고 아직 열리지 않은 출구는 방향키로 처리하지 않음
+	# 잠긴 문은 마우스 클릭으로만 상호작용
+	if is_locked and not is_unlocked:
+		return
+
+	# 출구별 이동 효과 결정
+	# JSON에 "move_effect": "door" 라고 적힌 출구만 흔들림 없이 이동
+	var use_shake = true
+
+	if exit_data.has("move_effect") and exit_data["move_effect"] == "door":
+		use_shake = false
+
+	# 열린 출구 이동
+	await move_to_room(exit_data["target"], use_shake, direction)
+# 잠긴 문 마우스 클릭 상호작용 함수
 func _on_door_button_pressed():
 
 	# 이미 다른 상호작용/대사/이동 중이면 문 입력 무시
 	if is_interacting or is_dialogue_showing or is_moving:
 		return
 
+	# 현재 방에 클릭 가능한 잠긴 출구가 없으면 종료
+	if current_locked_exit_data.is_empty():
+		return
+
 	is_interacting = true
 	set_interaction_buttons_disabled(true)
 
-	var room = rooms[current_room]
+	var exit_data = current_locked_exit_data
 
-	# 현재 방에 문 데이터가 없으면 종료
-	if not room.has("door"):
-		set_interaction_buttons_disabled(false)
-		is_interacting = false
-		return
-
-	# 이미 open_flag가 켜진 문이면 대사 없이 바로 이동
-	if room.has("open_flag") and has_flag(room["open_flag"]):
-		await move_to_room(room["door"], false)
-		set_interaction_buttons_disabled(false)
-		is_interacting = false
-		return
-
-	# 처음부터 열려있는 문이면 바로 이동
-	if room.has("door_open") and room["door_open"]:
-		await move_to_room(room["door"], false)
-		set_interaction_buttons_disabled(false)
-		is_interacting = false
-		return
-
-	# 잠긴 문이지만 필요한 아이템이 있으면 문을 열고 open_flag 저장
-	if room.has("required_item") and has_item(room["required_item"]):
+	# 필요한 아이템이 있으면 문 잠금 해제
+	if exit_data.has("required_item") and has_item(exit_data["required_item"]):
 		unlocked_sound.play()
 
-		if room.has("open_flag"):
-			set_flag(room["open_flag"])
+		# 문이 열렸다는 플래그 저장
+		if exit_data.has("open_flag"):
+			set_flag(exit_data["open_flag"])
 
 		await show_dialogue(MSG_DOOR_UNLOCK)
-		await move_to_room(room["door"], false)
+
+		# 문이 열리는 느낌을 주기 위한 암전
+		await effect(false, false, true, "")
+
+		# 열린 배경/화살표 상태로 갱신
+		update_room()
 
 		set_interaction_buttons_disabled(false)
 		is_interacting = false
 		return
 
-	# 아이템이 없으면 잠긴 문 처리
+	# 아이템이 없으면 잠긴 문 대사 출력
 	locked_sound.play()
 	await show_dialogue(MSG_DOOR_LOCKED)
 
@@ -277,67 +362,6 @@ func show_dialogue(text):
 	$DialogueBox.visible = false
 	is_dialogue_showing = false
 	dialogue_finished = false
-# 이동 효과 함수
-func play_move_effect():
-	
-	footstep_sound.play()
-	var tween = create_tween()
-
-	# 화면 앞뒤 흔들림
-	tween.tween_property(
-		background,
-		"scale",
-		Vector2(1.35, 1.35),
-		0.22
-	)
-	
-	# 화면 좌우 흔들림
-	tween.tween_property(
-		background,
-		"position",
-		Vector2(40, 0),
-		0.06
-	)
-
-	tween.tween_property(
-		background,
-		"position",
-		Vector2(-40, 0),
-		0.06
-	)
-	
-	tween.tween_property(
-		background,
-		"position",
-		Vector2(0, 0),
-		0.06
-	)
-	
-	tween.tween_property(
-		background,
-		"scale",
-		Vector2(1.0, 1.0),
-		0.28
-	)
-	
-	var fade_tween = create_tween()
-	
-	# 화면 암전 효과
-	fade_tween.tween_property(
-		fade,
-		"color:a",
-		1,
-		0
-	)
-	
-	fade_tween.tween_property(
-		fade,
-		"color:a",
-		0.0,
-		3.3
-	)
-	# 이동 흔들림 효과가 끝날 때까지 기다림
-	await tween.finished
 # 방 로드 및 예외 처리 함수
 func load_rooms():
 	
@@ -375,9 +399,6 @@ func load_rooms():
 		
 	print("rooms.json 로드 성공")
 	return true
-# 책상 상호작용 함수	
-func _on_desk_button_pressed():
-	await run_interaction("desk")
 # 선택지 함수
 func show_choices(choices):
 	
@@ -466,20 +487,15 @@ func run_interaction(interaction_id):
 
 	set_interaction_buttons_disabled(false)
 	is_interacting = false
-# 창문 상호작용 함수		
-func _on_window_button_pressed():
-	await run_interaction("window")
 # 상호작용 중 버튼 클릭 안되게 막는 함수
 func set_interaction_buttons_disabled(disabled):
 	
 	# 문
 	door_button.disabled = disabled
-	# 책상
-	desk_button.disabled = disabled
-	# 창문
-	window_button.disabled = disabled
-	# 사물함
-	locker_button.disabled = disabled
+	
+	for child in interaction_buttons.get_children():
+		if child is Button:
+			child.disabled = disabled
 # 아이템 보유 여부 확인 함수
 func has_item(item_id):
 	return inventory.has(item_id)
@@ -490,9 +506,6 @@ func add_item(item_id):
 
 	inventory.append(item_id)
 	print("아이템 획득: " + item_id)
-# 사물함 상호작용 함수	
-func _on_locker_button_pressed():
-	await run_interaction("locker")
 # 플래그 보유 여부 확인 함수
 func has_flag(flag_id):
 	return flags.has(flag_id) and flags[flag_id] == true
@@ -500,28 +513,134 @@ func has_flag(flag_id):
 func set_flag(flag_id):
 	flags[flag_id] = true
 	print("플래그 설정: " + flag_id)
-# 문 이동 효과 함수
-func play_door_move_effect():
-	# 문으로 들어가거나 나올 때 사용
-	# 흔들림 없이 암전만 처리
-	footstep_sound.play()
-	var fade_tween = create_tween()
+# 이펙트 효과 함수
+func effect(sound_effect, shake_effect, fade_effect, direction):
 	
-	# 화면을 즉시 어둡게 만듦
-	fade_tween.tween_property(
-		fade,
-		"color:a",
-		1,
-		0
-	)
+	# 발소리 효과
+	if sound_effect:
+		footstep_sound.play()
+		
+	if shake_effect:
+		var shake_tween = create_tween()
+		if direction == "up":
+			# 화면 앞뒤 흔들림
+			shake_tween.tween_property(
+				background,
+				"scale",
+				Vector2(1.35, 1.35),
+				0.22
+			)
+			
+			# 화면 좌우 흔들림
+			shake_tween.tween_property(
+				background,
+				"position",
+				Vector2(40, 0),
+				0.06
+			)
+
+			shake_tween.tween_property(
+				background,
+				"position",
+				Vector2(-40, 0),
+				0.06
+			)
+			
+			shake_tween.tween_property(
+				background,
+				"position",
+				Vector2(0, 0),
+				0.06
+			)
+			
+			shake_tween.tween_property(
+				background,
+				"scale",
+				Vector2(1.0, 1.0),
+				0.28
+			)
+		elif direction == "down" or direction == "left" or direction == "right":
+						
+			# 화면 좌우 흔들림
+			shake_tween.tween_property(
+				background,
+				"position",
+				Vector2(40, 0),
+				0.06
+			)
+
+			shake_tween.tween_property(
+				background,
+				"position",
+				Vector2(-40, 0),
+				0.06
+			)
+			
+			shake_tween.tween_property(
+				background,
+				"position",
+				Vector2(0, 0),
+				0.06
+			)
+		else:
+			print("no effect")
 	
-	# 천천히 다시 밝아짐
-	fade_tween.tween_property(
-		fade,
-		"color:a",
-		0.0,
-		3.3
-	)
+	if fade_effect:
+		# 암전 처리
+		var fade_tween = create_tween()
+		
+		# 화면을 즉시 어둡게 만듦
+		fade_tween.tween_property(
+			fade,
+			"color:a",
+			1,
+			0
+		)
+		
+		# 천천히 다시 밝아짐
+		fade_tween.tween_property(
+			fade,
+			"color:a",
+			0.0,
+			3.3
+		)
 	
 	await get_tree().create_timer(0.3).timeout
-	
+# 현재 방에 생성된 상호작용 버튼들을 전부 제거
+func clear_interaction_buttons():
+	for child in interaction_buttons.get_children():
+		child.queue_free()
+# rooms.json의 interactions 데이터를 읽어서 클릭 영역 버튼을 자동 생성
+func create_interaction_buttons(room):
+
+	clear_interaction_buttons()
+
+	if not room.has("interactions"):
+		return
+
+	for interaction_id in room["interactions"].keys():
+		var interaction = room["interactions"][interaction_id]
+
+		# click_rect가 없는 상호작용은 버튼 생성하지 않음
+		if not interaction.has("click_rect"):
+			continue
+
+		var rect = interaction["click_rect"]
+
+		var button = Button.new()
+		button.position = Vector2(rect[0], rect[1])
+		button.size = Vector2(rect[2], rect[3])
+
+		# 투명 버튼처럼 사용
+		button.text = ""
+		button.modulate.a = 0.0
+
+		# 디버그할 때는 아래처럼 잠깐 보이게 해도 됨
+		# button.modulate.a = 0.25
+
+		button.pressed.connect(
+			func():
+				await run_interaction(interaction_id)
+		)
+
+		interaction_buttons.add_child(button)

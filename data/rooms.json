@@ -1,35 +1,95 @@
 {
 	"hallway_1": {
 		"background": "res://imgs/backgrounds/hallway_open.png",
-		"forward": "hallway_2",
-		"door": "classroom_1",
-		"door_open": true
+		"exits": {
+			"up": {
+				"target": "hallway_2",
+				"position": [
+					860,
+					30
+				]
+			},
+			"right": {
+				"target": "classroom_1",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "door"
+			}
+		}
 	},
 	"hallway_2": {
-	  "background": "res://imgs/backgrounds/hallway_closed.png",
-	  "opened_background": "res://imgs/backgrounds/hallway_open.png",
-	  "forward": "hallway_3",
-	  "back": "hallway_1",
-	  "door": "classroom_2",
-	  "door_open": false,
-	  "required_item": "classroom_key",
-	  "open_flag": "opened_classroom_2"
+		"background": "res://imgs/backgrounds/hallway_closed.png",
+		"opened_background": "res://imgs/backgrounds/hallway_open.png",
+		"exits": {
+			"up": {
+				"target": "hallway_3",
+				"position": [
+					860,
+					30
+				]
+			},
+			"down": {
+				"target": "hallway_1",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "classroom_2",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "door",
+				"locked": true,
+				"required_item": "classroom_key",
+				"open_flag": "opened_classroom_2",
+				"click_rect": [1390, 270, 300, 560]
+			}
+		}
 	},
 	"hallway_3": {
 		"background": "res://imgs/backgrounds/hallway_open.png",
-		"back": "hallway_2",
-		"door": "classroom_3",
-		"door_open": true
+		"exits": {
+			"down": {
+				"target": "hallway_2",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "classroom_3",
+				"position": [
+					1390,
+					540
+				]
+			}
+		}
 	},
 	"classroom_1": {
 		"background": "res://imgs/backgrounds/classroom.png",
-		"back": "hallway_1",
+		"exits": {
+			"right": {
+				"target": "hallway_1",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "door"
+			}
+		},
 		"interactions": {
 			"desk": {
-				"text": "낡은 책상들이 늘어져있다. 소름끼칠 정도로 깨끗하게 정리 되어있다."
+				"text": "낡은 책상들이 늘어져있다. 소름끼칠 정도로 깨끗하게 정리 되어있다.",
+				"click_rect": [1, 634, 1236, 263]
 			},
 			"window": {
 				"text": "익숙한 풍경이 어둠속에 잠겨있다.",
+				 "click_rect": [0, 203, 203, 373],
 				"choices": [
 					{
 						"text": "문을 열고 바깥을 살핀다",
@@ -43,17 +103,18 @@
 			},
 			"locker": {
 				"text": "교탁과 사물함이 붙어있어 기묘한 위화감을 자아낸다.",
+				"click_rect": [258, 550, 740, 64],
 				"choices": [
 					{
 						"text": "첫 번째 사물함을 연다",
 						"result_text": "비어 있다."
 					},
 					{
-					  "text": "여섯 번째 사물함을 연다",
-					  "result_text": "교실키를 얻었다.",
-					  "item": "classroom_key",
-					  "flag": "got_classroom_key",
-					  "already_text": "이미 비어 있다."
+						"text": "여섯 번째 사물함을 연다",
+						"result_text": "교실키를 얻었다.",
+						"item": "classroom_key",
+						"flag": "got_classroom_key",
+						"already_text": "이미 비어 있다."
 					},
 					{
 						"text": "열 번째 사물함을 연다",
@@ -65,10 +126,28 @@
 	},
 	"classroom_2": {
 		"background": "res://imgs/backgrounds/classroom.png",
-		"back": "hallway_2"
+		"exits": {
+			"right": {
+				"target": "hallway_2",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "door"
+			}
+		}
 	},
 	"classroom_3": {
 		"background": "res://imgs/backgrounds/classroom.png",
-		"back": "hallway_3"
+		"exits": {
+			"right": {
+				"target": "hallway_3",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "door"
+			}
+		}
 	}
 }
