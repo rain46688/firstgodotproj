@@ -26,6 +26,12 @@ extends Control
 	"right": arrow_right
 }
 @onready var interaction_buttons = $InteractionButtons
+@onready var bag_button = $BagButton
+@onready var inventory_ui = $InventoryUI
+@onready var bag_open_sound = $BagOpenSound
+@onready var inventory_slots = $InventoryUI/InventorySlots
+@onready var selected_item_image = $InventoryUI/SelectedItemImage
+@onready var selected_item_description = $InventoryUI/SelectedItemDescription
 
 # 일반 변수 모음
 var arrow_time = 0.0
@@ -45,6 +51,10 @@ var flags = {}
 # 현재 클릭 가능한 잠긴 출구 데이터
 var current_locked_exit_data = {}
 var arrow_base_positions = {}
+var is_inventory_open = false
+var items = {}
+var inventory_slot_size = 150
+var inventory_slot_gap = 5
 
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
@@ -53,6 +63,7 @@ const MSG_NO_LEFT = "그쪽으로는 갈 수 없다..."
 const MSG_NO_RIGHT = "그쪽으로는 갈 수 없다..."
 const MSG_DOOR_LOCKED = "문이 굳게 잠겨있다..."
 const MSG_DOOR_UNLOCK = "교실키로 문을 열었다."
+const MSG_ITEM_GAINED_SUFFIX = "을 얻었다."
 
 # 프레임 마다 실행 함수
 func _process(delta):
@@ -91,6 +102,12 @@ func _process(delta):
 				typing_finished = true
 			else:
 				dialogue_finished = true
+		return
+
+	# 인벤토리가 열려 있으면 게임 이동/상호작용 입력을 막음
+	if is_inventory_open:
+		if Input.is_action_just_pressed("ui_cancel"):
+			close_inventory()
 		return
 
 	# 이동 중이면 아무 입력도 받지 않음
@@ -145,12 +162,22 @@ func _ready():
 	
 	background.scale = Vector2(1, 1)
 	
-	# 방 예외 처리
+	# 방 로드 및 예외 처리
 	var success = load_rooms()
 
 	if not success:
 		push_error("방 데이터 로드 실패로 게임 초기화 중단")
 		return
+		
+	# 아이템 로드 및 예외 처리
+	var item_success = load_items()
+
+	if not item_success:
+		push_error("아이템 데이터 로드 실패로 게임 초기화 중단")
+		return
+
+	# 방과 아이템 데이터가 모두 로드된 뒤 테스트 아이템 추가
+	await add_item("cutter_knife")
 		
 	update_room()
 # 방 변경 함수
@@ -480,7 +507,11 @@ func run_interaction(interaction_id):
 				await show_dialogue(selected_choice["result_text"])
 
 			if selected_choice.has("item"):
-				add_item(selected_choice["item"])
+				var item_id = selected_choice["item"]
+				var added = await add_item(item_id)
+
+				if added:
+					await show_dialogue("『" + get_item_name(item_id) + "』" + MSG_ITEM_GAINED_SUFFIX)
 
 			if selected_choice.has("flag"):
 				set_flag(selected_choice["flag"])
@@ -498,14 +529,29 @@ func set_interaction_buttons_disabled(disabled):
 			child.disabled = disabled
 # 아이템 보유 여부 확인 함수
 func has_item(item_id):
-	return inventory.has(item_id)
+	for item in inventory:
+		if item["id"] == item_id:
+			return true
+
+	return false
 # 아이템 추가 함수
 func add_item(item_id):
 	if has_item(item_id):
-		return
+		return false
 
-	inventory.append(item_id)
-	print("아이템 획득: " + item_id)
+	var empty_slot = find_empty_slot(item_id)
+
+	if empty_slot == -1:
+		await show_dialogue("가방에 공간이 없다.")
+		return false
+
+	inventory.append({
+		"id": item_id,
+		"slot": empty_slot
+	})
+
+	print("아이템 획득: " + get_item_name(item_id))
+	return true
 # 플래그 보유 여부 확인 함수
 func has_flag(flag_id):
 	return flags.has(flag_id) and flags[flag_id] == true
@@ -644,3 +690,220 @@ func create_interaction_buttons(room):
 		)
 
 		interaction_buttons.add_child(button)
+# 인벤토리 상호작용 함수
+func _on_bag_button_pressed():
+	if is_inventory_open:
+		close_inventory()
+	else:
+		open_inventory()
+# 인벤토리 열기 함수
+func open_inventory():
+	if is_moving or is_interacting or is_dialogue_showing or is_choosing:
+		return
+
+	is_inventory_open = true
+	inventory_ui.visible = true
+	update_inventory_ui()
+	clear_selected_item_info()
+	bag_open_sound.play()
+
+	# 인벤토리 열려 있을 때 상호작용 버튼 비활성화
+	set_interaction_buttons_disabled(true)
+# 인벤토리 닫기 함수
+func close_inventory():
+	is_inventory_open = false
+	inventory_ui.visible = false
+	bag_open_sound.play()
+
+	# 인벤토리 닫으면 상호작용 버튼 다시 활성화
+	set_interaction_buttons_disabled(false)
+# 아이템 데이터 로드 함수
+func load_items():
+	var path = "res://data/items.json"
+
+	if not FileAccess.file_exists(path):
+		push_error("items.json 파일을 찾을 수 없음: " + path)
+		return false
+
+	var file = FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		push_error("items.json 파일 열기 실패: " + path)
+		return false
+
+	var json_text = file.get_as_text()
+	var json = JSON.new()
+	var error = json.parse(json_text)
+
+	if error != OK:
+		push_error("items.json 파싱 실패: " + json.get_error_message())
+		push_error("오류 위치 line: " + str(json.get_error_line()))
+		return false
+
+	if typeof(json.data) != TYPE_DICTIONARY:
+		push_error("items.json 최상위 구조는 Dictionary여야 함")
+		return false
+
+	items = json.data
+	print("items.json 로드 성공")
+	return true
+# 아이템 이름 가져오기 함수
+func get_item_name(item_id):
+	if not items.has(item_id):
+		return item_id
+
+	if not items[item_id].has("name"):
+		return item_id
+
+	return items[item_id]["name"]
+# 인벤토리 UI 아이템 표시 갱신 함수
+func update_inventory_ui():
+
+	# 기존에 표시된 아이템 이미지 제거
+	for child in inventory_slots.get_children():
+		child.queue_free()
+
+	# 현재 가진 아이템을 슬롯 위치 기준으로 표시
+	for inventory_item in inventory:
+
+		var item_id = inventory_item["id"]
+		var start_slot = inventory_item["slot"]
+
+		if not items.has(item_id):
+			continue
+
+		var item_data = items[item_id]
+
+		if not item_data.has("image"):
+			continue
+
+		var item_width = 1
+		var item_height = 1
+
+		if item_data.has("width"):
+			item_width = item_data["width"]
+
+		if item_data.has("height"):
+			item_height = item_data["height"]
+
+		var col = start_slot % 4
+		var row = start_slot / 4
+
+		var item_button = TextureButton.new()
+		item_button.texture_normal = load(item_data["image"])
+		item_button.ignore_texture_size = true
+		item_button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+
+		# 아이템이 시작되는 슬롯 위치
+		item_button.position = Vector2(
+			col * (inventory_slot_size + inventory_slot_gap),
+			row * (inventory_slot_size + inventory_slot_gap)
+		)
+
+		# 아이템 크기: width/height만큼 슬롯을 차지
+		item_button.size = Vector2(
+			(inventory_slot_size * item_width) + (inventory_slot_gap * (item_width - 1)),
+			(inventory_slot_size * item_height) + (inventory_slot_gap * (item_height - 1))
+		)
+
+		# 아이템 클릭 시 중앙 이미지/설명 표시
+		item_button.pressed.connect(
+			func():
+				show_selected_item_info(item_id)
+		)
+
+		inventory_slots.add_child(item_button)
+# 선택된 아이템 정보 초기화 함수
+func clear_selected_item_info():
+	selected_item_image.texture = null
+	selected_item_description.text = ""
+# 선택된 아이템 정보를 중앙 이미지/설명칸에 표시
+func show_selected_item_info(item_id):
+	if not items.has(item_id):
+		return
+
+	var item_data = items[item_id]
+
+	if item_data.has("image"):
+		selected_item_image.texture = load(item_data["image"])
+
+	if item_data.has("description"):
+		selected_item_description.text = item_data["description"]
+	else:
+		selected_item_description.text = ""
+# 아이템이 들어갈 수 있는 빈 슬롯 찾기 함수
+func find_empty_slot(item_id):
+	if not items.has(item_id):
+		return -1
+
+	var item_data = items[item_id]
+	var item_width = item_data.get("width", 1)
+	var item_height = item_data.get("height", 1)
+
+	for slot in range(16):
+		if can_place_item_at(slot, item_width, item_height):
+			return slot
+
+	return -1
+# 특정 슬롯에 아이템을 놓을 수 있는지 확인하는 함수
+func can_place_item_at(start_slot, item_width, item_height):
+	var start_col = start_slot % 4
+	var start_row = start_slot / 4
+
+	# 오른쪽/아래로 가방 범위를 넘으면 배치 불가
+	if start_col + item_width > 4:
+		return false
+
+	if start_row + item_height > 4:
+		return false
+
+	# 새 아이템이 차지할 슬롯 목록
+	var target_slots = []
+
+	for y in range(item_height):
+		for x in range(item_width):
+			var slot = (start_row + y) * 4 + (start_col + x)
+			target_slots.append(slot)
+
+	# 기존 아이템들과 겹치는지 확인
+	for item in inventory:
+		var occupied = get_occupied_slots(item)
+
+		for slot in target_slots:
+			if occupied.has(slot):
+				return false
+
+	return true	
+# 아이템이 차지하는 슬롯 목록 반환 함수
+func get_occupied_slots(inventory_item):
+	var item_id = inventory_item["id"]
+
+	if not items.has(item_id):
+		return []
+
+	var item_data = items[item_id]
+	var item_width = item_data.get("width", 1)
+	var item_height = item_data.get("height", 1)
+
+	var start_slot = inventory_item["slot"]
+	var start_col = start_slot % 4
+	var start_row = start_slot / 4
+
+	var occupied = []
+
+	for y in range(item_height):
+		for x in range(item_width):
+			var slot = (start_row + y) * 4 + (start_col + x)
+			occupied.append(slot)
+
+	return occupied	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

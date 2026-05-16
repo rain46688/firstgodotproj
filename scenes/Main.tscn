@@ -9,6 +9,9 @@
 [ext_resource type="AudioStream" uid="uid://bd1nk2i0616gs" path="res://sounds/lockeddoor.mp3" id="7_lgr22"]
 [ext_resource type="AudioStream" uid="uid://b2p5y3ta6bfww" path="res://sounds/clcik.mp3" id="8_jlsqs"]
 [ext_resource type="AudioStream" uid="uid://cvy3qjqnkm0ca" path="res://sounds/unlockeddoor.mp3" id="9_q8u5g"]
+[ext_resource type="Texture2D" uid="uid://0sqsgro5tr8p" path="res://imgs/ui/bag200x300.png" id="10_lhr70"]
+[ext_resource type="Texture2D" uid="uid://ykmo18nim71i" path="res://imgs/ui/인벤토리1920x1080.png" id="11_wp0k4"]
+[ext_resource type="AudioStream" uid="uid://bos4o1wfm3q0b" path="res://sounds/bagopen.mp3" id="12_bjd11"]
 
 [node name="Main" type="Control" unique_id=376732367]
 layout_mode = 3
@@ -161,4 +164,51 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
+[node name="BagButton" type="TextureButton" parent="." unique_id=1029832583]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 220.0
+offset_bottom = 320.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("10_lhr70")
+
+[node name="InventoryUI" type="Control" parent="." unique_id=1132515591]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="InventoryBackground" type="TextureRect" parent="InventoryUI" unique_id=299516459]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("11_wp0k4")
+
+[node name="InventorySlots" type="Control" parent="InventoryUI" unique_id=1384889491]
+anchors_preset = 0
+offset_left = 1200.0
+offset_top = 200.0
+offset_right = 1820.0
+offset_bottom = 820.0
+
+[node name="SelectedItemImage" type="TextureRect" parent="InventoryUI" unique_id=38479359]
+layout_mode = 0
+offset_left = 690.0
+offset_top = 180.0
+offset_right = 990.0
+offset_bottom = 480.0
+
+[node name="SelectedItemDescription" type="Label" parent="InventoryUI" unique_id=357045251]
+layout_mode = 0
+offset_left = 640.0
+offset_top = 620.0
+offset_right = 1040.0
+offset_bottom = 980.0
+theme_override_font_sizes/font_size = 25
+
+[node name="BagOpenSound" type="AudioStreamPlayer" parent="." unique_id=1757765065]
+stream = ExtResource("12_bjd11")
+
 [connection signal="pressed" from="DoorButton" to="." method="_on_door_button_pressed"]
+[connection signal="pressed" from="BagButton" to="." method="_on_bag_button_pressed"]

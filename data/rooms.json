@@ -111,7 +111,6 @@
 					},
 					{
 						"text": "여섯 번째 사물함을 연다",
-						"result_text": "교실키를 얻었다.",
 						"item": "classroom_key",
 						"flag": "got_classroom_key",
 						"already_text": "이미 비어 있다."
