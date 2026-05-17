@@ -9,7 +9,7 @@
 	},
 	"cutter_knife": {
 		"name": "커터칼",
-		"description": "날이 살짝 녹슨 커터칼이다. 약한 공격 수단으로 사용할 수 있다.",
+		"description": "날이 살짝 녹슨 커터칼이다. \n약한 공격 수단으로 사용할 수 있다.",
 		"image": "res://imgs/items/cutterKnife360x240.png",
 		"width": 2,
 		"height": 1,
