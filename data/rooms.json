@@ -127,11 +127,14 @@
 		}
 	},
 	"classroom_2": {
-		"background": "res://imgs/backgrounds/classroom.png",
+		"background": "res://imgs/backgrounds/classroom_monitor.png",
 		"exits": {
 			"right": {
 				"target": "hallway_2",
-				"click_rect": [417, 514, 1267, 313],
+				"position": [
+					1390,
+					540
+				],
 				"move_effect": "door"
 			}
 		}

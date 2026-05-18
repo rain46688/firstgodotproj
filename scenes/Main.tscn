@@ -13,6 +13,57 @@
 [ext_resource type="AudioStream" uid="uid://bos4o1wfm3q0b" path="res://sounds/bagopen.mp3" id="12_bjd11"]
 [ext_resource type="AudioStream" uid="uid://y0ntyp8tj4xm" path="res://sounds/items.mp3" id="12_qmy6f"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bjd11"]
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mwfav"]
+bg_color = Color(0, 0, 0, 0.78431374)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qmy6f"]
+bg_color = Color(0, 0, 0, 0.78431374)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3p2gp"]
+bg_color = Color(0, 0, 0, 0.78431374)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cvmbd"]
+bg_color = Color(0, 0, 0, 0.78431374)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [node name="Main" type="Control" unique_id=376732367]
 layout_mode = 3
 anchors_preset = 15
@@ -178,9 +229,9 @@ texture = ExtResource("11_wp0k4")
 [node name="InventorySlots" type="Control" parent="InventoryUI" unique_id=1384889491]
 anchors_preset = 0
 offset_left = 1200.0
-offset_top = 200.0
+offset_top = 205.0
 offset_right = 1820.0
-offset_bottom = 820.0
+offset_bottom = 825.0
 
 [node name="SelectedItemImage" type="TextureRect" parent="InventoryUI" unique_id=38479359]
 layout_mode = 0
@@ -188,6 +239,7 @@ offset_left = 690.0
 offset_top = 180.0
 offset_right = 990.0
 offset_bottom = 480.0
+scale = Vector2(0.8, 0.8)
 
 [node name="SelectedItemDescription" type="Label" parent="InventoryUI" unique_id=357045251]
 layout_mode = 0
@@ -196,6 +248,44 @@ offset_top = 620.0
 offset_right = 1040.0
 offset_bottom = 980.0
 theme_override_font_sizes/font_size = 25
+
+[node name="SlotHighlight" type="ColorRect" parent="InventoryUI" unique_id=869998840]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="InventoryContextMenu" type="Panel" parent="InventoryUI" unique_id=2005983848]
+visible = false
+layout_mode = 0
+offset_right = 180.0
+offset_bottom = 180.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_bjd11")
+
+[node name="MenuTexts" type="VBoxContainer" parent="InventoryUI/InventoryContextMenu" unique_id=79929800]
+layout_mode = 0
+offset_right = 180.0
+offset_bottom = 180.0
+
+[node name="UseButton" type="Button" parent="InventoryUI/InventoryContextMenu/MenuTexts" unique_id=1087373340]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_mwfav")
+text = "사용"
+
+[node name="EquipButton" type="Button" parent="InventoryUI/InventoryContextMenu/MenuTexts" unique_id=348249589]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_qmy6f")
+text = "장착"
+
+[node name="DropButton" type="Button" parent="InventoryUI/InventoryContextMenu/MenuTexts" unique_id=1035168491]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_3p2gp")
+text = "버리기"
+
+[node name="RotateButton" type="Button" parent="InventoryUI/InventoryContextMenu/MenuTexts" unique_id=1713625206]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_cvmbd")
+text = "수납"
 
 [node name="BagOpenSound" type="AudioStreamPlayer" parent="." unique_id=1757765065]
 stream = ExtResource("12_bjd11")

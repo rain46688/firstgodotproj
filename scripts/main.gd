@@ -31,6 +31,12 @@ extends Control
 @onready var selected_item_image = $InventoryUI/SelectedItemImage
 @onready var selected_item_description = $InventoryUI/SelectedItemDescription
 @onready var item_sound = $ItemSound
+@onready var slot_highlight = $InventoryUI/SlotHighlight
+@onready var inventory_context_menu = $InventoryUI/InventoryContextMenu
+@onready var use_button = $InventoryUI/InventoryContextMenu/MenuTexts/UseButton
+@onready var equip_button = $InventoryUI/InventoryContextMenu/MenuTexts/EquipButton
+@onready var drop_button = $InventoryUI/InventoryContextMenu/MenuTexts/DropButton
+@onready var rotate_button = $InventoryUI/InventoryContextMenu/MenuTexts/RotateButton
 
 # 일반 변수 모음
 var arrow_time = 0.0
@@ -52,6 +58,15 @@ var is_inventory_open = false
 var items = {}
 var inventory_slot_size = 150
 var inventory_slot_gap = 5
+var selected_inventory_item = null
+var dragged_item = null
+var dragged_item_button = null
+var dragged_item_original_position = Vector2.ZERO
+var is_dragging_item = false
+var pressed_item = null
+var pressed_item_button = null
+var pressed_mouse_position = Vector2.ZERO
+var context_menu_item = null
 
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
@@ -67,8 +82,9 @@ func _process(delta):
 	# 입력 우선순위:
 	# 1. 선택지 조작
 	# 2. 대사 넘기기
-	# 3. 이동/상호작용 차단
-	# 4. 일반 이동 입력
+	# 3, 인벤토리 오픈시 상호작용 차단
+	# 4. 이동/상호작용 차단
+	# 5. 일반 이동 입력
 	
 	# 선택지 중이면 선택지만 처리하고 종료
 	if is_choosing:
@@ -103,9 +119,24 @@ func _process(delta):
 
 	# 인벤토리가 열려 있으면 게임 이동/상호작용 입력을 막음
 	if is_inventory_open:
+		# 클릭 후 일정 거리 이상 움직이면 드래그 시작
+		if not is_dragging_item:
+			if pressed_item != null and pressed_item_button != null:
+
+				var distance = get_global_mouse_position().distance_to(
+					pressed_mouse_position
+				)
+
+				# 12픽셀 이상 움직이면 드래그 시작
+				if distance > 12:
+					start_drag_item(pressed_item, pressed_item_button)
+		if is_dragging_item and dragged_item_button != null:
+			dragged_item_button.global_position = get_global_mouse_position() - dragged_item_button.size / 2
+			update_slot_highlight()
+
 		if Input.is_action_just_pressed("esc"):
-			print("inven")
 			close_inventory()
+
 		return
 
 	# 이동 중이면 아무 입력도 받지 않음
@@ -757,6 +788,22 @@ func close_inventory():
 	is_inventory_open = false
 	inventory_ui.visible = false
 	bag_open_sound.play()
+	
+	# 드래그 중이었다면 드래그 상태 초기화
+	if is_dragging_item and dragged_item_button != null:
+		dragged_item_button.position = dragged_item_original_position
+		dragged_item_button.z_index = 0
+
+	is_dragging_item = false
+	dragged_item = null
+	dragged_item_button = null
+	pressed_item = null
+	pressed_item_button = null
+	slot_highlight.visible = false
+	
+	selected_inventory_item = null
+	clear_selected_item_info()
+	close_context_menu()
 
 	# 인벤토리 닫으면 상호작용 버튼 다시 활성화
 	set_interaction_buttons_disabled(false)
@@ -850,12 +897,44 @@ func update_inventory_ui():
 			(inventory_slot_size * item_width) + (inventory_slot_gap * (item_width - 1)),
 			(inventory_slot_size * item_height) + (inventory_slot_gap * (item_height - 1))
 		)
+		
+		# 현재 선택된 아이템이면 밝게 표시
+		if selected_inventory_item == inventory_item:
+			item_button.modulate = Color(1.4, 1.4, 1.4, 1.0)
+		else:
+			item_button.modulate = Color(1.0, 1.0, 1.0, 1.0)
 
-		# 아이템 클릭 시 중앙 이미지/설명 표시
 		item_button.pressed.connect(
 			func():
 				item_sound.play()
+				selected_inventory_item = inventory_item
 				show_selected_item_info(item_id)
+				update_inventory_ui()
+		)
+		
+		item_button.gui_input.connect(
+			func(event):
+
+				# 마우스 버튼 이벤트만 처리
+				if event is InputEventMouseButton:
+
+					if event.button_index == MOUSE_BUTTON_LEFT:
+						if event.pressed:
+							pressed_item = inventory_item
+							pressed_item_button = item_button
+							pressed_mouse_position = get_global_mouse_position()
+						else:
+							if is_dragging_item:
+								stop_drag_item()
+							pressed_item = null
+							pressed_item_button = null
+					
+					if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+						item_sound.play()
+						selected_inventory_item = inventory_item
+						show_selected_item_info(item_id)
+						update_inventory_ui()
+						open_context_menu(inventory_item)
 		)
 
 		inventory_slots.add_child(item_button)
@@ -943,6 +1022,194 @@ func get_occupied_slots(inventory_item):
 			occupied.append(slot)
 
 	return occupied	
+# 아이템 드래그 시작 함수
+func start_drag_item(inventory_item, item_button):
+	is_dragging_item = true
+	dragged_item = inventory_item
+	dragged_item_button = item_button
+	dragged_item_original_position = item_button.position
+	
+	item_button.z_index = 100
+	item_sound.play()
+# 아이템 드래그 종료 함수
+func stop_drag_item():
+
+	if dragged_item_button == null:
+		return
+
+	var item_id = dragged_item["id"]
+	var item_data = items[item_id]
+
+	var item_width = item_data.get("width", 1)
+	var item_height = item_data.get("height", 1)
+
+	var target_slot = get_slot_from_mouse_position()
+
+	# 정상 슬롯이고 배치 가능하면 이동
+	if target_slot != -1:
+		if can_place_item_at_except(
+			target_slot,
+			item_width,
+			item_height,
+			dragged_item
+		):
+
+			dragged_item["slot"] = target_slot
+			update_inventory_ui()
+
+		# 놓을 수 없는 위치면 원래 자리 복귀
+		else:
+			dragged_item_button.position = dragged_item_original_position
+
+	# 가방 밖이면 원래 자리 복귀
+	else:
+		dragged_item_button.position = dragged_item_original_position
+
+	dragged_item_button.z_index = 0
+
+	is_dragging_item = false
+	dragged_item = null
+	dragged_item_button = null
+	slot_highlight.visible = false
+# 마우스 위치 기준 슬롯 번호 계산 함수
+func get_slot_from_mouse_position():
+
+	var local_mouse = inventory_slots.get_local_mouse_position()
+
+	var slot_x = int(local_mouse.x / (inventory_slot_size + inventory_slot_gap))
+	var slot_y = int(local_mouse.y / (inventory_slot_size + inventory_slot_gap))
+
+	# 가방 범위 밖이면 실패
+	if slot_x < 0 or slot_x >= 4:
+		return -1
+
+	if slot_y < 0 or slot_y >= 4:
+		return -1
+
+	return slot_y * 4 + slot_x	
+# 특정 아이템을 제외하고 슬롯 배치 가능 여부 확인
+func can_place_item_at_except(start_slot, item_width, item_height, ignored_item):
+
+	var start_col = start_slot % 4
+	var start_row = start_slot / 4
+
+	# 가방 범위 초과
+	if start_col + item_width > 4:
+		return false
+
+	if start_row + item_height > 4:
+		return false
+
+	var target_slots = []
+
+	for y in range(item_height):
+		for x in range(item_width):
+			var slot = (start_row + y) * 4 + (start_col + x)
+			target_slots.append(slot)
+
+	for item in inventory:
+
+		# 현재 드래그 중인 아이템은 무시
+		if item == ignored_item:
+			continue
+
+		var occupied = get_occupied_slots(item)
+
+		for slot in target_slots:
+			if occupied.has(slot):
+				return false
+
+	return true	
+# 드래그 중 아이템을 놓을 위치 하이라이트 갱신 함수
+func update_slot_highlight():
+	if not is_dragging_item:
+		slot_highlight.visible = false
+		return
+
+	if dragged_item == null:
+		slot_highlight.visible = false
+		return
+
+	var target_slot = get_slot_from_mouse_position()
+
+	if target_slot == -1:
+		slot_highlight.visible = false
+		return
+
+	var item_id = dragged_item["id"]
+	var item_data = items[item_id]
+
+	var item_width = item_data.get("width", 1)
+	var item_height = item_data.get("height", 1)
+
+	var can_place = can_place_item_at_except(
+		target_slot,
+		item_width,
+		item_height,
+		dragged_item
+	)
+
+	var col = target_slot % 4
+	var row = target_slot / 4
+
+	slot_highlight.position = inventory_slots.position + Vector2(
+		col * (inventory_slot_size + inventory_slot_gap),
+		row * (inventory_slot_size + inventory_slot_gap)
+	)
+
+	slot_highlight.size = Vector2(
+		(inventory_slot_size * item_width) + (inventory_slot_gap * (item_width - 1)),
+		(inventory_slot_size * item_height) + (inventory_slot_gap * (item_height - 1))
+	)
+
+	if can_place:
+		slot_highlight.color = Color(0, 1, 0, 0.025)
+	else:
+		slot_highlight.color = Color(1, 0, 0, 0.025)
+
+	slot_highlight.visible = true	
+# 인벤토리 우클릭 메뉴 열기 함수
+func open_context_menu(inventory_item):
+
+	context_menu_item = inventory_item
+
+	var item_id = inventory_item["id"]
+
+	if not items.has(item_id):
+		return
+
+	var item_data = items[item_id]
+	var item_type = item_data.get("type", "")
+
+	# 기본적으로 전부 숨김
+	use_button.visible = false
+	equip_button.visible = false
+	drop_button.visible = false
+	rotate_button.visible = false
+
+	# 타입별 메뉴 표시
+	if item_type == "weapon":
+		equip_button.visible = true
+		drop_button.visible = true
+		rotate_button.visible = true
+
+	elif item_type == "consumable":
+		use_button.visible = true
+		drop_button.visible = true
+
+	elif item_type == "key":
+		drop_button.visible = true
+
+	else:
+		drop_button.visible = true
+
+	inventory_context_menu.visible = true
+	inventory_context_menu.global_position = get_global_mouse_position()
+# 인벤토리 우클릭 메뉴 닫기 함수
+func close_context_menu():
+	context_menu_item = null
+	inventory_context_menu.visible = false	
+	
 	
 	
 	

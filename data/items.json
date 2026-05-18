@@ -5,7 +5,8 @@
 		"image": "res://imgs/items/classroomKey180x180.png",
 		"width": 1,
 		"height": 1,
-		"type": "key"
+		"type": "key",
+		"consumed_on_use": true
 	},
 	"cutter_knife": {
 		"name": "커터칼",
@@ -14,6 +15,7 @@
 		"width": 2,
 		"height": 1,
 		"type": "weapon",
-		"attack": 1
+		"attack": 1,
+		"consumed_on_use": false
 	}
 }
