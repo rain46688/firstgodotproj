@@ -8,8 +8,8 @@
 [ext_resource type="AudioStream" uid="uid://bd1nk2i0616gs" path="res://sounds/lockeddoor.mp3" id="7_lgr22"]
 [ext_resource type="AudioStream" uid="uid://b2p5y3ta6bfww" path="res://sounds/clcik.mp3" id="8_jlsqs"]
 [ext_resource type="AudioStream" uid="uid://cvy3qjqnkm0ca" path="res://sounds/unlockeddoor.mp3" id="9_q8u5g"]
+[ext_resource type="Texture2D" uid="uid://hvkehjj35xiv" path="res://imgs/ui/인벤토리_fix1920x1080.png" id="10_bjd11"]
 [ext_resource type="Texture2D" uid="uid://0sqsgro5tr8p" path="res://imgs/ui/bag200x300.png" id="10_lhr70"]
-[ext_resource type="Texture2D" uid="uid://ykmo18nim71i" path="res://imgs/ui/인벤토리1920x1080.png" id="11_wp0k4"]
 [ext_resource type="AudioStream" uid="uid://bos4o1wfm3q0b" path="res://sounds/bagopen.mp3" id="12_bjd11"]
 [ext_resource type="AudioStream" uid="uid://y0ntyp8tj4xm" path="res://sounds/items.mp3" id="12_qmy6f"]
 
@@ -224,14 +224,14 @@ offset_bottom = 40.0
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-texture = ExtResource("11_wp0k4")
+texture = ExtResource("10_bjd11")
 
 [node name="InventorySlots" type="Control" parent="InventoryUI" unique_id=1384889491]
 anchors_preset = 0
 offset_left = 1200.0
-offset_top = 205.0
+offset_top = 190.0
 offset_right = 1820.0
-offset_bottom = 825.0
+offset_bottom = 810.0
 
 [node name="SelectedItemImage" type="TextureRect" parent="InventoryUI" unique_id=38479359]
 layout_mode = 0
@@ -287,6 +287,14 @@ layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_cvmbd")
 text = "수납"
 
+[node name="EquippedWeaponText" type="Label" parent="InventoryUI" unique_id=2092615467]
+layout_mode = 0
+offset_left = 140.0
+offset_top = 620.0
+offset_right = 440.0
+offset_bottom = 970.0
+theme_override_font_sizes/font_size = 25
+
 [node name="BagOpenSound" type="AudioStreamPlayer" parent="." unique_id=1757765065]
 stream = ExtResource("12_bjd11")
 
@@ -294,3 +302,6 @@ stream = ExtResource("12_bjd11")
 stream = ExtResource("12_qmy6f")
 
 [connection signal="pressed" from="BagButton" to="." method="_on_bag_button_pressed"]
+[connection signal="pressed" from="InventoryUI/InventoryContextMenu/MenuTexts/UseButton" to="." method="_on_use_button_pressed"]
+[connection signal="pressed" from="InventoryUI/InventoryContextMenu/MenuTexts/EquipButton" to="." method="_on_equip_button_pressed"]
+[connection signal="pressed" from="InventoryUI/InventoryContextMenu/MenuTexts/DropButton" to="." method="_on_drop_button_pressed"]

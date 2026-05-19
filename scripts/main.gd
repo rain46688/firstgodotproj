@@ -37,6 +37,7 @@ extends Control
 @onready var equip_button = $InventoryUI/InventoryContextMenu/MenuTexts/EquipButton
 @onready var drop_button = $InventoryUI/InventoryContextMenu/MenuTexts/DropButton
 @onready var rotate_button = $InventoryUI/InventoryContextMenu/MenuTexts/RotateButton
+@onready var equipped_weapon_text = $InventoryUI/EquippedWeaponText
 
 # 일반 변수 모음
 var arrow_time = 0.0
@@ -67,6 +68,9 @@ var pressed_item = null
 var pressed_item_button = null
 var pressed_mouse_position = Vector2.ZERO
 var context_menu_item = null
+var equipped_weapon = null
+var player_hp = 75
+var player_max_hp = 100
 
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
@@ -211,6 +215,7 @@ func _ready():
 
 	# 테스트
 	await add_item("cutter_knife")
+	await add_item("beverage_a")
 	#await add_item("classroom_key")
 		
 	update_room()
@@ -749,6 +754,8 @@ func run_exit_interaction(direction):
 		if exit_data.has("open_flag"):
 			set_flag(exit_data["open_flag"])
 
+		consume_item_if_needed(exit_data["required_item"])
+		
 		await show_dialogue(MSG_DOOR_UNLOCK)
 
 		await effect(false, false, true, "")
@@ -778,6 +785,7 @@ func open_inventory():
 	is_inventory_open = true
 	inventory_ui.visible = true
 	update_inventory_ui()
+	update_equipped_weapon_ui()
 	clear_selected_item_info()
 	bag_open_sound.play()
 
@@ -1150,7 +1158,7 @@ func update_slot_highlight():
 	)
 
 	var col = target_slot % 4
-	var row = target_slot / 4
+	var row = floori(target_slot / 4.0)
 
 	slot_highlight.position = inventory_slots.position + Vector2(
 		col * (inventory_slot_size + inventory_slot_gap),
@@ -1170,6 +1178,10 @@ func update_slot_highlight():
 	slot_highlight.visible = true	
 # 인벤토리 우클릭 메뉴 열기 함수
 func open_context_menu(inventory_item):
+	
+	if inventory_context_menu.visible and context_menu_item == inventory_item:
+		close_context_menu()
+		return
 
 	context_menu_item = inventory_item
 
@@ -1193,6 +1205,11 @@ func open_context_menu(inventory_item):
 		drop_button.visible = true
 		rotate_button.visible = true
 
+		if equipped_weapon == inventory_item:
+			equip_button.text = "해제"
+		else:
+			equip_button.text = "장착"
+
 	elif item_type == "consumable":
 		use_button.visible = true
 		drop_button.visible = true
@@ -1209,14 +1226,121 @@ func open_context_menu(inventory_item):
 func close_context_menu():
 	context_menu_item = null
 	inventory_context_menu.visible = false	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+# 아이템 제거 함수
+func remove_item(inventory_item):
+	if inventory_item == null:
+		return false
+
+	if inventory.has(inventory_item):
+		inventory.erase(inventory_item)
+
+		if selected_inventory_item == inventory_item:
+			selected_inventory_item = null
+			clear_selected_item_info()
+
+		if context_menu_item == inventory_item:
+			close_context_menu()
+
+		update_inventory_ui()
+		return true
+
+	return false	
+# 아이템 사용 시 소모 처리 함수
+func consume_item_if_needed(item_id):
+
+	if not items.has(item_id):
+		return
+
+	var item_data = items[item_id]
+
+	# consumed_on_use가 없거나 false면 소모 안 함
+	if not item_data.get("consumed_on_use", false):
+		return
+
+	# 해당 아이템 찾기
+	for inventory_item in inventory:
+		if inventory_item["id"] == item_id:
+			remove_item(inventory_item)
+			print("아이템 소모: " + item_id)
+			return
+# 아이템 버리기 버튼 함수
+func _on_drop_button_pressed():
+	if context_menu_item == null:
+		return
+
+	item_sound.play()
+	remove_item(context_menu_item)
+# 아이템 장착 함수
+func equip_item(inventory_item):
+	if inventory_item == null:
+		return
+
+	var item_id = inventory_item["id"]
+
+	if not items.has(item_id):
+		return
+
+	var item_data = items[item_id]
+
+	if item_data.get("type", "") != "weapon":
+		return
+
+	if equipped_weapon == inventory_item:
+		equipped_weapon = null
+		print(get_item_name(item_id) + " 해제")
+	else:
+		equipped_weapon = inventory_item
+		print(get_item_name(item_id) + " 장착")
+
+	update_equipped_weapon_ui()
+	close_context_menu()
+# 아이템 장착 버튼 함수
+func _on_equip_button_pressed():
+	if context_menu_item == null:
+		return
+
+	item_sound.play()
+	equip_item(context_menu_item)
+# 장착 무기 UI 갱신 함수
+func update_equipped_weapon_ui():
+	if equipped_weapon == null:
+		equipped_weapon_text.text = "장비 없음"
+		return
+
+	var item_id = equipped_weapon["id"]
+
+	equipped_weapon_text.text = get_item_name(item_id)	
+# 아이템 사용 함수
+func use_item(inventory_item):
+	if inventory_item == null:
+		return
+
+	var item_id = inventory_item["id"]
+
+	if not items.has(item_id):
+		return
+
+	var item_data = items[item_id]
+	var item_type = item_data.get("type", "")
+
+	if item_type != "consumable":
+		return
+
+	if item_data.has("heal"):
+		player_hp += item_data["heal"]
+
+		if player_hp > player_max_hp:
+			player_hp = player_max_hp
+
+		print("현재 체력: " + str(player_hp))
+
+	consume_item_if_needed(item_id)
+	update_inventory_ui()
+	close_context_menu()	
+# 아이템 사용 버튼 함수
+func _on_use_button_pressed():
+	if context_menu_item == null:
+		return
+
+	item_sound.play()
+	use_item(context_menu_item)
