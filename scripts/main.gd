@@ -44,6 +44,8 @@ extends Control
 @onready var save_ui_open_sound = $SaveUiOpenSound
 @onready var save_ui_close_sound = $SaveUiCloseSound
 @onready var save_complete_sound = $SaveCompleteSound
+@onready var speaker_portrait = $DialogueBox/SpeakerPortrait
+@onready var speaker_name = $DialogueBox/SpeakerName
 
 
 # 일반 변수 모음
@@ -78,6 +80,7 @@ var context_menu_item = null
 var equipped_weapon = null
 var player_hp = 75
 var player_max_hp = 100
+var characters = {}
 
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
@@ -220,6 +223,13 @@ func _ready():
 	if not item_success:
 		push_error("아이템 데이터 로드 실패로 게임 초기화 중단")
 		return
+	
+	# 캐릭터 로드 및 예외 처리	
+	var character_success = load_characters()
+
+	if not character_success:
+		push_error("캐릭터 데이터 로드 실패로 게임 초기화 중단")
+		return
 
 	# 테스트
 	#await get_tree().create_timer(1.0).timeout
@@ -350,10 +360,17 @@ func try_move_to_exit(direction):
 	# 열린 출구 이동
 	await move_to_room(exit_data["target"], use_shake, direction)
 # 대사 출력 함수
-func show_dialogue(text):
+func show_dialogue(text, mode = "normal"):
 	# - 글자를 한 글자씩 출력
 	# - 출력 중 입력하면 전체 문장 즉시 표시
 	# - 출력 완료 후 입력하면 대사창 종료
+	
+	# 대화창 레이아웃 변경
+	set_dialogue_layout(mode)
+
+	if mode != "npc":
+		# NPC 대화 UI 초기화
+		clear_speaker_ui()
 
 	is_dialogue_showing = true
 	dialogue_finished = false
@@ -424,6 +441,8 @@ func load_rooms():
 	return true
 # 선택지 함수
 func show_choices(choices):
+	
+	set_dialogue_layout("choice")
 	
 	is_choosing = true
 	choice_index = 0
@@ -1033,7 +1052,7 @@ func show_selected_item_info(inventory_item):
 	# stackable 아이템이면 보유 개수 표시
 	if inventory_item != null:
 		if inventory_item.has("count"):
-			description_text += "\n\n보유 개수 : " + str(int(inventory_item["count"]))
+			description_text = "보유 개수 : " + str(int(inventory_item["count"])) + "\n\n" + description_text
 
 	selected_item_description.text = description_text
 # 아이템이 들어갈 수 있는 빈 슬롯 찾기 함수
@@ -1574,4 +1593,88 @@ func restore_equipped_weapon(saved_slot):
 		if inventory_item.has("slot") and int(inventory_item["slot"]) == int(saved_slot):
 			equipped_weapon = inventory_item
 			return
+# 대화창 레이아웃 변경 함수
+func set_dialogue_layout(mode):
+	
+	# choice
+	if mode == "choice":
+		speaker_portrait.visible = false
+		speaker_name.visible = false
+	
+		$DialogueBox/DialogueText.position = Vector2(50, 40)
+		$DialogueBox/DialogueText.size = Vector2(1600, 100)
+
+		choice_box.visible = true
+		choice_box.position = Vector2(50, 140)
+		choice_box.size = Vector2(1600, 140)
+	# npc
+	elif mode == "npc":
+		speaker_portrait.visible = true
+		speaker_name.visible = true
+
+		$DialogueBox/DialogueText.position = Vector2(290, 70)
+		$DialogueBox/DialogueText.size = Vector2(1360, 180)
+
+		choice_box.visible = false
+	# normal
+	else:
+		speaker_portrait.visible = false
+		speaker_name.visible = false
+		
+		$DialogueBox/DialogueText.position = Vector2(50, 40)
+		$DialogueBox/DialogueText.size = Vector2(1600, 220)
+
+		choice_box.visible = false	
+# NPC 대화 UI 초기화 함수
+func clear_speaker_ui():
+	speaker_portrait.visible = false
+	speaker_name.visible = false
+# NPC 대화 출력 함수
+func show_npc_dialogue(character_id, emotion, text):
+
+	if not characters.has(character_id):
+		push_error("존재하지 않는 캐릭터: " + character_id)
+		return
+
+	var character_data = characters[character_id]
+
+	speaker_name.text = character_data["name"]
+
+	if character_data.has("portrait"):
+		var portrait_data = character_data["portrait"]
+
+		if portrait_data.has(emotion):
+			speaker_portrait.texture = load(portrait_data[emotion])
+
+	await show_dialogue(text, "npc")
+# NPC 캐릭터 데이터 로드 함수
+func load_characters():
+	var path = "res://data/characters.json"
+
+	if not FileAccess.file_exists(path):
+		push_error("characters.json 파일을 찾을 수 없음: " + path)
+		return false
+
+	var file = FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		push_error("characters.json 파일 열기 실패: " + path)
+		return false
+
+	var json_text = file.get_as_text()
+	var json = JSON.new()
+	var error = json.parse(json_text)
+
+	if error != OK:
+		push_error("characters.json 파싱 실패: " + json.get_error_message())
+		push_error("오류 위치 line: " + str(json.get_error_line()))
+		return false
+
+	if typeof(json.data) != TYPE_DICTIONARY:
+		push_error("characters.json 최상위 구조는 Dictionary여야 함")
+		return false
+
+	characters = json.data
+	print("characters.json 로드 성공")
+	return true	
 	

@@ -1,0 +1,23 @@
+{
+  "claire": {
+	"name": "클레어",
+	
+	"portrait": {
+	  "normal": "res://imgs/characters/claire/portrait/normal.png",
+	  "pain": "res://imgs/characters/claire/portrait/pain.png",
+	  "embarrassed": "res://imgs/characters/claire/portrait/embarrassed.png",
+	  "angry": "res://imgs/characters/claire/portrait/angry.png",
+	  "annoyed": "res://imgs/characters/claire/portrait/annoyed.png",
+	  "expressionless": "res://imgs/characters/claire/portrait/expressionless.png"
+	},
+
+	"standing": {
+	  "normal": "res://imgs/characters/claire/standing/normal.png",
+	  "pain": "res://imgs/characters/claire/standing/pain.png",
+	  "embarrassed": "res://imgs/characters/claire/standing/embarrassed.png",
+	  "angry": "res://imgs/characters/claire/standing/angry.png",
+	  "annoyed": "res://imgs/characters/claire/standing/annoyed.png",
+	  "expressionless": "res://imgs/characters/claire/standing/expressionless.png"
+	}
+  }
+}

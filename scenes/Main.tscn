@@ -183,22 +183,40 @@ offset_bottom = 280.0
 [node name="Choice1" type="Label" parent="DialogueBox/ChoiceBox" unique_id=618178001]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_qmy6f")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 25
 
 [node name="Choice2" type="Label" parent="DialogueBox/ChoiceBox" unique_id=1239197474]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_qmy6f")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 25
 
 [node name="Choice3" type="Label" parent="DialogueBox/ChoiceBox" unique_id=1641613655]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_qmy6f")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 25
 
 [node name="Choice4" type="Label" parent="DialogueBox/ChoiceBox" unique_id=25649815]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_qmy6f")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 25
+
+[node name="SpeakerPortrait" type="TextureRect" parent="DialogueBox" unique_id=2112564769]
+visible = false
+layout_mode = 0
+offset_left = 40.0
+offset_top = 35.0
+offset_right = 260.0
+offset_bottom = 255.0
+expand_mode = 1
+stretch_mode = 6
+
+[node name="SpeakerName" type="Label" parent="DialogueBox" unique_id=1758236695]
+visible = false
+layout_mode = 0
+offset_left = 280.0
+offset_top = 20.0
+offset_right = 680.0
+offset_bottom = 60.0
 
 [node name="LockedSound" type="AudioStreamPlayer" parent="." unique_id=732505376]
 stream = ExtResource("7_lgr22")
@@ -247,10 +265,10 @@ offset_bottom = 810.0
 
 [node name="SelectedItemImage" type="TextureRect" parent="InventoryUI" unique_id=38479359]
 layout_mode = 0
-offset_left = 720.0
+offset_left = 700.0
 offset_top = 180.0
-offset_right = 1020.0
-offset_bottom = 480.0
+offset_right = 1050.0
+offset_bottom = 530.0
 scale = Vector2(0.8, 0.8)
 
 [node name="SelectedItemDescription" type="Label" parent="InventoryUI" unique_id=357045251]
