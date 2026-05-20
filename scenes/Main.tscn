@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://db3x6hhv5s5yi"]
 
 [ext_resource type="Script" uid="uid://c4xwmh67fo8qc" path="res://scripts/main.gd" id="1_r0du0"]
-[ext_resource type="Texture2D" uid="uid://c1tm41hn8s7o8" path="res://imgs/backgrounds/hallway_closed.png" id="2_bjd11"]
+[ext_resource type="Texture2D" uid="uid://dtna5r4qc5tbe" path="res://imgs/backgrounds/classroom_monitor.png" id="2_bb450"]
 [ext_resource type="Texture2D" uid="uid://r7yqri7sh84c" path="res://imgs/ui/arrow_forward.png" id="3_lhr70"]
 [ext_resource type="AudioStream" uid="uid://c17uoa5rh4onj" path="res://sounds/footsteps.mp3" id="4_3dxm6"]
 [ext_resource type="AudioStream" uid="uid://c4tigttavfb3d" path="res://sounds/bgm2.mp3" id="5_nxtc6"]
@@ -10,8 +10,14 @@
 [ext_resource type="AudioStream" uid="uid://cvy3qjqnkm0ca" path="res://sounds/unlockeddoor.mp3" id="9_q8u5g"]
 [ext_resource type="Texture2D" uid="uid://hvkehjj35xiv" path="res://imgs/ui/인벤토리_fix1920x1080.png" id="10_bjd11"]
 [ext_resource type="Texture2D" uid="uid://0sqsgro5tr8p" path="res://imgs/ui/bag200x300.png" id="10_lhr70"]
+[ext_resource type="FontFile" uid="uid://dshbp46j15be4" path="res://font/x12y12pxMaruMinyaHangul.ttf" id="11_qmy6f"]
 [ext_resource type="AudioStream" uid="uid://bos4o1wfm3q0b" path="res://sounds/bagopen.mp3" id="12_bjd11"]
 [ext_resource type="AudioStream" uid="uid://y0ntyp8tj4xm" path="res://sounds/items.mp3" id="12_qmy6f"]
+[ext_resource type="AudioStream" uid="uid://dpskhkn3tacx0" path="res://sounds/healing.mp3" id="14_mwfav"]
+[ext_resource type="AudioStream" uid="uid://cw2f5fwur2bxg" path="res://sounds/equip.mp3" id="15_3p2gp"]
+[ext_resource type="AudioStream" uid="uid://3o8o7uw5f8d7" path="res://sounds/save_ui_open.mp3" id="16_ft6cd"]
+[ext_resource type="AudioStream" uid="uid://bca0o8rrmsb8h" path="res://sounds/save_ui_close.mp3" id="17_bb450"]
+[ext_resource type="AudioStream" uid="uid://dcvrjg58exxw0" path="res://sounds/save_complete.mp3" id="18_bb450"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bjd11"]
 bg_color = Color(0, 0, 0, 0)
@@ -80,7 +86,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_bjd11")
+texture = ExtResource("2_bb450")
 expand_mode = 1
 stretch_mode = 6
 
@@ -163,6 +169,8 @@ offset_left = 50.0
 offset_top = 40.0
 offset_right = 1650.0
 offset_bottom = 160.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("11_qmy6f")
 theme_override_font_sizes/font_size = 25
 
 [node name="ChoiceBox" type="VBoxContainer" parent="DialogueBox" unique_id=1066981331]
@@ -174,18 +182,22 @@ offset_bottom = 280.0
 
 [node name="Choice1" type="Label" parent="DialogueBox/ChoiceBox" unique_id=618178001]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("11_qmy6f")
 theme_override_font_sizes/font_size = 20
 
 [node name="Choice2" type="Label" parent="DialogueBox/ChoiceBox" unique_id=1239197474]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("11_qmy6f")
 theme_override_font_sizes/font_size = 20
 
 [node name="Choice3" type="Label" parent="DialogueBox/ChoiceBox" unique_id=1641613655]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("11_qmy6f")
 theme_override_font_sizes/font_size = 20
 
 [node name="Choice4" type="Label" parent="DialogueBox/ChoiceBox" unique_id=25649815]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("11_qmy6f")
 theme_override_font_sizes/font_size = 20
 
 [node name="LockedSound" type="AudioStreamPlayer" parent="." unique_id=732505376]
@@ -235,9 +247,9 @@ offset_bottom = 810.0
 
 [node name="SelectedItemImage" type="TextureRect" parent="InventoryUI" unique_id=38479359]
 layout_mode = 0
-offset_left = 690.0
+offset_left = 720.0
 offset_top = 180.0
-offset_right = 990.0
+offset_right = 1020.0
 offset_bottom = 480.0
 scale = Vector2(0.8, 0.8)
 
@@ -247,6 +259,8 @@ offset_left = 640.0
 offset_top = 620.0
 offset_right = 1040.0
 offset_bottom = 980.0
+theme_override_colors/font_color = Color(0.84705883, 0.8156863, 0.78431374, 1)
+theme_override_fonts/font = ExtResource("11_qmy6f")
 theme_override_font_sizes/font_size = 25
 
 [node name="SlotHighlight" type="ColorRect" parent="InventoryUI" unique_id=869998840]
@@ -269,21 +283,29 @@ offset_bottom = 180.0
 
 [node name="UseButton" type="Button" parent="InventoryUI/InventoryContextMenu/MenuTexts" unique_id=1087373340]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.8156863, 0.78431374, 1)
+theme_override_fonts/font = ExtResource("11_qmy6f")
 theme_override_styles/normal = SubResource("StyleBoxFlat_mwfav")
 text = "사용"
 
 [node name="EquipButton" type="Button" parent="InventoryUI/InventoryContextMenu/MenuTexts" unique_id=348249589]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.8156863, 0.78431374, 1)
+theme_override_fonts/font = ExtResource("11_qmy6f")
 theme_override_styles/normal = SubResource("StyleBoxFlat_qmy6f")
 text = "장착"
 
 [node name="DropButton" type="Button" parent="InventoryUI/InventoryContextMenu/MenuTexts" unique_id=1035168491]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.8156863, 0.78431374, 1)
+theme_override_fonts/font = ExtResource("11_qmy6f")
 theme_override_styles/normal = SubResource("StyleBoxFlat_3p2gp")
 text = "버리기"
 
 [node name="RotateButton" type="Button" parent="InventoryUI/InventoryContextMenu/MenuTexts" unique_id=1713625206]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.8156863, 0.78431374, 1)
+theme_override_fonts/font = ExtResource("11_qmy6f")
 theme_override_styles/normal = SubResource("StyleBoxFlat_cvmbd")
 text = "수납"
 
@@ -293,13 +315,44 @@ offset_left = 140.0
 offset_top = 620.0
 offset_right = 440.0
 offset_bottom = 970.0
+theme_override_colors/font_color = Color(0.84705883, 0.8156863, 0.78431374, 1)
+theme_override_fonts/font = ExtResource("11_qmy6f")
 theme_override_font_sizes/font_size = 25
+
+[node name="PlayerHpText" type="Label" parent="InventoryUI" unique_id=65050815]
+layout_mode = 0
+offset_left = 290.0
+offset_top = 444.0
+offset_right = 390.0
+offset_bottom = 474.0
+theme_override_fonts/font = ExtResource("11_qmy6f")
+theme_override_font_sizes/font_size = 27
 
 [node name="BagOpenSound" type="AudioStreamPlayer" parent="." unique_id=1757765065]
 stream = ExtResource("12_bjd11")
 
 [node name="ItemSound" type="AudioStreamPlayer" parent="." unique_id=318527114]
 stream = ExtResource("12_qmy6f")
+
+[node name="HealingSound" type="AudioStreamPlayer" parent="." unique_id=2089716416]
+stream = ExtResource("14_mwfav")
+volume_db = -5.0
+
+[node name="EquipSound" type="AudioStreamPlayer" parent="." unique_id=103671333]
+stream = ExtResource("15_3p2gp")
+volume_db = -5.0
+
+[node name="SaveUiOpenSound" type="AudioStreamPlayer" parent="." unique_id=510261640]
+stream = ExtResource("16_ft6cd")
+volume_db = -5.0
+
+[node name="SaveUiCloseSound" type="AudioStreamPlayer" parent="." unique_id=600412446]
+stream = ExtResource("17_bb450")
+volume_db = -5.0
+
+[node name="SaveCompleteSound" type="AudioStreamPlayer" parent="." unique_id=1570015788]
+stream = ExtResource("18_bb450")
+volume_db = -5.0
 
 [connection signal="pressed" from="BagButton" to="." method="_on_bag_button_pressed"]
 [connection signal="pressed" from="InventoryUI/InventoryContextMenu/MenuTexts/UseButton" to="." method="_on_use_button_pressed"]

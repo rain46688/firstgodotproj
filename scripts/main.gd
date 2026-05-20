@@ -38,6 +38,13 @@ extends Control
 @onready var drop_button = $InventoryUI/InventoryContextMenu/MenuTexts/DropButton
 @onready var rotate_button = $InventoryUI/InventoryContextMenu/MenuTexts/RotateButton
 @onready var equipped_weapon_text = $InventoryUI/EquippedWeaponText
+@onready var healing_sound = $HealingSound
+@onready var player_hp_text = $InventoryUI/PlayerHpText
+@onready var equip_sound = $EquipSound
+@onready var save_ui_open_sound = $SaveUiOpenSound
+@onready var save_ui_close_sound = $SaveUiCloseSound
+@onready var save_complete_sound = $SaveCompleteSound
+
 
 # 일반 변수 모음
 var arrow_time = 0.0
@@ -193,6 +200,7 @@ func _process(delta):
 # 처음에 한번 실행 함수
 func _ready():
 	
+	inventory_ui.visible = false
 	background.scale = Vector2(1, 1)
 	
 	# 버튼이 키보드 포커스를 가져가지 않게 설정
@@ -214,8 +222,13 @@ func _ready():
 		return
 
 	# 테스트
-	await add_item("cutter_knife")
-	await add_item("beverage_a")
+	#await get_tree().create_timer(1.0).timeout
+	load_game(1)
+	
+	#await add_item("cutter_knife")
+	#await add_item("beverage_a")
+	#await add_item("beverage_a")
+	#await add_item("beverage_a")
 	#await add_item("classroom_key")
 		
 	update_room()
@@ -480,6 +493,13 @@ func run_interaction(interaction_id):
 	# 기존 단일 대사도 계속 지원
 	elif interaction.has("text"):
 		await show_dialogue(interaction["text"])
+	
+	# 저장 포인트 상호작용 처리
+	if interaction.has("save_point") and interaction["save_point"] == true:
+		await run_save_point()
+		set_interaction_buttons_disabled(false)
+		is_interacting = false
+		return
 
 	if interaction.has("choices"):
 		var selected_index = await show_choices(interaction["choices"])
@@ -522,8 +542,31 @@ func has_item(item_id):
 	return false
 # 아이템 추가 함수
 func add_item(item_id):
-	if has_item(item_id):
+	if not items.has(item_id):
 		return false
+
+	var item_data = items[item_id]
+	var is_stackable = item_data.get("stackable", false)
+	var max_stack = item_data.get("max_stack", 1)
+
+	# stackable 아이템이면 기존 같은 아이템의 count 증가
+	if is_stackable:
+		for inventory_item in inventory:
+			if inventory_item["id"] == item_id:
+				var current_count = inventory_item.get("count", 1)
+
+				if current_count < max_stack:
+					inventory_item["count"] = current_count + 1
+					print("아이템 개수 증가: " + get_item_name(item_id) + " x" + str(inventory_item["count"]))
+					return true
+
+				# 이미 최대 개수면 새 슬롯에 추가 시도
+				break
+
+	# 비중첩 아이템은 기존처럼 중복 획득 방지
+	else:
+		if has_item(item_id):
+			return false
 
 	var empty_slot = find_empty_slot(item_id)
 
@@ -531,10 +574,15 @@ func add_item(item_id):
 		await show_dialogue("가방에 공간이 없다.")
 		return false
 
-	inventory.append({
+	var new_item = {
 		"id": item_id,
 		"slot": empty_slot
-	})
+	}
+
+	if is_stackable:
+		new_item["count"] = 1
+
+	inventory.append(new_item)
 
 	print("아이템 획득: " + get_item_name(item_id))
 	return true
@@ -691,6 +739,18 @@ func create_exit_buttons(room):
 		# click_rect 없는 출구는 클릭 버튼 생성 안 함
 		if not exit_data.has("click_rect"):
 			continue
+			
+		# 잠긴 출구인지 확인
+		var is_locked = exit_data.has("locked") and exit_data["locked"] == true
+
+		# 이미 열렸는지 확인
+		var is_unlocked = false
+		if exit_data.has("open_flag") and has_flag(exit_data["open_flag"]):
+			is_unlocked = true
+
+		# 잠겨 있고 아직 열리지 않은 출구만 마우스 클릭 버튼 생성
+		if not is_locked or is_unlocked:
+			continue
 
 		var button = Button.new()
 
@@ -784,12 +844,14 @@ func open_inventory():
 
 	is_inventory_open = true
 	inventory_ui.visible = true
+	
+	clear_selected_item_info()
 	update_inventory_ui()
 	update_equipped_weapon_ui()
-	clear_selected_item_info()
+	update_player_status_ui()
+	
 	bag_open_sound.play()
 
-	# 인벤토리 열려 있을 때 상호작용 버튼 비활성화
 	set_interaction_buttons_disabled(true)
 # 인벤토리 닫기 함수
 func close_inventory():
@@ -865,7 +927,7 @@ func update_inventory_ui():
 	for inventory_item in inventory:
 
 		var item_id = inventory_item["id"]
-		var start_slot = inventory_item["slot"]
+		var start_slot = int(inventory_item["slot"])
 
 		if not items.has(item_id):
 			continue
@@ -885,7 +947,7 @@ func update_inventory_ui():
 			item_height = item_data["height"]
 
 		var col = start_slot % 4
-		var row = start_slot / 4
+		var row = floori(start_slot / 4.0)
 
 		var item_button = TextureButton.new()
 		# 아이템 버튼이 Space 입력을 가져가지 않게 함
@@ -916,7 +978,7 @@ func update_inventory_ui():
 			func():
 				item_sound.play()
 				selected_inventory_item = inventory_item
-				show_selected_item_info(item_id)
+				show_selected_item_info(inventory_item)
 				update_inventory_ui()
 		)
 		
@@ -940,7 +1002,7 @@ func update_inventory_ui():
 					if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 						item_sound.play()
 						selected_inventory_item = inventory_item
-						show_selected_item_info(item_id)
+						show_selected_item_info(inventory_item)
 						update_inventory_ui()
 						open_context_menu(inventory_item)
 		)
@@ -951,7 +1013,10 @@ func clear_selected_item_info():
 	selected_item_image.texture = null
 	selected_item_description.text = ""
 # 선택된 아이템 정보를 중앙 이미지/설명칸에 표시
-func show_selected_item_info(item_id):
+func show_selected_item_info(inventory_item):
+	
+	var item_id = inventory_item["id"]
+	
 	if not items.has(item_id):
 		return
 
@@ -960,10 +1025,17 @@ func show_selected_item_info(item_id):
 	if item_data.has("image"):
 		selected_item_image.texture = load(item_data["image"])
 
+	var description_text = ""
+	
 	if item_data.has("description"):
-		selected_item_description.text = item_data["description"]
-	else:
-		selected_item_description.text = ""
+		description_text = item_data["description"]
+		
+	# stackable 아이템이면 보유 개수 표시
+	if inventory_item != null:
+		if inventory_item.has("count"):
+			description_text += "\n\n보유 개수 : " + str(int(inventory_item["count"]))
+
+	selected_item_description.text = description_text
 # 아이템이 들어갈 수 있는 빈 슬롯 찾기 함수
 func find_empty_slot(item_id):
 	if not items.has(item_id):
@@ -1018,9 +1090,9 @@ func get_occupied_slots(inventory_item):
 	var item_width = item_data.get("width", 1)
 	var item_height = item_data.get("height", 1)
 
-	var start_slot = inventory_item["slot"]
+	var start_slot = int(inventory_item["slot"])
 	var start_col = start_slot % 4
-	var start_row = start_slot / 4
+	var start_row = floori(start_slot / 4.0)
 
 	var occupied = []
 
@@ -1232,6 +1304,12 @@ func remove_item(inventory_item):
 		return false
 
 	if inventory.has(inventory_item):
+
+		# 장착 중인 아이템을 제거하려는 경우 먼저 장착 해제
+		if equipped_weapon == inventory_item:
+			equipped_weapon = null
+			update_equipped_weapon_ui()
+
 		inventory.erase(inventory_item)
 
 		if selected_inventory_item == inventory_item:
@@ -1244,7 +1322,7 @@ func remove_item(inventory_item):
 		update_inventory_ui()
 		return true
 
-	return false	
+	return false
 # 아이템 사용 시 소모 처리 함수
 func consume_item_if_needed(item_id):
 
@@ -1260,6 +1338,20 @@ func consume_item_if_needed(item_id):
 	# 해당 아이템 찾기
 	for inventory_item in inventory:
 		if inventory_item["id"] == item_id:
+
+			# stackable 아이템이면 count만 1 감소
+			if inventory_item.has("count"):
+				inventory_item["count"] -= 1
+
+				print("아이템 개수 감소: " + item_id + " x" + str(inventory_item["count"]))
+
+				# count가 0 이하가 되었을 때만 실제 삭제
+				if inventory_item["count"] <= 0:
+					remove_item(inventory_item)
+
+				return
+
+			# stackable이 아닌 아이템은 기존처럼 삭제
 			remove_item(inventory_item)
 			print("아이템 소모: " + item_id)
 			return
@@ -1299,17 +1391,35 @@ func _on_equip_button_pressed():
 	if context_menu_item == null:
 		return
 
-	item_sound.play()
+	equip_sound.play()
 	equip_item(context_menu_item)
 # 장착 무기 UI 갱신 함수
 func update_equipped_weapon_ui():
-	if equipped_weapon == null:
-		equipped_weapon_text.text = "장비 없음"
+
+	# 아무것도 장착하지 않았으면 기본 무기 사용
+	var item_id = "fist"
+
+	if equipped_weapon != null:
+		item_id = equipped_weapon["id"]
+
+	if not items.has(item_id):
 		return
 
-	var item_id = equipped_weapon["id"]
+	var item_data = items[item_id]
 
-	equipped_weapon_text.text = get_item_name(item_id)	
+	# 이름 표시
+	if item_id == "fist":
+		equipped_weapon_text.text = "무기 없음"
+	else:
+		equipped_weapon_text.text = get_item_name(item_id)
+
+	# 중앙 이미지 표시
+	if item_data.has("image"):
+		selected_item_image.texture = load(item_data["image"])
+
+	# 설명 표시
+	if item_data.has("description"):
+		selected_item_description.text = item_data["description"]
 # 아이템 사용 함수
 func use_item(inventory_item):
 	if inventory_item == null:
@@ -1332,15 +1442,136 @@ func use_item(inventory_item):
 		if player_hp > player_max_hp:
 			player_hp = player_max_hp
 
-		print("현재 체력: " + str(player_hp))
+		print("현재 체력: " + str(int(player_hp)))
 
 	consume_item_if_needed(item_id)
 	update_inventory_ui()
+	# 아이템 사용 횟수 즉시 반영
+	if selected_inventory_item != null and inventory.has(selected_inventory_item):
+		show_selected_item_info(selected_inventory_item)
+	else:
+		clear_selected_item_info()
+	update_player_status_ui()
 	close_context_menu()	
 # 아이템 사용 버튼 함수
 func _on_use_button_pressed():
 	if context_menu_item == null:
 		return
 
-	item_sound.play()
+	healing_sound.play()
 	use_item(context_menu_item)
+# 플레이어 체력 UI 갱신 함수
+func update_player_status_ui():
+	player_hp_text.text = str(int(player_hp)) + " / " + str(int(player_max_hp))
+# 저장할 게임 데이터 생성 함수
+func get_save_data():
+	var equipped_weapon_slot = -1
+
+	if equipped_weapon != null:
+		equipped_weapon_slot = equipped_weapon["slot"]
+
+	return {
+		"current_room": current_room,
+		"player_hp": player_hp,
+		"player_max_hp": player_max_hp,
+		"inventory": inventory,
+		"flags": flags,
+		"equipped_weapon_slot": equipped_weapon_slot
+	}
+# 저장 파일 경로 반환 함수
+func get_save_path(slot_index):
+	
+	return "user://save_slot_" + str(slot_index) + ".json"
+# 게임 저장 함수
+func save_game(slot_index):
+	var save_data = get_save_data()
+	var json_text = JSON.stringify(save_data, "\t")
+	var path = get_save_path(slot_index)
+
+	var file = FileAccess.open(path, FileAccess.WRITE)
+
+	if file == null:
+		push_error("저장 파일 열기 실패: " + path)
+		return false
+
+	file.store_string(json_text)
+	file.close()
+
+	print("게임 저장 완료: " + path)
+	return true
+# 저장 포인트 실행 함수
+func run_save_point():
+	save_ui_open_sound.play()
+
+	var choices = [
+		{ "text": "예" },
+		{ "text": "아니오" }
+	]
+
+	var selected_index = await show_choices(choices)
+
+	if selected_index == 0:
+		var success = save_game(1)
+
+		if success:
+			save_complete_sound.play()
+			await show_dialogue("저장 완료.")
+		else:
+			await show_dialogue("저장에 실패했다.")
+	else:
+		save_ui_close_sound.play()	
+# 게임 불러오기 함수
+func load_game(slot_index):
+	var path = get_save_path(slot_index)
+
+	if not FileAccess.file_exists(path):
+		push_error("저장 파일이 없음: " + path)
+		return false
+
+	var file = FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		push_error("저장 파일 열기 실패: " + path)
+		return false
+
+	var json_text = file.get_as_text()
+	file.close()
+
+	var json = JSON.new()
+	var error = json.parse(json_text)
+
+	if error != OK:
+		push_error("저장 파일 파싱 실패: " + json.get_error_message())
+		return false
+
+	var save_data = json.data
+
+	current_room = save_data.get("current_room", "hallway_1")
+	player_hp = save_data.get("player_hp", player_max_hp)
+	player_max_hp = save_data.get("player_max_hp", 100)
+	inventory = save_data.get("inventory", [])
+	flags = save_data.get("flags", {})
+
+	restore_equipped_weapon(save_data.get("equipped_weapon_slot", -1))
+
+	update_room()
+	update_inventory_ui()
+	update_equipped_weapon_ui()
+	update_player_status_ui()
+	
+	await effect(false, false, true, "")
+
+	print("게임 불러오기 완료: " + path)
+	return true	
+# 저장된 장착 무기 복구 함수
+func restore_equipped_weapon(saved_slot):
+	equipped_weapon = null
+
+	if saved_slot == -1:
+		return
+
+	for inventory_item in inventory:
+		if inventory_item.has("slot") and int(inventory_item["slot"]) == int(saved_slot):
+			equipped_weapon = inventory_item
+			return
+	

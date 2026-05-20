@@ -137,6 +137,13 @@
 				],
 				"move_effect": "door"
 			}
+		},
+		"interactions": {
+		  "monitor": {
+			"text": "오래된 CRT 모니터다. 화면에는 흐릿한 글자가 떠 있다.",
+			"click_rect": [560, 488, 90, 60],
+			"save_point": true
+		  }
 		}
 	},
 	"classroom_3": {
