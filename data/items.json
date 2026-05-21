@@ -1,7 +1,7 @@
 {
 	"classroom_key": {
 		"name": "교실키",
-		"description": "낡은 교실 문을 열 수 있는 \n열쇠다.",
+		"description": "낡은 교실 문을 열 수 있는\n열쇠다.",
 		"image": "res://imgs/items/classroomKey180x180.png",
 		"width": 1,
 		"height": 1,
@@ -11,8 +11,8 @@
 	},
 	"cutter_knife": {
 		"name": "커터칼",
-		"description": "공격력 : 1 \n\n날이 살짝 녹슨 커터칼이다. \n약한 공격 수단으로 \n사용할 수 있다.",
-		"image": "res://imgs/items/cutterKnife360x240.png",
+		"description": "공격력 : 1\n\n날이 살짝 녹슨 커터칼이다.\n약한 공격 수단으로\n사용할 수 있다.",
+		"image": "res://imgs/items/cutterKnife360x180.png",
 		"width": 2,
 		"height": 1,
 		"type": "weapon",
@@ -21,27 +21,27 @@
 		"consumed_on_use": false
 	},
 	"fist": {
-	  "name": "맨주먹",
-	  "description": "공격력 : 1\n\n아무것도 쥐고 있지 않은 상태다.",
-	  "image": "res://imgs/items/fist360x180.png",
-	  "width": 2,
-	  "height": 1,
-	  "type": "weapon",
-	  "stackable": false,
-	  "attack": 1,
-	  "consumed_on_use": false,
-	  "default_weapon": true
+		"name": "맨주먹",
+		"description": "공격력 : 1\n\n아무것도 쥐고 있지 않은 상태다.",
+		"image": "res://imgs/items/fist180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "weapon",
+		"stackable": false,
+		"attack": 1,
+		"consumed_on_use": false,
+		"default_weapon": true
 	},
 	"beverage_a": {
-	  "name": "음료A",
-	  "description": "미지근 하다 마시면 \n에너지가 조금 회복될 것 같다.",
-	  "image": "res://imgs/items/beverageA180x180.png",
-	  "width": 1,
-	  "height": 1,
-	  "type": "consumable",
-	  "stackable": true,
-	  "max_stack": 10,
-	  "heal": 25,
-	  "consumed_on_use": true
+		"name": "음료A",
+		"description": "미지근 하다 마시면\n에너지가 조금 회복될 것 같다.",
+		"image": "res://imgs/items/beverageA180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "consumable",
+		"stackable": true,
+		"max_stack": 10,
+		"heal": 25,
+		"consumed_on_use": true
 	}
 }

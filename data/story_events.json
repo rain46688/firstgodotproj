@@ -1,0 +1,110 @@
+{
+	"first_enter_classroom_2": {
+		"start_flag": "story_first_enter_classroom_2_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "fade"
+			},
+			{
+			  "type": "background",
+			  "path": "res://imgs/backgrounds/classroom.png"
+			},
+			{
+			  "type": "stop_bgm"
+			},
+			{
+			  "type": "bgm",
+			  "path": "res://sounds/bgm3.mp3",
+			  "volume_db": -20,
+			  "loop": true
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "???",
+				"text": "앗… 깜짝이야! 문을 잠갔는데 어떻게 들어온 거죠???"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "???",
+				"text": "당신은... 누...누구죠?"
+			},
+			{
+				"type": "choices",
+				"choices": [
+					{
+						"text": "나야말로 깜짝이야 님은 누구세요?",
+						"events": [
+							{
+								"type": "standing",
+								"character": "claire",
+								"emotion": "normal",
+								"position": "center"
+							},
+							{
+								"type": "story_dialogue",
+								"name": "???",
+								"text": "저는… 음…"
+							}
+						]
+					},
+					{
+						"text": "저기 혹시 괴물?",
+						"events": [
+							{
+								"type": "standing",
+								"character": "claire",
+								"emotion": "angry",
+								"position": "center"
+							},
+							{
+								"type": "story_dialogue",
+								"name": "???",
+								"text": "아니거든요! 사람이에요!"
+							}
+						]
+					}
+				]
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "normal",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "저는 클레어에요 그냥 클레어라고 불러주세요."
+			},
+			{
+			  "type": "stop_bgm"
+			},
+			{
+			  "type": "bgm",
+			  "path": "res://sounds/bgm2.mp3",
+			  "volume_db": -5,
+			  "loop": true
+			},
+			{
+			  "type": "change_room",
+			  "room": "classroom_1"
+			},
+			{
+				"type": "show_game_ui"
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_classroom_2_done"
+			}
+		]
+	}
+}

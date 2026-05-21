@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dgpdv2d0orq33"
-path="res://.godot/imported/classroomKey180x180.png-9e47cc5a53288634c703df1d104d7c4e.ctex"
+uid="uid://blmpqop1hd86k"
+path="res://.godot/imported/전투화면1920x1080.png-eef624ed2f4a41f6d0c72854958e2ab6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/items/classroomKey180x180.png"
-dest_files=["res://.godot/imported/classroomKey180x180.png-9e47cc5a53288634c703df1d104d7c4e.ctex"]
+source_file="res://imgs/ui/전투화면1920x1080.png"
+dest_files=["res://.godot/imported/전투화면1920x1080.png-eef624ed2f4a41f6d0c72854958e2ab6.ctex"]
 
 [params]
 

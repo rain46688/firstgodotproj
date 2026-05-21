@@ -47,12 +47,17 @@
 				"locked": true,
 				"required_item": "classroom_key",
 				"open_flag": "opened_classroom_2",
-				"click_rect": [1390, 270, 300, 560]
+				"click_rect": [
+					1390,
+					270,
+					300,
+					560
+				]
 			}
 		}
 	},
 	"hallway_3": {
-		"background": "res://imgs/backgrounds/hallway_open.png",
+		"background": "res://imgs/backgrounds/hallway_open_endw.png",
 		"exits": {
 			"down": {
 				"target": "hallway_2",
@@ -84,43 +89,109 @@
 		},
 		"interactions": {
 			"desk": {
-				"texts": [
-				"낡은 책상들이 늘어져있다.",
-			    "소름끼칠 정도로 깨끗하게 정리 되어있다."
-			  ],
-			  "click_rect": [1, 634, 1236, 263]
-			},
-			"window": {
-				"text": "익숙한 풍경이 어둠속에 잠겨있다.",
-				 "click_rect": [0, 203, 203, 373],
-				"choices": [
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
 					{
-						"text": "문을 열고 바깥을 살핀다",
-						"result_text": "아래는 어둠이 짙게 깔려서 높이를 가늠할 수 없다."
+						"type": "text",
+						"text": "낡은 책상들이 늘어져있다."
 					},
 					{
-						"text": "그만둔다",
-						"result_text": ""
+						"type": "text",
+						"text": "소름끼칠 정도로 깨끗하게 정리 되어있다."
+					}
+				]
+			},
+			"window": {
+				"click_rect": [
+					0,
+					203,
+					203,
+					373
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "익숙한 풍경이 어둠속에 잠겨있다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 열고 바깥을 살핀다",
+								"events": [
+									{
+										"type": "text",
+										"text": "아래는 어둠이 짙게 깔려서 높이를 가늠할 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다",
+								"events": []
+							}
+						]
 					}
 				]
 			},
 			"locker": {
-				"text": "교탁과 사물함이 붙어있어 기묘한 위화감을 자아낸다.",
-				"click_rect": [258, 550, 740, 64],
-				"choices": [
+				"click_rect": [
+					258,
+					550,
+					740,
+					64
+				],
+				"events": [
 					{
-						"text": "첫 번째 사물함을 연다",
-						"result_text": "비어 있다."
+						"type": "text",
+						"text": "교탁과 사물함이 붙어있어 기묘한 위화감을 자아낸다."
 					},
 					{
-						"text": "여섯 번째 사물함을 연다",
-						"item": "classroom_key",
-						"flag": "got_classroom_key",
-						"already_text": "이미 비어 있다."
-					},
-					{
-						"text": "열 번째 사물함을 연다",
-						"result_text": "비어 있다."
+						"type": "choices",
+						"choices": [
+							{
+								"text": "첫 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "여섯 번째 사물함을 연다",
+								"flag": "got_classroom_key",
+								"already_events": [
+									{
+										"type": "text",
+										"text": "이미 비어 있다."
+									}
+								],
+								"events": [
+									{
+										"type": "item",
+										"item": "classroom_key"
+									},
+									{
+										"type": "flag",
+										"flag": "got_classroom_key"
+									}
+								]
+							},
+							{
+								"text": "열 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							}
+						]
 					}
 				]
 			}
@@ -128,6 +199,10 @@
 	},
 	"classroom_2": {
 		"background": "res://imgs/backgrounds/classroom_monitor.png",
+		"enter_story": {
+			"event": "first_enter_classroom_2",
+			"required_flag_missing": "story_first_enter_classroom_2_done"
+		},
 		"exits": {
 			"right": {
 				"target": "hallway_2",
@@ -139,11 +214,29 @@
 			}
 		},
 		"interactions": {
-		  "monitor": {
-			"text": "오래된 CRT 모니터다. 화면에는 흐릿한 글자가 떠 있다.",
-			"click_rect": [560, 488, 90, 60],
-			"save_point": true
-		  }
+			"monitor": {
+				"click_rect": [
+					560,
+					488,
+					90,
+					60
+				],
+				"events": [
+					{
+						"type": "portrait",
+						"character": "claire",
+						"emotion": "normal",
+						"text": "흠.. 이건 어떻게 작동하는걸까요?"
+					},
+					{
+						"type": "text",
+						"text": "오래된 CRT 모니터다. 화면에는 흐릿한 글자가 떠 있다."
+					},
+					{
+						"type": "save"
+					}
+				]
+			}
 		}
 	},
 	"classroom_3": {

@@ -1,10 +1,9 @@
 [gd_scene format=3 uid="uid://db3x6hhv5s5yi"]
 
 [ext_resource type="Script" uid="uid://c4xwmh67fo8qc" path="res://scripts/main.gd" id="1_r0du0"]
-[ext_resource type="Texture2D" uid="uid://dtna5r4qc5tbe" path="res://imgs/backgrounds/classroom_monitor.png" id="2_bb450"]
+[ext_resource type="Texture2D" uid="uid://c1tm41hn8s7o8" path="res://imgs/backgrounds/hallway_closed.png" id="2_bb450"]
 [ext_resource type="Texture2D" uid="uid://r7yqri7sh84c" path="res://imgs/ui/arrow_forward.png" id="3_lhr70"]
 [ext_resource type="AudioStream" uid="uid://c17uoa5rh4onj" path="res://sounds/footsteps.mp3" id="4_3dxm6"]
-[ext_resource type="AudioStream" uid="uid://c4tigttavfb3d" path="res://sounds/bgm2.mp3" id="5_nxtc6"]
 [ext_resource type="AudioStream" uid="uid://bd1nk2i0616gs" path="res://sounds/lockeddoor.mp3" id="7_lgr22"]
 [ext_resource type="AudioStream" uid="uid://b2p5y3ta6bfww" path="res://sounds/clcik.mp3" id="8_jlsqs"]
 [ext_resource type="AudioStream" uid="uid://cvy3qjqnkm0ca" path="res://sounds/unlockeddoor.mp3" id="9_q8u5g"]
@@ -86,6 +85,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(349, 700)
 texture = ExtResource("2_bb450")
 expand_mode = 1
 stretch_mode = 6
@@ -137,6 +137,7 @@ pivot_offset = Vector2(50, 37)
 texture = ExtResource("3_lhr70")
 
 [node name="Fade" type="ColorRect" parent="." unique_id=1447810409]
+z_index = 50
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -149,13 +150,9 @@ color = Color(0, 0, 0, 0)
 stream = ExtResource("4_3dxm6")
 volume_db = 20.0
 
-[node name="SchoolBackground" type="AudioStreamPlayer" parent="." unique_id=450576258]
-stream = ExtResource("5_nxtc6")
-autoplay = true
-parameters/looping = true
-
 [node name="DialogueBox" type="ColorRect" parent="." unique_id=1828740528]
 visible = false
+z_index = 20
 layout_mode = 0
 offset_left = 100.0
 offset_top = 730.0
@@ -217,6 +214,8 @@ offset_left = 280.0
 offset_top = 20.0
 offset_right = 680.0
 offset_bottom = 60.0
+theme_override_fonts/font = ExtResource("11_qmy6f")
+theme_override_font_sizes/font_size = 20
 
 [node name="LockedSound" type="AudioStreamPlayer" parent="." unique_id=732505376]
 stream = ExtResource("7_lgr22")
@@ -246,6 +245,7 @@ texture_normal = ExtResource("10_lhr70")
 
 [node name="InventoryUI" type="Control" parent="." unique_id=1132515591]
 visible = false
+z_index = 30
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -268,7 +268,7 @@ layout_mode = 0
 offset_left = 700.0
 offset_top = 180.0
 offset_right = 1050.0
-offset_bottom = 530.0
+offset_bottom = 480.0
 scale = Vector2(0.8, 0.8)
 
 [node name="SelectedItemDescription" type="Label" parent="InventoryUI" unique_id=357045251]
@@ -371,6 +371,19 @@ volume_db = -5.0
 [node name="SaveCompleteSound" type="AudioStreamPlayer" parent="." unique_id=1570015788]
 stream = ExtResource("18_bb450")
 volume_db = -5.0
+
+[node name="StoryStanding" type="TextureRect" parent="." unique_id=154659395]
+visible = false
+z_index = 5
+layout_mode = 0
+offset_left = 770.0
+offset_top = 40.0
+offset_right = 1150.0
+offset_bottom = 1040.0
+expand_mode = 1
+stretch_mode = 4
+
+[node name="BGMPlayer" type="AudioStreamPlayer" parent="." unique_id=969287587]
 
 [connection signal="pressed" from="BagButton" to="." method="_on_bag_button_pressed"]
 [connection signal="pressed" from="InventoryUI/InventoryContextMenu/MenuTexts/UseButton" to="." method="_on_use_button_pressed"]
