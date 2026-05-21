@@ -1,0 +1,141 @@
+[gd_scene format=3 uid="uid://2uvfda5deqns"]
+
+[ext_resource type="Texture2D" uid="uid://blmpqop1hd86k" path="res://imgs/ui/전투화면1920x1080.png" id="1_idkgt"]
+[ext_resource type="Script" uid="uid://fk3glf0gpddx" path="res://scripts/battle_scene.gd" id="1_rca61"]
+[ext_resource type="FontFile" uid="uid://dshbp46j15be4" path="res://font/x12y12pxMaruMinyaHangul.ttf" id="2_kinr6"]
+
+[node name="BattleScene" type="Control" unique_id=66959365]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rca61")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1615909653]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_idkgt")
+
+[node name="EnemySprite" type="TextureRect" parent="." unique_id=1403375332]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="WeaponSprite" type="TextureRect" parent="." unique_id=1213340853]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BulletContainer" type="Control" parent="." unique_id=88639530]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="EffectContainer" type="Control" parent="." unique_id=1319211907]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CenterPanel" type="Control" parent="." unique_id=1948466899]
+self_modulate = Color(1, 1, 1, 0)
+anchors_preset = 0
+offset_left = 350.0
+offset_top = 700.0
+offset_right = 1570.0
+offset_bottom = 1060.0
+
+[node name="BattleText" type="Label" parent="CenterPanel" unique_id=480143140]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 35.0
+offset_right = 1180.0
+offset_bottom = 325.0
+theme_override_fonts/font = ExtResource("2_kinr6")
+theme_override_font_sizes/font_size = 25
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="LeftPanel" type="Control" parent="." unique_id=2122720075]
+self_modulate = Color(1, 1, 1, 0)
+anchors_preset = 0
+offset_left = 20.0
+offset_top = 705.0
+offset_right = 320.0
+offset_bottom = 1055.0
+
+[node name="PlayerPortrait" type="TextureRect" parent="LeftPanel" unique_id=758708399]
+layout_mode = 0
+offset_right = 300.0
+offset_bottom = 260.0
+
+[node name="PlayerHpText" type="Label" parent="LeftPanel" unique_id=1191134058]
+layout_mode = 0
+offset_top = 290.0
+offset_right = 300.0
+offset_bottom = 350.0
+theme_override_fonts/font = ExtResource("2_kinr6")
+theme_override_font_sizes/font_size = 25
+
+[node name="RightPanel" type="Control" parent="." unique_id=1816465741]
+self_modulate = Color(1, 1, 1, 0)
+anchors_preset = 0
+offset_left = 1600.0
+offset_top = 700.0
+offset_right = 1900.0
+offset_bottom = 1060.0
+
+[node name="AttackButton" type="Button" parent="RightPanel" unique_id=1051836599]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 25.0
+offset_right = 280.0
+offset_bottom = 75.0
+theme_override_fonts/font = ExtResource("2_kinr6")
+theme_override_font_sizes/font_size = 25
+text = "공격하기"
+
+[node name="ObserveButton" type="Button" parent="RightPanel" unique_id=843266072]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 90.0
+offset_right = 280.0
+offset_bottom = 140.0
+theme_override_fonts/font = ExtResource("2_kinr6")
+theme_override_font_sizes/font_size = 25
+text = "관찰하기"
+
+[node name="ItemButton" type="Button" parent="RightPanel" unique_id=1510610001]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 155.0
+offset_right = 280.0
+offset_bottom = 205.0
+theme_override_fonts/font = ExtResource("2_kinr6")
+theme_override_font_sizes/font_size = 25
+text = "아이템"
+
+[node name="EndTurnButton" type="Button" parent="RightPanel" unique_id=2017665358]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 220.0
+offset_right = 280.0
+offset_bottom = 270.0
+theme_override_fonts/font = ExtResource("2_kinr6")
+theme_override_font_sizes/font_size = 25
+text = "턴 종료"
+
+[node name="RunButton" type="Button" parent="RightPanel" unique_id=178251116]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 285.0
+offset_right = 280.0
+offset_bottom = 335.0
+theme_override_fonts/font = ExtResource("2_kinr6")
+theme_override_font_sizes/font_size = 25
+text = "도망가기"
