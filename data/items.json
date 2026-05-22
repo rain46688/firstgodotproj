@@ -17,7 +17,7 @@
 		"height": 1,
 		"type": "weapon",
 		"stackable": false,
-		"attack": 1,
+		"attack": 8,
 		"consumed_on_use": false
 	},
 	"fist": {
@@ -28,7 +28,7 @@
 		"height": 1,
 		"type": "weapon",
 		"stackable": false,
-		"attack": 1,
+		"attack": 5,
 		"consumed_on_use": false,
 		"default_weapon": true
 	},

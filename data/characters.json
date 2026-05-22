@@ -7,7 +7,8 @@
 			"embarrassed": "res://imgs/characters/claire/portrait/embarrassed.png",
 			"angry": "res://imgs/characters/claire/portrait/angry.png",
 			"annoyed": "res://imgs/characters/claire/portrait/annoyed.png",
-			"expressionless": "res://imgs/characters/claire/portrait/expressionless.png"
+			"expressionless": "res://imgs/characters/claire/portrait/expressionless.png",
+			"shy": "res://imgs/characters/claire/portrait/shy.png"
 		},
 		"standing": {
 			"normal": "res://imgs/characters/claire/standing/normal.png",
@@ -15,8 +16,21 @@
 			"embarrassed": "res://imgs/characters/claire/standing/embarrassed.png",
 			"angry": "res://imgs/characters/claire/standing/angry.png",
 			"annoyed": "res://imgs/characters/claire/standing/annoyed.png",
+			"shy": "res://imgs/characters/claire/standing/shy.png",
 			"expressionless": "res://imgs/characters/claire/standing/expressionless.png",
 			"expressionless2": "res://imgs/characters/claire/standing/expressionless2.png"
+		}
+	},
+	"protagonist": {
+		"name": "나",
+		"portrait": {
+			"normal": "res://imgs/characters/protagonist/portrait/normal.png",
+			"pain": "res://imgs/characters/protagonist/portrait/pain.png",
+			"embarrassed": "res://imgs/characters/protagonist/portrait/embarrassed.png",
+			"angry": "res://imgs/characters/protagonist/portrait/angry.png",
+			"annoyed": "res://imgs/characters/protagonist/portrait/annoyed.png",
+			"fear": "res://imgs/characters/protagonist/portrait/fear.png",
+			"shy": "res://imgs/characters/protagonist/portrait/shy.png"
 		}
 	}
 }

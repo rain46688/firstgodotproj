@@ -1,0 +1,22 @@
+{
+	"shadow_student": {
+		"name": "그림자 학생",
+		"max_hp": 30,
+		"image": "res://imgs/enemies/shadow_student.png",
+		"can_escape": true,
+
+		"observe_text": "기분 나쁜 형체가 당신을 노려보고 있다.",
+		"weakness_text": "손목 부위가 약점인 것 같다.",
+
+		"patterns": [
+			{
+				"id": "basic_attack",
+				"weight": 100,
+				"warning_text": "그림자 학생이 오른쪽으로 몸을 기울인다...",
+				"damage": 5
+			}
+		],
+
+		"drops": []
+	}
+}

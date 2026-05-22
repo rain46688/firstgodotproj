@@ -84,6 +84,8 @@ var player_max_hp = 100
 var characters = {}
 var story_events = {}
 var is_story_playing = false
+var enemies = {}
+var battle_scene = null
 
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
@@ -93,6 +95,7 @@ const MSG_NO_RIGHT = "그쪽으로는 갈 수 없다..."
 const MSG_DOOR_LOCKED = "문이 굳게 잠겨있다..."
 const MSG_DOOR_UNLOCK = "교실키로 문을 열었다."
 const MSG_ITEM_GAINED_SUFFIX = "을 얻었다."
+const BATTLE_SCENE_PATH = "res://scenes/battle_scene.tscn"
 
 # 프레임 마다 실행 함수
 func _process(delta):
@@ -245,17 +248,26 @@ func _ready():
 	if not story_success:
 		push_error("스토리 이벤트 데이터 로드 실패로 게임 초기화 중단")
 		return
+		
+	var enemies_success = load_enemies()
+
+	if not enemies_success:
+		push_error("적 데이터 로드 실패로 게임 초기화 중단")
+		return
 
 	# 테스트
-	#load_game(1)
+	load_game(1)
 	
 	#await add_item("cutter_knife")
 	#await add_item("beverage_a")
 	#await add_item("beverage_a")
 	#await add_item("beverage_a")
-	await add_item("classroom_key")
+	#await add_item("classroom_key")
 		
 	update_room()
+	
+	await get_tree().create_timer(1.0).timeout
+	start_battle("shadow_student")
 # 방 변경 함수
 func update_room():
 	
@@ -1993,3 +2005,73 @@ func change_room_by_story(room_id):
 
 	current_room = room_id
 	update_room()
+# 적 데이터 로드 함수
+func load_enemies():
+	var path = "res://data/enemies.json"
+
+	if not FileAccess.file_exists(path):
+		push_error("enemies.json 파일을 찾을 수 없음: " + path)
+		return false
+
+	var file = FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		push_error("enemies.json 파일 열기 실패: " + path)
+		return false
+
+	var json_text = file.get_as_text()
+	var json = JSON.new()
+	var error = json.parse(json_text)
+
+	if error != OK:
+		push_error("enemies.json 파싱 실패: " + json.get_error_message())
+		push_error("오류 위치 line: " + str(json.get_error_line()))
+		return false
+
+	if typeof(json.data) != TYPE_DICTIONARY:
+		push_error("enemies.json 최상위 구조는 Dictionary여야 함")
+		return false
+
+	enemies = json.data
+	print("enemies.json 로드 성공")
+	return true
+# 전투 시작 함수
+func start_battle(enemy_id):
+	if not enemies.has(enemy_id):
+		push_error("존재하지 않는 적: " + enemy_id)
+		return
+
+	is_story_playing = true
+	hide_game_ui()
+
+	var battle_scene_resource = load(BATTLE_SCENE_PATH)
+	battle_scene = battle_scene_resource.instantiate()
+
+	add_child(battle_scene)
+	battle_scene.battle_finished.connect(end_battle)
+
+	var battle_data = {
+		"enemy_id": enemy_id,
+		"enemy_data": enemies[enemy_id],
+		"player_hp": player_hp,
+		"player_max_hp": player_max_hp,
+		"player_portrait": characters["protagonist"]["portrait"]["normal"],
+		"items": items,
+		"equipped_weapon": equipped_weapon,
+		"inventory": inventory
+	}
+
+	battle_scene.setup_battle(battle_data)
+# 전투 종료 함수
+func end_battle(result_data):
+	player_hp = result_data.get("player_hp", player_hp)
+	inventory = result_data.get("inventory", inventory)
+
+	if battle_scene != null:
+		battle_scene.queue_free()
+		battle_scene = null
+
+	is_story_playing = false
+	show_game_ui()
+
+	print("전투 종료 결과: " + str(result_data.get("result", "")))
