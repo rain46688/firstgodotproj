@@ -249,10 +249,10 @@ func _ready():
 	# 테스트
 	#load_game(1)
 	
-	await add_item("cutter_knife")
-	await add_item("beverage_a")
-	await add_item("beverage_a")
-	await add_item("beverage_a")
+	#await add_item("cutter_knife")
+	#await add_item("beverage_a")
+	#await add_item("beverage_a")
+	#await add_item("beverage_a")
 	await add_item("classroom_key")
 		
 	update_room()

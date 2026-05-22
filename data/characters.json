@@ -15,7 +15,8 @@
 			"embarrassed": "res://imgs/characters/claire/standing/embarrassed.png",
 			"angry": "res://imgs/characters/claire/standing/angry.png",
 			"annoyed": "res://imgs/characters/claire/standing/annoyed.png",
-			"expressionless": "res://imgs/characters/claire/standing/expressionless.png"
+			"expressionless": "res://imgs/characters/claire/standing/expressionless.png",
+			"expressionless2": "res://imgs/characters/claire/standing/expressionless2.png"
 		}
 	}
 }
