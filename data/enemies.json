@@ -1,13 +1,11 @@
 {
 	"shadow_student": {
 		"name": "그림자 학생",
-		"max_hp": 30,
+		"max_hp": 100,
 		"image": "res://imgs/enemies/shadow_student.png",
 		"can_escape": true,
-
 		"observe_text": "기분 나쁜 형체가 당신을 노려보고 있다.",
 		"weakness_text": "손목 부위가 약점인 것 같다.",
-
 		"patterns": [
 			{
 				"id": "basic_attack",
@@ -16,7 +14,27 @@
 				"damage": 5
 			}
 		],
-
+		"hitbox_base_size": [667, 1000],
+		"hitboxes": [
+			{
+				"id": "body",
+				"name": "몸통",
+				"rect": [280, 200, 160, 420],
+				"weak": false
+			},
+			{
+				"id": "right_arm",
+				"name": "오른쪽 팔",
+				"rect": [450, 330, 120, 200],
+				"weak": true
+			},
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [280, 40, 150, 150],
+				"weak": false
+			}
+		],
 		"drops": []
 	}
 }

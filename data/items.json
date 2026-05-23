@@ -18,7 +18,19 @@
 		"type": "weapon",
 		"stackable": false,
 		"attack": 8,
-		"consumed_on_use": false
+		"consumed_on_use": false,
+		"attack_base_rotation": 90,
+		"attack_angle_min": -45,
+		"attack_angle_max": 45,
+		"defense_base_rotation": 0,
+		"defense_move_speed": 300,
+		"parry_window": 0.1,
+		"piercing": false,
+		"battle_sprite_size": [220, 220],
+		"attack_move_range": 460,
+		"attack_swing_speed": 2.0,
+		"weapon_angle_step": 5,
+		"attack_projectile": "slash_basic"
 	},
 	"fist": {
 		"name": "맨주먹",
@@ -30,7 +42,19 @@
 		"stackable": false,
 		"attack": 5,
 		"consumed_on_use": false,
-		"default_weapon": true
+		"default_weapon": true,
+		"attack_base_rotation": 90,
+		"attack_angle_min": -30,
+		"attack_angle_max": 30,
+		"defense_base_rotation": 0,
+		"defense_move_speed": 500,
+		"parry_window": 0.2,
+		"piercing": false,
+		"battle_sprite_size": [140, 140],
+		"attack_move_range": 380,
+		"attack_swing_speed": 2.5,
+		"weapon_angle_step": 5,
+		"attack_projectile": "slash_basic"
 	},
 	"beverage_a": {
 		"name": "음료A",

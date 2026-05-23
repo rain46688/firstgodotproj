@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://n77k0moryfi7"
-path="res://.godot/imported/cutterKnife360x180.png-5a1b34c3cb3c7e9b7151860755fcb842.ctex"
+uid="uid://c3a18phblldsu"
+path="res://.godot/imported/slash_08.png-faaa3a29688675a5a5fe8423ffa8e01b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/items/cutterKnife360x180.png"
-dest_files=["res://.godot/imported/cutterKnife360x180.png-5a1b34c3cb3c7e9b7151860755fcb842.ctex"]
+source_file="res://imgs/effects/slash/slash_08.png"
+dest_files=["res://.godot/imported/slash_08.png-faaa3a29688675a5a5fe8423ffa8e01b.ctex"]
 
 [params]
 

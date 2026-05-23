@@ -270,6 +270,9 @@ offset_top = 180.0
 offset_right = 1050.0
 offset_bottom = 480.0
 scale = Vector2(0.8, 0.8)
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
 
 [node name="SelectedItemDescription" type="Label" parent="InventoryUI" unique_id=357045251]
 layout_mode = 0

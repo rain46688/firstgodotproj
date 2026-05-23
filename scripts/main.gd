@@ -86,6 +86,7 @@ var story_events = {}
 var is_story_playing = false
 var enemies = {}
 var battle_scene = null
+var projectiles = {}
 
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
@@ -253,6 +254,12 @@ func _ready():
 
 	if not enemies_success:
 		push_error("적 데이터 로드 실패로 게임 초기화 중단")
+		return
+		
+	var projectiles_success = load_projectiles()
+
+	if not projectiles_success:
+		push_error("투사체 데이터 로드 실패로 게임 초기화 중단")
 		return
 
 	# 테스트
@@ -2050,6 +2057,7 @@ func start_battle(enemy_id):
 	add_child(battle_scene)
 	battle_scene.battle_finished.connect(end_battle)
 
+	# 전투신으로 넘겨줄 로드한 데이터들 모음
 	var battle_data = {
 		"enemy_id": enemy_id,
 		"enemy_data": enemies[enemy_id],
@@ -2058,7 +2066,8 @@ func start_battle(enemy_id):
 		"player_portrait": characters["protagonist"]["portrait"]["normal"],
 		"items": items,
 		"equipped_weapon": equipped_weapon,
-		"inventory": inventory
+		"inventory": inventory,
+		"projectiles": projectiles
 	}
 
 	battle_scene.setup_battle(battle_data)
@@ -2075,3 +2084,33 @@ func end_battle(result_data):
 	show_game_ui()
 
 	print("전투 종료 결과: " + str(result_data.get("result", "")))
+# 탄막 데이터 로드 함수
+func load_projectiles():
+	var path = "res://data/projectiles.json"
+
+	if not FileAccess.file_exists(path):
+		push_error("projectiles.json 파일을 찾을 수 없음: " + path)
+		return false
+
+	var file = FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		push_error("projectiles.json 파일 열기 실패: " + path)
+		return false
+
+	var json_text = file.get_as_text()
+	var json = JSON.new()
+	var error = json.parse(json_text)
+
+	if error != OK:
+		push_error("projectiles.json 파싱 실패: " + json.get_error_message())
+		push_error("오류 위치 line: " + str(json.get_error_line()))
+		return false
+
+	if typeof(json.data) != TYPE_DICTIONARY:
+		push_error("projectiles.json 최상위 구조는 Dictionary여야 함")
+		return false
+
+	projectiles = json.data
+	print("projectiles.json 로드 성공")
+	return true
