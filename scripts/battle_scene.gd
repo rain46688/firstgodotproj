@@ -21,6 +21,7 @@ signal battle_finished(result_data)
 @onready var attack_guide = $CenterPanel/AttackGuide
 @onready var hitbox_debug_container = $HitboxDebugContainer
 @onready var player_attack_hitbox_debug = $HitboxDebugContainer/PlayerAttackHitboxDebug
+@onready var enemy_projectile_container = $EnemyProjectileContainer
 
 # 일반 변수 모음
 var player_hp = 0
@@ -438,27 +439,85 @@ func use_selected_battle_item():
 	await get_tree().create_timer(1.0).timeout
 
 	start_enemy_turn()
-# 실제 공격 함수
+# 실제 적 공격 함수
 func execute_enemy_attack():
-	var damage = current_enemy_pattern.get("damage", 1)
+	battle_text.text = ""
 
-	player_hp -= damage
-
-	if player_hp < 0:
-		player_hp = 0
-
-	update_player_hp_ui()
-
-	battle_text.text = str(int(damage)) + " 의 피해를 입었다."
+	await fire_enemy_projectile()
 
 	if player_hp <= 0:
 		await get_tree().create_timer(1.0).timeout
 		await game_over()
 		return
 
-	await get_tree().create_timer(1.0).timeout
-
+	await get_tree().create_timer(0.5).timeout
 	start_player_turn()
+# 적의 탄막 발사 함수
+func fire_enemy_projectile():
+	var projectile_id = current_enemy_pattern.get("projectile", "slash_basic")
+
+	if not projectiles.has(projectile_id):
+		push_error("적 투사체 데이터가 없음: " + projectile_id)
+		return
+
+	var projectile_data = projectiles[projectile_id]
+
+	var projectile_size = projectile_data.get("size", [200, 200])
+	var projectile_speed = projectile_data.get("speed", 1200)
+	var projectile_life_time = projectile_data.get("life_time", 0.9)
+	var projectile_frame_time = projectile_data.get("frame_time", 0.04)
+	var projectile_frame_count = projectile_data.get("frame_count", 9)
+	var projectile_frames_path = projectile_data.get("frames_path", "res://imgs/effects/slash/slash_")
+
+	var projectile_frames = make_effect_frames(projectile_frames_path, projectile_frame_count)
+
+	var projectile = TextureRect.new()
+	projectile.size = Vector2(projectile_size[0], projectile_size[1])
+	projectile.pivot_offset = projectile.size / 2
+	projectile.ignore_texture_size = true
+	projectile.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	projectile.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	var start_pos = current_enemy_pattern.get("projectile_start", [900, 120])
+	projectile.position = Vector2(start_pos[0], start_pos[1])
+	projectile.rotation_degrees = current_enemy_pattern.get("projectile_rotation", 180)
+
+	enemy_projectile_container.add_child(projectile)
+
+	var direction = Vector2.DOWN
+	var elapsed_time = 0.0
+	var frame_index = 0
+	var hit_player = false
+
+	while elapsed_time < projectile_life_time:
+		projectile.texture = load(projectile_frames[frame_index])
+		projectile.position += direction * projectile_speed * projectile_frame_time
+
+		if projectile.position.y >= 900:
+			hit_player = true
+			break
+
+		await get_tree().create_timer(projectile_frame_time).timeout
+
+		elapsed_time += projectile_frame_time
+		frame_index += 1
+
+		if frame_index >= projectile_frames.size():
+			frame_index = 0
+
+	projectile.queue_free()
+
+	if hit_player:
+		var damage = current_enemy_pattern.get("projectile_damage", current_enemy_pattern.get("damage", 1))
+		player_hp -= damage
+
+		if player_hp < 0:
+			player_hp = 0
+
+		update_player_hp_ui()
+		battle_text.text = str(int(damage)) + " 의 피해를 입었다."
+	else:
+		battle_text.text = "공격을 피했다."
 # 패턴 선택 함수
 func choose_enemy_pattern():
 	var patterns = enemy_data.get("patterns", [])
@@ -586,7 +645,12 @@ func execute_player_attack():
 			enemy_hp = 0
 
 		update_enemy_hp_ui()
+		
+		hit_effect.position = get_last_hitbox_center_position()
 
+		show_damage_popup(damage, is_weak)
+
+		await play_enemy_hit_shake()
 		await play_effect_frames(hit_effect, hit_frames, 0.05)
 
 		if is_weak:
@@ -613,6 +677,90 @@ func execute_player_attack():
 		return
 
 	start_enemy_turn()
+# 적 피격시 흔들림 함수
+func play_enemy_hit_shake():
+	var original_position = enemy_sprite.position
+
+	var tween = create_tween()
+	tween.tween_property(enemy_sprite, "position", original_position + Vector2(18, 0), 0.04)
+	tween.tween_property(enemy_sprite, "position", original_position + Vector2(-18, 0), 0.04)
+	tween.tween_property(enemy_sprite, "position", original_position + Vector2(10, 0), 0.04)
+	tween.tween_property(enemy_sprite, "position", original_position, 0.04)
+
+	await tween.finished
+# 적 피격시 데미지 팝업 함수 
+func show_damage_popup(damage, is_weak):
+	var label = Label.new()
+	var font = load("res://fonts/x12y12pxMaruMinyaHangul.ttf")
+	label.add_theme_font_override("font", font)
+	if is_weak:
+		label.text = "WEAK!\n" + str(int(damage))
+	else:
+		label.text = str(int(damage))
+	label.z_index = 100
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.size = Vector2(260, 120)
+
+	# 폰트 크기 키우기
+	label.add_theme_font_size_override("font_size", 48)
+
+	if is_weak:
+		label.add_theme_color_override("font_color", Color(1, 0.1, 0.1, 1))
+		label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+		label.add_theme_constant_override("outline_size", 8)
+	else:
+		label.add_theme_color_override("font_color", Color(1, 1, 1, 1))
+		label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+		label.add_theme_constant_override("outline_size", 8)
+
+	var hit_position = get_last_hitbox_center_position_for_battle_scene()
+	label.position = hit_position - Vector2(130, 60)
+
+	add_child(label)
+
+	var tween = create_tween()
+	tween.tween_property(label, "position", label.position + Vector2(0, -90), 1.0)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 1.0)
+
+	await tween.finished
+	label.queue_free()
+# 히트박스 이펙트 위치 조정 함수
+func get_last_hitbox_center_position():
+	var base_size = enemy_data.get("hitbox_base_size", [667, 1000])
+	var enemy_rect = enemy_sprite.get_global_rect()
+
+	var scale_x = enemy_rect.size.x / float(base_size[0])
+	var scale_y = enemy_rect.size.y / float(base_size[1])
+
+	var rect_data = last_hitbox_data.get("rect", [0, 0, 100, 100])
+
+	var center_global = Vector2(
+		enemy_rect.position.x + (rect_data[0] + rect_data[2] / 2.0) * scale_x,
+		enemy_rect.position.y + (rect_data[1] + rect_data[3] / 2.0) * scale_y
+	)
+
+	var effect_parent_global = hit_effect.get_parent().get_global_rect().position
+
+	return center_global - effect_parent_global - hit_effect.size / 2
+# 데미지 팝업 전용 위치 함수
+func get_last_hitbox_center_position_for_battle_scene():
+	var base_size = enemy_data.get("hitbox_base_size", [667, 1000])
+	var enemy_rect = enemy_sprite.get_global_rect()
+
+	var scale_x = enemy_rect.size.x / float(base_size[0])
+	var scale_y = enemy_rect.size.y / float(base_size[1])
+
+	var rect_data = last_hitbox_data.get("rect", [0, 0, 100, 100])
+
+	var center_global = Vector2(
+		enemy_rect.position.x + (rect_data[0] + rect_data[2] / 2.0) * scale_x,
+		enemy_rect.position.y + (rect_data[1] + rect_data[3] / 2.0) * scale_y
+	)
+
+	var battle_scene_global = get_global_rect().position
+
+	return center_global - battle_scene_global
 # 플레이어 공격 투사체 발사 함수
 func fire_player_attack_projectile():
 	current_projectile_data = get_current_projectile_data()

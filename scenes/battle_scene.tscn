@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://blmpqop1hd86k" path="res://imgs/ui/전투화면1920x1080.png" id="1_idkgt"]
 [ext_resource type="Script" uid="uid://fk3glf0gpddx" path="res://scripts/battle_scene.gd" id="1_rca61"]
-[ext_resource type="FontFile" uid="uid://dshbp46j15be4" path="res://font/x12y12pxMaruMinyaHangul.ttf" id="2_kinr6"]
+[ext_resource type="FontFile" uid="uid://dshbp46j15be4" path="res://fonts/x12y12pxMaruMinyaHangul.ttf" id="2_kinr6"]
 [ext_resource type="Texture2D" uid="uid://da27cgmes16v3" path="res://imgs/ui/격자1075x342.png" id="4_8qdv8"]
 
 [node name="BattleScene" type="Control" unique_id=66959365]
@@ -220,3 +220,9 @@ offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 color = Color(1, 1, 0, 0.5882353)
+
+[node name="EnemyProjectileContainer" type="Control" parent="." unique_id=262981383]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2

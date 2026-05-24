@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://dshbp46j15be4"
-path="res://.godot/imported/x12y12pxMaruMinyaHangul.ttf-5e2d1e125c867343593112cb690cb414.fontdata"
+path="res://.godot/imported/x12y12pxMaruMinyaHangul.ttf-6b4a900066160d4c4c9697ff657f6d92.fontdata"
 
 [deps]
 
-source_file="res://font/x12y12pxMaruMinyaHangul.ttf"
-dest_files=["res://.godot/imported/x12y12pxMaruMinyaHangul.ttf-5e2d1e125c867343593112cb690cb414.fontdata"]
+source_file="res://fonts/x12y12pxMaruMinyaHangul.ttf"
+dest_files=["res://.godot/imported/x12y12pxMaruMinyaHangul.ttf-6b4a900066160d4c4c9697ff657f6d92.fontdata"]
 
 [params]
 

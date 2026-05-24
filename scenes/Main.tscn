@@ -9,7 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://cvy3qjqnkm0ca" path="res://sounds/unlockeddoor.mp3" id="9_q8u5g"]
 [ext_resource type="Texture2D" uid="uid://hvkehjj35xiv" path="res://imgs/ui/인벤토리_fix1920x1080.png" id="10_bjd11"]
 [ext_resource type="Texture2D" uid="uid://0sqsgro5tr8p" path="res://imgs/ui/bag200x300.png" id="10_lhr70"]
-[ext_resource type="FontFile" uid="uid://dshbp46j15be4" path="res://font/x12y12pxMaruMinyaHangul.ttf" id="11_qmy6f"]
+[ext_resource type="FontFile" uid="uid://dshbp46j15be4" path="res://fonts/x12y12pxMaruMinyaHangul.ttf" id="11_qmy6f"]
 [ext_resource type="AudioStream" uid="uid://bos4o1wfm3q0b" path="res://sounds/bagopen.mp3" id="12_bjd11"]
 [ext_resource type="AudioStream" uid="uid://y0ntyp8tj4xm" path="res://sounds/items.mp3" id="12_qmy6f"]
 [ext_resource type="AudioStream" uid="uid://dpskhkn3tacx0" path="res://sounds/healing.mp3" id="14_mwfav"]
