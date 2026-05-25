@@ -221,6 +221,22 @@ offset_bottom = 40.0
 mouse_filter = 2
 color = Color(1, 1, 0, 0.5882353)
 
+[node name="DefenseWeaponHitboxDebug" type="ColorRect" parent="HitboxDebugContainer" unique_id=1301145254]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+color = Color(0, 0, 1, 0.5882353)
+
+[node name="EnemyProjectileHitboxDebug" type="ColorRect" parent="HitboxDebugContainer" unique_id=61061956]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+color = Color(1, 1, 0, 0.5882353)
+
 [node name="EnemyProjectileContainer" type="Control" parent="." unique_id=262981383]
 anchors_preset = 0
 offset_right = 40.0

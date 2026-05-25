@@ -22,6 +22,8 @@ signal battle_finished(result_data)
 @onready var hitbox_debug_container = $HitboxDebugContainer
 @onready var player_attack_hitbox_debug = $HitboxDebugContainer/PlayerAttackHitboxDebug
 @onready var enemy_projectile_container = $EnemyProjectileContainer
+@onready var defense_weapon_hitbox_debug = $HitboxDebugContainer/DefenseWeaponHitboxDebug
+@onready var enemy_projectile_hitbox_debug = $HitboxDebugContainer/EnemyProjectileHitboxDebug
 
 # 일반 변수 모음
 var player_hp = 0
@@ -58,6 +60,8 @@ var last_hitbox_data = {}
 var debug_mode = true
 var projectiles = {}
 var current_projectile_data = {}
+var is_defense_mode = false
+var defense_area_rect = Rect2(350, 700, 1220, 360)
 
 # 상수 변수 모음
 
@@ -68,7 +72,6 @@ func _process(delta):
 	if Input.is_action_just_pressed("debug_toggle"):
 		debug_mode = !debug_mode
 		hitbox_debug_container.visible = debug_mode
-	
 	# 관찰중
 	if is_observing:
 		if Input.is_action_just_pressed("ui_accept"):
@@ -100,7 +103,10 @@ func _process(delta):
 			waiting_enemy_attack = false
 			await execute_enemy_attack()
 		return
-	# 공격 준비중
+	# 방어 모드
+	if is_defense_mode:
+		update_defense_weapon_movement(delta)	
+	# 공격 모드
 	if is_attack_mode:
 		var weapon_data = get_current_weapon_data()
 
@@ -130,7 +136,6 @@ func _process(delta):
 
 		if Input.is_action_just_pressed("ui_accept"):
 			await execute_player_attack()
-
 		return
 # 처음에 한번 실행 함수
 func _ready():
@@ -330,7 +335,15 @@ func win_battle():
 		"player_hp": player_hp,
 		"inventory": inventory
 	})
-# 대미지 계산 함수 추가
+# 게임 오버 함수
+func game_over():
+	battle_ended = true
+	set_action_buttons_disabled(true)
+
+	battle_text.text = "YOU DIED"
+
+	await get_tree().create_timer(2.0).timeout
+# 플레이어 무기 데미지 계산 함수 추가
 func get_player_attack_damage():
 	var weapon_id = "fist"
 
@@ -343,17 +356,9 @@ func get_player_attack_damage():
 	var weapon_data = items[weapon_id]
 
 	return weapon_data.get("attack", 1)
-# UI 갱신 함수 추가
+# 플레이어 HP ui 갱신 함수 추가
 func update_enemy_hp_ui():
 	enemy_hp_text.text = str(int(enemy_hp)) + " / " + str(int(enemy_max_hp))
-# 게임 오버 함수
-func game_over():
-	battle_ended = true
-	set_action_buttons_disabled(true)
-
-	battle_text.text = "YOU DIED"
-
-	await get_tree().create_timer(2.0).timeout
 # 아이템 목록 열기 함수
 func open_battle_item_list():
 	battle_consumables.clear()
@@ -439,7 +444,7 @@ func use_selected_battle_item():
 	await get_tree().create_timer(1.0).timeout
 
 	start_enemy_turn()
-# 실제 적 공격 함수
+# 적 공격 함수
 func execute_enemy_attack():
 	battle_text.text = ""
 
@@ -483,17 +488,30 @@ func fire_enemy_projectile():
 	projectile.rotation_degrees = current_enemy_pattern.get("projectile_rotation", 180)
 
 	enemy_projectile_container.add_child(projectile)
+	
+	start_defense_mode()
+
+	await get_tree().create_timer(0.5).timeout
 
 	var direction = Vector2.DOWN
 	var elapsed_time = 0.0
 	var frame_index = 0
 	var hit_player = false
+	var blocked = false
 
 	while elapsed_time < projectile_life_time:
 		projectile.texture = load(projectile_frames[frame_index])
 		projectile.position += direction * projectile_speed * projectile_frame_time
+		
+		if check_defense_hit(projectile, projectile_data):
+			blocked = true
+			break
+			
+		# 바닥 도달 판정도 탄막 hitbox 기준
+		var projectile_hit_rect = get_projectile_hit_rect(projectile, projectile_data)
+		var damage_line_y = defense_area_rect.position.y + defense_area_rect.size.y - 20
 
-		if projectile.position.y >= 900:
+		if projectile_hit_rect.position.y + projectile_hit_rect.size.y >= damage_line_y:
 			hit_player = true
 			break
 
@@ -506,8 +524,15 @@ func fire_enemy_projectile():
 			frame_index = 0
 
 	projectile.queue_free()
+	
+	end_defense_mode()
 
-	if hit_player:
+	defense_weapon_hitbox_debug.visible = false
+	enemy_projectile_hitbox_debug.visible = false
+
+	if blocked:
+		battle_text.text = "공격을 막았다."
+	elif hit_player:
 		var damage = current_enemy_pattern.get("projectile_damage", current_enemy_pattern.get("damage", 1))
 		player_hp -= damage
 
@@ -517,8 +542,15 @@ func fire_enemy_projectile():
 		update_player_hp_ui()
 		battle_text.text = str(int(damage)) + " 의 피해를 입었다."
 	else:
-		battle_text.text = "공격을 피했다."
-# 패턴 선택 함수
+		var damage = current_enemy_pattern.get("projectile_damage", current_enemy_pattern.get("damage", 1))
+		player_hp -= damage
+
+		if player_hp < 0:
+			player_hp = 0
+
+		update_player_hp_ui()
+		battle_text.text = str(int(damage)) + " 의 피해를 입었다."
+# 적 패턴 선택 함수
 func choose_enemy_pattern():
 	var patterns = enemy_data.get("patterns", [])
 
@@ -526,6 +558,116 @@ func choose_enemy_pattern():
 		return {}
 
 	return patterns.pick_random()
+# 적 피격시 흔들림 함수
+func play_enemy_hit_shake():
+	var original_position = enemy_sprite.position
+
+	var tween = create_tween()
+	tween.tween_property(enemy_sprite, "position", original_position + Vector2(18, 0), 0.04)
+	tween.tween_property(enemy_sprite, "position", original_position + Vector2(-18, 0), 0.04)
+	tween.tween_property(enemy_sprite, "position", original_position + Vector2(10, 0), 0.04)
+	tween.tween_property(enemy_sprite, "position", original_position, 0.04)
+
+	await tween.finished
+# 적 피격시 데미지 팝업 함수 
+func show_damage_popup(damage, is_weak):
+	var label = Label.new()
+	var font = load("res://fonts/x12y12pxMaruMinyaHangul.ttf")
+	label.add_theme_font_override("font", font)
+	if is_weak:
+		label.text = "WEAK!\n" + str(int(damage))
+	else:
+		label.text = str(int(damage))
+	label.z_index = 100
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.size = Vector2(260, 120)
+
+	# 폰트 크기 키우기
+	label.add_theme_font_size_override("font_size", 48)
+
+	if is_weak:
+		label.add_theme_color_override("font_color", Color(1, 0.1, 0.1, 1))
+		label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+		label.add_theme_constant_override("outline_size", 8)
+	else:
+		label.add_theme_color_override("font_color", Color(1, 1, 1, 1))
+		label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+		label.add_theme_constant_override("outline_size", 8)
+
+	var hit_position = get_last_hitbox_center_position_for_battle_scene()
+	label.position = hit_position - Vector2(130, 60)
+
+	add_child(label)
+
+	var tween = create_tween()
+	tween.tween_property(label, "position", label.position + Vector2(0, -90), 1.0)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 1.0)
+
+	await tween.finished
+	label.queue_free()
+# 적 피격 데미지 팝업 전용 위치 함수
+func get_last_hitbox_center_position_for_battle_scene():
+	var base_size = enemy_data.get("hitbox_base_size", [667, 1000])
+	var enemy_rect = enemy_sprite.get_global_rect()
+
+	var scale_x = enemy_rect.size.x / float(base_size[0])
+	var scale_y = enemy_rect.size.y / float(base_size[1])
+
+	var rect_data = last_hitbox_data.get("rect", [0, 0, 100, 100])
+
+	var center_global = Vector2(
+		enemy_rect.position.x + (rect_data[0] + rect_data[2] / 2.0) * scale_x,
+		enemy_rect.position.y + (rect_data[1] + rect_data[3] / 2.0) * scale_y
+	)
+
+	var battle_scene_global = get_global_rect().position
+
+	return center_global - battle_scene_global
+# 적 히트박스 이펙트 위치 조정 함수
+func get_last_hitbox_center_position():
+	var base_size = enemy_data.get("hitbox_base_size", [667, 1000])
+	var enemy_rect = enemy_sprite.get_global_rect()
+
+	var scale_x = enemy_rect.size.x / float(base_size[0])
+	var scale_y = enemy_rect.size.y / float(base_size[1])
+
+	var rect_data = last_hitbox_data.get("rect", [0, 0, 100, 100])
+
+	var center_global = Vector2(
+		enemy_rect.position.x + (rect_data[0] + rect_data[2] / 2.0) * scale_x,
+		enemy_rect.position.y + (rect_data[1] + rect_data[3] / 2.0) * scale_y
+	)
+
+	var effect_parent_global = hit_effect.get_parent().get_global_rect().position
+
+	return center_global - effect_parent_global - hit_effect.size / 2
+# 적 탄막 피격 범위 가져오는 함수
+func get_projectile_hit_rect(projectile, projectile_data):
+	var hitbox_data = projectile_data.get("hitbox", {})
+	var offset_data = hitbox_data.get("offset", [0, 0])
+	var size_data = hitbox_data.get("size", [projectile.size.x, projectile.size.y])
+
+	var offset = Vector2(offset_data[0], offset_data[1])
+	var hitbox_size = Vector2(size_data[0], size_data[1])
+
+	var rot = int(round(projectile.rotation_degrees)) % 360
+	if rot < 0:
+		rot += 360
+
+	# 180도 회전 탄막은 이미지 안의 hitbox 위치도 반전
+	if rot == 180:
+		offset = Vector2(
+			projectile.size.x - offset.x - hitbox_size.x,
+			projectile.size.y - offset.y - hitbox_size.y
+		)
+
+	var parent_global = projectile.get_parent().get_global_rect().position
+
+	return Rect2(
+		parent_global + projectile.position + offset,
+		hitbox_size
+	)
 # 이펙트 프레임 생성 함수
 func make_effect_frames(base_path, count):
 	var frames = []
@@ -535,7 +677,112 @@ func make_effect_frames(base_path, count):
 		frames.append(base_path + number + ".png")
 
 	return frames
-# 이펙트 재생 함수
+# 히트 박스 확인용 함수
+func update_hitbox_debug():
+	for child in hitbox_debug_container.get_children():
+		if child == player_attack_hitbox_debug:
+			continue
+		if child == defense_weapon_hitbox_debug:
+			continue
+		if child == enemy_projectile_hitbox_debug:
+			continue
+
+		child.queue_free()
+
+	if not enemy_data.has("hitboxes"):
+		return
+
+	var base_size = enemy_data.get("hitbox_base_size", [667, 1000])
+	var base_width = float(base_size[0])
+	var base_height = float(base_size[1])
+
+	var enemy_rect = enemy_sprite.get_global_rect()
+
+	var scale_x = enemy_rect.size.x / base_width
+	var scale_y = enemy_rect.size.y / base_height
+
+	for hitbox in enemy_data["hitboxes"]:
+		var rect_data = hitbox["rect"]
+
+		var box = ColorRect.new()
+		box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		box.color = Color(1, 1, 1, 0.12)
+
+		if hitbox.get("weak", false):
+			box.color = Color(1, 0, 0, 0.18)
+
+		box.position = Vector2(
+			enemy_rect.position.x + rect_data[0] * scale_x,
+			enemy_rect.position.y + rect_data[1] * scale_y
+		)
+
+		box.size = Vector2(
+			rect_data[2] * scale_x,
+			rect_data[3] * scale_y
+		)
+
+		hitbox_debug_container.add_child(box)
+# 디버그 박스 갱신 함수 추가
+func update_defense_hitbox_debug(projectile, projectile_data):
+	if not debug_mode:
+		defense_weapon_hitbox_debug.visible = false
+		enemy_projectile_hitbox_debug.visible = false
+		return
+
+	var weapon_rect = get_weapon_defense_hit_rect()
+	var projectile_rect = get_projectile_hit_rect(projectile, projectile_data)
+	var debug_container_global = hitbox_debug_container.get_global_rect().position
+
+	defense_weapon_hitbox_debug.visible = true
+	defense_weapon_hitbox_debug.position = weapon_rect.position - debug_container_global
+	defense_weapon_hitbox_debug.size = weapon_rect.size
+
+	enemy_projectile_hitbox_debug.visible = true
+	enemy_projectile_hitbox_debug.position = projectile_rect.position - debug_container_global
+	enemy_projectile_hitbox_debug.size = projectile_rect.size
+# 플레이어 방어 무기 판정 함수
+func get_weapon_defense_hit_rect():
+	var weapon_rect = weapon_sprite.get_global_rect()
+	var weapon_data = get_current_weapon_data()
+
+	var hitbox_data = weapon_data.get("defense_hitbox", {})
+	var offset_data = hitbox_data.get("offset", [0, 0])
+	var size_data = hitbox_data.get("size", [weapon_sprite.size.x, weapon_sprite.size.y])
+
+	var offset = Vector2(offset_data[0], offset_data[1])
+	var hitbox_size = Vector2(size_data[0], size_data[1])
+
+	return Rect2(
+		weapon_rect.position + offset,
+		hitbox_size
+	)
+# 플레이어 방어 무기 탄막 충돌 함수
+func check_defense_hit(projectile, projectile_data):
+	update_defense_hitbox_debug(projectile, projectile_data)
+
+	var projectile_rect = get_projectile_hit_rect(projectile, projectile_data)
+	var weapon_rect = get_weapon_defense_hit_rect()
+
+	var projectile_bottom = projectile_rect.position.y + projectile_rect.size.y
+	var projectile_top = projectile_rect.position.y
+
+	var weapon_block_line_y = weapon_rect.position.y + weapon_rect.size.y
+
+	var projectile_left = projectile_rect.position.x
+	var projectile_right = projectile_rect.position.x + projectile_rect.size.x
+
+	var weapon_left = weapon_rect.position.x
+	var weapon_right = weapon_rect.position.x + weapon_rect.size.x
+
+	var x_overlaps = projectile_right >= weapon_left and projectile_left <= weapon_right
+
+	var crosses_block_line = (
+		projectile_bottom >= weapon_block_line_y
+		and projectile_top <= weapon_block_line_y
+	)
+
+	return x_overlaps and crosses_block_line
+# 플레이어 이펙트 재생 함수
 func play_effect_frames(effect_node, frame_paths, frame_time = 0.05):
 	effect_node.visible = true
 
@@ -545,13 +792,13 @@ func play_effect_frames(effect_node, frame_paths, frame_time = 0.05):
 
 	effect_node.visible = false
 	effect_node.texture = null
-# 무기 현재 아이디 값 가져오는 함수
+# 플레이어 무기 현재 아이디 값 가져오는 함수
 func get_current_weapon_id():
 	if equipped_weapon != null:
 		return equipped_weapon["id"]
 
 	return "fist"
-# 무기 현재 데이터 가져오는 함수
+# 플레이어 무기 현재 데이터 가져오는 함수
 func get_current_weapon_data():
 	var weapon_id = get_current_weapon_id()
 
@@ -559,12 +806,12 @@ func get_current_weapon_data():
 		return {}
 
 	return items[weapon_id]
-# 무기 현재 탄환 아이디 가져오는 함수
+# 플레이어 무기 현재 탄환 아이디 가져오는 함수
 func get_current_attack_projectile_id():
 	var weapon_data = get_current_weapon_data()
 
 	return weapon_data.get("attack_projectile", "slash_basic")
-# 무기 현재 탄환 데이터 함수
+# 플레이어 무기 현재 탄환 데이터 함수
 func get_current_projectile_data():
 	var projectile_id = get_current_attack_projectile_id()
 
@@ -572,7 +819,7 @@ func get_current_projectile_data():
 		return {}
 
 	return projectiles[projectile_id]
-# 현재 무기 ui에 추가하는 함수
+# 플레이어 무기 현재 ui에 추가하는 함수
 func update_weapon_sprite_texture():
 	var weapon_data = get_current_weapon_data()
 
@@ -580,7 +827,7 @@ func update_weapon_sprite_texture():
 		weapon_sprite.texture = load(weapon_data["image"])
 	else:
 		weapon_sprite.texture = null
-# 무기별 size 적용 함수
+# 플레이어 무기별 size 적용 함수
 func apply_weapon_visual_settings():
 	var weapon_data = get_current_weapon_data()
 
@@ -589,14 +836,14 @@ func apply_weapon_visual_settings():
 		weapon_sprite.size = Vector2(size_data[0], size_data[1])
 
 	weapon_sprite.pivot_offset = weapon_sprite.size / 2
-# 무기별 기본 위치값 추가 함수
+# 플레이어 무기별 기본 위치값 추가 함수
 func update_weapon_base_position():
 	var guide_center_global = attack_guide.get_global_rect().get_center()
 	var weapon_parent_global_pos = weapon_sprite.get_parent().get_global_rect().position
 
 	weapon_base_position = guide_center_global - weapon_parent_global_pos - weapon_sprite.pivot_offset
 	weapon_sprite.position = weapon_base_position
-# 공격 모드 시작 함수
+# 플레이어 공격 모드 시작 함수
 func start_attack_mode():
 	set_action_buttons_disabled(true)
 
@@ -617,6 +864,71 @@ func start_attack_mode():
 	attack_guide.visible = true
 
 	battle_text.text = ""
+# 플레이어 방어 모드 시작 함수
+func start_defense_mode():
+	var weapon_data = get_current_weapon_data()
+
+	update_weapon_sprite_texture()
+	apply_weapon_visual_settings()
+
+	weapon_sprite.rotation_degrees = weapon_data.get("defense_base_rotation", 0)
+	weapon_sprite.position = Vector2(
+		defense_area_rect.position.x + defense_area_rect.size.x / 2 - weapon_sprite.size.x / 2,
+		defense_area_rect.position.y + defense_area_rect.size.y - weapon_sprite.size.y - 20
+	)
+
+	weapon_sprite.visible = true
+	is_defense_mode = true
+# 플레이어 방어 모드 종료 함수
+func end_defense_mode():
+	is_defense_mode = false
+	weapon_sprite.visible = false
+	weapon_sprite.rotation_degrees = 0
+# 플레이어 방어 실행 함수
+func update_defense_weapon_movement(delta):
+	var weapon_data = get_current_weapon_data()
+	var move_speed = weapon_data.get("defense_move_speed", 500)
+
+	var move_vector = Vector2.ZERO
+
+	if Input.is_action_pressed("move_left") or Input.is_action_pressed("ui_left"):
+		move_vector.x -= 1
+
+	if Input.is_action_pressed("move_right") or Input.is_action_pressed("ui_right"):
+		move_vector.x += 1
+
+	if Input.is_action_pressed("move_forward") or Input.is_action_pressed("ui_up"):
+		move_vector.y -= 1
+
+	if Input.is_action_pressed("move_back") or Input.is_action_pressed("ui_down"):
+		move_vector.y += 1
+
+	if move_vector != Vector2.ZERO:
+		move_vector = move_vector.normalized()
+
+	weapon_sprite.position += move_vector * move_speed * delta
+
+	var min_pos = defense_area_rect.position
+	var max_pos = defense_area_rect.position + defense_area_rect.size
+
+	var hitbox_data = weapon_data.get("defense_hitbox", {})
+	var offset_data = hitbox_data.get("offset", [0, 0])
+	var size_data = hitbox_data.get("size", [weapon_sprite.size.x, weapon_sprite.size.y])
+
+	var hitbox_offset = Vector2(offset_data[0], offset_data[1])
+	var hitbox_size = Vector2(size_data[0], size_data[1])
+
+	weapon_sprite.position.x = clamp(
+		weapon_sprite.position.x,
+		min_pos.x - hitbox_offset.x,
+		max_pos.x - hitbox_offset.x - hitbox_size.x
+	)
+
+	weapon_sprite.position.y = clamp(
+		weapon_sprite.position.y,
+		min_pos.y - hitbox_offset.y,
+		max_pos.y - hitbox_offset.y - hitbox_size.y
+	)
 # 플레이어 공격 실행 함수
 func execute_player_attack():
 	if not is_attack_mode:
@@ -677,90 +989,6 @@ func execute_player_attack():
 		return
 
 	start_enemy_turn()
-# 적 피격시 흔들림 함수
-func play_enemy_hit_shake():
-	var original_position = enemy_sprite.position
-
-	var tween = create_tween()
-	tween.tween_property(enemy_sprite, "position", original_position + Vector2(18, 0), 0.04)
-	tween.tween_property(enemy_sprite, "position", original_position + Vector2(-18, 0), 0.04)
-	tween.tween_property(enemy_sprite, "position", original_position + Vector2(10, 0), 0.04)
-	tween.tween_property(enemy_sprite, "position", original_position, 0.04)
-
-	await tween.finished
-# 적 피격시 데미지 팝업 함수 
-func show_damage_popup(damage, is_weak):
-	var label = Label.new()
-	var font = load("res://fonts/x12y12pxMaruMinyaHangul.ttf")
-	label.add_theme_font_override("font", font)
-	if is_weak:
-		label.text = "WEAK!\n" + str(int(damage))
-	else:
-		label.text = str(int(damage))
-	label.z_index = 100
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.size = Vector2(260, 120)
-
-	# 폰트 크기 키우기
-	label.add_theme_font_size_override("font_size", 48)
-
-	if is_weak:
-		label.add_theme_color_override("font_color", Color(1, 0.1, 0.1, 1))
-		label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
-		label.add_theme_constant_override("outline_size", 8)
-	else:
-		label.add_theme_color_override("font_color", Color(1, 1, 1, 1))
-		label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
-		label.add_theme_constant_override("outline_size", 8)
-
-	var hit_position = get_last_hitbox_center_position_for_battle_scene()
-	label.position = hit_position - Vector2(130, 60)
-
-	add_child(label)
-
-	var tween = create_tween()
-	tween.tween_property(label, "position", label.position + Vector2(0, -90), 1.0)
-	tween.parallel().tween_property(label, "modulate:a", 0.0, 1.0)
-
-	await tween.finished
-	label.queue_free()
-# 히트박스 이펙트 위치 조정 함수
-func get_last_hitbox_center_position():
-	var base_size = enemy_data.get("hitbox_base_size", [667, 1000])
-	var enemy_rect = enemy_sprite.get_global_rect()
-
-	var scale_x = enemy_rect.size.x / float(base_size[0])
-	var scale_y = enemy_rect.size.y / float(base_size[1])
-
-	var rect_data = last_hitbox_data.get("rect", [0, 0, 100, 100])
-
-	var center_global = Vector2(
-		enemy_rect.position.x + (rect_data[0] + rect_data[2] / 2.0) * scale_x,
-		enemy_rect.position.y + (rect_data[1] + rect_data[3] / 2.0) * scale_y
-	)
-
-	var effect_parent_global = hit_effect.get_parent().get_global_rect().position
-
-	return center_global - effect_parent_global - hit_effect.size / 2
-# 데미지 팝업 전용 위치 함수
-func get_last_hitbox_center_position_for_battle_scene():
-	var base_size = enemy_data.get("hitbox_base_size", [667, 1000])
-	var enemy_rect = enemy_sprite.get_global_rect()
-
-	var scale_x = enemy_rect.size.x / float(base_size[0])
-	var scale_y = enemy_rect.size.y / float(base_size[1])
-
-	var rect_data = last_hitbox_data.get("rect", [0, 0, 100, 100])
-
-	var center_global = Vector2(
-		enemy_rect.position.x + (rect_data[0] + rect_data[2] / 2.0) * scale_x,
-		enemy_rect.position.y + (rect_data[1] + rect_data[3] / 2.0) * scale_y
-	)
-
-	var battle_scene_global = get_global_rect().position
-
-	return center_global - battle_scene_global
 # 플레이어 공격 투사체 발사 함수
 func fire_player_attack_projectile():
 	current_projectile_data = get_current_projectile_data()
@@ -875,44 +1103,3 @@ func check_attack_hit():
 			return true
 
 	return false
-# 히트 박스 확인용 함수
-func update_hitbox_debug():
-	for child in hitbox_debug_container.get_children():
-		if child == player_attack_hitbox_debug:
-			continue
-
-		child.queue_free()
-
-	if not enemy_data.has("hitboxes"):
-		return
-
-	var base_size = enemy_data.get("hitbox_base_size", [667, 1000])
-	var base_width = float(base_size[0])
-	var base_height = float(base_size[1])
-
-	var enemy_rect = enemy_sprite.get_global_rect()
-
-	var scale_x = enemy_rect.size.x / base_width
-	var scale_y = enemy_rect.size.y / base_height
-
-	for hitbox in enemy_data["hitboxes"]:
-		var rect_data = hitbox["rect"]
-
-		var box = ColorRect.new()
-		box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		box.color = Color(1, 1, 1, 0.12)
-
-		if hitbox.get("weak", false):
-			box.color = Color(1, 0, 0, 0.18)
-
-		box.position = Vector2(
-			enemy_rect.position.x + rect_data[0] * scale_x,
-			enemy_rect.position.y + rect_data[1] * scale_y
-		)
-
-		box.size = Vector2(
-			rect_data[2] * scale_x,
-			rect_data[3] * scale_y
-		)
-
-		hitbox_debug_container.add_child(box)
