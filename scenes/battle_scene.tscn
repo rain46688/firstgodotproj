@@ -237,6 +237,14 @@ offset_bottom = 40.0
 mouse_filter = 2
 color = Color(1, 1, 0, 0.5882353)
 
+[node name="ParryHitboxDebug" type="ColorRect" parent="HitboxDebugContainer" unique_id=325117932]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+color = Color(0, 1, 0, 0.5882353)
+
 [node name="EnemyProjectileContainer" type="Control" parent="." unique_id=262981383]
 anchors_preset = 0
 offset_right = 40.0

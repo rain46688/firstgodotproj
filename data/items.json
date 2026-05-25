@@ -17,7 +17,10 @@
 		"height": 1,
 		"type": "weapon",
 		"stackable": false,
-		"attack": 8,
+		"attack_min": 6,
+		"attack_max": 8,
+		"critical_chance": 0.25,
+		"critical_multiplier": 2.0,
 		"consumed_on_use": false,
 		"attack_base_rotation": 90,
 		"attack_angle_min": -45,
@@ -34,7 +37,8 @@
 		"defense_hitbox": {
 			"offset": [10, 85],
 			"size": [210, 45]
-		}
+		},
+		"parry_effect_offset": [110, 110]
 	},
 	"fist": {
 		"name": "맨주먹",
@@ -44,7 +48,10 @@
 		"height": 1,
 		"type": "weapon",
 		"stackable": false,
-		"attack": 5,
+		"attack_min": 3,
+		"attack_max": 10,
+		"critical_chance": 0.15,
+		"critical_multiplier": 1.5,
 		"consumed_on_use": false,
 		"default_weapon": true,
 		"attack_base_rotation": 90,
@@ -52,7 +59,7 @@
 		"attack_angle_max": 30,
 		"defense_base_rotation": 0,
 		"defense_move_speed": 500,
-		"parry_window": 0.2,
+		"parry_window": 0.25,
 		"piercing": false,
 		"battle_sprite_size": [140, 140],
 		"attack_move_range": 380,
@@ -60,9 +67,10 @@
 		"weapon_angle_step": 5,
 		"attack_projectile": "slash_basic",
 		"defense_hitbox": {
-			"offset": [45, 55],
-			"size": [90, 90]
-		}
+			"offset": [5, 35],
+			"size": [140, 70]
+		},
+		"parry_effect_offset": [70, 70]
 	},
 	"beverage_a": {
 		"name": "음료A",

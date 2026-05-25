@@ -24,6 +24,7 @@ signal battle_finished(result_data)
 @onready var enemy_projectile_container = $EnemyProjectileContainer
 @onready var defense_weapon_hitbox_debug = $HitboxDebugContainer/DefenseWeaponHitboxDebug
 @onready var enemy_projectile_hitbox_debug = $HitboxDebugContainer/EnemyProjectileHitboxDebug
+@onready var parry_hitbox_debug = $HitboxDebugContainer/ParryHitboxDebug
 
 # 일반 변수 모음
 var player_hp = 0
@@ -62,6 +63,10 @@ var projectiles = {}
 var current_projectile_data = {}
 var is_defense_mode = false
 var defense_area_rect = Rect2(350, 700, 1220, 360)
+var parry_success = false
+var parry_input_buffer_time = 0.0
+var parry_count = 0
+var battle_difficulty = "normal"
 
 # 상수 변수 모음
 
@@ -105,7 +110,13 @@ func _process(delta):
 		return
 	# 방어 모드
 	if is_defense_mode:
-		update_defense_weapon_movement(delta)	
+		update_defense_weapon_movement(delta)
+
+		if Input.is_action_just_pressed("ui_accept"):
+			parry_input_buffer_time = 0.05
+
+		if parry_input_buffer_time > 0:
+			parry_input_buffer_time -= delta	
 	# 공격 모드
 	if is_attack_mode:
 		var weapon_data = get_current_weapon_data()
@@ -145,7 +156,9 @@ func _ready():
 	end_turn_button.focus_mode = Control.FOCUS_NONE
 	run_button.focus_mode = Control.FOCUS_NONE
 	attack_guide.z_index = 1
-	weapon_sprite.z_index = 2
+	weapon_sprite.z_index = 10
+	parry_effect.z_index = 20
+	hitbox_debug_container.z_index = 999
 
 	weapon_sprite.pivot_offset = weapon_sprite.size / 2
 	update_weapon_base_position()
@@ -345,17 +358,23 @@ func game_over():
 	await get_tree().create_timer(2.0).timeout
 # 플레이어 무기 데미지 계산 함수 추가
 func get_player_attack_damage():
-	var weapon_id = "fist"
+	var weapon_data = get_current_weapon_data()
 
-	if equipped_weapon != null:
-		weapon_id = equipped_weapon["id"]
+	var min_damage = weapon_data.get("attack_min", weapon_data.get("attack", 1))
+	var max_damage = weapon_data.get("attack_max", weapon_data.get("attack", 1))
 
-	if not items.has(weapon_id):
-		return 1
+	return randi_range(min_damage, max_damage)
+# 플레이어 공격 치명타 판정 함수
+func is_player_attack_critical():
+	var weapon_data = get_current_weapon_data()
+	var critical_chance = weapon_data.get("critical_chance", 0.0)
 
-	var weapon_data = items[weapon_id]
+	return randf() < critical_chance
+# 플레이어 공격 치명타 배율 함수
+func get_critical_multiplier():
+	var weapon_data = get_current_weapon_data()
 
-	return weapon_data.get("attack", 1)
+	return weapon_data.get("critical_multiplier", 2.0)
 # 플레이어 HP ui 갱신 함수 추가
 func update_enemy_hp_ui():
 	enemy_hp_text.text = str(int(enemy_hp)) + " / " + str(int(enemy_max_hp))
@@ -448,7 +467,7 @@ func use_selected_battle_item():
 func execute_enemy_attack():
 	battle_text.text = ""
 
-	await fire_enemy_projectile()
+	await fire_enemy_projectiles()
 
 	if player_hp <= 0:
 		await get_tree().create_timer(1.0).timeout
@@ -457,15 +476,35 @@ func execute_enemy_attack():
 
 	await get_tree().create_timer(0.5).timeout
 	start_player_turn()
+# 적 탄막 난이도 보정 함수
+func get_adjusted_projectile_info(projectile_info):
+	var adjusted = projectile_info.duplicate(true)
+	var danger_type = adjusted.get("danger_type", "normal")
+
+	if battle_difficulty == "easy":
+		if danger_type == "parry_only":
+			adjusted["danger_type"] = "normal"
+
+	elif battle_difficulty == "hard":
+		if danger_type == "normal":
+			if randf() < 0.35:
+				adjusted["danger_type"] = "parry_only"
+
+	elif battle_difficulty == "nightmare":
+		adjusted["danger_type"] = "parry_only"
+
+	return adjusted
 # 적의 탄막 발사 함수
-func fire_enemy_projectile():
-	var projectile_id = current_enemy_pattern.get("projectile", "slash_basic")
+func fire_enemy_projectile(projectile_info):
+	projectile_info = get_adjusted_projectile_info(projectile_info)
+	var projectile_id = projectile_info.get("projectile", "slash_basic")
 
 	if not projectiles.has(projectile_id):
 		push_error("적 투사체 데이터가 없음: " + projectile_id)
 		return
 
 	var projectile_data = projectiles[projectile_id]
+	var danger_type = projectile_info.get("danger_type", "normal")
 
 	var projectile_size = projectile_data.get("size", [200, 200])
 	var projectile_speed = projectile_data.get("speed", 1200)
@@ -483,27 +522,38 @@ func fire_enemy_projectile():
 	projectile.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	projectile.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-	var start_pos = current_enemy_pattern.get("projectile_start", [900, 120])
+	var start_pos = projectile_info.get("start", [900, 120])
 	projectile.position = Vector2(start_pos[0], start_pos[1])
-	projectile.rotation_degrees = current_enemy_pattern.get("projectile_rotation", 180)
+	projectile.rotation_degrees = projectile_info.get("rotation", 180)
+	
+	if danger_type == "parry_only":
+		projectile.modulate = Color(1, 0.15, 0.15, 1)
+	else:
+		projectile.modulate = Color(1, 1, 1, 1)
 
 	enemy_projectile_container.add_child(projectile)
-	
-	start_defense_mode()
-
-	await get_tree().create_timer(0.5).timeout
 
 	var direction = Vector2.DOWN
 	var elapsed_time = 0.0
 	var frame_index = 0
 	var hit_player = false
 	var blocked = false
+	parry_success = false
 
 	while elapsed_time < projectile_life_time:
 		projectile.texture = load(projectile_frames[frame_index])
 		projectile.position += direction * projectile_speed * projectile_frame_time
 		
-		if check_defense_hit(projectile, projectile_data):
+		if parry_input_buffer_time > 0 and check_parry_hit(projectile, projectile_data):
+			parry_success = true
+			parry_count += 1
+			parry_input_buffer_time = 0.0
+			projectile.visible = false
+			parry_effect.position = get_parry_effect_position()
+			await play_effect_frames(parry_effect, parry_frames, 0.04)
+			break
+		
+		if danger_type != "parry_only" and check_defense_hit(projectile, projectile_data):
 			blocked = true
 			break
 			
@@ -524,16 +574,17 @@ func fire_enemy_projectile():
 			frame_index = 0
 
 	projectile.queue_free()
-	
-	end_defense_mode()
 
 	defense_weapon_hitbox_debug.visible = false
 	enemy_projectile_hitbox_debug.visible = false
+	parry_hitbox_debug.visible = false
 
-	if blocked:
-		battle_text.text = "공격을 막았다."
+	if parry_success:
+		pass
+	elif blocked:
+		pass
 	elif hit_player:
-		var damage = current_enemy_pattern.get("projectile_damage", current_enemy_pattern.get("damage", 1))
+		var damage = projectile_info.get("damage", current_enemy_pattern.get("damage", 1))
 		player_hp -= damage
 
 		if player_hp < 0:
@@ -542,7 +593,7 @@ func fire_enemy_projectile():
 		update_player_hp_ui()
 		battle_text.text = str(int(damage)) + " 의 피해를 입었다."
 	else:
-		var damage = current_enemy_pattern.get("projectile_damage", current_enemy_pattern.get("damage", 1))
+		var damage = projectile_info.get("damage", current_enemy_pattern.get("damage", 1))
 		player_hp -= damage
 
 		if player_hp < 0:
@@ -550,6 +601,92 @@ func fire_enemy_projectile():
 
 		update_player_hp_ui()
 		battle_text.text = str(int(damage)) + " 의 피해를 입었다."
+# 적의 패턴에 탄막 모두 발사 함수
+func fire_enemy_projectiles():
+	var projectile_list = current_enemy_pattern.get("projectiles", [])
+	var fire_mode = current_enemy_pattern.get("fire_mode", "sequential")
+
+	parry_count = 0
+
+	start_defense_mode()
+	await get_tree().create_timer(0.5).timeout
+
+	if projectile_list.size() == 0:
+		await fire_enemy_projectile(current_enemy_pattern)
+	else:
+		if fire_mode == "parallel":
+			await fire_enemy_projectiles_parallel(projectile_list)
+		else:
+			for projectile_info in projectile_list:
+				var delay = projectile_info.get("delay", 0.0)
+
+				if delay > 0:
+					await get_tree().create_timer(delay).timeout
+
+				await fire_enemy_projectile(projectile_info)
+
+	end_defense_mode()
+
+	defense_weapon_hitbox_debug.visible = false
+	enemy_projectile_hitbox_debug.visible = false
+	parry_hitbox_debug.visible = false
+
+	if parry_count > 0:
+		var counter_damage = 0
+
+		for i in range(parry_count):
+			counter_damage += get_parry_counter_damage_once()
+
+		enemy_hp -= counter_damage
+
+		if enemy_hp < 0:
+			enemy_hp = 0
+
+		update_enemy_hp_ui()
+
+		set_top_hitbox_as_last_hitbox()
+
+		hit_effect.position = get_last_hitbox_center_position()
+		show_damage_popup(counter_damage, true)
+
+		await play_enemy_hit_shake()
+		await play_effect_frames(hit_effect, hit_frames, 0.05)
+
+		battle_text.text = "패링 반격!\n" + str(int(counter_damage)) + " 의 피해를 주었다."
+
+		await get_tree().create_timer(1.0).timeout
+
+		if enemy_hp <= 0:
+			await win_battle()
+			return
+# 적의 패턴에 동시 탄막 추가 함수
+func fire_enemy_projectiles_parallel(projectile_list):
+	for projectile_info in projectile_list:
+		fire_enemy_projectile_parallel_task(projectile_info)
+
+	var max_wait_time = 0.0
+
+	for projectile_info in projectile_list:
+		var delay = projectile_info.get("delay", 0.0)
+		var projectile_id = projectile_info.get("projectile", "slash_basic")
+
+		if not projectiles.has(projectile_id):
+			continue
+
+		var projectile_data = projectiles[projectile_id]
+		var life_time = projectile_data.get("life_time", 0.9)
+
+		max_wait_time = max(max_wait_time, delay + life_time + 0.2)
+
+	await get_tree().create_timer(max_wait_time).timeout
+# 동시 탄막 추가 함수
+func fire_enemy_projectile_parallel_task(projectile_info):
+	var delay = projectile_info.get("delay", 0.0)
+
+	if delay > 0:
+		await get_tree().create_timer(delay).timeout
+
+	await fire_enemy_projectile(projectile_info)
 # 적 패턴 선택 함수
 func choose_enemy_pattern():
 	var patterns = enemy_data.get("patterns", [])
@@ -642,6 +779,23 @@ func get_last_hitbox_center_position():
 	var effect_parent_global = hit_effect.get_parent().get_global_rect().position
 
 	return center_global - effect_parent_global - hit_effect.size / 2
+# 적 패링 반격 데미지 피격 연출 함수
+func set_top_hitbox_as_last_hitbox():
+	if not enemy_data.has("hitboxes"):
+		return
+
+	var hitboxes = enemy_data["hitboxes"]
+
+	if hitboxes.size() == 0:
+		return
+
+	var top_hitbox = hitboxes[0]
+
+	for hitbox in hitboxes:
+		if hitbox["rect"][1] < top_hitbox["rect"][1]:
+			top_hitbox = hitbox
+
+	last_hitbox_data = top_hitbox
 # 적 탄막 피격 범위 가져오는 함수
 func get_projectile_hit_rect(projectile, projectile_data):
 	var hitbox_data = projectile_data.get("hitbox", {})
@@ -686,6 +840,8 @@ func update_hitbox_debug():
 			continue
 		if child == enemy_projectile_hitbox_debug:
 			continue
+		if child == parry_hitbox_debug:
+			continue
 
 		child.queue_free()
 
@@ -727,11 +883,13 @@ func update_defense_hitbox_debug(projectile, projectile_data):
 	if not debug_mode:
 		defense_weapon_hitbox_debug.visible = false
 		enemy_projectile_hitbox_debug.visible = false
+		parry_hitbox_debug.visible = false
 		return
 
 	var weapon_rect = get_weapon_defense_hit_rect()
 	var projectile_rect = get_projectile_hit_rect(projectile, projectile_data)
 	var debug_container_global = hitbox_debug_container.get_global_rect().position
+	var parry_rect = get_parry_hit_rect()
 
 	defense_weapon_hitbox_debug.visible = true
 	defense_weapon_hitbox_debug.position = weapon_rect.position - debug_container_global
@@ -740,6 +898,10 @@ func update_defense_hitbox_debug(projectile, projectile_data):
 	enemy_projectile_hitbox_debug.visible = true
 	enemy_projectile_hitbox_debug.position = projectile_rect.position - debug_container_global
 	enemy_projectile_hitbox_debug.size = projectile_rect.size
+	
+	parry_hitbox_debug.visible = true
+	parry_hitbox_debug.position = parry_rect.position - debug_container_global
+	parry_hitbox_debug.size = parry_rect.size
 # 플레이어 방어 무기 판정 함수
 func get_weapon_defense_hit_rect():
 	var weapon_rect = weapon_sprite.get_global_rect()
@@ -756,6 +918,37 @@ func get_weapon_defense_hit_rect():
 		weapon_rect.position + offset,
 		hitbox_size
 	)
+# 플레이어 방어 무기 패링 범위 확인 함수
+func get_parry_hit_rect():
+	var weapon_rect = get_weapon_defense_hit_rect()
+	var weapon_data = get_current_weapon_data()
+
+	var parry_window = weapon_data.get("parry_window", 0.1)
+
+	var parry_height = weapon_rect.size.y * parry_window
+	if parry_height < 6:
+		parry_height = 6
+
+	var center_y = weapon_rect.position.y + weapon_rect.size.y / 2.0
+
+	return Rect2(
+		Vector2(weapon_rect.position.x, center_y - parry_height / 2.0),
+		Vector2(weapon_rect.size.x, parry_height)
+	)
+# 플레이어 방어 무기 패링 이펙트 위치 함수
+func get_parry_effect_position():
+	var weapon_data = get_current_weapon_data()
+	var offset_data = weapon_data.get("parry_effect_offset", [
+		weapon_sprite.size.x / 2,
+		weapon_sprite.size.y / 2
+	])
+
+	var offset = Vector2(offset_data[0], offset_data[1])
+	var effect_parent_global = parry_effect.get_parent().get_global_rect().position
+
+	var effect_global_position = weapon_sprite.get_global_rect().position + offset
+
+	return effect_global_position - effect_parent_global - parry_effect.size / 2
 # 플레이어 방어 무기 탄막 충돌 함수
 func check_defense_hit(projectile, projectile_data):
 	update_defense_hitbox_debug(projectile, projectile_data)
@@ -782,6 +975,12 @@ func check_defense_hit(projectile, projectile_data):
 	)
 
 	return x_overlaps and crosses_block_line
+# 플레이어 방어 무기 패링 판정 함수
+func check_parry_hit(projectile, projectile_data):
+	var projectile_rect = get_projectile_hit_rect(projectile, projectile_data)
+	var parry_rect = get_parry_hit_rect()
+
+	return projectile_rect.intersects(parry_rect)
 # 플레이어 이펙트 재생 함수
 func play_effect_frames(effect_node, frame_paths, frame_time = 0.05):
 	effect_node.visible = true
@@ -872,9 +1071,10 @@ func start_defense_mode():
 	apply_weapon_visual_settings()
 
 	weapon_sprite.rotation_degrees = weapon_data.get("defense_base_rotation", 0)
+	# 방어 무기 초기 위치 + 될수록 내려감 현재 5
 	weapon_sprite.position = Vector2(
 		defense_area_rect.position.x + defense_area_rect.size.x / 2 - weapon_sprite.size.x / 2,
-		defense_area_rect.position.y + defense_area_rect.size.y - weapon_sprite.size.y - 20
+		defense_area_rect.position.y + defense_area_rect.size.y - weapon_sprite.size.y + 5
 	)
 
 	weapon_sprite.visible = true
@@ -947,9 +1147,15 @@ func execute_player_attack():
 		var damage = get_player_attack_damage()
 		var hitbox_name = last_hitbox_data.get("name", "부위")
 		var is_weak = last_hitbox_data.get("weak", false)
+		var is_critical = is_player_attack_critical()
+
+		if is_critical:
+			damage *= get_critical_multiplier()
 
 		if is_weak:
 			damage *= 2
+
+		damage = int(damage)
 
 		enemy_hp -= damage
 
@@ -965,22 +1171,19 @@ func execute_player_attack():
 		await play_enemy_hit_shake()
 		await play_effect_frames(hit_effect, hit_frames, 0.05)
 
+		var result_text = ""
+
+		if is_critical:
+			result_text += "치명타!\n"
+
 		if is_weak:
-			battle_text.text = (
-				hitbox_name
-				+ " 약점을 공격했다!\n"
-				+ str(int(damage))
-				+ " 의 피해를 주었다."
-			)
+			result_text += hitbox_name + " 약점을 공격했다!\n"
 		else:
-			battle_text.text = (
-				hitbox_name
-				+ "에 맞았다.\n"
-				+ str(int(damage))
-				+ " 의 피해를 주었다."
-			)
-	else:
-		battle_text.text = "공격이 빗나갔다."
+			result_text += hitbox_name + "에 맞았다.\n"
+
+		result_text += str(int(damage)) + " 의 피해를 주었다."
+
+		battle_text.text = result_text
 
 	await get_tree().create_timer(1.0).timeout
 
@@ -1103,3 +1306,14 @@ func check_attack_hit():
 			return true
 
 	return false
+# 플레이어 공격 패링 반격 데미지 함수
+func get_parry_counter_damage_once():
+	var damage = get_player_attack_damage()
+
+	if is_player_attack_critical():
+		damage *= get_critical_multiplier()
+
+	# 패링 반격은 100% 약점 처리
+	damage *= 2
+
+	return int(damage)
