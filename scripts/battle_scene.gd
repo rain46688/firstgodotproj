@@ -32,6 +32,7 @@ signal battle_finished(result_data)
 @onready var hit_red_sound = $HitRedSound
 @onready var slash_sound = $SlashSound
 @onready var click_sound = $ClickSound
+@onready var healing_sound = $HealingSound
 
 # 일반 변수 모음
 var player_hp = 0
@@ -78,6 +79,8 @@ var battle_difficulty = "normal"
 var action_buttons = []
 var action_button_base_texts = []
 var action_button_index = 0
+var attack_hit_results = []
+var pierced_hitbox_ids = []
 
 # 상수 변수 모음
 
@@ -123,7 +126,7 @@ func _process(delta):
 		update_defense_weapon_movement(delta)
 
 		if Input.is_action_just_pressed("ui_accept"):
-			parry_input_buffer_time = 0.05
+			parry_input_buffer_time = 0.03
 
 		if parry_input_buffer_time > 0:
 			parry_input_buffer_time -= delta	
@@ -145,12 +148,23 @@ func _process(delta):
 		var base_rotation = weapon_data.get("attack_base_rotation", 0)
 
 		var angle_step = weapon_data.get("weapon_angle_step", 5)
+		
+		var old_angle = weapon_angle_offset
 
 		if Input.is_action_just_pressed("move_left") or Input.is_action_just_pressed("ui_left"):
 			weapon_angle_offset -= angle_step
 
 		if Input.is_action_just_pressed("move_right") or Input.is_action_just_pressed("ui_right"):
 			weapon_angle_offset += angle_step
+			
+		weapon_angle_offset = clamp(
+			weapon_angle_offset,
+			weapon_data.get("attack_angle_min", -45),
+			weapon_data.get("attack_angle_max", 45)
+		)
+		
+		if weapon_angle_offset != old_angle:
+			play_click_sound()
 
 		weapon_angle_offset = clamp(weapon_angle_offset, angle_min, angle_max)
 		weapon_sprite.rotation_degrees = base_rotation + weapon_angle_offset
@@ -158,6 +172,9 @@ func _process(delta):
 		if Input.is_action_just_pressed("ui_accept"):
 			await execute_player_attack()
 		return
+	# 플레이어 행동 버튼 키보드 조작
+	if is_player_turn and not battle_ended:
+		update_action_button_keyboard_input()
 # 처음에 한번 실행 함수
 func _ready():
 	attack_button.focus_mode = Control.FOCUS_NONE
@@ -186,6 +203,24 @@ func _ready():
 	slash_frames = make_effect_frames("res://imgs/effects/slash/slash_", 9)
 	parry_frames = make_effect_frames("res://imgs/effects/parry/parry_", 9)
 	hit_frames = make_effect_frames("res://imgs/effects/hit/hit_", 5)
+	
+	action_buttons = [
+		attack_button,
+		observe_button,
+		item_button,
+		end_turn_button,
+		run_button
+	]
+
+	action_button_base_texts = [
+		attack_button.text,
+		observe_button.text,
+		item_button.text,
+		end_turn_button.text,
+		run_button.text
+	]
+
+	update_action_button_focus()
 # 전투 화면 설정 함수
 func setup_battle(data):
 	enemy_id = data.get("enemy_id", "")
@@ -231,13 +266,15 @@ func update_player_hp_ui():
 func _on_attack_button_pressed():
 	if not is_player_turn:
 		return
-
+	
+	play_click_sound()
 	start_attack_mode()
 # 관찰 버튼 클릭 함수
 func _on_observe_button_pressed():
 	if not is_player_turn:
 		return
 
+	play_click_sound()
 	set_action_buttons_disabled(true)
 	is_observing = true
 
@@ -265,12 +302,14 @@ func _on_item_button_pressed():
 	if not is_player_turn:
 		return
 
+	play_click_sound()
 	open_battle_item_list()
 # 턴종료 버튼 클릭 함수
 func _on_end_turn_button_pressed():
 	if not is_player_turn:
 		return
 
+	play_click_sound()
 	battle_text.text = "턴을 종료했다."
 
 	set_action_buttons_disabled(true)
@@ -283,6 +322,7 @@ func _on_run_button_pressed():
 	if not is_player_turn:
 		return
 
+	play_click_sound()
 	set_action_buttons_disabled(true)
 
 	if enemy_data.get("can_escape", true):
@@ -306,6 +346,7 @@ func start_player_turn():
 	print("start_player_turn")
 
 	is_player_turn = true
+	action_button_index = 0
 	is_attack_mode = false
 	
 	weapon_swing_enabled = false
@@ -342,6 +383,7 @@ func set_action_buttons_disabled(disabled):
 	item_button.disabled = disabled
 	end_turn_button.disabled = disabled
 	run_button.disabled = disabled
+	update_action_button_focus()
 # 승리 함수 추가
 func win_battle():
 	battle_ended = true
@@ -458,13 +500,14 @@ func use_selected_battle_item():
 		return
 
 	var item_data = items[item_id]
-
+	
 	if item_data.has("heal"):
 		player_hp += item_data["heal"]
 
 		if player_hp > player_max_hp:
 			player_hp = player_max_hp
 
+	healing_sound.play()
 	update_player_hp_ui()
 
 	if inventory_item.has("count"):
@@ -1160,6 +1203,54 @@ func update_defense_weapon_movement(delta):
 		min_pos.y - hitbox_offset.y,
 		max_pos.y - hitbox_offset.y - hitbox_size.y
 	)
+# 플레이어 공격 적용 함수
+func apply_player_attack_hit(hitbox):
+	last_hitbox_data = hitbox
+
+	var damage = get_player_attack_damage()
+	var hitbox_name = last_hitbox_data.get("name", "부위")
+	var is_weak = last_hitbox_data.get("weak", false)
+	var is_critical = is_player_attack_critical()
+
+	if is_critical:
+		damage *= get_critical_multiplier()
+
+	if is_weak:
+		damage *= 2
+
+	damage = int(damage)
+
+	if is_critical or is_weak:
+		hit_red_sound.play()
+	else:
+		hit_normal_sound.play()
+
+	enemy_hp -= damage
+
+	if enemy_hp < 0:
+		enemy_hp = 0
+
+	update_enemy_hp_ui()
+
+	hit_effect.position = get_last_hitbox_center_position()
+	show_damage_popup(damage, is_weak or is_critical)
+
+	play_enemy_hit_shake()
+	play_effect_frames(hit_effect, hit_frames, 0.05)
+
+	var text = ""
+
+	if is_critical:
+		text += "치명타!\n"
+
+	if is_weak:
+		text += hitbox_name + " 약점을 공격했다!\n"
+	else:
+		text += hitbox_name + "에 맞았다.\n"
+
+	text += str(int(damage)) + " 의 피해를 주었다."
+
+	battle_text.text = text
 # 플레이어 공격 실행 함수
 func execute_player_attack():
 	if not is_attack_mode:
@@ -1171,55 +1262,13 @@ func execute_player_attack():
 	attack_guide.visible = false
 
 	player_attack_hit = false
+	attack_hit_results.clear()
+	pierced_hitbox_ids.clear()
 
 	await fire_player_attack_projectile()
 
-	if player_attack_hit:
-		var damage = get_player_attack_damage()
-		var hitbox_name = last_hitbox_data.get("name", "부위")
-		var is_weak = last_hitbox_data.get("weak", false)
-		var is_critical = is_player_attack_critical()
-
-		if is_critical:
-			damage *= get_critical_multiplier()
-
-		if is_weak:
-			damage *= 2
-
-		damage = int(damage)
-		
-		if is_critical or is_weak:
-			hit_red_sound.play()
-		else:
-			hit_normal_sound.play()
-
-		enemy_hp -= damage
-
-		if enemy_hp < 0:
-			enemy_hp = 0
-
-		update_enemy_hp_ui()
-		
-		hit_effect.position = get_last_hitbox_center_position()
-
-		show_damage_popup(damage, is_weak)
-
-		await play_enemy_hit_shake()
-		await play_effect_frames(hit_effect, hit_frames, 0.05)
-
-		var result_text = ""
-
-		if is_critical:
-			result_text += "치명타!\n"
-
-		if is_weak:
-			result_text += hitbox_name + " 약점을 공격했다!\n"
-		else:
-			result_text += hitbox_name + "에 맞았다.\n"
-
-		result_text += str(int(damage)) + " 의 피해를 주었다."
-
-		battle_text.text = result_text
+	if not player_attack_hit:
+		battle_text.text = "공격이 빗나갔다."
 
 	await get_tree().create_timer(1.0).timeout
 
@@ -1279,11 +1328,28 @@ func fire_player_attack_projectile():
 			player_attack_hitbox_debug.position = attack_rect.position
 			player_attack_hitbox_debug.size = attack_rect.size
 
-		if check_attack_hit():
+		var weapon_data = get_current_weapon_data()
+		var piercing = weapon_data.get("piercing", false)
+
+		var collided_hitboxes = get_attack_collided_hitboxes()
+
+		if collided_hitboxes.size() > 0:
 			player_attack_hit = true
 			player_attack_hitbox_debug.visible = false
 
-			var piercing = current_projectile_data.get("piercing", false)
+			for hitbox in collided_hitboxes:
+				var hitbox_id = hitbox.get("id", "")
+
+				if piercing:
+					if pierced_hitbox_ids.has(hitbox_id):
+						continue
+					# 관통
+					pierced_hitbox_ids.append(hitbox_id)
+					apply_player_attack_hit(hitbox)
+				else:
+					# 비관통
+					apply_player_attack_hit(hitbox)
+					break
 
 			if not piercing:
 				break
@@ -1321,11 +1387,12 @@ func get_player_attack_hit_rect():
 
 	return Rect2(hitbox_position, hitbox_size)
 # 플레이어 공격 투사체 히트 판정 체크 함수
-func check_attack_hit():
+func get_attack_collided_hitboxes():
+	var results = []
 	var attack_rect = get_player_attack_hit_rect()
 
 	if not enemy_data.has("hitboxes"):
-		return false
+		return results
 
 	var base_size = enemy_data.get("hitbox_base_size", [667, 1000])
 
@@ -1348,10 +1415,9 @@ func check_attack_hit():
 		)
 
 		if attack_rect.intersects(hitbox_rect):
-			last_hitbox_data = hitbox
-			return true
+			results.append(hitbox)
 
-	return false
+	return results
 # 플레이어 공격 패링 반격 데미지 함수
 func get_parry_counter_damage_once():
 	var damage = get_player_attack_damage()
@@ -1363,3 +1429,57 @@ func get_parry_counter_damage_once():
 	damage *= 2
 
 	return int(damage)
+# 플레이어 전투 메뉴 조작 사운드 함수
+func play_click_sound():
+	if click_sound != null:
+		click_sound.play()
+# 플레이어 전투 메뉴 조작 포커스 함수
+func update_action_button_focus():
+	if action_buttons.size() == 0:
+		return
+
+	for i in range(action_buttons.size()):
+		var button = action_buttons[i]
+		var base_text = action_button_base_texts[i]
+
+		if not button.disabled and i == action_button_index and is_player_turn:
+			button.text = "▶ " + base_text
+		else:
+			button.text = "  " + base_text
+# 플레이어 전투 메뉴 조작 함수
+func move_action_button_focus(direction):
+	if action_buttons.size() == 0:
+		return
+
+	for i in range(action_buttons.size()):
+		action_button_index += direction
+
+		if action_button_index < 0:
+			action_button_index = action_buttons.size() - 1
+
+		if action_button_index >= action_buttons.size():
+			action_button_index = 0
+
+		if not action_buttons[action_button_index].disabled:
+			break
+
+	play_click_sound()
+	update_action_button_focus()
+# 플레이어 전투 메뉴 키보드 입력 함수
+func update_action_button_keyboard_input():
+	if action_buttons.size() == 0:
+		return
+
+	if Input.is_action_just_pressed("ui_down"):
+		move_action_button_focus(1)
+
+	if Input.is_action_just_pressed("ui_up"):
+		move_action_button_focus(-1)
+
+	if Input.is_action_just_pressed("ui_accept"):
+		var selected_button = action_buttons[action_button_index]
+
+		if selected_button.disabled:
+			return
+
+		selected_button.emit_signal("pressed")

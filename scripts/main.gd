@@ -270,7 +270,8 @@ func _ready():
 	#await add_item("beverage_a")
 	#await add_item("beverage_a")
 	#await add_item("classroom_key")
-		
+	#await add_item("holy_sword")
+	
 	update_room()
 	
 	await get_tree().create_timer(1.0).timeout
@@ -2047,7 +2048,7 @@ func start_battle(enemy_id):
 	if not enemies.has(enemy_id):
 		push_error("존재하지 않는 적: " + enemy_id)
 		return
-
+	
 	is_story_playing = true
 	hide_game_ui()
 
@@ -2069,6 +2070,9 @@ func start_battle(enemy_id):
 		"inventory": inventory,
 		"projectiles": projectiles
 	}
+	
+	if bgm_player.playing:
+		bgm_player.stop()
 
 	battle_scene.setup_battle(battle_data)
 # 전투 종료 함수
@@ -2082,6 +2086,8 @@ func end_battle(result_data):
 
 	is_story_playing = false
 	show_game_ui()
+	
+	bgm_player.play()
 
 	print("전투 종료 결과: " + str(result_data.get("result", "")))
 # 탄막 데이터 로드 함수

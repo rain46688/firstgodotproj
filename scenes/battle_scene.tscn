@@ -11,6 +11,7 @@
 [ext_resource type="AudioStream" uid="uid://kmiada54xs24" path="res://sounds/hit_red.mp3" id="9_bg0yk"]
 [ext_resource type="AudioStream" uid="uid://b2p5y3ta6bfww" path="res://sounds/clcik.mp3" id="10_yt3ua"]
 [ext_resource type="AudioStream" uid="uid://cg6bxsqbn3w4a" path="res://sounds/slash.mp3" id="11_3xrod"]
+[ext_resource type="AudioStream" uid="uid://dpskhkn3tacx0" path="res://sounds/healing.mp3" id="12_tttxe"]
 
 [node name="BattleScene" type="Control" unique_id=66959365]
 layout_mode = 3
@@ -260,21 +261,21 @@ mouse_filter = 2
 
 [node name="BattleBgm" type="AudioStreamPlayer" parent="." unique_id=90345847]
 stream = ExtResource("5_pxwbd")
+volume_db = -5.0
 
 [node name="ParrySound" type="AudioStreamPlayer" parent="." unique_id=871790508]
 stream = ExtResource("6_g72on")
-volume_db = 20.0
 
 [node name="BlockSound" type="AudioStreamPlayer" parent="." unique_id=1912699010]
 stream = ExtResource("7_tttxe")
-volume_db = 10.0
 
 [node name="HitNormalSound" type="AudioStreamPlayer" parent="." unique_id=1889640593]
 stream = ExtResource("8_ti0og")
+volume_db = -10.0
 
 [node name="HitRedSound" type="AudioStreamPlayer" parent="." unique_id=250167370]
 stream = ExtResource("9_bg0yk")
-volume_db = 20.0
+volume_db = -8.0
 
 [node name="ClickSound" type="AudioStreamPlayer" parent="." unique_id=797732391]
 stream = ExtResource("10_yt3ua")
@@ -282,4 +283,8 @@ volume_db = -10.0
 
 [node name="SlashSound" type="AudioStreamPlayer" parent="." unique_id=129709013]
 stream = ExtResource("11_3xrod")
-volume_db = -1.0
+volume_db = -5.0
+
+[node name="HealingSound" type="AudioStreamPlayer" parent="." unique_id=929464393]
+stream = ExtResource("12_tttxe")
+volume_db = -5.0
