@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://q61awdkm018y"
-path="res://.godot/imported/shadow_student.png-922440762dc5ad30e9df1d58ebb88503.ctex"
+uid="uid://68xahb2k6o42"
+path="res://.godot/imported/combined_candle_students_left.png-97e6bebabea2a5479fed9d9ec191de15.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/enemies/shadow_student.png"
-dest_files=["res://.godot/imported/shadow_student.png-922440762dc5ad30e9df1d58ebb88503.ctex"]
+source_file="res://imgs/enemies/combined_candle_students_left.png"
+dest_files=["res://.godot/imported/combined_candle_students_left.png-97e6bebabea2a5479fed9d9ec191de15.ctex"]
 
 [params]
 

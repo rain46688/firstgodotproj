@@ -266,16 +266,17 @@ func _ready():
 	load_game(1)
 	
 	#await add_item("cutter_knife")
-	#await add_item("beverage_a")
-	#await add_item("beverage_a")
-	#await add_item("beverage_a")
+	await add_item("beverage_a")
+	await add_item("beverage_a")
+	await add_item("beverage_a")
 	#await add_item("classroom_key")
 	#await add_item("holy_sword")
 	
 	update_room()
 	
 	await get_tree().create_timer(1.0).timeout
-	start_battle("shadow_student")
+	#start_battle("candle_student")
+	start_battle("combined_candle_students_phase_01")
 # 방 변경 함수
 func update_room():
 	

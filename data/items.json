@@ -59,7 +59,7 @@
 		"attack_angle_max": 30,
 		"defense_base_rotation": 0,
 		"defense_move_speed": 500,
-		"parry_window": 0.25,
+		"parry_window": 0.3,
 		"piercing": false,
 		"battle_sprite_size": [140, 140],
 		"attack_move_range": 380,

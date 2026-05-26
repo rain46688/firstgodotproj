@@ -1,28 +1,35 @@
 {
-	"shadow_student": {
-		"name": "그림자 학생",
+	"candle_student": {
+		"name": "밀랍을 뒤집어쓴 학생",
 		"max_hp": 100,
-		"image": "res://imgs/enemies/shadow_student.png",
+		"image": "res://imgs/enemies/candle_student.png",
 		"can_escape": true,
 		"observe_text": "기분 나쁜 형체가 당신을 노려보고 있다.",
-		"weakness_text": "손목 부위가 약점인 것 같다.",
+		"weakness_text": "들고있는 양초가 약점인 것 같다.",
 		"patterns": [
 			{
 				"id": "basic_attack",
 				"weight": 100,
-				"warning_text": "그림자 학생이 오른쪽으로 몸을 기울인다...",
+				"warning_text": "눈 앞의 적이 오른쪽으로 몸을 기울인다...",
 				"fire_mode": "sequential",
+				"counter_hitbox_id": "head",
 				"projectiles": [
 					{
 						"projectile": "slash_basic",
-						"start": [700, 0],
+						"start": [
+							700,
+							0
+						],
 						"rotation": 180,
 						"damage": 5,
 						"delay": 0.0
 					},
 					{
 						"projectile": "slash_basic",
-						"start": [900, 0],
+						"start": [
+							900,
+							0
+						],
 						"rotation": 180,
 						"damage": 5,
 						"delay": 0.3,
@@ -30,7 +37,10 @@
 					},
 					{
 						"projectile": "slash_basic",
-						"start": [1100, 0],
+						"start": [
+							1100,
+							0
+						],
 						"rotation": 180,
 						"damage": 5,
 						"delay": 0.3
@@ -40,19 +50,26 @@
 			{
 				"id": "parallel_attack",
 				"weight": 100,
-				"warning_text": "그림자 학생이 양팔을 들어올린다...",
+				"warning_text": "눈 앞의 적이 양팔을 들어올린다...",
 				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
 				"projectiles": [
 					{
 						"projectile": "slash_basic",
-						"start": [760, 0],
+						"start": [
+							760,
+							0
+						],
 						"rotation": 180,
 						"damage": 5,
 						"delay": 0.0
 					},
 					{
 						"projectile": "slash_basic",
-						"start": [900, 0],
+						"start": [
+							900,
+							0
+						],
 						"rotation": 180,
 						"damage": 5,
 						"delay": 0.4
@@ -60,24 +77,330 @@
 				]
 			}
 		],
-		"hitbox_base_size": [667, 1000],
+		"hitbox_base_size": [
+			667,
+			1000
+		],
 		"hitboxes": [
 			{
 				"id": "body",
 				"name": "몸통",
-				"rect": [280, 200, 160, 420],
+				"rect": [
+					280,
+					200,
+					160,
+					420
+				],
 				"weak": false
 			},
 			{
 				"id": "right_arm",
 				"name": "오른쪽 팔",
-				"rect": [450, 330, 120, 200],
+				"rect": [
+					450,
+					330,
+					120,
+					200
+				],
 				"weak": true
 			},
 			{
 				"id": "head",
 				"name": "머리",
-				"rect": [280, 40, 150, 150],
+				"rect": [
+					280,
+					40,
+					150,
+					150
+				],
+				"weak": false
+			}
+		],
+		"drops": []
+	},
+	"combined_candle_students_phase_01": {
+		"name": "합쳐진 밀랍 학생들",
+		"battle_bgm": "res://sounds/bgm5.mp3",
+		"phase": 1,
+		"max_hp": 600,
+		"image": "res://imgs/enemies/combined_candle_students_phase_01.png",
+		"enemy_size": [650, 760],
+		"enemy_position": [635, -40],
+		"can_escape": false,
+		"observe_text": "사람의 형체가 뭉쳐져서 만들어진것 같다.",
+		"weakness_text": "",
+		"next_phase_enemy_id": "combined_candle_students_phase_02",
+		"patterns": [
+			{
+				"id": "basic_attack",
+				"weight": 30,
+				"warning_text": "아무런 행동을 하지 않고 있다.",
+				"fire_mode": "sequential",
+				"projectiles": []
+			}
+		],
+		"hitbox_base_size": [
+			1024,
+			1535
+		],
+		"hitboxes": [
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					445,
+					600,
+					100,
+					230
+				],
+				"weak": false
+			},
+			{
+				"id": "left_body",
+				"name": "왼쪽 몸통",
+				"rect": [
+					280,
+					400,
+					160,
+					420
+				],
+				"weak": false
+			},
+			{
+				"id": "right_body",
+				"name": "오른쪽 몸통",
+				"rect": [
+					550,
+					400,
+					160,
+					420
+				],
+				"weak": false
+			}
+		],
+		"parts": [
+			{
+				"id": "left_arm",
+				"name": "구겨진 파이프를 들고있는 오른팔",
+				"max_hp": 200,
+				"z_index": 6,
+				"image": "res://imgs/enemies/combined_candle_students_left.png",
+				"observe_text": "팔 부위를 먼저 노리는게 좋을거같다.",
+				"size": [296, 795],
+				"position": [80, 0],
+				"destroyable": true,
+				"destroy_text": "구겨진 파이프를 든 팔이 떨어져 나갔다.",
+				"hitbox": {
+					"id": "left_arm",
+					"name": "오른팔",
+					"rect": [
+						120,
+						220,
+						160,
+						550
+					],
+					"weak": false
+				},
+				"patterns": [
+					{
+						"id": "pipe_swing",
+						"weight": 80,
+						"warning_text": "구겨진 파이프를 왼쪽으로 휘두른다.",
+						"fire_mode": "sequential",
+						"counter_hitbox_id": "left_arm",
+						"projectiles": [
+							{
+								"projectile": "slash_basic",
+								"start": [
+									700,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "slash_basic",
+								"start": [
+									900,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "slash_basic",
+								"start": [
+									1100,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							}
+						]
+					}
+				]
+			},
+			{
+				"id": "right_arm",
+				"name": "망가진 의자를 들고있는 왼팔",
+				"max_hp": 300,
+				"z_index": 6,
+				"image": "res://imgs/enemies/combined_candle_students_right.png",
+				"observe_text": "팔 부위를 먼저 노리는게 좋을거같다.",
+				"size": [324, 830],
+				"position": [620, 0],
+				"destroyable": true,
+				"hitbox": {
+					"id": "right_arm",
+					"name": "왼팔",
+					"rect": [
+						720,
+						220,
+						160,
+						550
+					],
+					"weak": false
+				},
+				"patterns": [
+					{
+						"id": "chair_swing",
+						"weight": 80,
+						"warning_text": "망가진 의자를 오른쪽으로 휘두른다.",
+						"fire_mode": "sequential",
+						"counter_hitbox_id": "right_arm",
+						"projectiles": [
+							{
+								"projectile": "slash_basic",
+								"start": [
+									700,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 0.0
+							},
+							{
+								"projectile": "slash_basic",
+								"start": [
+									900,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 0.3
+							},
+							{
+								"projectile": "slash_basic",
+								"start": [
+									1100,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 0.3
+							}
+						]
+					}
+				]
+			}
+		],
+		"drops": []
+	},
+	"combined_candle_students_phase_02": {
+		"name": "합쳐진 밀랍 학생들",
+		"battle_bgm": "res://sounds/bgm5.mp3",
+		"phase": 2,
+		"max_hp": 500,
+		"image": "res://imgs/enemies/combined_candle_students_phase_02.png",
+		"enemy_size": [650, 760],
+		"enemy_position": [635, -40],
+		"can_escape": false,
+		"observe_text": "양쪽 팔이 뜯겨있고 중앙의 얼굴에서는 소름끼치는 살기가 뿜어져나오고있다.",
+		"weakness_text": "머리가 약점인거같다.",
+		"patterns": [
+			{
+				"id": "basic_attack",
+				"warning_text": "알수없는 말을 중얼거린다.",
+				"fire_mode": "parallel",
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							760,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							860,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.7,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							960,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 1.2,
+						"danger_type": "parry_only"
+					}
+				]
+			}
+		],
+		"hitbox_base_size": [
+			1024,
+			1535
+		],
+		"hitboxes": [
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					445,
+					600,
+					100,
+					230
+				],
+				"weak": true
+			},
+			{
+				"id": "left_body",
+				"name": "왼쪽 몸통",
+				"rect": [
+					280,
+					400,
+					160,
+					420
+				],
+				"weak": false
+			},
+			{
+				"id": "right_body",
+				"name": "오른쪽 몸통",
+				"rect": [
+					550,
+					400,
+					160,
+					420
+				],
 				"weak": false
 			}
 		],

@@ -60,8 +60,6 @@ var weapon_move_time = 0.0
 var weapon_swing_enabled = false
 var is_attack_mode = false
 var weapon_angle_offset = 0.0
-var weapon_angle_speed = 120.0
-var attack_projectile_speed = 1200.0
 var active_attack_projectile = null
 var active_attack_direction = Vector2.ZERO
 var player_attack_hit = false
@@ -74,13 +72,34 @@ var defense_area_rect = Rect2(350, 700, 1220, 360)
 var parry_success = false
 var parry_input_buffer_time = 0.0
 var parry_count = 0
-# 전투 난이도 조절 기능
-var battle_difficulty = "normal"
 var action_buttons = []
 var action_button_base_texts = []
 var action_button_index = 0
-var attack_hit_results = []
 var pierced_hitbox_ids = []
+var enemy_parts = {}
+var enemy_part_sprites = {}
+var enemy_part_hp = {}
+var destroyed_parts = []
+var enemy_visual_base_position = Vector2.ZERO
+var enemy_part_base_positions = {}
+var enemy_shake_tween = null
+
+# 기존 적 포지션 저장
+var enemy_sprite_default_size = Vector2.ZERO
+var enemy_sprite_default_position = Vector2.ZERO
+
+# 전투 난이도 조절 기능
+# easy, normal, hard, nightmare
+var battle_difficulty = "normal"
+
+# 리펙토링시 삭제 예정 변수
+var weapon_angle_speed = 120.0 
+var attack_projectile_speed = 1200.0
+var attack_hit_results = []
+
+# 패링 판정 처리 부분
+# parry_input_buffer_time
+# parry_height
 
 # 상수 변수 모음
 
@@ -124,9 +143,10 @@ func _process(delta):
 	# 방어 모드
 	if is_defense_mode:
 		update_defense_weapon_movement(delta)
-
+		
+		# 패링 판정 처리 부분 1
 		if Input.is_action_just_pressed("ui_accept"):
-			parry_input_buffer_time = 0.03
+			parry_input_buffer_time = 0.035
 
 		if parry_input_buffer_time > 0:
 			parry_input_buffer_time -= delta	
@@ -182,6 +202,8 @@ func _ready():
 	item_button.focus_mode = Control.FOCUS_NONE
 	end_turn_button.focus_mode = Control.FOCUS_NONE
 	run_button.focus_mode = Control.FOCUS_NONE
+	enemy_sprite_default_size = enemy_sprite.size
+	enemy_sprite_default_position = enemy_sprite.position
 	
 	# 각 이미지들 z 값 설정
 	attack_guide.z_index = 1
@@ -223,6 +245,15 @@ func _ready():
 	update_action_button_focus()
 # 전투 화면 설정 함수
 func setup_battle(data):
+	battle_ended = false
+	is_player_turn = false
+	is_attack_mode = false
+	is_defense_mode = false
+	is_observing = false
+	is_item_selecting = false
+	waiting_enemy_attack = false
+	enemy_hp_text.visible = true
+
 	enemy_id = data.get("enemy_id", "")
 	enemy_data = data.get("enemy_data", {})
 	enemy_max_hp = enemy_data.get("max_hp", 10)
@@ -239,9 +270,13 @@ func setup_battle(data):
 
 	update_player_hp_ui()
 	update_enemy_hp_ui()
+	
+	enemy_sprite.modulate.a = 1.0
 
 	if enemy_data.has("image"):
 		enemy_sprite.texture = load(enemy_data["image"])
+		apply_enemy_visual_settings()
+		setup_enemy_parts()
 		
 	if data.has("player_portrait"):
 		player_portrait.texture = load(data["player_portrait"])
@@ -394,7 +429,15 @@ func win_battle():
 	var tween = create_tween()
 	tween.tween_property(enemy_sprite, "modulate:a", 0.0, 1.0)
 
+	for part_id in enemy_part_sprites.keys():
+		var part_sprite = enemy_part_sprites[part_id]
+
+		if part_sprite != null and is_instance_valid(part_sprite):
+			tween.parallel().tween_property(part_sprite, "modulate:a", 0.0, 1.0)
+
 	await tween.finished
+	
+	clear_enemy_parts()
 	
 	battle_bgm.stop()
 
@@ -436,7 +479,7 @@ func get_critical_multiplier():
 	var weapon_data = get_current_weapon_data()
 
 	return weapon_data.get("critical_multiplier", 2.0)
-# 플레이어 HP ui 갱신 함수 추가
+# 적 HP ui 갱신 함수
 func update_enemy_hp_ui():
 	enemy_hp_text.text = str(int(enemy_hp)) + " / " + str(int(enemy_max_hp))
 # 아이템 목록 열기 함수
@@ -542,7 +585,7 @@ func execute_enemy_attack():
 func get_adjusted_projectile_info(projectile_info):
 	var adjusted = projectile_info.duplicate(true)
 	var danger_type = adjusted.get("danger_type", "normal")
-
+	
 	if battle_difficulty == "easy":
 		if danger_type == "parry_only":
 			adjusted["danger_type"] = "normal"
@@ -680,22 +723,23 @@ func fire_enemy_projectiles():
 
 	parry_count = 0
 
+	if projectile_list.size() == 0:
+		await get_tree().create_timer(0.7).timeout
+		return
+
 	start_defense_mode()
 	await get_tree().create_timer(0.5).timeout
 
-	if projectile_list.size() == 0:
-		await fire_enemy_projectile(current_enemy_pattern)
+	if fire_mode == "parallel":
+		await fire_enemy_projectiles_parallel(projectile_list)
 	else:
-		if fire_mode == "parallel":
-			await fire_enemy_projectiles_parallel(projectile_list)
-		else:
-			for projectile_info in projectile_list:
-				var delay = projectile_info.get("delay", 0.0)
+		for projectile_info in projectile_list:
+			var delay = projectile_info.get("delay", 0.0)
 
-				if delay > 0:
-					await get_tree().create_timer(delay).timeout
+			if delay > 0:
+				await get_tree().create_timer(delay).timeout
 
-				await fire_enemy_projectile(projectile_info)
+			await fire_enemy_projectile(projectile_info)
 
 	end_defense_mode()
 
@@ -709,24 +753,7 @@ func fire_enemy_projectiles():
 		for i in range(parry_count):
 			counter_damage += get_parry_counter_damage_once()
 
-		enemy_hp -= counter_damage
-
-		if enemy_hp < 0:
-			enemy_hp = 0
-
-		update_enemy_hp_ui()
-
-		set_top_hitbox_as_last_hitbox()
-		
-		hit_red_sound.play()
-
-		hit_effect.position = get_last_hitbox_center_position()
-		show_damage_popup(counter_damage, true)
-
-		await play_enemy_hit_shake()
-		await play_effect_frames(hit_effect, hit_frames, 0.05)
-
-		battle_text.text = "패링 반격!\n" + str(int(counter_damage)) + " 의 피해를 주었다."
+		apply_parry_counter_damage(counter_damage)
 
 		await get_tree().create_timer(1.0).timeout
 
@@ -753,7 +780,7 @@ func fire_enemy_projectiles_parallel(projectile_list):
 		max_wait_time = max(max_wait_time, delay + life_time + 0.2)
 
 	await get_tree().create_timer(max_wait_time).timeout
-# 동시 탄막 추가 함수
+# 적 동시 탄막 추가 함수
 func fire_enemy_projectile_parallel_task(projectile_info):
 	var delay = projectile_info.get("delay", 0.0)
 
@@ -761,25 +788,78 @@ func fire_enemy_projectile_parallel_task(projectile_info):
 		await get_tree().create_timer(delay).timeout
 
 	await fire_enemy_projectile(projectile_info)
-# 적 패턴 랜덤 선택 함수
+# 적 패턴 선택 함수
 func choose_enemy_pattern():
-	var patterns = enemy_data.get("patterns", [])
+	var candidates = []
 
-	if patterns.size() == 0:
+	add_pattern_candidates(candidates, enemy_data.get("patterns", []), "body", "")
+
+	for part_id in enemy_parts.keys():
+		if destroyed_parts.has(part_id):
+			continue
+
+		var part = enemy_parts[part_id]
+		add_pattern_candidates(candidates, part.get("patterns", []), "part", part_id)
+
+	if candidates.size() == 0:
 		return {}
 
-	return patterns.pick_random()
+	return pick_weighted_pattern(candidates)
+# 적 패턴 리스트 취합 함수
+func add_pattern_candidates(candidates, patterns, owner_type, owner_id):
+	for pattern in patterns:
+		var copied_pattern = pattern.duplicate(true)
+		copied_pattern["owner_type"] = owner_type
+		copied_pattern["owner_id"] = owner_id
+		candidates.append(copied_pattern)
+# 적 패턴 가중치 기반 랜덤 선택 함수
+func pick_weighted_pattern(patterns):
+	var total_weight = 0
+
+	for pattern in patterns:
+		total_weight += int(pattern.get("weight", 100))
+
+	if total_weight <= 0:
+		return patterns.pick_random()
+
+	var roll = randi_range(1, total_weight)
+	var current = 0
+
+	for pattern in patterns:
+		current += int(pattern.get("weight", 100))
+
+		if roll <= current:
+			return pattern
+
+	return patterns[0]
 # 적 피격시 흔들림 함수
 func play_enemy_hit_shake():
-	var original_position = enemy_sprite.position
+	if enemy_shake_tween != null and enemy_shake_tween.is_valid():
+		enemy_shake_tween.kill()
 
-	var tween = create_tween()
-	tween.tween_property(enemy_sprite, "position", original_position + Vector2(18, 0), 0.04)
-	tween.tween_property(enemy_sprite, "position", original_position + Vector2(-18, 0), 0.04)
-	tween.tween_property(enemy_sprite, "position", original_position + Vector2(10, 0), 0.04)
-	tween.tween_property(enemy_sprite, "position", original_position, 0.04)
+	set_enemy_visual_offset(Vector2.ZERO)
 
-	await tween.finished
+	enemy_shake_tween = create_tween()
+	enemy_shake_tween.tween_method(set_enemy_visual_offset, Vector2.ZERO, Vector2(18, 0), 0.04)
+	enemy_shake_tween.tween_method(set_enemy_visual_offset, Vector2(18, 0), Vector2(-18, 0), 0.04)
+	enemy_shake_tween.tween_method(set_enemy_visual_offset, Vector2(-18, 0), Vector2(10, 0), 0.04)
+	enemy_shake_tween.tween_method(set_enemy_visual_offset, Vector2(10, 0), Vector2.ZERO, 0.04)
+
+	await enemy_shake_tween.finished
+	set_enemy_visual_offset(Vector2.ZERO)
+	update_hitbox_debug()
+# 적 본체 및 파츠 위치 동기화 함수
+func set_enemy_visual_offset(offset):
+	enemy_sprite.position = enemy_visual_base_position + offset
+
+	for part_id in enemy_part_sprites.keys():
+		if not enemy_part_base_positions.has(part_id):
+			continue
+
+		var part_sprite = enemy_part_sprites[part_id]
+
+		if part_sprite != null and is_instance_valid(part_sprite):
+			part_sprite.position = enemy_part_base_positions[part_id] + offset
 # 적 피격시 데미지 팝업 함수 
 func show_damage_popup(damage, is_weak):
 	var label = Label.new()
@@ -896,6 +976,220 @@ func get_projectile_hit_rect(projectile, projectile_data):
 		parent_global + projectile.position + offset,
 		hitbox_size
 	)
+# 적 본체 히트박스 찾는 함수
+func get_body_hitbox_by_id(hitbox_id):
+	for hitbox in enemy_data.get("hitboxes", []):
+		if hitbox.get("id", "") == hitbox_id:
+			var copied_hitbox = hitbox.duplicate(true)
+			copied_hitbox["target_type"] = "body"
+			return copied_hitbox
+
+	var hitboxes = enemy_data.get("hitboxes", [])
+
+	if hitboxes.size() > 0:
+		var copied_hitbox = hitboxes[0].duplicate(true)
+		copied_hitbox["target_type"] = "body"
+		return copied_hitbox
+
+	return {}
+# 적 파츠 히트박스 찾는 함수
+func get_part_hitbox_by_id(part_id):
+	if not enemy_parts.has(part_id):
+		return {}
+
+	var part = enemy_parts[part_id]
+
+	if not part.has("hitbox"):
+		return {}
+
+	var copied_hitbox = part["hitbox"].duplicate(true)
+	copied_hitbox["target_type"] = "part"
+	copied_hitbox["part_id"] = part_id
+
+	return copied_hitbox
+# 적 크기 세팅 함수
+func apply_enemy_visual_settings():
+	enemy_sprite.size = enemy_sprite_default_size
+	enemy_sprite.position = enemy_sprite_default_position
+
+	if enemy_data.has("enemy_size"):
+		var size_data = enemy_data["enemy_size"]
+		enemy_sprite.size = Vector2(size_data[0], size_data[1])
+
+	if enemy_data.has("enemy_position"):
+		var pos_data = enemy_data["enemy_position"]
+		enemy_sprite.position = Vector2(pos_data[0], pos_data[1])
+	
+	enemy_visual_base_position = enemy_sprite.position
+# 적 파츠 생성 함수
+func setup_enemy_parts():
+	clear_enemy_parts()
+
+	enemy_parts.clear()
+	enemy_part_hp.clear()
+	destroyed_parts.clear()
+	enemy_part_base_positions.clear()
+
+	var parts = enemy_data.get("parts", [])
+
+	for part in parts:
+		var part_id = part.get("id", "")
+
+		if part_id == "":
+			continue
+
+		enemy_parts[part_id] = part
+		enemy_part_hp[part_id] = part.get("max_hp", 1)
+
+		var part_sprite = TextureRect.new()
+		part_sprite.name = "EnemyPart_" + part_id
+		part_sprite.texture = load(part.get("image", ""))
+		part_sprite.modulate.a = 1.0
+		
+		part_sprite.ignore_texture_size = true
+		part_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		part_sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+		var base_size = enemy_data.get("hitbox_base_size", [enemy_sprite.size.x, enemy_sprite.size.y])
+		var base_width = float(base_size[0])
+		var base_height = float(base_size[1])
+
+		var scale_x = enemy_sprite.size.x / base_width
+		var scale_y = enemy_sprite.size.y / base_height
+
+		if part.has("size"):
+			var size_data = part["size"]
+			part_sprite.size = Vector2(
+				size_data[0] * scale_x,
+				size_data[1] * scale_y
+			)
+		else:
+			part_sprite.size = enemy_sprite.size
+
+		var pos = part.get("position", [0, 0])
+		part_sprite.position = enemy_sprite.position + Vector2(
+			pos[0] * scale_x,
+			pos[1] * scale_y
+		)
+		
+		enemy_part_base_positions[part_id] = part_sprite.position
+
+		part_sprite.z_index = part.get("z_index", enemy_sprite.z_index + 1)
+
+		enemy_sprite.get_parent().add_child(part_sprite)
+		enemy_part_sprites[part_id] = part_sprite
+# 적 파츠 제거 함수
+func clear_enemy_parts():
+	for part_id in enemy_part_sprites.keys():
+		var sprite = enemy_part_sprites[part_id]
+
+		if sprite != null and is_instance_valid(sprite):
+			sprite.queue_free()
+
+	enemy_part_sprites.clear()
+# 적 파츠 피격 함수
+func apply_player_attack_part_hit(hitbox):
+	last_hitbox_data = hitbox
+
+	var part_id = hitbox.get("part_id", "")
+
+	if part_id == "":
+		return
+
+	if destroyed_parts.has(part_id):
+		return
+
+	var damage = get_player_attack_damage()
+	var hitbox_name = hitbox.get("name", "부위")
+	var is_weak = hitbox.get("weak", false)
+	var is_critical = is_player_attack_critical()
+
+	if is_critical:
+		damage *= get_critical_multiplier()
+
+	if is_weak:
+		damage *= 2
+
+	damage = int(damage)
+
+	if is_critical or is_weak:
+		hit_red_sound.play()
+	else:
+		hit_normal_sound.play()
+
+	enemy_part_hp[part_id] -= damage
+
+	if enemy_part_hp[part_id] < 0:
+		enemy_part_hp[part_id] = 0
+
+	hit_effect.position = get_last_hitbox_center_position()
+	show_damage_popup(damage, is_weak or is_critical)
+
+	start_enemy_hit_feedback()
+
+	var text = ""
+
+	if is_critical:
+		text += "치명타!\n"
+
+	text += hitbox_name + "에 맞았다.\n"
+	text += str(int(damage)) + " 의 피해를 주었다."
+	
+	print(part_id, " HP: ", enemy_part_hp[part_id])
+
+	if enemy_part_hp[part_id] <= 0:
+		destroy_enemy_part(part_id)
+	else:
+		battle_text.text = text
+# 적 피격 연출 비동기 시작 함수
+func start_enemy_hit_feedback():
+	var hit_position = get_last_hitbox_center_position()
+	spawn_hit_effect(hit_position)
+	play_enemy_hit_shake()
+# 적 타격 이펙트 노드 생성 함수
+func spawn_hit_effect(effect_position):
+	var effect = TextureRect.new()
+	effect.size = hit_effect.size
+	effect.position = effect_position
+	effect.z_index = hit_effect.z_index
+	effect.ignore_texture_size = true
+	effect.stretch_mode = hit_effect.stretch_mode
+	effect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	effect.visible = true
+
+	hit_effect.get_parent().add_child(effect)
+
+	play_spawned_hit_effect(effect)
+# 생성된 타격 이펙트 프레임 재생 함수
+func play_spawned_hit_effect(effect):
+	for path in hit_frames:
+		if effect == null or not is_instance_valid(effect):
+			return
+
+		effect.texture = load(path)
+		await get_tree().create_timer(0.05).timeout
+
+	if effect != null and is_instance_valid(effect):
+		effect.queue_free()
+# 적 파츠 파괴 함수
+func destroy_enemy_part(part_id):
+	if destroyed_parts.has(part_id):
+		return
+
+	destroyed_parts.append(part_id)
+
+	if enemy_part_sprites.has(part_id):
+		var sprite = enemy_part_sprites[part_id]
+
+		if sprite != null and is_instance_valid(sprite):
+			sprite.visible = false
+
+	var part = enemy_parts.get(part_id, {})
+	var destroy_text = part.get("destroy_text", "부위가 파괴되었다.")
+
+	battle_text.text = destroy_text
+
+	update_hitbox_debug()
 # 모든 이펙트 프레임 생성 함수
 func make_effect_frames(base_path, count):
 	var frames = []
@@ -952,7 +1246,9 @@ func update_hitbox_debug():
 		)
 
 		hitbox_debug_container.add_child(box)
-# 디버그 박스 갱신 함수 추가
+		
+	update_part_hitbox_debug(base_size, enemy_rect)
+# 디버그 박스 갱신 함수
 func update_defense_hitbox_debug(projectile, projectile_data):
 	if not debug_mode:
 		defense_weapon_hitbox_debug.visible = false
@@ -976,6 +1272,41 @@ func update_defense_hitbox_debug(projectile, projectile_data):
 	parry_hitbox_debug.visible = true
 	parry_hitbox_debug.position = parry_rect.position - debug_container_global
 	parry_hitbox_debug.size = parry_rect.size
+# 디버그 적 파츠 확인 함수
+func update_part_hitbox_debug(base_size, enemy_rect):
+	var base_width = float(base_size[0])
+	var base_height = float(base_size[1])
+
+	var scale_x = enemy_rect.size.x / base_width
+	var scale_y = enemy_rect.size.y / base_height
+
+	for part_id in enemy_parts.keys():
+		if destroyed_parts.has(part_id):
+			continue
+
+		var part = enemy_parts[part_id]
+
+		if not part.has("hitbox"):
+			continue
+
+		var hitbox = part["hitbox"]
+		var rect_data = hitbox["rect"]
+
+		var box = ColorRect.new()
+		box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		box.color = Color(0.2, 0.7, 1, 0.18)
+
+		box.position = Vector2(
+			enemy_rect.position.x + rect_data[0] * scale_x,
+			enemy_rect.position.y + rect_data[1] * scale_y
+		)
+
+		box.size = Vector2(
+			rect_data[2] * scale_x,
+			rect_data[3] * scale_y
+		)
+
+		hitbox_debug_container.add_child(box)
 # 플레이어 방어 무기 판정 함수
 func get_weapon_defense_hit_rect():
 	var weapon_rect = weapon_sprite.get_global_rect()
@@ -999,6 +1330,7 @@ func get_parry_hit_rect():
 
 	var parry_window = weapon_data.get("parry_window", 0.1)
 
+	# 패링 판정 처리 부분 2
 	var parry_height = weapon_rect.size.y * parry_window
 	if parry_height < 6:
 		parry_height = 6
@@ -1205,6 +1537,10 @@ func update_defense_weapon_movement(delta):
 	)
 # 플레이어 공격 적용 함수
 func apply_player_attack_hit(hitbox):
+	if hitbox.get("target_type", "body") == "part":
+		apply_player_attack_part_hit(hitbox)
+		return
+
 	last_hitbox_data = hitbox
 
 	var damage = get_player_attack_damage()
@@ -1235,8 +1571,7 @@ func apply_player_attack_hit(hitbox):
 	hit_effect.position = get_last_hitbox_center_position()
 	show_damage_popup(damage, is_weak or is_critical)
 
-	play_enemy_hit_shake()
-	play_effect_frames(hit_effect, hit_frames, 0.05)
+	start_enemy_hit_feedback()
 
 	var text = ""
 
@@ -1391,11 +1726,18 @@ func get_attack_collided_hitboxes():
 	var results = []
 	var attack_rect = get_player_attack_hit_rect()
 
+	results.append_array(get_attack_collided_body_hitboxes(attack_rect))
+	results.append_array(get_attack_collided_part_hitboxes(attack_rect))
+
+	return results
+# 몸체 히트 박스 함수
+func get_attack_collided_body_hitboxes(attack_rect):
+	var results = []
+
 	if not enemy_data.has("hitboxes"):
 		return results
 
 	var base_size = enemy_data.get("hitbox_base_size", [667, 1000])
-
 	var base_width = float(base_size[0])
 	var base_height = float(base_size[1])
 
@@ -1415,7 +1757,48 @@ func get_attack_collided_hitboxes():
 		)
 
 		if attack_rect.intersects(hitbox_rect):
-			results.append(hitbox)
+			var copied_hitbox = hitbox.duplicate(true)
+			copied_hitbox["target_type"] = "body"
+			results.append(copied_hitbox)
+
+	return results
+# 파츠 히트 박스 함수
+func get_attack_collided_part_hitboxes(attack_rect):
+	var results = []
+
+	var base_size = enemy_data.get("hitbox_base_size", [667, 1000])
+	var base_width = float(base_size[0])
+	var base_height = float(base_size[1])
+
+	var enemy_rect = enemy_sprite.get_global_rect()
+
+	var scale_x = enemy_rect.size.x / base_width
+	var scale_y = enemy_rect.size.y / base_height
+
+	for part_id in enemy_parts.keys():
+		if destroyed_parts.has(part_id):
+			continue
+
+		var part = enemy_parts[part_id]
+
+		if not part.has("hitbox"):
+			continue
+
+		var hitbox = part["hitbox"]
+		var rect_data = hitbox["rect"]
+
+		var hitbox_rect = Rect2(
+			enemy_rect.position.x + rect_data[0] * scale_x,
+			enemy_rect.position.y + rect_data[1] * scale_y,
+			rect_data[2] * scale_x,
+			rect_data[3] * scale_y
+		)
+
+		if attack_rect.intersects(hitbox_rect):
+			var copied_hitbox = hitbox.duplicate(true)
+			copied_hitbox["target_type"] = "part"
+			copied_hitbox["part_id"] = part_id
+			results.append(copied_hitbox)
 
 	return results
 # 플레이어 공격 패링 반격 데미지 함수
@@ -1429,6 +1812,63 @@ func get_parry_counter_damage_once():
 	damage *= 2
 
 	return int(damage)
+# 패링 반격 적용 함수
+func apply_parry_counter_damage(counter_damage):
+	var owner_type = current_enemy_pattern.get("owner_type", "body")
+	var owner_id = current_enemy_pattern.get("owner_id", "")
+
+	if owner_type == "part" and owner_id != "":
+		apply_parry_counter_to_part(owner_id, counter_damage)
+	else:
+		apply_parry_counter_to_body(counter_damage)
+# 본체 패링 반격 함수
+func apply_parry_counter_to_body(counter_damage):
+	enemy_hp -= counter_damage
+
+	if enemy_hp < 0:
+		enemy_hp = 0
+
+	update_enemy_hp_ui()
+
+	var counter_hitbox_id = current_enemy_pattern.get("counter_hitbox_id", "head")
+	last_hitbox_data = get_body_hitbox_by_id(counter_hitbox_id)
+
+	if last_hitbox_data.is_empty():
+		set_top_hitbox_as_last_hitbox()
+
+	hit_red_sound.play()
+	show_damage_popup(counter_damage, true)
+	start_enemy_hit_feedback()
+
+	battle_text.text = "패링 반격!\n" + str(int(counter_damage)) + " 의 피해를 주었다."
+# 파츠 패링 반격 함수
+func apply_parry_counter_to_part(part_id, counter_damage):
+	if destroyed_parts.has(part_id):
+		apply_parry_counter_to_body(counter_damage)
+		return
+
+	if not enemy_part_hp.has(part_id):
+		apply_parry_counter_to_body(counter_damage)
+		return
+
+	enemy_part_hp[part_id] -= counter_damage
+
+	if enemy_part_hp[part_id] < 0:
+		enemy_part_hp[part_id] = 0
+
+	last_hitbox_data = get_part_hitbox_by_id(part_id)
+
+	hit_red_sound.play()
+	show_damage_popup(counter_damage, true)
+	start_enemy_hit_feedback()
+
+	var part = enemy_parts.get(part_id, {})
+	var part_name = part.get("name", "부위")
+
+	battle_text.text = "패링 반격!\n" + part_name + "에 " + str(int(counter_damage)) + " 의 피해를 주었다."
+
+	if enemy_part_hp[part_id] <= 0:
+		destroy_enemy_part(part_id)
 # 플레이어 전투 메뉴 조작 사운드 함수
 func play_click_sound():
 	if click_sound != null:
