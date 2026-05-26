@@ -25,6 +25,13 @@ signal battle_finished(result_data)
 @onready var defense_weapon_hitbox_debug = $HitboxDebugContainer/DefenseWeaponHitboxDebug
 @onready var enemy_projectile_hitbox_debug = $HitboxDebugContainer/EnemyProjectileHitboxDebug
 @onready var parry_hitbox_debug = $HitboxDebugContainer/ParryHitboxDebug
+@onready var battle_bgm = $BattleBgm
+@onready var parry_sound = $ParrySound
+@onready var block_sound = $BlockSound
+@onready var hit_normal_sound = $HitNormalSound
+@onready var hit_red_sound = $HitRedSound
+@onready var slash_sound = $SlashSound
+@onready var click_sound = $ClickSound
 
 # 일반 변수 모음
 var player_hp = 0
@@ -66,14 +73,17 @@ var defense_area_rect = Rect2(350, 700, 1220, 360)
 var parry_success = false
 var parry_input_buffer_time = 0.0
 var parry_count = 0
+# 전투 난이도 조절 기능
 var battle_difficulty = "normal"
+var action_buttons = []
+var action_button_base_texts = []
+var action_button_index = 0
 
 # 상수 변수 모음
 
 # 프레임 마다 실행 함수
 func _process(delta):
-	
-	# 개발자 모드
+		# 개발자 모드
 	if Input.is_action_just_pressed("debug_toggle"):
 		debug_mode = !debug_mode
 		hitbox_debug_container.visible = debug_mode
@@ -155,11 +165,15 @@ func _ready():
 	item_button.focus_mode = Control.FOCUS_NONE
 	end_turn_button.focus_mode = Control.FOCUS_NONE
 	run_button.focus_mode = Control.FOCUS_NONE
+	
+	# 각 이미지들 z 값 설정
 	attack_guide.z_index = 1
 	weapon_sprite.z_index = 10
 	parry_effect.z_index = 20
+	# 디버그 모드시 보이는 박스들이 가장 높음
 	hitbox_debug_container.z_index = 999
 
+	# 무기 별로 기본 위치 포지션을 잡아줌
 	weapon_sprite.pivot_offset = weapon_sprite.size / 2
 	update_weapon_base_position()
 	
@@ -202,6 +216,9 @@ func setup_battle(data):
 
 	is_player_turn = false
 	set_action_buttons_disabled(true)
+	
+	if not battle_bgm.playing:
+		battle_bgm.play()
 
 	battle_text.text = enemy_data.get("name", "무언가") + "가 나타났다..."
 
@@ -336,6 +353,8 @@ func win_battle():
 	tween.tween_property(enemy_sprite, "modulate:a", 0.0, 1.0)
 
 	await tween.finished
+	
+	battle_bgm.stop()
 
 	battle_text.text = "전투에서 승리했다."
 	enemy_hp_text.visible = false
@@ -532,6 +551,9 @@ func fire_enemy_projectile(projectile_info):
 		projectile.modulate = Color(1, 1, 1, 1)
 
 	enemy_projectile_container.add_child(projectile)
+	
+	var sound_id = projectile_data.get("sound", "")
+	play_projectile_sound(sound_id)
 
 	var direction = Vector2.DOWN
 	var elapsed_time = 0.0
@@ -549,12 +571,14 @@ func fire_enemy_projectile(projectile_info):
 			parry_count += 1
 			parry_input_buffer_time = 0.0
 			projectile.visible = false
+			parry_sound.play()
 			parry_effect.position = get_parry_effect_position()
 			await play_effect_frames(parry_effect, parry_frames, 0.04)
 			break
 		
 		if danger_type != "parry_only" and check_defense_hit(projectile, projectile_data):
 			blocked = true
+			block_sound.play()
 			break
 			
 		# 바닥 도달 판정도 탄막 hitbox 기준
@@ -589,6 +613,11 @@ func fire_enemy_projectile(projectile_info):
 
 		if player_hp < 0:
 			player_hp = 0
+			
+		if danger_type == "parry_only":
+			hit_red_sound.play()
+		else:
+			hit_normal_sound.play()
 
 		update_player_hp_ui()
 		battle_text.text = str(int(damage)) + " 의 피해를 입었다."
@@ -601,7 +630,7 @@ func fire_enemy_projectile(projectile_info):
 
 		update_player_hp_ui()
 		battle_text.text = str(int(damage)) + " 의 피해를 입었다."
-# 적의 패턴에 탄막 모두 발사 함수
+# 적의 탄막 패턴 발사 함수
 func fire_enemy_projectiles():
 	var projectile_list = current_enemy_pattern.get("projectiles", [])
 	var fire_mode = current_enemy_pattern.get("fire_mode", "sequential")
@@ -645,6 +674,8 @@ func fire_enemy_projectiles():
 		update_enemy_hp_ui()
 
 		set_top_hitbox_as_last_hitbox()
+		
+		hit_red_sound.play()
 
 		hit_effect.position = get_last_hitbox_center_position()
 		show_damage_popup(counter_damage, true)
@@ -687,7 +718,7 @@ func fire_enemy_projectile_parallel_task(projectile_info):
 		await get_tree().create_timer(delay).timeout
 
 	await fire_enemy_projectile(projectile_info)
-# 적 패턴 선택 함수
+# 적 패턴 랜덤 선택 함수
 func choose_enemy_pattern():
 	var patterns = enemy_data.get("patterns", [])
 
@@ -822,7 +853,7 @@ func get_projectile_hit_rect(projectile, projectile_data):
 		parent_global + projectile.position + offset,
 		hitbox_size
 	)
-# 이펙트 프레임 생성 함수
+# 모든 이펙트 프레임 생성 함수
 func make_effect_frames(base_path, count):
 	var frames = []
 
@@ -831,7 +862,7 @@ func make_effect_frames(base_path, count):
 		frames.append(base_path + number + ".png")
 
 	return frames
-# 히트 박스 확인용 함수
+# 디버그 히트 박스 확인용 함수
 func update_hitbox_debug():
 	for child in hitbox_debug_container.get_children():
 		if child == player_attack_hitbox_debug:
@@ -1156,6 +1187,11 @@ func execute_player_attack():
 			damage *= 2
 
 		damage = int(damage)
+		
+		if is_critical or is_weak:
+			hit_red_sound.play()
+		else:
+			hit_normal_sound.play()
 
 		enemy_hp -= damage
 
@@ -1192,6 +1228,13 @@ func execute_player_attack():
 		return
 
 	start_enemy_turn()
+# 발사체 사운드 재생 함수
+func play_projectile_sound(sound_id):
+	if sound_id == "":
+		return
+
+	if sound_id == "slash":
+		slash_sound.play()
 # 플레이어 공격 투사체 발사 함수
 func fire_player_attack_projectile():
 	current_projectile_data = get_current_projectile_data()
@@ -1217,6 +1260,9 @@ func fire_player_attack_projectile():
 	slash_effect.position = weapon_sprite.position
 	slash_effect.rotation_degrees = weapon_angle_offset
 	slash_effect.visible = true
+	
+	var sound_id = current_projectile_data.get("sound", "")
+	play_projectile_sound(sound_id)
 
 	var elapsed_time = 0.0
 	var frame_index = 0

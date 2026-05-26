@@ -4,6 +4,13 @@
 [ext_resource type="Script" uid="uid://fk3glf0gpddx" path="res://scripts/battle_scene.gd" id="1_rca61"]
 [ext_resource type="FontFile" uid="uid://dshbp46j15be4" path="res://fonts/x12y12pxMaruMinyaHangul.ttf" id="2_kinr6"]
 [ext_resource type="Texture2D" uid="uid://da27cgmes16v3" path="res://imgs/ui/격자1075x342.png" id="4_8qdv8"]
+[ext_resource type="AudioStream" uid="uid://4aw52p440fl" path="res://sounds/bgm8.mp3" id="5_pxwbd"]
+[ext_resource type="AudioStream" uid="uid://bk5gdqchewy3s" path="res://sounds/parry.mp3" id="6_g72on"]
+[ext_resource type="AudioStream" uid="uid://e3lmymn1pujd" path="res://sounds/block.mp3" id="7_tttxe"]
+[ext_resource type="AudioStream" uid="uid://mhg6um17w3u7" path="res://sounds/hit_normal.mp3" id="8_ti0og"]
+[ext_resource type="AudioStream" uid="uid://kmiada54xs24" path="res://sounds/hit_red.mp3" id="9_bg0yk"]
+[ext_resource type="AudioStream" uid="uid://b2p5y3ta6bfww" path="res://sounds/clcik.mp3" id="10_yt3ua"]
+[ext_resource type="AudioStream" uid="uid://cg6bxsqbn3w4a" path="res://sounds/slash.mp3" id="11_3xrod"]
 
 [node name="BattleScene" type="Control" unique_id=66959365]
 layout_mode = 3
@@ -250,3 +257,29 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
+
+[node name="BattleBgm" type="AudioStreamPlayer" parent="." unique_id=90345847]
+stream = ExtResource("5_pxwbd")
+
+[node name="ParrySound" type="AudioStreamPlayer" parent="." unique_id=871790508]
+stream = ExtResource("6_g72on")
+volume_db = 20.0
+
+[node name="BlockSound" type="AudioStreamPlayer" parent="." unique_id=1912699010]
+stream = ExtResource("7_tttxe")
+volume_db = 10.0
+
+[node name="HitNormalSound" type="AudioStreamPlayer" parent="." unique_id=1889640593]
+stream = ExtResource("8_ti0og")
+
+[node name="HitRedSound" type="AudioStreamPlayer" parent="." unique_id=250167370]
+stream = ExtResource("9_bg0yk")
+volume_db = 20.0
+
+[node name="ClickSound" type="AudioStreamPlayer" parent="." unique_id=797732391]
+stream = ExtResource("10_yt3ua")
+volume_db = -10.0
+
+[node name="SlashSound" type="AudioStreamPlayer" parent="." unique_id=129709013]
+stream = ExtResource("11_3xrod")
+volume_db = -1.0

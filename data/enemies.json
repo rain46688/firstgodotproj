@@ -52,10 +52,10 @@
 					},
 					{
 						"projectile": "slash_basic",
-						"start": [940, 0],
+						"start": [900, 0],
 						"rotation": 180,
 						"damage": 5,
-						"delay": 0.2
+						"delay": 0.4
 					}
 				]
 			}
