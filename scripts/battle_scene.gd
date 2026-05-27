@@ -33,6 +33,7 @@ signal battle_finished(result_data)
 @onready var slash_sound = $SlashSound
 @onready var click_sound = $ClickSound
 @onready var healing_sound = $HealingSound
+@onready var fade_rect = $FadeRect
 
 # 일반 변수 모음
 var player_hp = 0
@@ -83,6 +84,8 @@ var destroyed_parts = []
 var enemy_visual_base_position = Vector2.ZERO
 var enemy_part_base_positions = {}
 var enemy_shake_tween = null
+var enemies = {}
+var forced_enemy_pattern = {}
 
 # 기존 적 포지션 저장
 var enemy_sprite_default_size = Vector2.ZERO
@@ -211,6 +214,10 @@ func _ready():
 	parry_effect.z_index = 20
 	# 디버그 모드시 보이는 박스들이 가장 높음
 	hitbox_debug_container.z_index = 999
+	fade_rect.color = Color(0, 0, 0, 0)
+	fade_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fade_rect.z_index = 4096
+	fade_rect.visible = true
 
 	# 무기 별로 기본 위치 포지션을 잡아줌
 	weapon_sprite.pivot_offset = weapon_sprite.size / 2
@@ -264,6 +271,7 @@ func setup_battle(data):
 	equipped_weapon = data.get("equipped_weapon", null)
 	inventory = data.get("inventory", [])
 	projectiles = data.get("projectiles", {})
+	enemies = data.get("enemies", {})
 	
 	update_weapon_sprite_texture()
 	weapon_sprite.visible = false
@@ -652,6 +660,8 @@ func fire_enemy_projectile(projectile_info):
 		projectile.texture = load(projectile_frames[frame_index])
 		projectile.position += direction * projectile_speed * projectile_frame_time
 		
+		update_defense_hitbox_debug(projectile, projectile_data)
+		
 		if parry_input_buffer_time > 0 and check_parry_hit(projectile, projectile_data):
 			parry_success = true
 			parry_count += 1
@@ -808,6 +818,9 @@ func choose_enemy_pattern():
 # 적 패턴 리스트 취합 함수
 func add_pattern_candidates(candidates, patterns, owner_type, owner_id):
 	for pattern in patterns:
+		if int(pattern.get("weight", 100)) <= 0:
+			continue
+
 		var copied_pattern = pattern.duplicate(true)
 		copied_pattern["owner_type"] = owner_type
 		copied_pattern["owner_id"] = owner_id
@@ -1190,6 +1203,84 @@ func destroy_enemy_part(part_id):
 	battle_text.text = destroy_text
 
 	update_hitbox_debug()
+# 적 페이즈 전환 함수
+func change_enemy_phase():
+	var next_enemy_id = enemy_data.get("next_phase_enemy_id", "")
+
+	if next_enemy_id == "":
+		await win_battle()
+		return
+
+	if not enemies.has(next_enemy_id):
+		push_error("다음 페이즈 적 데이터가 없음: " + next_enemy_id)
+		await win_battle()
+		return
+
+	set_action_buttons_disabled(true)
+
+	battle_text.text = "무언가가 뒤틀리기 시작한다..."
+
+	await get_tree().create_timer(0.7).timeout
+
+	await fade_to_black(0.6)
+
+	clear_enemy_parts()
+
+	enemy_id = next_enemy_id
+	enemy_data = enemies[next_enemy_id]
+	enemy_max_hp = enemy_data.get("max_hp", 10)
+	enemy_hp = enemy_max_hp
+
+	enemy_sprite.modulate.a = 1.0
+	enemy_sprite.texture = load(enemy_data["image"])
+
+	apply_enemy_visual_settings()
+	setup_enemy_parts()
+	update_enemy_hp_ui()
+	update_hitbox_debug()
+
+	await fade_from_black(0.6)
+
+	battle_text.text = enemy_data.get("name", "적") + "의 모습이 변했다..."
+
+	await get_tree().create_timer(0.8).timeout
+
+	await start_enemy_turn_with_forced_pattern()
+# 적 페이즈 전환 확정 패턴 사용 함수
+func start_enemy_turn_with_forced_pattern():
+	var pattern_id = enemy_data.get("phase_start_pattern_id", "")
+
+	if pattern_id == "":
+		start_enemy_turn()
+		return
+
+	var pattern = get_enemy_pattern_by_id(pattern_id)
+
+	if pattern.is_empty():
+		start_enemy_turn()
+		return
+
+	is_player_turn = false
+	waiting_enemy_attack = true
+	set_action_buttons_disabled(true)
+
+	current_enemy_pattern = pattern
+	current_enemy_pattern["owner_type"] = "body"
+	current_enemy_pattern["owner_id"] = ""
+
+	var warning_text = current_enemy_pattern.get(
+		"warning_text",
+		enemy_data.get("name", "적") + "이(가) 공격하려고 한다..."
+	)
+
+	battle_text.text = warning_text + "\n\n[Space]"
+# 적 페이즈 전환 확정 패턴 탐색 함수
+func get_enemy_pattern_by_id(pattern_id):
+	for pattern in enemy_data.get("patterns", []):
+		if pattern.get("id", "") == pattern_id:
+			return pattern.duplicate(true)
+
+	return {}
 # 모든 이펙트 프레임 생성 함수
 func make_effect_frames(base_path, count):
 	var frames = []
@@ -1357,7 +1448,6 @@ func get_parry_effect_position():
 	return effect_global_position - effect_parent_global - parry_effect.size / 2
 # 플레이어 방어 무기 탄막 충돌 함수
 func check_defense_hit(projectile, projectile_data):
-	update_defense_hitbox_debug(projectile, projectile_data)
 
 	var projectile_rect = get_projectile_hit_rect(projectile, projectile_data)
 	var weapon_rect = get_weapon_defense_hit_rect()
@@ -1608,7 +1698,10 @@ func execute_player_attack():
 	await get_tree().create_timer(1.0).timeout
 
 	if enemy_hp <= 0:
-		await win_battle()
+		if enemy_data.has("next_phase_enemy_id"):
+			await change_enemy_phase()
+		else:
+			await win_battle()
 		return
 
 	start_enemy_turn()
@@ -1923,3 +2016,13 @@ func update_action_button_keyboard_input():
 			return
 
 		selected_button.emit_signal("pressed")
+# 화면 암전 처리 함수
+func fade_to_black(duration = 0.5):
+	var tween = create_tween()
+	tween.tween_property(fade_rect, "color:a", 1.0, duration)
+	await tween.finished
+# 화면 암전 되돌리기 함수
+func fade_from_black(duration = 0.5):
+	var tween = create_tween()
+	tween.tween_property(fade_rect, "color:a", 0.0, duration)
+	await tween.finished

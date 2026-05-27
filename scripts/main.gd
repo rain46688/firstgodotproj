@@ -2063,6 +2063,7 @@ func start_battle(enemy_id):
 	var battle_data = {
 		"enemy_id": enemy_id,
 		"enemy_data": enemies[enemy_id],
+		"enemies": enemies,
 		"player_hp": player_hp,
 		"player_max_hp": player_max_hp,
 		"player_portrait": characters["protagonist"]["portrait"]["normal"],
