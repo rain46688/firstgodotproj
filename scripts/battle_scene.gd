@@ -70,7 +70,6 @@ var projectiles = {}
 var current_projectile_data = {}
 var is_defense_mode = false
 var defense_area_rect = Rect2(350, 700, 1220, 360)
-var parry_success = false
 var parry_input_buffer_time = 0.0
 var parry_count = 0
 var action_buttons = []
@@ -298,9 +297,12 @@ func setup_battle(data):
 	if not battle_bgm.playing:
 		battle_bgm.play()
 
-	battle_text.text = enemy_data.get("name", "무언가") + "가 나타났다..."
+	battle_text.text = enemy_data.get(
+		"encounter_text",
+		enemy_data.get("name", "무언가") + "가 나타났다..."
+	) + "\n\n[Space]"
 
-	await get_tree().create_timer(1.0).timeout
+	await wait_for_accept_input()
 	start_player_turn()
 # 플레이어 현재 체력 갱신 함수
 func update_player_hp_ui():
@@ -654,7 +656,7 @@ func fire_enemy_projectile(projectile_info):
 	var frame_index = 0
 	var hit_player = false
 	var blocked = false
-	parry_success = false
+	var projectile_parried = false
 
 	while elapsed_time < projectile_life_time:
 		projectile.texture = load(projectile_frames[frame_index])
@@ -663,13 +665,11 @@ func fire_enemy_projectile(projectile_info):
 		update_defense_hitbox_debug(projectile, projectile_data)
 		
 		if parry_input_buffer_time > 0 and check_parry_hit(projectile, projectile_data):
-			parry_success = true
+			projectile_parried = true
 			parry_count += 1
-			parry_input_buffer_time = 0.0
 			projectile.visible = false
 			parry_sound.play()
-			parry_effect.position = get_parry_effect_position()
-			await play_effect_frames(parry_effect, parry_frames, 0.04)
+			spawn_parry_effect(get_parry_effect_position_for_projectile(projectile, projectile_data))
 			break
 		
 		if danger_type != "parry_only" and check_defense_hit(projectile, projectile_data):
@@ -699,7 +699,7 @@ func fire_enemy_projectile(projectile_info):
 	enemy_projectile_hitbox_debug.visible = false
 	parry_hitbox_debug.visible = false
 
-	if parry_success:
+	if projectile_parried:
 		pass
 	elif blocked:
 		pass
@@ -1218,7 +1218,10 @@ func change_enemy_phase():
 
 	set_action_buttons_disabled(true)
 
-	battle_text.text = "무언가가 뒤틀리기 시작한다..."
+	battle_text.text = enemy_data.get(
+		"phase_transition_text",
+		"어둠속에서 무언가가 다시 나타나기 시작한다..."
+	)
 
 	await get_tree().create_timer(0.7).timeout
 
@@ -1281,6 +1284,13 @@ func get_enemy_pattern_by_id(pattern_id):
 			return pattern.duplicate(true)
 
 	return {}
+# Space 입력 대기 함수
+func wait_for_accept_input():
+	while true:
+		await get_tree().process_frame
+
+		if Input.is_action_just_pressed("ui_accept"):
+			break
 # 모든 이펙트 프레임 생성 함수
 func make_effect_frames(base_path, count):
 	var frames = []
@@ -1432,20 +1442,35 @@ func get_parry_hit_rect():
 		Vector2(weapon_rect.position.x, center_y - parry_height / 2.0),
 		Vector2(weapon_rect.size.x, parry_height)
 	)
-# 플레이어 방어 무기 패링 이펙트 위치 함수
-func get_parry_effect_position():
-	var weapon_data = get_current_weapon_data()
-	var offset_data = weapon_data.get("parry_effect_offset", [
-		weapon_sprite.size.x / 2,
-		weapon_sprite.size.y / 2
-	])
+# 탄막 위치 기준 패링 이펙트 위치 함수
+func get_parry_effect_position_for_projectile(projectile, projectile_data):
+	var projectile_rect = get_projectile_hit_rect(projectile, projectile_data)
+	var parry_rect = get_parry_hit_rect()
 
-	var offset = Vector2(offset_data[0], offset_data[1])
+	var overlap_left = max(projectile_rect.position.x, parry_rect.position.x)
+	var overlap_right = min(
+		projectile_rect.position.x + projectile_rect.size.x,
+		parry_rect.position.x + parry_rect.size.x
+	)
+
+	var overlap_top = max(projectile_rect.position.y, parry_rect.position.y)
+	var overlap_bottom = min(
+		projectile_rect.position.y + projectile_rect.size.y,
+		parry_rect.position.y + parry_rect.size.y
+	)
+
+	var effect_global_position = Vector2(
+		(overlap_left + overlap_right) / 2.0,
+		(overlap_top + overlap_bottom) / 2.0
+	)
+
+	var weapon_data = get_current_weapon_data()
+	var extra_offset_data = weapon_data.get("parry_effect_extra_offset", [0, 0])
+	var extra_offset = Vector2(extra_offset_data[0], extra_offset_data[1])
+
 	var effect_parent_global = parry_effect.get_parent().get_global_rect().position
 
-	var effect_global_position = weapon_sprite.get_global_rect().position + offset
-
-	return effect_global_position - effect_parent_global - parry_effect.size / 2
+	return effect_global_position + extra_offset - effect_parent_global - parry_effect.size / 2
 # 플레이어 방어 무기 탄막 충돌 함수
 func check_defense_hit(projectile, projectile_data):
 
@@ -1477,6 +1502,99 @@ func check_parry_hit(projectile, projectile_data):
 	var parry_rect = get_parry_hit_rect()
 
 	return projectile_rect.intersects(parry_rect)
+# 플레이어 공격 패링 반격 데미지 함수
+func get_parry_counter_damage_once():
+	var damage = get_player_attack_damage()
+
+	if is_player_attack_critical():
+		damage *= get_critical_multiplier()
+
+	# 패링 반격은 100% 약점 처리
+	damage *= 2
+
+	return int(damage)
+# 패링 반격 적용 함수
+func apply_parry_counter_damage(counter_damage):
+	var owner_type = current_enemy_pattern.get("owner_type", "body")
+	var owner_id = current_enemy_pattern.get("owner_id", "")
+
+	if owner_type == "part" and owner_id != "":
+		apply_parry_counter_to_part(owner_id, counter_damage)
+	else:
+		apply_parry_counter_to_body(counter_damage)
+# 본체 패링 반격 함수
+func apply_parry_counter_to_body(counter_damage):
+	enemy_hp -= counter_damage
+
+	if enemy_hp < 0:
+		enemy_hp = 0
+
+	update_enemy_hp_ui()
+
+	var counter_hitbox_id = current_enemy_pattern.get("counter_hitbox_id", "head")
+	last_hitbox_data = get_body_hitbox_by_id(counter_hitbox_id)
+
+	if last_hitbox_data.is_empty():
+		set_top_hitbox_as_last_hitbox()
+
+	hit_red_sound.play()
+	show_damage_popup(counter_damage, true)
+	start_enemy_hit_feedback()
+
+	battle_text.text = "패링 반격!\n" + str(int(counter_damage)) + " 의 피해를 주었다."
+# 파츠 패링 반격 함수
+func apply_parry_counter_to_part(part_id, counter_damage):
+	if destroyed_parts.has(part_id):
+		apply_parry_counter_to_body(counter_damage)
+		return
+
+	if not enemy_part_hp.has(part_id):
+		apply_parry_counter_to_body(counter_damage)
+		return
+
+	enemy_part_hp[part_id] -= counter_damage
+
+	if enemy_part_hp[part_id] < 0:
+		enemy_part_hp[part_id] = 0
+
+	last_hitbox_data = get_part_hitbox_by_id(part_id)
+
+	hit_red_sound.play()
+	show_damage_popup(counter_damage, true)
+	start_enemy_hit_feedback()
+
+	var part = enemy_parts.get(part_id, {})
+	var part_name = part.get("name", "부위")
+
+	battle_text.text = "패링 반격!\n" + part_name + "에 " + str(int(counter_damage)) + " 의 피해를 주었다."
+
+	if enemy_part_hp[part_id] <= 0:
+		destroy_enemy_part(part_id)
+# 패링 이펙트 노드 생성 함수
+func spawn_parry_effect(effect_position):
+	var effect = TextureRect.new()
+	effect.size = parry_effect.size
+	effect.position = effect_position
+	effect.z_index = parry_effect.z_index
+	effect.ignore_texture_size = true
+	effect.stretch_mode = parry_effect.stretch_mode
+	effect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	effect.visible = true
+
+	parry_effect.get_parent().add_child(effect)
+
+	play_spawned_parry_effect(effect)
+# 생성된 패링 이펙트 프레임 재생 함수
+func play_spawned_parry_effect(effect):
+	for path in parry_frames:
+		if effect == null or not is_instance_valid(effect):
+			return
+
+		effect.texture = load(path)
+		await get_tree().create_timer(0.04).timeout
+
+	if effect != null and is_instance_valid(effect):
+		effect.queue_free()
 # 플레이어 이펙트 재생 함수
 func play_effect_frames(effect_node, frame_paths, frame_time = 0.05):
 	effect_node.visible = true
@@ -1894,74 +2012,6 @@ func get_attack_collided_part_hitboxes(attack_rect):
 			results.append(copied_hitbox)
 
 	return results
-# 플레이어 공격 패링 반격 데미지 함수
-func get_parry_counter_damage_once():
-	var damage = get_player_attack_damage()
-
-	if is_player_attack_critical():
-		damage *= get_critical_multiplier()
-
-	# 패링 반격은 100% 약점 처리
-	damage *= 2
-
-	return int(damage)
-# 패링 반격 적용 함수
-func apply_parry_counter_damage(counter_damage):
-	var owner_type = current_enemy_pattern.get("owner_type", "body")
-	var owner_id = current_enemy_pattern.get("owner_id", "")
-
-	if owner_type == "part" and owner_id != "":
-		apply_parry_counter_to_part(owner_id, counter_damage)
-	else:
-		apply_parry_counter_to_body(counter_damage)
-# 본체 패링 반격 함수
-func apply_parry_counter_to_body(counter_damage):
-	enemy_hp -= counter_damage
-
-	if enemy_hp < 0:
-		enemy_hp = 0
-
-	update_enemy_hp_ui()
-
-	var counter_hitbox_id = current_enemy_pattern.get("counter_hitbox_id", "head")
-	last_hitbox_data = get_body_hitbox_by_id(counter_hitbox_id)
-
-	if last_hitbox_data.is_empty():
-		set_top_hitbox_as_last_hitbox()
-
-	hit_red_sound.play()
-	show_damage_popup(counter_damage, true)
-	start_enemy_hit_feedback()
-
-	battle_text.text = "패링 반격!\n" + str(int(counter_damage)) + " 의 피해를 주었다."
-# 파츠 패링 반격 함수
-func apply_parry_counter_to_part(part_id, counter_damage):
-	if destroyed_parts.has(part_id):
-		apply_parry_counter_to_body(counter_damage)
-		return
-
-	if not enemy_part_hp.has(part_id):
-		apply_parry_counter_to_body(counter_damage)
-		return
-
-	enemy_part_hp[part_id] -= counter_damage
-
-	if enemy_part_hp[part_id] < 0:
-		enemy_part_hp[part_id] = 0
-
-	last_hitbox_data = get_part_hitbox_by_id(part_id)
-
-	hit_red_sound.play()
-	show_damage_popup(counter_damage, true)
-	start_enemy_hit_feedback()
-
-	var part = enemy_parts.get(part_id, {})
-	var part_name = part.get("name", "부위")
-
-	battle_text.text = "패링 반격!\n" + part_name + "에 " + str(int(counter_damage)) + " 의 피해를 주었다."
-
-	if enemy_part_hp[part_id] <= 0:
-		destroy_enemy_part(part_id)
 # 플레이어 전투 메뉴 조작 사운드 함수
 func play_click_sound():
 	if click_sound != null:

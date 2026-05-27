@@ -4,7 +4,8 @@
 		"max_hp": 100,
 		"image": "res://imgs/enemies/candle_student.png",
 		"can_escape": true,
-		"observe_text": "기분 나쁜 형체가 당신을 노려보고 있다.",
+		"encounter_text": "머리에 알수없는걸 뒤집어쓴 무언가가 다가왔다.",
+		"observe_text": "기분 나쁜 살이 타는 냄새가 코를 찌른다.",
 		"weakness_text": "들고있는 양초가 약점인 것 같다.",
 		"patterns": [
 			{
@@ -133,13 +134,15 @@
 			-40
 		],
 		"can_escape": false,
+		"encounter_text": "합쳐진 밀랍 학생들이 축축한 소리를 내며 몸을 다가온다.",
 		"observe_text": "사람의 형체가 뭉쳐져서 만들어진것 같다.",
 		"weakness_text": "",
 		"next_phase_enemy_id": "combined_candle_students_phase_02",
+		"phase_transition_text": "합쳐진 몸이 녹아내리듯 뒤틀리기 시작한다...",
 		"patterns": [
 			{
 				"id": "basic_attack",
-				"weight": 30,
+				"weight": 20,
 				"warning_text": "아무런 행동을 하지 않고 있다.",
 				"fire_mode": "sequential",
 				"projectiles": []
@@ -345,6 +348,7 @@
 			-40
 		],
 		"can_escape": false,
+		"encounter_text": "뜯겨나간 팔 너머로, 두 개의 몸이 하나처럼 뒤틀리기 시작한다...",
 		"observe_text": "양쪽 팔이 뜯겨있고 중앙의 얼굴에서는 소름끼치는 살기가 뿜어져나오고있다.",
 		"weakness_text": "머리가 약점인거같다.",
 		"phase_start_pattern_id": "phase2_start",
@@ -426,6 +430,7 @@
 			},
 			{
 				"id": "head_mumbling",
+				"weight": 0,
 				"warning_text": "알수없는 말을 중얼거린다.",
 				"fire_mode": "parallel",
 				"projectiles": [
@@ -466,6 +471,7 @@
 			},
 			{
 				"id": "head_mumbling2",
+				"weight": 100,
 				"warning_text": "알수없는 말을 중얼거린다.",
 				"fire_mode": "parallel",
 				"projectiles": [

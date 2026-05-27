@@ -37,8 +37,7 @@
 		"defense_hitbox": {
 			"offset": [10, 85],
 			"size": [210, 45]
-		},
-		"parry_effect_offset": [110, 110]
+		}
 	},
 	"fist": {
 		"name": "맨주먹",
@@ -59,7 +58,7 @@
 		"attack_angle_max": 30,
 		"defense_base_rotation": 0,
 		"defense_move_speed": 500,
-		"parry_window": 0.2,
+		"parry_window": 0.25,
 		"piercing": false,
 		"battle_sprite_size": [140, 140],
 		"attack_move_range": 380,
@@ -69,18 +68,17 @@
 		"defense_hitbox": {
 			"offset": [5, 35],
 			"size": [140, 70]
-		},
-		"parry_effect_offset": [70, 70]
+		}
 	},
 	"holy_sword": {
 		"name": "성검",
-		"description": "공격력 : 5 ~ 20\n\n적의 여러 부위를 꿰뚫을 수 있는\n희귀한 무기다.",
+		"description": "공격력 : 5 ~ 15\n\n적의 여러 부위를 꿰뚫을 수 있는\n희귀한 무기다.",
 		"image": "res://imgs/items/excalibur180x720.png",
 		"width": 1,
 		"height": 4,
 		"type": "weapon",
 		"attack_min": 5,
-		"attack_max": 20,
+		"attack_max": 15,
 		"critical_chance": 0.1,
 		"critical_multiplier": 2.0,
 		"consumed_on_use": false,
@@ -99,8 +97,7 @@
 		"defense_hitbox": {
 			"offset": [-300, 100],
 			"size": [300, 100]
-		},
-		"parry_effect_offset": [-110, 110]
+		}
 	},
 	"beverage_a": {
 		"name": "음료A",

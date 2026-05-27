@@ -276,7 +276,8 @@ func _ready():
 	
 	await get_tree().create_timer(1.0).timeout
 	#start_battle("candle_student")
-	start_battle("combined_candle_students_phase_01")
+	#start_battle("combined_candle_students_phase_01")
+	start_battle("combined_candle_students_phase_02")
 # 방 변경 함수
 func update_room():
 	
