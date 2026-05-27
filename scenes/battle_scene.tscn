@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://2uvfda5deqns"]
 
-[ext_resource type="Texture2D" uid="uid://blmpqop1hd86k" path="res://imgs/ui/전투화면1920x1080.png" id="1_idkgt"]
 [ext_resource type="Script" uid="uid://fk3glf0gpddx" path="res://scripts/battle_scene.gd" id="1_rca61"]
 [ext_resource type="FontFile" uid="uid://dshbp46j15be4" path="res://fonts/x12y12pxMaruMinyaHangul.ttf" id="2_kinr6"]
+[ext_resource type="Texture2D" uid="uid://bjv05s6l00lcm" path="res://imgs/ui/전투화면_no_black_1920x1080.png" id="2_tttxe"]
 [ext_resource type="Texture2D" uid="uid://da27cgmes16v3" path="res://imgs/ui/격자1075x342.png" id="4_8qdv8"]
 [ext_resource type="AudioStream" uid="uid://4aw52p440fl" path="res://sounds/bgm8.mp3" id="5_pxwbd"]
 [ext_resource type="AudioStream" uid="uid://bk5gdqchewy3s" path="res://sounds/parry.mp3" id="6_g72on"]
@@ -29,7 +29,27 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_idkgt")
+texture = ExtResource("2_tttxe")
+
+[node name="BlackBackground" type="ColorRect" parent="." unique_id=780886936]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="EnemyBackground" type="TextureRect" parent="." unique_id=873064259]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch_mode = 6
 
 [node name="EnemySprite" type="TextureRect" parent="." unique_id=1403375332]
 layout_mode = 0
@@ -49,6 +69,17 @@ offset_bottom = 1000.0
 mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
+
+[node name="FadeRect" type="ColorRect" parent="." unique_id=1841954385]
+z_index = 4096
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
 
 [node name="BulletContainer" type="Control" parent="." unique_id=88639530]
 anchors_preset = 0
@@ -288,14 +319,3 @@ volume_db = -5.0
 [node name="HealingSound" type="AudioStreamPlayer" parent="." unique_id=929464393]
 stream = ExtResource("12_tttxe")
 volume_db = -5.0
-
-[node name="FadeRect" type="ColorRect" parent="." unique_id=1841954385]
-z_index = 4096
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0, 0, 0, 0)
