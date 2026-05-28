@@ -38,6 +38,7 @@ signal battle_finished(result_data)
 @onready var effect_container = $EffectContainer
 @onready var background = $Background
 @onready var black_background = $BlackBackground
+@onready var enemy_encounter_sound = $EnemyEncounterSound
 
 # 일반 변수 모음
 var player_hp = 0
@@ -93,6 +94,12 @@ var default_battle_bgm_stream = null
 var observe_targets = []
 var observe_index = 0
 var debug_hp_labels = []
+var default_battle_bgm_volume_db = 0.0
+var bgm_volume_tween = null
+var battle_bgm_should_loop = true
+
+var default_enemy_encounter_stream = null
+var default_enemy_encounter_volume_db = 0.0
 
 # 기존 적 포지션 저장
 var enemy_sprite_default_size = Vector2.ZERO
@@ -224,8 +231,16 @@ func _ready():
 	run_button.focus_mode = Control.FOCUS_NONE
 	enemy_sprite_default_size = enemy_sprite.size
 	enemy_sprite_default_position = enemy_sprite.position
+	# bgm
 	default_battle_bgm_stream = battle_bgm.stream
-	
+	default_battle_bgm_volume_db = battle_bgm.volume_db
+
+	default_enemy_encounter_stream = enemy_encounter_sound.stream
+	default_enemy_encounter_volume_db = enemy_encounter_sound.volume_db
+
+	if not battle_bgm.finished.is_connected(_on_battle_bgm_finished):
+		battle_bgm.finished.connect(_on_battle_bgm_finished)
+		
 	# 화면 레이어 z_index 정리
 	background.z_index = 2
 	black_background.z_index = 0
@@ -342,7 +357,8 @@ func setup_battle(data):
 	is_player_turn = false
 	set_action_buttons_disabled(true)
 	
-	update_battle_bgm()
+	await update_battle_bgm()
+	play_enemy_encounter_sound()
 
 	battle_text.text = enemy_data.get(
 		"encounter_text",
@@ -482,7 +498,7 @@ func win_battle():
 	
 	clear_enemy_parts()
 	
-	battle_bgm.stop()
+	await stop_battle_bgm(true, 0.8)
 
 	battle_text.text = "전투에서 승리했다."
 	enemy_hp_text.visible = false
@@ -519,7 +535,8 @@ func make_effect_frames(base_path, count):
 		frames.append(base_path + number + ".png")
 
 	return frames
-# bgm 전환 함수
+
+# 전투 BGM 갱신 함수
 func update_battle_bgm():
 	var bgm_path = enemy_data.get("battle_bgm", "")
 	var next_stream = default_battle_bgm_stream
@@ -527,15 +544,141 @@ func update_battle_bgm():
 	if bgm_path != "":
 		next_stream = load(bgm_path)
 
+	var bgm_volume = enemy_data.get("battle_bgm_volume_db", default_battle_bgm_volume_db)
+	var bgm_loop = enemy_data.get("battle_bgm_loop", true)
+	var bgm_fade_in = enemy_data.get("battle_bgm_fade_in", true)
+	var bgm_fade_time = enemy_data.get("battle_bgm_fade_time", 1.0)
+
+	await play_battle_bgm(
+		next_stream,
+		bgm_volume,
+		bgm_loop,
+		bgm_fade_in,
+		bgm_fade_time,
+		false
+	)
+# 오디오 스트림 루프 설정 함수
+func set_audio_stream_loop(stream, should_loop):
+	if stream == null:
+		return
+
+	for property in stream.get_property_list():
+		var property_name = property.get("name", "")
+
+		if property_name == "loop":
+			stream.set("loop", should_loop)
+			return
+
+		if property_name == "loop_mode":
+			if should_loop:
+				stream.set("loop_mode", AudioStreamWAV.LOOP_FORWARD)
+			else:
+				stream.set("loop_mode", AudioStreamWAV.LOOP_DISABLED)
+			return
+# BGM 종료시 루프 보정 함수
+func _on_battle_bgm_finished():
+	if battle_bgm_should_loop and not battle_ended:
+		battle_bgm.play()
+# 같은 오디오 스트림인지 확인 함수
+func is_same_audio_stream(stream_a, stream_b):
+	if stream_a == null or stream_b == null:
+		return false
+
+	if stream_a == stream_b:
+		return true
+
+	if stream_a.resource_path != "" and stream_b.resource_path != "":
+		return stream_a.resource_path == stream_b.resource_path
+
+	return false
+# BGM 볼륨 페이드 함수
+func fade_bgm_volume(target_volume_db, duration):
+	if bgm_volume_tween != null and bgm_volume_tween.is_valid():
+		bgm_volume_tween.kill()
+
+	bgm_volume_tween = create_tween()
+	bgm_volume_tween.tween_property(battle_bgm, "volume_db", target_volume_db, duration)
+# BGM 정지 함수
+func stop_battle_bgm(fade_out = true, fade_time = 0.8):
+	battle_bgm_should_loop = false
+
+	if bgm_volume_tween != null and bgm_volume_tween.is_valid():
+		bgm_volume_tween.kill()
+
+	if fade_out and battle_bgm.playing:
+		var tween = create_tween()
+		tween.tween_property(battle_bgm, "volume_db", -40.0, fade_time)
+		await tween.finished
+
+	battle_bgm.stop()
+	battle_bgm.volume_db = default_battle_bgm_volume_db
+# BGM 재생 함수
+func play_battle_bgm(
+	next_stream,
+	target_volume_db = null,
+	loop = true,
+	fade_in = true,
+	fade_time = 1.0,
+	restart_if_same = false):
 	if next_stream == null:
 		return
 
-	if battle_bgm.stream != next_stream:
-		battle_bgm.stop()
-		battle_bgm.stream = next_stream
+	if target_volume_db == null:
+		target_volume_db = default_battle_bgm_volume_db
 
-	if not battle_bgm.playing:
-		battle_bgm.play()
+	set_audio_stream_loop(next_stream, loop)
+	battle_bgm_should_loop = loop
+
+	var same_stream = is_same_audio_stream(battle_bgm.stream, next_stream)
+
+	if same_stream and battle_bgm.playing and not restart_if_same:
+		fade_bgm_volume(target_volume_db, 0.2)
+		return
+
+	if battle_bgm.playing and not same_stream:
+		await stop_battle_bgm(true, min(fade_time, 0.5))
+
+	battle_bgm_should_loop = loop
+	battle_bgm.stream = next_stream
+
+	if fade_in:
+		battle_bgm.volume_db = -40.0
+	else:
+		battle_bgm.volume_db = target_volume_db
+
+	battle_bgm.play()
+
+	if fade_in:
+		fade_bgm_volume(target_volume_db, fade_time)
+# 단발 효과음 재생 함수
+func play_one_shot_sound(player, sound_path = "", fallback_stream = null, volume_db = null):
+	var next_stream = fallback_stream
+
+	if sound_path != "":
+		next_stream = load(sound_path)
+
+	if next_stream == null:
+		return
+
+	player.stop()
+	player.stream = next_stream
+
+	if volume_db != null:
+		player.volume_db = volume_db
+
+	player.play()
+# 적 등장 효과음 재생 함수
+func play_enemy_encounter_sound():
+	var sound_path = enemy_data.get("encounter_sound", "")
+	var volume_db = enemy_data.get("encounter_sound_volume_db", default_enemy_encounter_volume_db)
+
+	play_one_shot_sound(
+		enemy_encounter_sound,
+		sound_path,
+		default_enemy_encounter_stream,
+		volume_db
+	)
+
 # 관찰 대상 리스트 생성 함수
 func make_observe_targets():
 	var targets = []
@@ -1524,7 +1667,7 @@ func change_enemy_phase():
 		return
 
 	set_action_buttons_disabled(true)
-
+	
 	battle_text.text = enemy_data.get(
 		"phase_transition_text",
 		"어둠속에서 무언가가 다시 나타나기 시작한다..."
@@ -1532,7 +1675,7 @@ func change_enemy_phase():
 
 	await get_tree().create_timer(0.7).timeout
 
-	await fade_to_black(0.6)
+	await fade_to_black(2)
 
 	clear_enemy_parts()
 
@@ -1540,6 +1683,8 @@ func change_enemy_phase():
 	enemy_data = enemies[next_enemy_id]
 	enemy_max_hp = enemy_data.get("max_hp", 10)
 	enemy_hp = enemy_max_hp
+	
+	await update_battle_bgm()
 
 	enemy_sprite.modulate.a = 1.0
 	enemy_sprite.texture = load(enemy_data["image"])
@@ -1550,13 +1695,13 @@ func change_enemy_phase():
 	update_hitbox_debug()
 
 	await fade_from_black(0.6)
+	
+	play_enemy_encounter_sound()
 
 	battle_text.text = enemy_data.get("name", "적") + "의 모습이 변했다..."
 
 	await get_tree().create_timer(0.8).timeout
 	
-	update_battle_bgm()
-
 	await start_enemy_turn_with_forced_pattern()
 # 적 페이즈 전환 확정 패턴 사용 함수
 func start_enemy_turn_with_forced_pattern():

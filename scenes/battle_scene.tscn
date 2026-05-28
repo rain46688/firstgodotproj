@@ -81,6 +81,16 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0)
 
+[node name="EnemyHpText" type="Label" parent="." unique_id=1302683261]
+layout_mode = 0
+offset_left = 722.0
+offset_top = 607.0
+offset_right = 1242.0
+offset_bottom = 687.0
+theme_override_fonts/font = ExtResource("2_kinr6")
+theme_override_font_sizes/font_size = 25
+horizontal_alignment = 1
+
 [node name="BulletContainer" type="Control" parent="." unique_id=88639530]
 anchors_preset = 0
 offset_right = 40.0
@@ -236,16 +246,6 @@ theme_override_fonts/font = ExtResource("2_kinr6")
 theme_override_font_sizes/font_size = 25
 text = "도망가기"
 
-[node name="EnemyHpText" type="Label" parent="." unique_id=1302683261]
-layout_mode = 0
-offset_left = 722.0
-offset_top = 607.0
-offset_right = 1242.0
-offset_bottom = 687.0
-theme_override_fonts/font = ExtResource("2_kinr6")
-theme_override_font_sizes/font_size = 25
-horizontal_alignment = 1
-
 [node name="HitboxDebugContainer" type="Control" parent="." unique_id=2125584010]
 anchors_preset = 0
 offset_right = 40.0
@@ -293,6 +293,8 @@ mouse_filter = 2
 [node name="BattleBgm" type="AudioStreamPlayer" parent="." unique_id=90345847]
 stream = ExtResource("5_pxwbd")
 volume_db = -5.0
+
+[node name="EnemyEncounterSound" type="AudioStreamPlayer" parent="." unique_id=959709073]
 
 [node name="ParrySound" type="AudioStreamPlayer" parent="." unique_id=871790508]
 stream = ExtResource("6_g72on")
