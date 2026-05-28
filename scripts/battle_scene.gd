@@ -3,6 +3,8 @@ extends Control
 # 시그널 모음
 signal battle_finished(result_data)
 
+# 추후 용동가 애매하거나 사용하지 않는 변수 정리 필요
+
 # onready 변수 모음
 @onready var enemy_sprite = $EnemySprite
 @onready var weapon_sprite = $WeaponSprite
@@ -40,6 +42,7 @@ signal battle_finished(result_data)
 @onready var enemy_encounter_sound = $EnemyEncounterSound
 @onready var status_popup_panel = $StatusPopupPanel
 @onready var status_popup_text = $StatusPopupPanel/StatusPopupText
+@onready var result_sound = $ResultSound
 
 # 일반 변수 모음
 var player_hp = 0
@@ -105,6 +108,10 @@ var default_enemy_encounter_stream = null
 var default_enemy_encounter_volume_db = 0.0
 var player_status_effects = {}
 var player_portrait_paths = {}
+var battle_result_messages = []
+var battle_result_index = 0
+# 메인에서 넘겨받은 플래그
+var flags = {}
 
 # 기존 적 포지션 저장
 var enemy_sprite_default_size = Vector2.ZERO
@@ -329,12 +336,16 @@ func setup_battle(data):
 	inventory = data.get("inventory", [])
 	projectiles = data.get("projectiles", {})
 	enemies = data.get("enemies", {})
+	# 메인에서 넘겨받은 플래그
+	flags = data.get("flags", {})
 	
 	# 상태이상 초기화
 	player_status_effects.clear()
 	
 	update_weapon_sprite_texture()
 	weapon_sprite.visible = false
+	
+	# 플레이어 및 적 hp ui
 	update_player_hp_ui()
 	update_enemy_hp_ui()
 	
@@ -378,6 +389,7 @@ func setup_battle(data):
 
 	await wait_for_accept_input()
 	start_player_turn()
+
 # 공격 버튼 클릭 함수
 func _on_attack_button_pressed():
 	if not is_player_turn:
@@ -446,6 +458,7 @@ func _on_run_button_pressed():
 		await get_tree().create_timer(1.0).timeout
 
 		start_enemy_turn()
+
 # 플레이어 턴 시작 함수
 func start_player_turn():
 	print("start_player_turn")
@@ -509,17 +522,27 @@ func win_battle():
 	
 	clear_enemy_parts()
 	
-	await stop_battle_bgm(true, 0.8)
-
-	battle_text.text = "전투에서 승리했다."
+	# 적 드랍
+	var rewards = calculate_enemy_drops()
+	var reward_flags = calculate_enemy_defeat_flags()
+	var reward_messages = make_reward_messages(rewards)
 	
-	await get_tree().create_timer(1.0).timeout
+	await stop_battle_bgm(true, 0.8)
+	
+	battle_text.text = "전투에서 승리했다.\n\n[Space]"
+	await wait_for_accept_input()
 
+	if reward_messages.size() > 0:
+		await show_battle_result_messages(reward_messages)
+
+	# 전투 종료 후 메인에 전달할 변수들
 	emit_signal("battle_finished", {
 		"result": "win",
 		"enemy_id": enemy_id,
 		"player_hp": player_hp,
-		"inventory": inventory
+		"inventory": inventory,
+		"rewards": rewards,
+		"reward_flags": reward_flags
 	})
 # 게임 오버 함수
 func game_over():
@@ -545,150 +568,6 @@ func make_effect_frames(base_path, count):
 		frames.append(base_path + number + ".png")
 
 	return frames
-
-# 전투 BGM 갱신 함수
-func update_battle_bgm():
-	var bgm_path = enemy_data.get("battle_bgm", "")
-	var next_stream = default_battle_bgm_stream
-
-	if bgm_path != "":
-		next_stream = load(bgm_path)
-
-	var bgm_volume = enemy_data.get("battle_bgm_volume_db", default_battle_bgm_volume_db)
-	var bgm_loop = enemy_data.get("battle_bgm_loop", true)
-	var bgm_fade_in = enemy_data.get("battle_bgm_fade_in", true)
-	var bgm_fade_time = enemy_data.get("battle_bgm_fade_time", 1.0)
-
-	await play_battle_bgm(
-		next_stream,
-		bgm_volume,
-		bgm_loop,
-		bgm_fade_in,
-		bgm_fade_time,
-		false
-	)
-# 오디오 스트림 루프 설정 함수
-func set_audio_stream_loop(stream, should_loop):
-	if stream == null:
-		return
-
-	for property in stream.get_property_list():
-		var property_name = property.get("name", "")
-
-		if property_name == "loop":
-			stream.set("loop", should_loop)
-			return
-
-		if property_name == "loop_mode":
-			if should_loop:
-				stream.set("loop_mode", AudioStreamWAV.LOOP_FORWARD)
-			else:
-				stream.set("loop_mode", AudioStreamWAV.LOOP_DISABLED)
-			return
-# BGM 종료시 루프 보정 함수
-func _on_battle_bgm_finished():
-	if battle_bgm_should_loop and not battle_ended:
-		battle_bgm.play()
-# 같은 오디오 스트림인지 확인 함수
-func is_same_audio_stream(stream_a, stream_b):
-	if stream_a == null or stream_b == null:
-		return false
-
-	if stream_a == stream_b:
-		return true
-
-	if stream_a.resource_path != "" and stream_b.resource_path != "":
-		return stream_a.resource_path == stream_b.resource_path
-
-	return false
-# BGM 볼륨 페이드 함수
-func fade_bgm_volume(target_volume_db, duration):
-	if bgm_volume_tween != null and bgm_volume_tween.is_valid():
-		bgm_volume_tween.kill()
-
-	bgm_volume_tween = create_tween()
-	bgm_volume_tween.tween_property(battle_bgm, "volume_db", target_volume_db, duration)
-# BGM 정지 함수
-func stop_battle_bgm(fade_out = true, fade_time = 0.8):
-	battle_bgm_should_loop = false
-
-	if bgm_volume_tween != null and bgm_volume_tween.is_valid():
-		bgm_volume_tween.kill()
-
-	if fade_out and battle_bgm.playing:
-		var tween = create_tween()
-		tween.tween_property(battle_bgm, "volume_db", -40.0, fade_time)
-		await tween.finished
-
-	battle_bgm.stop()
-	battle_bgm.volume_db = default_battle_bgm_volume_db
-# BGM 재생 함수
-func play_battle_bgm(
-	next_stream,
-	target_volume_db = null,
-	loop = true,
-	fade_in = true,
-	fade_time = 1.0,
-	restart_if_same = false):
-	if next_stream == null:
-		return
-
-	if target_volume_db == null:
-		target_volume_db = default_battle_bgm_volume_db
-
-	set_audio_stream_loop(next_stream, loop)
-	battle_bgm_should_loop = loop
-
-	var same_stream = is_same_audio_stream(battle_bgm.stream, next_stream)
-
-	if same_stream and battle_bgm.playing and not restart_if_same:
-		fade_bgm_volume(target_volume_db, 0.2)
-		return
-
-	if battle_bgm.playing and not same_stream:
-		await stop_battle_bgm(true, min(fade_time, 0.5))
-
-	battle_bgm_should_loop = loop
-	battle_bgm.stream = next_stream
-
-	if fade_in:
-		battle_bgm.volume_db = -40.0
-	else:
-		battle_bgm.volume_db = target_volume_db
-
-	battle_bgm.play()
-
-	if fade_in:
-		fade_bgm_volume(target_volume_db, fade_time)
-# 단발 효과음 재생 함수
-func play_one_shot_sound(player, sound_path = "", fallback_stream = null, volume_db = null):
-	var next_stream = fallback_stream
-
-	if sound_path != "":
-		next_stream = load(sound_path)
-
-	if next_stream == null:
-		return
-
-	player.stop()
-	player.stream = next_stream
-
-	if volume_db != null:
-		player.volume_db = volume_db
-
-	player.play()
-# 적 등장 효과음 재생 함수
-func play_enemy_encounter_sound():
-	var sound_path = enemy_data.get("encounter_sound", "")
-	var volume_db = enemy_data.get("encounter_sound_volume_db", default_enemy_encounter_volume_db)
-
-	play_one_shot_sound(
-		enemy_encounter_sound,
-		sound_path,
-		default_enemy_encounter_stream,
-		volume_db
-	)
-
 # 관찰 대상 리스트 생성 함수
 func make_observe_targets():
 	var targets = []
@@ -868,6 +747,252 @@ func use_selected_battle_item():
 	await get_tree().create_timer(1.0).timeout
 
 	start_enemy_turn()
+# 전투 드랍 아이템 계산 함수
+func calculate_enemy_drops():
+	var rewards = []
+	var drops = enemy_data.get("drops", [])
+
+	for drop in drops:
+		var item_id = drop.get("item", "")
+
+		if item_id == "":
+			continue
+
+		if not items.has(item_id):
+			push_error("드랍 아이템 데이터가 없음: " + item_id)
+			continue
+		
+		# 한번 획득 가능한 아이템 플래그 검사
+		var once_flag = drop.get("once_flag", "")
+		if once_flag != "" and flags.has(once_flag) and flags[once_flag] == true:
+			continue
+		
+		var chance = float(drop.get("chance", 100))
+		var roll = randf() * 100.0
+
+		if roll > chance:
+			continue
+
+		var min_count = int(drop.get("min", 1))
+		var max_count = int(drop.get("max", 1))
+		var count = randi_range(min_count, max_count)
+
+		if count <= 0:
+			continue
+
+		var reward = {
+			"item": item_id,
+			"count": count
+		}
+		
+		if once_flag != "":
+			reward["once_flag"] = once_flag
+
+		rewards.append(reward)
+
+	return rewards
+# 인벤토리에 아이템 추가 함수
+func add_item_to_inventory(item_id, count = 1):
+	if not items.has(item_id):
+		return
+
+	var item_data = items[item_id]
+	var stackable = item_data.get("stackable", false)
+	var max_stack = int(item_data.get("max_stack", 1))
+	var remaining = count
+
+	if stackable:
+		for inventory_item in inventory:
+			if inventory_item.get("id", "") == item_id:
+				var current_count = int(inventory_item.get("count", 1))
+				var add_count = min(remaining, max_stack - current_count)
+
+				if add_count > 0:
+					inventory_item["count"] = current_count + add_count
+					remaining -= add_count
+
+				if remaining <= 0:
+					return
+
+	while remaining > 0:
+		if stackable:
+			var add_count = min(remaining, max_stack)
+			inventory.append({
+				"id": item_id,
+				"count": add_count
+			})
+			remaining -= add_count
+		else:
+			inventory.append({
+				"id": item_id
+			})
+			remaining -= 1
+# 전투 보상 결과 메시지 생성 함수
+func make_reward_messages(rewards):
+	var messages = []
+
+	for reward in rewards:
+		var item_id = reward.get("item", "")
+		var count = int(reward.get("count", 1))
+
+		if not items.has(item_id):
+			continue
+
+		var item_name = items[item_id].get("name", item_id)
+		messages.append(item_name + " " + str(count) + "개를 획득하였습니다.")
+
+	return messages
+# 전투 결과 메시지 순차 표시 함수
+func show_battle_result_messages(messages):
+	for message in messages:
+		if result_sound != null:
+			result_sound.play()
+
+		battle_text.text = message + "\n\n[Space]"
+		await wait_for_accept_input()
+
+# 전투 BGM 갱신 함수
+func update_battle_bgm():
+	var bgm_path = enemy_data.get("battle_bgm", "")
+	var next_stream = default_battle_bgm_stream
+
+	if bgm_path != "":
+		next_stream = load(bgm_path)
+
+	var bgm_volume = enemy_data.get("battle_bgm_volume_db", default_battle_bgm_volume_db)
+	var bgm_loop = enemy_data.get("battle_bgm_loop", true)
+	var bgm_fade_in = enemy_data.get("battle_bgm_fade_in", true)
+	var bgm_fade_time = enemy_data.get("battle_bgm_fade_time", 1.0)
+
+	await play_battle_bgm(
+		next_stream,
+		bgm_volume,
+		bgm_loop,
+		bgm_fade_in,
+		bgm_fade_time,
+		false
+	)
+# 오디오 스트림 루프 설정 함수
+func set_audio_stream_loop(stream, should_loop):
+	if stream == null:
+		return
+
+	for property in stream.get_property_list():
+		var property_name = property.get("name", "")
+
+		if property_name == "loop":
+			stream.set("loop", should_loop)
+			return
+
+		if property_name == "loop_mode":
+			if should_loop:
+				stream.set("loop_mode", AudioStreamWAV.LOOP_FORWARD)
+			else:
+				stream.set("loop_mode", AudioStreamWAV.LOOP_DISABLED)
+			return
+# BGM 종료시 루프 보정 함수
+func _on_battle_bgm_finished():
+	if battle_bgm_should_loop and not battle_ended:
+		battle_bgm.play()
+# 같은 오디오 스트림인지 확인 함수
+func is_same_audio_stream(stream_a, stream_b):
+	if stream_a == null or stream_b == null:
+		return false
+
+	if stream_a == stream_b:
+		return true
+
+	if stream_a.resource_path != "" and stream_b.resource_path != "":
+		return stream_a.resource_path == stream_b.resource_path
+
+	return false
+# BGM 볼륨 페이드 함수
+func fade_bgm_volume(target_volume_db, duration):
+	if bgm_volume_tween != null and bgm_volume_tween.is_valid():
+		bgm_volume_tween.kill()
+
+	bgm_volume_tween = create_tween()
+	bgm_volume_tween.tween_property(battle_bgm, "volume_db", target_volume_db, duration)
+# BGM 정지 함수
+func stop_battle_bgm(fade_out = true, fade_time = 0.8):
+	battle_bgm_should_loop = false
+
+	if bgm_volume_tween != null and bgm_volume_tween.is_valid():
+		bgm_volume_tween.kill()
+
+	if fade_out and battle_bgm.playing:
+		var tween = create_tween()
+		tween.tween_property(battle_bgm, "volume_db", -40.0, fade_time)
+		await tween.finished
+
+	battle_bgm.stop()
+	battle_bgm.volume_db = default_battle_bgm_volume_db
+# BGM 재생 함수
+func play_battle_bgm(
+	next_stream,
+	target_volume_db = null,
+	loop = true,
+	fade_in = true,
+	fade_time = 1.0,
+	restart_if_same = false):
+	if next_stream == null:
+		return
+
+	if target_volume_db == null:
+		target_volume_db = default_battle_bgm_volume_db
+
+	set_audio_stream_loop(next_stream, loop)
+	battle_bgm_should_loop = loop
+
+	var same_stream = is_same_audio_stream(battle_bgm.stream, next_stream)
+
+	if same_stream and battle_bgm.playing and not restart_if_same:
+		fade_bgm_volume(target_volume_db, 0.2)
+		return
+
+	if battle_bgm.playing and not same_stream:
+		await stop_battle_bgm(true, min(fade_time, 0.5))
+
+	battle_bgm_should_loop = loop
+	battle_bgm.stream = next_stream
+
+	if fade_in:
+		battle_bgm.volume_db = -40.0
+	else:
+		battle_bgm.volume_db = target_volume_db
+
+	battle_bgm.play()
+
+	if fade_in:
+		fade_bgm_volume(target_volume_db, fade_time)
+# 오디오 단발 효과음 재생 함수
+func play_one_shot_sound(player, sound_path = "", fallback_stream = null, volume_db = null):
+	var next_stream = fallback_stream
+
+	if sound_path != "":
+		next_stream = load(sound_path)
+
+	if next_stream == null:
+		return
+
+	player.stop()
+	player.stream = next_stream
+
+	if volume_db != null:
+		player.volume_db = volume_db
+
+	player.play()
+# 오디오 적 등장 효과음 재생 함수
+func play_enemy_encounter_sound():
+	var sound_path = enemy_data.get("encounter_sound", "")
+	var volume_db = enemy_data.get("encounter_sound_volume_db", default_enemy_encounter_volume_db)
+
+	play_one_shot_sound(
+		enemy_encounter_sound,
+		sound_path,
+		default_enemy_encounter_stream,
+		volume_db
+	)
 
 # 디버그 히트 박스 확인용 함수
 func update_hitbox_debug():
@@ -1749,6 +1874,17 @@ func get_enemy_pattern_by_id(pattern_id):
 			return pattern.duplicate(true)
 
 	return {}
+# 적 처치 플래그 계산 함수
+func calculate_enemy_defeat_flags():
+	var result_flags = []
+
+	for flag_id in enemy_data.get("defeat_flags", []):
+		if flag_id == "":
+			continue
+
+		result_flags.append(flag_id)
+
+	return result_flags
 
 # 플레이어 현재 체력 갱신 함수
 func update_player_hp_ui():
@@ -1806,7 +1942,7 @@ func get_parry_hit_rect():
 		Vector2(weapon_rect.position.x, center_y - parry_height / 2.0),
 		Vector2(weapon_rect.size.x, parry_height)
 	)
-# 탄막 위치 기준 패링 이펙트 위치 함수
+# 플레이어 탄막 위치 기준 패링 이펙트 위치 함수
 func get_parry_effect_position_for_projectile(projectile, projectile_data):
 	var projectile_rect = get_projectile_hit_rect(projectile, projectile_data)
 	var parry_rect = get_parry_hit_rect()
@@ -1877,7 +2013,7 @@ func get_parry_counter_damage_once():
 	damage *= 2
 
 	return int(damage)
-# 패링 반격 적용 함수
+# 플레이어 패링 반격 적용 함수
 func apply_parry_counter_damage(counter_damage):
 	var owner_type = current_enemy_pattern.get("owner_type", "body")
 	var owner_id = current_enemy_pattern.get("owner_id", "")
@@ -1886,7 +2022,7 @@ func apply_parry_counter_damage(counter_damage):
 		apply_parry_counter_to_part(owner_id, counter_damage)
 	else:
 		apply_parry_counter_to_body(counter_damage)
-# 본체 패링 반격 함수
+# 플레이어 본체 패링 반격 함수
 func apply_parry_counter_to_body(counter_damage):
 	enemy_hp -= counter_damage
 
@@ -1906,7 +2042,7 @@ func apply_parry_counter_to_body(counter_damage):
 	start_enemy_hit_feedback()
 
 	battle_text.text = "패링 반격!\n" + str(int(counter_damage)) + " 의 피해를 주었다."
-# 파츠 패링 반격 함수
+# 플레이어 파츠 패링 반격 함수
 func apply_parry_counter_to_part(part_id, counter_damage):
 	if destroyed_parts.has(part_id):
 		apply_parry_counter_to_body(counter_damage)
@@ -1935,7 +2071,7 @@ func apply_parry_counter_to_part(part_id, counter_damage):
 
 	if enemy_part_hp[part_id] <= 0:
 		destroy_enemy_part(part_id)
-# 패링 이펙트 노드 생성 함수
+# 플레이어 패링 이펙트 노드 생성 함수
 func spawn_parry_effect(effect_position):
 	var effect = TextureRect.new()
 	effect.size = parry_effect.size
@@ -2491,7 +2627,7 @@ func get_player_received_damage(base_damage):
 # 플레이어 상태이상 보유 확인 함수
 func has_player_status_effect(effect_id):
 	return player_status_effects.has(effect_id)
-# 상태이상 적용 방어 이동속도 함수
+# 플레이어 상태이상 적용 방어 이동속도 함수
 func get_defense_move_speed_with_status(weapon_data):
 	var move_speed = float(weapon_data.get("defense_move_speed", 500))
 
@@ -2499,7 +2635,7 @@ func get_defense_move_speed_with_status(weapon_data):
 		move_speed *= 0.7
 
 	return move_speed
-# 상태이상 적용 공격 스윙 속도 함수
+# 플레이어 상태이상 적용 공격 스윙 속도 함수
 func get_attack_swing_speed_with_status(weapon_data):
 	var swing_speed = float(weapon_data.get("attack_swing_speed", 3.0))
 
@@ -2507,7 +2643,7 @@ func get_attack_swing_speed_with_status(weapon_data):
 		swing_speed *= 1.5
 
 	return swing_speed
-# 상태이상에 따른 플레이어 초상화 갱신 함수
+# 플레이어 상태이상에 따른 초상화 갱신 함수
 func update_player_portrait_by_status():
 	var portrait_key = "normal"
 
@@ -2522,7 +2658,7 @@ func update_player_portrait_by_status():
 		player_portrait.texture = load(player_portrait_paths[portrait_key])
 	elif player_portrait_paths.has("normal"):
 		player_portrait.texture = load(player_portrait_paths["normal"])
-# 상태이상 이름 가져오기 함수
+# 플레이어 상태이상 이름 가져오기 함수
 func get_status_effect_name(effect_id):
 	match effect_id:
 		"fear":
@@ -2596,8 +2732,8 @@ func clear_player_status_effects():
 	update_player_action_text_by_status()
 	status_popup_panel.visible = false
 # 플레이어 상태이상 해제 함수
-# 전체 해제시 json에서 "clear_all_status_effects": true 처리하면됨
 func clear_selected_player_status_effects(effect_ids):
+	# 전체 해제시 json에서 "clear_all_status_effects": true 처리하면됨
 	for effect_id in effect_ids:
 		if player_status_effects.has(effect_id):
 			player_status_effects.erase(effect_id)
@@ -2612,7 +2748,7 @@ func _on_player_portrait_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			show_status_popup()
-# 상태이상 설명 팝업 표시 함수
+# 플레이어 상태이상 설명 팝업 표시 함수
 func show_status_popup():
 	var text = get_player_status_description_text()
 
@@ -2621,7 +2757,7 @@ func show_status_popup():
 
 	status_popup_text.text = text
 	status_popup_panel.visible = true
-# 상태이상 설명 텍스트 함수
+# 플레이어 상태이상 설명 텍스트 함수
 func get_player_status_description_text():
 	var lines = []
 

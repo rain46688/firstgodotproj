@@ -266,12 +266,12 @@ func _ready():
 	load_game(1)
 	
 	#await add_item("cutter_knife")
-	await add_item("beverage_a")
-	await add_item("beverage_a")
-	await add_item("beverage_a")
-	await add_item("tranquilizer")
-	await add_item("tranquilizer")
-	await add_item("tranquilizer")
+	#await add_item("beverage_a")
+	#await add_item("beverage_a")
+	#await add_item("beverage_a")
+	#await add_item("tranquilizer")
+	#await add_item("tranquilizer")
+	#await add_item("tranquilizer")
 	#await add_item("classroom_key")
 	#await add_item("holy_sword")
 	
@@ -279,8 +279,9 @@ func _ready():
 	
 	await get_tree().create_timer(1.0).timeout
 	#start_battle("candle_student")
+	start_battle("candle_student_tutorial")
 	#start_battle("combined_candle_students_phase_01")
-	start_battle("combined_candle_students_phase_02")
+	#start_battle("combined_candle_students_phase_02")
 # 방 변경 함수
 func update_room():
 	
@@ -2053,6 +2054,13 @@ func start_battle(enemy_id):
 	if not enemies.has(enemy_id):
 		push_error("존재하지 않는 적: " + enemy_id)
 		return
+
+	var enemy_data = enemies[enemy_id]
+	var skip_flag = enemy_data.get("skip_if_flag", "")
+
+	if skip_flag != "" and has_flag(skip_flag):
+		print("이미 처치한 적이라 전투 스킵: " + enemy_id)
+		return
 	
 	is_story_playing = true
 	hide_game_ui()
@@ -2074,7 +2082,8 @@ func start_battle(enemy_id):
 		"items": items,
 		"equipped_weapon": equipped_weapon,
 		"inventory": inventory,
-		"projectiles": projectiles
+		"projectiles": projectiles,
+		"flags": flags
 	}
 	
 	if bgm_player.playing:
@@ -2084,7 +2093,19 @@ func start_battle(enemy_id):
 # 전투 종료 함수
 func end_battle(result_data):
 	player_hp = result_data.get("player_hp", player_hp)
-	inventory = result_data.get("inventory", inventory)
+
+	for flag_id in result_data.get("reward_flags", []):
+		set_flag(flag_id)
+
+	for reward in result_data.get("rewards", []):
+		var item_id = reward.get("item", "")
+		var count = int(reward.get("count", 1))
+
+		for i in range(count):
+			var added = await add_item(item_id)
+			# 한번 획득 가능한 아이템 플래그 검사
+			if added and reward.has("once_flag"):
+				set_flag(reward["once_flag"])
 
 	if battle_scene != null:
 		battle_scene.queue_free()

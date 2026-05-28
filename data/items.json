@@ -122,5 +122,15 @@
 		"max_stack": 3,
 		"clear_status_effects": ["fear", "lethargy", "despair"],
 		"consumed_on_use": true
+	},
+	"unknown_coin": {
+		"name": "알수없는 코인",
+		"description": "알수없는 문양이 그려있는 주화\n낡았지만 은은하게 반짝거린다.",
+		"image": "res://imgs/items/unknown_coin180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "coin",
+		"stackable": true,
+		"max_stack": 100
 	}
 }

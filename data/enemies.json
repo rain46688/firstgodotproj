@@ -134,7 +134,24 @@
 				"weak": false
 			}
 		],
-		"drops": []
+		"drops": [
+			{
+				"item": "unknown_coin",
+				"chance": 100,
+				"min": 1,
+				"max": 3
+			},
+			{
+				"item": "cutter_knife",
+				"chance": 100,
+				"min": 1,
+				"max": 1,
+				"once_flag": "got_cutter_knife_from_candle_student"
+			}
+		],
+		"defeat_flags": [
+			"got_cutter_knife_from_candle_student"
+		]
 	},
 	"combined_candle_students_phase_01": {
 		"name": "합쳐진 밀랍 학생들",
@@ -250,7 +267,7 @@
 						"counter_hitbox_id": "left_arm",
 						"projectiles": [
 							{
-								"projectile": "slash_basic",
+								"projectile": "fear_slash",
 								"start": [
 									700,
 									0
@@ -261,7 +278,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "slash_basic",
+								"projectile": "fear_slash",
 								"start": [
 									900,
 									0
@@ -272,7 +289,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "slash_basic",
+								"projectile": "fear_slash",
 								"start": [
 									1100,
 									0
@@ -550,7 +567,7 @@
 						"delay": 0.6
 					},
 					{
-						"projectile": "slash_basic",
+						"projectile": "fear_slash",
 						"start": [
 							800,
 							0
@@ -561,7 +578,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "slash_basic",
+						"projectile": "fear_slash",
 						"start": [
 							880,
 							0
@@ -613,6 +630,156 @@
 				"weak": false
 			}
 		],
-		"drops": []
+		"drops": [
+			{
+				"item": "unknown_coin",
+				"chance": 100,
+				"min": 5,
+				"max": 10
+			}
+		],
+		"defeat_flags": [
+			"defeated_combined_candle_students"
+		]
+	},
+	"candle_student_tutorial": {
+		"name": "밀랍을 뒤집어쓴 학생",
+		"skip_if_flag": "defeated_tutorial_enemy",
+		"max_hp": 80,
+		"battle_bgm": "",
+		"battle_bgm_volume_db": -3.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/enemy_encounter.mp3",
+		"encounter_sound_volume_db": -10.0,
+		"image": "res://imgs/enemies/candle_student.png",
+		"battle_background": "res://imgs/backgrounds/hallway_open.png",
+		"battle_background_alpha": 0.2,
+		"enemy_size": [
+			550,
+			660
+		],
+		"enemy_position": [
+			635,
+			0
+		],
+		"can_escape": false,
+		"encounter_text": "머릿 속에서 무언가가 외치고있다.\n\"정확하게 적을 조준해서 공격하라.\"",
+		"observe_text": "머릿 속에서 무언가가 되뇌고 있다.\n\"적의 공격에 맞춰서 반격하라.\"",
+		"weakness_text": "적의 약점은 적에게 강한 피해를 입힌다.",
+		"patterns": [
+			{
+				"id": "basic_attack",
+				"weight": 100,
+				"warning_text": "머릿 속에서 무언가가 떠오르고 있다.\n\"적의 공격을 막아야한다.\"",
+				"fire_mode": "sequential",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							700,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.0
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.3
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1100,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.3
+					}
+				]
+			},
+			{
+				"id": "parallel_attack",
+				"weight": 100,
+				"warning_text": "머릿 속에서 무언가가 속삭이고 있다.\n\"적의 공격을 정확하게 받아쳐라.\"",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							760,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.0
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.4
+					}
+				]
+			}
+		],
+		"hitbox_base_size": [
+			667,
+			1000
+		],
+		"hitboxes": [
+			{
+				"id": "body",
+				"name": "몸통",
+				"rect": [
+					280,
+					200,
+					160,
+					420
+				],
+				"weak": false
+			},
+			{
+				"id": "right_arm",
+				"name": "오른쪽 팔",
+				"rect": [
+					450,
+					330,
+					120,
+					200
+				],
+				"weak": true
+			},
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					280,
+					40,
+					150,
+					150
+				],
+				"weak": false
+			}
+		],
+		"drops": [],
+		"defeat_flags": [
+			"defeated_tutorial_enemy"
+		]
 	}
 }
