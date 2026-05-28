@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5im42cjns450"
-path="res://.godot/imported/frustrated.png-1a0be800c2a71349ea54a2169ac9b6e7.ctex"
+uid="uid://ckjspm4g76mvb"
+path="res://.godot/imported/lethargy.png-7d1c47b604608c4ce93a874b73807b35.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/characters/protagonist/portrait/frustrated.png"
-dest_files=["res://.godot/imported/frustrated.png-1a0be800c2a71349ea54a2169ac9b6e7.ctex"]
+source_file="res://imgs/characters/protagonist/portrait/lethargy.png"
+dest_files=["res://.godot/imported/lethargy.png-7d1c47b604608c4ce93a874b73807b35.ctex"]
 
 [params]
 

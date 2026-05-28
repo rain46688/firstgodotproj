@@ -107,8 +107,20 @@
 		"height": 1,
 		"type": "consumable",
 		"stackable": true,
-		"max_stack": 10,
+		"max_stack": 5,
 		"heal": 25,
+		"consumed_on_use": true
+	},
+	"tranquilizer": {
+		"name": "진정제",
+		"description": "미지근 하다 마시면\n마음이 안정될 것 같다.",
+		"image": "res://imgs/items/tranquilizer180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "consumable",
+		"stackable": true,
+		"max_stack": 3,
+		"clear_status_effects": ["fear", "lethargy", "despair"],
 		"consumed_on_use": true
 	}
 }

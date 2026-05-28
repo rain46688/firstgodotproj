@@ -23,6 +23,7 @@ grow_vertical = 2
 script = ExtResource("1_rca61")
 
 [node name="Background" type="TextureRect" parent="." unique_id=1615909653]
+z_index = 2
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -42,6 +43,7 @@ color = Color(0, 0, 0, 1)
 
 [node name="EnemyBackground" type="TextureRect" parent="." unique_id=873064259]
 modulate = Color(1, 1, 1, 0)
+z_index = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -80,16 +82,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0)
-
-[node name="EnemyHpText" type="Label" parent="." unique_id=1302683261]
-layout_mode = 0
-offset_left = 722.0
-offset_top = 607.0
-offset_right = 1242.0
-offset_bottom = 687.0
-theme_override_fonts/font = ExtResource("2_kinr6")
-theme_override_font_sizes/font_size = 25
-horizontal_alignment = 1
 
 [node name="BulletContainer" type="Control" parent="." unique_id=88639530]
 anchors_preset = 0
@@ -136,6 +128,7 @@ stretch_mode = 5
 
 [node name="CenterPanel" type="Control" parent="." unique_id=1948466899]
 self_modulate = Color(1, 1, 1, 0)
+z_index = 2
 anchors_preset = 0
 offset_left = 350.0
 offset_top = 700.0
@@ -165,6 +158,7 @@ texture = ExtResource("4_8qdv8")
 
 [node name="LeftPanel" type="Control" parent="." unique_id=2122720075]
 self_modulate = Color(1, 1, 1, 0)
+z_index = 2
 anchors_preset = 0
 offset_left = 20.0
 offset_top = 705.0
@@ -190,6 +184,7 @@ vertical_alignment = 1
 
 [node name="RightPanel" type="Control" parent="." unique_id=1816465741]
 self_modulate = Color(1, 1, 1, 0)
+z_index = 2
 anchors_preset = 0
 offset_left = 1600.0
 offset_top = 700.0
@@ -321,3 +316,14 @@ volume_db = -5.0
 [node name="HealingSound" type="AudioStreamPlayer" parent="." unique_id=929464393]
 stream = ExtResource("12_tttxe")
 volume_db = -5.0
+
+[node name="StatusPopupPanel" type="PopupPanel" parent="." unique_id=1549040773]
+oversampling_override = 1.0
+position = Vector2i(40, 720)
+
+[node name="StatusPopupText" type="Label" parent="StatusPopupPanel" unique_id=185283925]
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_kinr6")
+theme_override_font_sizes/font_size = 20

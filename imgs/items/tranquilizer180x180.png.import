@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ctybk2ya24xai"
-path="res://.godot/imported/pain.png-b2d616b03c575c9abe21031cd6ff1201.ctex"
+uid="uid://blf1uorgy8qfl"
+path="res://.godot/imported/tranquilizer180x180.png-4089d7787667b236641de771af628245.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/characters/protagonist/portrait/pain.png"
-dest_files=["res://.godot/imported/pain.png-b2d616b03c575c9abe21031cd6ff1201.ctex"]
+source_file="res://imgs/items/tranquilizer180x180.png"
+dest_files=["res://.godot/imported/tranquilizer180x180.png-4089d7787667b236641de771af628245.ctex"]
 
 [params]
 

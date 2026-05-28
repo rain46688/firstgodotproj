@@ -269,6 +269,9 @@ func _ready():
 	await add_item("beverage_a")
 	await add_item("beverage_a")
 	await add_item("beverage_a")
+	await add_item("tranquilizer")
+	await add_item("tranquilizer")
+	await add_item("tranquilizer")
 	#await add_item("classroom_key")
 	#await add_item("holy_sword")
 	
@@ -276,8 +279,8 @@ func _ready():
 	
 	await get_tree().create_timer(1.0).timeout
 	#start_battle("candle_student")
-	start_battle("combined_candle_students_phase_01")
-	#start_battle("combined_candle_students_phase_02")
+	#start_battle("combined_candle_students_phase_01")
+	start_battle("combined_candle_students_phase_02")
 # 방 변경 함수
 func update_room():
 	
@@ -2067,7 +2070,7 @@ func start_battle(enemy_id):
 		"enemies": enemies,
 		"player_hp": player_hp,
 		"player_max_hp": player_max_hp,
-		"player_portrait": characters["protagonist"]["portrait"]["normal"],
+		"player_portraits": characters["protagonist"]["portrait"],
 		"items": items,
 		"equipped_weapon": equipped_weapon,
 		"inventory": inventory,

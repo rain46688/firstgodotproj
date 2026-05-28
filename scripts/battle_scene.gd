@@ -14,7 +14,6 @@ signal battle_finished(result_data)
 @onready var end_turn_button = $RightPanel/EndTurnButton
 @onready var run_button = $RightPanel/RunButton
 @onready var player_portrait = $LeftPanel/PlayerPortrait
-@onready var enemy_hp_text = $EnemyHpText
 @onready var slash_effect = $EffectContainer/SlashEffect
 @onready var hit_effect = $EffectContainer/HitEffect
 @onready var parry_effect = $EffectContainer/ParryEffect
@@ -39,6 +38,8 @@ signal battle_finished(result_data)
 @onready var background = $Background
 @onready var black_background = $BlackBackground
 @onready var enemy_encounter_sound = $EnemyEncounterSound
+@onready var status_popup_panel = $StatusPopupPanel
+@onready var status_popup_text = $StatusPopupPanel/StatusPopupText
 
 # 일반 변수 모음
 var player_hp = 0
@@ -84,6 +85,9 @@ var pierced_hitbox_ids = []
 var enemy_parts = {}
 var enemy_part_sprites = {}
 var enemy_part_hp = {}
+var enemy_hp_label = null
+var enemy_hp_label_position = Vector2(722, 607)
+var enemy_hp_label_size = Vector2(520, 80)
 var destroyed_parts = []
 var enemy_visual_base_position = Vector2.ZERO
 var enemy_part_base_positions = {}
@@ -97,9 +101,10 @@ var debug_hp_labels = []
 var default_battle_bgm_volume_db = 0.0
 var bgm_volume_tween = null
 var battle_bgm_should_loop = true
-
 var default_enemy_encounter_stream = null
 var default_enemy_encounter_volume_db = 0.0
+var player_status_effects = {}
+var player_portrait_paths = {}
 
 # 기존 적 포지션 저장
 var enemy_sprite_default_size = Vector2.ZERO
@@ -126,7 +131,6 @@ func _process(delta):
 	if Input.is_action_just_pressed("debug_toggle"):
 		debug_mode = !debug_mode
 		hitbox_debug_container.visible = debug_mode
-		enemy_hp_text.visible = debug_mode
 		update_debug_hp_labels()
 	# 관찰중
 	if is_observing:
@@ -158,7 +162,7 @@ func _process(delta):
 			use_selected_battle_item()
 		if Input.is_action_just_pressed("esc"):
 			is_item_selecting = false
-			battle_text.text = "행동을 선택하세요."
+			battle_text.text = get_player_turn_start_text()
 			set_action_buttons_disabled(false)
 		return
 	# 적 공격 대기중
@@ -184,7 +188,7 @@ func _process(delta):
 		if weapon_swing_enabled:
 			weapon_move_time += delta
 
-			var swing_speed = weapon_data.get("attack_swing_speed", 3.0)
+			var swing_speed = get_attack_swing_speed_with_status(weapon_data)
 			var move_range = weapon_data.get("attack_move_range", 460)
 
 			var offset_x = sin(weapon_move_time * swing_speed) * move_range
@@ -237,6 +241,9 @@ func _ready():
 
 	default_enemy_encounter_stream = enemy_encounter_sound.stream
 	default_enemy_encounter_volume_db = enemy_encounter_sound.volume_db
+	
+	player_portrait.gui_input.connect(_on_player_portrait_gui_input)
+	status_popup_panel.visible = false
 
 	if not battle_bgm.finished.is_connected(_on_battle_bgm_finished):
 		battle_bgm.finished.connect(_on_battle_bgm_finished)
@@ -262,7 +269,6 @@ func _ready():
 	hit_effect.z_index = 50
 	parry_effect.z_index = 50
 
-	enemy_hp_text.z_index = 900
 	hitbox_debug_container.z_index = 900
 	hitbox_debug_container.z_index = 999
 	fade_rect.z_index = 4096
@@ -311,8 +317,6 @@ func setup_battle(data):
 	is_observing = false
 	is_item_selecting = false
 	waiting_enemy_attack = false
-	
-	enemy_hp_text.visible = debug_mode
 
 	enemy_id = data.get("enemy_id", "")
 	enemy_data = data.get("enemy_data", {})
@@ -326,9 +330,11 @@ func setup_battle(data):
 	projectiles = data.get("projectiles", {})
 	enemies = data.get("enemies", {})
 	
+	# 상태이상 초기화
+	player_status_effects.clear()
+	
 	update_weapon_sprite_texture()
 	weapon_sprite.visible = false
-
 	update_player_hp_ui()
 	update_enemy_hp_ui()
 	
@@ -348,8 +354,13 @@ func setup_battle(data):
 	else:
 		enemy_background.visible = false
 		
+	# 플레이어 초상화 
+	player_portrait_paths = data.get("player_portraits", {})
+
 	if data.has("player_portrait"):
-		player_portrait.texture = load(data["player_portrait"])
+		player_portrait_paths["normal"] = data["player_portrait"]
+
+	update_player_portrait_by_status()
 		
 	# 히트 박스 확인용
 	update_hitbox_debug()
@@ -447,7 +458,7 @@ func start_player_turn():
 	weapon_sprite.visible = false
 	weapon_sprite.rotation_degrees = 0
 	attack_guide.visible = false
-	battle_text.text = "행동을 선택하세요."
+	battle_text.text = get_player_turn_start_text()
 
 	set_action_buttons_disabled(false)
 # 적 턴 시작 함수
@@ -501,7 +512,6 @@ func win_battle():
 	await stop_battle_bgm(true, 0.8)
 
 	battle_text.text = "전투에서 승리했다."
-	enemy_hp_text.visible = false
 	
 	await get_tree().create_timer(1.0).timeout
 
@@ -792,7 +802,7 @@ func open_battle_item_list():
 		await get_tree().create_timer(1.0).timeout
 
 		set_action_buttons_disabled(false)
-		battle_text.text = "행동을 선택하세요."
+		battle_text.text = get_player_turn_start_text()
 		return
 
 	set_action_buttons_disabled(true)
@@ -836,6 +846,9 @@ func use_selected_battle_item():
 
 		if player_hp > player_max_hp:
 			player_hp = player_max_hp
+			
+	if item_data.has("clear_status_effects"):
+		clear_selected_player_status_effects(item_data.get("clear_status_effects", []))
 
 	healing_sound.play()
 	update_player_hp_ui()
@@ -979,6 +992,8 @@ func update_debug_hp_labels():
 	if not debug_mode:
 		return
 
+	create_body_debug_hp_label()
+
 	for part_id in enemy_parts.keys():
 		if destroyed_parts.has(part_id):
 			continue
@@ -1019,11 +1034,26 @@ func create_part_debug_hp_label(part_id):
 
 	hitbox_debug_container.add_child(label)
 	debug_hp_labels.append(label)
+# 디버그 본체 HP 라벨 생성 함수
+func create_body_debug_hp_label():
+	var label = Label.new()
+	label.text = "BODY HP " + str(int(enemy_hp)) + " / " + str(int(enemy_max_hp))
+	label.z_index = 1000
+	label.size = enemy_hp_label_size
+	label.position = enemy_hp_label_position
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+
+	label.add_theme_font_size_override("font_size", 26)
+	label.add_theme_color_override("font_color", Color(1, 1, 1, 1))
+	label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+	label.add_theme_constant_override("outline_size", 5)
+
+	add_child(label)
+	debug_hp_labels.append(label)
 
 # 적 HP ui 갱신 함수
 func update_enemy_hp_ui():
-	enemy_hp_text.text = "BODY HP " + str(int(enemy_hp)) + " / " + str(int(enemy_max_hp))
-	enemy_hp_text.visible = debug_mode
 	update_debug_hp_labels()
 # 적 공격 함수
 func execute_enemy_attack():
@@ -1152,28 +1182,9 @@ func fire_enemy_projectile(projectile_info):
 	elif blocked:
 		pass
 	elif hit_player:
-		var damage = projectile_info.get("damage", current_enemy_pattern.get("damage", 1))
-		player_hp -= damage
-
-		if player_hp < 0:
-			player_hp = 0
-			
-		if danger_type == "parry_only":
-			hit_red_sound.play()
-		else:
-			hit_normal_sound.play()
-
-		update_player_hp_ui()
-		battle_text.text = str(int(damage)) + " 의 피해를 입었다."
+		apply_projectile_hit_to_player(projectile_info, projectile_data, danger_type)
 	else:
-		var damage = projectile_info.get("damage", current_enemy_pattern.get("damage", 1))
-		player_hp -= damage
-
-		if player_hp < 0:
-			player_hp = 0
-
-		update_player_hp_ui()
-		battle_text.text = str(int(damage)) + " 의 피해를 입었다."
+		apply_projectile_hit_to_player(projectile_info, projectile_data, danger_type)
 # 적의 탄막 패턴 발사 함수
 func fire_enemy_projectiles():
 	var projectile_list = current_enemy_pattern.get("projectiles", [])
@@ -2055,7 +2066,7 @@ func end_defense_mode():
 # 플레이어 방어 실행 함수
 func update_defense_weapon_movement(delta):
 	var weapon_data = get_current_weapon_data()
-	var move_speed = weapon_data.get("defense_move_speed", 500)
+	var move_speed = get_defense_move_speed_with_status(weapon_data)
 
 	var move_vector = Vector2.ZERO
 
@@ -2420,3 +2431,207 @@ func update_action_button_keyboard_input():
 			return
 
 		selected_button.emit_signal("pressed")
+# 플레이어 상태이상 부여 함수
+func apply_player_status_effects(effect_ids):
+	for effect_id in effect_ids:
+		if effect_id == "":
+			continue
+
+		player_status_effects[effect_id] = true
+
+	update_player_portrait_by_status()
+	update_player_action_text_by_status()
+# 탄막 상태이상 목록 가져오기 함수
+func get_projectile_status_effects(projectile_info, projectile_data):
+	if projectile_info.has("status_effects"):
+		return projectile_info.get("status_effects", [])
+
+	if projectile_info.has("status_effect"):
+		return [projectile_info.get("status_effect", "")]
+
+	if projectile_data.has("status_effects"):
+		return projectile_data.get("status_effects", [])
+
+	if projectile_data.has("status_effect"):
+		return [projectile_data.get("status_effect", "")]
+
+	return []
+# 플레이어 탄막 피격 처리 함수
+func apply_projectile_hit_to_player(projectile_info, projectile_data, danger_type):
+	var damage = projectile_info.get("damage", current_enemy_pattern.get("damage", 1))
+	damage = get_player_received_damage(damage)
+
+	player_hp -= damage
+
+	if player_hp < 0:
+		player_hp = 0
+
+	var status_effects = get_projectile_status_effects(projectile_info, projectile_data)
+	apply_player_status_effects(status_effects)
+
+	if danger_type == "parry_only":
+		hit_red_sound.play()
+	else:
+		hit_normal_sound.play()
+
+	update_player_hp_ui()
+
+	if status_effects.size() > 0:
+		battle_text.text = str(int(damage)) + " 의 피해를 입었다.\n" + get_status_applied_text(status_effects)
+	else:
+		battle_text.text = str(int(damage)) + " 의 피해를 입었다."
+# 플레이어 받는 데미지 계산 함수
+func get_player_received_damage(base_damage):
+	var damage = float(base_damage)
+
+	if has_player_status_effect("despair"):
+		damage *= 1.5
+
+	return int(ceil(damage))
+# 플레이어 상태이상 보유 확인 함수
+func has_player_status_effect(effect_id):
+	return player_status_effects.has(effect_id)
+# 상태이상 적용 방어 이동속도 함수
+func get_defense_move_speed_with_status(weapon_data):
+	var move_speed = float(weapon_data.get("defense_move_speed", 500))
+
+	if has_player_status_effect("lethargy"):
+		move_speed *= 0.7
+
+	return move_speed
+# 상태이상 적용 공격 스윙 속도 함수
+func get_attack_swing_speed_with_status(weapon_data):
+	var swing_speed = float(weapon_data.get("attack_swing_speed", 3.0))
+
+	if has_player_status_effect("fear"):
+		swing_speed *= 1.5
+
+	return swing_speed
+# 상태이상에 따른 플레이어 초상화 갱신 함수
+func update_player_portrait_by_status():
+	var portrait_key = "normal"
+
+	if has_player_status_effect("despair"):
+		portrait_key = "despair"
+	elif has_player_status_effect("fear"):
+		portrait_key = "fear"
+	elif has_player_status_effect("lethargy"):
+		portrait_key = "lethargy"
+
+	if player_portrait_paths.has(portrait_key):
+		player_portrait.texture = load(player_portrait_paths[portrait_key])
+	elif player_portrait_paths.has("normal"):
+		player_portrait.texture = load(player_portrait_paths["normal"])
+# 상태이상 이름 가져오기 함수
+func get_status_effect_name(effect_id):
+	match effect_id:
+		"fear":
+			return "공포"
+		"lethargy":
+			return "무기력"
+		"despair":
+			return "절망"
+		_:
+			return effect_id
+# 상태이상 적용 텍스트 생성 함수
+func get_status_applied_text(effect_ids):
+	var lines = []
+	var checked_effects = []
+
+	for effect_id in effect_ids:
+		if effect_id == "":
+			continue
+
+		if checked_effects.has(effect_id):
+			continue
+
+		checked_effects.append(effect_id)
+
+		match effect_id:
+			"fear":
+				lines.append("공포에 질렸다.")
+			"lethargy":
+				lines.append("무기력에 빠졌다.")
+			"despair":
+				lines.append("절망에 짓눌렸다.")
+			_:
+				lines.append(get_status_effect_name(effect_id) + " 상태가 되었다.")
+
+	return "\n".join(lines)
+# 플레이어 행동 선택 텍스트 상태이상 반영 함수
+func update_player_action_text_by_status():
+	if not is_player_turn:
+		return
+
+	if is_attack_mode:
+		return
+
+	if is_defense_mode:
+		return
+
+	if is_observing:
+		return
+
+	if is_item_selecting:
+		return
+
+	if waiting_enemy_attack:
+		return
+
+	battle_text.text = get_player_turn_start_text()
+# 플레이어 턴 시작 텍스트 함수
+func get_player_turn_start_text():
+	if has_player_status_effect("despair"):
+		return "당신은 절망에 짓눌려 있다."
+	if has_player_status_effect("fear"):
+		return "당신은 공포에 질려있다."
+	if has_player_status_effect("lethargy"):
+		return "당신은 무기력에 빠져있다."
+
+	return "행동을 선택하세요."
+# 플레이어 상태이상 전체 해제 함수
+func clear_player_status_effects():
+	player_status_effects.clear()
+	update_player_portrait_by_status()
+	update_player_action_text_by_status()
+	status_popup_panel.visible = false
+# 플레이어 상태이상 해제 함수
+# 전체 해제시 json에서 "clear_all_status_effects": true 처리하면됨
+func clear_selected_player_status_effects(effect_ids):
+	for effect_id in effect_ids:
+		if player_status_effects.has(effect_id):
+			player_status_effects.erase(effect_id)
+
+	update_player_portrait_by_status()
+	update_player_action_text_by_status()
+
+	if player_status_effects.size() == 0:
+		status_popup_panel.visible = false
+# 플레이어 초상화 입력 함수
+func _on_player_portrait_gui_input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+			show_status_popup()
+# 상태이상 설명 팝업 표시 함수
+func show_status_popup():
+	var text = get_player_status_description_text()
+
+	if text == "":
+		text = "정상 상태 : \n\n안정적인 상태이다."
+
+	status_popup_text.text = text
+	status_popup_panel.visible = true
+# 상태이상 설명 텍스트 함수
+func get_player_status_description_text():
+	var lines = []
+
+	if has_player_status_effect("fear"):
+		lines.append("공포 상태 : \n\n공격 무기의\n스윙 스피드가 50% 빨라진다.")
+
+	if has_player_status_effect("lethargy"):
+		lines.append("무기력 상태 : \n\n방어 무기의\n이동속도가 30% 느려진다.")
+
+	if has_player_status_effect("despair"):
+		lines.append("절망 상태 : \n\n받는 데미지가\n50% 증가한다.")
+
+	return "\n".join(lines)
