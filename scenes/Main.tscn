@@ -17,6 +17,7 @@
 [ext_resource type="AudioStream" uid="uid://3o8o7uw5f8d7" path="res://sounds/save_ui_open.mp3" id="16_ft6cd"]
 [ext_resource type="AudioStream" uid="uid://bca0o8rrmsb8h" path="res://sounds/save_ui_close.mp3" id="17_bb450"]
 [ext_resource type="AudioStream" uid="uid://dcvrjg58exxw0" path="res://sounds/save_complete.mp3" id="18_bb450"]
+[ext_resource type="AudioStream" uid="uid://b4idj20vru21j" path="res://sounds/heartbeats.mp3" id="18_nfivy"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bjd11"]
 bg_color = Color(0, 0, 0, 0)
@@ -137,7 +138,7 @@ pivot_offset = Vector2(50, 37)
 texture = ExtResource("3_lhr70")
 
 [node name="Fade" type="ColorRect" parent="." unique_id=1447810409]
-z_index = 50
+z_index = 4096
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -387,6 +388,21 @@ expand_mode = 1
 stretch_mode = 4
 
 [node name="BGMPlayer" type="AudioStreamPlayer" parent="." unique_id=969287587]
+
+[node name="EncounterDangerOverlay" type="ColorRect" parent="." unique_id=338707217]
+z_index = 4095
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0, 0, 0)
+
+[node name="EncounterHeartbeatSound" type="AudioStreamPlayer" parent="." unique_id=676020408]
+stream = ExtResource("18_nfivy")
+volume_db = 6.0
 
 [connection signal="pressed" from="BagButton" to="." method="_on_bag_button_pressed"]
 [connection signal="pressed" from="InventoryUI/InventoryContextMenu/MenuTexts/UseButton" to="." method="_on_use_button_pressed"]

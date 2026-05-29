@@ -1,0 +1,18 @@
+{
+	"school_hallway": [
+		{
+			"enemy": "candle_student",
+			"weight": 80,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "candle_student_tutorial",
+			"weight": 20,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		}
+	]
+}

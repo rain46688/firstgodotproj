@@ -17,6 +17,11 @@
 				],
 				"move_effect": "door"
 			}
+		},
+		"random_encounter": {
+			"enemy_table": "school_hallway",
+			"event_table": "school_hallway",
+			"chance": 25
 		}
 	},
 	"hallway_2": {
@@ -54,6 +59,11 @@
 					560
 				]
 			}
+		},
+		"random_encounter": {
+			"enemy_table": "school_hallway",
+			"event_table": "school_hallway",
+			"chance": 25
 		}
 	},
 	"hallway_3": {
@@ -73,6 +83,11 @@
 					540
 				]
 			}
+		},
+		"random_encounter": {
+			"enemy_table": "school_hallway",
+			"event_table": "school_hallway",
+			"chance": 25
 		}
 	},
 	"classroom_1": {

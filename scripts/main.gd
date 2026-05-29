@@ -48,6 +48,8 @@ extends Control
 @onready var speaker_name = $DialogueBox/SpeakerName
 @onready var story_standing = $StoryStanding
 @onready var bgm_player = $BGMPlayer
+@onready var encounter_danger_overlay = $EncounterDangerOverlay
+@onready var encounter_heartbeat_sound = $EncounterHeartbeatSound
 
 # 일반 변수 모음
 var arrow_time = 0.0
@@ -87,6 +89,11 @@ var is_story_playing = false
 var enemies = {}
 var battle_scene = null
 var projectiles = {}
+var encounters = {}
+var encounter_events = {}
+var encounter_overlay_tween = null
+# 도주 후 여유 시간 변수
+var random_encounter_cooldown_steps = 0
 
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
@@ -218,6 +225,12 @@ func _ready():
 	play_bgm("res://sounds/bgm2.mp3")
 	inventory_ui.visible = false
 	background.scale = Vector2(1, 1)
+	encounter_danger_overlay.color = Color(1, 0, 0, 0)
+	encounter_danger_overlay.visible = true
+	encounter_danger_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	encounter_danger_overlay.z_index = 4095 # Fade는 4096
+
+	encounter_heartbeat_sound.stop()
 	
 	# 버튼이 키보드 포커스를 가져가지 않게 설정
 	# Space를 눌렀을 때 버튼이 다시 눌리는 문제 방지
@@ -261,6 +274,18 @@ func _ready():
 	if not projectiles_success:
 		push_error("투사체 데이터 로드 실패로 게임 초기화 중단")
 		return
+	
+	var encounters_success = load_encounters()
+
+	if not encounters_success:
+		push_error("인카운터 데이터 로드 실패로 게임 초기화 중단")
+		return
+		
+	var encounter_events_success = load_encounter_events()
+
+	if not encounter_events_success:
+		push_error("인카운터 이벤트 데이터 로드 실패로 게임 초기화 중단")
+		return
 
 	# 테스트
 	load_game(1)
@@ -277,9 +302,9 @@ func _ready():
 	
 	update_room()
 	
-	await get_tree().create_timer(1.0).timeout
+	#await get_tree().create_timer(1.0).timeout
 	#start_battle("candle_student")
-	start_battle("candle_student_tutorial")
+	#start_battle("candle_student_tutorial")
 	#start_battle("combined_candle_students_phase_01")
 	#start_battle("combined_candle_students_phase_02")
 # 방 변경 함수
@@ -355,6 +380,17 @@ func move_to_room(target_room, use_shake, direction):
 	
 	# 방 진입시 스토리 이벤트 확인
 	await check_room_enter_story()
+	
+	# 랜덤 인카운터 체크
+	if random_encounter_cooldown_steps > 0:
+		random_encounter_cooldown_steps -= 1
+	else:
+		if not is_story_playing:
+			var encounter_started = await check_random_encounter()
+
+			if encounter_started:
+				is_moving = false
+				return
 	
 	# 새 방이 보인 뒤 바로 이동하지 못하게 잠깐 대기
 	await get_tree().create_timer(1.5).timeout
@@ -2049,8 +2085,9 @@ func load_enemies():
 	enemies = json.data
 	print("enemies.json 로드 성공")
 	return true
+
 # 전투 시작 함수
-func start_battle(enemy_id):
+func start_battle(enemy_id, first_turn = ""):
 	if not enemies.has(enemy_id):
 		push_error("존재하지 않는 적: " + enemy_id)
 		return
@@ -2083,7 +2120,8 @@ func start_battle(enemy_id):
 		"equipped_weapon": equipped_weapon,
 		"inventory": inventory,
 		"projectiles": projectiles,
-		"flags": flags
+		"flags": flags,
+		"first_turn": first_turn
 	}
 	
 	if bgm_player.playing:
@@ -2147,3 +2185,268 @@ func load_projectiles():
 	projectiles = json.data
 	print("projectiles.json 로드 성공")
 	return true
+
+# 인카운터 데이터 로드 함수
+func load_encounters():
+	var path = "res://data/encounters.json"
+
+	if not FileAccess.file_exists(path):
+		push_error("encounters.json 파일을 찾을 수 없음: " + path)
+		return false
+
+	var file = FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		push_error("encounters.json 파일 열기 실패: " + path)
+		return false
+
+	var json_text = file.get_as_text()
+	var json = JSON.new()
+	var error = json.parse(json_text)
+
+	if error != OK:
+		push_error("encounters.json 파싱 실패: " + json.get_error_message())
+		push_error("오류 위치 line: " + str(json.get_error_line()))
+		return false
+
+	if typeof(json.data) != TYPE_DICTIONARY:
+		push_error("encounters.json 최상위 구조는 Dictionary여야 함")
+		return false
+
+	encounters = json.data
+	print("encounters.json 로드 성공")
+	return true
+# 현재 방 랜덤 인카운터 확인 함수
+func check_random_encounter():
+	var room = rooms[current_room]
+
+	if not room.has("random_encounter"):
+		return false
+
+	var encounter_data = room["random_encounter"]
+	var chance = float(encounter_data.get("chance", 0))
+
+	if randf() * 100.0 > chance:
+		return false
+
+	var enemy_table_id = encounter_data.get("enemy_table", encounter_data.get("table", ""))
+	var event_table_id = encounter_data.get("event_table", enemy_table_id)
+
+	if enemy_table_id == "":
+		return false
+
+	var enemy_id = pick_random_encounter_enemy(enemy_table_id)
+
+	if enemy_id == "":
+		return false
+
+	start_random_encounter_effect()
+
+	var start_text = get_random_encounter_start_text(event_table_id)
+
+	if start_text != "":
+		await show_dialogue(start_text)
+
+	var choices = make_random_encounter_choices(event_table_id)
+
+	if choices.size() == 0:
+		await stop_random_encounter_effect()
+		start_battle(enemy_id)
+		return true
+
+	var selected_index = await show_choices(choices)
+	var selected_choice = choices[selected_index]
+
+	var encounter_result = await run_random_encounter_choice(selected_choice, enemy_id)
+
+	await stop_random_encounter_effect()
+
+	if encounter_result.get("result", "battle") == "escape":
+		# 도주 후 여유 시간 부여
+		random_encounter_cooldown_steps = 2
+		return false
+
+	start_battle(
+		encounter_result.get("enemy_id", enemy_id),
+		encounter_result.get("first_turn", "")
+	)
+
+	return true
+# 랜덤 인카운터 적 선택 함수
+func pick_random_encounter_enemy(table_id):
+	if not encounters.has(table_id):
+		push_error("존재하지 않는 인카운터 테이블: " + table_id)
+		return ""
+
+	var candidates = []
+
+	for encounter in encounters[table_id]:
+		var enemy_id = encounter.get("enemy", "")
+
+		if enemy_id == "":
+			continue
+
+		if not enemies.has(enemy_id):
+			continue
+
+		var required_flag = encounter.get("required_flag", "")
+		if required_flag != "" and not has_flag(required_flag):
+			continue
+
+		var missing_flag = encounter.get("missing_flag", "")
+		if missing_flag != "" and has_flag(missing_flag):
+			continue
+
+		var enemy_data = enemies[enemy_id]
+		var skip_flag = enemy_data.get("skip_if_flag", "")
+		if skip_flag != "" and has_flag(skip_flag):
+			continue
+
+		candidates.append(encounter)
+
+	if candidates.size() == 0:
+		return ""
+
+	return pick_weighted_encounter(candidates)
+# 인카운터 가중치 선택 함수
+func pick_weighted_encounter(candidates):
+	var total_weight = 0
+
+	for encounter in candidates:
+		total_weight += int(encounter.get("weight", 100))
+
+	if total_weight <= 0:
+		return candidates.pick_random().get("enemy", "")
+
+	var roll = randi_range(1, total_weight)
+	var current = 0
+
+	for encounter in candidates:
+		current += int(encounter.get("weight", 100))
+
+		if roll <= current:
+			return encounter.get("enemy", "")
+
+	return candidates[0].get("enemy", "")
+# 인카운터 이벤트 데이터 로드 함수
+func load_encounter_events():
+	var path = "res://data/encounter_events.json"
+
+	if not FileAccess.file_exists(path):
+		push_error("encounter_events.json 파일을 찾을 수 없음: " + path)
+		return false
+
+	var file = FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		push_error("encounter_events.json 파일 열기 실패: " + path)
+		return false
+
+	var json_text = file.get_as_text()
+	var json = JSON.new()
+	var error = json.parse(json_text)
+
+	if error != OK:
+		push_error("encounter_events.json 파싱 실패: " + json.get_error_message())
+		push_error("오류 위치 line: " + str(json.get_error_line()))
+		return false
+
+	if typeof(json.data) != TYPE_DICTIONARY:
+		push_error("encounter_events.json 최상위 구조는 Dictionary여야 함")
+		return false
+
+	encounter_events = json.data
+	print("encounter_events.json 로드 성공")
+	return true
+# 인카운터 발생 텍스트 가져오기 함수
+func get_random_encounter_start_text(event_table_id):
+	if event_table_id == "":
+		return ""
+
+	if not encounter_events.has(event_table_id):
+		push_error("존재하지 않는 인카운터 이벤트 테이블: " + event_table_id)
+		return ""
+
+	var event_data = encounter_events[event_table_id]
+	var start_texts = event_data.get("start_texts", [])
+
+	if start_texts.size() == 0:
+		return ""
+
+	return start_texts.pick_random()
+# 인카운터 선택지 생성 함수
+func make_random_encounter_choices(event_table_id):
+	var result_choices = []
+
+	if event_table_id == "":
+		return result_choices
+
+	if not encounter_events.has(event_table_id):
+		push_error("존재하지 않는 인카운터 이벤트 테이블: " + event_table_id)
+		return result_choices
+
+	var event_data = encounter_events[event_table_id]
+	var choice_pools = event_data.get("choice_pools", {})
+
+	var pool_order = ["escape", "player_first", "enemy_first"]
+
+	for pool_id in pool_order:
+		var pool = choice_pools.get(pool_id, [])
+
+		if pool.size() == 0:
+			continue
+
+		var choice = pool.pick_random().duplicate(true)
+		result_choices.append(choice)
+
+	return result_choices
+# 인카운터 선택 결과 실행 함수
+func run_random_encounter_choice(choice, enemy_id):
+	var result_text = choice.get("result_text", "")
+
+	if result_text != "":
+		await show_dialogue(result_text)
+
+	var result = choice.get("result", "battle")
+
+	return {
+		"result": result,
+		"enemy_id": enemy_id,
+		"first_turn": choice.get("first_turn", "")
+	}
+# 랜덤 인카운터 공통 연출 시작 함수
+func start_random_encounter_effect():
+	if encounter_overlay_tween != null and encounter_overlay_tween.is_valid():
+		encounter_overlay_tween.kill()
+
+	encounter_danger_overlay.visible = true
+	encounter_danger_overlay.color = Color(1, 0, 0, 0)
+
+	encounter_overlay_tween = create_tween()
+	encounter_overlay_tween.tween_property(
+		encounter_danger_overlay,
+		"color:a",
+		0.35,
+		3
+	)
+
+	if encounter_heartbeat_sound != null:
+		encounter_heartbeat_sound.stop()
+		encounter_heartbeat_sound.play()
+# 랜덤 인카운터 공통 연출 종료 함수
+func stop_random_encounter_effect():
+	if encounter_overlay_tween != null and encounter_overlay_tween.is_valid():
+		encounter_overlay_tween.kill()
+
+	encounter_overlay_tween = create_tween()
+	encounter_overlay_tween.tween_property(
+		encounter_danger_overlay,
+		"color:a",
+		0.0,
+		0.4
+	)
+
+	await encounter_overlay_tween.finished
+
+	if encounter_heartbeat_sound != null:
+		encounter_heartbeat_sound.stop()

@@ -110,14 +110,18 @@ var player_status_effects = {}
 var player_portrait_paths = {}
 var battle_result_messages = []
 var battle_result_index = 0
+
+# 첫 턴 결정 변수
+var encounter_first_turn = ""
+
 # 메인에서 넘겨받은 플래그
 var flags = {}
 
-# 기존 적 포지션 저장
+# 기존 적 포지션 저장 변수
 var enemy_sprite_default_size = Vector2.ZERO
 var enemy_sprite_default_position = Vector2.ZERO
 
-# 전투 난이도 조절 기능
+# 전투 난이도 조절 기능 변수
 # easy, normal, hard, nightmare
 var battle_difficulty = "normal"
 
@@ -338,6 +342,7 @@ func setup_battle(data):
 	enemies = data.get("enemies", {})
 	# 메인에서 넘겨받은 플래그
 	flags = data.get("flags", {})
+	encounter_first_turn = data.get("first_turn", "")
 	
 	# 상태이상 초기화
 	player_status_effects.clear()
@@ -388,7 +393,12 @@ func setup_battle(data):
 	) + "\n\n[Space]"
 
 	await wait_for_accept_input()
-	start_player_turn()
+	
+	# 첫 턴 결정
+	if encounter_first_turn == "enemy":
+		start_enemy_turn()
+	else:
+		start_player_turn()
 
 # 공격 버튼 클릭 함수
 func _on_attack_button_pressed():
