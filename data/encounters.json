@@ -3,14 +3,14 @@
 		{
 			"enemy": "candle_student",
 			"weight": 80,
-			"required_flag": "",
+			"required_flag": "story_first_enter_classroom_2_done",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "candle_student_tutorial",
 			"weight": 20,
-			"required_flag": "",
+			"required_flag": "story_first_enter_classroom_2_done",
 			"missing_flag": "",
 			"first_turn": ""
 		}

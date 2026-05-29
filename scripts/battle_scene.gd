@@ -43,6 +43,11 @@ signal battle_finished(result_data)
 @onready var status_popup_panel = $StatusPopupPanel
 @onready var status_popup_text = $StatusPopupPanel/StatusPopupText
 @onready var result_sound = $ResultSound
+@onready var player_hit_flash = $LeftPanel/PlayerHitFlash
+@onready var status_effect_flash = $LeftPanel/StatusEffectFlash
+@onready var status_effect_sound = $StatusEffectSound
+@onready var center_panel = $CenterPanel
+@onready var ui_warp_sound = $UiWarpSound
 
 # 일반 변수 모음
 var player_hp = 0
@@ -110,6 +115,23 @@ var player_status_effects = {}
 var player_portrait_paths = {}
 var battle_result_messages = []
 var battle_result_index = 0
+var player_hit_flash_tween = null
+var status_effect_flash_tween = null
+
+# 적 턴 플레이어 피해 결과 누적 변수
+var enemy_turn_total_damage = 0
+var enemy_turn_applied_status_effects = []
+
+# 방어 모드 좌우 워프 관련 변수
+var last_left_press_time = -999.0
+var last_right_press_time = -999.0
+var side_warp_double_tap_time = 0.25
+var side_warp_margin = 8.0
+# false로 할시 양쪽 무기 워프 차단됨
+var side_warp_enabled = true
+# 추후 확장 양쪽 골라서 무기 워프 차단
+# var side_warp_left_blocked = false
+# var side_warp_right_blocked = false
 
 # 첫 턴 결정 변수
 var encounter_first_turn = ""
@@ -185,6 +207,7 @@ func _process(delta):
 	# 방어 모드
 	if is_defense_mode:
 		update_defense_weapon_movement(delta)
+		check_defense_side_warp_input()
 		
 		# 패링 판정 처리 부분 1
 		if Input.is_action_just_pressed("ui_accept"):
@@ -270,8 +293,11 @@ func _ready():
 
 	enemy_sprite.z_index = 10
 	# 파츠는 20
-	attack_guide.z_index = 30
-	weapon_sprite.z_index = 30
+	
+	# 중앙 공격 가이드보다 무기가 위에 보이도록 분리
+	attack_guide.z_index = 25
+	weapon_sprite.z_index = 35
+	weapon_sprite.z_as_relative = false
 
 	enemy_projectile_container.z_index = 40
 	effect_container.z_index = 50
@@ -279,6 +305,16 @@ func _ready():
 	slash_effect.z_index = 40
 	hit_effect.z_index = 50
 	parry_effect.z_index = 50
+	
+	player_hit_flash.color = Color(1, 0, 0, 0)
+	player_hit_flash.visible = true
+	player_hit_flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	player_hit_flash.z_index = 100
+	
+	status_effect_flash.color = Color(0, 0, 0, 0)
+	status_effect_flash.visible = true
+	status_effect_flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	status_effect_flash.z_index = 101
 
 	hitbox_debug_container.z_index = 900
 	hitbox_debug_container.z_index = 999
@@ -1326,6 +1362,8 @@ func fire_enemy_projectiles():
 	var fire_mode = current_enemy_pattern.get("fire_mode", "sequential")
 
 	parry_count = 0
+	enemy_turn_total_damage = 0
+	enemy_turn_applied_status_effects.clear()
 
 	if projectile_list.size() == 0:
 		await get_tree().create_timer(0.7).timeout
@@ -1346,6 +1384,8 @@ func fire_enemy_projectiles():
 			await fire_enemy_projectile(projectile_info)
 
 	end_defense_mode()
+	
+	await show_enemy_turn_player_damage_result()
 
 	defense_weapon_hitbox_debug.visible = false
 	enemy_projectile_hitbox_debug.visible = false
@@ -2196,24 +2236,29 @@ func start_defense_mode():
 	apply_weapon_visual_settings()
 
 	weapon_sprite.rotation_degrees = weapon_data.get("defense_base_rotation", 0)
-	# 방어 무기 초기 위치 + 될수록 내려감 현재 5
-	weapon_sprite.position = Vector2(
-		defense_area_rect.position.x + defense_area_rect.size.x / 2 - weapon_sprite.size.x / 2,
-		defense_area_rect.position.y + defense_area_rect.size.y - weapon_sprite.size.y + 5
-	)
 
 	weapon_sprite.visible = true
+
+	# 무기 표시/크기/회전 설정 끝난 뒤에 호출
+	move_defense_weapon_to_area_center()
+
 	is_defense_mode = true
+# 방어 무기 히트박스를 방어 영역 중앙으로 이동시키는 함수
+func move_defense_weapon_to_area_center():
+	var area = get_defense_area_global_rect()
+	var hit_rect = get_weapon_defense_hit_rect()
+
+	var correction = area.get_center() - hit_rect.get_center()
+	weapon_sprite.global_position += correction
+
+	clamp_defense_weapon_to_area()
 # 플레이어 방어 모드 종료 함수
 func end_defense_mode():
 	is_defense_mode = false
 	weapon_sprite.visible = false
 	weapon_sprite.rotation_degrees = 0
-# 플레이어 방어 실행 함수
+# 방어 무기 이동 함수
 func update_defense_weapon_movement(delta):
-	var weapon_data = get_current_weapon_data()
-	var move_speed = get_defense_move_speed_with_status(weapon_data)
-
 	var move_vector = Vector2.ZERO
 
 	if Input.is_action_pressed("move_left") or Input.is_action_pressed("ui_left"):
@@ -2231,29 +2276,12 @@ func update_defense_weapon_movement(delta):
 	if move_vector != Vector2.ZERO:
 		move_vector = move_vector.normalized()
 
-	weapon_sprite.position += move_vector * move_speed * delta
+	var weapon_data = get_current_weapon_data()
+	var move_speed = get_defense_move_speed_with_status(weapon_data)
 
-	var min_pos = defense_area_rect.position
-	var max_pos = defense_area_rect.position + defense_area_rect.size
+	weapon_sprite.global_position += move_vector * move_speed * delta
 
-	var hitbox_data = weapon_data.get("defense_hitbox", {})
-	var offset_data = hitbox_data.get("offset", [0, 0])
-	var size_data = hitbox_data.get("size", [weapon_sprite.size.x, weapon_sprite.size.y])
-
-	var hitbox_offset = Vector2(offset_data[0], offset_data[1])
-	var hitbox_size = Vector2(size_data[0], size_data[1])
-
-	weapon_sprite.position.x = clamp(
-		weapon_sprite.position.x,
-		min_pos.x - hitbox_offset.x,
-		max_pos.x - hitbox_offset.x - hitbox_size.x
-	)
-
-	weapon_sprite.position.y = clamp(
-		weapon_sprite.position.y,
-		min_pos.y - hitbox_offset.y,
-		max_pos.y - hitbox_offset.y - hitbox_size.y
-	)
+	clamp_defense_weapon_to_area()
 # 플레이어 공격 적용 함수
 func apply_player_attack_hit(hitbox):
 	if hitbox.get("target_type", "body") == "part":
@@ -2579,14 +2607,26 @@ func update_action_button_keyboard_input():
 		selected_button.emit_signal("pressed")
 # 플레이어 상태이상 부여 함수
 func apply_player_status_effects(effect_ids):
+	var added_new_status = false
+	var added_effects = []
+
 	for effect_id in effect_ids:
 		if effect_id == "":
 			continue
 
+		if not player_status_effects.has(effect_id):
+			added_new_status = true
+			added_effects.append(effect_id)
+
 		player_status_effects[effect_id] = true
+
+	if added_new_status:
+		play_status_effect_flash()
 
 	update_player_portrait_by_status()
 	update_player_action_text_by_status()
+
+	return added_effects
 # 탄막 상태이상 목록 가져오기 함수
 func get_projectile_status_effects(projectile_info, projectile_data):
 	if projectile_info.has("status_effects"):
@@ -2602,6 +2642,32 @@ func get_projectile_status_effects(projectile_info, projectile_data):
 		return [projectile_data.get("status_effect", "")]
 
 	return []
+# 적 턴 상태이상 결과 누적 함수
+func add_enemy_turn_status_effects(effect_ids):
+	for effect_id in effect_ids:
+		if effect_id == "":
+			continue
+
+		if enemy_turn_applied_status_effects.has(effect_id):
+			continue
+
+		enemy_turn_applied_status_effects.append(effect_id)
+# 적 턴 플레이어 피해 결과 표시 함수
+func show_enemy_turn_player_damage_result():
+	if enemy_turn_total_damage <= 0 and enemy_turn_applied_status_effects.size() == 0:
+		return
+
+	var lines = []
+
+	if enemy_turn_total_damage > 0:
+		lines.append(str(int(enemy_turn_total_damage)) + " 의 피해를 입었다.")
+
+	if enemy_turn_applied_status_effects.size() > 0:
+		lines.append(get_status_applied_text(enemy_turn_applied_status_effects))
+
+	battle_text.text = "\n".join(lines)
+
+	await get_tree().create_timer(1.0).timeout
 # 플레이어 탄막 피격 처리 함수
 func apply_projectile_hit_to_player(projectile_info, projectile_data, danger_type):
 	var damage = projectile_info.get("damage", current_enemy_pattern.get("damage", 1))
@@ -2612,8 +2678,13 @@ func apply_projectile_hit_to_player(projectile_info, projectile_data, danger_typ
 	if player_hp < 0:
 		player_hp = 0
 
+	enemy_turn_total_damage += damage
+
+	play_player_hit_flash()
+
 	var status_effects = get_projectile_status_effects(projectile_info, projectile_data)
-	apply_player_status_effects(status_effects)
+	var added_effects = apply_player_status_effects(status_effects)
+	add_enemy_turn_status_effects(added_effects)
 
 	if danger_type == "parry_only":
 		hit_red_sound.play()
@@ -2621,11 +2692,6 @@ func apply_projectile_hit_to_player(projectile_info, projectile_data, danger_typ
 		hit_normal_sound.play()
 
 	update_player_hp_ui()
-
-	if status_effects.size() > 0:
-		battle_text.text = str(int(damage)) + " 의 피해를 입었다.\n" + get_status_applied_text(status_effects)
-	else:
-		battle_text.text = str(int(damage)) + " 의 피해를 입었다."
 # 플레이어 받는 데미지 계산 함수
 func get_player_received_damage(base_damage):
 	var damage = float(base_damage)
@@ -2781,3 +2847,150 @@ func get_player_status_description_text():
 		lines.append("절망 상태 : \n\n받는 데미지가\n50% 증가한다.")
 
 	return "\n".join(lines)
+# 플레이어 피격시 왼쪽 패널 빨간 플래시 함수
+func play_player_hit_flash():
+	if player_hit_flash_tween != null and player_hit_flash_tween.is_valid():
+		player_hit_flash_tween.kill()
+
+	player_hit_flash.color = Color(1, 0, 0, 0.45)
+
+	player_hit_flash_tween = create_tween()
+	player_hit_flash_tween.tween_property(
+		player_hit_flash,
+		"color:a",
+		0.0,
+		0.45
+	)
+# 플레이어 상태이상 발생시 왼쪽 패널 검은 플래시 함수
+func play_status_effect_flash():
+	if status_effect_flash_tween != null and status_effect_flash_tween.is_valid():
+		status_effect_flash_tween.kill()
+
+	status_effect_flash.color = Color(0, 0, 0, 0.6)
+
+	status_effect_flash_tween = create_tween()
+	status_effect_flash_tween.tween_property(
+		status_effect_flash,
+		"color:a",
+		0.0,
+		0.65
+	)
+
+	if status_effect_sound != null:
+		status_effect_sound.stop()
+		status_effect_sound.play()
+# 방어 모드 좌우 워프 입력 확인 함수
+func check_defense_side_warp_input():
+	if not is_defense_mode:
+		return
+
+	if not side_warp_enabled:
+		return
+
+	if weapon_sprite == null or not weapon_sprite.visible:
+		return
+
+	var current_time = Time.get_ticks_msec() / 1000.0
+
+	if Input.is_action_just_pressed("move_left") or Input.is_action_just_pressed("ui_left"):
+		if current_time - last_left_press_time <= side_warp_double_tap_time:
+			try_defense_side_warp("left")
+
+		last_left_press_time = current_time
+
+	if Input.is_action_just_pressed("move_right") or Input.is_action_just_pressed("ui_right"):
+		if current_time - last_right_press_time <= side_warp_double_tap_time:
+			try_defense_side_warp("right")
+
+		last_right_press_time = current_time
+# 방어 무기 좌우 워프 함수
+func try_defense_side_warp(direction):
+	var area = get_defense_area_global_rect()
+	var hit_rect = get_weapon_defense_hit_rect()
+
+	var area_left = area.position.x
+	var area_right = area.position.x + area.size.x
+
+	var hit_left = hit_rect.position.x
+	var hit_right = hit_rect.position.x + hit_rect.size.x
+
+	if direction == "left":
+		if hit_left > area_left + side_warp_margin:
+			return
+
+		warp_defense_weapon_to_side("right")
+
+	elif direction == "right":
+		if hit_right < area_right - side_warp_margin:
+			return
+
+		warp_defense_weapon_to_side("left")
+# 방어 무기를 특정 좌우 끝으로 이동시키는 함수
+func warp_defense_weapon_to_side(target_side):
+	var area = get_defense_area_global_rect()
+	var hit_rect = get_weapon_defense_hit_rect()
+
+	var area_left = area.position.x
+	var area_right = area.position.x + area.size.x
+
+	var hit_left = hit_rect.position.x
+	var hit_right = hit_rect.position.x + hit_rect.size.x
+
+	var correction = Vector2.ZERO
+
+	if target_side == "right":
+		correction.x = area_right - hit_right
+	else:
+		correction.x = area_left - hit_left
+
+	weapon_sprite.global_position += correction
+	clamp_defense_weapon_to_area()
+
+	play_ui_warp_sound()
+# UI 워프 효과음 재생 함수
+func play_ui_warp_sound():
+	if ui_warp_sound != null:
+		ui_warp_sound.stop()
+		ui_warp_sound.play()
+# 방어 가능 영역 전역 좌표 반환 함수
+func get_defense_area_global_rect():
+	var area = center_panel.get_global_rect()
+
+	# 빨간 테두리와 너무 딱 붙는 게 싫으면 약간 안쪽으로 줄임
+	var padding = 8.0
+	area.position += Vector2(padding, padding)
+	area.size -= Vector2(padding * 2.0, padding * 2.0)
+
+	return area
+# 방어 무기 히트박스를 방어 영역 안에 고정하는 함수
+func clamp_defense_weapon_to_area():
+	if weapon_sprite == null:
+		return
+
+	var area = get_defense_area_global_rect()
+	var hit_rect = get_weapon_defense_hit_rect()
+
+	var correction = Vector2.ZERO
+
+	var area_left = area.position.x
+	var area_right = area.position.x + area.size.x
+	var area_top = area.position.y
+	var area_bottom = area.position.y + area.size.y
+
+	var hit_left = hit_rect.position.x
+	var hit_right = hit_rect.position.x + hit_rect.size.x
+	var hit_top = hit_rect.position.y
+	var hit_bottom = hit_rect.position.y + hit_rect.size.y
+
+	if hit_left < area_left:
+		correction.x = area_left - hit_left
+	elif hit_right > area_right:
+		correction.x = area_right - hit_right
+
+	if hit_top < area_top:
+		correction.y = area_top - hit_top
+	elif hit_bottom > area_bottom:
+		correction.y = area_bottom - hit_bottom
+
+	if correction != Vector2.ZERO:
+		weapon_sprite.global_position += correction

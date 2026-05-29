@@ -876,7 +876,7 @@ func run_exit_interaction(direction):
 		if exit_data.has("open_flag"):
 			set_flag(exit_data["open_flag"])
 
-		consume_item_if_needed(exit_data["required_item"])
+		consume_item_by_id(exit_data["required_item"])
 		
 		await show_dialogue(MSG_DOOR_UNLOCK)
 
@@ -893,6 +893,13 @@ func run_exit_interaction(direction):
 
 	set_interaction_buttons_disabled(false)
 	is_interacting = false
+# 아이템 id 기준으로 첫 번째 아이템을 찾아 소모하는 함수 (문 열쇠처럼 id만 아는 경우)
+func consume_item_by_id(item_id):
+	for inventory_item in inventory:
+		if inventory_item.get("id", "") == item_id:
+			return consume_item_if_needed(inventory_item)
+
+	return false
 # 인벤토리 상호작용 함수
 func _on_bag_button_pressed():
 	# 스토리 이벤트 중이면 일반 조작 차단
@@ -1390,37 +1397,39 @@ func remove_item(inventory_item):
 
 	return false
 # 아이템 사용 시 소모 처리 함수
-func consume_item_if_needed(item_id):
+func consume_item_if_needed(inventory_item):
+	if inventory_item == null:
+		return false
+
+	if not inventory.has(inventory_item):
+		return false
+
+	var item_id = inventory_item.get("id", "")
 
 	if not items.has(item_id):
-		return
+		return false
 
 	var item_data = items[item_id]
 
 	# consumed_on_use가 없거나 false면 소모 안 함
 	if not item_data.get("consumed_on_use", false):
-		return
+		return false
 
-	# 해당 아이템 찾기
-	for inventory_item in inventory:
-		if inventory_item["id"] == item_id:
+	# stackable 아이템이면 선택한 스택의 count만 1 감소
+	if inventory_item.has("count"):
+		inventory_item["count"] = int(inventory_item["count"]) - 1
 
-			# stackable 아이템이면 count만 1 감소
-			if inventory_item.has("count"):
-				inventory_item["count"] -= 1
+		print("아이템 개수 감소: " + item_id + " x" + str(inventory_item["count"]))
 
-				print("아이템 개수 감소: " + item_id + " x" + str(inventory_item["count"]))
-
-				# count가 0 이하가 되었을 때만 실제 삭제
-				if inventory_item["count"] <= 0:
-					remove_item(inventory_item)
-
-				return
-
-			# stackable이 아닌 아이템은 기존처럼 삭제
+		if int(inventory_item["count"]) <= 0:
 			remove_item(inventory_item)
-			print("아이템 소모: " + item_id)
-			return
+
+		return true
+
+	# stackable이 아닌 아이템은 선택한 아이템 제거
+	remove_item(inventory_item)
+	print("아이템 소모: " + item_id)
+	return true
 # 아이템 버리기 버튼 함수
 func _on_drop_button_pressed():
 	if context_menu_item == null:
@@ -1510,7 +1519,7 @@ func use_item(inventory_item):
 
 		print("현재 체력: " + str(int(player_hp)))
 
-	consume_item_if_needed(item_id)
+	consume_item_if_needed(inventory_item)
 	update_inventory_ui()
 	# 아이템 사용 횟수 즉시 반영
 	if selected_inventory_item != null and inventory.has(selected_inventory_item):

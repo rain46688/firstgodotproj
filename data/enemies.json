@@ -400,7 +400,7 @@
 		],
 		"can_escape": false,
 		"encounter_text": "뜯겨나간 팔 너머로, 두 개의 몸이 하나처럼 뒤틀리기 시작한다...",
-		"observe_text": "양쪽 팔이 뜯겨있고 중앙의 얼굴에서는 소름끼치는 살기가 뿜어져나오고있다.",
+		"observe_text": "꺼져있던 양초에 불이 붙고 중앙의 얼굴에서는 소름끼치는 살기가 뿜어져나오고있다.",
 		"weakness_text": "머리가 약점인거같다.",
 		"phase_start_pattern_id": "phase2_start",
 		"patterns": [
@@ -481,7 +481,7 @@
 			},
 			{
 				"id": "head_mumbling",
-				"weight": 50,
+				"weight": 0,
 				"warning_text": "알수없는 말을 중얼거린다.",
 				"fire_mode": "parallel",
 				"projectiles": [
@@ -522,7 +522,7 @@
 			},
 			{
 				"id": "head_mumbling2",
-				"weight": 50,
+				"weight": 0,
 				"warning_text": "알수없는 말을 중얼거린다.",
 				"fire_mode": "parallel",
 				"projectiles": [
@@ -586,6 +586,98 @@
 						"rotation": 180,
 						"damage": 6,
 						"delay": 1.1,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "head_mumbling3",
+				"weight": 30,
+				"warning_text": "알수없는 말을 중얼거린다.",
+				"fire_mode": "parallel",
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.0
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							880,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.0
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1000,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.8
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1080,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.8
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							1200,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 2.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							1280,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 2.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							300,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 3.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							380,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 3.6,
 						"danger_type": "parry_only"
 					}
 				]

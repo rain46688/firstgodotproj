@@ -13,6 +13,8 @@
 [ext_resource type="AudioStream" uid="uid://cg6bxsqbn3w4a" path="res://sounds/slash.mp3" id="11_3xrod"]
 [ext_resource type="AudioStream" uid="uid://dpskhkn3tacx0" path="res://sounds/healing.mp3" id="12_tttxe"]
 [ext_resource type="AudioStream" uid="uid://b3onferv05h72" path="res://sounds/result.mp3" id="13_ti0og"]
+[ext_resource type="AudioStream" uid="uid://ca1qfq5mp82lv" path="res://sounds/status_effects.mp3" id="14_bg0yk"]
+[ext_resource type="AudioStream" uid="uid://6kmnifivrqgd" path="res://sounds/ui_warp.mp3" id="15_yt3ua"]
 
 [node name="BattleScene" type="Control" unique_id=66959365]
 layout_mode = 3
@@ -183,6 +185,26 @@ theme_override_font_sizes/font_size = 30
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="PlayerHitFlash" type="ColorRect" parent="LeftPanel" unique_id=760848462]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0, 0, 0)
+
+[node name="StatusEffectFlash" type="ColorRect" parent="LeftPanel" unique_id=1793566696]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
 [node name="RightPanel" type="Control" parent="." unique_id=1816465741]
 self_modulate = Color(1, 1, 1, 0)
 z_index = 2
@@ -334,3 +356,11 @@ offset_bottom = 96.0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_kinr6")
 theme_override_font_sizes/font_size = 20
+
+[node name="StatusEffectSound" type="AudioStreamPlayer" parent="." unique_id=1656746803]
+stream = ExtResource("14_bg0yk")
+volume_db = -5.0
+
+[node name="UiWarpSound" type="AudioStreamPlayer" parent="." unique_id=1282917929]
+stream = ExtResource("15_yt3ua")
+volume_db = -5.0
