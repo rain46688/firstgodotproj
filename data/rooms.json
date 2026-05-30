@@ -118,6 +118,10 @@
 					{
 						"type": "text",
 						"text": "소름끼칠 정도로 깨끗하게 정리 되어있다."
+					},
+					{
+						"type": "item",
+						"item": "cutter_knife"
 					}
 				]
 			},

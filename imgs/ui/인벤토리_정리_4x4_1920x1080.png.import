@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bwidu2vxibhd6"
-path="res://.godot/imported/뉴전투화면_노멀1920x1080.png-37eeb1d3aa9260b735d20d0e39d214bc.ctex"
+uid="uid://bv4dtt8d1i8a4"
+path="res://.godot/imported/인벤토리_정리_4x4_1920x1080.png-7f070d52b7692d1c0316e98684b88f84.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/ui/뉴전투화면_노멀1920x1080.png"
-dest_files=["res://.godot/imported/뉴전투화면_노멀1920x1080.png-37eeb1d3aa9260b735d20d0e39d214bc.ctex"]
+source_file="res://imgs/ui/인벤토리_정리_4x4_1920x1080.png"
+dest_files=["res://.godot/imported/인벤토리_정리_4x4_1920x1080.png-7f070d52b7692d1c0316e98684b88f84.ctex"]
 
 [params]
 

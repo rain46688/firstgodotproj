@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://q8w3rqhcapm3"
-path="res://.godot/imported/전투화면_black_1920x1080.png-370e2d04d5d745be89989525b48aaef2.ctex"
+uid="uid://n7oahw6mr75n"
+path="res://.godot/imported/인벤토리_정리_4x5_1920x1080.png-27f57993a8fe6f29df4e0a1aa0ed30e5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/ui/전투화면_black_1920x1080.png"
-dest_files=["res://.godot/imported/전투화면_black_1920x1080.png-370e2d04d5d745be89989525b48aaef2.ctex"]
+source_file="res://imgs/ui/인벤토리_정리_4x5_1920x1080.png"
+dest_files=["res://.godot/imported/인벤토리_정리_4x5_1920x1080.png-27f57993a8fe6f29df4e0a1aa0ed30e5.ctex"]
 
 [params]
 

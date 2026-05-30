@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://hvkehjj35xiv"
-path="res://.godot/imported/인벤토리_fix1920x1080.png-1dcc7dad2284472ae8f37b31f95064ce.ctex"
+uid="uid://b231jn5rl3ery"
+path="res://.godot/imported/인벤토리_4x4_1920x1080.png-23d5105d5f857d4eb09d8722396a3481.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/ui/인벤토리_fix1920x1080.png"
-dest_files=["res://.godot/imported/인벤토리_fix1920x1080.png-1dcc7dad2284472ae8f37b31f95064ce.ctex"]
+source_file="res://imgs/ui/인벤토리_4x4_1920x1080.png"
+dest_files=["res://.godot/imported/인벤토리_4x4_1920x1080.png-23d5105d5f857d4eb09d8722396a3481.ctex"]
 
 [params]
 

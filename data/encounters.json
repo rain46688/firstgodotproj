@@ -2,14 +2,14 @@
 	"school_hallway": [
 		{
 			"enemy": "candle_student",
-			"weight": 80,
+			"weight": 90,
 			"required_flag": "story_first_enter_classroom_2_done",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "candle_student_tutorial",
-			"weight": 20,
+			"weight": 10,
 			"required_flag": "story_first_enter_classroom_2_done",
 			"missing_flag": "",
 			"first_turn": ""

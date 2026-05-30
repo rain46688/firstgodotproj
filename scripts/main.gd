@@ -50,6 +50,16 @@ extends Control
 @onready var bgm_player = $BGMPlayer
 @onready var encounter_danger_overlay = $EncounterDangerOverlay
 @onready var encounter_heartbeat_sound = $EncounterHeartbeatSound
+@onready var inventory_arrange_ui = $InventoryArrangeUI
+@onready var arrange_background = $InventoryArrangeUI/ArrangeBackground
+@onready var arrange_left_items = $InventoryArrangeUI/ArrangeLeftItems
+@onready var arrange_right_items = $InventoryArrangeUI/ArrangeRightItems
+@onready var dialogue_box = $DialogueBox
+@onready var arrange_discard_notice_label = $InventoryArrangeUI/ArrangeDiscardNoticeLabel
+@onready var arrange_selected_item_image = $InventoryArrangeUI/ArrangeSelectedItemImage
+@onready var arrange_selected_item_text = $InventoryArrangeUI/ArrangeSelectedItemText
+@onready var arrange_slot_highlight_container = $InventoryArrangeUI/ArrangeSlotHighlightContainer
+@onready var arrange_selected_focus_container = $InventoryArrangeUI/ArrangeSelectedFocusContainer
 
 # 일반 변수 모음
 var arrow_time = 0.0
@@ -94,6 +104,35 @@ var encounter_events = {}
 var encounter_overlay_tween = null
 # 도주 후 여유 시간 변수
 var random_encounter_cooldown_steps = 0
+# 가방에 넣지 못한 임시 획득 아이템 목록
+var pending_loot = []
+# 인벤토리 정리 화면 관련 변수
+var is_inventory_arrange_open = false
+var inventory_arrange_mode = ""
+var arrange_left_inventory = []
+# 인벤토리 정리 UI 좌표 설정
+var arrange_left_grid_position = Vector2(55, 60)
+var arrange_right_grid_position = Vector2(1200, 190)
+var arrange_slot_size = 150
+var arrange_left_cols = 3
+var arrange_left_rows = 6
+var arrange_right_cols = 4
+var arrange_right_rows = 4
+var arrange_slot_gap = 5
+# 인벤토리 정리 화면 드래그 변수
+var arrange_pressed_item = null
+var arrange_pressed_button = null
+var arrange_pressed_source = ""
+var arrange_pressed_mouse_position = Vector2.ZERO
+var arrange_dragged_item = null
+var arrange_dragged_button = null
+var arrange_dragged_source = ""
+var arrange_dragged_original_slot = -1
+var arrange_dragged_original_global_position = Vector2.ZERO
+var is_arrange_dragging_item = false
+# 정리 화면 선택 포커스 변수
+var selected_arrange_item = null
+var selected_arrange_source = ""
 
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
@@ -149,6 +188,27 @@ func _process(delta):
 	# 스토리 이벤트 중이면 일반 조작 차단
 	if is_story_playing:
 		return
+		
+	# 인벤토리 정리 화면이 열려 있으면 정리 화면 입력만 처리
+	if is_inventory_arrange_open:
+		if not is_arrange_dragging_item:
+			if arrange_pressed_item != null and arrange_pressed_button != null:
+				var distance = get_global_mouse_position().distance_to(arrange_pressed_mouse_position)
+
+				if distance > 12:
+					start_arrange_drag_item(
+						arrange_pressed_item,
+						arrange_pressed_button,
+						arrange_pressed_source
+					)
+
+		if is_arrange_dragging_item and arrange_dragged_button != null:
+			arrange_dragged_button.global_position = get_global_mouse_position() - arrange_dragged_button.size / 2
+			update_arrange_drag_slot_highlight()
+
+		if Input.is_action_just_pressed("esc"):
+			close_inventory_arrange()
+		return	
 
 	# 인벤토리가 열려 있으면 게임 이동/상호작용 입력을 막음
 	if is_inventory_open:
@@ -228,9 +288,34 @@ func _ready():
 	encounter_danger_overlay.color = Color(1, 0, 0, 0)
 	encounter_danger_overlay.visible = true
 	encounter_danger_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	encounter_danger_overlay.z_index = 4095 # Fade는 4096
-
+	
+	arrange_discard_notice_label.visible = false
+	arrange_selected_item_image.texture = null
+	arrange_selected_item_image.visible = false
+	arrange_selected_item_text.text = ""
+	arrange_selected_item_text.visible = false
+	
+	# z_index 정리
+	story_standing.z_index = 5
+	arrange_slot_highlight_container.z_index = 5
+	# 아이템 icon z_index = 10
+	arrange_left_items.z_index = 10
+	arrange_right_items.z_index = 10
+	arrange_selected_focus_container.z_index = 20
+	dialogue_box.z_index = 20
+	inventory_ui.z_index = 30
+	inventory_arrange_ui.z_index = 31
+	inventory_context_menu.z_index = 100
+	inventory_context_menu.mouse_filter = Control.MOUSE_FILTER_STOP
+	encounter_danger_overlay.z_index = 4095 
+	# Fade는 4096
+	fade.z_index = 4096
+	
+	# 랜덤 인카운터 심장 박동 소리 초기화
 	encounter_heartbeat_sound.stop()
+	# 인벤토리 정리화면 초기화
+	inventory_arrange_ui.visible = false
+	connect_inventory_context_menu_buttons()
 	
 	# 버튼이 키보드 포커스를 가져가지 않게 설정
 	# Space를 눌렀을 때 버튼이 다시 눌리는 문제 방지
@@ -291,14 +376,18 @@ func _ready():
 	load_game(1)
 	
 	#await add_item("cutter_knife")
-	#await add_item("beverage_a")
-	#await add_item("beverage_a")
-	#await add_item("beverage_a")
-	#await add_item("tranquilizer")
-	#await add_item("tranquilizer")
+	#await add_item("beverage_a", 5)
 	#await add_item("tranquilizer")
 	#await add_item("classroom_key")
 	#await add_item("holy_sword")
+	
+	#await give_items_with_pending_loot([
+		#{
+			#"item": "beverage_a",
+			#"count": 1
+		#}
+	#])
+	#await open_inventory_arrange_if_pending_loot("loot")
 	
 	update_room()
 	
@@ -307,6 +396,325 @@ func _ready():
 	#start_battle("candle_student_tutorial")
 	#start_battle("combined_candle_students_phase_01")
 	#start_battle("combined_candle_students_phase_02")
+# 전투 시작 함수
+func start_battle(enemy_id, first_turn = ""):
+	if not enemies.has(enemy_id):
+		push_error("존재하지 않는 적: " + enemy_id)
+		return
+
+	var enemy_data = enemies[enemy_id]
+	var skip_flag = enemy_data.get("skip_if_flag", "")
+
+	if skip_flag != "" and has_flag(skip_flag):
+		print("이미 처치한 적이라 전투 스킵: " + enemy_id)
+		return
+	
+	is_story_playing = true
+	hide_game_ui()
+
+	var battle_scene_resource = load(BATTLE_SCENE_PATH)
+	battle_scene = battle_scene_resource.instantiate()
+
+	add_child(battle_scene)
+	battle_scene.battle_finished.connect(end_battle)
+
+	# 전투신으로 넘겨줄 로드한 데이터들 모음
+	var battle_data = {
+		"enemy_id": enemy_id,
+		"enemy_data": enemies[enemy_id],
+		"enemies": enemies,
+		"player_hp": player_hp,
+		"player_max_hp": player_max_hp,
+		"player_portraits": characters["protagonist"]["portrait"],
+		"items": items,
+		"equipped_weapon": equipped_weapon,
+		"inventory": inventory,
+		"projectiles": projectiles,
+		"flags": flags,
+		"first_turn": first_turn
+	}
+	
+	if bgm_player.playing:
+		bgm_player.stop()
+
+	battle_scene.setup_battle(battle_data)
+# 전투 종료 함수
+func end_battle(result_data):
+	player_hp = result_data.get("player_hp", player_hp)
+
+	for flag_id in result_data.get("reward_flags", []):
+		set_flag(flag_id)
+
+	var battle_rewards = result_data.get("rewards", [])
+
+	for reward in battle_rewards:
+		if reward.has("once_flag"):
+			set_flag(reward["once_flag"])
+
+	if battle_scene != null:
+		battle_scene.queue_free()
+		battle_scene = null
+
+	is_story_playing = false
+	show_game_ui()
+	
+	bgm_player.play()
+	
+	await give_items_with_pending_loot(battle_rewards)
+	await open_inventory_arrange_if_pending_loot("loot")
+
+	print("전투 종료 결과: " + str(result_data.get("result", "")))
+
+# === 로드 함수 모음 ===
+# 방 로드 및 예외 처리 함수
+func load_rooms():
+	
+	# 방 구조 json 파일
+	var path = "res://data/rooms.json"
+	
+	if not FileAccess.file_exists(path):
+		push_error("rooms.json 파일을 찾을 수 없음: " + path)
+		return false
+		
+	var file = FileAccess.open(path, FileAccess.READ)
+	
+	if file == null:
+		push_error("rooms.json 파일 열기 실패: " + path)
+		return false
+		
+	var json_text = file.get_as_text()
+	var json = JSON.new()
+	var error = json.parse(json_text)
+	
+	if error != OK:
+		push_error("rooms.json 파싱 실패: " + json.get_error_message())
+		push_error("오류 위치 line: " + str(json.get_error_line()))
+		return false
+		
+	if typeof(json.data) != TYPE_DICTIONARY:
+		push_error("rooms.json 최상위 구조는 Dictionary여야 함")
+		return false
+		
+	rooms = json.data
+	
+	if not rooms.has(current_room):
+		push_error("현재 방이 rooms.json에 없음: " + current_room)
+		return false
+		
+	print("rooms.json 로드 성공")
+	return true
+# 아이템 데이터 로드 및 예외 처리 함수
+func load_items():
+	var path = "res://data/items.json"
+
+	if not FileAccess.file_exists(path):
+		push_error("items.json 파일을 찾을 수 없음: " + path)
+		return false
+
+	var file = FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		push_error("items.json 파일 열기 실패: " + path)
+		return false
+
+	var json_text = file.get_as_text()
+	var json = JSON.new()
+	var error = json.parse(json_text)
+
+	if error != OK:
+		push_error("items.json 파싱 실패: " + json.get_error_message())
+		push_error("오류 위치 line: " + str(json.get_error_line()))
+		return false
+
+	if typeof(json.data) != TYPE_DICTIONARY:
+		push_error("items.json 최상위 구조는 Dictionary여야 함")
+		return false
+
+	items = json.data
+	print("items.json 로드 성공")
+	return true
+# NPC 캐릭터 데이터 로드 및 예외 처리 함수
+func load_characters():
+	var path = "res://data/characters.json"
+
+	if not FileAccess.file_exists(path):
+		push_error("characters.json 파일을 찾을 수 없음: " + path)
+		return false
+
+	var file = FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		push_error("characters.json 파일 열기 실패: " + path)
+		return false
+
+	var json_text = file.get_as_text()
+	var json = JSON.new()
+	var error = json.parse(json_text)
+
+	if error != OK:
+		push_error("characters.json 파싱 실패: " + json.get_error_message())
+		push_error("오류 위치 line: " + str(json.get_error_line()))
+		return false
+
+	if typeof(json.data) != TYPE_DICTIONARY:
+		push_error("characters.json 최상위 구조는 Dictionary여야 함")
+		return false
+
+	characters = json.data
+	print("characters.json 로드 성공")
+	return true	
+# 스토리 이벤트 데이터 로드 함수
+func load_story_events():
+	var path = "res://data/story_events.json"
+
+	if not FileAccess.file_exists(path):
+		push_error("story_events.json 파일을 찾을 수 없음: " + path)
+		return false
+
+	var file = FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		push_error("story_events.json 파일 열기 실패: " + path)
+		return false
+
+	var json_text = file.get_as_text()
+	var json = JSON.new()
+	var error = json.parse(json_text)
+
+	if error != OK:
+		push_error("story_events.json 파싱 실패: " + json.get_error_message())
+		push_error("오류 위치 line: " + str(json.get_error_line()))
+		return false
+
+	if typeof(json.data) != TYPE_DICTIONARY:
+		push_error("story_events.json 최상위 구조는 Dictionary여야 함")
+		return false
+
+	story_events = json.data
+	print("story_events.json 로드 성공")
+	return true
+# 적 데이터 로드 및 예외 처리 함수
+func load_enemies():
+	var path = "res://data/enemies.json"
+
+	if not FileAccess.file_exists(path):
+		push_error("enemies.json 파일을 찾을 수 없음: " + path)
+		return false
+
+	var file = FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		push_error("enemies.json 파일 열기 실패: " + path)
+		return false
+
+	var json_text = file.get_as_text()
+	var json = JSON.new()
+	var error = json.parse(json_text)
+
+	if error != OK:
+		push_error("enemies.json 파싱 실패: " + json.get_error_message())
+		push_error("오류 위치 line: " + str(json.get_error_line()))
+		return false
+
+	if typeof(json.data) != TYPE_DICTIONARY:
+		push_error("enemies.json 최상위 구조는 Dictionary여야 함")
+		return false
+
+	enemies = json.data
+	print("enemies.json 로드 성공")
+	return true
+# 탄막 데이터 로드 및 예외 처리 함수
+func load_projectiles():
+	var path = "res://data/projectiles.json"
+
+	if not FileAccess.file_exists(path):
+		push_error("projectiles.json 파일을 찾을 수 없음: " + path)
+		return false
+
+	var file = FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		push_error("projectiles.json 파일 열기 실패: " + path)
+		return false
+
+	var json_text = file.get_as_text()
+	var json = JSON.new()
+	var error = json.parse(json_text)
+
+	if error != OK:
+		push_error("projectiles.json 파싱 실패: " + json.get_error_message())
+		push_error("오류 위치 line: " + str(json.get_error_line()))
+		return false
+
+	if typeof(json.data) != TYPE_DICTIONARY:
+		push_error("projectiles.json 최상위 구조는 Dictionary여야 함")
+		return false
+
+	projectiles = json.data
+	print("projectiles.json 로드 성공")
+	return true
+# 인카운터 데이터 로드 및 예외 처리 함수
+func load_encounters():
+	var path = "res://data/encounters.json"
+
+	if not FileAccess.file_exists(path):
+		push_error("encounters.json 파일을 찾을 수 없음: " + path)
+		return false
+
+	var file = FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		push_error("encounters.json 파일 열기 실패: " + path)
+		return false
+
+	var json_text = file.get_as_text()
+	var json = JSON.new()
+	var error = json.parse(json_text)
+
+	if error != OK:
+		push_error("encounters.json 파싱 실패: " + json.get_error_message())
+		push_error("오류 위치 line: " + str(json.get_error_line()))
+		return false
+
+	if typeof(json.data) != TYPE_DICTIONARY:
+		push_error("encounters.json 최상위 구조는 Dictionary여야 함")
+		return false
+
+	encounters = json.data
+	print("encounters.json 로드 성공")
+	return true
+# 인카운터 이벤트 데이터 로드 및 예외 처리 함수
+func load_encounter_events():
+	var path = "res://data/encounter_events.json"
+
+	if not FileAccess.file_exists(path):
+		push_error("encounter_events.json 파일을 찾을 수 없음: " + path)
+		return false
+
+	var file = FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		push_error("encounter_events.json 파일 열기 실패: " + path)
+		return false
+
+	var json_text = file.get_as_text()
+	var json = JSON.new()
+	var error = json.parse(json_text)
+
+	if error != OK:
+		push_error("encounter_events.json 파싱 실패: " + json.get_error_message())
+		push_error("오류 위치 line: " + str(json.get_error_line()))
+		return false
+
+	if typeof(json.data) != TYPE_DICTIONARY:
+		push_error("encounter_events.json 최상위 구조는 Dictionary여야 함")
+		return false
+
+	encounter_events = json.data
+	print("encounter_events.json 로드 성공")
+	return true
+
+# === 방 함수 모음 ===
 # 방 변경 함수
 func update_room():
 	
@@ -397,7 +805,7 @@ func move_to_room(target_room, use_shake, direction):
 	
 	# 다시 입력 허용
 	is_moving = false
-# 방향키 입력을 받아 exits 데이터 기준으로 이동하는 함수
+# 방향키 입력을 받아 exits 데이터 기준으로 방 이동하는 함수
 func try_move_to_exit(direction):
 
 	var room = rooms[current_room]
@@ -438,6 +846,12 @@ func try_move_to_exit(direction):
 
 	# 열린 출구 이동
 	await move_to_room(exit_data["target"], use_shake, direction)
+# 현재 방에 생성된 상호작용 버튼들을 전부 제거
+func clear_interaction_buttons():
+	for child in interaction_buttons.get_children():
+		child.queue_free()
+
+# === 대사, 상호작용, 이벤트 함수 모음 ===
 # 대사 출력 함수
 func show_dialogue(text, mode = "normal"):
 	# - 글자를 한 글자씩 출력
@@ -480,43 +894,6 @@ func show_dialogue(text, mode = "normal"):
 	$DialogueBox.visible = false
 	is_dialogue_showing = false
 	dialogue_finished = false
-# 방 로드 및 예외 처리 함수
-func load_rooms():
-	
-	# 방 구조 json 파일
-	var path = "res://data/rooms.json"
-	
-	if not FileAccess.file_exists(path):
-		push_error("rooms.json 파일을 찾을 수 없음: " + path)
-		return false
-		
-	var file = FileAccess.open(path, FileAccess.READ)
-	
-	if file == null:
-		push_error("rooms.json 파일 열기 실패: " + path)
-		return false
-		
-	var json_text = file.get_as_text()
-	var json = JSON.new()
-	var error = json.parse(json_text)
-	
-	if error != OK:
-		push_error("rooms.json 파싱 실패: " + json.get_error_message())
-		push_error("오류 위치 line: " + str(json.get_error_line()))
-		return false
-		
-	if typeof(json.data) != TYPE_DICTIONARY:
-		push_error("rooms.json 최상위 구조는 Dictionary여야 함")
-		return false
-		
-	rooms = json.data
-	
-	if not rooms.has(current_room):
-		push_error("현재 방이 rooms.json에 없음: " + current_room)
-		return false
-		
-	print("rooms.json 로드 성공")
-	return true
 # 선택지 함수
 func show_choices(choices):
 	
@@ -595,59 +972,6 @@ func set_interaction_buttons_disabled(disabled):
 	for child in interaction_buttons.get_children():
 		if child is Button:
 			child.disabled = disabled
-# 아이템 보유 여부 확인 함수
-func has_item(item_id):
-	for item in inventory:
-		if item["id"] == item_id:
-			return true
-
-	return false
-# 아이템 추가 함수
-func add_item(item_id):
-	if not items.has(item_id):
-		return false
-
-	var item_data = items[item_id]
-	var is_stackable = item_data.get("stackable", false)
-	var max_stack = item_data.get("max_stack", 1)
-
-	# stackable 아이템이면 기존 같은 아이템의 count 증가
-	if is_stackable:
-		for inventory_item in inventory:
-			if inventory_item["id"] == item_id:
-				var current_count = inventory_item.get("count", 1)
-
-				if current_count < max_stack:
-					inventory_item["count"] = current_count + 1
-					print("아이템 개수 증가: " + get_item_name(item_id) + " x" + str(inventory_item["count"]))
-					return true
-
-				# 이미 최대 개수면 새 슬롯에 추가 시도
-				break
-
-	# 비중첩 아이템은 기존처럼 중복 획득 방지
-	else:
-		if has_item(item_id):
-			return false
-
-	var empty_slot = find_empty_slot(item_id)
-
-	if empty_slot == -1:
-		await show_dialogue("가방에 공간이 없다.")
-		return false
-
-	var new_item = {
-		"id": item_id,
-		"slot": empty_slot
-	}
-
-	if is_stackable:
-		new_item["count"] = 1
-
-	inventory.append(new_item)
-
-	print("아이템 획득: " + get_item_name(item_id))
-	return true
 # 플래그 보유 여부 확인 함수
 func has_flag(flag_id):
 	return flags.has(flag_id) and flags[flag_id] == true
@@ -655,103 +979,6 @@ func has_flag(flag_id):
 func set_flag(flag_id):
 	flags[flag_id] = true
 	print("플래그 설정: " + flag_id)
-# 이펙트 효과 함수
-func effect(sound_effect, shake_effect, fade_effect, direction):
-	
-	# 발소리 효과
-	if sound_effect:
-		footstep_sound.play()
-		
-	if shake_effect:
-		var shake_tween = create_tween()
-		if direction == "up":
-			# 화면 앞뒤 흔들림
-			shake_tween.tween_property(
-				background,
-				"scale",
-				Vector2(1.35, 1.35),
-				0.22
-			)
-			
-			# 화면 좌우 흔들림
-			shake_tween.tween_property(
-				background,
-				"position",
-				Vector2(40, 0),
-				0.06
-			)
-
-			shake_tween.tween_property(
-				background,
-				"position",
-				Vector2(-40, 0),
-				0.06
-			)
-			
-			shake_tween.tween_property(
-				background,
-				"position",
-				Vector2(0, 0),
-				0.06
-			)
-			
-			shake_tween.tween_property(
-				background,
-				"scale",
-				Vector2(1.0, 1.0),
-				0.28
-			)
-		elif direction == "down" or direction == "left" or direction == "right":
-						
-			# 화면 좌우 흔들림
-			shake_tween.tween_property(
-				background,
-				"position",
-				Vector2(40, 0),
-				0.06
-			)
-
-			shake_tween.tween_property(
-				background,
-				"position",
-				Vector2(-40, 0),
-				0.06
-			)
-			
-			shake_tween.tween_property(
-				background,
-				"position",
-				Vector2(0, 0),
-				0.06
-			)
-		else:
-			print("no effect")
-	
-	if fade_effect:
-		# 암전 처리
-		var fade_tween = create_tween()
-		
-		# 화면을 즉시 어둡게 만듦
-		fade_tween.tween_property(
-			fade,
-			"color:a",
-			1,
-			0
-		)
-		
-		# 천천히 다시 밝아짐
-		fade_tween.tween_property(
-			fade,
-			"color:a",
-			0.0,
-			3.3
-		)
-	
-	await get_tree().create_timer(0.3).timeout
-# 현재 방에 생성된 상호작용 버튼들을 전부 제거
-func clear_interaction_buttons():
-	for child in interaction_buttons.get_children():
-		child.queue_free()
 # rooms.json의 interactions 데이터를 읽어서 클릭 영역 버튼을 자동 생성
 func create_interaction_buttons(room):
 
@@ -893,771 +1120,6 @@ func run_exit_interaction(direction):
 
 	set_interaction_buttons_disabled(false)
 	is_interacting = false
-# 아이템 id 기준으로 첫 번째 아이템을 찾아 소모하는 함수 (문 열쇠처럼 id만 아는 경우)
-func consume_item_by_id(item_id):
-	for inventory_item in inventory:
-		if inventory_item.get("id", "") == item_id:
-			return consume_item_if_needed(inventory_item)
-
-	return false
-# 인벤토리 상호작용 함수
-func _on_bag_button_pressed():
-	# 스토리 이벤트 중이면 일반 조작 차단
-	if is_story_playing:
-		return
-	
-	if is_inventory_open:
-		close_inventory()
-	else:
-		open_inventory()
-# 인벤토리 열기 함수
-func open_inventory():
-	if is_moving or is_interacting or is_dialogue_showing or is_choosing:
-		return
-
-	is_inventory_open = true
-	inventory_ui.visible = true
-	
-	clear_selected_item_info()
-	update_inventory_ui()
-	update_equipped_weapon_ui()
-	update_player_status_ui()
-	
-	bag_open_sound.play()
-
-	set_interaction_buttons_disabled(true)
-# 인벤토리 닫기 함수
-func close_inventory():
-	is_inventory_open = false
-	inventory_ui.visible = false
-	bag_open_sound.play()
-	
-	# 드래그 중이었다면 드래그 상태 초기화
-	if is_dragging_item and dragged_item_button != null:
-		dragged_item_button.position = dragged_item_original_position
-		dragged_item_button.z_index = 0
-
-	is_dragging_item = false
-	dragged_item = null
-	dragged_item_button = null
-	pressed_item = null
-	pressed_item_button = null
-	slot_highlight.visible = false
-	
-	selected_inventory_item = null
-	clear_selected_item_info()
-	close_context_menu()
-
-	# 인벤토리 닫으면 상호작용 버튼 다시 활성화
-	set_interaction_buttons_disabled(false)
-# 아이템 데이터 로드 함수
-func load_items():
-	var path = "res://data/items.json"
-
-	if not FileAccess.file_exists(path):
-		push_error("items.json 파일을 찾을 수 없음: " + path)
-		return false
-
-	var file = FileAccess.open(path, FileAccess.READ)
-
-	if file == null:
-		push_error("items.json 파일 열기 실패: " + path)
-		return false
-
-	var json_text = file.get_as_text()
-	var json = JSON.new()
-	var error = json.parse(json_text)
-
-	if error != OK:
-		push_error("items.json 파싱 실패: " + json.get_error_message())
-		push_error("오류 위치 line: " + str(json.get_error_line()))
-		return false
-
-	if typeof(json.data) != TYPE_DICTIONARY:
-		push_error("items.json 최상위 구조는 Dictionary여야 함")
-		return false
-
-	items = json.data
-	print("items.json 로드 성공")
-	return true
-# 아이템 이름 가져오기 함수
-func get_item_name(item_id):
-	if not items.has(item_id):
-		return item_id
-
-	if not items[item_id].has("name"):
-		return item_id
-
-	return items[item_id]["name"]
-# 인벤토리 UI 아이템 표시 갱신 함수
-func update_inventory_ui():
-
-	# 기존에 표시된 아이템 이미지 제거
-	for child in inventory_slots.get_children():
-		child.queue_free()
-
-	# 현재 가진 아이템을 슬롯 위치 기준으로 표시
-	for inventory_item in inventory:
-
-		var item_id = inventory_item["id"]
-		var start_slot = int(inventory_item["slot"])
-
-		if not items.has(item_id):
-			continue
-
-		var item_data = items[item_id]
-
-		if not item_data.has("image"):
-			continue
-
-		var item_width = 1
-		var item_height = 1
-
-		if item_data.has("width"):
-			item_width = item_data["width"]
-
-		if item_data.has("height"):
-			item_height = item_data["height"]
-
-		var col = start_slot % 4
-		var row = floori(start_slot / 4.0)
-
-		var item_button = TextureButton.new()
-		# 아이템 버튼이 Space 입력을 가져가지 않게 함
-		item_button.focus_mode = Control.FOCUS_NONE
-		item_button.texture_normal = load(item_data["image"])
-		item_button.ignore_texture_size = true
-		item_button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
-
-		# 아이템이 시작되는 슬롯 위치
-		item_button.position = Vector2(
-			col * (inventory_slot_size + inventory_slot_gap),
-			row * (inventory_slot_size + inventory_slot_gap)
-		)
-
-		# 아이템 크기: width/height만큼 슬롯을 차지
-		item_button.size = Vector2(
-			(inventory_slot_size * item_width) + (inventory_slot_gap * (item_width - 1)),
-			(inventory_slot_size * item_height) + (inventory_slot_gap * (item_height - 1))
-		)
-		
-		# 현재 선택된 아이템이면 밝게 표시
-		if selected_inventory_item == inventory_item:
-			item_button.modulate = Color(1.4, 1.4, 1.4, 1.0)
-		else:
-			item_button.modulate = Color(1.0, 1.0, 1.0, 1.0)
-
-		item_button.pressed.connect(
-			func():
-				item_sound.play()
-				selected_inventory_item = inventory_item
-				show_selected_item_info(inventory_item)
-				update_inventory_ui()
-		)
-		
-		item_button.gui_input.connect(
-			func(event):
-
-				# 마우스 버튼 이벤트만 처리
-				if event is InputEventMouseButton:
-
-					if event.button_index == MOUSE_BUTTON_LEFT:
-						if event.pressed:
-							pressed_item = inventory_item
-							pressed_item_button = item_button
-							pressed_mouse_position = get_global_mouse_position()
-						else:
-							if is_dragging_item:
-								stop_drag_item()
-							pressed_item = null
-							pressed_item_button = null
-					
-					if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-						item_sound.play()
-						selected_inventory_item = inventory_item
-						show_selected_item_info(inventory_item)
-						update_inventory_ui()
-						open_context_menu(inventory_item)
-		)
-
-		inventory_slots.add_child(item_button)
-# 선택된 아이템 정보 초기화 함수
-func clear_selected_item_info():
-	selected_item_image.texture = null
-	selected_item_description.text = ""
-# 선택된 아이템 정보를 중앙 이미지/설명칸에 표시
-func show_selected_item_info(inventory_item):
-	
-	var item_id = inventory_item["id"]
-	
-	if not items.has(item_id):
-		return
-
-	var item_data = items[item_id]
-
-	if item_data.has("image"):
-		selected_item_image.texture = load(item_data["image"])
-
-	var description_text = ""
-	
-	if item_data.has("description"):
-		description_text = item_data["description"]
-		
-	# stackable 아이템이면 보유 개수 표시
-	if inventory_item != null:
-		if inventory_item.has("count"):
-			description_text = "보유 개수 : " + str(int(inventory_item["count"])) + "\n\n" + description_text
-
-	selected_item_description.text = description_text
-# 아이템이 들어갈 수 있는 빈 슬롯 찾기 함수
-func find_empty_slot(item_id):
-	if not items.has(item_id):
-		return -1
-
-	var item_data = items[item_id]
-	var item_width = item_data.get("width", 1)
-	var item_height = item_data.get("height", 1)
-
-	for slot in range(16):
-		if can_place_item_at(slot, item_width, item_height):
-			return slot
-
-	return -1
-# 특정 슬롯에 아이템을 놓을 수 있는지 확인하는 함수
-func can_place_item_at(start_slot, item_width, item_height):
-	var start_col = start_slot % 4
-	var start_row = start_slot / 4
-
-	# 오른쪽/아래로 가방 범위를 넘으면 배치 불가
-	if start_col + item_width > 4:
-		return false
-
-	if start_row + item_height > 4:
-		return false
-
-	# 새 아이템이 차지할 슬롯 목록
-	var target_slots = []
-
-	for y in range(item_height):
-		for x in range(item_width):
-			var slot = (start_row + y) * 4 + (start_col + x)
-			target_slots.append(slot)
-
-	# 기존 아이템들과 겹치는지 확인
-	for item in inventory:
-		var occupied = get_occupied_slots(item)
-
-		for slot in target_slots:
-			if occupied.has(slot):
-				return false
-
-	return true	
-# 아이템이 차지하는 슬롯 목록 반환 함수
-func get_occupied_slots(inventory_item):
-	var item_id = inventory_item["id"]
-
-	if not items.has(item_id):
-		return []
-
-	var item_data = items[item_id]
-	var item_width = item_data.get("width", 1)
-	var item_height = item_data.get("height", 1)
-
-	var start_slot = int(inventory_item["slot"])
-	var start_col = start_slot % 4
-	var start_row = floori(start_slot / 4.0)
-
-	var occupied = []
-
-	for y in range(item_height):
-		for x in range(item_width):
-			var slot = (start_row + y) * 4 + (start_col + x)
-			occupied.append(slot)
-
-	return occupied	
-# 아이템 드래그 시작 함수
-func start_drag_item(inventory_item, item_button):
-	is_dragging_item = true
-	dragged_item = inventory_item
-	dragged_item_button = item_button
-	dragged_item_original_position = item_button.position
-	
-	item_button.z_index = 100
-	item_sound.play()
-# 아이템 드래그 종료 함수
-func stop_drag_item():
-
-	if dragged_item_button == null:
-		return
-
-	var item_id = dragged_item["id"]
-	var item_data = items[item_id]
-
-	var item_width = item_data.get("width", 1)
-	var item_height = item_data.get("height", 1)
-
-	var target_slot = get_slot_from_mouse_position()
-
-	# 정상 슬롯이고 배치 가능하면 이동
-	if target_slot != -1:
-		if can_place_item_at_except(
-			target_slot,
-			item_width,
-			item_height,
-			dragged_item
-		):
-
-			dragged_item["slot"] = target_slot
-			update_inventory_ui()
-
-		# 놓을 수 없는 위치면 원래 자리 복귀
-		else:
-			dragged_item_button.position = dragged_item_original_position
-
-	# 가방 밖이면 원래 자리 복귀
-	else:
-		dragged_item_button.position = dragged_item_original_position
-
-	dragged_item_button.z_index = 0
-
-	is_dragging_item = false
-	dragged_item = null
-	dragged_item_button = null
-	slot_highlight.visible = false
-# 마우스 위치 기준 슬롯 번호 계산 함수
-func get_slot_from_mouse_position():
-
-	var local_mouse = inventory_slots.get_local_mouse_position()
-
-	var slot_x = int(local_mouse.x / (inventory_slot_size + inventory_slot_gap))
-	var slot_y = int(local_mouse.y / (inventory_slot_size + inventory_slot_gap))
-
-	# 가방 범위 밖이면 실패
-	if slot_x < 0 or slot_x >= 4:
-		return -1
-
-	if slot_y < 0 or slot_y >= 4:
-		return -1
-
-	return slot_y * 4 + slot_x	
-# 특정 아이템을 제외하고 슬롯 배치 가능 여부 확인
-func can_place_item_at_except(start_slot, item_width, item_height, ignored_item):
-
-	var start_col = start_slot % 4
-	var start_row = start_slot / 4
-
-	# 가방 범위 초과
-	if start_col + item_width > 4:
-		return false
-
-	if start_row + item_height > 4:
-		return false
-
-	var target_slots = []
-
-	for y in range(item_height):
-		for x in range(item_width):
-			var slot = (start_row + y) * 4 + (start_col + x)
-			target_slots.append(slot)
-
-	for item in inventory:
-
-		# 현재 드래그 중인 아이템은 무시
-		if item == ignored_item:
-			continue
-
-		var occupied = get_occupied_slots(item)
-
-		for slot in target_slots:
-			if occupied.has(slot):
-				return false
-
-	return true	
-# 드래그 중 아이템을 놓을 위치 하이라이트 갱신 함수
-func update_slot_highlight():
-	if not is_dragging_item:
-		slot_highlight.visible = false
-		return
-
-	if dragged_item == null:
-		slot_highlight.visible = false
-		return
-
-	var target_slot = get_slot_from_mouse_position()
-
-	if target_slot == -1:
-		slot_highlight.visible = false
-		return
-
-	var item_id = dragged_item["id"]
-	var item_data = items[item_id]
-
-	var item_width = item_data.get("width", 1)
-	var item_height = item_data.get("height", 1)
-
-	var can_place = can_place_item_at_except(
-		target_slot,
-		item_width,
-		item_height,
-		dragged_item
-	)
-
-	var col = target_slot % 4
-	var row = floori(target_slot / 4.0)
-
-	slot_highlight.position = inventory_slots.position + Vector2(
-		col * (inventory_slot_size + inventory_slot_gap),
-		row * (inventory_slot_size + inventory_slot_gap)
-	)
-
-	slot_highlight.size = Vector2(
-		(inventory_slot_size * item_width) + (inventory_slot_gap * (item_width - 1)),
-		(inventory_slot_size * item_height) + (inventory_slot_gap * (item_height - 1))
-	)
-
-	if can_place:
-		slot_highlight.color = Color(0, 1, 0, 0.025)
-	else:
-		slot_highlight.color = Color(1, 0, 0, 0.025)
-
-	slot_highlight.visible = true	
-# 인벤토리 우클릭 메뉴 열기 함수
-func open_context_menu(inventory_item):
-	
-	if inventory_context_menu.visible and context_menu_item == inventory_item:
-		close_context_menu()
-		return
-
-	context_menu_item = inventory_item
-
-	var item_id = inventory_item["id"]
-
-	if not items.has(item_id):
-		return
-
-	var item_data = items[item_id]
-	var item_type = item_data.get("type", "")
-
-	# 기본적으로 전부 숨김
-	use_button.visible = false
-	equip_button.visible = false
-	drop_button.visible = false
-	rotate_button.visible = false
-
-	# 타입별 메뉴 표시
-	if item_type == "weapon":
-		equip_button.visible = true
-		drop_button.visible = true
-		rotate_button.visible = true
-
-		if equipped_weapon == inventory_item:
-			equip_button.text = "해제"
-		else:
-			equip_button.text = "장착"
-
-	elif item_type == "consumable":
-		use_button.visible = true
-		drop_button.visible = true
-
-	elif item_type == "key":
-		drop_button.visible = true
-
-	else:
-		drop_button.visible = true
-
-	inventory_context_menu.visible = true
-	inventory_context_menu.global_position = get_global_mouse_position()
-# 인벤토리 우클릭 메뉴 닫기 함수
-func close_context_menu():
-	context_menu_item = null
-	inventory_context_menu.visible = false	
-# 아이템 제거 함수
-func remove_item(inventory_item):
-	if inventory_item == null:
-		return false
-
-	if inventory.has(inventory_item):
-
-		# 장착 중인 아이템을 제거하려는 경우 먼저 장착 해제
-		if equipped_weapon == inventory_item:
-			equipped_weapon = null
-			update_equipped_weapon_ui()
-
-		inventory.erase(inventory_item)
-
-		if selected_inventory_item == inventory_item:
-			selected_inventory_item = null
-			clear_selected_item_info()
-
-		if context_menu_item == inventory_item:
-			close_context_menu()
-
-		update_inventory_ui()
-		return true
-
-	return false
-# 아이템 사용 시 소모 처리 함수
-func consume_item_if_needed(inventory_item):
-	if inventory_item == null:
-		return false
-
-	if not inventory.has(inventory_item):
-		return false
-
-	var item_id = inventory_item.get("id", "")
-
-	if not items.has(item_id):
-		return false
-
-	var item_data = items[item_id]
-
-	# consumed_on_use가 없거나 false면 소모 안 함
-	if not item_data.get("consumed_on_use", false):
-		return false
-
-	# stackable 아이템이면 선택한 스택의 count만 1 감소
-	if inventory_item.has("count"):
-		inventory_item["count"] = int(inventory_item["count"]) - 1
-
-		print("아이템 개수 감소: " + item_id + " x" + str(inventory_item["count"]))
-
-		if int(inventory_item["count"]) <= 0:
-			remove_item(inventory_item)
-
-		return true
-
-	# stackable이 아닌 아이템은 선택한 아이템 제거
-	remove_item(inventory_item)
-	print("아이템 소모: " + item_id)
-	return true
-# 아이템 버리기 버튼 함수
-func _on_drop_button_pressed():
-	if context_menu_item == null:
-		return
-
-	item_sound.play()
-	remove_item(context_menu_item)
-# 아이템 장착 함수
-func equip_item(inventory_item):
-	if inventory_item == null:
-		return
-
-	var item_id = inventory_item["id"]
-
-	if not items.has(item_id):
-		return
-
-	var item_data = items[item_id]
-
-	if item_data.get("type", "") != "weapon":
-		return
-
-	if equipped_weapon == inventory_item:
-		equipped_weapon = null
-		print(get_item_name(item_id) + " 해제")
-	else:
-		equipped_weapon = inventory_item
-		print(get_item_name(item_id) + " 장착")
-
-	update_equipped_weapon_ui()
-	close_context_menu()
-# 아이템 장착 버튼 함수
-func _on_equip_button_pressed():
-	if context_menu_item == null:
-		return
-
-	equip_sound.play()
-	equip_item(context_menu_item)
-# 장착 무기 UI 갱신 함수
-func update_equipped_weapon_ui():
-
-	# 아무것도 장착하지 않았으면 기본 무기 사용
-	var item_id = "fist"
-
-	if equipped_weapon != null:
-		item_id = equipped_weapon["id"]
-
-	if not items.has(item_id):
-		return
-
-	var item_data = items[item_id]
-
-	# 이름 표시
-	if item_id == "fist":
-		equipped_weapon_text.text = "무기 없음"
-	else:
-		equipped_weapon_text.text = get_item_name(item_id)
-
-	# 중앙 이미지 표시
-	if item_data.has("image"):
-		selected_item_image.texture = load(item_data["image"])
-
-	# 설명 표시
-	if item_data.has("description"):
-		selected_item_description.text = item_data["description"]
-# 아이템 사용 함수
-func use_item(inventory_item):
-	if inventory_item == null:
-		return
-
-	var item_id = inventory_item["id"]
-
-	if not items.has(item_id):
-		return
-
-	var item_data = items[item_id]
-	var item_type = item_data.get("type", "")
-
-	if item_type != "consumable":
-		return
-
-	if item_data.has("heal"):
-		player_hp += item_data["heal"]
-
-		if player_hp > player_max_hp:
-			player_hp = player_max_hp
-
-		print("현재 체력: " + str(int(player_hp)))
-
-	consume_item_if_needed(inventory_item)
-	update_inventory_ui()
-	# 아이템 사용 횟수 즉시 반영
-	if selected_inventory_item != null and inventory.has(selected_inventory_item):
-		show_selected_item_info(selected_inventory_item)
-	else:
-		clear_selected_item_info()
-	update_player_status_ui()
-	close_context_menu()	
-# 아이템 사용 버튼 함수
-func _on_use_button_pressed():
-	if context_menu_item == null:
-		return
-
-	healing_sound.play()
-	use_item(context_menu_item)
-# 플레이어 체력 UI 갱신 함수
-func update_player_status_ui():
-	player_hp_text.text = str(int(player_hp)) + " / " + str(int(player_max_hp))
-# 저장할 게임 데이터 생성 함수
-func get_save_data():
-	var equipped_weapon_slot = -1
-
-	if equipped_weapon != null:
-		equipped_weapon_slot = int(equipped_weapon["slot"])
-
-	return {
-		"room": {
-			"current_room": current_room
-		},
-		"player": {
-			"hp": player_hp,
-			"max_hp": player_max_hp,
-			"equipped_weapon_slot": equipped_weapon_slot
-		},
-		"inventory": inventory,
-		"flags": flags
-	}
-# 저장 파일 경로 반환 함수
-func get_save_path(slot_index):
-	
-	return "user://save_slot_" + str(slot_index) + ".json"
-# 게임 저장 함수
-func save_game(slot_index):
-	var save_data = get_save_data()
-	var json_text = JSON.stringify(save_data, "\t")
-	var path = get_save_path(slot_index)
-
-	var file = FileAccess.open(path, FileAccess.WRITE)
-
-	if file == null:
-		push_error("저장 파일 열기 실패: " + path)
-		return false
-
-	file.store_string(json_text)
-	file.close()
-
-	print("게임 저장 완료: " + path)
-	return true
-# 저장 포인트 실행 함수
-func run_save_point():
-	save_ui_open_sound.play()
-
-	var choices = [
-		{ "text": "예" },
-		{ "text": "아니오" }
-	]
-
-	var selected_index = await show_choices(choices)
-
-	if selected_index == 0:
-		var success = save_game(1)
-
-		if success:
-			save_complete_sound.play()
-			await show_dialogue("저장 완료.")
-		else:
-			await show_dialogue("저장에 실패했다.")
-	else:
-		save_ui_close_sound.play()	
-# 게임 불러오기 함수
-func load_game(slot_index):
-	var path = get_save_path(slot_index)
-
-	if not FileAccess.file_exists(path):
-		push_error("저장 파일이 없음: " + path)
-		return false
-
-	var file = FileAccess.open(path, FileAccess.READ)
-
-	if file == null:
-		push_error("저장 파일 열기 실패: " + path)
-		return false
-
-	var json_text = file.get_as_text()
-	file.close()
-
-	var json = JSON.new()
-	var error = json.parse(json_text)
-
-	if error != OK:
-		push_error("저장 파일 파싱 실패: " + json.get_error_message())
-		return false
-
-	var save_data = json.data
-
-	var room_data = save_data.get("room", {})
-	var player_data = save_data.get("player", {})
-
-	current_room = room_data.get("current_room", "hallway_1")
-
-	player_hp = player_data.get("hp", 100)
-	player_max_hp = player_data.get("max_hp", 100)
-
-	inventory = save_data.get("inventory", [])
-	flags = save_data.get("flags", {})
-
-	restore_equipped_weapon(player_data.get("equipped_weapon_slot", -1))
-
-	update_room()
-	update_inventory_ui()
-	update_equipped_weapon_ui()
-	update_player_status_ui()
-	
-	await effect(false, false, true, "")
-
-	print("게임 불러오기 완료: " + path)
-	return true	
-# 저장된 장착 무기 복구 함수
-func restore_equipped_weapon(saved_slot):
-	equipped_weapon = null
-
-	if saved_slot == -1:
-		return
-
-	for inventory_item in inventory:
-		if inventory_item.has("slot") and int(inventory_item["slot"]) == int(saved_slot):
-			equipped_weapon = inventory_item
-			return
 # 대화창 레이아웃 변경 함수
 func set_dialogue_layout(mode):
 	
@@ -1727,36 +1189,6 @@ func show_npc_dialogue(character_id, emotion, text):
 			speaker_portrait.texture = load(portrait_data[emotion])
 
 	await show_dialogue(text, "npc")
-# NPC 캐릭터 데이터 로드 함수
-func load_characters():
-	var path = "res://data/characters.json"
-
-	if not FileAccess.file_exists(path):
-		push_error("characters.json 파일을 찾을 수 없음: " + path)
-		return false
-
-	var file = FileAccess.open(path, FileAccess.READ)
-
-	if file == null:
-		push_error("characters.json 파일 열기 실패: " + path)
-		return false
-
-	var json_text = file.get_as_text()
-	var json = JSON.new()
-	var error = json.parse(json_text)
-
-	if error != OK:
-		push_error("characters.json 파싱 실패: " + json.get_error_message())
-		push_error("오류 위치 line: " + str(json.get_error_line()))
-		return false
-
-	if typeof(json.data) != TYPE_DICTIONARY:
-		push_error("characters.json 최상위 구조는 Dictionary여야 함")
-		return false
-
-	characters = json.data
-	print("characters.json 로드 성공")
-	return true	
 # events 배열을 순서대로 실행하는 함수
 func run_events(events):
 	for event in events:
@@ -1777,10 +1209,28 @@ func run_events(events):
 
 		elif event_type == "item":
 			var item_id = event.get("item", "")
-			var added = await add_item(item_id)
+			var count = int(event.get("count", 1))
 
-			if added:
-				await show_dialogue("『" + get_item_name(item_id) + "』" + MSG_ITEM_GAINED_SUFFIX)
+			var reward_results = await give_items_with_pending_loot([
+				{
+					"item": item_id,
+					"count": count
+				}
+			])
+
+			var has_reward = false
+
+			for reward_result in reward_results:
+				if int(reward_result.get("added", 0)) > 0 or int(reward_result.get("remaining", 0)) > 0:
+					has_reward = true
+
+			if has_reward:
+				if count > 1:
+					await show_dialogue(get_item_name(item_id) + " " + str(count) + "개" + MSG_ITEM_GAINED_SUFFIX)
+				else:
+					await show_dialogue(get_item_name(item_id) + MSG_ITEM_GAINED_SUFFIX)
+
+			await open_inventory_arrange_if_pending_loot("loot")
 
 		elif event_type == "flag":
 			set_flag(event.get("flag", ""))
@@ -1808,36 +1258,6 @@ func run_event_choices(choices):
 
 	if selected_choice.has("flag"):
 		set_flag(selected_choice["flag"])
-# 스토리 이벤트 데이터 로드 함수
-func load_story_events():
-	var path = "res://data/story_events.json"
-
-	if not FileAccess.file_exists(path):
-		push_error("story_events.json 파일을 찾을 수 없음: " + path)
-		return false
-
-	var file = FileAccess.open(path, FileAccess.READ)
-
-	if file == null:
-		push_error("story_events.json 파일 열기 실패: " + path)
-		return false
-
-	var json_text = file.get_as_text()
-	var json = JSON.new()
-	var error = json.parse(json_text)
-
-	if error != OK:
-		push_error("story_events.json 파싱 실패: " + json.get_error_message())
-		push_error("오류 위치 line: " + str(json.get_error_line()))
-		return false
-
-	if typeof(json.data) != TYPE_DICTIONARY:
-		push_error("story_events.json 최상위 구조는 Dictionary여야 함")
-		return false
-
-	story_events = json.data
-	print("story_events.json 로드 성공")
-	return true
 # 스토리 스탠딩 CG 표시 함수
 func show_story_standing(character_id, emotion, position_name = "center"):
 
@@ -2031,6 +1451,112 @@ func check_room_enter_story():
 			return
 
 	await run_story_event(event_id)
+# 스토리 이벤트용 방 변경 함수
+func change_room_by_story(room_id):
+	if not rooms.has(room_id):
+		push_error("존재하지 않는 방: " + room_id)
+		return
+
+	current_room = room_id
+	update_room()
+
+# === 기타 함수 모음 ===
+# 이펙트 효과 함수
+func effect(sound_effect, shake_effect, fade_effect, direction):
+	
+	# 발소리 효과
+	if sound_effect:
+		footstep_sound.play()
+		
+	if shake_effect:
+		var shake_tween = create_tween()
+		if direction == "up":
+			# 화면 앞뒤 흔들림
+			shake_tween.tween_property(
+				background,
+				"scale",
+				Vector2(1.35, 1.35),
+				0.22
+			)
+			
+			# 화면 좌우 흔들림
+			shake_tween.tween_property(
+				background,
+				"position",
+				Vector2(40, 0),
+				0.06
+			)
+
+			shake_tween.tween_property(
+				background,
+				"position",
+				Vector2(-40, 0),
+				0.06
+			)
+			
+			shake_tween.tween_property(
+				background,
+				"position",
+				Vector2(0, 0),
+				0.06
+			)
+			
+			shake_tween.tween_property(
+				background,
+				"scale",
+				Vector2(1.0, 1.0),
+				0.28
+			)
+		elif direction == "down" or direction == "left" or direction == "right":
+						
+			# 화면 좌우 흔들림
+			shake_tween.tween_property(
+				background,
+				"position",
+				Vector2(40, 0),
+				0.06
+			)
+
+			shake_tween.tween_property(
+				background,
+				"position",
+				Vector2(-40, 0),
+				0.06
+			)
+			
+			shake_tween.tween_property(
+				background,
+				"position",
+				Vector2(0, 0),
+				0.06
+			)
+		else:
+			print("no effect")
+	
+	if fade_effect:
+		# 암전 처리
+		var fade_tween = create_tween()
+		
+		# 화면을 즉시 어둡게 만듦
+		fade_tween.tween_property(
+			fade,
+			"color:a",
+			1,
+			0
+		)
+		
+		# 천천히 다시 밝아짐
+		fade_tween.tween_property(
+			fade,
+			"color:a",
+			0.0,
+			3.3
+		)
+	
+	await get_tree().create_timer(0.3).timeout
+# 플레이어 체력 UI 갱신 함수
+func update_player_status_ui():
+	player_hp_text.text = str(int(player_hp)) + " / " + str(int(player_max_hp))
 # BGM 재생 함수
 func play_bgm(path, volume_db = -5.0, loop = true):
 	if path == "":
@@ -2056,175 +1582,2190 @@ func change_background(path):
 		return
 
 	background.texture = load(path)
-# 스토리 이벤트용 방 변경 함수
-func change_room_by_story(room_id):
-	if not rooms.has(room_id):
-		push_error("존재하지 않는 방: " + room_id)
+
+# === 인벤토리 함수 모음 ===
+# 인벤토리 상호작용 함수
+func _on_bag_button_pressed():
+	# 스토리 이벤트 중이면 일반 조작 차단
+	if is_story_playing:
+		return
+	
+	if is_inventory_open:
+		close_inventory()
+	else:
+		open_inventory()
+# 인벤토리 열기 함수
+func open_inventory():
+	if is_moving or is_interacting or is_dialogue_showing or is_choosing:
 		return
 
-	current_room = room_id
-	update_room()
-# 적 데이터 로드 함수
-func load_enemies():
-	var path = "res://data/enemies.json"
+	is_inventory_open = true
+	inventory_ui.visible = true
 
-	if not FileAccess.file_exists(path):
-		push_error("enemies.json 파일을 찾을 수 없음: " + path)
+	context_menu_item = null
+	inventory_context_menu.visible = false
+
+	selected_inventory_item = null
+
+	update_inventory_ui()
+	update_equipped_weapon_ui()
+	update_player_status_ui()
+
+	if bag_open_sound != null:
+		bag_open_sound.play()
+
+	set_interaction_buttons_disabled(true)
+# 인벤토리 닫기 함수
+func close_inventory():
+	is_inventory_open = false
+	inventory_ui.visible = false
+	bag_open_sound.play()
+	
+	# 드래그 중이었다면 드래그 상태 초기화
+	if is_dragging_item and dragged_item_button != null:
+		dragged_item_button.position = dragged_item_original_position
+		dragged_item_button.z_index = 0
+
+	is_dragging_item = false
+	dragged_item = null
+	dragged_item_button = null
+	pressed_item = null
+	pressed_item_button = null
+	slot_highlight.visible = false
+	
+	selected_inventory_item = null
+	clear_selected_item_info()
+	close_context_menu()
+
+	# 인벤토리 닫으면 상호작용 버튼 다시 활성화
+	set_interaction_buttons_disabled(false)
+# 인벤토리 UI 아이템 표시 갱신 함수
+func update_inventory_ui():
+
+	# 기존에 표시된 아이템 이미지 제거
+	for child in inventory_slots.get_children():
+		child.queue_free()
+
+	# 현재 가진 아이템을 슬롯 위치 기준으로 표시
+	for inventory_item in inventory:
+
+		var item_id = inventory_item["id"]
+		var start_slot = int(inventory_item["slot"])
+
+		if not items.has(item_id):
+			continue
+
+		var item_data = items[item_id]
+
+		if not item_data.has("image"):
+			continue
+
+		var item_width = 1
+		var item_height = 1
+
+		if item_data.has("width"):
+			item_width = item_data["width"]
+
+		if item_data.has("height"):
+			item_height = item_data["height"]
+
+		var col = start_slot % 4
+		var row = floori(start_slot / 4.0)
+
+		var item_button = TextureButton.new()
+		# 아이템 버튼이 Space 입력을 가져가지 않게 함
+		item_button.focus_mode = Control.FOCUS_NONE
+		item_button.texture_normal = load(item_data["image"])
+		item_button.ignore_texture_size = true
+		item_button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+
+		# 아이템이 시작되는 슬롯 위치
+		item_button.position = Vector2(
+			col * (inventory_slot_size + inventory_slot_gap),
+			row * (inventory_slot_size + inventory_slot_gap)
+		)
+
+		# 아이템 크기: width/height만큼 슬롯을 차지
+		item_button.size = Vector2(
+			(inventory_slot_size * item_width) + (inventory_slot_gap * (item_width - 1)),
+			(inventory_slot_size * item_height) + (inventory_slot_gap * (item_height - 1))
+		)
+		
+		# 현재 선택된 아이템이면 밝게 표시
+		item_button.modulate = Color(1.0, 1.0, 1.0, 1.0)
+		item_button.z_index = 10
+
+		item_button.pressed.connect(
+			func():
+				item_sound.play()
+				select_inventory_item(inventory_item)
+		)
+		
+		item_button.gui_input.connect(
+			func(event):
+
+				# 마우스 버튼 이벤트만 처리
+				if event is InputEventMouseButton:
+					# 기존 인벤토리 좌클릭 이벤트 처리
+					if event.button_index == MOUSE_BUTTON_LEFT:
+						if event.pressed:
+							if inventory_context_menu.visible:
+								close_context_menu()
+
+							pressed_item = inventory_item
+							pressed_item_button = item_button
+							pressed_mouse_position = get_global_mouse_position()
+						else:
+							if is_dragging_item:
+								stop_drag_item()
+
+							pressed_item = null
+							pressed_item_button = null
+					# 기존 인벤토리 우클릭 이벤트 처리
+					if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+						item_sound.play()
+						selected_inventory_item = inventory_item
+						show_selected_item_info(inventory_item)
+						update_inventory_ui()
+						open_context_menu(inventory_item)
+						get_viewport().set_input_as_handled()
+		)
+
+		inventory_slots.add_child(item_button)
+		add_item_count_label(item_button, inventory_item)
+
+		if selected_inventory_item == inventory_item:
+			create_inventory_selected_focus(start_slot, item_width, item_height)
+# 인벤토리 가방에 넣지 못한 아이템을 임시 보관함에 추가하는 함수
+func add_pending_loot(item_id, count = 1):
+	if item_id == "":
+		return
+
+	if count <= 0:
+		return
+
+	for loot_item in pending_loot:
+		if loot_item.get("id", "") == item_id:
+			loot_item["count"] = int(loot_item.get("count", 1)) + count
+			return
+
+	pending_loot.append({
+		"id": item_id,
+		"count": count
+	})
+# 기존 인벤토리 선택 포커스 생성 함수
+func create_inventory_selected_focus(start_slot, item_width, item_height):
+	var col = start_slot % 4
+	var row = floori(start_slot / 4.0)
+
+	var focus_panel = Panel.new()
+	focus_panel.position = Vector2(
+		col * (inventory_slot_size + inventory_slot_gap),
+		row * (inventory_slot_size + inventory_slot_gap)
+	)
+
+	focus_panel.size = Vector2(
+		(inventory_slot_size * item_width) + (inventory_slot_gap * (item_width - 1)),
+		(inventory_slot_size * item_height) + (inventory_slot_gap * (item_height - 1))
+	)
+
+	focus_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	focus_panel.z_index = 20
+
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(1, 1, 1, 0.08)
+	style.border_color = Color(1, 1, 1, 0.08)
+	style.set_border_width_all(4)
+
+	focus_panel.add_theme_stylebox_override("panel", style)
+
+	inventory_slots.add_child(focus_panel)
+# 기존 인벤토리 선택 아이템 지정 함수
+func select_inventory_item(inventory_item):
+	selected_inventory_item = inventory_item
+
+	if inventory_item == null:
+		clear_selected_item_info()
+		update_inventory_ui()
+		return
+
+	show_selected_item_info(inventory_item)
+	update_inventory_ui()
+# 기존 인벤토리 특정 슬롯에 있는 아이템 index 찾기 함수
+func get_inventory_item_index_at_slot(slot):
+	if slot < 0:
+		return -1
+
+	var cols = 4
+
+	for i in range(inventory.size()):
+		var inventory_item = inventory[i]
+
+		if inventory_item == null:
+			continue
+
+		if typeof(inventory_item) != TYPE_DICTIONARY:
+			continue
+
+		if not inventory_item.has("slot"):
+			continue
+
+		var item_id = inventory_item.get("id", "")
+
+		if item_id == "":
+			continue
+
+		if not items.has(item_id):
+			continue
+
+		var item_data = items[item_id]
+		var item_width = int(item_data.get("width", 1))
+		var item_height = int(item_data.get("height", 1))
+		var start_slot = int(inventory_item.get("slot", 0))
+
+		var start_col = start_slot % cols
+		var start_row = floori(start_slot / float(cols))
+
+		for y in range(item_height):
+			for x in range(item_width):
+				var check_col = start_col + x
+				var check_row = start_row + y
+				var check_slot = check_row * cols + check_col
+
+				if check_slot == slot:
+					return i
+
+	return -1
+# 아이템이 차지하는 슬롯 목록 반환 함수
+func get_occupied_slots(inventory_item):
+	var item_id = inventory_item["id"]
+
+	if not items.has(item_id):
+		return []
+
+	var item_data = items[item_id]
+	var item_width = item_data.get("width", 1)
+	var item_height = item_data.get("height", 1)
+
+	var start_slot = int(inventory_item["slot"])
+	var start_col = start_slot % 4
+	var start_row = floori(start_slot / 4.0)
+
+	var occupied = []
+
+	for y in range(item_height):
+		for x in range(item_width):
+			var slot = (start_row + y) * 4 + (start_col + x)
+			occupied.append(slot)
+
+	return occupied	
+# 아이템 드래그 시작 함수
+func start_drag_item(inventory_item, item_button):
+	is_dragging_item = true
+	dragged_item = inventory_item
+	dragged_item_button = item_button
+	dragged_item_original_position = item_button.position
+	
+	item_button.z_index = 100
+	item_sound.play()
+# 아이템 드래그 종료 함수
+func stop_drag_item():
+
+	if dragged_item == null or dragged_item_button == null:
+		is_dragging_item = false
+		dragged_item = null
+		dragged_item_button = null
+		slot_highlight.visible = false
+		return
+
+	var item_id = dragged_item["id"]
+
+	if not items.has(item_id):
+		dragged_item_button.position = dragged_item_original_position
+		dragged_item_button.z_index = 0
+		is_dragging_item = false
+		dragged_item = null
+		dragged_item_button = null
+		slot_highlight.visible = false
+		return
+
+	var item_data = items[item_id]
+
+	var item_width = int(item_data.get("width", 1))
+	var item_height = int(item_data.get("height", 1))
+
+	var target_slot = get_slot_from_mouse_position()
+
+	# 스택 아이템이면 먼저 합치기 시도
+	if target_slot != -1:
+		var merged = try_merge_inventory_stack_item(
+			dragged_item,
+			target_slot
+		)
+
+		if merged:
+			dragged_item_button.z_index = 0
+
+			is_dragging_item = false
+			dragged_item = null
+			dragged_item_button = null
+			slot_highlight.visible = false
+
+			update_inventory_ui()
+			return
+
+	# 정상 슬롯이고 배치 가능하면 이동
+	if target_slot != -1:
+		if can_place_item_at_except(
+			target_slot,
+			item_width,
+			item_height,
+			dragged_item
+		):
+			dragged_item["slot"] = target_slot
+			item_sound.play()
+			update_inventory_ui()
+
+		# 놓을 수 없는 위치면 원래 자리 복귀
+		else:
+			dragged_item_button.position = dragged_item_original_position
+
+	# 가방 밖이면 원래 자리 복귀
+	else:
+		dragged_item_button.position = dragged_item_original_position
+
+	dragged_item_button.z_index = 0
+
+	is_dragging_item = false
+	dragged_item = null
+	dragged_item_button = null
+	slot_highlight.visible = false
+# 특정 슬롯을 차지하고 있는 인벤토리 아이템 찾기 함수
+func find_inventory_item_at_slot(slot, ignored_item = null):
+	for item in inventory:
+		if item == ignored_item:
+			continue
+
+		var occupied_slots = get_occupied_slots(item)
+
+		if occupied_slots.has(slot):
+			return item
+
+	return null
+# 기존 인벤토리에서 스택 합치기 가능 여부 확인 함수
+func can_merge_inventory_stack_item(source_item, target_slot):
+	if source_item == null:
 		return false
 
-	var file = FileAccess.open(path, FileAccess.READ)
-
-	if file == null:
-		push_error("enemies.json 파일 열기 실패: " + path)
+	if typeof(source_item) != TYPE_DICTIONARY:
 		return false
 
-	var json_text = file.get_as_text()
-	var json = JSON.new()
-	var error = json.parse(json_text)
-
-	if error != OK:
-		push_error("enemies.json 파싱 실패: " + json.get_error_message())
-		push_error("오류 위치 line: " + str(json.get_error_line()))
+	if target_slot == -1:
 		return false
 
-	if typeof(json.data) != TYPE_DICTIONARY:
-		push_error("enemies.json 최상위 구조는 Dictionary여야 함")
+	var source_id = source_item.get("id", "")
+
+	if source_id == "":
 		return false
 
-	enemies = json.data
-	print("enemies.json 로드 성공")
+	if not items.has(source_id):
+		return false
+
+	var item_data = items[source_id]
+
+	if not item_data.get("stackable", false):
+		return false
+
+	var max_stack = int(item_data.get("max_stack", 1))
+
+	if max_stack <= 1:
+		return false
+
+	var target_index = find_inventory_item_index_at_slot(target_slot, source_item)
+
+	if target_index < 0:
+		return false
+
+	if target_index >= inventory.size():
+		return false
+
+	var target_item = inventory[target_index]
+
+	if target_item == null:
+		return false
+
+	if typeof(target_item) != TYPE_DICTIONARY:
+		return false
+
+	if target_item.get("id", "") != source_id:
+		return false
+
+	var target_count = int(target_item.get("count", 1))
+
+	if target_count >= max_stack:
+		return false
+
 	return true
+# 기존 인벤토리 스택 합치기 실행 함수
+func try_merge_inventory_stack_item(source_item, target_slot):
+	if source_item == null:
+		return false
 
-# 전투 시작 함수
-func start_battle(enemy_id, first_turn = ""):
-	if not enemies.has(enemy_id):
-		push_error("존재하지 않는 적: " + enemy_id)
-		return
+	if typeof(source_item) != TYPE_DICTIONARY:
+		return false
 
-	var enemy_data = enemies[enemy_id]
-	var skip_flag = enemy_data.get("skip_if_flag", "")
+	if not can_merge_inventory_stack_item(source_item, target_slot):
+		return false
 
-	if skip_flag != "" and has_flag(skip_flag):
-		print("이미 처치한 적이라 전투 스킵: " + enemy_id)
-		return
+	var source_id = source_item.get("id", "")
+
+	if source_id == "":
+		return false
+
+	if not items.has(source_id):
+		return false
+
+	var item_data = items[source_id]
+	var max_stack = int(item_data.get("max_stack", 1))
+
+	var target_index = find_inventory_item_index_at_slot(target_slot, source_item)
+
+	if target_index < 0:
+		return false
+
+	if target_index >= inventory.size():
+		return false
+
+	var source_count = int(source_item.get("count", 1))
+	var target_count = int(inventory[target_index].get("count", 1))
+
+	var move_count = min(source_count, max_stack - target_count)
+
+	if move_count <= 0:
+		return false
+
+	# target_item 변수에 직접 대입하지 않고 inventory index로 수정
+	inventory[target_index]["count"] = target_count + move_count
+	source_count -= move_count
+
+	if source_count <= 0:
+		if selected_inventory_item == source_item:
+			selected_inventory_item = inventory[target_index]
+
+		inventory.erase(source_item)
+	else:
+		source_item["count"] = source_count
+
+	selected_inventory_item = inventory[target_index]
+	show_selected_item_info(selected_inventory_item)
+
+	if item_sound != null:
+		item_sound.play()
+
+	return true
+# 특정 슬롯을 차지하고 있는 인벤토리 아이템 index 찾기 함수
+func find_inventory_item_index_at_slot(slot, ignored_item = null):
+	if slot < 0:
+		return -1
+
+	for i in range(inventory.size()):
+		var item = inventory[i]
+
+		if item == ignored_item:
+			continue
+
+		if item == null:
+			continue
+
+		if typeof(item) != TYPE_DICTIONARY:
+			continue
+
+		if not item.has("slot"):
+			continue
+
+		var occupied_slots = get_occupied_slots(item)
+
+		if occupied_slots.has(slot):
+			return i
+
+	return -1
+# 인벤토리 우클릭 메뉴 버튼 연결 함수
+func connect_inventory_context_menu_buttons():
+	if not use_button.pressed.is_connected(_on_use_button_pressed):
+		use_button.pressed.connect(_on_use_button_pressed)
+
+	if not equip_button.pressed.is_connected(_on_equip_button_pressed):
+		equip_button.pressed.connect(_on_equip_button_pressed)
+
+	if not drop_button.pressed.is_connected(_on_drop_button_pressed):
+		drop_button.pressed.connect(_on_drop_button_pressed)
+
+	var rotate_callable = Callable(self, "_on_rotate_button_pressed")
+
+	if has_method("_on_rotate_button_pressed"):
+		if not rotate_button.pressed.is_connected(rotate_callable):
+			rotate_button.pressed.connect(rotate_callable)
+
+# 인벤토리 정리 화면 열기 함수
+func open_inventory_arrange(mode, left_items):
+	is_inventory_arrange_open = true
+	inventory_arrange_mode = mode
+	arrange_left_inventory = left_items.duplicate(true)
+	selected_arrange_item = null
+	selected_arrange_source = ""
+	clear_arrange_selected_focus()
+	clear_arrange_selected_item_info()
 	
-	is_story_playing = true
-	hide_game_ui()
+	normalize_arrange_left_slots()
 
-	var battle_scene_resource = load(BATTLE_SCENE_PATH)
-	battle_scene = battle_scene_resource.instantiate()
+	# 기존 인벤토리 여는 효과음과 동일하게 사용
+	if bag_open_sound != null:
+		bag_open_sound.play()
 
-	add_child(battle_scene)
-	battle_scene.battle_finished.connect(end_battle)
+	inventory_arrange_ui.visible = true
+	clear_arrange_selected_item_info()
+	
+	if inventory_arrange_mode == "loot":
+		arrange_discard_notice_label.visible = true
+		arrange_discard_notice_label.text = "※ 왼쪽에 남은 아이템은 버려집니다."
+	else:
+		arrange_discard_notice_label.visible = false
+	
+	update_inventory_arrange_ui()
 
-	# 전투신으로 넘겨줄 로드한 데이터들 모음
-	var battle_data = {
-		"enemy_id": enemy_id,
-		"enemy_data": enemies[enemy_id],
-		"enemies": enemies,
-		"player_hp": player_hp,
-		"player_max_hp": player_max_hp,
-		"player_portraits": characters["protagonist"]["portrait"],
-		"items": items,
-		"equipped_weapon": equipped_weapon,
-		"inventory": inventory,
-		"projectiles": projectiles,
-		"flags": flags,
-		"first_turn": first_turn
+	print("인벤토리 정리 화면 열림 mode: ", inventory_arrange_mode)
+	print("left items: ", arrange_left_inventory)
+# 인벤토리 정리 화면 왼쪽 아이템 slot 보정 함수
+func normalize_arrange_left_slots():
+	var next_slot = 0
+
+	for item in arrange_left_inventory:
+		if item.has("slot"):
+			continue
+
+		item["slot"] = next_slot
+		next_slot += 1
+# 인벤토리 정리 화면 UI 갱신 함수
+func update_inventory_arrange_ui():
+	for child in arrange_left_items.get_children():
+		child.queue_free()
+
+	for child in arrange_right_items.get_children():
+		child.queue_free()
+
+	for item in arrange_left_inventory:
+		create_arrange_item_icon(
+			item,
+			arrange_left_items,
+			arrange_left_grid_position,
+			arrange_left_cols,
+			"left"
+		)
+
+	for item in inventory:
+		create_arrange_item_icon(
+			item,
+			arrange_right_items,
+			arrange_right_grid_position,
+			arrange_right_cols,
+			"right"
+		)
+
+	update_arrange_selected_focus()
+# 인벤토리 정리 화면 아이템 아이콘 생성 함수
+func create_arrange_item_icon(inventory_item, parent_node, grid_position, grid_cols, source):
+	var item_id = inventory_item.get("id", "")
+
+	if item_id == "":
+		return
+
+	if not items.has(item_id):
+		return
+
+	if not inventory_item.has("slot"):
+		return
+
+	var item_data = items[item_id]
+
+	var slot = int(inventory_item["slot"])
+	var item_width = int(item_data.get("width", 1))
+	var item_height = int(item_data.get("height", 1))
+
+	var col = slot % grid_cols
+	var row = floori(slot / float(grid_cols))
+
+	var icon = TextureButton.new()
+	icon.focus_mode = Control.FOCUS_NONE
+	icon.texture_normal = load(item_data.get("image", ""))
+	icon.ignore_texture_size = true
+	icon.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+
+	var slot_step = arrange_slot_size + arrange_slot_gap
+
+	icon.position = grid_position + Vector2(
+		col * slot_step,
+		row * slot_step
+	)
+	
+	icon.size = Vector2(
+		item_width * arrange_slot_size + (item_width - 1) * arrange_slot_gap,
+		item_height * arrange_slot_size + (item_height - 1) * arrange_slot_gap
+	)
+
+	icon.mouse_filter = Control.MOUSE_FILTER_STOP
+	icon.z_index = 10
+
+	icon.gui_input.connect(
+		func(event):
+			if event is InputEventMouseButton:
+				if event.button_index == MOUSE_BUTTON_LEFT:
+					if event.pressed:
+						arrange_pressed_item = inventory_item
+						arrange_pressed_button = icon
+						arrange_pressed_source = source
+						arrange_pressed_mouse_position = get_global_mouse_position()
+					else:
+						if is_arrange_dragging_item:
+							stop_arrange_drag_item()
+						else:
+							item_sound.play()
+							select_arrange_item(inventory_item, source)
+
+						arrange_pressed_item = null
+						arrange_pressed_button = null
+						arrange_pressed_source = ""
+			)
+
+	parent_node.add_child(icon)
+
+	add_item_count_label(icon, inventory_item)
+# 인벤토리 정리 화면 아이템 드래그 시작 함수
+func start_arrange_drag_item(inventory_item, item_button, source):
+	is_arrange_dragging_item = true
+
+	arrange_dragged_item = inventory_item
+	arrange_dragged_button = item_button
+	arrange_dragged_source = source
+	arrange_dragged_original_slot = int(inventory_item.get("slot", -1))
+	arrange_dragged_original_global_position = item_button.global_position
+
+	item_button.z_index = 100
+# 인벤토리 정리 화면 아이템 드래그 종료 함수
+func stop_arrange_drag_item():
+	if arrange_dragged_item == null or arrange_dragged_button == null:
+		reset_arrange_drag_state()
+		return
+
+	var mouse_pos = get_global_mouse_position()
+	var target_source = get_arrange_drop_target_source(mouse_pos)
+
+	if target_source == "":
+		cancel_arrange_drag_item()
+		return
+
+	var target_slot = get_arrange_slot_from_global_position(mouse_pos, target_source)
+
+	if target_slot == -1:
+		cancel_arrange_drag_item()
+		return
+
+	var merged = try_merge_arrange_stack_item(
+		arrange_dragged_item,
+		arrange_dragged_source,
+		target_source,
+		target_slot
+	)
+
+	if merged:
+		var merged_source_item = arrange_dragged_item
+		var merged_source = arrange_dragged_source
+		
+		if item_sound != null:
+			item_sound.play()
+
+		reset_arrange_drag_state()
+		clear_arrange_selected_focus()
+		update_inventory_arrange_ui()
+
+		if merged_source_item != null and int(merged_source_item.get("count", 0)) > 0:
+			select_arrange_item(merged_source_item, merged_source)
+		else:
+			selected_arrange_item = null
+			selected_arrange_source = ""
+			clear_arrange_selected_item_info()
+			clear_arrange_selected_focus()
+
+		clear_arrange_slot_highlights()
+		return
+
+	var moved = move_arrange_item_to_grid(
+		arrange_dragged_item,
+		arrange_dragged_source,
+		target_source,
+		target_slot
+	)
+
+	if not moved:
+		cancel_arrange_drag_item()
+		return
+
+	var moved_item = arrange_dragged_item
+	var moved_target_source = target_source
+	
+	if item_sound != null:
+		item_sound.play()
+
+	reset_arrange_drag_state()
+	clear_arrange_selected_focus()
+	update_inventory_arrange_ui()
+
+	select_arrange_item(moved_item, moved_target_source)
+
+	clear_arrange_slot_highlights()
+# 인벤토리 정리 화면 드롭 위치가 왼쪽/오른쪽 중 어디인지 반환하는 함수
+func get_arrange_drop_target_source(global_pos):
+	var left_rect = Rect2(
+		arrange_left_grid_position,
+		get_arrange_grid_pixel_size(arrange_left_cols, arrange_left_rows)
+	)
+
+	var right_rect = Rect2(
+		arrange_right_grid_position,
+		get_arrange_grid_pixel_size(arrange_right_cols, arrange_right_rows)
+	)
+
+	if left_rect.has_point(global_pos):
+		return "left"
+
+	if right_rect.has_point(global_pos):
+		return "right"
+
+	return ""
+# 인벤토리 정리 화면 사이즈 그리드 사이즈 함수
+func get_arrange_grid_pixel_size(cols, rows):
+	return Vector2(
+		cols * arrange_slot_size + (cols - 1) * arrange_slot_gap,
+		rows * arrange_slot_size + (rows - 1) * arrange_slot_gap
+	)
+# 인벤토리 정리 화면 전역 좌표를 슬롯 번호로 변환하는 함수
+func get_arrange_slot_from_global_position(global_pos, source):
+	var grid_position = arrange_left_grid_position
+	var cols = arrange_left_cols
+	var rows = arrange_left_rows
+
+	if source == "right":
+		grid_position = arrange_right_grid_position
+		cols = arrange_right_cols
+		rows = arrange_right_rows
+
+	var local_pos = global_pos - grid_position
+	var slot_step = arrange_slot_size + arrange_slot_gap
+
+	var col = int(local_pos.x / slot_step)
+	var row = int(local_pos.y / slot_step)
+
+	if col < 0 or col >= cols:
+		return -1
+
+	if row < 0 or row >= rows:
+		return -1
+
+	# 슬롯 사이 gap 영역에 놓았으면 실패 처리
+	var inside_x = fmod(local_pos.x, slot_step)
+	var inside_y = fmod(local_pos.y, slot_step)
+
+	if inside_x > arrange_slot_size:
+		return -1
+
+	if inside_y > arrange_slot_size:
+		return -1
+
+	return row * cols + col
+# 인벤토리 정리 화면 아이템 이동 함수
+func move_arrange_item_to_grid(item, from_source, to_source, target_slot):
+	var item_id = item.get("id", "")
+
+	if item_id == "":
+		return false
+
+	if not items.has(item_id):
+		return false
+
+	var item_data = items[item_id]
+	var item_width = int(item_data.get("width", 1))
+	var item_height = int(item_data.get("height", 1))
+
+	var target_list = get_arrange_item_list(to_source)
+	var target_cols = get_arrange_grid_cols(to_source)
+	var target_rows = get_arrange_grid_rows(to_source)
+
+	if not can_place_item_at_arrange_grid(
+		target_list,
+		target_slot,
+		item_width,
+		item_height,
+		target_cols,
+		target_rows,
+		item
+	):
+		return false
+
+	# 오른쪽 가방에서 왼쪽 임시 영역으로 나가는 경우 장착 해제
+	if from_source == "right" and to_source == "left":
+		unequip_item_if_moved_out_from_inventory(item)
+
+	remove_arrange_item_from_source(item, from_source)
+
+	item["slot"] = target_slot
+
+	if to_source == "left":
+		arrange_left_inventory.append(item)
+	else:
+		inventory.append(item)
+
+	if selected_arrange_item == item:
+		selected_arrange_source = to_source
+		
+	return true
+# 인벤토리 정리 화면 source에 맞는 아이템 목록 반환 함수
+func get_arrange_item_list(source):
+	if source == "left":
+		return arrange_left_inventory
+
+	return inventory
+# 인벤토리 정리 화면 source에 맞는 열 개수 반환 함수
+func get_arrange_grid_cols(source):
+	if source == "left":
+		return arrange_left_cols
+
+	return arrange_right_cols
+# 인벤토리 정리 화면 source에 맞는 행 개수 반환 함수
+func get_arrange_grid_rows(source):
+	if source == "left":
+		return arrange_left_rows
+
+	return arrange_right_rows
+# 인벤토리 정리 화면 source에서 특정 아이템 제거 함수
+func remove_arrange_item_from_source(item, source):
+	var target_list = get_arrange_item_list(source)
+
+	if target_list.has(item):
+		target_list.erase(item)
+# 인벤토리 정리 화면 아이템이 차지하는 슬롯 목록 반환 함수
+func get_arrange_occupied_slots(item, cols):
+	var item_id = item.get("id", "")
+
+	if item_id == "":
+		return []
+
+	if not items.has(item_id):
+		return []
+
+	var item_data = items[item_id]
+	var item_width = int(item_data.get("width", 1))
+	var item_height = int(item_data.get("height", 1))
+	var start_slot = int(item.get("slot", 0))
+
+	var start_col = start_slot % cols
+	var start_row = floori(start_slot / float(cols))
+
+	var occupied = []
+
+	for y in range(item_height):
+		for x in range(item_width):
+			occupied.append((start_row + y) * cols + (start_col + x))
+
+	return occupied
+# 인벤토리 정리 화면 특정 위치에 아이템 배치 가능 여부 확인 함수
+func can_place_item_at_arrange_grid(item_list, start_slot, item_width, item_height, cols, rows, ignore_item = null):
+	var start_col = start_slot % cols
+	var start_row = floori(start_slot / float(cols))
+
+	if start_col + item_width > cols:
+		return false
+
+	if start_row + item_height > rows:
+		return false
+
+	var target_slots = []
+
+	for y in range(item_height):
+		for x in range(item_width):
+			target_slots.append((start_row + y) * cols + (start_col + x))
+
+	for other_item in item_list:
+		if other_item == ignore_item:
+			continue
+
+		var occupied_slots = get_arrange_occupied_slots(other_item, cols)
+
+		for slot in target_slots:
+			if occupied_slots.has(slot):
+				return false
+
+	return true
+# 인벤토리 정리 화면 드래그 취소 함수
+func cancel_arrange_drag_item():
+	if arrange_dragged_button != null:
+		arrange_dragged_button.global_position = arrange_dragged_original_global_position
+		arrange_dragged_button.z_index = 10
+
+	reset_arrange_drag_state()
+	clear_arrange_slot_highlights()
+# 인벤토리 정리 화면 드래그 상태 초기화 함수
+func reset_arrange_drag_state():
+	is_arrange_dragging_item = false
+	arrange_dragged_item = null
+	arrange_dragged_button = null
+	arrange_dragged_source = ""
+	arrange_dragged_original_slot = -1
+	arrange_dragged_original_global_position = Vector2.ZERO
+
+	arrange_pressed_item = null
+	arrange_pressed_button = null
+	arrange_pressed_source = ""
+# 인벤토리 정리 화면 닫기 함수 (추후에 창고 만들때 여기서 분리 처리!)
+func close_inventory_arrange():
+	selected_arrange_item = null
+	selected_arrange_source = ""
+	clear_arrange_selected_focus()
+	clear_arrange_selected_item_info()
+
+	if is_arrange_dragging_item:
+		cancel_arrange_drag_item()
+		
+	var discarded_items = []
+
+	if inventory_arrange_mode == "loot":
+		discarded_items = arrange_left_inventory.duplicate(true)
+
+	is_inventory_arrange_open = false
+	inventory_arrange_mode = ""
+	# 추후에 창고 만들때 여기서 분리 처리!
+	arrange_left_inventory.clear()
+	
+	#if inventory_arrange_mode == "storage":
+		#storage_inventory = arrange_left_inventory.duplicate(true)
+	#else:
+		#arrange_left_inventory.clear()
+
+	inventory_arrange_ui.visible = false
+	arrange_discard_notice_label.visible = false
+
+	# 클리어 처리
+	clear_selected_item_info()
+	clear_arrange_selected_item_info()
+
+	if bag_open_sound != null:
+		bag_open_sound.play()
+
+	set_interaction_buttons_disabled(false)
+
+	var discard_messages = make_discarded_item_messages(discarded_items)
+
+	for message in discard_messages:
+		print(message)
+	
+	clear_arrange_slot_highlights()
+	print("인벤토리 정리 화면 종료")
+# 인벤토리 정리 화면 스택 아이템 병합 시도 함수
+func try_merge_arrange_stack_item(source_item, from_source, to_source, target_slot):
+	if source_item == null:
+		return false
+
+	if typeof(source_item) != TYPE_DICTIONARY:
+		return false
+
+	var source_item_id = source_item.get("id", "")
+
+	if source_item_id == "":
+		return false
+
+	if not items.has(source_item_id):
+		return false
+
+	var item_data = items[source_item_id]
+
+	if not item_data.get("stackable", false):
+		return false
+
+	var target_list = get_arrange_item_list(to_source)
+	var target_index = get_arrange_item_index_at_slot(to_source, target_slot)
+
+	# 타겟 슬롯에 아이템이 없으면 병합이 아니라 일반 이동 대상
+	if target_index < 0:
+		return false
+
+	if target_index >= target_list.size():
+		return false
+
+	var target_item = target_list[target_index]
+
+	if target_item == null:
+		return false
+
+	if typeof(target_item) != TYPE_DICTIONARY:
+		return false
+
+	# 자기 자신 위에 놓은 경우는 병합 아님
+	if target_item == source_item:
+		return false
+
+	var target_item_id = target_item.get("id", "")
+
+	if target_item_id != source_item_id:
+		return false
+
+	var max_stack = int(item_data.get("max_stack", 1))
+	var source_count = int(source_item.get("count", 1))
+	var target_count = int(target_item.get("count", 1))
+
+	if source_count <= 0:
+		return false
+
+	if target_count >= max_stack:
+		return false
+
+	var space = max_stack - target_count
+	var move_count = min(source_count, space)
+
+	if move_count <= 0:
+		return false
+
+	# 여기부터 실제 병합
+	target_list[target_index]["count"] = target_count + move_count
+	source_item["count"] = source_count - move_count
+
+	print("스택 병합: " + source_item_id + " +" + str(move_count))
+
+	# 전부 병합됐으면 원래 아이템 제거
+	if int(source_item["count"]) <= 0:
+		if selected_arrange_item == source_item:
+			selected_arrange_item = null
+			selected_arrange_source = ""
+			clear_arrange_selected_item_info()
+			clear_arrange_selected_focus()
+
+		if from_source == "right" and to_source == "left":
+			unequip_item_if_moved_out_from_inventory(source_item)
+
+		remove_arrange_item_from_source(source_item, from_source)
+
+	return true
+# 정리 화면 스택 병합 가능 여부 확인 함수
+func can_merge_arrange_stack_item(source_item, to_source, target_slot):
+	if source_item == null:
+		return false
+
+	if typeof(source_item) != TYPE_DICTIONARY:
+		return false
+
+	var source_item_id = source_item.get("id", "")
+
+	if source_item_id == "":
+		return false
+
+	if not items.has(source_item_id):
+		return false
+
+	var item_data = items[source_item_id]
+
+	if not item_data.get("stackable", false):
+		return false
+
+	var target_index = get_arrange_item_index_at_slot(to_source, target_slot)
+
+	if target_index < 0:
+		return false
+
+	var target_list = get_arrange_item_list(to_source)
+
+	if target_index >= target_list.size():
+		return false
+
+	var target_item = target_list[target_index]
+
+	if target_item == null:
+		return false
+
+	if target_item == source_item:
+		return false
+
+	if target_item.get("id", "") != source_item_id:
+		return false
+
+	var max_stack = int(item_data.get("max_stack", 1))
+	var target_count = int(target_item.get("count", 1))
+
+	return target_count < max_stack
+# 인벤토리 정리 화면 특정 슬롯에 있는 아이템 index 찾기 함수
+func get_arrange_item_index_at_slot(source, slot):
+	if slot < 0:
+		return -1
+
+	var item_list = get_arrange_item_list(source)
+	var cols = get_arrange_grid_cols(source)
+
+	for i in range(item_list.size()):
+		var item = item_list[i]
+
+		if item == null:
+			continue
+
+		if typeof(item) != TYPE_DICTIONARY:
+			continue
+
+		if not item.has("slot"):
+			continue
+
+		var occupied_slots = get_arrange_occupied_slots(item, cols)
+
+		if occupied_slots.has(slot):
+			return i
+
+	return -1
+# 인벤토리 정리 화면에서 버린 아이템 메시지 생성 함수
+func make_discarded_item_messages(discarded_items):
+	var messages = []
+
+	for discarded_item in discarded_items:
+		var item_id = discarded_item.get("id", "")
+
+		if item_id == "":
+			continue
+
+		if not items.has(item_id):
+			continue
+
+		var item_name = items[item_id].get("name", item_id)
+		var count = int(discarded_item.get("count", 1))
+
+		messages.append(item_name + " " + str(count) + "개를 버렸다.")
+
+	return messages
+# 인벤토리 정리 화면 선택 아이템 정보 표시 함수
+func show_arrange_selected_item_info(inventory_item):
+	show_item_info_ui(
+		inventory_item,
+		arrange_selected_item_image,
+		arrange_selected_item_text
+	)
+# 인벤토리 정리 화면 선택 아이템 정보 제거 함수
+func clear_arrange_selected_item_info():
+	clear_item_info_ui(
+		arrange_selected_item_image,
+		arrange_selected_item_text
+	)
+# 인벤토리 정리 화면 슬롯 하이라이트 제거 함수
+func clear_arrange_slot_highlights():
+	for child in arrange_slot_highlight_container.get_children():
+		arrange_slot_highlight_container.remove_child(child)
+		child.free()
+# 인벤토리 정리 화면 슬롯 하이라이트 칸 생성 함수
+func create_arrange_slot_highlight(slot_position, is_valid):
+	var rect = ColorRect.new()
+
+	# 너무 진해서 알파 값 줄임
+	if is_valid:
+		rect.color = Color(0, 1, 0, 0.025)
+	else:
+		rect.color = Color(1, 0, 0, 0.025)
+
+	rect.position = slot_position
+	rect.size = Vector2(arrange_slot_size, arrange_slot_size)
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	rect.z_index = 5
+
+	arrange_slot_highlight_container.add_child(rect)
+# 인벤토리 정리 화면 특정 슬롯의 화면 좌표 반환 함수
+func get_arrange_slot_position(source, slot):
+	var grid_position = arrange_left_grid_position
+	var cols = arrange_left_cols
+
+	if source == "right":
+		grid_position = arrange_right_grid_position
+		cols = arrange_right_cols
+
+	var slot_step = arrange_slot_size + arrange_slot_gap
+	var col = slot % cols
+	var row = floori(slot / float(cols))
+
+	return grid_position + Vector2(col * slot_step, row * slot_step)
+# 인벤토리 정리 화면 드래그 예상 위치 하이라이트 갱신 함수
+func update_arrange_drag_slot_highlight():
+	clear_arrange_slot_highlights()
+
+	if not is_arrange_dragging_item:
+		return
+
+	if arrange_dragged_item == null:
+		return
+
+	var mouse_pos = get_global_mouse_position()
+	var target_source = get_arrange_drop_target_source(mouse_pos)
+
+	if target_source == "":
+		return
+
+	var target_slot = get_arrange_slot_from_global_position(mouse_pos, target_source)
+
+	if target_slot == -1:
+		return
+
+	var item_id = arrange_dragged_item.get("id", "")
+
+	if item_id == "":
+		return
+
+	if not items.has(item_id):
+		return
+
+	var item_data = items[item_id]
+	var item_width = int(item_data.get("width", 1))
+	var item_height = int(item_data.get("height", 1))
+
+	var target_list = get_arrange_item_list(target_source)
+	var target_cols = get_arrange_grid_cols(target_source)
+	var target_rows = get_arrange_grid_rows(target_source)
+
+	var can_merge = can_merge_arrange_stack_item(
+		arrange_dragged_item,
+		target_source,
+		target_slot
+	)
+
+	var can_place = can_place_item_at_arrange_grid(
+		target_list,
+		target_slot,
+		item_width,
+		item_height,
+		target_cols,
+		target_rows,
+		arrange_dragged_item
+	)
+
+	var is_valid = can_merge or can_place
+
+	var start_col = target_slot % target_cols
+	var start_row = floori(target_slot / float(target_cols))
+
+	for y in range(item_height):
+		for x in range(item_width):
+			var col = start_col + x
+			var row = start_row + y
+
+			if col < 0 or col >= target_cols:
+				continue
+
+			if row < 0 or row >= target_rows:
+				continue
+
+			var slot = row * target_cols + col
+			var slot_position = get_arrange_slot_position(target_source, slot)
+
+			create_arrange_slot_highlight(slot_position, is_valid)
+# 인벤토리 정리 화면 선택 포커스 제거 함수
+func clear_arrange_selected_focus():
+	for child in arrange_selected_focus_container.get_children():
+		arrange_selected_focus_container.remove_child(child)
+		child.free()
+# 인벤토리 정리 화면 선택 포커스 갱신 함수
+func update_arrange_selected_focus():
+	clear_arrange_selected_focus()
+
+	if selected_arrange_item == null:
+		return
+
+	if typeof(selected_arrange_item) != TYPE_DICTIONARY:
+		return
+
+	if selected_arrange_source == "":
+		return
+
+	if not selected_arrange_item.has("slot"):
+		return
+
+	var item_id = selected_arrange_item.get("id", "")
+
+	if item_id == "":
+		return
+
+	if not items.has(item_id):
+		return
+
+	var item_data = items[item_id]
+	var item_width = int(item_data.get("width", 1))
+	var item_height = int(item_data.get("height", 1))
+	var slot = int(selected_arrange_item.get("slot", 0))
+
+	var focus_panel = Panel.new()
+	focus_panel.position = get_arrange_slot_position(selected_arrange_source, slot)
+	focus_panel.size = Vector2(
+		item_width * arrange_slot_size + (item_width - 1) * arrange_slot_gap,
+		item_height * arrange_slot_size + (item_height - 1) * arrange_slot_gap
+	)
+	focus_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	focus_panel.z_index = 20
+
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(1, 1, 1, 0.08)
+	style.border_color = Color(1, 1, 1, 0.08)
+	style.set_border_width_all(4)
+
+	focus_panel.add_theme_stylebox_override("panel", style)
+
+	arrange_selected_focus_container.add_child(focus_panel)
+# 인벤토리 정리 화면 선택 아이템 지정 함수
+func select_arrange_item(inventory_item, _source):
+	if inventory_item == null:
+		selected_arrange_item = null
+		selected_arrange_source = ""
+		clear_arrange_selected_item_info()
+		clear_arrange_selected_focus()
+		return
+
+	var real_source = get_real_arrange_item_source(inventory_item)
+
+	if real_source == "":
+		selected_arrange_item = null
+		selected_arrange_source = ""
+		clear_arrange_selected_item_info()
+		clear_arrange_selected_focus()
+		return
+
+	selected_arrange_item = inventory_item
+	selected_arrange_source = real_source
+
+	show_arrange_selected_item_info(inventory_item)
+	update_arrange_selected_focus()
+# 인벤토리 정리 화면에서 장착 중인 아이템이 가방 밖으로 나갈 때 장착 해제하는 함수
+func unequip_item_if_moved_out_from_inventory(item):
+	if item == null:
+		return
+
+	if equipped_weapon == item:
+		equipped_weapon = null
+		update_equipped_weapon_ui()
+
+		if selected_inventory_item == item:
+			selected_inventory_item = null
+			clear_selected_item_info()
+
+		print("장착 중인 아이템이 가방 밖으로 이동되어 장착 해제됨")
+# 인벤토리 정리 화면 아이템이 실제로 어느 쪽 목록에 있는지 찾는 함수
+func get_real_arrange_item_source(item):
+	if item == null:
+		return ""
+
+	if arrange_left_inventory.has(item):
+		return "left"
+
+	if inventory.has(item):
+		return "right"
+
+	return ""
+
+# === 아이템 함수 모음 ===
+# 아이템 보유 여부 확인 함수
+func has_item(item_id):
+	for item in inventory:
+		if item["id"] == item_id:
+			return true
+
+	return false
+# 아이템 추가 함수
+func add_item(item_id, count = 1, show_full_message = true):
+	if not items.has(item_id):
+		push_error("아이템 데이터가 없음: " + item_id)
+		return false
+
+	var item_data = items[item_id]
+	var is_stackable = item_data.get("stackable", false)
+	var max_stack = int(item_data.get("max_stack", 1))
+	var remaining = int(count)
+	var added_any = false
+
+	if remaining <= 0:
+		return false
+
+	# 스택 가능한 아이템은 기존 스택부터 먼저 채움
+	if is_stackable:
+		for inventory_item in inventory:
+			if remaining <= 0:
+				break
+
+			if inventory_item.get("id", "") != item_id:
+				continue
+
+			var current_count = int(inventory_item.get("count", 1))
+
+			if current_count >= max_stack:
+				continue
+
+			var add_count = min(remaining, max_stack - current_count)
+			inventory_item["count"] = current_count + add_count
+			remaining -= add_count
+			added_any = true
+
+	# 남은 수량은 새 슬롯에 배치
+	while remaining > 0:
+		var empty_slot = find_empty_slot(item_id)
+
+		if empty_slot == -1:
+			if show_full_message:
+				await show_dialogue("가방에 공간이 없다.")
+			return added_any
+
+		var new_item = {
+			"id": item_id,
+			"slot": empty_slot
+		}
+
+		if is_stackable:
+			var add_count = min(remaining, max_stack)
+			new_item["count"] = add_count
+			remaining -= add_count
+		else:
+			# 현재 구조에서는 비중첩 아이템 중복 획득 방지
+			if has_item(item_id):
+				return added_any
+
+			remaining -= 1
+
+		inventory.append(new_item)
+		added_any = true
+
+	print("아이템 획득: " + get_item_name(item_id))
+	return added_any
+# 아이템 추가 시 실제로 넣은 개수 계산 함수
+func get_inventory_item_count(item_id):
+	var total_count = 0
+
+	for inventory_item in inventory:
+		if inventory_item.get("id", "") != item_id:
+			continue
+
+		total_count += int(inventory_item.get("count", 1))
+
+	return total_count
+# 아이템 id 기준으로 첫 번째 아이템을 찾아 소모하는 함수 (문 열쇠처럼 id만 아는 경우)
+func consume_item_by_id(item_id):
+	for inventory_item in inventory:
+		if inventory_item.get("id", "") == item_id:
+			return consume_item_if_needed(inventory_item)
+
+	return false
+# 아이템 타입 한글 이름 반환 함수
+func get_item_type_text(item_type):
+	if item_type == "key":
+		return "열쇠"
+	elif item_type == "weapon":
+		return "무기"
+	elif item_type == "consumable":
+		return "소모품"
+	elif item_type == "coin":
+		return "주화"
+	elif item_type == "holy":
+		return "성물"
+	elif item_type == "fetish":
+		return "주물"
+	elif item_type == "":
+		return ""
+	else:
+		return "기타"
+# 아이템 개수 라벨 생성 함수
+func add_item_count_label(icon_node, inventory_item):
+	var count = int(inventory_item.get("count", 1))
+
+	if count <= 1:
+		return
+
+	var count_label = Label.new()
+	var font = load("res://fonts/x12y12pxMaruMinyaHangul.ttf")
+	count_label.add_theme_color_override("font_color",Color("#d8d0c8"))
+	count_label.add_theme_font_override("font", font)
+	count_label.text = str(count)
+	count_label.size = Vector2(50, 32)
+	count_label.position = Vector2(icon_node.size.x - 58, icon_node.size.y - 38)
+	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	count_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	count_label.z_index = 50
+
+	# 숫자만 너무 떠 보이면 나중에 LabelSettings로 외곽선 추가 가능
+	icon_node.add_child(count_label)
+# 아이템 설명 텍스트 생성 함수
+func make_item_info_text(inventory_item):
+	if inventory_item == null:
+		return ""
+
+	if typeof(inventory_item) != TYPE_DICTIONARY:
+		return ""
+
+	var item_id = inventory_item.get("id", "")
+
+	if item_id == "":
+		return ""
+
+	if not items.has(item_id):
+		return ""
+
+	var item_data = items[item_id]
+
+	var item_name = item_data.get("name", item_id)
+	var description = item_data.get("description", "")
+	var item_type = item_data.get("type", "")
+	var item_type_text = get_item_type_text(item_type)
+	var count = int(inventory_item.get("count", 1))
+
+	var attack_min = int(item_data.get("attack_min", 0))
+	var attack_max = int(item_data.get("attack_max", 0))
+
+	var text_lines = []
+
+	text_lines.append("이름 : " + item_name)
+
+	if count > 1:
+		text_lines.append("보유 수량 : " + str(count))
+
+	if item_type == "weapon":
+		text_lines.append("공격력 : " + str(attack_min) + " ~ " + str(attack_max))
+
+	if item_type_text != "":
+		text_lines.append("종류 : " + item_type_text)
+
+	if description != "":
+		text_lines.append("")
+		text_lines.append(description)
+
+	return "\n".join(text_lines)
+# 아이템 이미지 경로 반환 함수
+func get_item_image_path_from_inventory_item(inventory_item):
+	if inventory_item == null:
+		return ""
+
+	if typeof(inventory_item) != TYPE_DICTIONARY:
+		return ""
+
+	var item_id = inventory_item.get("id", "")
+
+	if item_id == "":
+		return ""
+
+	if not items.has(item_id):
+		return ""
+
+	return items[item_id].get("image", "")
+# 아이템 정보 UI 표시 공통 함수
+func show_item_info_ui(inventory_item, image_node, text_node):
+	if inventory_item == null:
+		clear_item_info_ui(image_node, text_node)
+		return
+
+	var info_text = make_item_info_text(inventory_item)
+	var image_path = get_item_image_path_from_inventory_item(inventory_item)
+
+	if info_text == "":
+		clear_item_info_ui(image_node, text_node)
+		return
+
+	if image_node != null:
+		if image_path != "":
+			image_node.texture = load(image_path)
+			image_node.visible = true
+		else:
+			image_node.texture = null
+			image_node.visible = false
+
+	if text_node != null:
+		text_node.text = info_text
+		text_node.visible = true
+# 아이템 정보 UI 초기화 공통 함수
+func clear_item_info_ui(image_node, text_node):
+	if image_node != null:
+		image_node.texture = null
+		image_node.visible = false
+
+	if text_node != null:
+		text_node.text = ""
+		text_node.visible = false
+# 아이템을 가방에 넣고, 못 넣은 수량은 pending_loot에 저장하는 함수
+func give_item_with_pending_loot(item_id, count = 1):
+	var result = {
+		"item": item_id,
+		"requested": int(count),
+		"added": 0,
+		"remaining": 0
 	}
-	
-	if bgm_player.playing:
-		bgm_player.stop()
 
-	battle_scene.setup_battle(battle_data)
-# 전투 종료 함수
-func end_battle(result_data):
-	player_hp = result_data.get("player_hp", player_hp)
+	if item_id == "":
+		return result
 
-	for flag_id in result_data.get("reward_flags", []):
-		set_flag(flag_id)
+	if not items.has(item_id):
+		push_error("아이템 데이터가 없음: " + item_id)
+		return result
 
-	for reward in result_data.get("rewards", []):
+	var item_data = items[item_id]
+	var is_stackable = item_data.get("stackable", false)
+	var requested_count = int(count)
+
+	if requested_count <= 0:
+		return result
+
+	var before_count = get_inventory_item_count(item_id)
+
+	await add_item(item_id, requested_count, false)
+
+	var after_count = get_inventory_item_count(item_id)
+	var added_count = max(after_count - before_count, 0)
+	var remaining_count = requested_count - added_count
+
+	# 비중첩 아이템은 현재 구조상 중복 소지 불가.
+	# 이미 가지고 있는 아이템 때문에 못 들어간 경우는 pending_loot로 보내지 않음.
+	if not is_stackable and after_count > 0:
+		remaining_count = 0
+
+	if remaining_count > 0:
+		add_pending_loot(item_id, remaining_count)
+
+	result["added"] = added_count
+	result["remaining"] = remaining_count
+
+	return result
+# 여러 보상 아이템을 가방에 넣고, 못 넣은 수량은 pending_loot에 저장하는 함수
+func give_items_with_pending_loot(rewards):
+	var results = []
+
+	for reward in rewards:
 		var item_id = reward.get("item", "")
 		var count = int(reward.get("count", 1))
 
-		for i in range(count):
-			var added = await add_item(item_id)
-			# 한번 획득 가능한 아이템 플래그 검사
-			if added and reward.has("once_flag"):
-				set_flag(reward["once_flag"])
+		if item_id == "":
+			continue
 
-	if battle_scene != null:
-		battle_scene.queue_free()
-		battle_scene = null
+		var result = await give_item_with_pending_loot(item_id, count)
+		results.append(result)
 
-	is_story_playing = false
-	show_game_ui()
+	return results
+# pending_loot가 있으면 인벤토리 정리 화면을 여는 함수
+func open_inventory_arrange_if_pending_loot(mode = "loot"):
+	if pending_loot.size() <= 0:
+		return
+
+	var loot_to_arrange = pending_loot.duplicate(true)
+	pending_loot.clear()
+
+	await open_inventory_arrange(mode, loot_to_arrange)
+# 아이템 이름 가져오기 함수
+func get_item_name(item_id):
+	if not items.has(item_id):
+		return item_id
+
+	if not items[item_id].has("name"):
+		return item_id
+
+	return items[item_id]["name"]
+# 선택 아이템 정보 제거 함수
+func clear_selected_item_info():
+	show_equipped_weapon_info()
+# 선택 아이템 정보 표시 함수
+func show_selected_item_info(inventory_item):
+	show_item_info_ui(
+		inventory_item,
+		selected_item_image,
+		selected_item_description
+	)
+# 아이템이 들어갈 수 있는 빈 슬롯 찾기 함수
+func find_empty_slot(item_id):
+	if not items.has(item_id):
+		return -1
+
+	var item_data = items[item_id]
+	var item_width = item_data.get("width", 1)
+	var item_height = item_data.get("height", 1)
+
+	for slot in range(16):
+		if can_place_item_at(slot, item_width, item_height):
+			return slot
+
+	return -1
+# 선택 아이템 특정 슬롯에 아이템을 놓을 수 있는지 확인하는 함수
+func can_place_item_at(start_slot, item_width, item_height):
+	var start_col = start_slot % 4
+	var start_row = start_slot / 4
+
+	# 오른쪽/아래로 가방 범위를 넘으면 배치 불가
+	if start_col + item_width > 4:
+		return false
+
+	if start_row + item_height > 4:
+		return false
+
+	# 새 아이템이 차지할 슬롯 목록
+	var target_slots = []
+
+	for y in range(item_height):
+		for x in range(item_width):
+			var slot = (start_row + y) * 4 + (start_col + x)
+			target_slots.append(slot)
+
+	# 기존 아이템들과 겹치는지 확인
+	for item in inventory:
+		var occupied = get_occupied_slots(item)
+
+		for slot in target_slots:
+			if occupied.has(slot):
+				return false
+
+	return true	
+# 마우스 위치 기준 슬롯 번호 계산 함수
+func get_slot_from_mouse_position():
+
+	var local_mouse = inventory_slots.get_local_mouse_position()
+
+	var slot_x = int(local_mouse.x / (inventory_slot_size + inventory_slot_gap))
+	var slot_y = int(local_mouse.y / (inventory_slot_size + inventory_slot_gap))
+
+	# 가방 범위 밖이면 실패
+	if slot_x < 0 or slot_x >= 4:
+		return -1
+
+	if slot_y < 0 or slot_y >= 4:
+		return -1
+
+	return slot_y * 4 + slot_x	
+# 특정 아이템을 제외하고 슬롯 배치 가능 여부 확인
+func can_place_item_at_except(start_slot, item_width, item_height, ignored_item):
+
+	var start_col = start_slot % 4
+	var start_row = start_slot / 4
+
+	# 가방 범위 초과
+	if start_col + item_width > 4:
+		return false
+
+	if start_row + item_height > 4:
+		return false
+
+	var target_slots = []
+
+	for y in range(item_height):
+		for x in range(item_width):
+			var slot = (start_row + y) * 4 + (start_col + x)
+			target_slots.append(slot)
+
+	for item in inventory:
+
+		# 현재 드래그 중인 아이템은 무시
+		if item == ignored_item:
+			continue
+
+		var occupied = get_occupied_slots(item)
+
+		for slot in target_slots:
+			if occupied.has(slot):
+				return false
+
+	return true	
+# 드래그 중 아이템을 놓을 위치 하이라이트 갱신 함수
+func update_slot_highlight():
+	if not is_dragging_item:
+		slot_highlight.visible = false
+		return
+
+	if dragged_item == null:
+		slot_highlight.visible = false
+		return
+
+	var target_slot = get_slot_from_mouse_position()
+
+	if target_slot == -1:
+		slot_highlight.visible = false
+		return
+
+	var item_id = dragged_item["id"]
+	var item_data = items[item_id]
+
+	var item_width = item_data.get("width", 1)
+	var item_height = item_data.get("height", 1)
+
+	var can_merge = can_merge_inventory_stack_item(
+		dragged_item,
+		target_slot
+	)
+
+	var can_place = can_merge or can_place_item_at_except(
+		target_slot,
+		item_width,
+		item_height,
+		dragged_item
+	)
+
+	var col = target_slot % 4
+	var row = floori(target_slot / 4.0)
+
+	slot_highlight.position = inventory_slots.position + Vector2(
+		col * (inventory_slot_size + inventory_slot_gap),
+		row * (inventory_slot_size + inventory_slot_gap)
+	)
+
+	slot_highlight.size = Vector2(
+		(inventory_slot_size * item_width) + (inventory_slot_gap * (item_width - 1)),
+		(inventory_slot_size * item_height) + (inventory_slot_gap * (item_height - 1))
+	)
+
+	if can_place:
+		slot_highlight.color = Color(0, 1, 0, 0.025)
+	else:
+		slot_highlight.color = Color(1, 0, 0, 0.025)
+
+	slot_highlight.visible = true	
+# 인벤토리 우클릭 메뉴 열기 함수
+func open_context_menu(inventory_item):
 	
-	bgm_player.play()
+	if inventory_context_menu.visible and context_menu_item == inventory_item:
+		close_context_menu()
+		return
 
-	print("전투 종료 결과: " + str(result_data.get("result", "")))
-# 탄막 데이터 로드 함수
-func load_projectiles():
-	var path = "res://data/projectiles.json"
+	context_menu_item = inventory_item
+
+	var item_id = inventory_item["id"]
+
+	if not items.has(item_id):
+		return
+
+	var item_data = items[item_id]
+	var item_type = item_data.get("type", "")
+
+	# 기본적으로 전부 숨김
+	use_button.visible = false
+	equip_button.visible = false
+	drop_button.visible = false
+	rotate_button.visible = false
+
+	# 타입별 메뉴 표시
+	if item_type == "weapon":
+		equip_button.visible = true
+		drop_button.visible = true
+		rotate_button.visible = true
+
+		if equipped_weapon == inventory_item:
+			equip_button.text = "해제"
+		else:
+			equip_button.text = "장착"
+
+	elif item_type == "consumable":
+		use_button.visible = true
+		drop_button.visible = true
+
+	elif item_type == "key":
+		drop_button.visible = true
+
+	else:
+		drop_button.visible = true
+
+	inventory_context_menu.visible = true
+	inventory_context_menu.global_position = get_global_mouse_position()
+	inventory_context_menu.z_index = 100
+	inventory_context_menu.move_to_front()
+# 인벤토리 우클릭 메뉴 닫기 함수
+func close_context_menu():
+	context_menu_item = null
+	inventory_context_menu.visible = false	
+# 아이템 제거 함수
+func remove_item(inventory_item):
+	if inventory_item == null:
+		return false
+
+	if inventory.has(inventory_item):
+
+		# 장착 중인 아이템을 제거하려는 경우 먼저 장착 해제
+		if equipped_weapon == inventory_item:
+			equipped_weapon = null
+			update_equipped_weapon_ui()
+
+		inventory.erase(inventory_item)
+
+		if selected_inventory_item == inventory_item:
+			selected_inventory_item = null
+			clear_selected_item_info()
+
+		if context_menu_item == inventory_item:
+			close_context_menu()
+
+		update_inventory_ui()
+		return true
+
+	return false
+# 아이템 사용 시 소모 처리 함수
+func consume_item_if_needed(inventory_item):
+	if inventory_item == null:
+		return false
+
+	if not inventory.has(inventory_item):
+		return false
+
+	var item_id = inventory_item.get("id", "")
+
+	if not items.has(item_id):
+		return false
+
+	var item_data = items[item_id]
+
+	# consumed_on_use가 없거나 false면 소모 안 함
+	if not item_data.get("consumed_on_use", false):
+		return false
+
+	# stackable 아이템이면 선택한 스택의 count만 1 감소
+	if inventory_item.has("count"):
+		inventory_item["count"] = int(inventory_item["count"]) - 1
+
+		print("아이템 개수 감소: " + item_id + " x" + str(inventory_item["count"]))
+
+		if int(inventory_item["count"]) <= 0:
+			remove_item(inventory_item)
+
+		return true
+
+	# stackable이 아닌 아이템은 선택한 아이템 제거
+	remove_item(inventory_item)
+	print("아이템 소모: " + item_id)
+	return true
+# 아이템 버리기 버튼 함수
+func _on_drop_button_pressed():
+	if context_menu_item == null:
+		return
+
+	item_sound.play()
+	remove_item(context_menu_item)
+# 아이템 장착 함수
+func equip_item(inventory_item):
+	if inventory_item == null:
+		return
+
+	var item_id = inventory_item["id"]
+
+	if not items.has(item_id):
+		return
+
+	var item_data = items[item_id]
+
+	if item_data.get("type", "") != "weapon":
+		return
+
+	if equipped_weapon == inventory_item:
+		equipped_weapon = null
+		print(get_item_name(item_id) + " 해제")
+	else:
+		equipped_weapon = inventory_item
+		print(get_item_name(item_id) + " 장착")
+
+	update_equipped_weapon_ui()
+	close_context_menu()
+# 아이템 장착 버튼 함수
+func _on_equip_button_pressed():
+	if context_menu_item == null:
+		return
+
+	equip_sound.play()
+	equip_item(context_menu_item)
+# 장착 무기 UI 갱신 함수
+func update_equipped_weapon_ui():
+	show_equipped_weapon_info()
+# 현재 장착 무기 정보 표시 함수
+func show_equipped_weapon_info():
+	var item_id = "fist"
+
+	if equipped_weapon != null:
+		item_id = equipped_weapon.get("id", "fist")
+
+	if not items.has(item_id):
+		selected_item_image.texture = null
+		selected_item_image.visible = false
+		selected_item_description.text = ""
+		selected_item_description.visible = false
+		equipped_weapon_text.text = "무기 없음"
+		return
+
+	var fake_inventory_item = {
+		"id": item_id,
+		"count": 1
+	}
+
+	if item_id == "fist":
+		equipped_weapon_text.text = "무기 없음"
+	else:
+		equipped_weapon_text.text = get_item_name(item_id)
+
+	show_item_info_ui(
+		fake_inventory_item,
+		selected_item_image,
+		selected_item_description
+	)
+# 아이템 사용 함수
+func use_item(inventory_item):
+	if inventory_item == null:
+		return
+
+	var item_id = inventory_item["id"]
+
+	if not items.has(item_id):
+		return
+
+	var item_data = items[item_id]
+	var item_type = item_data.get("type", "")
+
+	if item_type != "consumable":
+		return
+
+	if item_data.has("heal"):
+		player_hp += item_data["heal"]
+
+		if player_hp > player_max_hp:
+			player_hp = player_max_hp
+
+		print("현재 체력: " + str(int(player_hp)))
+
+	consume_item_if_needed(inventory_item)
+	update_inventory_ui()
+	# 아이템 사용 횟수 즉시 반영
+	if selected_inventory_item != null and inventory.has(selected_inventory_item):
+		show_selected_item_info(selected_inventory_item)
+	else:
+		clear_selected_item_info()
+	update_player_status_ui()
+	close_context_menu()	
+# 아이템 사용 버튼 함수
+func _on_use_button_pressed():
+	if context_menu_item == null:
+		return
+
+	healing_sound.play()
+	use_item(context_menu_item)
+
+# === 저장 함수 모음 ===
+# 저장할 게임 데이터 생성 함수
+func get_save_data():
+	var equipped_weapon_slot = -1
+
+	if equipped_weapon != null:
+		equipped_weapon_slot = int(equipped_weapon["slot"])
+
+	return {
+		"room": {
+			"current_room": current_room
+		},
+		"player": {
+			"hp": player_hp,
+			"max_hp": player_max_hp,
+			"equipped_weapon_slot": equipped_weapon_slot
+		},
+		"inventory": inventory,
+		"flags": flags
+	}
+# 저장 파일 경로 반환 함수
+func get_save_path(slot_index):
+	
+	return "user://save_slot_" + str(slot_index) + ".json"
+# 게임 저장 함수
+func save_game(slot_index):
+	var save_data = get_save_data()
+	var json_text = JSON.stringify(save_data, "\t")
+	var path = get_save_path(slot_index)
+
+	var file = FileAccess.open(path, FileAccess.WRITE)
+
+	if file == null:
+		push_error("저장 파일 열기 실패: " + path)
+		return false
+
+	file.store_string(json_text)
+	file.close()
+
+	print("게임 저장 완료: " + path)
+	return true
+# 저장 포인트 실행 함수
+func run_save_point():
+	save_ui_open_sound.play()
+
+	var choices = [
+		{ "text": "예" },
+		{ "text": "아니오" }
+	]
+
+	var selected_index = await show_choices(choices)
+
+	if selected_index == 0:
+		var success = save_game(1)
+
+		if success:
+			save_complete_sound.play()
+			await show_dialogue("저장 완료.")
+		else:
+			await show_dialogue("저장에 실패했다.")
+	else:
+		save_ui_close_sound.play()	
+# 게임 불러오기 함수
+func load_game(slot_index):
+	var path = get_save_path(slot_index)
 
 	if not FileAccess.file_exists(path):
-		push_error("projectiles.json 파일을 찾을 수 없음: " + path)
+		push_error("저장 파일이 없음: " + path)
 		return false
 
 	var file = FileAccess.open(path, FileAccess.READ)
 
 	if file == null:
-		push_error("projectiles.json 파일 열기 실패: " + path)
+		push_error("저장 파일 열기 실패: " + path)
 		return false
 
 	var json_text = file.get_as_text()
+	file.close()
+
 	var json = JSON.new()
 	var error = json.parse(json_text)
 
 	if error != OK:
-		push_error("projectiles.json 파싱 실패: " + json.get_error_message())
-		push_error("오류 위치 line: " + str(json.get_error_line()))
+		push_error("저장 파일 파싱 실패: " + json.get_error_message())
 		return false
 
-	if typeof(json.data) != TYPE_DICTIONARY:
-		push_error("projectiles.json 최상위 구조는 Dictionary여야 함")
-		return false
+	var save_data = json.data
 
-	projectiles = json.data
-	print("projectiles.json 로드 성공")
-	return true
+	var room_data = save_data.get("room", {})
+	var player_data = save_data.get("player", {})
 
-# 인카운터 데이터 로드 함수
-func load_encounters():
-	var path = "res://data/encounters.json"
+	current_room = room_data.get("current_room", "hallway_1")
 
-	if not FileAccess.file_exists(path):
-		push_error("encounters.json 파일을 찾을 수 없음: " + path)
-		return false
+	player_hp = player_data.get("hp", 100)
+	player_max_hp = player_data.get("max_hp", 100)
 
-	var file = FileAccess.open(path, FileAccess.READ)
+	inventory = save_data.get("inventory", [])
+	flags = save_data.get("flags", {})
 
-	if file == null:
-		push_error("encounters.json 파일 열기 실패: " + path)
-		return false
+	restore_equipped_weapon(player_data.get("equipped_weapon_slot", -1))
 
-	var json_text = file.get_as_text()
-	var json = JSON.new()
-	var error = json.parse(json_text)
+	update_room()
+	update_inventory_ui()
+	update_equipped_weapon_ui()
+	update_player_status_ui()
+	
+	await effect(false, false, true, "")
 
-	if error != OK:
-		push_error("encounters.json 파싱 실패: " + json.get_error_message())
-		push_error("오류 위치 line: " + str(json.get_error_line()))
-		return false
+	print("게임 불러오기 완료: " + path)
+	return true	
+# 저장된 장착 무기 복구 함수
+func restore_equipped_weapon(saved_slot):
+	equipped_weapon = null
 
-	if typeof(json.data) != TYPE_DICTIONARY:
-		push_error("encounters.json 최상위 구조는 Dictionary여야 함")
-		return false
+	if saved_slot == -1:
+		return
 
-	encounters = json.data
-	print("encounters.json 로드 성공")
-	return true
+	for inventory_item in inventory:
+		if inventory_item.has("slot") and int(inventory_item["slot"]) == int(saved_slot):
+			equipped_weapon = inventory_item
+			return
+
+# === 랜덤 인카운터 함수 모음 ===
 # 현재 방 랜덤 인카운터 확인 함수
 func check_random_encounter():
 	var room = rooms[current_room]
@@ -2337,36 +3878,6 @@ func pick_weighted_encounter(candidates):
 			return encounter.get("enemy", "")
 
 	return candidates[0].get("enemy", "")
-# 인카운터 이벤트 데이터 로드 함수
-func load_encounter_events():
-	var path = "res://data/encounter_events.json"
-
-	if not FileAccess.file_exists(path):
-		push_error("encounter_events.json 파일을 찾을 수 없음: " + path)
-		return false
-
-	var file = FileAccess.open(path, FileAccess.READ)
-
-	if file == null:
-		push_error("encounter_events.json 파일 열기 실패: " + path)
-		return false
-
-	var json_text = file.get_as_text()
-	var json = JSON.new()
-	var error = json.parse(json_text)
-
-	if error != OK:
-		push_error("encounter_events.json 파싱 실패: " + json.get_error_message())
-		push_error("오류 위치 line: " + str(json.get_error_line()))
-		return false
-
-	if typeof(json.data) != TYPE_DICTIONARY:
-		push_error("encounter_events.json 최상위 구조는 Dictionary여야 함")
-		return false
-
-	encounter_events = json.data
-	print("encounter_events.json 로드 성공")
-	return true
 # 인카운터 발생 텍스트 가져오기 함수
 func get_random_encounter_start_text(event_table_id):
 	if event_table_id == "":

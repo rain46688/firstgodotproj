@@ -643,7 +643,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 0,
 						"delay": 2.0,
 						"danger_type": "parry_only"
 					},
@@ -654,31 +654,29 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 0,
 						"delay": 2.0,
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_basic",
 						"start": [
 							300,
 							0
 						],
 						"rotation": 180,
 						"damage": 6,
-						"delay": 3.6,
-						"danger_type": "parry_only"
+						"delay": 3.6
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_basic",
 						"start": [
 							380,
 							0
 						],
 						"rotation": 180,
 						"damage": 6,
-						"delay": 3.6,
-						"danger_type": "parry_only"
+						"delay": 3.6
 					}
 				]
 			}

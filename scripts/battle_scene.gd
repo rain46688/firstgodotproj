@@ -2722,7 +2722,7 @@ func get_attack_swing_speed_with_status(weapon_data):
 # 플레이어 상태이상에 따른 초상화 갱신 함수
 func update_player_portrait_by_status():
 	var portrait_key = "normal"
-
+ 
 	if has_player_status_effect("despair"):
 		portrait_key = "despair"
 	elif has_player_status_effect("fear"):

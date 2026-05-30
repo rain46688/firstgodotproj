@@ -25,10 +25,10 @@
 		"name": "나",
 		"portrait": {
 			"normal": "res://imgs/characters/protagonist/portrait/normal.png",
-			"pain": "res://imgs/characters/protagonist/portrait/pain.png",
+			"despair": "res://imgs/characters/protagonist/portrait/despair.png",
 			"embarrassed": "res://imgs/characters/protagonist/portrait/embarrassed.png",
 			"angry": "res://imgs/characters/protagonist/portrait/angry.png",
-			"annoyed": "res://imgs/characters/protagonist/portrait/annoyed.png",
+			"lethargy": "res://imgs/characters/protagonist/portrait/lethargy.png",
 			"fear": "res://imgs/characters/protagonist/portrait/fear.png",
 			"shy": "res://imgs/characters/protagonist/portrait/shy.png"
 		}
