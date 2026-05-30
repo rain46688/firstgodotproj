@@ -308,6 +308,19 @@ offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 
+[node name="StatusPopupPanel" type="PopupPanel" parent="." unique_id=1549040773]
+oversampling_override = 1.0
+position = Vector2i(40, 720)
+
+[node name="StatusPopupText" type="Label" parent="StatusPopupPanel" unique_id=185283925]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 96.0
+offset_bottom = 96.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_kinr6")
+theme_override_font_sizes/font_size = 20
+
 [node name="BattleBgm" type="AudioStreamPlayer" parent="." unique_id=90345847]
 stream = ExtResource("5_pxwbd")
 volume_db = -5.0
@@ -343,19 +356,6 @@ volume_db = -5.0
 [node name="ResultSound" type="AudioStreamPlayer" parent="." unique_id=629580740]
 stream = ExtResource("13_ti0og")
 volume_db = -5.0
-
-[node name="StatusPopupPanel" type="PopupPanel" parent="." unique_id=1549040773]
-oversampling_override = 1.0
-position = Vector2i(40, 720)
-
-[node name="StatusPopupText" type="Label" parent="StatusPopupPanel" unique_id=185283925]
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 96.0
-offset_bottom = 96.0
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_kinr6")
-theme_override_font_sizes/font_size = 20
 
 [node name="StatusEffectSound" type="AudioStreamPlayer" parent="." unique_id=1656746803]
 stream = ExtResource("14_bg0yk")

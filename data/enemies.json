@@ -50,8 +50,7 @@
 						],
 						"rotation": 180,
 						"damage": 5,
-						"delay": 0.3,
-						"danger_type": "parry_only"
+						"delay": 0.3
 					},
 					{
 						"projectile": "slash_basic",

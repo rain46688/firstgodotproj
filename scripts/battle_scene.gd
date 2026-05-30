@@ -79,7 +79,6 @@ var active_attack_projectile = null
 var active_attack_direction = Vector2.ZERO
 var player_attack_hit = false
 var last_hitbox_data = {}
-var debug_mode = true
 var projectiles = {}
 var current_projectile_data = {}
 var is_defense_mode = false
@@ -117,6 +116,14 @@ var battle_result_messages = []
 var battle_result_index = 0
 var player_hit_flash_tween = null
 var status_effect_flash_tween = null
+var battle_item_scroll_start = 0
+const BATTLE_ITEM_VISIBLE_COUNT = 4
+
+# 디버그 모드
+var debug_mode = false
+
+# 적 탄막별 디버그 박스 목록
+var enemy_projectile_debug_boxes = {}
 
 # 적 턴 플레이어 피해 결과 누적 변수
 var enemy_turn_total_damage = 0
@@ -163,8 +170,7 @@ func _process(delta):
 		# 개발자 모드
 	if Input.is_action_just_pressed("debug_toggle"):
 		debug_mode = !debug_mode
-		hitbox_debug_container.visible = debug_mode
-		update_debug_hp_labels()
+		update_hitbox_debug()
 	# 관찰중
 	if is_observing:
 		if Input.is_action_just_pressed("move_left") or Input.is_action_just_pressed("ui_left"):
@@ -181,22 +187,20 @@ func _process(delta):
 		return			
 	# 아이템 선택중
 	if is_item_selecting:
-		if Input.is_action_just_pressed("ui_down"):
-			item_index += 1
-			if item_index >= battle_consumables.size():
-				item_index = 0
-			update_battle_item_list()
-		if Input.is_action_just_pressed("ui_up"):
-			item_index -= 1
-			if item_index < 0:
-				item_index = battle_consumables.size() - 1
-			update_battle_item_list()
+		if Input.is_action_just_pressed("ui_down") or Input.is_action_just_pressed("battle_item_down"):
+			move_battle_item_selection(1)
+
+		if Input.is_action_just_pressed("ui_up") or Input.is_action_just_pressed("battle_item_up"):
+			move_battle_item_selection(-1)
+
 		if Input.is_action_just_pressed("ui_accept"):
 			use_selected_battle_item()
+
 		if Input.is_action_just_pressed("esc"):
 			is_item_selecting = false
-			battle_text.text = get_player_turn_start_text()
+			battle_text.text = "행동을 선택하세요."
 			set_action_buttons_disabled(false)
+
 		return
 	# 적 공격 대기중
 	if waiting_enemy_attack:
@@ -269,15 +273,18 @@ func _ready():
 	run_button.focus_mode = Control.FOCUS_NONE
 	enemy_sprite_default_size = enemy_sprite.size
 	enemy_sprite_default_position = enemy_sprite.position
+	
 	# bgm
 	default_battle_bgm_stream = battle_bgm.stream
 	default_battle_bgm_volume_db = battle_bgm.volume_db
 
 	default_enemy_encounter_stream = enemy_encounter_sound.stream
 	default_enemy_encounter_volume_db = enemy_encounter_sound.volume_db
-	
 	player_portrait.gui_input.connect(_on_player_portrait_gui_input)
+	
+	# visible 처리
 	status_popup_panel.visible = false
+	enemy_projectile_hitbox_debug.visible = false
 
 	if not battle_bgm.finished.is_connected(_on_battle_bgm_finished):
 		battle_bgm.finished.connect(_on_battle_bgm_finished)
@@ -320,6 +327,12 @@ func _ready():
 	hitbox_debug_container.z_index = 999
 	fade_rect.z_index = 4096
 	
+	hitbox_debug_container.visible = debug_mode
+	player_attack_hitbox_debug.visible = false
+	defense_weapon_hitbox_debug.visible = false
+	enemy_projectile_hitbox_debug.visible = false
+	parry_hitbox_debug.visible = false
+	
 	fade_rect.color = Color(0, 0, 0, 0)
 	fade_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	fade_rect.visible = true
@@ -327,6 +340,7 @@ func _ready():
 	# 무기 별로 기본 위치 포지션을 잡아줌
 	weapon_sprite.pivot_offset = weapon_sprite.size / 2
 	update_weapon_base_position()
+	ensure_battle_item_input_actions()
 	
 	attack_button.pressed.connect(_on_attack_button_pressed)
 	observe_button.pressed.connect(_on_observe_button_pressed)
@@ -436,6 +450,7 @@ func setup_battle(data):
 	else:
 		start_player_turn()
 
+# === 버튼 클릭 함수 모음 ===
 # 공격 버튼 클릭 함수
 func _on_attack_button_pressed():
 	if not is_player_turn:
@@ -505,6 +520,7 @@ func _on_run_button_pressed():
 
 		start_enemy_turn()
 
+# === 기타 함수 모음 ===
 # 플레이어 턴 시작 함수
 func start_player_turn():
 	print("start_player_turn")
@@ -708,6 +724,7 @@ func fade_from_black(duration = 0.5):
 func open_battle_item_list():
 	battle_consumables.clear()
 	item_index = 0
+	battle_item_scroll_start = 0
 
 	for inventory_item in inventory:
 		var item_id = inventory_item["id"]
@@ -735,11 +752,26 @@ func open_battle_item_list():
 	update_battle_item_list()
 # 아이템 목록 표시 함수
 func update_battle_item_list():
+	update_battle_item_scroll()
+
 	var text = "사용할 아이템을 선택하세요.\n\n"
 
-	for i in battle_consumables.size():
+	var start_index = battle_item_scroll_start
+	var end_index = min(
+		battle_consumables.size(),
+		battle_item_scroll_start + BATTLE_ITEM_VISIBLE_COUNT
+	)
+
+	if start_index > 0:
+		text += "  ↑\n"
+
+	for i in range(start_index, end_index):
 		var inventory_item = battle_consumables[i]
-		var item_id = inventory_item["id"]
+		var item_id = inventory_item.get("id", "")
+
+		if not items.has(item_id):
+			continue
+
 		var item_name = items[item_id].get("name", item_id)
 		var count_text = ""
 
@@ -751,7 +783,10 @@ func update_battle_item_list():
 		else:
 			text += "  " + item_name + count_text + "\n"
 
-	text += "\n[Space] 사용 / [ESC] 취소"
+	if end_index < battle_consumables.size():
+		text += "  ↓\n"
+
+	text += "\n[↑↓/WS] 선택 / [Space] 사용 / [ESC] 취소"
 	battle_text.text = text
 # 아이템 사용 함수
 func use_selected_battle_item():
@@ -896,7 +931,50 @@ func show_battle_result_messages(messages):
 
 		battle_text.text = message + "\n\n[Space]"
 		await wait_for_accept_input()
+# 전투 아이템 선택용 키 입력 액션 생성 함수
+func ensure_battle_item_input_actions():
+	ensure_key_action("battle_item_up", KEY_W)
+	ensure_key_action("battle_item_down", KEY_S)
+# 키보드 액션이 없으면 코드에서 자동 생성하는 함수
+func ensure_key_action(action_name, physical_keycode):
+	if not InputMap.has_action(action_name):
+		InputMap.add_action(action_name)
 
+	for event in InputMap.action_get_events(action_name):
+		if event is InputEventKey and event.physical_keycode == physical_keycode:
+			return
+
+	var key_event = InputEventKey.new()
+	key_event.physical_keycode = physical_keycode
+	InputMap.action_add_event(action_name, key_event)
+# 전투 아이템 선택 이동 함수
+func move_battle_item_selection(direction):
+	if battle_consumables.size() == 0:
+		return
+
+	item_index += direction
+
+	if item_index >= battle_consumables.size():
+		item_index = 0
+
+	if item_index < 0:
+		item_index = battle_consumables.size() - 1
+
+	update_battle_item_scroll()
+	update_battle_item_list()
+	play_click_sound()
+# 전투 아이템 목록 스크롤 위치 갱신 함수
+func update_battle_item_scroll():
+	if item_index < battle_item_scroll_start:
+		battle_item_scroll_start = item_index
+
+	if item_index >= battle_item_scroll_start + BATTLE_ITEM_VISIBLE_COUNT:
+		battle_item_scroll_start = item_index - BATTLE_ITEM_VISIBLE_COUNT + 1
+
+	if battle_item_scroll_start < 0:
+		battle_item_scroll_start = 0
+
+# === 음원 함수 모음 ===
 # 전투 BGM 갱신 함수
 func update_battle_bgm():
 	var bgm_path = enemy_data.get("battle_bgm", "")
@@ -1040,8 +1118,11 @@ func play_enemy_encounter_sound():
 		volume_db
 	)
 
+# === 디버그 함수 모음 ===
 # 디버그 히트 박스 확인용 함수
 func update_hitbox_debug():
+	clear_enemy_projectile_debug_boxes()
+
 	for child in hitbox_debug_container.get_children():
 		if child == player_attack_hitbox_debug:
 			continue
@@ -1054,7 +1135,19 @@ func update_hitbox_debug():
 
 		child.queue_free()
 
+	if not debug_mode:
+		hitbox_debug_container.visible = false
+		player_attack_hitbox_debug.visible = false
+		defense_weapon_hitbox_debug.visible = false
+		enemy_projectile_hitbox_debug.visible = false
+		parry_hitbox_debug.visible = false
+		update_debug_hp_labels()
+		return
+
+	hitbox_debug_container.visible = true
+
 	if not enemy_data.has("hitboxes"):
+		update_debug_hp_labels()
 		return
 
 	var base_size = enemy_data.get("hitbox_base_size", [667, 1000])
@@ -1096,10 +1189,10 @@ func update_defense_hitbox_debug(projectile, projectile_data):
 		defense_weapon_hitbox_debug.visible = false
 		enemy_projectile_hitbox_debug.visible = false
 		parry_hitbox_debug.visible = false
+		clear_enemy_projectile_debug_boxes()
 		return
 
 	var weapon_rect = get_weapon_defense_hit_rect()
-	var projectile_rect = get_projectile_hit_rect(projectile, projectile_data)
 	var debug_container_global = hitbox_debug_container.get_global_rect().position
 	var parry_rect = get_parry_hit_rect()
 
@@ -1107,13 +1200,15 @@ func update_defense_hitbox_debug(projectile, projectile_data):
 	defense_weapon_hitbox_debug.position = weapon_rect.position - debug_container_global
 	defense_weapon_hitbox_debug.size = weapon_rect.size
 
-	enemy_projectile_hitbox_debug.visible = true
-	enemy_projectile_hitbox_debug.position = projectile_rect.position - debug_container_global
-	enemy_projectile_hitbox_debug.size = projectile_rect.size
-	
 	parry_hitbox_debug.visible = true
 	parry_hitbox_debug.position = parry_rect.position - debug_container_global
 	parry_hitbox_debug.size = parry_rect.size
+
+	# 기존 단일 적 탄막 디버그 노드는 사용하지 않음
+	enemy_projectile_hitbox_debug.visible = false
+
+	# 현재 탄막 전용 디버그 박스 갱신
+	update_enemy_projectile_debug_box(projectile, projectile_data)
 # 디버그 적 파츠 확인 함수
 func update_part_hitbox_debug(base_size, enemy_rect):
 	var base_width = float(base_size[0])
@@ -1222,7 +1317,80 @@ func create_body_debug_hp_label():
 
 	add_child(label)
 	debug_hp_labels.append(label)
+# 적 탄막 디버그 박스 가져오기/생성 함수
+func get_enemy_projectile_debug_box(projectile):
+	if projectile == null:
+		return null
 
+	if not is_instance_valid(projectile):
+		return null
+
+	var projectile_key = projectile.get_instance_id()
+
+	if enemy_projectile_debug_boxes.has(projectile_key):
+		var existing_box = enemy_projectile_debug_boxes[projectile_key]
+
+		if existing_box != null and is_instance_valid(existing_box):
+			return existing_box
+
+	var box = ColorRect.new()
+	box.name = "EnemyProjectileHitboxDebug_" + str(projectile_key)
+	box.color = Color(1, 1, 0, 0.32)
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.z_index = 300
+
+	hitbox_debug_container.add_child(box)
+	enemy_projectile_debug_boxes[projectile_key] = box
+
+	return box
+# 적 탄막 디버그 박스 갱신 함수
+func update_enemy_projectile_debug_box(projectile, projectile_data):
+	if not debug_mode:
+		return
+
+	if projectile == null:
+		return
+
+	if not is_instance_valid(projectile):
+		return
+
+	var projectile_rect = get_projectile_hit_rect(projectile, projectile_data)
+	var debug_container_global = hitbox_debug_container.get_global_rect().position
+	var box = get_enemy_projectile_debug_box(projectile)
+
+	if box == null:
+		return
+
+	box.visible = true
+	box.position = projectile_rect.position - debug_container_global
+	box.size = projectile_rect.size
+# 특정 적 탄막 디버그 박스 제거 함수
+func remove_enemy_projectile_debug_box(projectile):
+	if projectile == null:
+		return
+
+	var projectile_key = projectile.get_instance_id()
+
+	if not enemy_projectile_debug_boxes.has(projectile_key):
+		return
+
+	var box = enemy_projectile_debug_boxes[projectile_key]
+
+	if box != null and is_instance_valid(box):
+		box.queue_free()
+
+	enemy_projectile_debug_boxes.erase(projectile_key)
+# 모든 적 탄막 디버그 박스 제거 함수
+func clear_enemy_projectile_debug_boxes():
+	for key in enemy_projectile_debug_boxes.keys():
+		var box = enemy_projectile_debug_boxes[key]
+
+		if box != null and is_instance_valid(box):
+			box.queue_free()
+
+	enemy_projectile_debug_boxes.clear()
+
+# === 적 관련 함수 모음 ===
 # 적 HP ui 갱신 함수
 func update_enemy_hp_ui():
 	update_debug_hp_labels()
@@ -1342,11 +1510,8 @@ func fire_enemy_projectile(projectile_info):
 		if frame_index >= projectile_frames.size():
 			frame_index = 0
 
+	remove_enemy_projectile_debug_box(projectile)
 	projectile.queue_free()
-
-	defense_weapon_hitbox_debug.visible = false
-	enemy_projectile_hitbox_debug.visible = false
-	parry_hitbox_debug.visible = false
 
 	if projectile_parried:
 		pass
@@ -1390,6 +1555,7 @@ func fire_enemy_projectiles():
 	defense_weapon_hitbox_debug.visible = false
 	enemy_projectile_hitbox_debug.visible = false
 	parry_hitbox_debug.visible = false
+	clear_enemy_projectile_debug_boxes()
 
 	if parry_count > 0:
 		var counter_damage = 0
@@ -1808,7 +1974,7 @@ func spawn_hit_effect(effect_position):
 	hit_effect.get_parent().add_child(effect)
 
 	play_spawned_hit_effect(effect)
-# 생성된 타격 이펙트 프레임 재생 함수
+# 적 생성된 타격 이펙트 프레임 재생 함수
 func play_spawned_hit_effect(effect):
 	for path in hit_frames:
 		if effect == null or not is_instance_valid(effect):
@@ -1936,6 +2102,7 @@ func calculate_enemy_defeat_flags():
 
 	return result_flags
 
+# === 플레이어 관련 함수 모음 ===
 # 플레이어 현재 체력 갱신 함수
 func update_player_hp_ui():
 	player_hp_text.text = str(int(player_hp)) + " / " + str(int(player_max_hp))
@@ -2879,7 +3046,7 @@ func play_status_effect_flash():
 	if status_effect_sound != null:
 		status_effect_sound.stop()
 		status_effect_sound.play()
-# 방어 모드 좌우 워프 입력 확인 함수
+# 플레이어 방어 모드 좌우 워프 입력 확인 함수
 func check_defense_side_warp_input():
 	if not is_defense_mode:
 		return
@@ -2903,7 +3070,7 @@ func check_defense_side_warp_input():
 			try_defense_side_warp("right")
 
 		last_right_press_time = current_time
-# 방어 무기 좌우 워프 함수
+# 플레이어 방어 무기 좌우 워프 함수
 func try_defense_side_warp(direction):
 	var area = get_defense_area_global_rect()
 	var hit_rect = get_weapon_defense_hit_rect()
@@ -2925,7 +3092,7 @@ func try_defense_side_warp(direction):
 			return
 
 		warp_defense_weapon_to_side("left")
-# 방어 무기를 특정 좌우 끝으로 이동시키는 함수
+# 플레이어 방어 무기를 특정 좌우 끝으로 이동시키는 함수
 func warp_defense_weapon_to_side(target_side):
 	var area = get_defense_area_global_rect()
 	var hit_rect = get_weapon_defense_hit_rect()
@@ -2947,12 +3114,12 @@ func warp_defense_weapon_to_side(target_side):
 	clamp_defense_weapon_to_area()
 
 	play_ui_warp_sound()
-# UI 워프 효과음 재생 함수
+# 플레이어 UI 워프 효과음 재생 함수
 func play_ui_warp_sound():
 	if ui_warp_sound != null:
 		ui_warp_sound.stop()
 		ui_warp_sound.play()
-# 방어 가능 영역 전역 좌표 반환 함수
+# 플레이어 방어 가능 영역 전역 좌표 반환 함수
 func get_defense_area_global_rect():
 	var area = center_panel.get_global_rect()
 
@@ -2962,7 +3129,7 @@ func get_defense_area_global_rect():
 	area.size -= Vector2(padding * 2.0, padding * 2.0)
 
 	return area
-# 방어 무기 히트박스를 방어 영역 안에 고정하는 함수
+# 플레이어 방어 무기 히트박스를 방어 영역 안에 고정하는 함수
 func clamp_defense_weapon_to_area():
 	if weapon_sprite == null:
 		return

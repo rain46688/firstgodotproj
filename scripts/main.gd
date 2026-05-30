@@ -4,6 +4,8 @@ extends Control
 @onready var background = $Background
 @onready var footstep_sound = $FootstepSound
 @onready var fade = $Fade
+@onready var bag_button = $BagButton
+@onready var atmosphere_fade = $AtmosphereFade
 @onready var arrow_up = $ArrowUp
 @onready var arrow_down = $ArrowDown
 @onready var arrow_left = $ArrowLeft
@@ -296,6 +298,12 @@ func _ready():
 	arrange_selected_item_text.visible = false
 	
 	# z_index 정리
+	atmosphere_fade.z_index = 1
+	arrow_down.z_index = 2
+	arrow_up.z_index = 2
+	arrow_left.z_index = 2
+	arrow_right.z_index = 2
+	bag_button.z_index = 2
 	story_standing.z_index = 5
 	arrange_slot_highlight_container.z_index = 5
 	# 아이템 icon z_index = 10
@@ -3123,7 +3131,7 @@ func make_item_info_text(inventory_item):
 
 	var text_lines = []
 
-	text_lines.append("이름 : " + item_name)
+	text_lines.append(item_name+"\n")
 
 	if count > 1:
 		text_lines.append("보유 수량 : " + str(count))
@@ -3919,6 +3927,7 @@ func make_random_encounter_choices(event_table_id):
 		var choice = pool.pick_random().duplicate(true)
 		result_choices.append(choice)
 
+	result_choices.shuffle()
 	return result_choices
 # 인카운터 선택 결과 실행 함수
 func run_random_encounter_choice(choice, enemy_id):

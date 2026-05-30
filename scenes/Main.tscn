@@ -148,9 +148,44 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0)
 
-[node name="FootstepSound" type="AudioStreamPlayer" parent="." unique_id=696735495]
-stream = ExtResource("4_3dxm6")
-volume_db = 20.0
+[node name="AtmosphereFade" type="ColorRect" parent="." unique_id=1652273500]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5882353)
+
+[node name="StoryStanding" type="TextureRect" parent="." unique_id=154659395]
+visible = false
+layout_mode = 0
+offset_left = 770.0
+offset_top = 40.0
+offset_right = 1150.0
+offset_bottom = 1040.0
+expand_mode = 1
+stretch_mode = 4
+
+[node name="EncounterDangerOverlay" type="ColorRect" parent="." unique_id=338707217]
+z_index = 4095
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0, 0, 0)
+
+[node name="BagButton" type="TextureButton" parent="." unique_id=1029832583]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 220.0
+offset_bottom = 320.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("10_lhr70")
 
 [node name="DialogueBox" type="ColorRect" parent="." unique_id=1828740528]
 visible = false
@@ -218,31 +253,10 @@ offset_bottom = 60.0
 theme_override_fonts/font = ExtResource("11_qmy6f")
 theme_override_font_sizes/font_size = 20
 
-[node name="LockedSound" type="AudioStreamPlayer" parent="." unique_id=732505376]
-stream = ExtResource("7_lgr22")
-volume_db = 10.0
-
-[node name="ChoiceSound" type="AudioStreamPlayer" parent="." unique_id=699496763]
-stream = ExtResource("8_jlsqs")
-volume_db = -10.0
-
-[node name="UnLockedSound" type="AudioStreamPlayer" parent="." unique_id=793091637]
-stream = ExtResource("9_q8u5g")
-volume_db = 5.0
-
 [node name="InteractionButtons" type="Control" parent="." unique_id=1999727950]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-
-[node name="BagButton" type="TextureButton" parent="." unique_id=1029832583]
-layout_mode = 0
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 220.0
-offset_bottom = 320.0
-scale = Vector2(0.5, 0.5)
-texture_normal = ExtResource("10_lhr70")
 
 [node name="InventoryUI" type="Control" parent="." unique_id=1132515591]
 visible = false
@@ -425,6 +439,22 @@ offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 
+[node name="ChoiceSound" type="AudioStreamPlayer" parent="." unique_id=699496763]
+stream = ExtResource("8_jlsqs")
+volume_db = -10.0
+
+[node name="UnLockedSound" type="AudioStreamPlayer" parent="." unique_id=793091637]
+stream = ExtResource("9_q8u5g")
+volume_db = 5.0
+
+[node name="LockedSound" type="AudioStreamPlayer" parent="." unique_id=732505376]
+stream = ExtResource("7_lgr22")
+volume_db = 10.0
+
+[node name="FootstepSound" type="AudioStreamPlayer" parent="." unique_id=696735495]
+stream = ExtResource("4_3dxm6")
+volume_db = 20.0
+
 [node name="BagOpenSound" type="AudioStreamPlayer" parent="." unique_id=1757765065]
 stream = ExtResource("12_bjd11")
 
@@ -451,28 +481,7 @@ volume_db = -5.0
 stream = ExtResource("18_bb450")
 volume_db = -5.0
 
-[node name="StoryStanding" type="TextureRect" parent="." unique_id=154659395]
-visible = false
-layout_mode = 0
-offset_left = 770.0
-offset_top = 40.0
-offset_right = 1150.0
-offset_bottom = 1040.0
-expand_mode = 1
-stretch_mode = 4
-
 [node name="BGMPlayer" type="AudioStreamPlayer" parent="." unique_id=969287587]
-
-[node name="EncounterDangerOverlay" type="ColorRect" parent="." unique_id=338707217]
-z_index = 4095
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(1, 0, 0, 0)
 
 [node name="EncounterHeartbeatSound" type="AudioStreamPlayer" parent="." unique_id=676020408]
 stream = ExtResource("18_nfivy")
