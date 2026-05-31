@@ -297,6 +297,7 @@ offset_bottom = 980.0
 theme_override_colors/font_color = Color(0.84705883, 0.8156863, 0.78431374, 1)
 theme_override_fonts/font = ExtResource("11_qmy6f")
 theme_override_font_sizes/font_size = 25
+autowrap_mode = 2
 
 [node name="SlotHighlight" type="ColorRect" parent="InventoryUI" unique_id=869998840]
 visible = false

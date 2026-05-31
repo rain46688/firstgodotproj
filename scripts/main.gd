@@ -399,6 +399,10 @@ func _ready():
 		#}
 	#])
 	#await open_inventory_arrange_if_pending_loot("loot")
+
+	await add_item("old_water_ball") 
+	await add_item("old_abacus")
+	await add_item("cube_relic")
 	
 	update_room()
 	
@@ -407,7 +411,270 @@ func _ready():
 	#start_battle("candle_student_tutorial")
 	#start_battle("combined_candle_students_phase_01")
 	#start_battle("combined_candle_students_phase_02")
-# 전투 시작 함수s
+
+# 현재 장착 무기 기준 기본/적용 능력치 계산 함수
+func get_player_effective_stats():
+	var weapon_id = "fist"
+
+	if equipped_weapon != null:
+		weapon_id = equipped_weapon.get("id", "fist")
+
+	var weapon_data = {}
+
+	if items.has(weapon_id):
+		weapon_data = items[weapon_id]
+
+	var attack_min = int(weapon_data.get("attack_min", weapon_data.get("attack", 1)))
+	var attack_max = int(weapon_data.get("attack_max", weapon_data.get("attack", attack_min)))
+	var critical_chance = float(weapon_data.get("critical_chance", 0.01))
+	var critical_multiplier = float(weapon_data.get("critical_multiplier", 2.0))
+	var parry_window = float(weapon_data.get("parry_window", 0.1))
+	var attack_swing_speed = float(weapon_data.get("attack_swing_speed", 3.0))
+	var defense_move_speed = float(weapon_data.get("defense_move_speed", 500.0))
+
+	var stats = {
+		"weapon_id": weapon_id,
+
+		"attack_min_base": attack_min,
+		"attack_max_base": attack_max,
+		"critical_chance_base": critical_chance,
+		"critical_multiplier_base": critical_multiplier,
+		"parry_window_base": parry_window,
+		"attack_swing_speed_base": attack_swing_speed,
+		"defense_move_speed_base": defense_move_speed,
+		"max_hp_base": int(player_max_hp),
+
+		"attack_min": attack_min,
+		"attack_max": attack_max,
+		"critical_chance": critical_chance,
+		"critical_multiplier": critical_multiplier,
+		"parry_window": parry_window,
+		"attack_swing_speed": attack_swing_speed,
+		"defense_move_speed": defense_move_speed,
+		"max_hp": int(player_max_hp),
+
+		"damage_taken_multiplier": 1.0,
+		"turn_player_hp_delta": 0,
+		"turn_enemy_hp_delta": 0,
+		"piercing": bool(weapon_data.get("piercing", false)),
+		"cannot_die": false,
+
+		"applied_relic_ids": [],
+		"applied_relic_names": []
+	}
+	
+	# 성물/주물 효과 적용 부분
+	apply_relic_and_fetish_effects(stats)
+
+	print("장착 무기 주변 슬롯: ", get_equipped_weapon_adjacent_slots())
+
+	return clamp_player_effective_stats(stats)
+# 성물/주물 효과 적용 함수
+func apply_relic_and_fetish_effects(stats):
+	for inventory_item in inventory:
+		var item_id = inventory_item.get("id", "")
+
+		if item_id == "":
+			continue
+
+		if not items.has(item_id):
+			continue
+
+		var item_data = items[item_id]
+		var item_type = item_data.get("type", "")
+		var effect_scope = item_data.get("effect_scope", "")
+
+		if item_type != "relic":
+			continue
+
+		if effect_scope == "adjacent_weapon":
+			if not is_inventory_item_adjacent_to_equipped_weapon(inventory_item):
+				continue
+
+		elif effect_scope != "inventory":
+			continue
+
+		match item_id:
+			"old_water_ball":
+				stats["attack_min"] = int(stats.get("attack_min", 1)) + 3
+				add_applied_relic_to_stats(stats, item_id)
+
+			"old_abacus":
+				stats["attack_max"] = int(stats.get("attack_max", 1)) + 3
+				add_applied_relic_to_stats(stats, item_id)
+
+			"cube_relic":
+				stats["max_hp"] = int(stats.get("max_hp", player_max_hp)) + 30
+				add_applied_relic_to_stats(stats, item_id)
+
+			_:
+				pass
+# 인벤토리 아이템이 차지하는 슬롯 목록 반환 함수
+func get_inventory_item_occupied_slots(inventory_item):
+	var occupied_slots = []
+
+	if inventory_item == null:
+		return occupied_slots
+
+	if not inventory_item.has("slot"):
+		return occupied_slots
+
+	var item_id = inventory_item.get("id", "")
+
+	if item_id == "":
+		return occupied_slots
+
+	if not items.has(item_id):
+		return occupied_slots
+
+	var item_data = items[item_id]
+	var item_width = int(item_data.get("width", 1))
+	var item_height = int(item_data.get("height", 1))
+	var start_slot = int(inventory_item.get("slot", -1))
+
+	if start_slot < 0:
+		return occupied_slots
+
+	var start_col = start_slot % inventory_cols
+	var start_row = floori(start_slot / float(inventory_cols))
+
+	for y in range(item_height):
+		for x in range(item_width):
+			var col = start_col + x
+			var row = start_row + y
+
+			if col < 0:
+				continue
+
+			if col >= inventory_cols:
+				continue
+
+			if row < 0:
+				continue
+
+			if row >= inventory_rows:
+				continue
+
+			var slot = row * inventory_cols + col
+			occupied_slots.append(slot)
+
+	return occupied_slots
+# 장착 무기 인벤토리 아이템 찾기 함수
+func get_equipped_weapon_inventory_item():
+	if equipped_weapon == null:
+		return null
+
+	var equipped_weapon_id = equipped_weapon.get("id", "")
+
+	if equipped_weapon_id == "":
+		return null
+
+	for inventory_item in inventory:
+		if inventory_item.get("id", "") == equipped_weapon_id:
+			return inventory_item
+
+	return null
+# 장착 무기 주변 1칸 슬롯 목록 반환 함수
+func get_equipped_weapon_adjacent_slots():
+	var adjacent_slots = []
+	var equipped_inventory_item = get_equipped_weapon_inventory_item()
+
+	if equipped_inventory_item == null:
+		return adjacent_slots
+
+	var weapon_slots = get_inventory_item_occupied_slots(equipped_inventory_item)
+
+	for slot in weapon_slots:
+		var col = slot % inventory_cols
+		var row = slot / inventory_cols
+
+		for y in range(-1, 2):
+			for x in range(-1, 2):
+				if x == 0 and y == 0:
+					continue
+
+				var check_col = col + x
+				var check_row = row + y
+
+				if check_col < 0:
+					continue
+
+				if check_col >= inventory_cols:
+					continue
+
+				if check_row < 0:
+					continue
+
+				if check_row >= inventory_rows:
+					continue
+
+				var check_slot = check_row * inventory_cols + check_col
+
+				if weapon_slots.has(check_slot):
+					continue
+
+				if not adjacent_slots.has(check_slot):
+					adjacent_slots.append(check_slot)
+
+	return adjacent_slots
+# 해당 아이템이 장착 무기 주변 1칸에 인접해 있는지 확인 함수
+func is_inventory_item_adjacent_to_equipped_weapon(inventory_item):
+	if inventory_item == null:
+		return false
+
+	var item_slots = get_inventory_item_occupied_slots(inventory_item)
+
+	if item_slots.size() == 0:
+		return false
+
+	var adjacent_slots = get_equipped_weapon_adjacent_slots()
+
+	for slot in item_slots:
+		if adjacent_slots.has(slot):
+			return true
+
+	return false
+# 적용된 성물/주물 이름 저장 함수
+func add_applied_relic_to_stats(stats, item_id):
+	if not items.has(item_id):
+		return
+
+	if not stats.has("applied_relic_ids"):
+		stats["applied_relic_ids"] = []
+
+	if not stats.has("applied_relic_names"):
+		stats["applied_relic_names"] = []
+
+	if stats["applied_relic_ids"].has(item_id):
+		return
+
+	stats["applied_relic_ids"].append(item_id)
+	stats["applied_relic_names"].append(items[item_id].get("name", item_id))
+# 적용 능력치 최종 제한값 보정 함수
+func clamp_player_effective_stats(stats):
+	stats["max_hp"] = max(1, int(stats.get("max_hp", player_max_hp)))
+	stats["attack_min"] = max(1, int(stats.get("attack_min", 1)))
+	stats["attack_max"] = max(1, int(stats.get("attack_max", stats["attack_min"])))
+
+	# 최소 공격력이 최대 공격력보다 커지면 최대 공격력을 최소 공격력에 맞춤
+	if int(stats["attack_min"]) > int(stats["attack_max"]):
+		stats["attack_max"] = int(stats["attack_min"])
+
+	stats["critical_chance"] = clamp(float(stats.get("critical_chance", 0.01)), 0.01, 1.0)
+	stats["critical_multiplier"] = max(1.1, float(stats.get("critical_multiplier", 1.1)))
+	stats["parry_window"] = max(0.01, float(stats.get("parry_window", 0.1)))
+	stats["attack_swing_speed"] = max(0.01, float(stats.get("attack_swing_speed", 3.0)))
+	stats["defense_move_speed"] = max(1.0, float(stats.get("defense_move_speed", 500.0)))
+	stats["damage_taken_multiplier"] = max(0.01, float(stats.get("damage_taken_multiplier", 1.0)))
+
+	if not stats.has("applied_relic_ids"):
+		stats["applied_relic_ids"] = []
+
+	if not stats.has("applied_relic_names"):
+		stats["applied_relic_names"] = []
+
+	return stats
+# 전투 시작 함수
 func start_battle(enemy_id, first_turn = ""):
 	if not enemies.has(enemy_id):
 		push_error("존재하지 않는 적: " + enemy_id)
@@ -428,14 +695,20 @@ func start_battle(enemy_id, first_turn = ""):
 
 	add_child(battle_scene)
 	battle_scene.battle_finished.connect(end_battle)
+	
+	var effective_stats = get_player_effective_stats()
+	var battle_player_max_hp = int(effective_stats.get("max_hp", player_max_hp))
+	@warning_ignore("unused_variable")
+	var battle_player_hp = min(player_hp, battle_player_max_hp)
 
 	# 전투신으로 넘겨줄 로드한 데이터들 모음
 	var battle_data = {
 		"enemy_id": enemy_id,
 		"enemy_data": enemies[enemy_id],
 		"enemies": enemies,
-		"player_hp": player_hp,
-		"player_max_hp": player_max_hp,
+		"player_hp": battle_player_hp,
+		"player_max_hp": battle_player_max_hp,
+		"player_effective_stats": effective_stats,
 		"player_portraits": characters["protagonist"]["portrait"],
 		"items": items,
 		"equipped_weapon": equipped_weapon,
@@ -1567,7 +1840,13 @@ func effect(sound_effect, shake_effect, fade_effect, direction):
 	await get_tree().create_timer(0.3).timeout
 # 플레이어 체력 UI 갱신 함수
 func update_player_status_ui():
-	player_hp_text.text = str(int(player_hp)) + " / " + str(int(player_max_hp))
+	var effective_stats = get_player_effective_stats()
+	var display_max_hp = int(effective_stats.get("max_hp", player_max_hp))
+
+	if player_hp > display_max_hp:
+		player_hp = display_max_hp
+
+	player_hp_text.text = str(int(player_hp)) + " / " + str(int(display_max_hp))
 # BGM 재생 함수
 func play_bgm(path, volume_db = -5.0, loop = true):
 	if path == "":
@@ -3604,7 +3883,18 @@ func show_equipped_weapon_info():
 	if item_id == "fist":
 		equipped_weapon_text.text = "무기 없음"
 	else:
+		var effective_stats = get_player_effective_stats()
+		var applied_relic_names = effective_stats.get("applied_relic_names", [])
+
 		equipped_weapon_text.text = get_item_name(item_id)
+
+		if applied_relic_names.size() > 0:
+			equipped_weapon_text.text += "\n\n적용 효과:"
+
+			for relic_name in applied_relic_names:
+				equipped_weapon_text.text += "\n- " + str(relic_name)
+		else:
+			equipped_weapon_text.text += "\n\n적용 효과 없음"
 
 	show_item_info_ui(
 		fake_inventory_item,

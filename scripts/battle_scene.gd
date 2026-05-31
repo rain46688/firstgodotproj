@@ -119,6 +119,7 @@ var battle_result_index = 0
 var player_hit_flash_tween = null
 var status_effect_flash_tween = null
 var battle_item_scroll_start = 0
+var player_effective_stats = {}
 const BATTLE_ITEM_VISIBLE_COUNT = 4
 
 # 디버그 모드
@@ -382,11 +383,19 @@ func setup_battle(data):
 
 	enemy_id = data.get("enemy_id", "")
 	enemy_data = data.get("enemy_data", {})
+	
 	enemy_max_hp = enemy_data.get("max_hp", 10)
 	enemy_hp = enemy_max_hp
-	player_hp = data.get("player_hp", 100)
-	player_max_hp = data.get("player_max_hp", 100)
+
+	player_effective_stats = data.get("player_effective_stats", {})
+	player_hp = int(data.get("player_hp", 100))
+	player_max_hp = int(player_effective_stats.get("max_hp", data.get("player_max_hp", 100)))
+
+	if player_hp > player_max_hp:
+		player_hp = player_max_hp
+
 	items = data.get("items", {})
+	
 	equipped_weapon = data.get("equipped_weapon", null)
 	inventory = data.get("inventory", [])
 	projectiles = data.get("projectiles", {})
@@ -2123,9 +2132,13 @@ func update_player_hp_ui():
 # 플레이어 무기 데미지 계산 함수 추가
 func get_player_attack_damage():
 	var weapon_data = get_current_weapon_data()
+	
+	# 최소 공격력이 최대 공격력보다 커지면 최대 공격력 = 최소 공격력
+	var min_damage = int(weapon_data.get("attack_min", weapon_data.get("attack", 1)))
+	var max_damage = int(weapon_data.get("attack_max", weapon_data.get("attack", min_damage)))
 
-	var min_damage = weapon_data.get("attack_min", weapon_data.get("attack", 1))
-	var max_damage = weapon_data.get("attack_max", weapon_data.get("attack", 1))
+	if min_damage > max_damage:
+		max_damage = min_damage
 
 	return randi_range(min_damage, max_damage)
 # 플레이어 공격 치명타 판정 함수
@@ -2350,7 +2363,21 @@ func get_current_weapon_data():
 	if not items.has(weapon_id):
 		return {}
 
-	return items[weapon_id]
+	var weapon_data = items[weapon_id].duplicate(true)
+
+	# 원본 items[weapon_id]를 직접 수정하지 않고, 복사본에만 적용 능력치를 덮어씌우는 구조
+	if player_effective_stats.size() > 0:
+		weapon_data["attack_min"] = int(player_effective_stats.get("attack_min", weapon_data.get("attack_min", weapon_data.get("attack", 1))))
+		weapon_data["attack_max"] = int(player_effective_stats.get("attack_max", weapon_data.get("attack_max", weapon_data.get("attack", weapon_data["attack_min"]))))
+		weapon_data["critical_chance"] = float(player_effective_stats.get("critical_chance", weapon_data.get("critical_chance", 0.01)))
+		weapon_data["critical_multiplier"] = float(player_effective_stats.get("critical_multiplier", weapon_data.get("critical_multiplier", 2.0)))
+		weapon_data["parry_window"] = float(player_effective_stats.get("parry_window", weapon_data.get("parry_window", 0.1)))
+		weapon_data["attack_swing_speed"] = float(player_effective_stats.get("attack_swing_speed", weapon_data.get("attack_swing_speed", 3.0)))
+		weapon_data["defense_move_speed"] = float(player_effective_stats.get("defense_move_speed", weapon_data.get("defense_move_speed", 500.0)))
+		# player_effective_stats의 piercing은 main.gd에서 기본 무기 piercing 값을 포함해서 계산되어야 함
+		weapon_data["piercing"] = bool(player_effective_stats.get("piercing", weapon_data.get("piercing", false)))
+
+	return weapon_data
 # 플레이어 무기 현재 탄환 아이디 가져오는 함수
 func get_current_attack_projectile_id():
 	var weapon_data = get_current_weapon_data()
@@ -2888,6 +2915,8 @@ func apply_projectile_hit_to_player(projectile_info, projectile_data, danger_typ
 # 플레이어 받는 데미지 계산 함수
 func get_player_received_damage(base_damage):
 	var damage = float(base_damage)
+	# 플레이어 받는 피해 증가 및 감소 옵션 적용을 위한 기반
+	damage *= float(player_effective_stats.get("damage_taken_multiplier", 1.0))
 
 	if has_player_status_effect("despair"):
 		damage *= 1.5

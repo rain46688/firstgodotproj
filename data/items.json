@@ -18,7 +18,7 @@
 		"type": "weapon",
 		"stackable": false,
 		"attack_min": 3,
-		"attack_max": 5,
+		"attack_max": 4,
 		"critical_chance": 0.25,
 		"critical_multiplier": 2.0,
 		"consumed_on_use": false,
@@ -29,14 +29,23 @@
 		"defense_move_speed": 300,
 		"parry_window": 0.1,
 		"piercing": false,
-		"battle_sprite_size": [220, 220],
+		"battle_sprite_size": [
+			220,
+			220
+		],
 		"attack_move_range": 460,
 		"attack_swing_speed": 2.0,
 		"weapon_angle_step": 5,
 		"attack_projectile": "slash_basic",
 		"defense_hitbox": {
-			"offset": [10, 85],
-			"size": [210, 45]
+			"offset": [
+				10,
+				85
+			],
+			"size": [
+				210,
+				45
+			]
 		}
 	},
 	"fist": {
@@ -48,7 +57,7 @@
 		"type": "weapon",
 		"stackable": false,
 		"attack_min": 1,
-		"attack_max": 6,
+		"attack_max": 5,
 		"critical_chance": 0.15,
 		"critical_multiplier": 1.5,
 		"consumed_on_use": false,
@@ -60,14 +69,23 @@
 		"defense_move_speed": 500,
 		"parry_window": 0.25,
 		"piercing": false,
-		"battle_sprite_size": [140, 140],
+		"battle_sprite_size": [
+			140,
+			140
+		],
 		"attack_move_range": 380,
 		"attack_swing_speed": 2.5,
 		"weapon_angle_step": 5,
 		"attack_projectile": "slash_basic",
 		"defense_hitbox": {
-			"offset": [5, 35],
-			"size": [140, 70]
+			"offset": [
+				5,
+				35
+			],
+			"size": [
+				140,
+				70
+			]
 		}
 	},
 	"holy_sword": {
@@ -89,14 +107,23 @@
 		"defense_move_speed": 500,
 		"parry_window": 0.05,
 		"piercing": true,
-		"battle_sprite_size": [300, 300],
+		"battle_sprite_size": [
+			300,
+			300
+		],
 		"attack_move_range": 460,
 		"attack_swing_speed": 2.5,
 		"weapon_angle_step": 5,
 		"attack_projectile": "slash_excalibur",
 		"defense_hitbox": {
-			"offset": [-300, 100],
-			"size": [300, 100]
+			"offset": [
+				-300,
+				100
+			],
+			"size": [
+				300,
+				100
+			]
 		}
 	},
 	"beverage_a": {
@@ -120,7 +147,11 @@
 		"type": "consumable",
 		"stackable": true,
 		"max_stack": 3,
-		"clear_status_effects": ["fear", "lethargy", "despair"],
+		"clear_status_effects": [
+			"fear",
+			"lethargy",
+			"despair"
+		],
 		"consumed_on_use": true
 	},
 	"unknown_coin": {
@@ -132,5 +163,38 @@
 		"type": "coin",
 		"stackable": true,
 		"max_stack": 100
+	},
+	"old_water_ball": {
+		"name": "오래된 워터볼",
+		"description": "흐릿한 물속에 무언가가 흔들리고 있다.\n소지시 장착한 무기의 최소 공격력이 3 증가한다.",
+		"image": "res://imgs/items/성물180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "relic",
+		"relic_type": "holy",
+		"effect_scope": "inventory",
+		"stackable": false
+	},
+	"old_abacus": {
+		"name": "낡은 주판",
+		"description": "몇 개의 알이 제멋대로 움직이는 낡은 주판.\n소지시 장착한 무기의 최대 공격력이 3 증가한다.",
+		"image": "res://imgs/items/성물180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "relic",
+		"relic_type": "holy",
+		"effect_scope": "inventory",
+		"stackable": false
+	},
+	"cube_relic": {
+		"name": "큐브",
+		"description": "맞춰도 맞춰도 원래대로 돌아오는 작은 큐브.\n소지시 최대 체력이 30 증가한다.",
+		"image": "res://imgs/items/성물180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "relic",
+		"relic_type": "holy",
+		"effect_scope": "inventory",
+		"stackable": false
 	}
 }
