@@ -32,6 +32,8 @@ signal battle_finished(result_data)
 @onready var hit_normal_sound = $HitNormalSound
 @onready var hit_red_sound = $HitRedSound
 @onready var slash_sound = $SlashSound
+@onready var impact_sound = $ImpactSound
+@onready var shot_sound = $ShotSound
 @onready var click_sound = $ClickSound
 @onready var healing_sound = $HealingSound
 @onready var fade_rect = $FadeRect
@@ -348,7 +350,6 @@ func _ready():
 	end_turn_button.pressed.connect(_on_end_turn_button_pressed)
 	run_button.pressed.connect(_on_run_button_pressed)
 	
-	slash_frames = make_effect_frames("res://imgs/effects/slash/slash_", 9)
 	parry_frames = make_effect_frames("res://imgs/effects/parry/parry_", 9)
 	hit_frames = make_effect_frames("res://imgs/effects/hit/hit_", 5)
 	
@@ -2019,25 +2020,31 @@ func change_enemy_phase():
 		return
 
 	set_action_buttons_disabled(true)
-	
+
+	# 1. 페이즈1 쪽 전환 텍스트 표시
 	battle_text.text = enemy_data.get(
 		"phase_transition_text",
 		"어둠속에서 무언가가 다시 나타나기 시작한다..."
-	)
+	) + "\n\n[Space]"
 
-	await get_tree().create_timer(0.7).timeout
+	await wait_for_accept_input()
 
+	# 2. 암전
 	await fade_to_black(2)
 
+	# 3. 페이즈1 파츠 제거
 	clear_enemy_parts()
 
+	# 4. 페이즈2 적 데이터로 교체
 	enemy_id = next_enemy_id
 	enemy_data = enemies[next_enemy_id]
 	enemy_max_hp = enemy_data.get("max_hp", 10)
 	enemy_hp = enemy_max_hp
-	
+
+	# 5. 페이즈2 BGM 갱신
 	await update_battle_bgm()
 
+	# 6. 페이즈2 이미지/파츠/히트박스 갱신
 	enemy_sprite.modulate.a = 1.0
 	enemy_sprite.texture = load(enemy_data["image"])
 
@@ -2046,14 +2053,21 @@ func change_enemy_phase():
 	update_enemy_hp_ui()
 	update_hitbox_debug()
 
+	# 7. 밝아짐
 	await fade_from_black(0.6)
-	
+
+	# 8. 페이즈2 등장 효과음
 	play_enemy_encounter_sound()
 
-	battle_text.text = enemy_data.get("name", "적") + "의 모습이 변했다..."
+	# 9. 페이즈2 encounter_text 표시 후 Space 대기
+	battle_text.text = enemy_data.get(
+		"encounter_text",
+		enemy_data.get("name", "무언가") + "가 나타났다..."
+	) + "\n\n[Space]"
 
-	await get_tree().create_timer(0.8).timeout
-	
+	await wait_for_accept_input()
+
+	# 10. Space를 누른 뒤에야 페이즈2 확정 패턴 경고문 표시
 	await start_enemy_turn_with_forced_pattern()
 # 적 페이즈 전환 확정 패턴 사용 함수
 func start_enemy_turn_with_forced_pattern():
@@ -2535,7 +2549,19 @@ func play_projectile_sound(sound_id):
 		return
 
 	if sound_id == "slash":
-		slash_sound.play()
+		if slash_sound != null:
+			slash_sound.stop()
+			slash_sound.play()
+
+	elif sound_id == "impact":
+		if impact_sound != null:
+			impact_sound.stop()
+			impact_sound.play()
+
+	elif sound_id == "shot":
+		if shot_sound != null:
+			shot_sound.stop()
+			shot_sound.play()
 # 플레이어 공격 투사체 발사 함수
 func fire_player_attack_projectile():
 	current_projectile_data = get_current_projectile_data()

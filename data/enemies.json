@@ -339,7 +339,7 @@
 						"counter_hitbox_id": "right_arm",
 						"projectiles": [
 							{
-								"projectile": "slash_basic",
+								"projectile": "impact_basic",
 								"start": [
 									700,
 									0
@@ -349,7 +349,7 @@
 								"delay": 0.0
 							},
 							{
-								"projectile": "slash_basic",
+								"projectile": "impact_basic",
 								"start": [
 									900,
 									0
@@ -359,7 +359,7 @@
 								"delay": 0.3
 							},
 							{
-								"projectile": "slash_basic",
+								"projectile": "impact_basic",
 								"start": [
 									1100,
 									0
@@ -480,7 +480,7 @@
 			},
 			{
 				"id": "head_mumbling",
-				"weight": 0,
+				"weight": 30,
 				"warning_text": "알수없는 말을 중얼거린다.",
 				"fire_mode": "parallel",
 				"projectiles": [
@@ -521,8 +521,8 @@
 			},
 			{
 				"id": "head_mumbling2",
-				"weight": 0,
-				"warning_text": "알수없는 말을 중얼거린다.",
+				"weight": 30,
+				"warning_text": "알수없는 말을 중얼거린다..",
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
@@ -592,7 +592,7 @@
 			{
 				"id": "head_mumbling3",
 				"weight": 30,
-				"warning_text": "알수없는 말을 중얼거린다.",
+				"warning_text": "알수없는 말을 중얼거린다...",
 				"fire_mode": "parallel",
 				"projectiles": [
 					{

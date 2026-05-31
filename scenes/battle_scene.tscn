@@ -11,7 +11,9 @@
 [ext_resource type="AudioStream" uid="uid://kmiada54xs24" path="res://sounds/hit_red.mp3" id="9_bg0yk"]
 [ext_resource type="AudioStream" uid="uid://b2p5y3ta6bfww" path="res://sounds/clcik.mp3" id="10_yt3ua"]
 [ext_resource type="AudioStream" uid="uid://cg6bxsqbn3w4a" path="res://sounds/slash.mp3" id="11_3xrod"]
+[ext_resource type="AudioStream" uid="uid://uwqg05gnkood" path="res://sounds/impact.mp3" id="12_05s0e"]
 [ext_resource type="AudioStream" uid="uid://dpskhkn3tacx0" path="res://sounds/healing.mp3" id="12_tttxe"]
+[ext_resource type="AudioStream" uid="uid://duygr8vxwyi0h" path="res://sounds/shot.mp3" id="13_j0cvo"]
 [ext_resource type="AudioStream" uid="uid://b3onferv05h72" path="res://sounds/result.mp3" id="13_ti0og"]
 [ext_resource type="AudioStream" uid="uid://ca1qfq5mp82lv" path="res://sounds/status_effects.mp3" id="14_bg0yk"]
 [ext_resource type="AudioStream" uid="uid://6kmnifivrqgd" path="res://sounds/ui_warp.mp3" id="15_yt3ua"]
@@ -347,6 +349,14 @@ volume_db = -10.0
 
 [node name="SlashSound" type="AudioStreamPlayer" parent="." unique_id=129709013]
 stream = ExtResource("11_3xrod")
+volume_db = -5.0
+
+[node name="ImpactSound" type="AudioStreamPlayer" parent="." unique_id=1467264411]
+stream = ExtResource("12_05s0e")
+volume_db = -5.0
+
+[node name="ShotSound" type="AudioStreamPlayer" parent="." unique_id=1451613314]
+stream = ExtResource("13_j0cvo")
 volume_db = -5.0
 
 [node name="HealingSound" type="AudioStreamPlayer" parent="." unique_id=929464393]

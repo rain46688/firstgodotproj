@@ -81,8 +81,11 @@ var flags = {}
 var arrow_base_positions = {}
 var is_inventory_open = false
 var items = {}
+# 기존 인벤토리 변수
 var inventory_slot_size = 150
 var inventory_slot_gap = 5
+var inventory_cols = 4
+var inventory_rows = 4
 var selected_inventory_item = null
 var dragged_item = null
 var dragged_item_button = null
@@ -404,7 +407,7 @@ func _ready():
 	#start_battle("candle_student_tutorial")
 	#start_battle("combined_candle_students_phase_01")
 	#start_battle("combined_candle_students_phase_02")
-# 전투 시작 함수
+# 전투 시작 함수s
 func start_battle(enemy_id, first_turn = ""):
 	if not enemies.has(enemy_id):
 		push_error("존재하지 않는 적: " + enemy_id)
@@ -1677,8 +1680,8 @@ func update_inventory_ui():
 		if item_data.has("height"):
 			item_height = item_data["height"]
 
-		var col = start_slot % 4
-		var row = floori(start_slot / 4.0)
+		var col = start_slot % inventory_cols
+		var row = floori(start_slot / float(inventory_cols))
 
 		var item_button = TextureButton.new()
 		# 아이템 버튼이 Space 입력을 가져가지 않게 함
@@ -1763,8 +1766,8 @@ func add_pending_loot(item_id, count = 1):
 	})
 # 기존 인벤토리 선택 포커스 생성 함수
 func create_inventory_selected_focus(start_slot, item_width, item_height):
-	var col = start_slot % 4
-	var row = floori(start_slot / 4.0)
+	var col = start_slot % inventory_cols
+	var row = floori(start_slot / float(inventory_cols))
 
 	var focus_panel = Panel.new()
 	focus_panel.position = Vector2(
@@ -1804,7 +1807,7 @@ func get_inventory_item_index_at_slot(slot):
 	if slot < 0:
 		return -1
 
-	var cols = 4
+	var cols = inventory_cols
 
 	for i in range(inventory.size()):
 		var inventory_item = inventory[i]
@@ -1856,17 +1859,17 @@ func get_occupied_slots(inventory_item):
 	var item_height = item_data.get("height", 1)
 
 	var start_slot = int(inventory_item["slot"])
-	var start_col = start_slot % 4
-	var start_row = floori(start_slot / 4.0)
+	var start_col = start_slot % inventory_cols
+	var start_row = floori(start_slot / float(inventory_cols))
 
 	var occupied = []
 
 	for y in range(item_height):
 		for x in range(item_width):
-			var slot = (start_row + y) * 4 + (start_col + x)
+			var slot = (start_row + y) * inventory_cols + (start_col + x)
 			occupied.append(slot)
 
-	return occupied	
+	return occupied
 # 아이템 드래그 시작 함수
 func start_drag_item(inventory_item, item_button):
 	is_dragging_item = true
@@ -3292,21 +3295,21 @@ func find_empty_slot(item_id):
 	var item_width = item_data.get("width", 1)
 	var item_height = item_data.get("height", 1)
 
-	for slot in range(16):
+	for slot in range(inventory_cols * inventory_rows):
 		if can_place_item_at(slot, item_width, item_height):
 			return slot
 
 	return -1
 # 선택 아이템 특정 슬롯에 아이템을 놓을 수 있는지 확인하는 함수
 func can_place_item_at(start_slot, item_width, item_height):
-	var start_col = start_slot % 4
-	var start_row = start_slot / 4
+	var start_col = start_slot % inventory_cols
+	var start_row = floori(start_slot / float(inventory_cols))
 
 	# 오른쪽/아래로 가방 범위를 넘으면 배치 불가
-	if start_col + item_width > 4:
+	if start_col + item_width > inventory_cols:
 		return false
 
-	if start_row + item_height > 4:
+	if start_row + item_height > inventory_rows:
 		return false
 
 	# 새 아이템이 차지할 슬롯 목록
@@ -3314,7 +3317,7 @@ func can_place_item_at(start_slot, item_width, item_height):
 
 	for y in range(item_height):
 		for x in range(item_width):
-			var slot = (start_row + y) * 4 + (start_col + x)
+			var slot = (start_row + y) * inventory_cols + (start_col + x)
 			target_slots.append(slot)
 
 	# 기존 아이템들과 겹치는지 확인
@@ -3328,42 +3331,40 @@ func can_place_item_at(start_slot, item_width, item_height):
 	return true	
 # 마우스 위치 기준 슬롯 번호 계산 함수
 func get_slot_from_mouse_position():
-
+	
 	var local_mouse = inventory_slots.get_local_mouse_position()
 
 	var slot_x = int(local_mouse.x / (inventory_slot_size + inventory_slot_gap))
 	var slot_y = int(local_mouse.y / (inventory_slot_size + inventory_slot_gap))
 
 	# 가방 범위 밖이면 실패
-	if slot_x < 0 or slot_x >= 4:
+	if slot_x < 0 or slot_x >= inventory_cols:
 		return -1
 
-	if slot_y < 0 or slot_y >= 4:
+	if slot_y < 0 or slot_y >= inventory_rows:
 		return -1
 
-	return slot_y * 4 + slot_x	
+	return slot_y * inventory_cols + slot_x	
 # 특정 아이템을 제외하고 슬롯 배치 가능 여부 확인
 func can_place_item_at_except(start_slot, item_width, item_height, ignored_item):
-
-	var start_col = start_slot % 4
-	var start_row = start_slot / 4
+	var start_col = start_slot % inventory_cols
+	var start_row = floori(start_slot / float(inventory_cols))
 
 	# 가방 범위 초과
-	if start_col + item_width > 4:
+	if start_col + item_width > inventory_cols:
 		return false
 
-	if start_row + item_height > 4:
+	if start_row + item_height > inventory_rows:
 		return false
 
 	var target_slots = []
 
 	for y in range(item_height):
 		for x in range(item_width):
-			var slot = (start_row + y) * 4 + (start_col + x)
+			var slot = (start_row + y) * inventory_cols + (start_col + x)
 			target_slots.append(slot)
 
 	for item in inventory:
-
 		# 현재 드래그 중인 아이템은 무시
 		if item == ignored_item:
 			continue
@@ -3374,7 +3375,7 @@ func can_place_item_at_except(start_slot, item_width, item_height, ignored_item)
 			if occupied.has(slot):
 				return false
 
-	return true	
+	return true
 # 드래그 중 아이템을 놓을 위치 하이라이트 갱신 함수
 func update_slot_highlight():
 	if not is_dragging_item:
@@ -3409,8 +3410,8 @@ func update_slot_highlight():
 		dragged_item
 	)
 
-	var col = target_slot % 4
-	var row = floori(target_slot / 4.0)
+	var col = target_slot % inventory_cols
+	var row = floori(target_slot / float(inventory_cols))
 
 	slot_highlight.position = inventory_slots.position + Vector2(
 		col * (inventory_slot_size + inventory_slot_gap),
