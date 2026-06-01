@@ -514,8 +514,13 @@ func _on_run_button_pressed():
 	set_action_buttons_disabled(true)
 
 	if enemy_data.get("can_escape", true):
-		battle_text.text = "도망쳤다."
-
+		# 사운드 추가 및 적 이미지 안보이게 수정
+		if result_sound != null:
+			result_sound.play()
+		enemy_sprite.visible = false
+		battle_text.text = "당신은 도망쳤다."
+		
+		# 기다리는 시간 증가 추후에 증가 예정 지금은 테스트라 1초 유지
 		await get_tree().create_timer(1.0).timeout
 
 		emit_signal("battle_finished", {
@@ -524,8 +529,12 @@ func _on_run_button_pressed():
 			"inventory": inventory
 		})
 	else:
-		battle_text.text = "도망칠 수 없다..."
-
+		# 사운드 추가
+		if result_sound != null:
+			result_sound.play()
+		battle_text.text = "당신은 도망칠 수 없다..."
+		
+		# 기다리는 시간 증가 추후에 증가 예정 지금은 테스트라 1초 유지
 		await get_tree().create_timer(1.0).timeout
 
 		start_enemy_turn()
@@ -601,6 +610,9 @@ func win_battle():
 	
 	await stop_battle_bgm(true, 0.8)
 	
+	# 사운드 추가
+	if result_sound != null:
+			result_sound.play()
 	battle_text.text = "전투에서 승리했다.\n\n[Space]"
 	await wait_for_accept_input()
 

@@ -138,6 +138,7 @@ var is_arrange_dragging_item = false
 # 정리 화면 선택 포커스 변수
 var selected_arrange_item = null
 var selected_arrange_source = ""
+var equipped_weapon_text_scroll = null
 
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
@@ -285,7 +286,7 @@ func _process(delta):
 		elif dir == "right":
 			arrow.position = base_pos + Vector2(-offset, 0)
 # 처음에 한번 실행 함수
-func _ready():
+func _ready():   
 	
 	play_bgm("res://sounds/bgm2.mp3")
 	inventory_ui.visible = false
@@ -321,6 +322,9 @@ func _ready():
 	encounter_danger_overlay.z_index = 4095 
 	# Fade는 4096
 	fade.z_index = 4096
+	
+	# 장착 무기 효과 텍스트를 ScrollContainer 안에 넣는 함수
+	setup_equipped_weapon_text_scroll()
 	
 	# 랜덤 인카운터 심장 박동 소리 초기화
 	encounter_heartbeat_sound.stop()
@@ -383,16 +387,45 @@ func _ready():
 		push_error("인카운터 이벤트 데이터 로드 실패로 게임 초기화 중단")
 		return
 
-	# 테스트
+	# 세이브 파일 로드 테스트
 	load_game(1)
 	
+	# 아이템 테스트
 	#await add_item("cutter_knife")
-	#await add_item("beverage_a", 5)
-	#await add_item("beverage_a", 5)
-	#await add_item("tranquilizer")
 	#await add_item("classroom_key")
 	#await add_item("holy_sword")
 	
+	#await add_item("beverage_a", 5)
+	#await add_item("beverage_a", 5)
+	#await add_item("beverage_a", 5)
+	#
+	#await add_item("beverage_a", 5)
+	#await add_item("beverage_a", 5)
+	#await add_item("beverage_a", 5)
+	#
+	#await add_item("tranquilizer", 3)
+	#await add_item("tranquilizer", 3)
+	#await add_item("tranquilizer", 3)
+	#
+	#await add_item("beverage_a", 1)
+	#await add_item("tranquilizer", 1)
+	
+	await add_item("old_water_ball") 
+	await add_item("old_abacus")
+	await add_item("cube_relic")
+	await add_item("torn_eyepatch")
+	await add_item("dice_relic")
+	
+	await add_item("bible_fetish")
+	await add_item("metal_syringe")
+	await add_item("rosary_fetish")
+	
+	await add_item("sneakers_fetish")
+	await add_item("dumbbell_fetish")
+	await add_item("sandbag_fetish")
+	await add_item("lung_model_fetish")
+	
+	# 인벤토리 정리 테스트
 	#await give_items_with_pending_loot([
 		#{
 			#"item": "beverage_a",
@@ -401,20 +434,91 @@ func _ready():
 	#])
 	#await open_inventory_arrange_if_pending_loot("loot")
 
-	#await add_item("old_water_ball") 
-	#await add_item("old_abacus")
-	#await add_item("cube_relic")
-	#await add_item("torn_eyepatch")
-	#await add_item("dice_relic")
-	
+	# 방 갱신 함수 호출
 	update_room()
 	
+	# 전투 테스트
 	#await get_tree().create_timer(1.0).timeout
 	#start_battle("candle_student")
 	#start_battle("candle_student_tutorial")
 	#start_battle("combined_candle_students_phase_01")
 	#start_battle("combined_candle_students_phase_02")
+# 전투 시작 함수
+func start_battle(enemy_id, first_turn = ""):
+	if not enemies.has(enemy_id):
+		push_error("존재하지 않는 적: " + enemy_id)
+		return
 
+	var enemy_data = enemies[enemy_id]
+	var skip_flag = enemy_data.get("skip_if_flag", "")
+
+	if skip_flag != "" and has_flag(skip_flag):
+		print("이미 처치한 적이라 전투 스킵: " + enemy_id)
+		return
+	
+	is_story_playing = true
+	hide_game_ui()
+
+	var battle_scene_resource = load(BATTLE_SCENE_PATH)
+	battle_scene = battle_scene_resource.instantiate()
+
+	add_child(battle_scene)
+	battle_scene.battle_finished.connect(end_battle)
+	
+	var effective_stats = get_player_effective_stats()
+	var battle_player_max_hp = int(effective_stats.get("max_hp", player_max_hp))
+	@warning_ignore("unused_variable")
+	var battle_player_hp = min(player_hp, battle_player_max_hp)
+
+	# 전투신으로 넘겨줄 로드한 데이터들 모음
+	var battle_data = {
+		"enemy_id": enemy_id,
+		"enemy_data": enemies[enemy_id],
+		"enemies": enemies,
+		"player_hp": battle_player_hp,
+		"player_max_hp": battle_player_max_hp,
+		"player_effective_stats": effective_stats,
+		"player_portraits": characters["protagonist"]["portrait"],
+		"items": items,
+		"equipped_weapon": equipped_weapon,
+		"inventory": inventory,
+		"projectiles": projectiles,
+		"flags": flags,
+		"first_turn": first_turn
+	}
+	
+	if bgm_player.playing:
+		bgm_player.stop()
+
+	battle_scene.setup_battle(battle_data)
+# 전투 종료 함수
+func end_battle(result_data):
+	player_hp = result_data.get("player_hp", player_hp)
+
+	for flag_id in result_data.get("reward_flags", []):
+		set_flag(flag_id)
+
+	var battle_rewards = result_data.get("rewards", [])
+
+	for reward in battle_rewards:
+		if reward.has("once_flag"):
+			set_flag(reward["once_flag"])
+
+	if battle_scene != null:
+		battle_scene.queue_free()
+		battle_scene = null
+
+	is_story_playing = false
+	show_game_ui()
+	
+	bgm_player.play()
+	
+	await give_items_with_pending_loot(battle_rewards)
+	await open_inventory_arrange_if_pending_loot("loot")
+
+	print("전투 종료 결과: " + str(result_data.get("result", "")))
+
+# === 성물/주물 관련 함수 모음 === 
 # 현재 장착 무기 기준 기본/적용 능력치 계산 함수
 func get_player_effective_stats():
 	var weapon_id = "fist"
@@ -518,7 +622,38 @@ func apply_relic_and_fetish_effects(stats):
 			"dice_relic":
 				stats["parry_window"] = float(stats.get("parry_window", 0.1)) * 1.3
 				add_applied_relic_to_stats(stats, item_id)
-
+			# 성경책 : 장착한 무기 최소 공격력 5 증가(합연산)
+			"bible_fetish":
+				stats["attack_min"] = int(stats.get("attack_min", 1)) + 5
+				add_applied_relic_to_stats(stats, item_id)
+			# 금속 주사기 : 장착한 무기 최대 공격력 5 증가(합연산)
+			"metal_syringe":
+				stats["attack_max"] = int(stats.get("attack_max", 1)) + 5
+				add_applied_relic_to_stats(stats, item_id)
+			# 묵주 : 받는 피해 30% 감소(곱연산), 최대 공격력 5 하락(합연산)
+			"rosary_fetish":
+				stats["damage_taken_multiplier"] = float(stats.get("damage_taken_multiplier", 1.0)) * 0.7
+				stats["attack_max"] = int(stats.get("attack_max", 1)) - 5
+				add_applied_relic_to_stats(stats, item_id)
+			# 운동화 : 방어 모드 이동 속도 50% 증가, 스윙 속도 30% 증가
+			"sneakers_fetish":
+				stats["defense_move_speed"] = float(stats.get("defense_move_speed", 500.0)) * 1.5
+				stats["attack_swing_speed"] = float(stats.get("attack_swing_speed", 3.0)) * 1.3
+				add_applied_relic_to_stats(stats, item_id)
+			# 아령 : 스윙 속도 50% 감소
+			"dumbbell_fetish":
+				stats["attack_swing_speed"] = float(stats.get("attack_swing_speed", 3.0)) * 0.5
+				add_applied_relic_to_stats(stats, item_id)
+			# 모래 주머니 : 최대 체력 50 하락
+			"sandbag_fetish":
+				stats["max_hp"] = int(stats.get("max_hp", player_max_hp)) - 50
+				add_applied_relic_to_stats(stats, item_id)
+			# 폐 모형 : 소모품 총개수 * 5 만큼 최대 체력 증가, 치명타 확률 50% 감소(합연산)
+			"lung_model_fetish":
+				var consumable_count = get_inventory_consumable_total_count()
+				stats["max_hp"] = int(stats.get("max_hp", player_max_hp)) + consumable_count * 5
+				stats["critical_chance"] = float(stats.get("critical_chance", 0.01)) - 0.5
+				add_applied_relic_to_stats(stats, item_id)						
 			_:
 				pass
 # 인벤토리 아이템이 차지하는 슬롯 목록 반환 함수
@@ -686,80 +821,28 @@ func clamp_player_effective_stats(stats):
 		stats["applied_relic_names"] = []
 
 	return stats
-# 전투 시작 함수
-func start_battle(enemy_id, first_turn = ""):
-	if not enemies.has(enemy_id):
-		push_error("존재하지 않는 적: " + enemy_id)
-		return
+# 인벤토리 안의 소모품 총개수 계산 함수
+func get_inventory_consumable_total_count():
+	var total_count = 0
 
-	var enemy_data = enemies[enemy_id]
-	var skip_flag = enemy_data.get("skip_if_flag", "")
+	for inventory_item in inventory:
+		var item_id = inventory_item.get("id", "")
 
-	if skip_flag != "" and has_flag(skip_flag):
-		print("이미 처치한 적이라 전투 스킵: " + enemy_id)
-		return
-	
-	is_story_playing = true
-	hide_game_ui()
+		if item_id == "":
+			continue
 
-	var battle_scene_resource = load(BATTLE_SCENE_PATH)
-	battle_scene = battle_scene_resource.instantiate()
+		if not items.has(item_id):
+			continue
 
-	add_child(battle_scene)
-	battle_scene.battle_finished.connect(end_battle)
-	
-	var effective_stats = get_player_effective_stats()
-	var battle_player_max_hp = int(effective_stats.get("max_hp", player_max_hp))
-	@warning_ignore("unused_variable")
-	var battle_player_hp = min(player_hp, battle_player_max_hp)
+		var item_data = items[item_id]
 
-	# 전투신으로 넘겨줄 로드한 데이터들 모음
-	var battle_data = {
-		"enemy_id": enemy_id,
-		"enemy_data": enemies[enemy_id],
-		"enemies": enemies,
-		"player_hp": battle_player_hp,
-		"player_max_hp": battle_player_max_hp,
-		"player_effective_stats": effective_stats,
-		"player_portraits": characters["protagonist"]["portrait"],
-		"items": items,
-		"equipped_weapon": equipped_weapon,
-		"inventory": inventory,
-		"projectiles": projectiles,
-		"flags": flags,
-		"first_turn": first_turn
-	}
-	
-	if bgm_player.playing:
-		bgm_player.stop()
+		if item_data.get("type", "") != "consumable":
+			continue
 
-	battle_scene.setup_battle(battle_data)
-# 전투 종료 함수
-func end_battle(result_data):
-	player_hp = result_data.get("player_hp", player_hp)
+		total_count += int(inventory_item.get("count", 1))
 
-	for flag_id in result_data.get("reward_flags", []):
-		set_flag(flag_id)
+	return total_count
 
-	var battle_rewards = result_data.get("rewards", [])
-
-	for reward in battle_rewards:
-		if reward.has("once_flag"):
-			set_flag(reward["once_flag"])
-
-	if battle_scene != null:
-		battle_scene.queue_free()
-		battle_scene = null
-
-	is_story_playing = false
-	show_game_ui()
-	
-	bgm_player.play()
-	
-	await give_items_with_pending_loot(battle_rewards)
-	await open_inventory_arrange_if_pending_loot("loot")
-
-	print("전투 종료 결과: " + str(result_data.get("result", "")))
 
 # === 로드 함수 모음 ===
 # 방 로드 및 예외 처리 함수
@@ -1851,13 +1934,24 @@ func effect(sound_effect, shake_effect, fade_effect, direction):
 		)
 	
 	await get_tree().create_timer(0.3).timeout
+# 현재 성물/주물 효과가 적용된 최대 체력 반환 함수
+func get_current_player_max_hp():
+	var effective_stats = get_player_effective_stats()
+	return int(effective_stats.get("max_hp", player_max_hp))
+# 현재 체력이 적용 최대 체력을 넘지 않도록 보정하는 함수
+func clamp_player_hp_to_current_max():
+	var current_max_hp = get_current_player_max_hp()
+
+	if player_hp > current_max_hp:
+		player_hp = current_max_hp
+
+	if player_hp < 0:
+		player_hp = 0
+
+	return current_max_hp
 # 플레이어 체력 UI 갱신 함수
 func update_player_status_ui():
-	var effective_stats = get_player_effective_stats()
-	var display_max_hp = int(effective_stats.get("max_hp", player_max_hp))
-
-	if player_hp > display_max_hp:
-		player_hp = display_max_hp
+	var display_max_hp = clamp_player_hp_to_current_max()
 
 	player_hp_text.text = str(int(player_hp)) + " / " + str(int(display_max_hp))
 # BGM 재생 함수
@@ -2529,6 +2623,44 @@ func connect_inventory_context_menu_buttons():
 	if has_method("_on_rotate_button_pressed"):
 		if not rotate_button.pressed.is_connected(rotate_callable):
 			rotate_button.pressed.connect(rotate_callable)
+# 장착 무기 효과 텍스트를 ScrollContainer 안에 넣는 함수
+func setup_equipped_weapon_text_scroll():
+	if equipped_weapon_text == null:
+		return
+
+	if equipped_weapon_text_scroll != null:
+		return
+
+	var parent_node = equipped_weapon_text.get_parent()
+
+	if parent_node == null:
+		return
+
+	var old_position = equipped_weapon_text.position
+	var old_size = equipped_weapon_text.size
+	var old_index = equipped_weapon_text.get_index()
+
+	equipped_weapon_text_scroll = ScrollContainer.new()
+	equipped_weapon_text_scroll.name = "EquippedWeaponTextScroll"
+	equipped_weapon_text_scroll.position = old_position
+	equipped_weapon_text_scroll.size = old_size
+	equipped_weapon_text_scroll.mouse_filter = Control.MOUSE_FILTER_STOP
+	# 스크롤바 안보이게 처리
+	equipped_weapon_text_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	equipped_weapon_text_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+
+	parent_node.remove_child(equipped_weapon_text)
+	parent_node.add_child(equipped_weapon_text_scroll)
+	parent_node.move_child(equipped_weapon_text_scroll, old_index)
+
+	equipped_weapon_text.position = Vector2.ZERO
+	equipped_weapon_text.size = Vector2(old_size.x - 24, old_size.y)
+	equipped_weapon_text.custom_minimum_size = Vector2(old_size.x - 24, 0)
+	equipped_weapon_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	equipped_weapon_text.clip_text = false
+	equipped_weapon_text.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	equipped_weapon_text_scroll.add_child(equipped_weapon_text)
 
 # 인벤토리 정리 화면 열기 함수
 func open_inventory_arrange(mode, left_items):
@@ -4201,6 +4333,9 @@ func show_equipped_weapon_info():
 		selected_item_image,
 		selected_item_description
 	)
+	
+	if equipped_weapon_text_scroll != null:
+		equipped_weapon_text_scroll.scroll_vertical = 0
 # 아이템 사용 함수
 func use_item(inventory_item):
 	if inventory_item == null:
@@ -4218,14 +4353,17 @@ func use_item(inventory_item):
 		return
 
 	if item_data.has("heal"):
-		player_hp += item_data["heal"]
+		var current_max_hp = get_current_player_max_hp()
 
-		if player_hp > player_max_hp:
-			player_hp = player_max_hp
+		player_hp += int(item_data["heal"])
+
+		if player_hp > current_max_hp:
+			player_hp = current_max_hp
 
 		print("현재 체력: " + str(int(player_hp)))
 
 	consume_item_if_needed(inventory_item)
+	clamp_player_hp_to_current_max()
 	update_inventory_ui()
 	# 아이템 사용 횟수 즉시 반영
 	if selected_inventory_item != null and inventory.has(selected_inventory_item):

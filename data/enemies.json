@@ -78,7 +78,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 5,
+						"damage": 7,
 						"delay": 0.0
 					},
 					{
@@ -88,7 +88,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 5,
+						"damage": 7,
 						"delay": 0.4
 					}
 				]

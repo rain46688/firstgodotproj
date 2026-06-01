@@ -76,7 +76,7 @@
 		"attack_move_range": 380,
 		"attack_swing_speed": 2.5,
 		"weapon_angle_step": 5,
-		"attack_projectile": "slash_basic",
+		"attack_projectile": "impact_basic",
 		"defense_hitbox": {
 			"offset": [
 				5,
@@ -217,6 +217,83 @@
 		"type": "relic",
 		"relic_type": "holy",
 		"effect_scope": "adjacent_weapon",
+		"stackable": false
+	},
+	"bible_fetish": {
+		"name": "성경책",
+		"description": "표지가 검게 그을린 오래된 성경책.\n소지시 장착한 무기의 최소 공격력이 5 증가한다.",
+		"image": "res://imgs/items/주물180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "relic",
+		"relic_type": "fetish",
+		"effect_scope": "inventory",
+		"stackable": false
+	},
+	"metal_syringe": {
+		"name": "금속 주사기",
+		"description": "차갑게 빛나는 금속 주사기.\n소지시 장착한 무기의 최대 공격력이 5 증가한다.",
+		"image": "res://imgs/items/주물180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "relic",
+		"relic_type": "fetish",
+		"effect_scope": "inventory",
+		"stackable": false
+	},
+	"rosary_fetish": {
+		"name": "묵주",
+		"description": "손때가 깊게 밴 낡은 묵주.\n소지시 받는 피해가 30% 감소하지만 장착한 무기의 최대 공격력이 5 감소한다.",
+		"image": "res://imgs/items/주물180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "relic",
+		"relic_type": "fetish",
+		"effect_scope": "inventory",
+		"stackable": false
+	},
+	"sneakers_fetish": {
+		"name": "운동화",
+		"description": "누군가 오래 신고 다닌 낡은 운동화.\n소지시 방어 모드 이동 속도가 50% 증가하고 스윙 속도가 30% 증가한다.",
+		"image": "res://imgs/items/주물180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "relic",
+		"relic_type": "fetish",
+		"effect_scope": "inventory",
+		"stackable": false
+	},
+	"dumbbell_fetish": {
+		"name": "아령",
+		"description": "손잡이에 검은 얼룩이 남은 무거운 아령.\n소지시 장착한 무기의 스윙 속도가 50% 감소한다.",
+		"image": "res://imgs/items/주물180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "relic",
+		"relic_type": "fetish",
+		"effect_scope": "inventory",
+		"stackable": false
+	},
+	"sandbag_fetish": {
+		"name": "모래 주머니",
+		"description": "축축한 모래가 들어있는 작은 주머니.\n소지시 최대 체력이 50 감소한다.",
+		"image": "res://imgs/items/주물180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "relic",
+		"relic_type": "fetish",
+		"effect_scope": "inventory",
+		"stackable": false
+	},
+	"lung_model_fetish": {
+		"name": "폐 모형",
+		"description": "숨을 쉬는 듯 들썩이는 폐 모형.\n소지시 인벤토리 내 소모품 총개수 * 5 만큼 최대 체력이 증가하지만 치명타 확률이 50% 감소한다.",
+		"image": "res://imgs/items/주물180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "relic",
+		"relic_type": "fetish",
+		"effect_scope": "inventory",
 		"stackable": false
 	}
 }
