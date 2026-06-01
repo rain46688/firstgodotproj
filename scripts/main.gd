@@ -394,6 +394,7 @@ func _ready():
 	#await add_item("cutter_knife")
 	#await add_item("classroom_key")
 	#await add_item("holy_sword")
+	#await add_item("razor")
 	
 	#await add_item("beverage_a", 5)
 	#await add_item("beverage_a", 5)
@@ -410,20 +411,39 @@ func _ready():
 	#await add_item("beverage_a", 1)
 	#await add_item("tranquilizer", 1)
 	
-	await add_item("old_water_ball") 
-	await add_item("old_abacus")
-	await add_item("cube_relic")
-	await add_item("torn_eyepatch")
-	await add_item("dice_relic")
+	#await add_item("old_water_ball") 
+	#await add_item("old_abacus")
+	#await add_item("cube_relic")
+	#await add_item("torn_eyepatch")
+	#await add_item("dice_relic")
+	#
+	#await add_item("bible_fetish")
+	#await add_item("metal_syringe")
+	#await add_item("rosary_fetish")
+	#
+	#await add_item("sneakers_fetish")
+	#await add_item("dumbbell_fetish")
+	#await add_item("sandbag_fetish")
+	#await add_item("lung_model_fetish")
+	#
+	#await add_item("music_box_relic")
+	#await add_item("first_aid_box_fetish")
+	#await add_item("classic_camera_fetish")
+	#await add_item("hourglass_fetish")
 	
-	await add_item("bible_fetish")
-	await add_item("metal_syringe")
-	await add_item("rosary_fetish")
+	#await add_item("broken_headset_relic")
+	#await add_item("teddy_bear_relic")
+	#await add_item("character_figure_relic")
+	#
+	#await add_item("hand_bone_fetish")
+	#await add_item("skull_model_fetish")
+	#await add_item("small_frame_fetish")
+	#await add_item("hand_candlestick_fetish")
 	
-	await add_item("sneakers_fetish")
-	await add_item("dumbbell_fetish")
-	await add_item("sandbag_fetish")
-	await add_item("lung_model_fetish")
+	#await add_item("cross_relic")
+	#await add_item("holy_grail_relic")
+	#await add_item("brain_model_fetish")
+	#await add_item("heart_model_fetish")
 	
 	# 인벤토리 정리 테스트
 	#await give_items_with_pending_loot([
@@ -439,7 +459,7 @@ func _ready():
 	
 	# 전투 테스트
 	#await get_tree().create_timer(1.0).timeout
-	#start_battle("candle_student")
+	#start_battle("candle_student") 
 	#start_battle("candle_student_tutorial")
 	#start_battle("combined_candle_students_phase_01")
 	#start_battle("combined_candle_students_phase_02")
@@ -563,6 +583,9 @@ func get_player_effective_stats():
 		"damage_taken_multiplier": 1.0,
 		"turn_player_hp_delta": 0,
 		"turn_enemy_hp_delta": 0,
+		"turn_start_player_damage": 0,
+		"turn_start_player_heal": 0,
+		"turn_start_enemy_damage": 0,
 		"piercing": bool(weapon_data.get("piercing", false)),
 		"cannot_die": false,
 
@@ -572,7 +595,17 @@ func get_player_effective_stats():
 	
 	# 성물/주물 효과 적용 부분
 	apply_relic_and_fetish_effects(stats)
-
+	
+	# 성물 테스트 용도
+	#print("적용 효과: ", stats.get("applied_relic_names", []))
+	#print("공격력: ", stats.get("attack_min"), " ~ ", stats.get("attack_max"))
+	#print("치명타 확률: ", stats.get("critical_chance"))
+	#print("치명타 배율: ", stats.get("critical_multiplier"))
+	#print("패링 범위: ", stats.get("parry_window"))
+	#print("스윙 속도: ", stats.get("attack_swing_speed"))
+	#print("받는 피해 배율: ", stats.get("damage_taken_multiplier"))
+	#print("관통 여부: ", stats.get("piercing"))
+	#print("최대 체력: ", stats.get("max_hp"))
 	#print("장착 무기 주변 슬롯: ", get_equipped_weapon_adjacent_slots())
 
 	return clamp_player_effective_stats(stats)
@@ -654,6 +687,81 @@ func apply_relic_and_fetish_effects(stats):
 				stats["max_hp"] = int(stats.get("max_hp", player_max_hp)) + consumable_count * 5
 				stats["critical_chance"] = float(stats.get("critical_chance", 0.01)) - 0.5
 				add_applied_relic_to_stats(stats, item_id)						
+			# 오르골 : 플레이어 턴 시작 시 현재 체력 3 회복
+			"music_box_relic":
+				stats["turn_start_player_heal"] = int(stats.get("turn_start_player_heal", 0)) + 3
+				add_applied_relic_to_stats(stats, item_id)
+			# 구급 상자 : 플레이어 턴 시작 시 현재 체력 5 회복, 최소 공격력 5 하락
+			"first_aid_box_fetish":
+				stats["turn_start_player_heal"] = int(stats.get("turn_start_player_heal", 0)) + 5
+				stats["attack_min"] = int(stats.get("attack_min", 1)) - 5
+				add_applied_relic_to_stats(stats, item_id)
+			# 클래식 카메라 : 인접 시 최소/최대 공격력 5 증가, 플레이어 턴 시작 시 현재 체력 3 감소
+			"classic_camera_fetish":
+				stats["attack_min"] = int(stats.get("attack_min", 1)) + 5
+				stats["attack_max"] = int(stats.get("attack_max", 1)) + 5
+				stats["turn_start_player_damage"] = int(stats.get("turn_start_player_damage", 0)) + 3
+				add_applied_relic_to_stats(stats, item_id)
+			# 모래 시계 : 플레이어 턴 시작 시 플레이어/적 본체/적 파츠 현재 체력 10 감소
+			"hourglass_fetish":
+				stats["turn_start_player_damage"] = int(stats.get("turn_start_player_damage", 0)) + 10
+				stats["turn_start_enemy_damage"] = int(stats.get("turn_start_enemy_damage", 0)) + 10
+				add_applied_relic_to_stats(stats, item_id)
+			# 망가진 헤드셋 : 치명타 배율 30% 증가
+			"broken_headset_relic":
+				stats["critical_multiplier"] = float(stats.get("critical_multiplier", 2.0)) * 1.3
+				add_applied_relic_to_stats(stats, item_id)
+			# 곰인형 : 최소 공격력 5 증가
+			"teddy_bear_relic":
+				stats["attack_min"] = int(stats.get("attack_min", 1)) + 5
+				add_applied_relic_to_stats(stats, item_id)
+			# 캐릭터 피규어 : 최대 공격력 5 증가
+			"character_figure_relic":
+				stats["attack_max"] = int(stats.get("attack_max", 1)) + 5
+				add_applied_relic_to_stats(stats, item_id)
+			# 손 뼈 모형 : 치명타 확률 50% 증가, 최대 체력 30 하락
+			"hand_bone_fetish":
+				stats["critical_chance"] = float(stats.get("critical_chance", 0.01)) + 0.5
+				stats["max_hp"] = int(stats.get("max_hp", player_max_hp)) - 30
+				add_applied_relic_to_stats(stats, item_id)
+			# 해골 모형 : 치명타 배율 50% 증가, 최대 체력 50 하락
+			"skull_model_fetish":
+				stats["critical_multiplier"] = float(stats.get("critical_multiplier", 2.0)) * 1.5
+				stats["max_hp"] = int(stats.get("max_hp", player_max_hp)) - 50
+				add_applied_relic_to_stats(stats, item_id)
+			# 작은 액자 : 패링 범위 50% 증가, 스윙 속도 30% 증가
+			"small_frame_fetish":
+				stats["parry_window"] = float(stats.get("parry_window", 0.1)) * 1.5
+				stats["attack_swing_speed"] = float(stats.get("attack_swing_speed", 3.0)) * 1.3
+				add_applied_relic_to_stats(stats, item_id)
+			# 손 모양 촛대 : 관통 효과 부여, 받는 피해 50% 증가
+			"hand_candlestick_fetish":
+				stats["piercing"] = true
+				stats["damage_taken_multiplier"] = float(stats.get("damage_taken_multiplier", 1.0)) * 1.5
+				add_applied_relic_to_stats(stats, item_id)
+			# 십자가 : 인벤토리 내 무기 타입 아이템이 3개 이상이면 최대 공격력 +10
+			"cross_relic":
+				if get_inventory_weapon_total_count() >= 3:
+					stats["attack_max"] = int(stats.get("attack_max", 1)) + 10
+					add_applied_relic_to_stats(stats, item_id)
+			# 성배 : 인벤토리 내 소모품 타입 아이템 총개수가 0개이면 관통 효과 부여
+			"holy_grail_relic":
+				if get_inventory_consumable_total_count() <= 0:
+					stats["piercing"] = true
+					add_applied_relic_to_stats(stats, item_id)
+			# 뇌 모형 : 인벤토리가 꽉 찼을 경우 최대 공격력 +10
+			"brain_model_fetish":
+				if is_inventory_full():
+					stats["attack_max"] = int(stats.get("attack_max", 1)) + 10
+					add_applied_relic_to_stats(stats, item_id)
+			# 심장 모형 : 최대 체력 -30, 효과 적용 후 최대 체력이 30 이하라면 죽지 않음 효과 부여
+			"heart_model_fetish":
+				stats["max_hp"] = int(stats.get("max_hp", player_max_hp)) - 30
+
+				if int(stats.get("max_hp", player_max_hp)) <= 30:
+					stats["cannot_die"] = true
+
+				add_applied_relic_to_stats(stats, item_id)
 			_:
 				pass
 # 인벤토리 아이템이 차지하는 슬롯 목록 반환 함수
@@ -842,7 +950,44 @@ func get_inventory_consumable_total_count():
 		total_count += int(inventory_item.get("count", 1))
 
 	return total_count
+# 인벤토리 안의 무기 타입 아이템 개수 계산 함수
+func get_inventory_weapon_total_count():
+	var total_count = 0
 
+	for inventory_item in inventory:
+		var item_id = inventory_item.get("id", "")
+
+		if item_id == "":
+			continue
+
+		if not items.has(item_id):
+			continue
+
+		var item_data = items[item_id]
+
+		if item_data.get("type", "") != "weapon":
+			continue
+
+		total_count += int(inventory_item.get("count", 1))
+
+	return total_count
+# 현재 인벤토리에 빈칸이 있는지 확인하는 함수
+func has_empty_inventory_slot():
+	var used_slots = []
+
+	for inventory_item in inventory:
+		var occupied_slots = get_inventory_item_occupied_slots(inventory_item)
+
+		for slot in occupied_slots:
+			if not used_slots.has(slot):
+				used_slots.append(slot)
+
+	var total_slots = inventory_cols * inventory_rows
+
+	return used_slots.size() < total_slots
+# 인벤토리가 꽉 찼는지 확인하는 함수
+func is_inventory_full():
+	return not has_empty_inventory_slot()
 
 # === 로드 함수 모음 ===
 # 방 로드 및 예외 처리 함수

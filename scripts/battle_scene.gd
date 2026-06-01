@@ -552,8 +552,15 @@ func start_player_turn():
 	weapon_sprite.visible = false
 	weapon_sprite.rotation_degrees = 0
 	attack_guide.visible = false
-	battle_text.text = get_player_turn_start_text()
 
+	set_action_buttons_disabled(true)
+
+	var can_continue = await apply_player_turn_start_relic_effects()
+
+	if not can_continue:
+		return
+
+	battle_text.text = get_player_turn_start_text()
 	set_action_buttons_disabled(false)
 # 적 턴 시작 함수
 func start_enemy_turn():
@@ -1139,6 +1146,24 @@ func play_enemy_encounter_sound():
 		default_enemy_encounter_stream,
 		volume_db
 	)
+# 같은 효과음이 짧은 시간에 여러 번 나도 서로 끊기지 않게 재생하는 함수
+func play_overlap_sound_from_player(source_player):
+	if source_player == null:
+		return
+
+	if source_player.stream == null:
+		return
+
+	var sound = AudioStreamPlayer.new()
+	sound.stream = source_player.stream
+	sound.volume_db = source_player.volume_db
+	sound.pitch_scale = source_player.pitch_scale
+	sound.bus = source_player.bus
+
+	add_child(sound)
+
+	sound.finished.connect(Callable(sound, "queue_free"))
+	sound.play()
 
 # === 디버그 함수 모음 ===
 # 디버그 히트 박스 확인용 함수
@@ -2905,7 +2930,13 @@ func apply_projectile_hit_to_player(projectile_info, projectile_data, danger_typ
 	var damage = projectile_info.get("damage", current_enemy_pattern.get("damage", 1))
 	damage = get_player_received_damage(damage)
 
+	var before_hp = player_hp
+
 	player_hp -= damage
+	
+	# 주물 심장 모형 처리 로직
+	if bool(player_effective_stats.get("cannot_die", false)) and before_hp >= 1 and player_hp < 1:
+		player_hp = 1
 
 	if player_hp < 0:
 		player_hp = 0
@@ -3228,3 +3259,117 @@ func clamp_defense_weapon_to_area():
 
 	if correction != Vector2.ZERO:
 		weapon_sprite.global_position += correction
+# 플레이어 현재 체력을 전투 최대 체력 안으로 보정하는 함수
+func clamp_battle_player_hp():
+	if player_hp > player_max_hp:
+		player_hp = player_max_hp
+
+	if player_hp < 0:
+		player_hp = 0
+# 플레이어 턴 시작 성물/주물 효과 적용 함수
+func apply_player_turn_start_relic_effects():
+	var player_damage = int(player_effective_stats.get("turn_start_player_damage", 0))
+	var player_heal = int(player_effective_stats.get("turn_start_player_heal", 0))
+	var enemy_damage = int(player_effective_stats.get("turn_start_enemy_damage", 0))
+
+	var effect_happened = false
+	var player_was_damaged = false
+
+	# 1. 먼저 플레이어 피해 효과 적용
+	if player_damage > 0:
+		var before_hp = player_hp
+
+		player_hp -= player_damage
+
+		if bool(player_effective_stats.get("cannot_die", false)) and before_hp >= 1 and player_hp < 1:
+			player_hp = 1
+
+		if player_hp < 0:
+			player_hp = 0
+
+		if before_hp > player_hp:
+			play_player_hit_flash()
+			play_overlap_sound_from_player(hit_normal_sound)
+
+			player_was_damaged = true
+			effect_happened = true
+
+		update_player_hp_ui()
+
+		if player_hp <= 0:
+			await get_tree().create_timer(0.5).timeout
+			await game_over()
+			return false
+		
+		if player_was_damaged and enemy_damage > 0:
+			await get_tree().create_timer(0.10).timeout
+
+	# 2. 적 본체/파츠 피해 효과 적용
+	if enemy_damage > 0:
+		var damaged_enemy = false
+
+		if enemy_hp > 0:
+			enemy_hp -= enemy_damage
+
+			if enemy_hp < 0:
+				enemy_hp = 0
+
+			damaged_enemy = true
+
+		for part_id in enemy_part_hp.keys():
+			if destroyed_parts.has(part_id):
+				continue
+
+			enemy_part_hp[part_id] -= enemy_damage
+
+			if enemy_part_hp[part_id] < 0:
+				enemy_part_hp[part_id] = 0
+
+			damaged_enemy = true
+
+			if enemy_part_hp[part_id] <= 0:
+				destroy_enemy_part(part_id)
+
+		if damaged_enemy:
+			play_overlap_sound_from_player(hit_normal_sound)
+
+			set_top_hitbox_as_last_hitbox()
+			show_damage_popup(enemy_damage, false)
+			start_enemy_hit_feedback()
+
+			effect_happened = true
+
+		update_enemy_hp_ui()
+		update_debug_hp_labels()
+
+		if enemy_hp <= 0:
+			await get_tree().create_timer(0.5).timeout
+
+			if enemy_data.has("next_phase_enemy_id"):
+				await change_enemy_phase()
+			else:
+				await win_battle()
+
+			return false
+
+	# 3. 마지막에 플레이어 회복 효과 적용
+	if player_heal > 0:
+		var before_heal_hp = player_hp
+
+		player_hp += player_heal
+
+		if player_hp > player_max_hp:
+			player_hp = player_max_hp
+
+		if player_hp > before_heal_hp:
+			if healing_sound != null:
+				healing_sound.play()
+
+			effect_happened = true
+
+		update_player_hp_ui()
+
+	if effect_happened:
+		await get_tree().create_timer(0.45).timeout
+
+	return true
