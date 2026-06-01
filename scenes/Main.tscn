@@ -440,6 +440,9 @@ offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 
+[node name="BGMPlayer" type="AudioStreamPlayer" parent="." unique_id=969287587]
+volume_db = 5.0
+
 [node name="ChoiceSound" type="AudioStreamPlayer" parent="." unique_id=699496763]
 stream = ExtResource("8_jlsqs")
 volume_db = -10.0
@@ -481,8 +484,6 @@ volume_db = -5.0
 [node name="SaveCompleteSound" type="AudioStreamPlayer" parent="." unique_id=1570015788]
 stream = ExtResource("18_bb450")
 volume_db = -5.0
-
-[node name="BGMPlayer" type="AudioStreamPlayer" parent="." unique_id=969287587]
 
 [node name="EncounterHeartbeatSound" type="AudioStreamPlayer" parent="." unique_id=676020408]
 stream = ExtResource("18_nfivy")

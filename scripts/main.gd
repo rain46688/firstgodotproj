@@ -388,6 +388,7 @@ func _ready():
 	
 	#await add_item("cutter_knife")
 	#await add_item("beverage_a", 5)
+	#await add_item("beverage_a", 5)
 	#await add_item("tranquilizer")
 	#await add_item("classroom_key")
 	#await add_item("holy_sword")
@@ -400,9 +401,11 @@ func _ready():
 	#])
 	#await open_inventory_arrange_if_pending_loot("loot")
 
-	await add_item("old_water_ball") 
-	await add_item("old_abacus")
-	await add_item("cube_relic")
+	#await add_item("old_water_ball") 
+	#await add_item("old_abacus")
+	#await add_item("cube_relic")
+	#await add_item("torn_eyepatch")
+	#await add_item("dice_relic")
 	
 	update_room()
 	
@@ -466,7 +469,7 @@ func get_player_effective_stats():
 	# 성물/주물 효과 적용 부분
 	apply_relic_and_fetish_effects(stats)
 
-	print("장착 무기 주변 슬롯: ", get_equipped_weapon_adjacent_slots())
+	#print("장착 무기 주변 슬롯: ", get_equipped_weapon_adjacent_slots())
 
 	return clamp_player_effective_stats(stats)
 # 성물/주물 효과 적용 함수
@@ -495,16 +498,25 @@ func apply_relic_and_fetish_effects(stats):
 			continue
 
 		match item_id:
+			# 오래된 워터볼 : 장착한 무기 최소 공격력 3 증가(합연산)
 			"old_water_ball":
 				stats["attack_min"] = int(stats.get("attack_min", 1)) + 3
 				add_applied_relic_to_stats(stats, item_id)
-
+			# 낡은 주판 : 장착한 무기 최대 공격력 3 증가(합연산)
 			"old_abacus":
 				stats["attack_max"] = int(stats.get("attack_max", 1)) + 3
 				add_applied_relic_to_stats(stats, item_id)
-
+			# 큐브 : 최대 체력 30 증가(합연산)
 			"cube_relic":
 				stats["max_hp"] = int(stats.get("max_hp", player_max_hp)) + 30
+				add_applied_relic_to_stats(stats, item_id)
+			# 찢어진 안대 : 치명타 확률 30% 증가(합연산)
+			"torn_eyepatch":
+				stats["critical_chance"] = float(stats.get("critical_chance", 0.01)) + 0.3
+				add_applied_relic_to_stats(stats, item_id)
+			# 주사위 : 패링 범위 30% 증가(곱연산)
+			"dice_relic":
+				stats["parry_window"] = float(stats.get("parry_window", 0.1)) * 1.3
 				add_applied_relic_to_stats(stats, item_id)
 
 			_:
@@ -586,9 +598,9 @@ func get_equipped_weapon_adjacent_slots():
 
 	for slot in weapon_slots:
 		var col = slot % inventory_cols
-		var row = slot / inventory_cols
+		var row = floori(slot / float(inventory_cols))
 
-		for y in range(-1, 2):
+		for y in range(-1, 2):    
 			for x in range(-1, 2):
 				if x == 0 and y == 0:
 					continue
@@ -1124,8 +1136,9 @@ func try_move_to_exit(direction):
 	# 출구별 이동 효과 결정
 	var use_shake = true
 
-	# JSON에 "move_effect": "door" 라고 적힌 출구만 흔들림 없이 이동
-	if exit_data.has("move_effect") and exit_data["move_effect"] == "door":
+	# JSON에 "move_effect": "enter" 라고 적힌 출구만 흔들림 없이 이동
+	# 값 door 에서 enter로 변경함 문 뿐만 아니라 여러 가지 상황에 매치 시키기 위해서 수정
+	if exit_data.has("move_effect") and exit_data["move_effect"] == "enter":
 		use_shake = false
 
 	# 열린 출구 이동
@@ -1370,7 +1383,7 @@ func run_exit_interaction(direction):
 	if not is_locked or is_unlocked:
 		var use_shake = true
 
-		if exit_data.has("move_effect") and exit_data["move_effect"] == "door":
+		if exit_data.has("move_effect") and exit_data["move_effect"] == "enter":
 			use_shake = false
 
 		await move_to_room(exit_data["target"], use_shake, direction)
@@ -2202,8 +2215,32 @@ func stop_drag_item():
 			slot_highlight.visible = false
 
 			update_inventory_ui()
+			update_equipped_weapon_ui()
+			update_player_status_ui()
 			return
 
+	# 스택 병합이 안 되는 1x1 아이템끼리는 자리 교환
+	if target_slot != -1:
+		var swapped = try_swap_inventory_1x1_items(
+			dragged_item,
+			target_slot
+		)
+
+		if swapped:
+			item_sound.play()
+
+			dragged_item_button.z_index = 0
+
+			is_dragging_item = false
+			dragged_item = null
+			dragged_item_button = null
+			slot_highlight.visible = false
+
+			update_inventory_ui()
+			update_equipped_weapon_ui()
+			update_player_status_ui()
+			return
+			
 	# 정상 슬롯이고 배치 가능하면 이동
 	if target_slot != -1:
 		if can_place_item_at_except(
@@ -2215,6 +2252,8 @@ func stop_drag_item():
 			dragged_item["slot"] = target_slot
 			item_sound.play()
 			update_inventory_ui()
+			update_equipped_weapon_ui()
+			update_player_status_ui()
 
 		# 놓을 수 없는 위치면 원래 자리 복귀
 		else:
@@ -2230,7 +2269,7 @@ func stop_drag_item():
 	dragged_item = null
 	dragged_item_button = null
 	slot_highlight.visible = false
-# 특정 슬롯을 차지하고 있는 인벤토리 아이템 찾기 함수
+# 특정 슬롯을 차지하고 있는 인벤토리 아이템 찾기 함수, 사용 하지 않아서 리팩토링시 삭제 예정
 func find_inventory_item_at_slot(slot, ignored_item = null):
 	for item in inventory:
 		if item == ignored_item:
@@ -2242,6 +2281,101 @@ func find_inventory_item_at_slot(slot, ignored_item = null):
 			return item
 
 	return null
+# 기존 인벤토리 아이템이 1x1 크기인지 확인하는 함수
+func is_inventory_item_1x1(inventory_item):
+	if inventory_item == null:
+		return false
+
+	if typeof(inventory_item) != TYPE_DICTIONARY:
+		return false
+
+	var item_id = inventory_item.get("id", "")
+
+	if item_id == "":
+		return false
+
+	if not items.has(item_id):
+		return false
+
+	var item_data = items[item_id]
+	var item_width = int(item_data.get("width", 1))
+	var item_height = int(item_data.get("height", 1))
+
+	return item_width == 1 and item_height == 1
+# 기존 인벤토리에서 1x1 아이템끼리 자리 교환 가능한지 확인하는 함수
+func can_swap_inventory_1x1_items(source_item, target_slot):
+	if source_item == null:
+		return false
+
+	if typeof(source_item) != TYPE_DICTIONARY:
+		return false
+
+	if target_slot == -1:
+		return false
+
+	if not is_inventory_item_1x1(source_item):
+		return false
+
+	var target_index = find_inventory_item_index_at_slot(target_slot, source_item)
+
+	if target_index < 0:
+		return false
+
+	if target_index >= inventory.size():
+		return false
+
+	if inventory[target_index] == null:
+		return false
+
+	if typeof(inventory[target_index]) != TYPE_DICTIONARY:
+		return false
+
+	if inventory[target_index] == source_item:
+		return false
+
+	if not is_inventory_item_1x1(inventory[target_index]):
+		return false
+
+	# 스택 병합이 가능한 경우에는 자리 교환보다 병합을 우선함
+	if can_merge_inventory_stack_item(source_item, target_slot):
+		return false
+
+	return true
+# 기존 인벤토리에서 1x1 아이템끼리 자리 교환 실행 함수
+func try_swap_inventory_1x1_items(source_item, target_slot):
+	if not can_swap_inventory_1x1_items(source_item, target_slot):
+		return false
+
+	var target_index = find_inventory_item_index_at_slot(target_slot, source_item)
+
+	if target_index < 0:
+		return false
+
+	if target_index >= inventory.size():
+		return false
+
+	if inventory[target_index] == null:
+		return false
+
+	if typeof(inventory[target_index]) != TYPE_DICTIONARY:
+		return false
+
+	var source_slot = int(source_item.get("slot", -1))
+	var target_item_slot = int(inventory[target_index].get("slot", -1))
+
+	if source_slot < 0:
+		return false
+
+	if target_item_slot < 0:
+		return false
+
+	source_item["slot"] = target_item_slot
+	inventory[target_index]["slot"] = source_slot
+
+	selected_inventory_item = source_item
+	show_selected_item_info(source_item)
+
+	return true
 # 기존 인벤토리에서 스택 합치기 가능 여부 확인 함수
 func can_merge_inventory_stack_item(source_item, target_slot):
 	if source_item == null:
@@ -2557,6 +2691,31 @@ func stop_arrange_drag_item():
 
 	if target_slot == -1:
 		cancel_arrange_drag_item()
+		return
+		
+	var swapped = try_swap_arrange_1x1_items(
+		arrange_dragged_item,
+		arrange_dragged_source,
+		target_source,
+		target_slot
+	)
+
+	if swapped:
+		var swapped_item = arrange_dragged_item
+		var swapped_target_source = target_source
+
+		if item_sound != null:
+			item_sound.play()
+
+		reset_arrange_drag_state()
+		clear_arrange_selected_focus()
+		update_inventory_arrange_ui()
+		update_equipped_weapon_ui()
+		update_player_status_ui()
+
+		select_arrange_item(swapped_item, swapped_target_source)
+
+		clear_arrange_slot_highlights()
 		return
 
 	var merged = try_merge_arrange_stack_item(
@@ -3014,6 +3173,131 @@ func get_arrange_item_index_at_slot(source, slot):
 			return i
 
 	return -1
+# 인벤토리 정리 화면 아이템이 1x1인지 확인하는 함수
+func is_arrange_item_1x1(item):
+	if item == null:
+		return false
+
+	if typeof(item) != TYPE_DICTIONARY:
+		return false
+
+	var item_id = item.get("id", "")
+
+	if item_id == "":
+		return false
+
+	if not items.has(item_id):
+		return false
+
+	var item_data = items[item_id]
+	var item_width = int(item_data.get("width", 1))
+	var item_height = int(item_data.get("height", 1))
+
+	return item_width == 1 and item_height == 1
+# 인벤토리 정리 화면에서 1x1 아이템끼리 자리 교환 가능한지 확인하는 함수
+func can_swap_arrange_1x1_items(source_item, from_source, to_source, target_slot):
+	if source_item == null:
+		return false
+
+	if typeof(source_item) != TYPE_DICTIONARY:
+		return false
+
+	if from_source == "":
+		return false
+
+	if to_source == "":
+		return false
+
+	if target_slot == -1:
+		return false
+
+	if not is_arrange_item_1x1(source_item):
+		return false
+
+	var target_list = get_arrange_item_list(to_source)
+	var target_index = get_arrange_item_index_at_slot(to_source, target_slot)
+
+	if target_index < 0:
+		return false
+
+	if target_index >= target_list.size():
+		return false
+
+	var target_item = target_list[target_index]
+
+	if target_item == null:
+		return false
+
+	if typeof(target_item) != TYPE_DICTIONARY:
+		return false
+
+	if target_item == source_item:
+		return false
+
+	if not is_arrange_item_1x1(target_item):
+		return false
+
+	# 스택 병합이 가능한 경우에는 교환보다 병합을 우선함
+	if can_merge_arrange_stack_item(source_item, to_source, target_slot):
+		return false
+
+	return true
+# 인벤토리 정리 화면에서 1x1 아이템끼리 자리 교환 실행 함수
+func try_swap_arrange_1x1_items(source_item, from_source, to_source, target_slot):
+	if not can_swap_arrange_1x1_items(source_item, from_source, to_source, target_slot):
+		return false
+
+	var from_list = get_arrange_item_list(from_source)
+	var to_list = get_arrange_item_list(to_source)
+	var target_index = get_arrange_item_index_at_slot(to_source, target_slot)
+
+	if target_index < 0:
+		return false
+
+	if target_index >= to_list.size():
+		return false
+
+	var target_item = to_list[target_index]
+
+	if target_item == null:
+		return false
+
+	var source_slot = int(source_item.get("slot", -1))
+	var target_item_slot = int(target_item.get("slot", -1))
+
+	if source_slot < 0:
+		return false
+
+	if target_item_slot < 0:
+		return false
+
+	# 같은 영역 안에서 자리만 교환
+	if from_source == to_source:
+		source_item["slot"] = target_item_slot
+		to_list[target_index]["slot"] = source_slot
+		return true
+
+	# 서로 다른 영역이면 실제 목록도 교환
+	if not from_list.has(source_item):
+		return false
+
+	from_list.erase(source_item)
+	to_list.erase(target_item)
+
+	source_item["slot"] = target_item_slot
+	target_item["slot"] = source_slot
+
+	from_list.append(target_item)
+	to_list.append(source_item)
+
+	# 오른쪽 가방에서 왼쪽 임시 영역으로 나간 아이템은 장착 해제
+	if from_source == "right" and to_source == "left":
+		unequip_item_if_moved_out_from_inventory(source_item)
+
+	if from_source == "left" and to_source == "right":
+		unequip_item_if_moved_out_from_inventory(target_item)
+
+	return true
 # 인벤토리 정리 화면에서 버린 아이템 메시지 생성 함수
 func make_discarded_item_messages(discarded_items):
 	var messages = []
@@ -3124,6 +3408,13 @@ func update_arrange_drag_slot_highlight():
 		target_slot
 	)
 
+	var can_swap = can_swap_arrange_1x1_items(
+		arrange_dragged_item,
+		arrange_dragged_source,
+		target_source,
+		target_slot
+	)
+
 	var can_place = can_place_item_at_arrange_grid(
 		target_list,
 		target_slot,
@@ -3134,7 +3425,7 @@ func update_arrange_drag_slot_highlight():
 		arrange_dragged_item
 	)
 
-	var is_valid = can_merge or can_place
+	var is_valid = can_merge or can_swap or can_place
 
 	var start_col = target_slot % target_cols
 	var start_row = floori(target_slot / float(target_cols))
@@ -3345,8 +3636,10 @@ func consume_item_by_id(item_id):
 			return consume_item_if_needed(inventory_item)
 
 	return false
-# 아이템 타입 한글 이름 반환 함수
+# 아이템 타입 한글 이름 반환 함수 (성물/주물 타입 반영 필요!)
 func get_item_type_text(item_type):
+	# 성물 주물 타입이 relic 하위 카테고리 relic_type 에서 holy 와 fetish 로 나뉨
+	# 추후 아래 부분 수정 필요함! 
 	if item_type == "key":
 		return "열쇠"
 	elif item_type == "weapon":
@@ -3682,7 +3975,12 @@ func update_slot_highlight():
 		target_slot
 	)
 
-	var can_place = can_merge or can_place_item_at_except(
+	var can_swap = can_swap_inventory_1x1_items(
+		dragged_item,
+		target_slot
+	)
+
+	var can_place = can_merge or can_swap or can_place_item_at_except(
 		target_slot,
 		item_width,
 		item_height,
@@ -3782,6 +4080,8 @@ func remove_item(inventory_item):
 			close_context_menu()
 
 		update_inventory_ui()
+		update_equipped_weapon_ui()
+		update_player_status_ui()
 		return true
 
 	return false
@@ -3880,21 +4180,21 @@ func show_equipped_weapon_info():
 		"count": 1
 	}
 
-	if item_id == "fist":
-		equipped_weapon_text.text = "무기 없음"
-	else:
-		var effective_stats = get_player_effective_stats()
-		var applied_relic_names = effective_stats.get("applied_relic_names", [])
+	var effective_stats = get_player_effective_stats()
+	var applied_relic_names = effective_stats.get("applied_relic_names", [])
 
+	if item_id == "fist":
+		equipped_weapon_text.text = get_item_name(item_id)
+	else:
 		equipped_weapon_text.text = get_item_name(item_id)
 
-		if applied_relic_names.size() > 0:
-			equipped_weapon_text.text += "\n\n적용 효과:"
+	if applied_relic_names.size() > 0:
+		equipped_weapon_text.text += "\n\n적용 효과:"
 
-			for relic_name in applied_relic_names:
-				equipped_weapon_text.text += "\n- " + str(relic_name)
-		else:
-			equipped_weapon_text.text += "\n\n적용 효과 없음"
+		for relic_name in applied_relic_names:
+			equipped_weapon_text.text += "\n- " + str(relic_name)
+	else:
+		equipped_weapon_text.text += "\n\n적용 효과 없음"
 
 	show_item_info_ui(
 		fake_inventory_item,

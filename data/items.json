@@ -97,7 +97,7 @@
 		"type": "weapon",
 		"attack_min": 20,
 		"attack_max": 20,
-		"critical_chance": 1,
+		"critical_chance": 0.1,
 		"critical_multiplier": 2.0,
 		"consumed_on_use": false,
 		"attack_base_rotation": 0,
@@ -195,6 +195,28 @@
 		"type": "relic",
 		"relic_type": "holy",
 		"effect_scope": "inventory",
+		"stackable": false
+	},
+	"torn_eyepatch": {
+		"name": "찢어진 안대",
+		"description": "오래된 얼룩이 남아있는 찢어진 안대.\n장착 무기 주변 1칸에 있을 때 치명타 확률이 30% 증가한다.",
+		"image": "res://imgs/items/성물180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "relic",
+		"relic_type": "holy",
+		"effect_scope": "adjacent_weapon",
+		"stackable": false
+	},
+	"dice_relic": {
+		"name": "주사위",
+		"description": "어떤 면을 봐도 같은 숫자만 보이는 주사위.\n장착 무기 주변 1칸에 있을 때 패링 범위가 30% 증가한다.",
+		"image": "res://imgs/items/성물180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "relic",
+		"relic_type": "holy",
+		"effect_scope": "adjacent_weapon",
 		"stackable": false
 	}
 }

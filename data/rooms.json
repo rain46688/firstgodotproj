@@ -15,7 +15,7 @@
 					1390,
 					540
 				],
-				"move_effect": "door"
+				"move_effect": "enter"
 			}
 		},
 		"random_encounter": {
@@ -48,7 +48,7 @@
 					1390,
 					540
 				],
-				"move_effect": "door",
+				"move_effect": "enter",
 				"locked": true,
 				"required_item": "classroom_key",
 				"open_flag": "opened_classroom_2",
@@ -81,7 +81,8 @@
 				"position": [
 					1390,
 					540
-				]
+				],
+				"move_effect": "enter"
 			}
 		},
 		"random_encounter": {
@@ -99,7 +100,7 @@
 					1390,
 					540
 				],
-				"move_effect": "door"
+				"move_effect": "enter"
 			}
 		},
 		"interactions": {
@@ -229,7 +230,7 @@
 					1390,
 					540
 				],
-				"move_effect": "door"
+				"move_effect": "enter"
 			}
 		},
 		"interactions": {
@@ -267,7 +268,7 @@
 					1390,
 					540
 				],
-				"move_effect": "door"
+				"move_effect": "enter"
 			}
 		}
 	}
