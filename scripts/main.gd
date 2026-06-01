@@ -62,6 +62,7 @@ extends Control
 @onready var arrange_selected_item_text = $InventoryArrangeUI/ArrangeSelectedItemText
 @onready var arrange_slot_highlight_container = $InventoryArrangeUI/ArrangeSlotHighlightContainer
 @onready var arrange_selected_focus_container = $InventoryArrangeUI/ArrangeSelectedFocusContainer
+@onready var inventory_portrait = get_node_or_null("InventoryUI/InventoryPortrait")
 
 # 일반 변수 모음
 var arrow_time = 0.0
@@ -139,6 +140,8 @@ var is_arrange_dragging_item = false
 var selected_arrange_item = null
 var selected_arrange_source = ""
 var equipped_weapon_text_scroll = null
+var selected_item_description_scroll = null
+var arrange_selected_item_text_scroll = null
 
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
@@ -149,6 +152,10 @@ const MSG_DOOR_LOCKED = "문이 굳게 잠겨있다..."
 const MSG_DOOR_UNLOCK = "교실키로 문을 열었다."
 const MSG_ITEM_GAINED_SUFFIX = "을 얻었다."
 const BATTLE_SCENE_PATH = "res://scenes/battle_scene.tscn"
+const STAT_GOOD_COLOR = "#55ff77"
+const STAT_BAD_COLOR = "#ff5555"
+const STAT_INFO_COLOR = "#88ccff"
+
 
 # 프레임 마다 실행 함수
 func _process(delta):
@@ -325,6 +332,7 @@ func _ready():
 	
 	# 장착 무기 효과 텍스트를 ScrollContainer 안에 넣는 함수
 	setup_equipped_weapon_text_scroll()
+	setup_selected_item_description_scrolls()
 	
 	# 랜덤 인카운터 심장 박동 소리 초기화
 	encounter_heartbeat_sound.stop()
@@ -441,6 +449,20 @@ func _ready():
 	#await add_item("hand_candlestick_fetish")
 	
 	#await add_item("cross_relic")
+	#await add_item("holy_grail_relic")
+	#await add_item("brain_model_fetish")
+	#await add_item("heart_model_fetish")
+	
+	# 내 조합
+	#await add_item("old_water_ball") 
+	#await add_item("old_abacus")
+	#await add_item("torn_eyepatch")
+	#await add_item("bible_fetish")
+	#await add_item("metal_syringe")
+	#await add_item("classic_camera_fetish")
+	#await add_item("broken_headset_relic")
+	#await add_item("hand_bone_fetish")
+	#await add_item("skull_model_fetish")
 	#await add_item("holy_grail_relic")
 	#await add_item("brain_model_fetish")
 	#await add_item("heart_model_fetish")
@@ -2152,6 +2174,7 @@ func open_inventory():
 	update_inventory_ui()
 	update_equipped_weapon_ui()
 	update_player_status_ui()
+	update_inventory_portrait_ui()
 
 	if bag_open_sound != null:
 		bag_open_sound.play()
@@ -2804,9 +2827,207 @@ func setup_equipped_weapon_text_scroll():
 	equipped_weapon_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	equipped_weapon_text.clip_text = false
 	equipped_weapon_text.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	equipped_weapon_text.add_theme_constant_override("line_separation", 8)
 
 	equipped_weapon_text_scroll.add_child(equipped_weapon_text)
+# 선택 아이템 설명 텍스트를 ScrollContainer 안에 넣는 공통 함수
+func setup_text_node_scroll(text_node, scroll_name):
+	if text_node == null:
+		return null
 
+	var parent_node = text_node.get_parent()
+
+	if parent_node == null:
+		return null
+
+	if parent_node is ScrollContainer:
+		return parent_node
+
+	var old_position = text_node.position
+	var old_size = text_node.size
+	var old_index = text_node.get_index()
+
+	var scroll = ScrollContainer.new()
+	scroll.name = scroll_name
+	scroll.position = old_position
+	scroll.size = old_size
+	scroll.mouse_filter = Control.MOUSE_FILTER_STOP
+	# 스크롤바 안보이게 처리 인벤토리 설명
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+
+	parent_node.remove_child(text_node)
+	parent_node.add_child(scroll)
+	parent_node.move_child(scroll, old_index)
+
+	text_node.position = Vector2.ZERO
+	text_node.size = Vector2(old_size.x - 24, old_size.y)
+	text_node.custom_minimum_size = Vector2(old_size.x - 24, old_size.y)
+	text_node.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	text_node.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	if text_node is Label:
+		text_node.clip_text = false
+
+	if text_node is RichTextLabel:
+		text_node.bbcode_enabled = true
+		text_node.fit_content = true
+		text_node.scroll_active = false
+
+	scroll.add_child(text_node)
+
+	return scroll
+# 인벤토리 / 인벤토리 정리 설명창 RichTextLabel 변환 + 스크롤 세팅 함수
+func setup_selected_item_description_scrolls():
+	selected_item_description = convert_label_to_rich_text_label(
+		selected_item_description,
+		"SelectedItemDescriptionRichText"
+	)
+
+	arrange_selected_item_text = convert_label_to_rich_text_label(
+		arrange_selected_item_text,
+		"ArrangeSelectedItemTextRichText"
+	)
+
+	selected_item_description_scroll = setup_text_node_scroll(
+		selected_item_description,
+		"SelectedItemDescriptionScroll"
+	)
+
+	arrange_selected_item_text_scroll = setup_text_node_scroll(
+		arrange_selected_item_text,
+		"ArrangeSelectedItemTextScroll"
+	)
+# BBCode 충돌 방지용 텍스트 이스케이프
+func escape_rich_text(value):
+	var text = str(value)
+	text = text.replace("[", "[lb]")
+	text = text.replace("]", "[rb]")
+	return text
+# 텍스트 색상 적용 함수
+func make_colored_text(text, color):
+	return "[color=" + color + "]" + str(text) + "[/color]"
+# 기존 Label을 RichTextLabel로 교체하는 함수
+func convert_label_to_rich_text_label(text_node, rich_name):
+	if text_node == null:
+		return null
+
+	if text_node is RichTextLabel:
+		text_node.bbcode_enabled = true
+		text_node.fit_content = true
+		text_node.scroll_active = false
+		text_node.add_theme_constant_override("line_separation", 8)
+		return text_node
+
+	var parent_node = text_node.get_parent()
+
+	if parent_node == null:
+		return text_node
+
+	var old_position = text_node.position
+	var old_size = text_node.size
+	var old_index = text_node.get_index()
+	var old_visible = text_node.visible
+	var old_text = text_node.text
+	var old_z_index = text_node.z_index
+	var old_modulate = text_node.modulate
+
+	var rich = RichTextLabel.new()
+	rich.name = rich_name
+	rich.position = old_position
+	rich.size = old_size
+	rich.custom_minimum_size = old_size
+	rich.visible = old_visible
+	rich.z_index = old_z_index
+	rich.modulate = old_modulate
+	
+	var font = load("res://fonts/x12y12pxMaruMinyaHangul.ttf")
+	rich.add_theme_color_override("font_color",Color("#d8d0c8"))
+	rich.add_theme_font_override("normal_font", font)
+	rich.add_theme_font_size_override("normal_font_size", 25)
+	rich.add_theme_constant_override("line_separation", 8)
+
+	rich.bbcode_enabled = true
+	rich.fit_content = true
+	rich.scroll_active = false
+	rich.selection_enabled = false
+	rich.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	rich.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	parent_node.remove_child(text_node)
+	parent_node.add_child(rich)
+	parent_node.move_child(rich, old_index)
+
+	rich.text = old_text
+
+	return rich
+# 변화가 있으면 상승/하락 색상으로 표시하는 함수
+func make_changed_value_text(base_value, effective_value, suffix = "", digit_count = 0, higher_is_better = true):
+	var base_float = float(base_value)
+	var effective_float = float(effective_value)
+
+	var value_text = ""
+
+	if digit_count <= 0:
+		value_text = str(int(round(effective_float)))
+	else:
+		value_text = format_stat_float(effective_float, digit_count)
+
+	value_text += suffix
+
+	if is_equal_approx(base_float, effective_float):
+		return value_text
+
+	var is_increased = effective_float > base_float
+	var is_good_change = is_increased == higher_is_better
+
+	if is_good_change:
+		return make_colored_text(value_text, STAT_GOOD_COLOR)
+
+	return make_colored_text(value_text, STAT_BAD_COLOR)
+# 패링 범위 등급 텍스트
+func make_parry_window_grade_text(parry_window):
+	var value = float(parry_window)
+
+	if value <= 0.1:
+		return make_colored_text("낮음", STAT_BAD_COLOR)
+
+	if value >= 0.3:
+		return make_colored_text("넓음", STAT_GOOD_COLOR)
+
+	return "보통"
+# 스윙 속도 등급 텍스트
+func make_attack_swing_speed_grade_text(attack_swing_speed):
+	var value = float(attack_swing_speed)
+
+	if value <= 2.0:
+		return make_colored_text("느림", STAT_BAD_COLOR)
+
+	if value >= 3.0:
+		return make_colored_text("빠름", STAT_GOOD_COLOR)
+
+	return "보통"
+# 방어 이동 속도 등급 텍스트
+func make_defense_move_speed_grade_text(defense_move_speed):
+	var value = float(defense_move_speed)
+
+	if value <= 200.0:
+		return make_colored_text("느림", STAT_BAD_COLOR)
+
+	if value >= 400.0:
+		return make_colored_text("빠름", STAT_GOOD_COLOR)
+
+	return "보통"
+# 선택한 무기에 관통 효과 표시가 필요한지 확인하는 함수
+func should_show_weapon_piercing_effect(_item_id, item_data, is_current_equipped_weapon, effective_stats):
+	if bool(item_data.get("piercing", false)):
+		return true
+
+	if is_current_equipped_weapon:
+		if bool(effective_stats.get("piercing", false)):
+			return true
+
+	return false
 # 인벤토리 정리 화면 열기 함수
 func open_inventory_arrange(mode, left_items):
 	is_inventory_arrange_open = true
@@ -3804,6 +4025,8 @@ func unequip_item_if_moved_out_from_inventory(item):
 	if equipped_weapon == item:
 		equipped_weapon = null
 		update_equipped_weapon_ui()
+		clamp_player_hp_to_current_max()
+		update_player_status_ui()
 
 		if selected_inventory_item == item:
 			selected_inventory_item = null
@@ -3822,6 +4045,27 @@ func get_real_arrange_item_source(item):
 		return "right"
 
 	return ""
+# 인벤토리 초상화 출력 함수
+func update_inventory_portrait_ui():
+	if inventory_portrait == null:
+		return
+
+	if not characters.has("protagonist"):
+		inventory_portrait.texture = null
+		inventory_portrait.visible = false
+		return
+
+	var protagonist_data = characters["protagonist"]
+	var portrait_data = protagonist_data.get("portrait", {})
+	var portrait_path = portrait_data.get("normal", "")
+
+	if portrait_path == "":
+		inventory_portrait.texture = null
+		inventory_portrait.visible = false
+		return
+
+	inventory_portrait.texture = load(portrait_path)
+	inventory_portrait.visible = true
 
 # === 아이템 함수 모음 ===
 # 아이템 보유 여부 확인 함수
@@ -3914,9 +4158,16 @@ func consume_item_by_id(item_id):
 
 	return false
 # 아이템 타입 한글 이름 반환 함수 (성물/주물 타입 반영 필요!)
-func get_item_type_text(item_type):
-	# 성물 주물 타입이 relic 하위 카테고리 relic_type 에서 holy 와 fetish 로 나뉨
-	# 추후 아래 부분 수정 필요함! 
+func get_item_type_text(item_type_or_data):
+	var item_type = ""
+	var relic_type = ""
+
+	if typeof(item_type_or_data) == TYPE_DICTIONARY:
+		item_type = item_type_or_data.get("type", "")
+		relic_type = item_type_or_data.get("relic_type", "")
+	else:
+		item_type = str(item_type_or_data)
+
 	if item_type == "key":
 		return "열쇠"
 	elif item_type == "weapon":
@@ -3925,6 +4176,13 @@ func get_item_type_text(item_type):
 		return "소모품"
 	elif item_type == "coin":
 		return "주화"
+	elif item_type == "relic":
+		if relic_type == "holy":
+			return "성물"
+		elif relic_type == "fetish":
+			return "주물"
+		else:
+			return "유물"
 	elif item_type == "holy":
 		return "성물"
 	elif item_type == "fetish":
@@ -3975,30 +4233,328 @@ func make_item_info_text(inventory_item):
 	var item_name = item_data.get("name", item_id)
 	var description = item_data.get("description", "")
 	var item_type = item_data.get("type", "")
-	var item_type_text = get_item_type_text(item_type)
+	var item_type_text = get_item_type_text(item_data)
 	var count = int(inventory_item.get("count", 1))
-
-	var attack_min = int(item_data.get("attack_min", 0))
-	var attack_max = int(item_data.get("attack_max", 0))
 
 	var text_lines = []
 
-	text_lines.append(item_name+"\n")
+	text_lines.append(escape_rich_text(item_name))
+	text_lines.append("")
 
 	if count > 1:
 		text_lines.append("보유 수량 : " + str(count))
+		text_lines.append("")
 
-	if item_type == "weapon":
-		text_lines.append("공격력 : " + str(attack_min) + " ~ " + str(attack_max))
+	var is_weapon = item_type == "weapon"
+	var is_current_equipped_weapon = false
+	var effective_stats = {}
+
+	if is_weapon:
+		is_current_equipped_weapon = is_selected_item_current_equipped_weapon(item_id)
+
+		var attack_min_base = int(item_data.get("attack_min", item_data.get("attack", 1)))
+		var attack_max_base = int(item_data.get("attack_max", item_data.get("attack", attack_min_base)))
+
+		if is_current_equipped_weapon:
+			effective_stats = get_player_effective_stats()
+
+			var attack_min = int(effective_stats.get("attack_min", attack_min_base))
+			var attack_max = int(effective_stats.get("attack_max", attack_max_base))
+
+			var attack_min_text = make_changed_value_text(
+				attack_min_base,
+				attack_min,
+				"",
+				0,
+				true
+			)
+
+			var attack_max_text = make_changed_value_text(
+				attack_max_base,
+				attack_max,
+				"",
+				0,
+				true
+			)
+
+			text_lines.append("공격력 : " + attack_min_text + " ~ " + attack_max_text)
+		else:
+			text_lines.append("공격력 : " + str(attack_min_base) + " ~ " + str(attack_max_base))
 
 	if item_type_text != "":
-		text_lines.append("종류 : " + item_type_text)
+		text_lines.append("종류 : " + escape_rich_text(item_type_text))
+
+	if is_weapon:
+		var critical_chance_base = float(item_data.get("critical_chance", 0.01))
+		var critical_multiplier_base = float(item_data.get("critical_multiplier", 2.0))
+		var parry_window_base = float(item_data.get("parry_window", 0.1))
+		var attack_swing_speed_base = float(item_data.get("attack_swing_speed", 3.0))
+		var defense_move_speed_base = float(item_data.get("defense_move_speed", 500.0))
+
+		var critical_chance = critical_chance_base
+		var critical_multiplier = critical_multiplier_base
+		var parry_window = parry_window_base
+		var attack_swing_speed = attack_swing_speed_base
+		var defense_move_speed = defense_move_speed_base
+
+		if is_current_equipped_weapon:
+			critical_chance_base = float(effective_stats.get("critical_chance_base", critical_chance_base))
+			critical_multiplier_base = float(effective_stats.get("critical_multiplier_base", critical_multiplier_base))
+			parry_window_base = float(effective_stats.get("parry_window_base", parry_window_base))
+			attack_swing_speed_base = float(effective_stats.get("attack_swing_speed_base", attack_swing_speed_base))
+			defense_move_speed_base = float(effective_stats.get("defense_move_speed_base", defense_move_speed_base))
+
+			critical_chance = float(effective_stats.get("critical_chance", critical_chance_base))
+			critical_multiplier = float(effective_stats.get("critical_multiplier", critical_multiplier_base))
+			parry_window = float(effective_stats.get("parry_window", parry_window_base))
+			attack_swing_speed = float(effective_stats.get("attack_swing_speed", attack_swing_speed_base))
+			defense_move_speed = float(effective_stats.get("defense_move_speed", defense_move_speed_base))
+
+		var critical_chance_text = ""
+
+		if is_current_equipped_weapon:
+			critical_chance_text = make_changed_value_text(
+				critical_chance_base * 100.0,
+				critical_chance * 100.0,
+				"%",
+				0,
+				true
+			)
+		else:
+			critical_chance_text = str(int(round(critical_chance * 100.0))) + "%"
+
+		var critical_multiplier_text = ""
+
+		if is_current_equipped_weapon:
+			critical_multiplier_text = make_changed_value_text(
+				critical_multiplier_base,
+				critical_multiplier,
+				"x",
+				2,
+				true
+			)
+		else:
+			critical_multiplier_text = format_stat_float(critical_multiplier, 2) + "x"
+
+		text_lines.append("치명타 확률 : " + critical_chance_text)
+		text_lines.append("치명타 배율 : " + critical_multiplier_text)
+		text_lines.append("패링 범위 : " + make_parry_window_grade_text(parry_window))
+		text_lines.append("스윙 속도 : " + make_attack_swing_speed_grade_text(attack_swing_speed))
+		text_lines.append("방어 이동 속도 : " + make_defense_move_speed_grade_text(defense_move_speed))
+		
+	if is_weapon:
+		if should_show_weapon_piercing_effect(
+			item_id,
+			item_data,
+			is_current_equipped_weapon,
+			effective_stats
+		):
+			text_lines.append("관통 효과")
 
 	if description != "":
 		text_lines.append("")
-		text_lines.append(description)
+		text_lines.append(escape_rich_text(description))
 
 	return "\n".join(text_lines)
+# 현재 선택한 아이템이 장착 중인 무기인지 확인하는 함수
+func is_selected_item_current_equipped_weapon(item_id):
+	if item_id == "":
+		return false
+
+	var current_weapon_id = "fist"
+
+	if equipped_weapon != null:
+		current_weapon_id = equipped_weapon.get("id", "fist")
+
+	return item_id == current_weapon_id
+# 소수 표시 정리 함수
+func format_stat_float(value, digit_count = 2):
+	var format_text = "%." + str(digit_count) + "f"
+	return format_text % float(value)
+# 퍼센트 표시 함수
+func format_stat_percent(value):
+	return format_stat_float(float(value) * 100.0, 1) + "%"
+# 기본값과 적용값 비교 텍스트 생성 함수
+# higher_is_better가 false면 수치가 낮아지는 쪽을 좋은 변화로 표시
+func make_stat_compare_line(label_text, base_value, effective_value, suffix = "", digit_count = 0, higher_is_better = true):
+	var base_text = ""
+	var effective_text = ""
+
+	if digit_count <= 0:
+		base_text = str(int(base_value))
+		effective_text = str(int(effective_value))
+	else:
+		base_text = format_stat_float(base_value, digit_count)
+		effective_text = format_stat_float(effective_value, digit_count)
+
+	if suffix != "":
+		base_text += suffix
+		effective_text += suffix
+
+	if str(base_text) == str(effective_text):
+		return label_text + " : " + effective_text
+
+	var is_increased = float(effective_value) > float(base_value)
+	var is_good_change = is_increased == higher_is_better
+	var color = STAT_GOOD_COLOR
+
+	if not is_good_change:
+		color = STAT_BAD_COLOR
+
+	var change_text = ""
+
+	if is_increased:
+		change_text = effective_text + " 상승"
+	else:
+		change_text = effective_text + " 하락"
+
+	return label_text + " : " + base_text + " → " + make_colored_text(change_text, color)
+# 현재 장착 무기 기준 적용 능력치 설명 생성 함수
+func make_current_weapon_effective_stat_text(item_id, item_data):
+	if not is_selected_item_current_equipped_weapon(item_id):
+		return []
+
+	var effective_stats = get_player_effective_stats()
+	var lines = []
+
+	var attack_min_base = int(effective_stats.get("attack_min_base", item_data.get("attack_min", item_data.get("attack", 1))))
+	var attack_max_base = int(effective_stats.get("attack_max_base", item_data.get("attack_max", item_data.get("attack", attack_min_base))))
+	var attack_min = int(effective_stats.get("attack_min", attack_min_base))
+	var attack_max = int(effective_stats.get("attack_max", attack_max_base))
+
+	lines.append("")
+	lines.append(make_colored_text("[현재 적용 능력치]", STAT_INFO_COLOR))
+		
+	if attack_min_base == attack_min and attack_max_base == attack_max:
+		lines.append("공격력 : " + str(attack_min) + " ~ " + str(attack_max))
+	else:
+		var base_attack_text = str(attack_min_base) + " ~ " + str(attack_max_base)
+		var effective_attack_text = str(attack_min) + " ~ " + str(attack_max)
+
+		var attack_is_good = true
+
+		if attack_min < attack_min_base or attack_max < attack_max_base:
+			attack_is_good = false
+
+		var attack_color = STAT_GOOD_COLOR
+
+		if not attack_is_good:
+			attack_color = STAT_BAD_COLOR
+
+		lines.append("공격력 : " + base_attack_text + " → " + make_colored_text(effective_attack_text, attack_color))
+
+	lines.append(
+		make_stat_compare_line(
+			"최대 체력",
+			int(effective_stats.get("max_hp_base", player_max_hp)),
+			int(effective_stats.get("max_hp", player_max_hp))
+		)
+	)
+
+	var critical_chance_base = float(effective_stats.get("critical_chance_base", item_data.get("critical_chance", 0.01)))
+	var critical_chance = float(effective_stats.get("critical_chance", critical_chance_base))
+
+	if critical_chance_base == critical_chance:
+		lines.append("치명타 확률 : " + format_stat_percent(critical_chance))
+	else:
+		var critical_color = STAT_GOOD_COLOR
+
+		if critical_chance < critical_chance_base:
+			critical_color = STAT_BAD_COLOR
+
+		var critical_change_text = format_stat_percent(critical_chance)
+
+		if critical_chance > critical_chance_base:
+			critical_change_text += " 상승"
+		else:
+			critical_change_text += " 하락"
+
+		lines.append(
+			"치명타 확률 : " + format_stat_percent(critical_chance_base) + " → " + make_colored_text(critical_change_text, critical_color)
+		)
+
+	lines.append(
+		make_stat_compare_line(
+			"치명타 배율",
+			float(effective_stats.get("critical_multiplier_base", item_data.get("critical_multiplier", 2.0))),
+			float(effective_stats.get("critical_multiplier", item_data.get("critical_multiplier", 2.0))),
+			"x",
+			2
+		)
+	)
+
+	lines.append(
+		make_stat_compare_line(
+			"패링 범위",
+			float(effective_stats.get("parry_window_base", item_data.get("parry_window", 0.1))),
+			float(effective_stats.get("parry_window", item_data.get("parry_window", 0.1))),
+			"",
+			3
+		)
+	)
+
+	lines.append(
+		make_stat_compare_line(
+			"스윙 속도",
+			float(effective_stats.get("attack_swing_speed_base", item_data.get("attack_swing_speed", 3.0))),
+			float(effective_stats.get("attack_swing_speed", item_data.get("attack_swing_speed", 3.0))),
+			"",
+			2
+		)
+	)
+
+	lines.append(
+		make_stat_compare_line(
+			"방어 이동 속도",
+			float(effective_stats.get("defense_move_speed_base", item_data.get("defense_move_speed", 500.0))),
+			float(effective_stats.get("defense_move_speed", item_data.get("defense_move_speed", 500.0))),
+			"",
+			0
+		)
+	)
+
+	var base_piercing = bool(item_data.get("piercing", false))
+	var effective_piercing = bool(effective_stats.get("piercing", base_piercing))
+
+	if base_piercing == effective_piercing:
+		if effective_piercing:
+			lines.append("관통 : 있음")
+		else:
+			lines.append("관통 : 없음")
+	else:
+		if effective_piercing:
+			lines.append("관통 : 없음 → " + make_colored_text("있음 상승", STAT_GOOD_COLOR))
+		else:
+			lines.append("관통 : 있음 → " + make_colored_text("없음 하락", STAT_BAD_COLOR))
+
+	lines.append(
+		make_stat_compare_line(
+			"받는 피해 배율",
+			1.0,
+			float(effective_stats.get("damage_taken_multiplier", 1.0)),
+			"x",
+			2,
+			false
+		)
+	)
+
+	var turn_damage = int(effective_stats.get("turn_start_player_damage", 0))
+	var turn_heal = int(effective_stats.get("turn_start_player_heal", 0))
+	var enemy_damage = int(effective_stats.get("turn_start_enemy_damage", 0))
+
+	if turn_damage > 0:
+		lines.append("턴 시작 피해 : " + make_colored_text(str(turn_damage), STAT_BAD_COLOR))
+
+	if turn_heal > 0:
+		lines.append("턴 시작 회복 : " + make_colored_text(str(turn_heal), STAT_GOOD_COLOR))
+
+	if enemy_damage > 0:
+		lines.append("턴 시작 적 피해 : " + make_colored_text(str(enemy_damage), STAT_GOOD_COLOR))
+
+	if bool(effective_stats.get("cannot_die", false)):
+		lines.append("죽음 방지 : " + make_colored_text("활성화", STAT_GOOD_COLOR))
+
+	return lines
 # 아이템 이미지 경로 반환 함수
 func get_item_image_path_from_inventory_item(inventory_item):
 	if inventory_item == null:
@@ -4038,8 +4594,19 @@ func show_item_info_ui(inventory_item, image_node, text_node):
 			image_node.visible = false
 
 	if text_node != null:
-		text_node.text = info_text
+		if text_node is RichTextLabel:
+			text_node.clear()
+			text_node.append_text(info_text)
+		else:
+			text_node.text = info_text
+
 		text_node.visible = true
+
+		if text_node == selected_item_description and selected_item_description_scroll != null:
+			selected_item_description_scroll.scroll_vertical = 0
+
+		if text_node == arrange_selected_item_text and arrange_selected_item_text_scroll != null:
+			arrange_selected_item_text_scroll.scroll_vertical = 0
 # 아이템 정보 UI 초기화 공통 함수
 func clear_item_info_ui(image_node, text_node):
 	if image_node != null:
@@ -4047,8 +4614,18 @@ func clear_item_info_ui(image_node, text_node):
 		image_node.visible = false
 
 	if text_node != null:
-		text_node.text = ""
+		if text_node is RichTextLabel:
+			text_node.clear()
+		else:
+			text_node.text = ""
+
 		text_node.visible = false
+
+		if text_node == selected_item_description and selected_item_description_scroll != null:
+			selected_item_description_scroll.scroll_vertical = 0
+
+		if text_node == arrange_selected_item_text and arrange_selected_item_text_scroll != null:
+			arrange_selected_item_text_scroll.scroll_vertical = 0
 # 아이템을 가방에 넣고, 못 넣은 수량은 pending_loot에 저장하는 함수
 func give_item_with_pending_loot(item_id, count = 1):
 	var result = {
@@ -4426,6 +5003,8 @@ func equip_item(inventory_item):
 		print(get_item_name(item_id) + " 장착")
 
 	update_equipped_weapon_ui()
+	clamp_player_hp_to_current_max()
+	update_player_status_ui()
 	close_context_menu()
 # 아이템 장착 버튼 함수
 func _on_equip_button_pressed():
