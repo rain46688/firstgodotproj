@@ -143,6 +143,16 @@ var equipped_weapon_text_scroll = null
 var selected_item_description_scroll = null
 var arrange_selected_item_text_scroll = null
 
+# 디버그 관련 상수 변수 모음
+# false
+# true
+const DEBUG_ADD_START_ITEMS = false
+const DEBUG_OPEN_PENDING_LOOT_TEST = false
+const DEBUG_START_BATTLE_TEST = false
+const DEBUG_TEST_BATTLE_ENEMY_ID = "combined_candle_studen ts_phase_01"
+const DEBUG_BATTLE_START_DELAY = 1.0
+const DEBUG_START_ITEM_PRESET = "my_test"
+
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
 const MSG_NO_BACK = "더 이상 뒤로 갈 수 없다..."
@@ -292,199 +302,149 @@ func _process(delta):
 
 		elif dir == "right":
 			arrow.position = base_pos + Vector2(-offset, 0)
-# 처음에 한번 실행 함수
-func _ready():   
-	
-	play_bgm("res://sounds/bgm2.mp3")
+# 게임 시작 시 UI의 기본 표시 상태를 초기화하는 함수
+func setup_initial_ui_state():
 	inventory_ui.visible = false
+	inventory_arrange_ui.visible = false
+
 	background.scale = Vector2(1, 1)
+
 	encounter_danger_overlay.color = Color(1, 0, 0, 0)
 	encounter_danger_overlay.visible = true
 	encounter_danger_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	
+
 	arrange_discard_notice_label.visible = false
+
 	arrange_selected_item_image.texture = null
 	arrange_selected_item_image.visible = false
-	arrange_selected_item_text.text = ""
+
+	if arrange_selected_item_text is RichTextLabel:
+		arrange_selected_item_text.clear()
+	else:
+		arrange_selected_item_text.text = ""
+
 	arrange_selected_item_text.visible = false
-	
-	# z_index 정리
+# 게임 시작 시 UI 레이어 순서를 초기화하는 함수
+func setup_initial_z_index():
 	atmosphere_fade.z_index = 1
+
 	arrow_down.z_index = 2
 	arrow_up.z_index = 2
 	arrow_left.z_index = 2
 	arrow_right.z_index = 2
 	bag_button.z_index = 2
+
 	story_standing.z_index = 5
 	arrange_slot_highlight_container.z_index = 5
-	# 아이템 icon z_index = 10
+
+	# 인벤토리 정리 아이템 아이콘 레이어
 	arrange_left_items.z_index = 10
 	arrange_right_items.z_index = 10
+
 	arrange_selected_focus_container.z_index = 20
 	dialogue_box.z_index = 20
+
 	inventory_ui.z_index = 30
 	inventory_arrange_ui.z_index = 31
+
 	inventory_context_menu.z_index = 100
 	inventory_context_menu.mouse_filter = Control.MOUSE_FILTER_STOP
-	encounter_danger_overlay.z_index = 4095 
-	# Fade는 4096
+
+	encounter_danger_overlay.z_index = 4095
+
+	# Fade는 최상단
 	fade.z_index = 4096
-	
-	# 장착 무기 효과 텍스트를 ScrollContainer 안에 넣는 함수
+# 게임 시작 시 UI 보조 기능과 버튼 연결을 초기화하는 함수
+func setup_initial_ui_helpers():
 	setup_equipped_weapon_text_scroll()
 	setup_selected_item_description_scrolls()
-	
-	# 랜덤 인카운터 심장 박동 소리 초기화
+
 	encounter_heartbeat_sound.stop()
-	# 인벤토리 정리화면 초기화
-	inventory_arrange_ui.visible = false
+
 	connect_inventory_context_menu_buttons()
-	
+
 	# 버튼이 키보드 포커스를 가져가지 않게 설정
 	# Space를 눌렀을 때 버튼이 다시 눌리는 문제 방지
-	$BagButton.focus_mode = Control.FOCUS_NONE
-		
-	# 방 로드 및 예외 처리
-	var success = load_rooms()
-
-	if not success:
-		push_error("방 데이터 로드 실패로 게임 초기화 중단")
-		return
-		
-	# 아이템 로드 및 예외 처리
-	var item_success = load_items()
-
-	if not item_success:
-		push_error("아이템 데이터 로드 실패로 게임 초기화 중단")
-		return
+	bag_button.focus_mode = Control.FOCUS_NONE
+# 처음에 한번 실행 함수
+func _ready():   
 	
-	# 캐릭터 로드 및 예외 처리	
-	var character_success = load_characters()
+	# 시작시 기본 브금 실행
+	play_bgm("res://sounds/bgm2.mp3")
 
-	if not character_success:
-		push_error("캐릭터 데이터 로드 실패로 게임 초기화 중단")
-		return
-		
-	var story_success = load_story_events()
-
-	if not story_success:
-		push_error("스토리 이벤트 데이터 로드 실패로 게임 초기화 중단")
-		return
-		
-	var enemies_success = load_enemies()
-
-	if not enemies_success:
-		push_error("적 데이터 로드 실패로 게임 초기화 중단")
-		return
-		
-	var projectiles_success = load_projectiles()
-
-	if not projectiles_success:
-		push_error("투사체 데이터 로드 실패로 게임 초기화 중단")
-		return
+	# 게임 시작 시 UI의 기본 표시 상태를 초기화하는 함수
+	setup_initial_ui_state()
 	
-	var encounters_success = load_encounters()
-
-	if not encounters_success:
-		push_error("인카운터 데이터 로드 실패로 게임 초기화 중단")
-		return
-		
-	var encounter_events_success = load_encounter_events()
-
-	if not encounter_events_success:
-		push_error("인카운터 이벤트 데이터 로드 실패로 게임 초기화 중단")
+	# 게임 시작 시 UI 레이어 순서를 초기화하는 함수
+	setup_initial_z_index()
+	
+	# 게임 시작 시 UI 보조 기능과 버튼 연결을 초기화하는 함수
+	setup_initial_ui_helpers()
+	
+	# 게임 시작 데이터 로드
+	if not load_startup_game_data():
 		return
 
 	# 세이브 파일 로드 테스트
 	load_game(1)
 	
-	# 아이템 테스트
-	#await add_item("cutter_knife")
-	#await add_item("classroom_key")
-	#await add_item("holy_sword")
-	#await add_item("razor")
+	# 디버그 아이템 테스트
+	await add_debug_start_items()
 	
-	#await add_item("beverage_a", 5)
-	#await add_item("beverage_a", 5)
-	#await add_item("beverage_a", 5)
-	#
-	#await add_item("beverage_a", 5)
-	#await add_item("beverage_a", 5)
-	#await add_item("beverage_a", 5)
-	#
-	#await add_item("tranquilizer", 3)
-	#await add_item("tranquilizer", 3)
-	#await add_item("tranquilizer", 3)
-	#
-	#await add_item("beverage_a", 1)
-	#await add_item("tranquilizer", 1)
-	
-	#await add_item("old_water_ball") 
-	#await add_item("old_abacus")
-	#await add_item("cube_relic")
-	#await add_item("torn_eyepatch")
-	#await add_item("dice_relic")
-	#
-	#await add_item("bible_fetish")
-	#await add_item("metal_syringe")
-	#await add_item("rosary_fetish")
-	#
-	#await add_item("sneakers_fetish")
-	#await add_item("dumbbell_fetish")
-	#await add_item("sandbag_fetish")
-	#await add_item("lung_model_fetish")
-	#
-	#await add_item("music_box_relic")
-	#await add_item("first_aid_box_fetish")
-	#await add_item("classic_camera_fetish")
-	#await add_item("hourglass_fetish")
-	
-	#await add_item("broken_headset_relic")
-	#await add_item("teddy_bear_relic")
-	#await add_item("character_figure_relic")
-	#
-	#await add_item("hand_bone_fetish")
-	#await add_item("skull_model_fetish")
-	#await add_item("small_frame_fetish")
-	#await add_item("hand_candlestick_fetish")
-	
-	#await add_item("cross_relic")
-	#await add_item("holy_grail_relic")
-	#await add_item("brain_model_fetish")
-	#await add_item("heart_model_fetish")
-	
-	# 내 조합
-	#await add_item("old_water_ball") 
-	#await add_item("old_abacus")
-	#await add_item("torn_eyepatch")
-	#await add_item("bible_fetish")
-	#await add_item("metal_syringe")
-	#await add_item("classic_camera_fetish")
-	#await add_item("broken_headset_relic")
-	#await add_item("hand_bone_fetish")
-	#await add_item("skull_model_fetish")
-	#await add_item("holy_grail_relic")
-	#await add_item("brain_model_fetish")
-	#await add_item("heart_model_fetish")
-	
-	# 인벤토리 정리 테스트
-	#await give_items_with_pending_loot([
-		#{
-			#"item": "beverage_a",
-			#"count": 1
-		#}
-	#])
-	#await open_inventory_arrange_if_pending_loot("loot")
+	# 디버그 방 갱신 전 개발 테스트 흐름, 아이템 정리 화면 테스트
+	await run_debug_before_room_update_flow()
 
 	# 방 갱신 함수 호출
 	update_room()
 	
-	# 전투 테스트
-	#await get_tree().create_timer(1.0).timeout
-	#start_battle("candle_student") 
-	#start_battle("candle_student_tutorial")
-	#start_battle("combined_candle_students_phase_01")
-	#start_battle("combined_candle_students_phase_02")
+	# 디버그 방 갱신 후 개발 테스트 흐름, 적 배틀 테스트
+	await run_debug_after_room_update_flow()
+# 게임 시작에 필요한 데이터 로드 함수
+func load_startup_game_data():
+	var load_steps = [
+		{
+			"loader": Callable(self, "load_rooms"),
+			"error": "방 데이터 로드 실패로 게임 초기화 중단"
+		},
+		{
+			"loader": Callable(self, "load_items"),
+			"error": "아이템 데이터 로드 실패로 게임 초기화 중단"
+		},
+		{
+			"loader": Callable(self, "load_characters"),
+			"error": "캐릭터 데이터 로드 실패로 게임 초기화 중단"
+		},
+		{
+			"loader": Callable(self, "load_story_events"),
+			"error": "스토리 이벤트 데이터 로드 실패로 게임 초기화 중단"
+		},
+		{
+			"loader": Callable(self, "load_enemies"),
+			"error": "적 데이터 로드 실패로 게임 초기화 중단"
+		},
+		{
+			"loader": Callable(self, "load_projectiles"),
+			"error": "투사체 데이터 로드 실패로 게임 초기화 중단"
+		},
+		{
+			"loader": Callable(self, "load_encounters"),
+			"error": "인카운터 데이터 로드 실패로 게임 초기화 중단"
+		},
+		{
+			"loader": Callable(self, "load_encounter_events"),
+			"error": "인카운터 이벤트 데이터 로드 실패로 게임 초기화 중단"
+		}
+	]
+
+	for step in load_steps:
+		var loader = step["loader"]
+		var success = loader.call()
+
+		if success != true:
+			push_error(step["error"])
+			return false
+
+	return true
 # 전투 시작 함수
 func start_battle(enemy_id, first_turn = ""):
 	if not enemies.has(enemy_id):
@@ -559,6 +519,131 @@ func end_battle(result_data):
 	await open_inventory_arrange_if_pending_loot("loot")
 
 	print("전투 종료 결과: " + str(result_data.get("result", "")))
+
+# 개발 테스트용 시작 아이템 추가 함수
+func add_debug_start_items():
+	if not DEBUG_ADD_START_ITEMS:
+		return
+
+	var debug_item_ids = get_debug_start_item_ids()
+
+	for item_id in debug_item_ids:
+		if not items.has(item_id):
+			push_warning("테스트 시작 아이템이 items.json에 없음: " + str(item_id))
+			continue
+
+		await add_item(item_id)
+# 방 갱신 전에 실행할 개발 테스트 흐름
+func run_debug_before_room_update_flow():
+	if DEBUG_OPEN_PENDING_LOOT_TEST:
+		await give_items_with_pending_loot([
+			{
+				"item": "beverage_a",
+				"count": 1
+			}
+		])
+
+		await open_inventory_arrange_if_pending_loot("loot")
+# 방 갱신 후 실행할 개발 테스트 흐름
+func run_debug_after_room_update_flow():
+	if DEBUG_START_BATTLE_TEST:
+		await get_tree().create_timer(DEBUG_BATTLE_START_DELAY).timeout
+		start_battle(DEBUG_TEST_BATTLE_ENEMY_ID)
+# 개발 테스트용 시작 아이템 프리셋 반환 함수
+func get_debug_start_item_ids():
+	match DEBUG_START_ITEM_PRESET:
+		"none":
+			return []
+
+		"basic":
+			return [
+				"holy_sword",
+				"beverage_a",
+				"beverage_b"
+			]
+
+		"relic_basic":
+			return [
+				"holy_sword",
+				"old_water_ball",
+				"old_abacus",
+				"cube_relic",
+				"torn_eyepatch",
+				"dice_relic"
+			]
+
+		"relic_full":
+			return [
+				"holy_sword",
+				"old_water_ball",
+				"old_abacus",
+				"cube_relic",
+				"torn_eyepatch",
+				"dice_relic",
+				"broken_headset_relic",
+				"teddy_bear_relic",
+				"character_figure_relic",
+				"music_box_relic",
+				"cross_relic",
+				"holy_grail_relic",
+
+				"bible_fetish",
+				"metal_syringe",
+				"rosary_fetish",
+				"sneakers_fetish",
+				"dumbbell_fetish",
+				"sandbag_fetish",
+				"lung_model_fetish",
+				"first_aid_box_fetish",
+				"hourglass_fetish",
+				"hand_bone_fetish",
+				"skull_model_fetish",
+				"small_frame_fetish",
+				"hand_candlestick_fetish",
+				"brain_model_fetish",
+				"heart_model_fetish"
+			]
+
+		"consumable_test":
+			return [
+				"holy_sword",
+				"beverage_a",
+				"beverage_a",
+				"beverage_a",
+				"beverage_b",
+				"lung_model_fetish"
+			]
+
+		"weapon_count_test":
+			return [
+				"holy_sword",
+				"razor",
+				"cutter_knife",
+				"cross_relic"
+			]
+			
+		"my_test":
+			return [
+				"holy_grail_relic",
+				"old_abacus",
+				"old_water_ball",
+				"metal_syringe",
+				"brain_model_fetish",
+				"torn_eyepatch",
+				"hourglass_fetish",
+				"character_figure_relic",
+				"skull_model_fetish",
+				"cutter_knife",
+				"bible_fetish",
+				"classic_camera_fetish",
+				"broken_headset_relic",
+				"hand_bone_fetish",
+				"heart_model_fetish"
+			]
+
+		_:
+			push_warning("알 수 없는 DEBUG_START_ITEM_PRESET: " + str(DEBUG_START_ITEM_PRESET))
+			return []
 
 # === 성물/주물 관련 함수 모음 === 
 # 현재 장착 무기 기준 기본/적용 능력치 계산 함수
@@ -836,7 +921,7 @@ func get_inventory_item_occupied_slots(inventory_item):
 			occupied_slots.append(slot)
 
 	return occupied_slots
-# 장착 무기 인벤토리 아이템 찾기 함수
+# 장착 무기 인벤토리 아이템 찾기 함수s
 func get_equipped_weapon_inventory_item():
 	if equipped_weapon == null:
 		return null
@@ -1012,251 +1097,139 @@ func is_inventory_full():
 	return not has_empty_inventory_slot()
 
 # === 로드 함수 모음 ===
-# 방 로드 및 예외 처리 함수
-func load_rooms():
-	
-	# 방 구조 json 파일
-	var path = "res://data/rooms.json"
-	
+# Dictionary 구조 JSON 파일 공통 로드 함수
+func load_json_dictionary(path, file_label):
 	if not FileAccess.file_exists(path):
-		push_error("rooms.json 파일을 찾을 수 없음: " + path)
-		return false
-		
+		push_error(file_label + " 파일을 찾을 수 없음: " + path)
+		return null
+
 	var file = FileAccess.open(path, FileAccess.READ)
-	
+
 	if file == null:
-		push_error("rooms.json 파일 열기 실패: " + path)
-		return false
-		
+		push_error(file_label + " 파일 열기 실패: " + path)
+		return null
+
 	var json_text = file.get_as_text()
 	var json = JSON.new()
 	var error = json.parse(json_text)
-	
+
 	if error != OK:
-		push_error("rooms.json 파싱 실패: " + json.get_error_message())
+		push_error(file_label + " 파싱 실패: " + json.get_error_message())
 		push_error("오류 위치 line: " + str(json.get_error_line()))
-		return false
-		
+		return null
+
 	if typeof(json.data) != TYPE_DICTIONARY:
-		push_error("rooms.json 최상위 구조는 Dictionary여야 함")
+		push_error(file_label + " 최상위 구조는 Dictionary여야 함")
+		return null
+
+	return json.data
+# 방 로드 및 예외 처리 함수
+func load_rooms():
+	var data = load_json_dictionary(
+		"res://data/rooms.json",
+		"rooms.json"
+	)
+
+	if data == null:
 		return false
-		
-	rooms = json.data
-	
+
+	rooms = data
+
 	if not rooms.has(current_room):
 		push_error("현재 방이 rooms.json에 없음: " + current_room)
 		return false
-		
+
 	print("rooms.json 로드 성공")
 	return true
 # 아이템 데이터 로드 및 예외 처리 함수
 func load_items():
-	var path = "res://data/items.json"
+	var data = load_json_dictionary(
+		"res://data/items.json",
+		"items.json"
+	)
 
-	if not FileAccess.file_exists(path):
-		push_error("items.json 파일을 찾을 수 없음: " + path)
+	if data == null:
 		return false
 
-	var file = FileAccess.open(path, FileAccess.READ)
-
-	if file == null:
-		push_error("items.json 파일 열기 실패: " + path)
-		return false
-
-	var json_text = file.get_as_text()
-	var json = JSON.new()
-	var error = json.parse(json_text)
-
-	if error != OK:
-		push_error("items.json 파싱 실패: " + json.get_error_message())
-		push_error("오류 위치 line: " + str(json.get_error_line()))
-		return false
-
-	if typeof(json.data) != TYPE_DICTIONARY:
-		push_error("items.json 최상위 구조는 Dictionary여야 함")
-		return false
-
-	items = json.data
+	items = data
 	print("items.json 로드 성공")
 	return true
 # NPC 캐릭터 데이터 로드 및 예외 처리 함수
 func load_characters():
-	var path = "res://data/characters.json"
+	var data = load_json_dictionary(
+		"res://data/characters.json",
+		"characters.json"
+	)
 
-	if not FileAccess.file_exists(path):
-		push_error("characters.json 파일을 찾을 수 없음: " + path)
+	if data == null:
 		return false
 
-	var file = FileAccess.open(path, FileAccess.READ)
-
-	if file == null:
-		push_error("characters.json 파일 열기 실패: " + path)
-		return false
-
-	var json_text = file.get_as_text()
-	var json = JSON.new()
-	var error = json.parse(json_text)
-
-	if error != OK:
-		push_error("characters.json 파싱 실패: " + json.get_error_message())
-		push_error("오류 위치 line: " + str(json.get_error_line()))
-		return false
-
-	if typeof(json.data) != TYPE_DICTIONARY:
-		push_error("characters.json 최상위 구조는 Dictionary여야 함")
-		return false
-
-	characters = json.data
+	characters = data
 	print("characters.json 로드 성공")
-	return true	
+	return true
 # 스토리 이벤트 데이터 로드 함수
 func load_story_events():
-	var path = "res://data/story_events.json"
+	var data = load_json_dictionary(
+		"res://data/story_events.json",
+		"story_events.json"
+	)
 
-	if not FileAccess.file_exists(path):
-		push_error("story_events.json 파일을 찾을 수 없음: " + path)
+	if data == null:
 		return false
 
-	var file = FileAccess.open(path, FileAccess.READ)
-
-	if file == null:
-		push_error("story_events.json 파일 열기 실패: " + path)
-		return false
-
-	var json_text = file.get_as_text()
-	var json = JSON.new()
-	var error = json.parse(json_text)
-
-	if error != OK:
-		push_error("story_events.json 파싱 실패: " + json.get_error_message())
-		push_error("오류 위치 line: " + str(json.get_error_line()))
-		return false
-
-	if typeof(json.data) != TYPE_DICTIONARY:
-		push_error("story_events.json 최상위 구조는 Dictionary여야 함")
-		return false
-
-	story_events = json.data
+	story_events = data
 	print("story_events.json 로드 성공")
 	return true
 # 적 데이터 로드 및 예외 처리 함수
 func load_enemies():
-	var path = "res://data/enemies.json"
+	var data = load_json_dictionary(
+		"res://data/enemies.json",
+		"enemies.json"
+	)
 
-	if not FileAccess.file_exists(path):
-		push_error("enemies.json 파일을 찾을 수 없음: " + path)
+	if data == null:
 		return false
 
-	var file = FileAccess.open(path, FileAccess.READ)
-
-	if file == null:
-		push_error("enemies.json 파일 열기 실패: " + path)
-		return false
-
-	var json_text = file.get_as_text()
-	var json = JSON.new()
-	var error = json.parse(json_text)
-
-	if error != OK:
-		push_error("enemies.json 파싱 실패: " + json.get_error_message())
-		push_error("오류 위치 line: " + str(json.get_error_line()))
-		return false
-
-	if typeof(json.data) != TYPE_DICTIONARY:
-		push_error("enemies.json 최상위 구조는 Dictionary여야 함")
-		return false
-
-	enemies = json.data
+	enemies = data
 	print("enemies.json 로드 성공")
 	return true
-# 탄막 데이터 로드 및 예외 처리 함수
+# 투사체 데이터 로드 및 예외 처리 함수
 func load_projectiles():
-	var path = "res://data/projectiles.json"
+	var data = load_json_dictionary(
+		"res://data/projectiles.json",
+		"projectiles.json"
+	)
 
-	if not FileAccess.file_exists(path):
-		push_error("projectiles.json 파일을 찾을 수 없음: " + path)
+	if data == null:
 		return false
 
-	var file = FileAccess.open(path, FileAccess.READ)
-
-	if file == null:
-		push_error("projectiles.json 파일 열기 실패: " + path)
-		return false
-
-	var json_text = file.get_as_text()
-	var json = JSON.new()
-	var error = json.parse(json_text)
-
-	if error != OK:
-		push_error("projectiles.json 파싱 실패: " + json.get_error_message())
-		push_error("오류 위치 line: " + str(json.get_error_line()))
-		return false
-
-	if typeof(json.data) != TYPE_DICTIONARY:
-		push_error("projectiles.json 최상위 구조는 Dictionary여야 함")
-		return false
-
-	projectiles = json.data
+	projectiles = data
 	print("projectiles.json 로드 성공")
 	return true
-# 인카운터 데이터 로드 및 예외 처리 함수
+# 랜덤 인카운터 데이터 로드 및 예외 처리 함수
 func load_encounters():
-	var path = "res://data/encounters.json"
+	var data = load_json_dictionary(
+		"res://data/encounters.json",
+		"encounters.json"
+	)
 
-	if not FileAccess.file_exists(path):
-		push_error("encounters.json 파일을 찾을 수 없음: " + path)
+	if data == null:
 		return false
 
-	var file = FileAccess.open(path, FileAccess.READ)
-
-	if file == null:
-		push_error("encounters.json 파일 열기 실패: " + path)
-		return false
-
-	var json_text = file.get_as_text()
-	var json = JSON.new()
-	var error = json.parse(json_text)
-
-	if error != OK:
-		push_error("encounters.json 파싱 실패: " + json.get_error_message())
-		push_error("오류 위치 line: " + str(json.get_error_line()))
-		return false
-
-	if typeof(json.data) != TYPE_DICTIONARY:
-		push_error("encounters.json 최상위 구조는 Dictionary여야 함")
-		return false
-
-	encounters = json.data
+	encounters = data
 	print("encounters.json 로드 성공")
 	return true
 # 인카운터 이벤트 데이터 로드 및 예외 처리 함수
 func load_encounter_events():
-	var path = "res://data/encounter_events.json"
+	var data = load_json_dictionary(
+		"res://data/encounter_events.json",
+		"encounter_events.json"
+	)
 
-	if not FileAccess.file_exists(path):
-		push_error("encounter_events.json 파일을 찾을 수 없음: " + path)
+	if data == null:
 		return false
 
-	var file = FileAccess.open(path, FileAccess.READ)
-
-	if file == null:
-		push_error("encounter_events.json 파일 열기 실패: " + path)
-		return false
-
-	var json_text = file.get_as_text()
-	var json = JSON.new()
-	var error = json.parse(json_text)
-
-	if error != OK:
-		push_error("encounter_events.json 파싱 실패: " + json.get_error_message())
-		push_error("오류 위치 line: " + str(json.get_error_line()))
-		return false
-
-	if typeof(json.data) != TYPE_DICTIONARY:
-		push_error("encounter_events.json 최상위 구조는 Dictionary여야 함")
-		return false
-
-	encounter_events = json.data
+	encounter_events = data
 	print("encounter_events.json 로드 성공")
 	return true
 

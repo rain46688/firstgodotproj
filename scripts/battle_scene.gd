@@ -3282,6 +3282,9 @@ func apply_player_turn_start_relic_effects():
 		player_hp -= player_damage
 
 		if bool(player_effective_stats.get("cannot_die", false)) and before_hp >= 1 and player_hp < 1:
+			# cannot_die 여도 연출은 추가하기
+			play_player_hit_flash()
+			play_overlap_sound_from_player(hit_normal_sound)
 			player_hp = 1
 
 		if player_hp < 0:
