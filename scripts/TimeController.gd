@@ -4,10 +4,14 @@ var base_time_scale := Engine.time_scale
 var base_physics_ticks_per_second := Engine.physics_ticks_per_second
 var base_physics_steps_per_frame := Engine.max_physics_steps_per_frame
 
-var time_scale_factor := 2.0
+var time_scale_factor := 1.0
+
+func _ready() -> void:
+	time_scale_factor = 2.0
+	update_time_scale()
 
 # 게임 배속 조절하기 위한 스크립트일 뿐 게임이랑 무관함
-func _unhandled_key_input(event: InputEvent) -> void:
+func _unhandled_key_input(_event: InputEvent) -> void:
 	# I 키: 1/16배속 (0.0625)으로 느려짐
 	if Input.is_key_pressed(KEY_I):
 		time_scale_factor = 0.0625
@@ -18,9 +22,9 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		time_scale_factor = 1.0
 		update_time_scale()
 		
-	# P 키: 4배속 (4.0)으로 빨라짐
+	# P 키: 8배속 (8.0)으로 빨라짐
 	if Input.is_key_pressed(KEY_P):
-		time_scale_factor = 4.0
+		time_scale_factor = 8.0
 		update_time_scale()
 
 

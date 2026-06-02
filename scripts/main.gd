@@ -148,14 +148,14 @@ var arrange_selected_item_text_scroll = null
 # true
 # consumable_test
 # my_test
-# combined_candle_studen ts_phase_01
+# combined_candle_students_phase_01
 # candle_student
 const DEBUG_ADD_START_ITEMS = true
-const DEBUG_OPEN_PENDING_LOOT_TEST = true
+const DEBUG_OPEN_PENDING_LOOT_TEST = false
 const DEBUG_START_BATTLE_TEST = false
-const DEBUG_TEST_BATTLE_ENEMY_ID = "candle_student"
+const DEBUG_TEST_BATTLE_ENEMY_ID = "combined_candle_students_phase_01"
 const DEBUG_BATTLE_START_DELAY = 1.0
-const DEBUG_START_ITEM_PRESET = "consumable_test"
+const DEBUG_START_ITEM_PRESET = "my_test"
 
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
@@ -457,13 +457,33 @@ func load_startup_game_data():
 # 전투 관련 함수 모음
 # ============================================================
 
-# 전투 시작 함수
-func start_battle(enemy_id, first_turn = ""):
+# enemy_id 기준으로 적 데이터 가져오기 함수
+func get_enemy_data_by_id(enemy_id, show_error = true):
+	if enemy_id == "":
+		if show_error:
+			push_error("적 ID가 비어있음")
+		return {}
+
 	if not enemies.has(enemy_id):
-		push_error("존재하지 않는 적: " + enemy_id)
-		return
+		if show_error:
+			push_error("존재하지 않는 적: " + str(enemy_id))
+		return {}
 
 	var enemy_data = enemies[enemy_id]
+
+	if typeof(enemy_data) != TYPE_DICTIONARY:
+		if show_error:
+			push_error("적 데이터가 Dictionary가 아님: " + str(enemy_id))
+		return {}
+
+	return enemy_data
+# 전투 시작 함수
+func start_battle(enemy_id, first_turn = ""):
+	var enemy_data = get_enemy_data_by_id(enemy_id)
+
+	if enemy_data.is_empty():
+		return
+
 	var skip_flag = enemy_data.get("skip_if_flag", "")
 
 	if skip_flag != "" and has_flag(skip_flag):
@@ -487,12 +507,12 @@ func start_battle(enemy_id, first_turn = ""):
 	# 전투신으로 넘겨줄 로드한 데이터들 모음
 	var battle_data = {
 		"enemy_id": enemy_id,
-		"enemy_data": enemies[enemy_id],
+		"enemy_data": enemy_data,
 		"enemies": enemies,
 		"player_hp": battle_player_hp,
 		"player_max_hp": battle_player_max_hp,
 		"player_effective_stats": effective_stats,
-		"player_portraits": characters["protagonist"]["portrait"],
+		"player_portraits": get_character_portrait_data_by_id("protagonist"),
 		"items": items,
 		"equipped_weapon": equipped_weapon,
 		"inventory": inventory,
@@ -544,7 +564,7 @@ func add_debug_start_items():
 	var debug_item_ids = get_debug_start_item_ids()
 
 	for item_id in debug_item_ids:
-		if not items.has(item_id):
+		if get_item_data_by_id(item_id).is_empty():
 			push_warning("테스트 시작 아이템이 items.json에 없음: " + str(item_id))
 			continue
 
@@ -689,10 +709,7 @@ func get_player_effective_stats():
 	if equipped_weapon != null:
 		weapon_id = equipped_weapon.get("id", "fist")
 
-	var weapon_data = {}
-
-	if items.has(weapon_id):
-		weapon_data = items[weapon_id]
+	var weapon_data = get_item_data_by_id(weapon_id)
 
 	var attack_min = int(weapon_data.get("attack_min", weapon_data.get("attack", 1)))
 	var attack_max = int(weapon_data.get("attack_max", weapon_data.get("attack", attack_min)))
@@ -760,10 +777,11 @@ func apply_relic_and_fetish_effects(stats):
 		if item_id == "":
 			continue
 
-		if not items.has(item_id):
+		var item_data = get_item_data_by_id(item_id)
+
+		if item_data.is_empty():
 			continue
 
-		var item_data = items[item_id]
 		var item_type = item_data.get("type", "")
 		var effect_scope = item_data.get("effect_scope", "")
 
@@ -907,9 +925,14 @@ func apply_relic_and_fetish_effects(stats):
 				add_applied_relic_to_stats(stats, item_id)
 			_:
 				pass
-# 적용된 성물/주물 이름 저장 함수
+# 적용된 성물/주물 목록에 아이템 추가 함수
 func add_applied_relic_to_stats(stats, item_id):
-	if not items.has(item_id):
+	if item_id == "":
+		return
+
+	var item_data = get_item_data_by_id(item_id)
+
+	if item_data.is_empty():
 		return
 
 	if not stats.has("applied_relic_ids"):
@@ -922,7 +945,7 @@ func add_applied_relic_to_stats(stats, item_id):
 		return
 
 	stats["applied_relic_ids"].append(item_id)
-	stats["applied_relic_names"].append(items[item_id].get("name", item_id))
+	stats["applied_relic_names"].append(get_item_name(item_id))
 # 적용 능력치 최종 제한값 보정 함수
 func clamp_player_effective_stats(stats):
 	stats["max_hp"] = max(1, int(stats.get("max_hp", player_max_hp)))
@@ -1352,145 +1375,398 @@ func load_encounter_events():
 	print("encounter_events.json 로드 성공")
 	return true
 
-# === 방 함수 모음 ===
-# 방 변경 함수
-func update_room():
-	
-	var room = rooms[current_room]
-	
-	# 방 예외 처리
-	if not rooms.has(current_room):
-		push_error("존재하지 않는 방: " + current_room)
-		return
-		
-	if not room.has("background"):
+# ============================================================
+# 방 함수 모음
+# ============================================================
+
+# room_id 기준으로 방 데이터 가져오기 함수
+func get_room_data_by_id(room_id, show_error = true):
+	if room_id == "":
+		if show_error:
+			push_error("방 ID가 비어있음")
+		return {}
+
+	if not rooms.has(room_id):
+		if show_error:
+			push_error("존재하지 않는 방: " + str(room_id))
+		return {}
+
+	var room_data = rooms[room_id]
+
+	if typeof(room_data) != TYPE_DICTIONARY:
+		if show_error:
+			push_error("방 데이터가 Dictionary가 아님: " + str(room_id))
+		return {}
+
+	return room_data
+# 현재 방 데이터 가져오기 함수
+func get_current_room_data(show_error = true):
+	return get_room_data_by_id(current_room, show_error)
+# 방 데이터에서 특정 방향 출구 데이터 가져오기 함수
+func get_exit_data_from_room(room, direction, show_error = false):
+	if room.is_empty():
+		return {}
+
+	if not room.has("exits"):
+		return {}
+
+	var exits = room["exits"]
+
+	if typeof(exits) != TYPE_DICTIONARY:
+		if show_error:
+			push_error("exits 데이터가 Dictionary가 아님: " + str(current_room))
+		return {}
+
+	if not exits.has(direction):
+		return {}
+
+	var exit_data = exits[direction]
+
+	if typeof(exit_data) != TYPE_DICTIONARY:
+		if show_error:
+			push_error("출구 데이터가 Dictionary가 아님: " + str(current_room) + " / " + str(direction))
+		return {}
+
+	return exit_data
+# 출구가 잠긴 상태인지 확인하는 함수
+func is_exit_locked(exit_data):
+	if exit_data.is_empty():
+		return false
+
+	return bool(exit_data.get("locked", false))
+# 잠긴 출구가 플래그로 열렸는지 확인하는 함수
+func is_exit_unlocked(exit_data):
+	if exit_data.is_empty():
+		return false
+
+	var open_flag = exit_data.get("open_flag", "")
+
+	if open_flag == "":
+		return false
+
+	return has_flag(open_flag)
+# 현재 이동 입력으로 지나갈 수 없는 출구인지 확인하는 함수
+func is_exit_blocked_for_movement(exit_data):
+	return is_exit_locked(exit_data) and not is_exit_unlocked(exit_data)
+# 출구 이동 시 흔들림 효과를 사용할지 확인하는 함수
+func should_use_exit_shake(exit_data):
+	if exit_data.is_empty():
+		return true
+
+	return exit_data.get("move_effect", "") != "enter"
+# 방향별 막힌 길 대사 반환 함수
+func get_no_exit_message(direction):
+	match direction:
+		"up":
+			return MSG_NO_FORWARD
+		"down":
+			return MSG_NO_BACK
+		"left":
+			return MSG_NO_LEFT
+		"right":
+			return MSG_NO_RIGHT
+		_:
+			return "그쪽으로는 갈 수 없다."
+# 모든 이동 화살표 숨김 함수
+func hide_all_move_arrows():
+	for direction in move_arrows.keys():
+		move_arrows[direction].visible = false
+# 현재 방 배경 경로 결정 함수
+func get_room_background_path(room):
+	if room.is_empty():
+		return ""
+
+	var background_path = room.get("background", "")
+
+	if background_path == "":
 		push_error(current_room + "에 background 값이 없음")
+		return ""
+
+	if not room.has("exits"):
+		return background_path
+
+	var exits = room["exits"]
+
+	if typeof(exits) != TYPE_DICTIONARY:
+		return background_path
+
+	for direction in exits.keys():
+		var exit_data = get_exit_data_from_room(room, direction)
+
+		if exit_data.is_empty():
+			continue
+
+		if is_exit_unlocked(exit_data) and room.has("opened_background"):
+			background_path = room["opened_background"]
+			break
+
+	return background_path
+# 현재 방 배경 이미지 갱신 함수
+func update_room_background(room):
+	var background_path = get_room_background_path(room)
+
+	if background_path == "":
 		return
-	
-	# 기본 배경 이미지
-	var background_path = room["background"]
-
-	# 모든 이동 화살표를 먼저 숨김
-	for dir in move_arrows.keys():
-		move_arrows[dir].visible = false
-
-	# exits 데이터가 있다면 출구 상태 확인
-	if room.has("exits"):
-		for dir in room["exits"].keys():
-			var exit_data = room["exits"][dir]
-
-			# 잠긴 출구인지 확인
-			var is_locked = exit_data.has("locked") and exit_data["locked"] == true
-
-			# 잠긴 출구가 이미 열렸는지 확인
-			var is_unlocked = false
-			if exit_data.has("open_flag") and has_flag(exit_data["open_flag"]):
-				is_unlocked = true
-
-			# 열린 플래그가 있으면 현재 방 배경을 열린 배경으로 변경
-			if is_unlocked and room.has("opened_background"):
-				background_path = room["opened_background"]
-
-			# 잠긴 문은 화살표를 숨김
-			if is_locked and not is_unlocked:
-				continue
-				
-			# 열린 출구만 화살표 표시
-			if move_arrows.has(dir):
-				var arrow = move_arrows[dir]
-				arrow.visible = true
-
-				if exit_data.has("position"):
-					arrow.position = Vector2(
-						exit_data["position"][0],
-						exit_data["position"][1]
-					)
-					arrow_base_positions[dir] = arrow.position
 
 	background.texture = load(background_path)
-	
+# 현재 방 이동 화살표 갱신 함수
+func update_room_move_arrows(room):
+	hide_all_move_arrows()
+
+	if room.is_empty():
+		return
+
+	if not room.has("exits"):
+		return
+
+	var exits = room["exits"]
+
+	if typeof(exits) != TYPE_DICTIONARY:
+		return
+
+	for direction in exits.keys():
+		var exit_data = get_exit_data_from_room(room, direction)
+
+		if exit_data.is_empty():
+			continue
+
+		# 잠겨 있고 아직 열리지 않은 출구는 화살표 표시 안 함
+		if is_exit_blocked_for_movement(exit_data):
+			continue
+
+		if not move_arrows.has(direction):
+			continue
+
+		var arrow = move_arrows[direction]
+		arrow.visible = true
+
+		if exit_data.has("position"):
+			arrow.position = Vector2(
+				exit_data["position"][0],
+				exit_data["position"][1]
+			)
+			arrow_base_positions[direction] = arrow.position
+# 현재 방 UI 갱신 함수
+func update_room():
+	var room = get_current_room_data()
+
+	if room.is_empty():
+		return
+
+	update_room_background(room)
+	update_room_move_arrows(room)
+
 	# 현재 방의 interactions 데이터를 기준으로 클릭 버튼 자동 생성
 	create_interaction_buttons(room)
 	create_exit_buttons(room)
+# 현재 방을 변경하고 방 UI를 갱신하는 함수
+func apply_room_change(target_room):
+	current_room = target_room
+	update_room()
+# 방 이동 후 방 진입 스토리 이벤트를 처리하는 함수
+func handle_room_enter_story_after_move():
+	await check_room_enter_story()
+# 방 이동 후 랜덤 인카운터를 처리하는 함수
+# 랜덤 인카운터가 시작되면 true 반환
+func handle_random_encounter_after_move():
+	if random_encounter_cooldown_steps > 0:
+		random_encounter_cooldown_steps -= 1
+		return false
+
+	if is_story_playing:
+		return false
+
+	var encounter_started = await check_random_encounter()
+
+	if encounter_started:
+		return true
+
+	return false
+# 방 이동 후 이동 입력 잠금을 해제하는 함수
+func finish_room_move_input_lock():
+	await get_tree().create_timer(1.5).timeout
+	is_moving = false
 # 방 이동 함수
 func move_to_room(target_room, use_shake, direction):
+	if get_room_data_by_id(target_room).is_empty():
+		return
+
 	# 이동 중에는 추가 입력을 막음
 	is_moving = true
 	
 	# use_shake가 true면 흔들림 사용, false면 암전만 사용
 	await effect(true, use_shake, true, direction)
 	
-	# 실제 방 변경
-	current_room = target_room
-	update_room()
+	# 실제 방 변경 및 UI 갱신
+	apply_room_change(target_room)
 	
-	# 방 진입시 스토리 이벤트 확인
-	await check_room_enter_story()
+	# 방 진입 시 스토리 이벤트 확인
+	await handle_room_enter_story_after_move()
 	
 	# 랜덤 인카운터 체크
-	if random_encounter_cooldown_steps > 0:
-		random_encounter_cooldown_steps -= 1
-	else:
-		if not is_story_playing:
-			var encounter_started = await check_random_encounter()
+	var encounter_started = await handle_random_encounter_after_move()
 
-			if encounter_started:
-				is_moving = false
-				return
+	if encounter_started:
+		is_moving = false
+		return
 	
 	# 새 방이 보인 뒤 바로 이동하지 못하게 잠깐 대기
-	await get_tree().create_timer(1.5).timeout
-	
-	# 다시 입력 허용
-	is_moving = false
+	await finish_room_move_input_lock()
 # 방향키 입력을 받아 exits 데이터 기준으로 방 이동하는 함수
 func try_move_to_exit(direction):
+	var room = get_current_room_data()
 
-	var room = rooms[current_room]
-
-	# 현재 방에 해당 방향 출구가 없으면 방향별 대사 출력
-	if not room.has("exits") or not room["exits"].has(direction):
-		if direction == "up":
-			await show_dialogue(MSG_NO_FORWARD)
-		elif direction == "down":
-			await show_dialogue(MSG_NO_BACK)
-		elif direction == "left":
-			await show_dialogue(MSG_NO_LEFT)
-		elif direction == "right":
-			await show_dialogue(MSG_NO_RIGHT)
+	if room.is_empty():
 		return
 
-	var exit_data = room["exits"][direction]
+	var exit_data = get_exit_data_from_room(room, direction)
 
-	# 잠긴 출구인지 확인
-	var is_locked = exit_data.has("locked") and exit_data["locked"] == true
-
-	# 잠긴 출구가 이미 열렸는지 확인
-	var is_unlocked = false
-	if exit_data.has("open_flag") and has_flag(exit_data["open_flag"]):
-		is_unlocked = true
+	# 현재 방에 해당 방향 출구가 없으면 방향별 대사 출력
+	if exit_data.is_empty():
+		await show_dialogue(get_no_exit_message(direction))
+		return
 
 	# 잠겨 있고 아직 열리지 않은 출구는 방향키로 처리하지 않음
 	# 잠긴 문은 마우스 클릭으로만 상호작용
-	if is_locked and not is_unlocked:
+	if is_exit_blocked_for_movement(exit_data):
 		return
 
-	# 출구별 이동 효과 결정
-	var use_shake = true
+	var target_room = exit_data.get("target", "")
 
-	# JSON에 "move_effect": "enter" 라고 적힌 출구만 흔들림 없이 이동
-	# 값 door 에서 enter로 변경함 문 뿐만 아니라 여러 가지 상황에 매치 시키기 위해서 수정
-	if exit_data.has("move_effect") and exit_data["move_effect"] == "enter":
-		use_shake = false
+	if target_room == "":
+		push_error("출구 target 값이 없음: " + current_room + " / " + str(direction))
+		return
 
-	# 열린 출구 이동
-	await move_to_room(exit_data["target"], use_shake, direction)
+	var use_shake = should_use_exit_shake(exit_data)
+
+	await move_to_room(target_room, use_shake, direction)
 # 현재 방에 생성된 상호작용 버튼들을 전부 제거
 func clear_interaction_buttons():
 	for child in interaction_buttons.get_children():
 		child.queue_free()
+# 방 데이터에서 interactions Dictionary 가져오기 함수
+func get_interactions_from_room(room, show_error = false):
+	if room.is_empty():
+		return {}
 
-# === 대사, 상호작용, 이벤트 함수 모음 ===
+	if not room.has("interactions"):
+		return {}
+
+	var interactions = room["interactions"]
+
+	if typeof(interactions) != TYPE_DICTIONARY:
+		if show_error:
+			push_error("interactions 데이터가 Dictionary가 아님: " + str(current_room))
+		return {}
+
+	return interactions
+# 방 데이터에서 특정 interaction 데이터 가져오기 함수
+func get_interaction_data_from_room(room, interaction_id, show_error = false):
+	var interactions = get_interactions_from_room(room, show_error)
+
+	if interactions.is_empty():
+		return {}
+
+	if not interactions.has(interaction_id):
+		if show_error:
+			push_error("존재하지 않는 interaction: " + str(current_room) + " / " + str(interaction_id))
+		return {}
+
+	var interaction_data = interactions[interaction_id]
+
+	if typeof(interaction_data) != TYPE_DICTIONARY:
+		if show_error:
+			push_error("interaction 데이터가 Dictionary가 아님: " + str(current_room) + " / " + str(interaction_id))
+		return {}
+
+	return interaction_data
+# 방 데이터에서 진입 스토리 이벤트 ID 가져오기 함수
+func get_room_enter_story_id(room):
+	if room.is_empty():
+		return ""
+
+	if not room.has("enter_story"):
+		return ""
+
+	var enter_story = room["enter_story"]
+
+	# 새/단순 구조:
+	# "enter_story": "story_event_id"
+	if typeof(enter_story) == TYPE_STRING:
+		return enter_story
+
+	# 기존/상세 구조:
+	# "enter_story": {
+	#     "event": "story_event_id",
+	#     "required_flag_missing": "..."
+	# }
+	if typeof(enter_story) == TYPE_DICTIONARY:
+		return str(enter_story.get("event", ""))
+
+	push_error("enter_story 데이터 타입이 올바르지 않음: " + str(current_room))
+	return ""
+# 방 진입 스토리 이벤트 실행 조건 확인 함수
+func can_run_room_enter_story(room):
+	if room.is_empty():
+		return false
+
+	if not room.has("enter_story"):
+		return false
+
+	var enter_story = room["enter_story"]
+
+	# enter_story가 문자열이면 별도 조건 없음
+	if typeof(enter_story) == TYPE_STRING:
+		return true
+
+	if typeof(enter_story) != TYPE_DICTIONARY:
+		return false
+
+	# 특정 플래그가 있을 때만 실행
+	if enter_story.has("required_flag"):
+		var required_flag = str(enter_story.get("required_flag", ""))
+
+		if required_flag != "" and not has_flag(required_flag):
+			return false
+
+	# 특정 플래그가 없을 때만 실행
+	if enter_story.has("required_flag_missing"):
+		var missing_flag = str(enter_story.get("required_flag_missing", ""))
+
+		if missing_flag != "" and has_flag(missing_flag):
+			return false
+
+	return true
+
+# ============================================================
+# 대사, 상호작용, 이벤트 함수 모음
+# ============================================================
+
+# story_event_id 기준으로 스토리 이벤트 데이터 가져오기 함수
+func get_story_event_data_by_id(story_event_id, show_error = true):
+	if typeof(story_event_id) != TYPE_STRING:
+		if show_error:
+			push_error("스토리 이벤트 ID가 String이 아님: " + str(story_event_id))
+		return {}
+
+	if story_event_id == "":
+		if show_error:
+			push_error("스토리 이벤트 ID가 비어있음")
+		return {}
+
+	if not story_events.has(story_event_id):
+		if show_error:
+			push_error("존재하지 않는 스토리 이벤트: " + str(story_event_id))
+		return {}
+
+	var story_event_data = story_events[story_event_id]
+
+	if typeof(story_event_data) != TYPE_DICTIONARY:
+		if show_error:
+			push_error("스토리 이벤트 데이터가 Dictionary가 아님: " + str(story_event_id))
+		return {}
+
+	return story_event_data
 # 대사 출력 함수
 func show_dialogue(text, mode = "normal"):
 	# - 글자를 한 글자씩 출력
@@ -1565,43 +1841,51 @@ func update_choice_ui():
 			choice_labels[i].visible = false
 # 현재 선택된 선택지 앞에 화살표를 붙이는 함수
 func get_choice_text(index):
-	
+	if index < 0:
+		return ""
+
 	if index >= current_choices.size():
 		return ""
-		
+
+	var choice = current_choices[index]
+	var choice_text = get_choice_data_text(choice)
+
+	if choice_text == "":
+		return ""
+
 	if index == choice_index:
-		return "▶ " + current_choices[index]["text"]
-	else:
-		return "  " + current_choices[index]["text"]
+		return "▶ " + choice_text
+
+	return "  " + choice_text
 # 상호작용 실행 함수
 func run_interaction(interaction_id):
 	# rooms.json의 interaction events 배열을 순서대로 실행
 	# text / portrait / choices / item / flag / save 등을 처리
-	
+
 	if is_interacting:
+		return
+
+	var room = get_current_room_data()
+
+	if room.is_empty():
+		return
+
+	var interaction = get_interaction_data_from_room(
+		room,
+		interaction_id,
+		true
+	)
+
+	if interaction.is_empty():
 		return
 
 	is_interacting = true
 	set_interaction_buttons_disabled(true)
 
-	var room = rooms[current_room]
-
-	if not room.has("interactions"):
-		is_interacting = false
-		set_interaction_buttons_disabled(false)
-		return
-
-	if not room["interactions"].has(interaction_id):
-		is_interacting = false
-		set_interaction_buttons_disabled(false)
-		return
-
-	var interaction = room["interactions"][interaction_id]
-
 	if interaction.has("events"):
 		await run_events(interaction["events"])
 	else:
-		push_error("events가 없는 interaction: " + interaction_id)
+		push_error("events가 없는 interaction: " + str(interaction_id))
 
 	set_interaction_buttons_disabled(false)
 	is_interacting = false
@@ -1620,14 +1904,18 @@ func set_flag(flag_id):
 	print("플래그 설정: " + flag_id)
 # rooms.json의 interactions 데이터를 읽어서 클릭 영역 버튼을 자동 생성
 func create_interaction_buttons(room):
-
 	clear_interaction_buttons()
 
-	if not room.has("interactions"):
+	var interactions = get_interactions_from_room(room)
+
+	if interactions.is_empty():
 		return
 
-	for interaction_id in room["interactions"].keys():
-		var interaction = room["interactions"][interaction_id]
+	for interaction_id in interactions.keys():
+		var interaction = get_interaction_data_from_room(room, interaction_id)
+
+		if interaction.is_empty():
+			continue
 
 		# click_rect가 없는 상호작용은 버튼 생성하지 않음
 		if not interaction.has("click_rect"):
@@ -1635,7 +1923,14 @@ func create_interaction_buttons(room):
 
 		var rect = interaction["click_rect"]
 
+		if typeof(rect) != TYPE_ARRAY:
+			continue
+
+		if rect.size() < 4:
+			continue
+
 		var button = Button.new()
+
 		# 투명 상호작용 버튼이 Space 입력으로 다시 눌리지 않게 함
 		button.focus_mode = Control.FOCUS_NONE
 		button.position = Vector2(rect[0], rect[1])
@@ -1644,105 +1939,112 @@ func create_interaction_buttons(room):
 		# 투명 버튼처럼 사용
 		button.text = ""
 		button.modulate.a = 0.0
+		button.mouse_filter = Control.MOUSE_FILTER_STOP
 
 		# 디버그할 때는 아래처럼 잠깐 보이게 해도 됨
 		# button.modulate.a = 0.25
 
+		var target_interaction_id = str(interaction_id)
+
 		button.pressed.connect(
 			func():
-				await run_interaction(interaction_id)
+				await run_interaction(target_interaction_id)
 		)
 
 		interaction_buttons.add_child(button)
 # exits 데이터를 읽어서 잠긴 문 클릭 버튼 생성
 func create_exit_buttons(room):
+	if room.is_empty():
+		return
 
 	if not room.has("exits"):
 		return
 
-	for direction in room["exits"].keys():
+	var exits = room["exits"]
 
-		var exit_data = room["exits"][direction]
+	if typeof(exits) != TYPE_DICTIONARY:
+		return
+
+	for direction in exits.keys():
+		var exit_data = get_exit_data_from_room(room, direction)
+
+		if exit_data.is_empty():
+			continue
 
 		# click_rect 없는 출구는 클릭 버튼 생성 안 함
 		if not exit_data.has("click_rect"):
 			continue
-			
-		# 잠긴 출구인지 확인
-		var is_locked = exit_data.has("locked") and exit_data["locked"] == true
-
-		# 이미 열렸는지 확인
-		var is_unlocked = false
-		if exit_data.has("open_flag") and has_flag(exit_data["open_flag"]):
-			is_unlocked = true
 
 		# 잠겨 있고 아직 열리지 않은 출구만 마우스 클릭 버튼 생성
-		if not is_locked or is_unlocked:
+		if not is_exit_blocked_for_movement(exit_data):
+			continue
+
+		var rect = exit_data["click_rect"]
+
+		if rect.size() < 4:
 			continue
 
 		var button = Button.new()
-
 		button.focus_mode = Control.FOCUS_NONE
-
-		var rect = exit_data["click_rect"]
 
 		button.position = Vector2(rect[0], rect[1])
 		button.size = Vector2(rect[2], rect[3])
 
 		button.text = ""
 		button.modulate.a = 0.0
+		button.mouse_filter = Control.MOUSE_FILTER_STOP
+
+		var exit_direction = str(direction)
 
 		button.pressed.connect(
 			func():
-				await run_exit_interaction(direction)
+				await run_exit_interaction(exit_direction)
 		)
 
 		interaction_buttons.add_child(button)
 # 잠긴 문 상호작용 실행 함수
 func run_exit_interaction(direction):
-
 	if is_interacting or is_dialogue_showing or is_moving:
 		return
 
-	var room = rooms[current_room]
+	var room = get_current_room_data()
 
-	if not room.has("exits"):
+	if room.is_empty():
 		return
 
-	if not room["exits"].has(direction):
+	var exit_data = get_exit_data_from_room(room, direction)
+
+	if exit_data.is_empty():
 		return
 
-	var exit_data = room["exits"][direction]
+	# 이미 열린 출구이거나 잠겨 있지 않은 출구면 바로 이동
+	if not is_exit_blocked_for_movement(exit_data):
+		var target_room = exit_data.get("target", "")
 
-	var is_locked = exit_data.has("locked") and exit_data["locked"] == true
+		if target_room == "":
+			push_error("출구 target 값이 없음: " + current_room + " / " + str(direction))
+			return
 
-	var is_unlocked = false
+		var use_shake = should_use_exit_shake(exit_data)
 
-	if exit_data.has("open_flag") and has_flag(exit_data["open_flag"]):
-		is_unlocked = true
-
-	# 이미 열린 문이면 바로 이동
-	if not is_locked or is_unlocked:
-		var use_shake = true
-
-		if exit_data.has("move_effect") and exit_data["move_effect"] == "enter":
-			use_shake = false
-
-		await move_to_room(exit_data["target"], use_shake, direction)
+		await move_to_room(target_room, use_shake, direction)
 		return
 
 	is_interacting = true
 	set_interaction_buttons_disabled(true)
 
-	# 필요한 아이템이 있으면 문 열기
-	if exit_data.has("required_item") and has_item(exit_data["required_item"]):
+	var required_item = exit_data.get("required_item", "")
 
+	# 필요한 아이템이 있으면 문 열기
+	if required_item != "" and has_item(required_item):
 		unlocked_sound.play()
 
-		if exit_data.has("open_flag"):
-			set_flag(exit_data["open_flag"])
+		var open_flag = exit_data.get("open_flag", "")
 
-		consume_item_by_id(exit_data["required_item"])
+		if open_flag != "":
+			set_flag(open_flag)
+
+		consume_item_by_id(required_item)
 		
 		await show_dialogue(MSG_DOOR_UNLOCK)
 
@@ -1810,113 +2112,263 @@ func set_dialogue_layout(mode):
 func clear_speaker_ui():
 	speaker_portrait.visible = false
 	speaker_name.visible = false
+# character_id 기준으로 캐릭터 데이터 가져오기 함수
+func get_character_data_by_id(character_id, show_error = true):
+	if character_id == "":
+		if show_error:
+			push_error("캐릭터 ID가 비어있음")
+		return {}
+
+	if not characters.has(character_id):
+		if show_error:
+			push_error("존재하지 않는 캐릭터: " + str(character_id))
+		return {}
+
+	var character_data = characters[character_id]
+
+	if typeof(character_data) != TYPE_DICTIONARY:
+		if show_error:
+			push_error("캐릭터 데이터가 Dictionary가 아님: " + str(character_id))
+		return {}
+
+	return character_data
+# character_id 기준으로 캐릭터 이름 가져오기 함수
+func get_character_name_by_id(character_id):
+	var character_data = get_character_data_by_id(character_id, false)
+
+	if character_data.is_empty():
+		return str(character_id)
+
+	return str(character_data.get("name", character_id))
+# character_id 기준으로 portrait Dictionary 가져오기 함수
+func get_character_portrait_data_by_id(character_id):
+	var character_data = get_character_data_by_id(character_id, false)
+
+	if character_data.is_empty():
+		return {}
+
+	var portrait_data = character_data.get("portrait", {})
+
+	if typeof(portrait_data) != TYPE_DICTIONARY:
+		return {}
+
+	return portrait_data
+# character_id / emotion 기준으로 초상화 이미지 경로 가져오기 함수
+func get_character_portrait_path(character_id, emotion = "normal"):
+	var portrait_data = get_character_portrait_data_by_id(character_id)
+
+	if portrait_data.is_empty():
+		return ""
+
+	return str(portrait_data.get(emotion, ""))
+# character_id / emotion 기준으로 스탠딩 이미지 경로 가져오기 함수
+func get_character_standing_path(character_id, emotion = "normal"):
+	var character_data = get_character_data_by_id(character_id, false)
+
+	if character_data.is_empty():
+		return ""
+
+	var standing_data = character_data.get("standing", {})
+
+	if typeof(standing_data) != TYPE_DICTIONARY:
+		return ""
+
+	return str(standing_data.get(emotion, ""))
 # NPC 대화 출력 함수
 func show_npc_dialogue(character_id, emotion, text):
+	var character_data = get_character_data_by_id(character_id)
 
-	if not characters.has(character_id):
-		push_error("존재하지 않는 캐릭터: " + character_id)
+	if character_data.is_empty():
 		return
 
-	var character_data = characters[character_id]
+	speaker_name.text = get_character_name_by_id(character_id)
 
-	speaker_name.text = character_data["name"]
+	var portrait_path = get_character_portrait_path(character_id, emotion)
 
-	if character_data.has("portrait"):
-		var portrait_data = character_data["portrait"]
-
-		if portrait_data.has(emotion):
-			speaker_portrait.texture = load(portrait_data[emotion])
+	if portrait_path != "":
+		speaker_portrait.texture = load(portrait_path)
+	else:
+		speaker_portrait.texture = null
 
 	await show_dialogue(text, "npc")
+# 일반 이벤트 1개 실행 함수
+func run_single_event(event):
+	if event == null:
+		return
+
+	if typeof(event) != TYPE_DICTIONARY:
+		push_error("일반 이벤트 데이터가 Dictionary가 아님: " + str(event))
+		return
+
+	var event_type = event.get("type", "")
+
+	if event_type == "text":
+		await show_dialogue(event.get("text", ""))
+
+	elif event_type == "portrait":
+		await show_npc_dialogue(
+			event.get("character", ""),
+			event.get("emotion", "normal"),
+			event.get("text", "")
+		)
+
+	elif event_type == "save":
+		await run_save_point()
+
+	elif event_type == "item":
+		var item_id = event.get("item", "")
+		var count = int(event.get("count", 1))
+
+		var reward_results = await give_items_with_pending_loot([
+			{
+				"item": item_id,
+				"count": count
+			}
+		])
+
+		var has_reward = false
+
+		for reward_result in reward_results:
+			if int(reward_result.get("added", 0)) > 0 or int(reward_result.get("remaining", 0)) > 0:
+				has_reward = true
+
+		if has_reward:
+			if count > 1:
+				await show_dialogue(get_item_name(item_id) + " " + str(count) + "개" + MSG_ITEM_GAINED_SUFFIX)
+			else:
+				await show_dialogue(get_item_name(item_id) + MSG_ITEM_GAINED_SUFFIX)
+
+		await open_inventory_arrange_if_pending_loot("loot")
+
+	elif event_type == "flag":
+		set_flag(event.get("flag", ""))
+
+	elif event_type == "choices":
+		await run_event_choices(event.get("choices", []))
+
+	else:
+		push_error("알 수 없는 event type: " + str(event_type))
 # events 배열을 순서대로 실행하는 함수
 func run_events(events):
+	if typeof(events) != TYPE_ARRAY:
+		push_error("일반 events 데이터가 Array가 아님")
+		return
+
 	for event in events:
-		var event_type = event.get("type", "")
+		await run_single_event(event)
+# 선택지 Dictionary에서 표시 텍스트 가져오기 함수
+func get_choice_data_text(choice):
+	if choice == null:
+		return ""
 
-		if event_type == "text":
-			await show_dialogue(event.get("text", ""))
+	if typeof(choice) != TYPE_DICTIONARY:
+		return ""
 
-		elif event_type == "portrait":
-			await show_npc_dialogue(
-				event.get("character", ""),
-				event.get("emotion", "normal"),
-				event.get("text", "")
-			)
+	return str(choice.get("text", ""))
+# 선택지 Dictionary에서 실행 events 가져오기 함수
+func get_choice_data_events(choice):
+	if choice == null:
+		return []
 
-		elif event_type == "save":
-			await run_save_point()
+	if typeof(choice) != TYPE_DICTIONARY:
+		return []
 
-		elif event_type == "item":
-			var item_id = event.get("item", "")
-			var count = int(event.get("count", 1))
+	var events = choice.get("events", [])
 
-			var reward_results = await give_items_with_pending_loot([
-				{
-					"item": item_id,
-					"count": count
-				}
-			])
+	if typeof(events) != TYPE_ARRAY:
+		return []
 
-			var has_reward = false
+	return events
+# 선택지 Dictionary에서 이미 실행된 경우의 events 가져오기 함수
+func get_choice_data_already_events(choice):
+	if choice == null:
+		return []
 
-			for reward_result in reward_results:
-				if int(reward_result.get("added", 0)) > 0 or int(reward_result.get("remaining", 0)) > 0:
-					has_reward = true
+	if typeof(choice) != TYPE_DICTIONARY:
+		return []
 
-			if has_reward:
-				if count > 1:
-					await show_dialogue(get_item_name(item_id) + " " + str(count) + "개" + MSG_ITEM_GAINED_SUFFIX)
-				else:
-					await show_dialogue(get_item_name(item_id) + MSG_ITEM_GAINED_SUFFIX)
+	var events = choice.get("already_events", [])
 
-			await open_inventory_arrange_if_pending_loot("loot")
+	if typeof(events) != TYPE_ARRAY:
+		return []
 
-		elif event_type == "flag":
-			set_flag(event.get("flag", ""))
+	return events
+# 선택지 Dictionary에서 flag 값 가져오기 함수
+func get_choice_data_flag(choice):
+	if choice == null:
+		return ""
 
-		elif event_type == "choices":
-			await run_event_choices(event.get("choices", []))
+	if typeof(choice) != TYPE_DICTIONARY:
+		return ""
 
-		else:
-			push_error("알 수 없는 event type: " + event_type)
-# events 방식 선택지 실행 함수
+	return str(choice.get("flag", ""))
+# 선택지 데이터가 유효한지 확인하는 함수
+func is_valid_choice_data(choice):
+	if choice == null:
+		return false
+
+	if typeof(choice) != TYPE_DICTIONARY:
+		return false
+
+	if get_choice_data_text(choice) == "":
+		return false
+
+	return true
+# 일반 이벤트 선택지 실행 함수
 func run_event_choices(choices):
-	if choices.size() == 0:
+	if typeof(choices) != TYPE_ARRAY:
+		push_error("선택지 데이터가 Array가 아님")
 		return
 
-	var selected_index = await show_choices(choices)
-	var selected_choice = choices[selected_index]
+	var valid_choices = []
 
-	if selected_choice.has("flag") and has_flag(selected_choice["flag"]):
-		if selected_choice.has("already_events"):
-			await run_events(selected_choice["already_events"])
+	for choice in choices:
+		if is_valid_choice_data(choice):
+			valid_choices.append(choice)
+
+	if valid_choices.size() == 0:
 		return
 
-	if selected_choice.has("events"):
-		await run_events(selected_choice["events"])
+	var selected_index = await show_choices(valid_choices)
 
-	if selected_choice.has("flag"):
-		set_flag(selected_choice["flag"])
+	if selected_index < 0:
+		return
+
+	if selected_index >= valid_choices.size():
+		return
+
+	var selected_choice = valid_choices[selected_index]
+	var choice_flag = get_choice_data_flag(selected_choice)
+
+	if choice_flag != "" and has_flag(choice_flag):
+		var already_events = get_choice_data_already_events(selected_choice)
+
+		if already_events.size() > 0:
+			await run_events(already_events)
+
+		return
+
+	var choice_events = get_choice_data_events(selected_choice)
+
+	if choice_events.size() > 0:
+		await run_events(choice_events)
+
+	if choice_flag != "":
+		set_flag(choice_flag)
 # 스토리 스탠딩 CG 표시 함수
 func show_story_standing(character_id, emotion, position_name = "center"):
+	var character_data = get_character_data_by_id(character_id)
 
-	if not characters.has(character_id):
-		push_error("존재하지 않는 캐릭터: " + character_id)
+	if character_data.is_empty():
 		return
 
-	var character_data = characters[character_id]
+	var standing_path = get_character_standing_path(character_id, emotion)
 
-	if not character_data.has("standing"):
-		push_error("standing 데이터가 없는 캐릭터: " + character_id)
+	if standing_path == "":
+		push_error("존재하지 않는 standing emotion: " + str(character_id) + " / " + str(emotion))
 		return
 
-	var standing_data = character_data["standing"]
-
-	if not standing_data.has(emotion):
-		push_error("존재하지 않는 standing emotion: " + emotion)
-		return
-
-	story_standing.texture = load(standing_data[emotion])
+	story_standing.texture = load(standing_path)
 	story_standing.visible = true
 
 	if position_name == "center":
@@ -1927,7 +2379,7 @@ func show_story_standing(character_id, emotion, position_name = "center"):
 
 	elif position_name == "right":
 		story_standing.position = Vector2(1120, 140)
-		
+
 	story_standing.modulate.a = 0.0
 	story_standing.visible = true
 
@@ -1936,7 +2388,7 @@ func show_story_standing(character_id, emotion, position_name = "center"):
 		story_standing,
 		"modulate:a",
 		1.0,
-		0.35
+		0.25
 	)
 
 	await tween.finished
@@ -1977,86 +2429,135 @@ func show_game_ui():
 	set_interaction_buttons_disabled(false)
 # 스토리 이벤트 실행 함수
 func run_story_event(event_id):
-
 	if is_story_playing:
 		return
 
-	if not story_events.has(event_id):
-		push_error("존재하지 않는 스토리 이벤트: " + event_id)
-		return
+	var story_data = get_story_event_data_by_id(event_id)
 
-	var story_data = story_events[event_id]
+	if story_data.is_empty():
+		return
 
 	if story_data.has("start_flag") and has_flag(story_data["start_flag"]):
 		return
 
 	if not story_data.has("events"):
-		push_error("events가 없는 스토리 이벤트: " + event_id)
+		push_error("events가 없는 스토리 이벤트: " + str(event_id))
+		return
+
+	var events = story_data["events"]
+
+	if typeof(events) != TYPE_ARRAY:
+		push_error("스토리 이벤트 events가 Array가 아님: " + str(event_id))
 		return
 
 	is_story_playing = true
 	set_interaction_buttons_disabled(true)
 
-	await run_story_events(story_data["events"])
+	await run_story_events(events)
 
 	is_story_playing = false
-# 스토리 events 배열 실행 함수
-func run_story_events(events):
-	for event in events:
-		var event_type = event.get("type", "")
-
-		if event_type == "hide_game_ui":
-			hide_game_ui()
-
-		elif event_type == "show_game_ui":
-			show_game_ui()
-
-		elif event_type == "fade":
-			await effect(false, false, true, "")
-			
-		elif event_type == "bgm":
-			play_bgm(event.get("path", ""))
-			
-		elif event_type == "stop_bgm":
-			stop_bgm()
-			
-		elif event_type == "change_room":
-			change_room_by_story(event.get("room", ""))
-		
-		elif event_type == "background":
-			change_background(event.get("path", ""))		
-
-		elif event_type == "standing":
-			await show_story_standing(
-				event.get("character", ""),
-				event.get("emotion", "normal"),
-				event.get("position", "center")
-			)
-
-		elif event_type == "story_dialogue":
-			await show_story_dialogue(
-				event.get("name", ""),
-				event.get("text", "")
-			)
-
-		elif event_type == "choices":
-			await run_story_choices(event.get("choices", []))
-
-		elif event_type == "flag":
-			set_flag(event.get("flag", ""))
-
-		else:
-			push_error("알 수 없는 story event type: " + event_type)
-# 스토리 이벤트 선택지 실행 함수
-func run_story_choices(choices):
-	if choices.size() == 0:
+# 스토리 이벤트 1개 실행 함수
+func run_single_story_event(event):
+	if event == null:
 		return
 
-	var selected_index = await show_choices(choices)
-	var selected_choice = choices[selected_index]
+	if typeof(event) != TYPE_DICTIONARY:
+		push_error("스토리 이벤트 데이터가 Dictionary가 아님: " + str(event))
+		return
 
-	if selected_choice.has("events"):
-		await run_story_events(selected_choice["events"])
+	var event_type = event.get("type", "")
+
+	if event_type == "hide_game_ui":
+		hide_game_ui()
+
+	elif event_type == "show_game_ui":
+		show_game_ui()
+
+	elif event_type == "fade":
+		await effect(false, false, true, "")
+			
+	elif event_type == "bgm":
+		play_bgm(event.get("path", ""))
+			
+	elif event_type == "stop_bgm":
+		stop_bgm()
+			
+	elif event_type == "change_room":
+		change_room_by_story(event.get("room", ""))
+		
+	elif event_type == "background":
+		change_background(event.get("path", ""))		
+
+	elif event_type == "standing":
+		await show_story_standing(
+			event.get("character", ""),
+			event.get("emotion", "normal"),
+			event.get("position", "center")
+		)
+
+	elif event_type == "story_dialogue":
+		await show_story_dialogue(
+			event.get("name", ""),
+			event.get("text", "")
+		)
+
+	elif event_type == "choices":
+		await run_story_choices(event.get("choices", []))
+
+	elif event_type == "flag":
+		set_flag(event.get("flag", ""))
+
+	else:
+		push_error("알 수 없는 story event type: " + str(event_type))
+# 스토리 events 배열 실행 함수
+func run_story_events(events):
+	if typeof(events) != TYPE_ARRAY:
+		push_error("스토리 events 데이터가 Array가 아님")
+		return
+
+	for event in events:
+		await run_single_story_event(event)
+# 스토리 이벤트 선택지 실행 함수
+func run_story_choices(choices):
+	if typeof(choices) != TYPE_ARRAY:
+		push_error("스토리 선택지 데이터가 Array가 아님")
+		return
+
+	var valid_choices = []
+
+	for choice in choices:
+		if is_valid_choice_data(choice):
+			valid_choices.append(choice)
+
+	if valid_choices.size() == 0:
+		return
+
+	var selected_index = await show_choices(valid_choices)
+
+	if selected_index < 0:
+		return
+
+	if selected_index >= valid_choices.size():
+		return
+
+	var selected_choice = valid_choices[selected_index]
+	var choice_flag = get_choice_data_flag(selected_choice)
+
+	if choice_flag != "" and has_flag(choice_flag):
+		var already_events = get_choice_data_already_events(selected_choice)
+
+		if already_events.size() > 0:
+			await run_story_events(already_events)
+
+		return
+
+	var choice_events = get_choice_data_events(selected_choice)
+
+	if choice_events.size() > 0:
+		await run_story_events(choice_events)
+
+	if choice_flag != "":
+		set_flag(choice_flag)
 # 스토리 대화 출력 함수
 func show_story_dialogue(speaker, text):
 	set_dialogue_layout("normal")
@@ -2068,38 +2569,50 @@ func show_story_dialogue(speaker, text):
 	$DialogueBox/DialogueText.size = Vector2(1600, 180)
 
 	await show_dialogue(text, "story")
-# 방 입장 시 실행할 스토리 이벤트 확인 함수
+# 방 진입 시 스토리 이벤트 확인 함수
 func check_room_enter_story():
-	var room = rooms[current_room]
+	var room = get_current_room_data()
 
-	if not room.has("enter_story"):
+	if room.is_empty():
 		return
 
-	var enter_story = room["enter_story"]
+	var story_event_id = get_room_enter_story_id(room)
 
-	if not enter_story.has("event"):
+	if story_event_id == "":
+		return
+		
+	if not can_run_room_enter_story(room):
 		return
 
-	var event_id = enter_story["event"]
+	# 이미 실행한 일회성 방 진입 이벤트라면 실행하지 않음
+	var enter_story_flag = "room_enter_story_done_" + str(story_event_id)
 
-	# 특정 플래그가 없을 때만 실행
-	if enter_story.has("required_flag_missing"):
-		var flag_id = enter_story["required_flag_missing"]
+	if has_flag(enter_story_flag):
+		return
 
-		if has_flag(flag_id):
-			return
+	var story_event_data = get_story_event_data_by_id(story_event_id)
 
-	await run_story_event(event_id)
+	if story_event_data.is_empty():
+		return
+
+	if not story_event_data.has("events"):
+		push_error("events가 없는 스토리 이벤트: " + str(story_event_id))
+		return
+
+	set_flag(enter_story_flag)
+
+	await run_story_event(story_event_id)
 # 스토리 이벤트용 방 변경 함수
 func change_room_by_story(room_id):
-	if not rooms.has(room_id):
-		push_error("존재하지 않는 방: " + room_id)
+	if get_room_data_by_id(room_id).is_empty():
 		return
 
-	current_room = room_id
-	update_room()
+	apply_room_change(room_id)
 
-# === 기타 함수 모음 ===
+# ============================================================
+# 기타 함수 모음
+# ============================================================
+
 # 이펙트 효과 함수
 func effect(sound_effect, shake_effect, fade_effect, direction):
 	
@@ -2224,7 +2737,10 @@ func change_background(path):
 
 	background.texture = load(path)
 
-# === 인벤토리 함수 모음 ===
+# ============================================================
+# 인벤토리 함수 모음
+# ============================================================
+
 # 인벤토리 상호작용 함수
 func _on_bag_button_pressed():
 	# 스토리 이벤트 중이면 일반 조작 차단
@@ -3850,10 +4366,12 @@ func make_discarded_item_messages(discarded_items):
 		if item_id == "":
 			continue
 
-		if not items.has(item_id):
+		var item_data = get_item_data_by_id(item_id)
+
+		if item_data.is_empty():
 			continue
 
-		var item_name = items[item_id].get("name", item_id)
+		var item_name = get_item_name(item_id)
 		var count = int(discarded_item.get("count", 1))
 
 		messages.append(item_name + " " + str(count) + "개를 버렸다.")
@@ -4089,14 +4607,7 @@ func update_inventory_portrait_ui():
 	if inventory_portrait == null:
 		return
 
-	if not characters.has("protagonist"):
-		inventory_portrait.texture = null
-		inventory_portrait.visible = false
-		return
-
-	var protagonist_data = characters["protagonist"]
-	var portrait_data = protagonist_data.get("portrait", {})
-	var portrait_path = portrait_data.get("normal", "")
+	var portrait_path = get_character_portrait_path("protagonist", "normal")
 
 	if portrait_path == "":
 		inventory_portrait.texture = null
@@ -4106,7 +4617,10 @@ func update_inventory_portrait_ui():
 	inventory_portrait.texture = load(portrait_path)
 	inventory_portrait.visible = true
 
-# === 아이템 함수 모음 ===
+# ============================================================
+# 아이템 함수 모음
+# ============================================================
+
 # 아이템 보유 여부 확인 함수
 func has_item(item_id):
 	if item_id == "":
@@ -4928,12 +5442,12 @@ func open_context_menu(inventory_item):
 
 	context_menu_item = inventory_item
 
-	var item_id = inventory_item["id"]
+	var item_id = inventory_item.get("id", "")
+	var item_data = get_item_data_by_id(item_id)
 
-	if not items.has(item_id):
+	if item_data.is_empty():
 		return
 
-	var item_data = items[item_id]
 	var item_type = item_data.get("type", "")
 
 	# 기본적으로 전부 숨김
@@ -5007,11 +5521,10 @@ func consume_item_if_needed(inventory_item):
 		return false
 
 	var item_id = inventory_item.get("id", "")
+	var item_data = get_item_data_by_id(item_id)
 
-	if not items.has(item_id):
+	if item_data.is_empty():
 		return false
-
-	var item_data = items[item_id]
 
 	# consumed_on_use가 없거나 false면 소모 안 함
 	if not item_data.get("consumed_on_use", false):
@@ -5044,12 +5557,11 @@ func equip_item(inventory_item):
 	if inventory_item == null:
 		return
 
-	var item_id = inventory_item["id"]
+	var item_id = inventory_item.get("id", "")
+	var item_data = get_item_data_by_id(item_id)
 
-	if not items.has(item_id):
+	if item_data.is_empty():
 		return
-
-	var item_data = items[item_id]
 
 	if item_data.get("type", "") != "weapon":
 		return
@@ -5082,10 +5594,15 @@ func show_equipped_weapon_info():
 	if equipped_weapon != null:
 		item_id = equipped_weapon.get("id", "fist")
 
-	if not items.has(item_id):
+	if get_item_data_by_id(item_id).is_empty():
 		selected_item_image.texture = null
 		selected_item_image.visible = false
-		selected_item_description.text = ""
+
+		if selected_item_description is RichTextLabel:
+			selected_item_description.clear()
+		else:
+			selected_item_description.text = ""
+
 		selected_item_description.visible = false
 		equipped_weapon_text.text = "무기 없음"
 		return
@@ -5124,17 +5641,18 @@ func use_item(inventory_item):
 	if inventory_item == null:
 		return
 
-	var item_id = inventory_item["id"]
+	var item_id = inventory_item.get("id", "")
+	var item_data = get_item_data_by_id(item_id)
 
-	if not items.has(item_id):
+	if item_data.is_empty():
 		return
 
-	var item_data = items[item_id]
 	var item_type = item_data.get("type", "")
 
 	if item_type != "consumable":
 		return
-
+		
+	# 이렇게 해야 최대 체력이 100 이상 올라갔을 때도 소모품 회복이 제대로 적용
 	if item_data.has("heal"):
 		var current_max_hp = get_current_player_max_hp()
 
@@ -5163,7 +5681,10 @@ func _on_use_button_pressed():
 	healing_sound.play()
 	use_item(context_menu_item)
 
-# === 저장 함수 모음 ===
+# ============================================================
+# 저장 함수 모음
+# ============================================================
+
 # 저장할 게임 데이터 생성 함수
 func get_save_data():
 	var equipped_weapon_slot = -1
@@ -5285,7 +5806,10 @@ func restore_equipped_weapon(saved_slot):
 			equipped_weapon = inventory_item
 			return
 
-# === 랜덤 인카운터 함수 모음 ===
+# ============================================================
+# 랜덤 인카운터 함수 모음
+# ============================================================
+
 # 현재 방 랜덤 인카운터 확인 함수
 func check_random_encounter():
 	var room = rooms[current_room]
@@ -5342,62 +5866,122 @@ func check_random_encounter():
 	)
 
 	return true
-# 랜덤 인카운터 적 선택 함수
-func pick_random_encounter_enemy(table_id):
-	if not encounters.has(table_id):
-		push_error("존재하지 않는 인카운터 테이블: " + table_id)
-		return ""
+# 인카운터 데이터가 기본적으로 유효한지 확인하는 함수
+func is_valid_encounter_data(encounter):
+	if encounter == null:
+		return false
 
+	if typeof(encounter) != TYPE_DICTIONARY:
+		return false
+
+	var enemy_id = encounter.get("enemy", "")
+
+	if enemy_id == "":
+		return false
+
+	var enemy_data = get_enemy_data_by_id(enemy_id, false)
+
+	if enemy_data.is_empty():
+		return false
+
+	return true
+# 인카운터 후보가 현재 플래그 조건에 맞는지 확인하는 함수
+func can_use_encounter_candidate(encounter):
+	if not is_valid_encounter_data(encounter):
+		return false
+
+	var enemy_id = encounter.get("enemy", "")
+	var enemy_data = get_enemy_data_by_id(enemy_id, false)
+
+	if enemy_data.is_empty():
+		return false
+
+	var required_flag = str(encounter.get("required_flag", ""))
+
+	if required_flag != "" and not has_flag(required_flag):
+		return false
+
+	var missing_flag = str(encounter.get("missing_flag", ""))
+
+	if missing_flag != "" and has_flag(missing_flag):
+		return false
+
+	var skip_flag = str(enemy_data.get("skip_if_flag", ""))
+
+	if skip_flag != "" and has_flag(skip_flag):
+		return false
+
+	return true
+# 인카운터 테이블에서 현재 사용 가능한 후보 목록 생성 함수
+func get_available_encounter_candidates(encounter_table):
 	var candidates = []
 
-	for encounter in encounters[table_id]:
-		var enemy_id = encounter.get("enemy", "")
+	if typeof(encounter_table) != TYPE_ARRAY:
+		return candidates
 
-		if enemy_id == "":
-			continue
+	for encounter in encounter_table:
+		if can_use_encounter_candidate(encounter):
+			candidates.append(encounter)
 
-		if not enemies.has(enemy_id):
-			continue
+	return candidates
+# 인카운터 후보의 가중치 가져오기 함수
+func get_encounter_weight(encounter):
+	if encounter == null:
+		return 0
 
-		var required_flag = encounter.get("required_flag", "")
-		if required_flag != "" and not has_flag(required_flag):
-			continue
+	if typeof(encounter) != TYPE_DICTIONARY:
+		return 0
 
-		var missing_flag = encounter.get("missing_flag", "")
-		if missing_flag != "" and has_flag(missing_flag):
-			continue
+	var weight = int(encounter.get("weight", 1))
 
-		var enemy_data = enemies[enemy_id]
-		var skip_flag = enemy_data.get("skip_if_flag", "")
-		if skip_flag != "" and has_flag(skip_flag):
-			continue
+	if weight < 0:
+		weight = 0
 
-		candidates.append(encounter)
+	return weight
+# 후보 목록에서 weight 기준으로 인카운터 하나 선택하는 함수
+func pick_weighted_encounter(candidates):
+	if typeof(candidates) != TYPE_ARRAY:
+		return {}
+
+	if candidates.size() == 0:
+		return {}
+
+	var total_weight = 0
+
+	for encounter in candidates:
+		total_weight += get_encounter_weight(encounter)
+
+	if total_weight <= 0:
+		return {}
+
+	var roll = randi_range(1, total_weight)
+	var current_weight = 0
+
+	for encounter in candidates:
+		current_weight += get_encounter_weight(encounter)
+
+		if roll <= current_weight:
+			return encounter
+
+	return {}
+# 랜덤 인카운터 테이블에서 적 하나 선택하는 함수
+func pick_random_encounter_enemy(table_id):
+	var encounter_table = get_encounter_table_by_id(table_id)
+
+	if encounter_table.is_empty():
+		return ""
+
+	var candidates = get_available_encounter_candidates(encounter_table)
 
 	if candidates.size() == 0:
 		return ""
 
-	return pick_weighted_encounter(candidates)
-# 인카운터 가중치 선택 함수
-func pick_weighted_encounter(candidates):
-	var total_weight = 0
+	var selected_encounter = pick_weighted_encounter(candidates)
 
-	for encounter in candidates:
-		total_weight += int(encounter.get("weight", 100))
+	if selected_encounter.is_empty():
+		return ""
 
-	if total_weight <= 0:
-		return candidates.pick_random().get("enemy", "")
-
-	var roll = randi_range(1, total_weight)
-	var current = 0
-
-	for encounter in candidates:
-		current += int(encounter.get("weight", 100))
-
-		if roll <= current:
-			return encounter.get("enemy", "")
-
-	return candidates[0].get("enemy", "")
+	return str(selected_encounter.get("enemy", ""))
 # 인카운터 발생 텍스트 가져오기 함수
 func get_random_encounter_start_text(event_table_id):
 	if event_table_id == "":
@@ -5491,3 +6075,23 @@ func stop_random_encounter_effect():
 
 	if encounter_heartbeat_sound != null:
 		encounter_heartbeat_sound.stop()
+# encounter table_id 기준으로 인카운터 테이블 가져오기 함수
+func get_encounter_table_by_id(table_id, show_error = true):
+	if table_id == "":
+		if show_error:
+			push_error("인카운터 테이블 ID가 비어있음")
+		return []
+
+	if not encounters.has(table_id):
+		if show_error:
+			push_error("존재하지 않는 인카운터 테이블: " + str(table_id))
+		return []
+
+	var encounter_table = encounters[table_id]
+
+	if typeof(encounter_table) != TYPE_ARRAY:
+		if show_error:
+			push_error("인카운터 테이블 데이터가 Array가 아님: " + str(table_id))
+		return []
+
+	return encounter_table
