@@ -141,15 +141,15 @@
 				"max": 3
 			},
 			{
-				"item": "cutter_knife",
+				"item": "razor",
 				"chance": 100,
 				"min": 1,
 				"max": 1,
-				"once_flag": "got_cutter_knife_from_candle_student"
+				"once_flag": "got_razor_from_candle_student"
 			}
 		],
 		"defeat_flags": [
-			"got_cutter_knife_from_candle_student"
+			"got_razor_from_candle_student"
 		]
 	},
 	"combined_candle_students_phase_01": {

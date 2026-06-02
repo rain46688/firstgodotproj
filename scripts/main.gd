@@ -146,12 +146,16 @@ var arrange_selected_item_text_scroll = null
 # 디버그 관련 상수 변수 모음
 # false
 # true
-const DEBUG_ADD_START_ITEMS = false
-const DEBUG_OPEN_PENDING_LOOT_TEST = false
+# consumable_test
+# my_test
+# combined_candle_studen ts_phase_01
+# candle_student
+const DEBUG_ADD_START_ITEMS = true
+const DEBUG_OPEN_PENDING_LOOT_TEST = true
 const DEBUG_START_BATTLE_TEST = false
-const DEBUG_TEST_BATTLE_ENEMY_ID = "combined_candle_studen ts_phase_01"
+const DEBUG_TEST_BATTLE_ENEMY_ID = "candle_student"
 const DEBUG_BATTLE_START_DELAY = 1.0
-const DEBUG_START_ITEM_PRESET = "my_test"
+const DEBUG_START_ITEM_PRESET = "consumable_test"
 
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
@@ -166,6 +170,9 @@ const STAT_GOOD_COLOR = "#55ff77"
 const STAT_BAD_COLOR = "#ff5555"
 const STAT_INFO_COLOR = "#88ccff"
 
+# ============================================================
+# 게임 시작 관련 함수 모음
+# ============================================================
 
 # 프레임 마다 실행 함수
 func _process(delta):
@@ -386,7 +393,7 @@ func _ready():
 		return
 
 	# 세이브 파일 로드 테스트
-	load_game(1)
+	#load_game(1)
 	
 	# 디버그 아이템 테스트
 	await add_debug_start_items()
@@ -445,6 +452,11 @@ func load_startup_game_data():
 			return false
 
 	return true
+
+# ============================================================
+# 전투 관련 함수 모음
+# ============================================================
+
 # 전투 시작 함수
 func start_battle(enemy_id, first_turn = ""):
 	if not enemies.has(enemy_id):
@@ -520,6 +532,10 @@ func end_battle(result_data):
 
 	print("전투 종료 결과: " + str(result_data.get("result", "")))
 
+# ============================================================
+# 디버그 관련 함수 모음
+# ============================================================
+
 # 개발 테스트용 시작 아이템 추가 함수
 func add_debug_start_items():
 	if not DEBUG_ADD_START_ITEMS:
@@ -559,7 +575,7 @@ func get_debug_start_item_ids():
 			return [
 				"holy_sword",
 				"beverage_a",
-				"beverage_b"
+				"beverage_a"
 			]
 
 		"relic_basic":
@@ -610,8 +626,21 @@ func get_debug_start_item_ids():
 				"beverage_a",
 				"beverage_a",
 				"beverage_a",
-				"beverage_b",
-				"lung_model_fetish"
+				"beverage_a",
+				"beverage_a",
+				"beverage_a",
+				"tranquilizer",
+				"tranquilizer",
+				"tranquilizer",
+				"tranquilizer",
+				"tranquilizer",
+				"lung_model_fetish",
+				"holy_grail_relic",
+				"music_box_relic",
+				"first_aid_box_fetish",
+				"cross_relic",
+				"razor",
+				"cutter_knife"
 			]
 
 		"weapon_count_test":
@@ -645,7 +674,14 @@ func get_debug_start_item_ids():
 			push_warning("알 수 없는 DEBUG_START_ITEM_PRESET: " + str(DEBUG_START_ITEM_PRESET))
 			return []
 
-# === 성물/주물 관련 함수 모음 === 
+# ============================================================
+# 성물/주물 관련 함수 모음
+# ============================================================
+
+# ------------------------------------------------------------
+# 성물/주물 능력치 계산
+# ------------------------------------------------------------
+
 # 현재 장착 무기 기준 기본/적용 능력치 계산 함수
 func get_player_effective_stats():
 	var weapon_id = "fist"
@@ -871,57 +907,236 @@ func apply_relic_and_fetish_effects(stats):
 				add_applied_relic_to_stats(stats, item_id)
 			_:
 				pass
-# 인벤토리 아이템이 차지하는 슬롯 목록 반환 함수
-func get_inventory_item_occupied_slots(inventory_item):
-	var occupied_slots = []
+# 적용된 성물/주물 이름 저장 함수
+func add_applied_relic_to_stats(stats, item_id):
+	if not items.has(item_id):
+		return
 
+	if not stats.has("applied_relic_ids"):
+		stats["applied_relic_ids"] = []
+
+	if not stats.has("applied_relic_names"):
+		stats["applied_relic_names"] = []
+
+	if stats["applied_relic_ids"].has(item_id):
+		return
+
+	stats["applied_relic_ids"].append(item_id)
+	stats["applied_relic_names"].append(items[item_id].get("name", item_id))
+# 적용 능력치 최종 제한값 보정 함수
+func clamp_player_effective_stats(stats):
+	stats["max_hp"] = max(1, int(stats.get("max_hp", player_max_hp)))
+	stats["attack_min"] = max(1, int(stats.get("attack_min", 1)))
+	stats["attack_max"] = max(1, int(stats.get("attack_max", stats["attack_min"])))
+
+	# 최소 공격력이 최대 공격력보다 커지면 최대 공격력을 최소 공격력에 맞춤
+	if int(stats["attack_min"]) > int(stats["attack_max"]):
+		stats["attack_max"] = int(stats["attack_min"])
+
+	stats["critical_chance"] = clamp(float(stats.get("critical_chance", 0.01)), 0.01, 1.0)
+	stats["critical_multiplier"] = max(1.1, float(stats.get("critical_multiplier", 1.1)))
+	stats["parry_window"] = max(0.01, float(stats.get("parry_window", 0.1)))
+	stats["attack_swing_speed"] = max(0.01, float(stats.get("attack_swing_speed", 3.0)))
+	stats["defense_move_speed"] = max(1.0, float(stats.get("defense_move_speed", 500.0)))
+	stats["damage_taken_multiplier"] = max(0.01, float(stats.get("damage_taken_multiplier", 1.0)))
+
+	if not stats.has("applied_relic_ids"):
+		stats["applied_relic_ids"] = []
+
+	if not stats.has("applied_relic_names"):
+		stats["applied_relic_names"] = []
+
+	return stats
+# 현재 성물/주물 효과가 적용된 최대 체력 반환 함수
+func get_current_player_max_hp():
+	var effective_stats = get_player_effective_stats()
+	return int(effective_stats.get("max_hp", player_max_hp))
+# 현재 체력이 적용 최대 체력을 넘지 않도록 보정하는 함수
+func clamp_player_hp_to_current_max():
+	var current_max_hp = get_current_player_max_hp()
+
+	if player_hp > current_max_hp:
+		player_hp = current_max_hp
+
+	if player_hp < 0:
+		player_hp = 0
+
+	return current_max_hp
+
+# ------------------------------------------------------------
+# 성물/주물 조건 계산
+# ------------------------------------------------------------
+
+# 인벤토리 안의 소모품 총개수 계산 함수
+func get_inventory_consumable_total_count():
+	var total_count = 0
+
+	for inventory_item in inventory:
+		if inventory_item == null:
+			continue
+
+		if typeof(inventory_item) != TYPE_DICTIONARY:
+			continue
+
+		var item_id = inventory_item.get("id", "")
+		var item_data = get_item_data_by_id(item_id)
+
+		if item_data.is_empty():
+			continue
+
+		if item_data.get("type", "") != "consumable":
+			continue
+
+		total_count += int(inventory_item.get("count", 1))
+
+	return total_count
+# 인벤토리 안의 무기 타입 아이템 개수 계산 함수
+func get_inventory_weapon_total_count():
+	var total_count = 0
+
+	for inventory_item in inventory:
+		if inventory_item == null:
+			continue
+
+		if typeof(inventory_item) != TYPE_DICTIONARY:
+			continue
+
+		var item_id = inventory_item.get("id", "")
+		var item_data = get_item_data_by_id(item_id)
+
+		if item_data.is_empty():
+			continue
+
+		if item_data.get("type", "") != "weapon":
+			continue
+
+		total_count += int(inventory_item.get("count", 1))
+
+	return total_count
+# 현재 인벤토리에 빈칸이 있는지 확인하는 함수
+func has_empty_inventory_slot():
+	var used_slots = []
+
+	for inventory_item in inventory:
+		var occupied_slots = get_inventory_item_occupied_slots(inventory_item)
+
+		for slot in occupied_slots:
+			if not used_slots.has(slot):
+				used_slots.append(slot)
+
+	var total_slots = inventory_cols * inventory_rows
+
+	return used_slots.size() < total_slots
+# 인벤토리가 꽉 찼는지 확인하는 함수
+func is_inventory_full():
+	return not has_empty_inventory_slot()
+
+# ------------------------------------------------------------
+# 인벤토리 슬롯 / 장착 무기 인접 판정
+# ------------------------------------------------------------
+
+# item_id 기준으로 아이템 데이터 반환 함수
+func get_item_data_by_id(item_id):
+	if item_id == "":
+		return {}
+
+	if not items.has(item_id):
+		return {}
+
+	return items[item_id]
+# item_id 기준으로 아이템 이미지 경로 반환 함수
+func get_item_image_path_by_id(item_id):
+	var item_data = get_item_data_by_id(item_id)
+
+	if item_data.is_empty():
+		return ""
+
+	return item_data.get("image", "")
+# inventory_item 기준으로 아이템 이미지 경로 반환 함수
+func get_item_image_path_from_inventory_item(inventory_item):
 	if inventory_item == null:
-		return occupied_slots
+		return ""
 
-	if not inventory_item.has("slot"):
-		return occupied_slots
+	if typeof(inventory_item) != TYPE_DICTIONARY:
+		return ""
 
 	var item_id = inventory_item.get("id", "")
 
-	if item_id == "":
-		return occupied_slots
+	return get_item_image_path_by_id(item_id)
+# item_id 기준으로 items.json의 인벤토리 크기 반환 함수
+# 앞으로 아이템 크기가 필요하면 직접 items[item_id]["width"]를 읽지 않고 이 함수를 사용
+func get_item_grid_size_by_id(item_id):
+	var item_data = get_item_data_by_id(item_id)
 
-	if not items.has(item_id):
-		return occupied_slots
+	if item_data.is_empty():
+		return Vector2i(0, 0)
 
-	var item_data = items[item_id]
 	var item_width = int(item_data.get("width", 1))
 	var item_height = int(item_data.get("height", 1))
-	var start_slot = int(inventory_item.get("slot", -1))
+
+	if item_width < 1:
+		item_width = 1
+
+	if item_height < 1:
+		item_height = 1
+
+	return Vector2i(item_width, item_height)
+# inventory_item 기준으로 아이템 인벤토리 크기 반환 함수
+# 앞으로 아이템 크기가 필요하면 직접 items[item_id]["width"]를 읽지 않고 이 함수를 사용
+func get_inventory_item_grid_size(inventory_item):
+	if inventory_item == null:
+		return Vector2i(0, 0)
+
+	if typeof(inventory_item) != TYPE_DICTIONARY:
+		return Vector2i(0, 0)
+
+	var item_id = inventory_item.get("id", "")
+
+	return get_item_grid_size_by_id(item_id)
+# 시작 슬롯, 크기, 가로 칸 수를 기준으로 차지 슬롯 목록 생성 함수
+func get_grid_slots_from_size(start_slot, item_width, item_height, cols = -1):
+	if cols <= 0:
+		cols = inventory_cols
 
 	if start_slot < 0:
-		return occupied_slots
+		return []
 
-	var start_col = start_slot % inventory_cols
-	var start_row = floori(start_slot / float(inventory_cols))
+	var start_col = int(start_slot) % int(cols)
+	var start_row = floori(int(start_slot) / float(cols))
 
-	for y in range(item_height):
-		for x in range(item_width):
-			var col = start_col + x
-			var row = start_row + y
+	var slots = []
 
-			if col < 0:
-				continue
+	for y in range(int(item_height)):
+		for x in range(int(item_width)):
+			var slot = (start_row + y) * int(cols) + (start_col + x)
+			slots.append(slot)
 
-			if col >= inventory_cols:
-				continue
+	return slots
+# 인벤토리 아이템이 차지하는 슬롯 목록 반환 함수
+func get_inventory_item_occupied_slots(inventory_item):
+	if inventory_item == null:
+		return []
 
-			if row < 0:
-				continue
+	if typeof(inventory_item) != TYPE_DICTIONARY:
+		return []
 
-			if row >= inventory_rows:
-				continue
+	if not inventory_item.has("slot"):
+		return []
 
-			var slot = row * inventory_cols + col
-			occupied_slots.append(slot)
+	var item_size = get_inventory_item_grid_size(inventory_item)
 
-	return occupied_slots
-# 장착 무기 인벤토리 아이템 찾기 함수s
+	if item_size.x <= 0 or item_size.y <= 0:
+		return []
+
+	var start_slot = int(inventory_item.get("slot", -1))
+
+	return get_grid_slots_from_size(
+		start_slot,
+		item_size.x,
+		item_size.y,
+		inventory_cols
+	)
+# 장착 무기 인벤토리 아이템 찾기 함수
 func get_equipped_weapon_inventory_item():
 	if equipped_weapon == null:
 		return null
@@ -996,107 +1211,11 @@ func is_inventory_item_adjacent_to_equipped_weapon(inventory_item):
 			return true
 
 	return false
-# 적용된 성물/주물 이름 저장 함수
-func add_applied_relic_to_stats(stats, item_id):
-	if not items.has(item_id):
-		return
 
-	if not stats.has("applied_relic_ids"):
-		stats["applied_relic_ids"] = []
+# ============================================================
+# 로드 함수 모음
+# ============================================================
 
-	if not stats.has("applied_relic_names"):
-		stats["applied_relic_names"] = []
-
-	if stats["applied_relic_ids"].has(item_id):
-		return
-
-	stats["applied_relic_ids"].append(item_id)
-	stats["applied_relic_names"].append(items[item_id].get("name", item_id))
-# 적용 능력치 최종 제한값 보정 함수
-func clamp_player_effective_stats(stats):
-	stats["max_hp"] = max(1, int(stats.get("max_hp", player_max_hp)))
-	stats["attack_min"] = max(1, int(stats.get("attack_min", 1)))
-	stats["attack_max"] = max(1, int(stats.get("attack_max", stats["attack_min"])))
-
-	# 최소 공격력이 최대 공격력보다 커지면 최대 공격력을 최소 공격력에 맞춤
-	if int(stats["attack_min"]) > int(stats["attack_max"]):
-		stats["attack_max"] = int(stats["attack_min"])
-
-	stats["critical_chance"] = clamp(float(stats.get("critical_chance", 0.01)), 0.01, 1.0)
-	stats["critical_multiplier"] = max(1.1, float(stats.get("critical_multiplier", 1.1)))
-	stats["parry_window"] = max(0.01, float(stats.get("parry_window", 0.1)))
-	stats["attack_swing_speed"] = max(0.01, float(stats.get("attack_swing_speed", 3.0)))
-	stats["defense_move_speed"] = max(1.0, float(stats.get("defense_move_speed", 500.0)))
-	stats["damage_taken_multiplier"] = max(0.01, float(stats.get("damage_taken_multiplier", 1.0)))
-
-	if not stats.has("applied_relic_ids"):
-		stats["applied_relic_ids"] = []
-
-	if not stats.has("applied_relic_names"):
-		stats["applied_relic_names"] = []
-
-	return stats
-# 인벤토리 안의 소모품 총개수 계산 함수
-func get_inventory_consumable_total_count():
-	var total_count = 0
-
-	for inventory_item in inventory:
-		var item_id = inventory_item.get("id", "")
-
-		if item_id == "":
-			continue
-
-		if not items.has(item_id):
-			continue
-
-		var item_data = items[item_id]
-
-		if item_data.get("type", "") != "consumable":
-			continue
-
-		total_count += int(inventory_item.get("count", 1))
-
-	return total_count
-# 인벤토리 안의 무기 타입 아이템 개수 계산 함수
-func get_inventory_weapon_total_count():
-	var total_count = 0
-
-	for inventory_item in inventory:
-		var item_id = inventory_item.get("id", "")
-
-		if item_id == "":
-			continue
-
-		if not items.has(item_id):
-			continue
-
-		var item_data = items[item_id]
-
-		if item_data.get("type", "") != "weapon":
-			continue
-
-		total_count += int(inventory_item.get("count", 1))
-
-	return total_count
-# 현재 인벤토리에 빈칸이 있는지 확인하는 함수
-func has_empty_inventory_slot():
-	var used_slots = []
-
-	for inventory_item in inventory:
-		var occupied_slots = get_inventory_item_occupied_slots(inventory_item)
-
-		for slot in occupied_slots:
-			if not used_slots.has(slot):
-				used_slots.append(slot)
-
-	var total_slots = inventory_cols * inventory_rows
-
-	return used_slots.size() < total_slots
-# 인벤토리가 꽉 찼는지 확인하는 함수
-func is_inventory_full():
-	return not has_empty_inventory_slot()
-
-# === 로드 함수 모음 ===
 # Dictionary 구조 JSON 파일 공통 로드 함수
 func load_json_dictionary(path, file_label):
 	if not FileAccess.file_exists(path):
@@ -2074,21 +2193,6 @@ func effect(sound_effect, shake_effect, fade_effect, direction):
 		)
 	
 	await get_tree().create_timer(0.3).timeout
-# 현재 성물/주물 효과가 적용된 최대 체력 반환 함수
-func get_current_player_max_hp():
-	var effective_stats = get_player_effective_stats()
-	return int(effective_stats.get("max_hp", player_max_hp))
-# 현재 체력이 적용 최대 체력을 넘지 않도록 보정하는 함수
-func clamp_player_hp_to_current_max():
-	var current_max_hp = get_current_player_max_hp()
-
-	if player_hp > current_max_hp:
-		player_hp = current_max_hp
-
-	if player_hp < 0:
-		player_hp = 0
-
-	return current_max_hp
 # 플레이어 체력 UI 갱신 함수
 func update_player_status_ui():
 	var display_max_hp = clamp_player_hp_to_current_max()
@@ -2187,25 +2291,32 @@ func update_inventory_ui():
 	# 현재 가진 아이템을 슬롯 위치 기준으로 표시
 	for inventory_item in inventory:
 
-		var item_id = inventory_item["id"]
-		var start_slot = int(inventory_item["slot"])
-
-		if not items.has(item_id):
+		if inventory_item == null:
 			continue
 
-		var item_data = items[item_id]
-
-		if not item_data.has("image"):
+		if typeof(inventory_item) != TYPE_DICTIONARY:
 			continue
 
-		var item_width = 1
-		var item_height = 1
+		if not inventory_item.has("slot"):
+			continue
 
-		if item_data.has("width"):
-			item_width = item_data["width"]
+		var image_path = get_item_image_path_from_inventory_item(inventory_item)
 
-		if item_data.has("height"):
-			item_height = item_data["height"]
+		if image_path == "":
+			continue
+
+		var item_size = get_inventory_item_grid_size(inventory_item)
+
+		if item_size.x <= 0 or item_size.y <= 0:
+			continue
+
+		var start_slot = int(inventory_item.get("slot", -1))
+
+		if start_slot < 0:
+			continue
+
+		var item_width = item_size.x
+		var item_height = item_size.y
 
 		var col = start_slot % inventory_cols
 		var row = floori(start_slot / float(inventory_cols))
@@ -2213,7 +2324,7 @@ func update_inventory_ui():
 		var item_button = TextureButton.new()
 		# 아이템 버튼이 Space 입력을 가져가지 않게 함
 		item_button.focus_mode = Control.FOCUS_NONE
-		item_button.texture_normal = load(item_data["image"])
+		item_button.texture_normal = load(image_path)
 		item_button.ignore_texture_size = true
 		item_button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 
@@ -2329,74 +2440,10 @@ func select_inventory_item(inventory_item):
 
 	show_selected_item_info(inventory_item)
 	update_inventory_ui()
-# 기존 인벤토리 특정 슬롯에 있는 아이템 index 찾기 함수
-func get_inventory_item_index_at_slot(slot):
-	if slot < 0:
-		return -1
-
-	var cols = inventory_cols
-
-	for i in range(inventory.size()):
-		var inventory_item = inventory[i]
-
-		if inventory_item == null:
-			continue
-
-		if typeof(inventory_item) != TYPE_DICTIONARY:
-			continue
-
-		if not inventory_item.has("slot"):
-			continue
-
-		var item_id = inventory_item.get("id", "")
-
-		if item_id == "":
-			continue
-
-		if not items.has(item_id):
-			continue
-
-		var item_data = items[item_id]
-		var item_width = int(item_data.get("width", 1))
-		var item_height = int(item_data.get("height", 1))
-		var start_slot = int(inventory_item.get("slot", 0))
-
-		var start_col = start_slot % cols
-		var start_row = floori(start_slot / float(cols))
-
-		for y in range(item_height):
-			for x in range(item_width):
-				var check_col = start_col + x
-				var check_row = start_row + y
-				var check_slot = check_row * cols + check_col
-
-				if check_slot == slot:
-					return i
-
-	return -1
 # 아이템이 차지하는 슬롯 목록 반환 함수
+# 기존 인벤토리 코드 호환용 래퍼
 func get_occupied_slots(inventory_item):
-	var item_id = inventory_item["id"]
-
-	if not items.has(item_id):
-		return []
-
-	var item_data = items[item_id]
-	var item_width = item_data.get("width", 1)
-	var item_height = item_data.get("height", 1)
-
-	var start_slot = int(inventory_item["slot"])
-	var start_col = start_slot % inventory_cols
-	var start_row = floori(start_slot / float(inventory_cols))
-
-	var occupied = []
-
-	for y in range(item_height):
-		for x in range(item_width):
-			var slot = (start_row + y) * inventory_cols + (start_col + x)
-			occupied.append(slot)
-
-	return occupied
+	return get_inventory_item_occupied_slots(inventory_item)
 # 아이템 드래그 시작 함수
 func start_drag_item(inventory_item, item_button):
 	is_dragging_item = true
@@ -2416,21 +2463,21 @@ func stop_drag_item():
 		slot_highlight.visible = false
 		return
 
-	var item_id = dragged_item["id"]
+	var item_size = get_inventory_item_grid_size(dragged_item)
 
-	if not items.has(item_id):
-		dragged_item_button.position = dragged_item_original_position
-		dragged_item_button.z_index = 0
+	if item_size.x <= 0 or item_size.y <= 0:
+		if dragged_item_button != null:
+			dragged_item_button.position = dragged_item_original_position
+			dragged_item_button.z_index = 0
+
 		is_dragging_item = false
 		dragged_item = null
 		dragged_item_button = null
 		slot_highlight.visible = false
 		return
 
-	var item_data = items[item_id]
-
-	var item_width = int(item_data.get("width", 1))
-	var item_height = int(item_data.get("height", 1))
+	var item_width = item_size.x
+	var item_height = item_size.y
 
 	var target_slot = get_slot_from_mouse_position()
 
@@ -2504,39 +2551,14 @@ func stop_drag_item():
 	dragged_item = null
 	dragged_item_button = null
 	slot_highlight.visible = false
-# 특정 슬롯을 차지하고 있는 인벤토리 아이템 찾기 함수, 사용 하지 않아서 리팩토링시 삭제 예정
-func find_inventory_item_at_slot(slot, ignored_item = null):
-	for item in inventory:
-		if item == ignored_item:
-			continue
-
-		var occupied_slots = get_occupied_slots(item)
-
-		if occupied_slots.has(slot):
-			return item
-
-	return null
-# 기존 인벤토리 아이템이 1x1 크기인지 확인하는 함수
+# 인벤토리 아이템이 1x1 크기인지 확인하는 함수
 func is_inventory_item_1x1(inventory_item):
-	if inventory_item == null:
+	var item_size = get_inventory_item_grid_size(inventory_item)
+
+	if item_size.x <= 0 or item_size.y <= 0:
 		return false
 
-	if typeof(inventory_item) != TYPE_DICTIONARY:
-		return false
-
-	var item_id = inventory_item.get("id", "")
-
-	if item_id == "":
-		return false
-
-	if not items.has(item_id):
-		return false
-
-	var item_data = items[item_id]
-	var item_width = int(item_data.get("width", 1))
-	var item_height = int(item_data.get("height", 1))
-
-	return item_width == 1 and item_height == 1
+	return item_size.x == 1 and item_size.y == 1
 # 기존 인벤토리에서 1x1 아이템끼리 자리 교환 가능한지 확인하는 함수
 func can_swap_inventory_1x1_items(source_item, target_slot):
 	if source_item == null:
@@ -2627,15 +2649,15 @@ func can_merge_inventory_stack_item(source_item, target_slot):
 	if source_id == "":
 		return false
 
-	if not items.has(source_id):
-		return false
+	var item_data = get_item_data_by_id(source_id)
 
-	var item_data = items[source_id]
+	if item_data.is_empty():
+		return false
 
 	if not item_data.get("stackable", false):
 		return false
 
-	var max_stack = int(item_data.get("max_stack", 1))
+	var max_stack = max(int(item_data.get("max_stack", 1)), 1)
 
 	if max_stack <= 1:
 		return false
@@ -2681,11 +2703,12 @@ func try_merge_inventory_stack_item(source_item, target_slot):
 	if source_id == "":
 		return false
 
-	if not items.has(source_id):
+	var item_data = get_item_data_by_id(source_id)
+
+	if item_data.is_empty():
 		return false
 
-	var item_data = items[source_id]
-	var max_stack = int(item_data.get("max_stack", 1))
+	var max_stack = max(int(item_data.get("max_stack", 1)), 1)
 
 	var target_index = find_inventory_item_index_at_slot(target_slot, source_item)
 
@@ -3069,29 +3092,38 @@ func update_inventory_arrange_ui():
 	update_arrange_selected_focus()
 # 인벤토리 정리 화면 아이템 아이콘 생성 함수
 func create_arrange_item_icon(inventory_item, parent_node, grid_position, grid_cols, source):
-	var item_id = inventory_item.get("id", "")
-
-	if item_id == "":
+	if inventory_item == null:
 		return
 
-	if not items.has(item_id):
+	if typeof(inventory_item) != TYPE_DICTIONARY:
 		return
 
 	if not inventory_item.has("slot"):
 		return
 
-	var item_data = items[item_id]
+	var item_size = get_inventory_item_grid_size(inventory_item)
+
+	if item_size.x <= 0 or item_size.y <= 0:
+		return
+
+	var image_path = get_item_image_path_from_inventory_item(inventory_item)
+
+	if image_path == "":
+		return
 
 	var slot = int(inventory_item["slot"])
-	var item_width = int(item_data.get("width", 1))
-	var item_height = int(item_data.get("height", 1))
+	var item_width = item_size.x
+	var item_height = item_size.y
 
 	var col = slot % grid_cols
 	var row = floori(slot / float(grid_cols))
 
 	var icon = TextureButton.new()
 	icon.focus_mode = Control.FOCUS_NONE
-	icon.texture_normal = load(item_data.get("image", ""))
+
+	if image_path != "":
+		icon.texture_normal = load(image_path)
+
 	icon.ignore_texture_size = true
 	icon.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 
@@ -3303,17 +3335,19 @@ func get_arrange_slot_from_global_position(global_pos, source):
 	return row * cols + col
 # 인벤토리 정리 화면 아이템 이동 함수
 func move_arrange_item_to_grid(item, from_source, to_source, target_slot):
-	var item_id = item.get("id", "")
-
-	if item_id == "":
+	if item == null:
 		return false
 
-	if not items.has(item_id):
+	if typeof(item) != TYPE_DICTIONARY:
 		return false
 
-	var item_data = items[item_id]
-	var item_width = int(item_data.get("width", 1))
-	var item_height = int(item_data.get("height", 1))
+	var item_size = get_inventory_item_grid_size(item)
+
+	if item_size.x <= 0 or item_size.y <= 0:
+		return false
+
+	var item_width = item_size.x
+	var item_height = item_size.y
 
 	var target_list = get_arrange_item_list(to_source)
 	var target_cols = get_arrange_grid_cols(to_source)
@@ -3373,45 +3407,55 @@ func remove_arrange_item_from_source(item, source):
 		target_list.erase(item)
 # 인벤토리 정리 화면 아이템이 차지하는 슬롯 목록 반환 함수
 func get_arrange_occupied_slots(item, cols):
-	var item_id = item.get("id", "")
-
-	if item_id == "":
+	if item == null:
 		return []
 
-	if not items.has(item_id):
+	if typeof(item) != TYPE_DICTIONARY:
 		return []
 
-	var item_data = items[item_id]
-	var item_width = int(item_data.get("width", 1))
-	var item_height = int(item_data.get("height", 1))
-	var start_slot = int(item.get("slot", 0))
+	if not item.has("slot"):
+		return []
 
-	var start_col = start_slot % cols
-	var start_row = floori(start_slot / float(cols))
+	var item_size = get_inventory_item_grid_size(item)
 
-	var occupied = []
+	if item_size.x <= 0 or item_size.y <= 0:
+		return []
 
-	for y in range(item_height):
-		for x in range(item_width):
-			occupied.append((start_row + y) * cols + (start_col + x))
+	var start_slot = int(item.get("slot", -1))
 
-	return occupied
+	return get_grid_slots_from_size(
+		start_slot,
+		item_size.x,
+		item_size.y,
+		cols
+	)
 # 인벤토리 정리 화면 특정 위치에 아이템 배치 가능 여부 확인 함수
 func can_place_item_at_arrange_grid(item_list, start_slot, item_width, item_height, cols, rows, ignore_item = null):
-	var start_col = start_slot % cols
-	var start_row = floori(start_slot / float(cols))
-
-	if start_col + item_width > cols:
+	if start_slot < 0:
 		return false
 
-	if start_row + item_height > rows:
+	if cols <= 0:
 		return false
 
-	var target_slots = []
+	if rows <= 0:
+		return false
 
-	for y in range(item_height):
-		for x in range(item_width):
-			target_slots.append((start_row + y) * cols + (start_col + x))
+	var start_col = int(start_slot) % int(cols)
+	var start_row = floori(int(start_slot) / float(cols))
+
+	# 오른쪽/아래로 정리 가방 범위를 넘으면 배치 불가
+	if start_col + int(item_width) > int(cols):
+		return false
+
+	if start_row + int(item_height) > int(rows):
+		return false
+
+	var target_slots = get_grid_slots_from_size(
+		start_slot,
+		item_width,
+		item_height,
+		cols
+	)
 
 	for other_item in item_list:
 		if other_item == ignore_item:
@@ -3496,21 +3540,35 @@ func try_merge_arrange_stack_item(source_item, from_source, to_source, target_sl
 	if typeof(source_item) != TYPE_DICTIONARY:
 		return false
 
+	if from_source == "":
+		return false
+
+	if to_source == "":
+		return false
+
+	if target_slot == -1:
+		return false
+
 	var source_item_id = source_item.get("id", "")
 
 	if source_item_id == "":
 		return false
 
-	if not items.has(source_item_id):
-		return false
+	var item_data = get_item_data_by_id(source_item_id)
 
-	var item_data = items[source_item_id]
+	if item_data.is_empty():
+		return false
 
 	if not item_data.get("stackable", false):
 		return false
 
+	var max_stack = max(int(item_data.get("max_stack", 1)), 1)
+
+	if max_stack <= 1:
+		return false
+
 	var target_list = get_arrange_item_list(to_source)
-	var target_index = get_arrange_item_index_at_slot(to_source, target_slot)
+	var target_index = get_arrange_item_index_at_slot(to_source, target_slot, source_item)
 
 	# 타겟 슬롯에 아이템이 없으면 병합이 아니라 일반 이동 대상
 	if target_index < 0:
@@ -3531,12 +3589,9 @@ func try_merge_arrange_stack_item(source_item, from_source, to_source, target_sl
 	if target_item == source_item:
 		return false
 
-	var target_item_id = target_item.get("id", "")
-
-	if target_item_id != source_item_id:
+	if target_item.get("id", "") != source_item_id:
 		return false
 
-	var max_stack = int(item_data.get("max_stack", 1))
 	var source_count = int(source_item.get("count", 1))
 	var target_count = int(target_item.get("count", 1))
 
@@ -3561,10 +3616,8 @@ func try_merge_arrange_stack_item(source_item, from_source, to_source, target_sl
 	# 전부 병합됐으면 원래 아이템 제거
 	if int(source_item["count"]) <= 0:
 		if selected_arrange_item == source_item:
-			selected_arrange_item = null
-			selected_arrange_source = ""
-			clear_arrange_selected_item_info()
-			clear_arrange_selected_focus()
+			selected_arrange_item = target_list[target_index]
+			selected_arrange_source = to_source
 
 		if from_source == "right" and to_source == "left":
 			unequip_item_if_moved_out_from_inventory(source_item)
@@ -3580,20 +3633,31 @@ func can_merge_arrange_stack_item(source_item, to_source, target_slot):
 	if typeof(source_item) != TYPE_DICTIONARY:
 		return false
 
+	if to_source == "":
+		return false
+
+	if target_slot == -1:
+		return false
+
 	var source_item_id = source_item.get("id", "")
 
 	if source_item_id == "":
 		return false
 
-	if not items.has(source_item_id):
-		return false
+	var item_data = get_item_data_by_id(source_item_id)
 
-	var item_data = items[source_item_id]
+	if item_data.is_empty():
+		return false
 
 	if not item_data.get("stackable", false):
 		return false
 
-	var target_index = get_arrange_item_index_at_slot(to_source, target_slot)
+	var max_stack = max(int(item_data.get("max_stack", 1)), 1)
+
+	if max_stack <= 1:
+		return false
+
+	var target_index = get_arrange_item_index_at_slot(to_source, target_slot, source_item)
 
 	if target_index < 0:
 		return false
@@ -3608,18 +3672,21 @@ func can_merge_arrange_stack_item(source_item, to_source, target_slot):
 	if target_item == null:
 		return false
 
+	if typeof(target_item) != TYPE_DICTIONARY:
+		return false
+
 	if target_item == source_item:
 		return false
 
 	if target_item.get("id", "") != source_item_id:
 		return false
 
-	var max_stack = int(item_data.get("max_stack", 1))
 	var target_count = int(target_item.get("count", 1))
 
 	return target_count < max_stack
-# 인벤토리 정리 화면 특정 슬롯에 있는 아이템 index 찾기 함수
-func get_arrange_item_index_at_slot(source, slot):
+# 인벤토리 정리 화면 특정 슬롯을 차지하고 있는 아이템 index 찾기 함수
+# ignore_item을 넣으면 해당 아이템은 검사에서 제외함
+func get_arrange_item_index_at_slot(source, slot, ignore_item = null):
 	if slot < 0:
 		return -1
 
@@ -3628,6 +3695,9 @@ func get_arrange_item_index_at_slot(source, slot):
 
 	for i in range(item_list.size()):
 		var item = item_list[i]
+
+		if item == ignore_item:
+			continue
 
 		if item == null:
 			continue
@@ -3644,27 +3714,28 @@ func get_arrange_item_index_at_slot(source, slot):
 			return i
 
 	return -1
-# 인벤토리 정리 화면 아이템이 1x1인지 확인하는 함수
+# 인벤토리 정리 화면 특정 슬롯을 차지하고 있는 아이템 반환 함수
+# 선택 사항: 아이템 자체 반환 함수 추가
+func get_arrange_item_at_slot(source, slot, ignore_item = null):
+	var item_index = get_arrange_item_index_at_slot(source, slot, ignore_item)
+
+	if item_index < 0:
+		return null
+
+	var item_list = get_arrange_item_list(source)
+
+	if item_index >= item_list.size():
+		return null
+
+	return item_list[item_index]
+# 인벤토리 정리 화면 아이템이 1x1 크기인지 확인하는 함수
 func is_arrange_item_1x1(item):
-	if item == null:
+	var item_size = get_inventory_item_grid_size(item)
+
+	if item_size.x <= 0 or item_size.y <= 0:
 		return false
 
-	if typeof(item) != TYPE_DICTIONARY:
-		return false
-
-	var item_id = item.get("id", "")
-
-	if item_id == "":
-		return false
-
-	if not items.has(item_id):
-		return false
-
-	var item_data = items[item_id]
-	var item_width = int(item_data.get("width", 1))
-	var item_height = int(item_data.get("height", 1))
-
-	return item_width == 1 and item_height == 1
+	return item_size.x == 1 and item_size.y == 1
 # 인벤토리 정리 화면에서 1x1 아이템끼리 자리 교환 가능한지 확인하는 함수
 func can_swap_arrange_1x1_items(source_item, from_source, to_source, target_slot):
 	if source_item == null:
@@ -3857,17 +3928,14 @@ func update_arrange_drag_slot_highlight():
 	if target_slot == -1:
 		return
 
-	var item_id = arrange_dragged_item.get("id", "")
+	var item_size = get_inventory_item_grid_size(arrange_dragged_item)
 
-	if item_id == "":
+	if item_size.x <= 0 or item_size.y <= 0:
+		arrange_slot_highlight_container.visible = false
 		return
 
-	if not items.has(item_id):
-		return
-
-	var item_data = items[item_id]
-	var item_width = int(item_data.get("width", 1))
-	var item_height = int(item_data.get("height", 1))
+	var item_width = item_size.x
+	var item_height = item_size.y
 
 	var target_list = get_arrange_item_list(target_source)
 	var target_cols = get_arrange_grid_cols(target_source)
@@ -3924,6 +3992,7 @@ func clear_arrange_selected_focus():
 # 인벤토리 정리 화면 선택 포커스 갱신 함수
 func update_arrange_selected_focus():
 	clear_arrange_selected_focus()
+	arrange_selected_focus_container.visible = true
 
 	if selected_arrange_item == null:
 		return
@@ -3937,17 +4006,14 @@ func update_arrange_selected_focus():
 	if not selected_arrange_item.has("slot"):
 		return
 
-	var item_id = selected_arrange_item.get("id", "")
+	var item_size = get_inventory_item_grid_size(selected_arrange_item)
 
-	if item_id == "":
+	if item_size.x <= 0 or item_size.y <= 0:
 		return
 
-	if not items.has(item_id):
-		return
-
-	var item_data = items[item_id]
-	var item_width = int(item_data.get("width", 1))
-	var item_height = int(item_data.get("height", 1))
+	var item_width = item_size.x
+	var item_height = item_size.y
+	
 	var slot = int(selected_arrange_item.get("slot", 0))
 
 	var focus_panel = Panel.new()
@@ -4043,20 +4109,50 @@ func update_inventory_portrait_ui():
 # === 아이템 함수 모음 ===
 # 아이템 보유 여부 확인 함수
 func has_item(item_id):
+	if item_id == "":
+		return false
+
 	for item in inventory:
-		if item["id"] == item_id:
+		if item == null:
+			continue
+
+		if typeof(item) != TYPE_DICTIONARY:
+			continue
+
+		if item.get("id", "") == item_id:
 			return true
 
 	return false
-# 아이템 추가 함수
-func add_item(item_id, count = 1, show_full_message = true):
-	if not items.has(item_id):
-		push_error("아이템 데이터가 없음: " + item_id)
+# item_id 기준으로 스택 가능한 아이템인지 확인하는 함수
+func is_item_stackable_by_id(item_id):
+	var item_data = get_item_data_by_id(item_id)
+
+	if item_data.is_empty():
 		return false
 
-	var item_data = items[item_id]
+	return bool(item_data.get("stackable", false))
+# 아이템 중복 획득을 막아야 하는지 확인하는 함수
+# 현재 규칙: 스택 불가능한 아이템은 중복 획득 불가
+func should_block_duplicate_item_gain(item_id):
+	var item_data = get_item_data_by_id(item_id)
+
+	if item_data.is_empty():
+		return true
+
+	if is_item_stackable_by_id(item_id):
+		return false
+
+	return has_item(item_id)
+# 아이템 추가 함수
+func add_item(item_id, count = 1, show_full_message = true):
+	var item_data = get_item_data_by_id(item_id)
+
+	if item_data.is_empty():
+		push_error("아이템 데이터가 없음: " + str(item_id))
+		return false
+
 	var is_stackable = item_data.get("stackable", false)
-	var max_stack = int(item_data.get("max_stack", 1))
+	var max_stack = max(int(item_data.get("max_stack", 1)), 1)
 	var remaining = int(count)
 	var added_any = false
 
@@ -4101,8 +4197,7 @@ func add_item(item_id, count = 1, show_full_message = true):
 			new_item["count"] = add_count
 			remaining -= add_count
 		else:
-			# 현재 구조에서는 비중첩 아이템 중복 획득 방지
-			if has_item(item_id):
+			if should_block_duplicate_item_gain(item_id):
 				return added_any
 
 			remaining -= 1
@@ -4164,6 +4259,25 @@ func get_item_type_text(item_type_or_data):
 		return ""
 	else:
 		return "기타"
+# item_id 기준으로 아이템 타입 한글 이름 반환 함수
+func get_item_type_text_by_id(item_id):
+	var item_data = get_item_data_by_id(item_id)
+
+	if item_data.is_empty():
+		return ""
+
+	return get_item_type_text(item_data)
+# inventory_item 기준으로 아이템 타입 한글 이름 반환 함수
+func get_item_type_text_from_inventory_item(inventory_item):
+	if inventory_item == null:
+		return ""
+
+	if typeof(inventory_item) != TYPE_DICTIONARY:
+		return ""
+
+	var item_id = inventory_item.get("id", "")
+
+	return get_item_type_text_by_id(item_id)
 # 아이템 개수 라벨 생성 함수
 func add_item_count_label(icon_node, inventory_item):
 	var count = int(inventory_item.get("count", 1))
@@ -4198,15 +4312,16 @@ func make_item_info_text(inventory_item):
 	if item_id == "":
 		return ""
 
-	if not items.has(item_id):
+	var item_data = get_item_data_by_id(item_id)
+
+	if item_data.is_empty():
 		return ""
 
-	var item_data = items[item_id]
-
-	var item_name = item_data.get("name", item_id)
+	var item_name = get_item_name(item_id)
 	var description = item_data.get("description", "")
 	var item_type = item_data.get("type", "")
-	var item_type_text = get_item_type_text(item_data)
+	var item_type_text = get_item_type_text_from_inventory_item(inventory_item)
+	
 	var count = int(inventory_item.get("count", 1))
 
 	var text_lines = []
@@ -4528,23 +4643,6 @@ func make_current_weapon_effective_stat_text(item_id, item_data):
 		lines.append("죽음 방지 : " + make_colored_text("활성화", STAT_GOOD_COLOR))
 
 	return lines
-# 아이템 이미지 경로 반환 함수
-func get_item_image_path_from_inventory_item(inventory_item):
-	if inventory_item == null:
-		return ""
-
-	if typeof(inventory_item) != TYPE_DICTIONARY:
-		return ""
-
-	var item_id = inventory_item.get("id", "")
-
-	if item_id == "":
-		return ""
-
-	if not items.has(item_id):
-		return ""
-
-	return items[item_id].get("image", "")
 # 아이템 정보 UI 표시 공통 함수
 func show_item_info_ui(inventory_item, image_node, text_node):
 	if inventory_item == null:
@@ -4611,11 +4709,12 @@ func give_item_with_pending_loot(item_id, count = 1):
 	if item_id == "":
 		return result
 
-	if not items.has(item_id):
-		push_error("아이템 데이터가 없음: " + item_id)
+	var item_data = get_item_data_by_id(item_id)
+
+	if item_data.is_empty():
+		push_error("아이템 데이터가 없음: " + str(item_id))
 		return result
 
-	var item_data = items[item_id]
 	var is_stackable = item_data.get("stackable", false)
 	var requested_count = int(count)
 
@@ -4668,13 +4767,12 @@ func open_inventory_arrange_if_pending_loot(mode = "loot"):
 	await open_inventory_arrange(mode, loot_to_arrange)
 # 아이템 이름 가져오기 함수
 func get_item_name(item_id):
-	if not items.has(item_id):
-		return item_id
+	var item_data = get_item_data_by_id(item_id)
 
-	if not items[item_id].has("name"):
-		return item_id
+	if item_data.is_empty():
+		return str(item_id)
 
-	return items[item_id]["name"]
+	return item_data.get("name", str(item_id))
 # 선택 아이템 정보 제거 함수
 func clear_selected_item_info():
 	show_equipped_weapon_info()
@@ -4687,47 +4785,28 @@ func show_selected_item_info(inventory_item):
 	)
 # 아이템이 들어갈 수 있는 빈 슬롯 찾기 함수
 func find_empty_slot(item_id):
-	if not items.has(item_id):
+	var item_size = get_item_grid_size_by_id(item_id)
+
+	if item_size.x <= 0 or item_size.y <= 0:
 		return -1
 
-	var item_data = items[item_id]
-	var item_width = item_data.get("width", 1)
-	var item_height = item_data.get("height", 1)
+	var item_width = item_size.x
+	var item_height = item_size.y
+	var total_slots = inventory_cols * inventory_rows
 
-	for slot in range(inventory_cols * inventory_rows):
+	for slot in range(total_slots):
 		if can_place_item_at(slot, item_width, item_height):
 			return slot
 
 	return -1
 # 선택 아이템 특정 슬롯에 아이템을 놓을 수 있는지 확인하는 함수
 func can_place_item_at(start_slot, item_width, item_height):
-	var start_col = start_slot % inventory_cols
-	var start_row = floori(start_slot / float(inventory_cols))
-
-	# 오른쪽/아래로 가방 범위를 넘으면 배치 불가
-	if start_col + item_width > inventory_cols:
-		return false
-
-	if start_row + item_height > inventory_rows:
-		return false
-
-	# 새 아이템이 차지할 슬롯 목록
-	var target_slots = []
-
-	for y in range(item_height):
-		for x in range(item_width):
-			var slot = (start_row + y) * inventory_cols + (start_col + x)
-			target_slots.append(slot)
-
-	# 기존 아이템들과 겹치는지 확인
-	for item in inventory:
-		var occupied = get_occupied_slots(item)
-
-		for slot in target_slots:
-			if occupied.has(slot):
-				return false
-
-	return true	
+	return can_place_item_at_except(
+		start_slot,
+		item_width,
+		item_height,
+		null
+	)
 # 마우스 위치 기준 슬롯 번호 계산 함수
 func get_slot_from_mouse_position():
 	
@@ -4745,33 +4824,37 @@ func get_slot_from_mouse_position():
 
 	return slot_y * inventory_cols + slot_x	
 # 특정 아이템을 제외하고 슬롯 배치 가능 여부 확인
-func can_place_item_at_except(start_slot, item_width, item_height, ignored_item):
-	var start_col = start_slot % inventory_cols
-	var start_row = floori(start_slot / float(inventory_cols))
-
-	# 가방 범위 초과
-	if start_col + item_width > inventory_cols:
+# ignored_item이 null이면 모든 기존 아이템을 검사함
+func can_place_item_at_except(start_slot, item_width, item_height, ignored_item = null):
+	if start_slot < 0:
 		return false
 
-	if start_row + item_height > inventory_rows:
+	var start_col = int(start_slot) % inventory_cols
+	var start_row = floori(int(start_slot) / float(inventory_cols))
+
+	# 오른쪽/아래로 가방 범위를 넘으면 배치 불가
+	if start_col + int(item_width) > inventory_cols:
 		return false
 
-	var target_slots = []
+	if start_row + int(item_height) > inventory_rows:
+		return false
 
-	for y in range(item_height):
-		for x in range(item_width):
-			var slot = (start_row + y) * inventory_cols + (start_col + x)
-			target_slots.append(slot)
+	var target_slots = get_grid_slots_from_size(
+		start_slot,
+		item_width,
+		item_height,
+		inventory_cols
+	)
 
+	# 기존 아이템들과 겹치는지 확인
 	for item in inventory:
-		# 현재 드래그 중인 아이템은 무시
 		if item == ignored_item:
 			continue
 
-		var occupied = get_occupied_slots(item)
+		var occupied_slots = get_inventory_item_occupied_slots(item)
 
 		for slot in target_slots:
-			if occupied.has(slot):
+			if occupied_slots.has(slot):
 				return false
 
 	return true
@@ -4791,11 +4874,14 @@ func update_slot_highlight():
 		slot_highlight.visible = false
 		return
 
-	var item_id = dragged_item["id"]
-	var item_data = items[item_id]
+	var item_size = get_inventory_item_grid_size(dragged_item)
 
-	var item_width = item_data.get("width", 1)
-	var item_height = item_data.get("height", 1)
+	if item_size.x <= 0 or item_size.y <= 0:
+		slot_highlight.visible = false
+		return
+
+	var item_width = item_size.x
+	var item_height = item_size.y
 
 	var can_merge = can_merge_inventory_stack_item(
 		dragged_item,
