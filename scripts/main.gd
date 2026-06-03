@@ -317,7 +317,8 @@ func setup_initial_ui_state():
 	background.scale = Vector2(1, 1)
 
 	encounter_danger_overlay.color = Color(1, 0, 0, 0)
-	encounter_danger_overlay.visible = true
+	# start_random_encounter_effect()에서 다시 visible = true를 해주기 때문에 문제 없음
+	encounter_danger_overlay.visible = false
 	encounter_danger_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	arrange_discard_notice_label.visible = false
@@ -5810,24 +5811,69 @@ func restore_equipped_weapon(saved_slot):
 # 랜덤 인카운터 함수 모음
 # ============================================================
 
-# 현재 방 랜덤 인카운터 확인 함수
-func check_random_encounter():
-	var room = rooms[current_room]
+# 방 데이터에서 random_encounter 데이터 가져오기 함수
+func get_random_encounter_data_from_room(room, show_error = false):
+	if room.is_empty():
+		return {}
 
 	if not room.has("random_encounter"):
+		return {}
+
+	var random_encounter_data = room["random_encounter"]
+
+	if typeof(random_encounter_data) != TYPE_DICTIONARY:
+		if show_error:
+			push_error("random_encounter 데이터가 Dictionary가 아님: " + str(current_room))
+		return {}
+
+	return random_encounter_data
+# 랜덤 인카운터 발생 확률 가져오기 함수
+func get_random_encounter_chance(encounter_data):
+	if encounter_data.is_empty():
+		return 0.0
+
+	return float(encounter_data.get("chance", 0.0))
+# 랜덤 인카운터 적 테이블 ID 가져오기 함수
+func get_random_encounter_enemy_table_id(encounter_data):
+	if encounter_data.is_empty():
+		return ""
+
+	return str(encounter_data.get("enemy_table", encounter_data.get("table", "")))
+# 랜덤 인카운터 이벤트 테이블 ID 가져오기 함수
+func get_random_encounter_event_table_id(encounter_data, enemy_table_id):
+	if encounter_data.is_empty():
+		return ""
+
+	return str(encounter_data.get("event_table", enemy_table_id))
+# 현재 방 랜덤 인카운터 확인 함수
+func check_random_encounter():
+	var room = get_current_room_data(false)
+
+	if room.is_empty():
 		return false
 
-	var encounter_data = room["random_encounter"]
-	var chance = float(encounter_data.get("chance", 0))
+	var encounter_data = get_random_encounter_data_from_room(room)
+
+	if encounter_data.is_empty():
+		return false
+
+	var chance = get_random_encounter_chance(encounter_data)
+
+	if chance <= 0.0:
+		return false
 
 	if randf() * 100.0 > chance:
 		return false
 
-	var enemy_table_id = encounter_data.get("enemy_table", encounter_data.get("table", ""))
-	var event_table_id = encounter_data.get("event_table", enemy_table_id)
+	var enemy_table_id = get_random_encounter_enemy_table_id(encounter_data)
 
 	if enemy_table_id == "":
 		return false
+
+	var event_table_id = get_random_encounter_event_table_id(
+		encounter_data,
+		enemy_table_id
+	)
 
 	var enemy_id = pick_random_encounter_enemy(enemy_table_id)
 
@@ -5849,6 +5895,12 @@ func check_random_encounter():
 		return true
 
 	var selected_index = await show_choices(choices)
+
+	if selected_index < 0 or selected_index >= choices.size():
+		await stop_random_encounter_effect()
+		start_battle(enemy_id)
+		return true
+
 	var selected_choice = choices[selected_index]
 
 	var encounter_result = await run_random_encounter_choice(selected_choice, enemy_id)
@@ -5982,100 +6034,201 @@ func pick_random_encounter_enemy(table_id):
 		return ""
 
 	return str(selected_encounter.get("enemy", ""))
-# 인카운터 발생 텍스트 가져오기 함수
-func get_random_encounter_start_text(event_table_id):
+# encounter event_table_id 기준으로 인카운터 이벤트 데이터 가져오기 함수
+func get_encounter_event_data_by_id(event_table_id, show_error = true):
 	if event_table_id == "":
-		return ""
+		if show_error:
+			push_error("인카운터 이벤트 테이블 ID가 비어있음")
+		return {}
 
 	if not encounter_events.has(event_table_id):
-		push_error("존재하지 않는 인카운터 이벤트 테이블: " + event_table_id)
-		return ""
+		if show_error:
+			push_error("존재하지 않는 인카운터 이벤트 테이블: " + str(event_table_id))
+		return {}
 
 	var event_data = encounter_events[event_table_id]
+
+	if typeof(event_data) != TYPE_DICTIONARY:
+		if show_error:
+			push_error("인카운터 이벤트 데이터가 Dictionary가 아님: " + str(event_table_id))
+		return {}
+
+	return event_data
+# 인카운터 발생 텍스트 가져오기 함수
+func get_random_encounter_start_text(event_table_id):
+	var event_data = get_encounter_event_data_by_id(event_table_id)
+
+	if event_data.is_empty():
+		return ""
+
 	var start_texts = event_data.get("start_texts", [])
+
+	if typeof(start_texts) != TYPE_ARRAY:
+		return ""
 
 	if start_texts.size() == 0:
 		return ""
 
-	return start_texts.pick_random()
+	return str(start_texts.pick_random())
 # 인카운터 선택지 생성 함수
 func make_random_encounter_choices(event_table_id):
 	var result_choices = []
+	var event_data = get_encounter_event_data_by_id(event_table_id)
 
-	if event_table_id == "":
+	if event_data.is_empty():
 		return result_choices
 
-	if not encounter_events.has(event_table_id):
-		push_error("존재하지 않는 인카운터 이벤트 테이블: " + event_table_id)
-		return result_choices
-
-	var event_data = encounter_events[event_table_id]
 	var choice_pools = event_data.get("choice_pools", {})
+
+	if typeof(choice_pools) != TYPE_DICTIONARY:
+		return result_choices
 
 	var pool_order = ["escape", "player_first", "enemy_first"]
 
 	for pool_id in pool_order:
 		var pool = choice_pools.get(pool_id, [])
 
+		if typeof(pool) != TYPE_ARRAY:
+			continue
+
 		if pool.size() == 0:
 			continue
 
-		var choice = pool.pick_random().duplicate(true)
+		var picked_choice = pool.pick_random()
+
+		if picked_choice == null:
+			continue
+
+		if typeof(picked_choice) != TYPE_DICTIONARY:
+			continue
+
+		var choice = picked_choice.duplicate(true)
 		result_choices.append(choice)
 
 	result_choices.shuffle()
 	return result_choices
+# 랜덤 인카운터 선택지 결과 텍스트 가져오기 함수
+func get_random_encounter_choice_result_text(choice):
+	if choice == null:
+		return ""
+
+	if typeof(choice) != TYPE_DICTIONARY:
+		return ""
+
+	return str(choice.get("result_text", ""))
+# 랜덤 인카운터 선택지 결과 타입 가져오기 함수
+func get_random_encounter_choice_result(choice):
+	if choice == null:
+		return "battle"
+
+	if typeof(choice) != TYPE_DICTIONARY:
+		return "battle"
+
+	var result = str(choice.get("result", "battle"))
+
+	if result == "":
+		return "battle"
+
+	return result
+# 랜덤 인카운터 선택지 선공 정보 가져오기 함수
+func get_random_encounter_choice_first_turn(choice):
+	if choice == null:
+		return ""
+
+	if typeof(choice) != TYPE_DICTIONARY:
+		return ""
+
+	var first_turn = str(choice.get("first_turn", ""))
+
+	if first_turn != "player" and first_turn != "enemy":
+		return ""
+
+	return first_turn
+# 랜덤 인카운터 선택지 결과 Dictionary 생성 함수
+func make_random_encounter_choice_result(choice, enemy_id):
+	return {
+		"result": get_random_encounter_choice_result(choice),
+		"enemy_id": enemy_id,
+		"first_turn": get_random_encounter_choice_first_turn(choice)
+	}
 # 인카운터 선택 결과 실행 함수
 func run_random_encounter_choice(choice, enemy_id):
-	var result_text = choice.get("result_text", "")
+	var result_text = get_random_encounter_choice_result_text(choice)
 
 	if result_text != "":
 		await show_dialogue(result_text)
 
-	var result = choice.get("result", "battle")
+	return make_random_encounter_choice_result(choice, enemy_id)
+# 랜덤 인카운터 오버레이 트윈 정리 함수
+func kill_random_encounter_overlay_tween():
+	if encounter_overlay_tween != null and encounter_overlay_tween.is_valid():
+		encounter_overlay_tween.kill()
 
-	return {
-		"result": result,
-		"enemy_id": enemy_id,
-		"first_turn": choice.get("first_turn", "")
-	}
+	encounter_overlay_tween = null
+
+
+# 랜덤 인카운터 오버레이 초기화 함수
+func reset_random_encounter_overlay():
+	if encounter_danger_overlay == null:
+		return
+
+	encounter_danger_overlay.color = Color(1, 0, 0, 0)
+	encounter_danger_overlay.visible = false
+
+
+# 랜덤 인카운터 심장박동 사운드 시작 함수
+func play_random_encounter_heartbeat():
+	if encounter_heartbeat_sound == null:
+		return
+
+	encounter_heartbeat_sound.stop()
+	encounter_heartbeat_sound.play()
+
+
+# 랜덤 인카운터 심장박동 사운드 종료 함수
+func stop_random_encounter_heartbeat():
+	if encounter_heartbeat_sound == null:
+		return
+
+	encounter_heartbeat_sound.stop()
 # 랜덤 인카운터 공통 연출 시작 함수
 func start_random_encounter_effect():
-	if encounter_overlay_tween != null and encounter_overlay_tween.is_valid():
-		encounter_overlay_tween.kill()
+	kill_random_encounter_overlay_tween()
 
-	encounter_danger_overlay.visible = true
-	encounter_danger_overlay.color = Color(1, 0, 0, 0)
+	if encounter_danger_overlay != null:
+		encounter_danger_overlay.visible = true
+		encounter_danger_overlay.color = Color(1, 0, 0, 0)
 
-	encounter_overlay_tween = create_tween()
-	encounter_overlay_tween.tween_property(
-		encounter_danger_overlay,
-		"color:a",
-		0.35,
-		3
-	)
+		encounter_overlay_tween = create_tween()
+		encounter_overlay_tween.tween_property(
+			encounter_danger_overlay,
+			"color:a",
+			0.35,
+			3.0
+		)
 
-	if encounter_heartbeat_sound != null:
-		encounter_heartbeat_sound.stop()
-		encounter_heartbeat_sound.play()
+	play_random_encounter_heartbeat()
 # 랜덤 인카운터 공통 연출 종료 함수
 func stop_random_encounter_effect():
-	if encounter_overlay_tween != null and encounter_overlay_tween.is_valid():
-		encounter_overlay_tween.kill()
+	kill_random_encounter_overlay_tween()
 
-	encounter_overlay_tween = create_tween()
-	encounter_overlay_tween.tween_property(
-		encounter_danger_overlay,
-		"color:a",
-		0.0,
-		0.4
-	)
+	if encounter_danger_overlay != null:
+		encounter_overlay_tween = create_tween()
+		encounter_overlay_tween.tween_property(
+			encounter_danger_overlay,
+			"color:a",
+			0.0,
+			0.4
+		)
 
-	await encounter_overlay_tween.finished
+		await encounter_overlay_tween.finished
 
-	if encounter_heartbeat_sound != null:
-		encounter_heartbeat_sound.stop()
-# encounter table_id 기준으로 인카운터 테이블 가져오기 함수
+		encounter_danger_overlay.color = Color(1, 0, 0, 0)
+		encounter_danger_overlay.visible = false
+
+	encounter_overlay_tween = null
+	stop_random_encounter_heartbeat()
+# 랜덤 인카운터 encounter table_id 기준으로 인카운터 테이블 가져오기 함수
 func get_encounter_table_by_id(table_id, show_error = true):
 	if table_id == "":
 		if show_error:
