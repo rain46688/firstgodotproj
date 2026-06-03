@@ -206,7 +206,7 @@ func _process(delta):
 
 		if Input.is_action_just_pressed("esc"):
 			is_item_selecting = false
-			battle_text.text = "행동을 선택하세요."
+			show_player_turn_start_text()
 			set_action_buttons_disabled(false)
 
 		return
@@ -496,9 +496,7 @@ func get_current_enemy_encounter_text():
 	))
 # 전투 시작 조우 텍스트 표시 함수
 func show_battle_encounter_text():
-	battle_text.text = get_current_enemy_encounter_text() + "\n\n[Space]"
-
-	await wait_for_accept_input()
+	await show_current_enemy_encounter_text()
 # 전투 시작 BGM / 조우 사운드 / 조우 텍스트 실행 함수
 func play_battle_start_presentation():
 	await update_battle_bgm()
@@ -805,7 +803,7 @@ func _on_observe_button_pressed():
 	observe_index = 0
 
 	if observe_targets.size() == 0:
-		battle_text.text = "관찰할 수 있는 대상이 없다.\n\n[Space]"
+		set_battle_text_with_accept("관찰할 수 있는 대상이 없다.")
 		return
 
 	show_current_observe_target()
@@ -822,11 +820,9 @@ func _on_end_turn_button_pressed():
 		return
 
 	play_click_sound()
-	battle_text.text = "턴을 종료했다."
-
 	set_action_buttons_disabled(true)
 
-	await get_tree().create_timer(0.7).timeout
+	await show_battle_text_for_seconds("턴을 종료했다.", 0.7)
 
 	start_enemy_turn()
 # 도망 버튼 클릭 함수
@@ -842,20 +838,15 @@ func _on_run_button_pressed():
 		if result_sound != null:
 			result_sound.play()
 		enemy_sprite.visible = false
-		battle_text.text = "당신은 도망쳤다."
-		
-		# 기다리는 시간 증가 추후에 증가 예정 지금은 테스트라 1초 유지
-		await get_tree().create_timer(1.0).timeout
+
+		await show_battle_text_for_seconds("당신은 도망쳤다.", 1.0)
 
 		finish_battle(make_battle_escape_result())
 	else:
 		# 사운드 추가
 		if result_sound != null:
 			result_sound.play()
-		battle_text.text = "당신은 도망칠 수 없다..."
-		
-		# 기다리는 시간 증가 추후에 증가 예정 지금은 테스트라 1초 유지
-		await get_tree().create_timer(1.0).timeout
+		await show_battle_text_for_seconds("당신은 도망칠 수 없다...", 1.0)
 
 		start_enemy_turn()
 
@@ -863,6 +854,9 @@ func _on_run_button_pressed():
 # 기타 함수 모음
 # ============================================================
 
+# 플레이어 턴 시작 텍스트 표시 함수
+func show_player_turn_start_text():
+	set_battle_text(get_player_turn_start_text())
 # 플레이어 턴 시작 함수
 func start_player_turn():
 	print("start_player_turn")
@@ -883,7 +877,7 @@ func start_player_turn():
 	if not can_continue:
 		return
 
-	battle_text.text = get_player_turn_start_text()
+	show_player_turn_start_text()
 	set_action_buttons_disabled(false)
 # 적 턴 시작 함수
 func start_enemy_turn():
@@ -899,12 +893,7 @@ func start_enemy_turn():
 	set_action_buttons_disabled(true)
 	current_enemy_pattern = choose_enemy_pattern()
 
-	var warning_text = current_enemy_pattern.get(
-		"warning_text",
-		enemy_data.get("name", "적") + "이(가) 공격하려고 한다..."
-	)
-
-	battle_text.text = warning_text + "\n\n[Space]"
+	show_enemy_pattern_warning_text(current_enemy_pattern)
 # 버튼 활성/비활성 함수
 func set_action_buttons_disabled(disabled):
 	attack_button.disabled = disabled
@@ -935,12 +924,19 @@ func make_battle_escape_result():
 # 전투 종료 신호 전달 함수
 func finish_battle(result_data):
 	emit_signal("battle_finished", result_data)
+# 적 처치 텍스트 생성 함수
+func make_enemy_defeated_text():
+	return enemy_data.get("name", "적") + "을 쓰러뜨렸다."
+# 전투 승리 텍스트 표시 함수
+func show_battle_win_text():
+	set_battle_text_with_accept("전투에서 승리했다.")
+	await wait_for_accept_input()
 # 승리 함수 추가
 func win_battle():
 	battle_ended = true
 	set_action_buttons_disabled(true)
 
-	battle_text.text = enemy_data.get("name", "적") + "을 쓰러뜨렸다."
+	set_battle_text(make_enemy_defeated_text())
 
 	var tween = create_tween()
 	tween.tween_property(enemy_sprite, "modulate:a", 0.0, 1.0)
@@ -964,9 +960,9 @@ func win_battle():
 	
 	# 사운드 추가
 	if result_sound != null:
-			result_sound.play()
-	battle_text.text = "전투에서 승리했다.\n\n[Space]"
-	await wait_for_accept_input()
+		result_sound.play()
+
+	await show_battle_win_text()
 
 	if reward_messages.size() > 0:
 		await show_battle_result_messages(reward_messages)
@@ -978,14 +974,33 @@ func win_battle():
 			reward_flags
 		)
 	)
+# 게임오버 텍스트 생성 함수
+func make_game_over_text():
+	return "YOU DIED"
+# 게임오버 텍스트 표시 함수
+func show_game_over_text():
+	await show_battle_text_for_seconds(make_game_over_text(), 2.0)
 # 게임 오버 함수
 func game_over():
 	battle_ended = true
 	set_action_buttons_disabled(true)
 
-	battle_text.text = "YOU DIED"
+	await show_game_over_text()
+# 전투 텍스트 표시 함수
+func set_battle_text(text):
+	set_battle_text(str(text))
+# 전투 텍스트 비우기 함수
+func clear_battle_text():
+	set_battle_text("")
+# Space 입력 안내가 붙은 전투 텍스트 표시 함수
+func set_battle_text_with_accept(text):
+	set_battle_text(str(text) + "\n\n[Space]")
+# 일정 시간 동안 전투 텍스트 표시 함수
+func show_battle_text_for_seconds(text, seconds = 1.0):
+	set_battle_text(text)
 
-	await get_tree().create_timer(2.0).timeout
+	if seconds > 0.0:
+		await get_tree().create_timer(seconds).timeout
 # Space 입력 대기 함수
 func wait_for_accept_input():
 	while true:
@@ -1040,48 +1055,109 @@ func move_observe_target(direction):
 
 	play_click_sound()
 	show_current_observe_target()
-# 관찰 하는 현재 대상 표시 함수
-func show_current_observe_target():
-	if observe_targets.size() == 0:
-		return
+# 관찰 대상 타입 가져오기 함수
+func get_observe_target_type(target):
+	if target == null:
+		return "body"
 
-	var target = observe_targets[observe_index]
-	var target_type = target.get("target_type", "body")
-	var target_id = target.get("id", "")
-	var target_name = target.get("name", "대상")
+	if typeof(target) != TYPE_DICTIONARY:
+		return "body"
+
+	return str(target.get("target_type", "body"))
+# 관찰 대상 ID 가져오기 함수
+func get_observe_target_id(target):
+	if target == null:
+		return ""
+
+	if typeof(target) != TYPE_DICTIONARY:
+		return ""
+
+	return str(target.get("id", ""))
+# 관찰 대상 이름 가져오기 함수
+func get_observe_target_name(target):
+	if target == null:
+		return "대상"
+
+	if typeof(target) != TYPE_DICTIONARY:
+		return "대상"
+
+	return str(target.get("name", "대상"))
+# 적 본체 관찰 텍스트 생성 함수
+func make_body_observe_text(target_name):
+	var text = ""
+
+	text += "[ " + str(target_name) + " ]\n"
+	text += str(enemy_data.get("observe_text", "특별한 점은 보이지 않는다.")) + "\n"
+
+	var weakness_text = str(enemy_data.get("weakness_text", ""))
+
+	if weakness_text != "":
+		text += weakness_text + "\n"
+
+	text += "\n남은 체력 : " + str(int(enemy_hp)) + " / " + str(int(enemy_max_hp))
+
+	return text	
+# 적 파츠 관찰 텍스트 생성 함수
+func make_part_observe_text(target_id, target_name):
+	var part = get_enemy_part_data_by_id(target_id)
+
+	if part.is_empty():
+		return "[ " + str(target_name) + " ]\n확인할 수 없는 부위이다."
 
 	var text = ""
 
-	if target_type == "part":
-		var part = enemy_parts.get(target_id, {})
+	text += "[ " + str(target_name) + " ]\n"
+	text += str(part.get("observe_text", "특별한 점은 보이지 않는다.")) + "\n"
 
-		text += "[ " + target_name + " ]\n"
-		text += part.get("observe_text", "특별한 점은 보이지 않는다.") + "\n"
+	var weakness_text = str(part.get("weakness_text", ""))
 
-		var weakness_text = part.get("weakness_text", "")
-		if weakness_text != "":
-			text += weakness_text + "\n"
+	if weakness_text != "":
+		text += weakness_text + "\n"
 
-		var hp = enemy_part_hp.get(target_id, 0)
-		var max_hp = part.get("max_hp", hp)
-		text += "\n남은 체력 : " + str(int(hp)) + " / " + str(int(max_hp))
+	var hp = int(enemy_part_hp.get(target_id, 0))
+	var max_hp = get_enemy_part_max_hp_from_data(part)
 
-	else:
-		text += "[ " + target_name + " ]\n"
-		text += enemy_data.get("observe_text", "특별한 점은 보이지 않는다.") + "\n"
+	text += "\n남은 체력 : " + str(hp) + " / " + str(max_hp)
 
-		var weakness_text = enemy_data.get("weakness_text", "")
-		if weakness_text != "":
-			text += weakness_text + "\n"
-
-		text += "\n남은 체력 : " + str(int(enemy_hp)) + " / " + str(int(enemy_max_hp))
+	return text	
+# 관찰 조작 안내 텍스트 생성 함수
+func make_observe_control_text():
+	var text = ""
 
 	if observe_targets.size() > 1:
 		text += "\n\n[A/D] 관찰 대상 변경"
 
 	text += "\n[Space] 관찰을 끝낸다."
 
-	battle_text.text = text
+	return text
+# 현재 관찰 대상 텍스트 생성 함수
+func make_current_observe_target_text():
+	if observe_targets.size() == 0:
+		return ""
+
+	var target = observe_targets[observe_index]
+	var target_type = get_observe_target_type(target)
+	var target_id = get_observe_target_id(target)
+	var target_name = get_observe_target_name(target)
+
+	var text = ""
+
+	if target_type == "part":
+		text = make_part_observe_text(target_id, target_name)
+	else:
+		text = make_body_observe_text(target_name)
+
+	text += make_observe_control_text()
+
+	return text
+# 관찰 하는 현재 대상 표시 함수
+func show_current_observe_target():
+	var text = make_current_observe_target_text()
+
+	if text == "":
+		return
+
+	set_battle_text(text)
 # 화면 암전 처리 함수
 func fade_to_black(duration = 0.5):
 	var tween = create_tween()
@@ -1118,63 +1194,97 @@ func open_battle_item_list():
 		set_action_buttons_disabled(true)
 		if result_sound != null:
 			result_sound.play()
-		battle_text.text = "사용할 수 있는 아이템이 없다."
-
-		await get_tree().create_timer(1.0).timeout
+			
+		await show_battle_text_for_seconds("사용할 수 있는 아이템이 없다.", 1.0)
 
 		set_action_buttons_disabled(false)
-		battle_text.text = get_player_turn_start_text()
+		show_player_turn_start_text()
 		return
 
 	set_action_buttons_disabled(true)
 	is_item_selecting = true
 	update_battle_item_list()
-# 아이템 목록 표시 함수
-func update_battle_item_list():
-	update_battle_item_scroll()
-
+# 전투 아이템 목록 전체 텍스트 생성 함수
+func make_battle_item_list_text():
 	var text = "사용할 아이템을 선택하세요.\n\n"
 
-	var start_index = battle_item_scroll_start
-	var end_index = min(
-		battle_consumables.size(),
-		battle_item_scroll_start + BATTLE_ITEM_VISIBLE_COUNT
-	)
+	var start_index = get_battle_item_visible_start_index()
+	var end_index = get_battle_item_visible_end_index()
 
 	if start_index > 0:
 		text += "  ↑\n"
 
 	for i in range(start_index, end_index):
-		var inventory_item = battle_consumables[i]
+		var line_text = make_battle_item_line_text(battle_consumables[i], i)
 
-		if inventory_item == null:
+		if line_text == "":
 			continue
 
-		if typeof(inventory_item) != TYPE_DICTIONARY:
-			continue
-
-		var item_id = inventory_item.get("id", "")
-		var item_data = get_item_data_by_id(item_id)
-
-		if item_data.is_empty():
-			continue
-
-		var item_name = get_item_name_by_id(item_id)
-		var count_text = ""
-
-		if inventory_item.has("count"):
-			count_text = " x" + str(int(inventory_item["count"]))
-
-		if i == item_index:
-			text += "▶ " + item_name + count_text + "\n"
-		else:
-			text += "  " + item_name + count_text + "\n"
+		text += line_text
 
 	if end_index < battle_consumables.size():
 		text += "  ↓\n"
 
 	text += "\n[↑↓/WS] 선택 / [Space] 사용 / [ESC] 취소"
-	battle_text.text = text
+
+	return text
+# 전투 아이템 목록 표시 시작 인덱스 가져오기 함수
+func get_battle_item_visible_start_index():
+	return battle_item_scroll_start
+# 전투 아이템 목록 표시 끝 인덱스 가져오기 함수
+func get_battle_item_visible_end_index():
+	return min(
+		battle_consumables.size(),
+		battle_item_scroll_start + BATTLE_ITEM_VISIBLE_COUNT
+	)
+# 전투 아이템 목록 한 줄 텍스트 생성 함수
+func make_battle_item_line_text(inventory_item, index):
+	if inventory_item == null:
+		return ""
+
+	if typeof(inventory_item) != TYPE_DICTIONARY:
+		return ""
+
+	var item_id = inventory_item.get("id", "")
+	var item_data = get_item_data_by_id(item_id)
+
+	if item_data.is_empty():
+		return ""
+
+	var item_name = get_item_name_by_id(item_id)
+	var count_text = make_battle_item_count_text(inventory_item)
+
+	if index == item_index:
+		return "▶ " + item_name + count_text + "\n"
+
+	return "  " + item_name + count_text + "\n"
+# 전투 아이템 수량 텍스트 생성 함수
+func make_battle_item_count_text(inventory_item):
+	if inventory_item == null:
+		return ""
+
+	if typeof(inventory_item) != TYPE_DICTIONARY:
+		return ""
+
+	if inventory_item.has("count"):
+		return " x" + str(int(inventory_item["count"]))
+
+	return ""
+# 아이템 목록 표시 함수
+func update_battle_item_list():
+	update_battle_item_scroll()
+	set_battle_text(make_battle_item_list_text())
+# 전투 아이템 사용 결과 표시 함수
+func show_battle_item_used_text(item_id):
+	await show_battle_text_for_seconds(
+		make_battle_item_used_text(item_id),
+		1.0
+	)
+# 전투 아이템 사용 결과 텍스트 생성 함수
+func make_battle_item_used_text(item_id):
+	var item_name = get_item_name_by_id(item_id)
+
+	return item_name + " 을 사용했다."
 # 아이템 사용 함수
 func use_selected_battle_item():
 	if battle_consumables.size() == 0:
@@ -1221,9 +1331,7 @@ func use_selected_battle_item():
 
 	is_item_selecting = false
 
-	battle_text.text = get_item_name_by_id(item_id) + " 을 사용했다."
-
-	await get_tree().create_timer(1.0).timeout
+	await show_battle_item_used_text(item_id)
 
 	start_enemy_turn()
 # 전투 드랍 아이템 계산 함수
@@ -1296,7 +1404,7 @@ func show_battle_result_messages(messages):
 		if result_sound != null:
 			result_sound.play()
 
-		battle_text.text = message + "\n\n[Space]"
+		set_battle_text_with_accept(message)
 		await wait_for_accept_input()
 # 전투 아이템 선택용 키 입력 액션 생성 함수
 func ensure_battle_item_input_actions():
@@ -1782,7 +1890,7 @@ func update_enemy_hp_ui():
 	update_debug_hp_labels()
 # 적 공격 함수
 func execute_enemy_attack():
-	battle_text.text = ""
+	clear_battle_text()
 
 	await fire_enemy_projectiles()
 
@@ -2759,20 +2867,18 @@ func apply_player_attack_part_hit(hitbox):
 
 	start_enemy_hit_feedback()
 
-	var text = ""
+	var hit_text = make_player_attack_part_hit_text(
+		hitbox_name,
+		damage,
+		is_critical
+	)
 
-	if is_critical:
-		text += "치명타!\n"
-
-	text += hitbox_name + "에 맞았다.\n"
-	text += str(int(damage)) + " 의 피해를 주었다."
-	
 	print(part_id, " HP: ", enemy_part_hp[part_id])
 
 	if enemy_part_hp[part_id] <= 0:
 		destroy_enemy_part(part_id)
 	else:
-		battle_text.text = text
+		set_battle_text(hit_text)
 # 적 피격 연출 비동기 시작 함수
 func start_enemy_hit_feedback():
 	var hit_position = get_last_hitbox_center_position()
@@ -2816,11 +2922,8 @@ func destroy_enemy_part(part_id):
 		if sprite != null and is_instance_valid(sprite):
 			sprite.visible = false
 
-	var part = enemy_parts.get(part_id, {})
-	var destroy_text = part.get("destroy_text", "부위가 파괴되었다.")
-
-	battle_text.text = destroy_text
-
+	set_battle_text(get_enemy_part_destroy_text(part_id))
+	
 	update_hitbox_debug()
 	update_debug_hp_labels()
 # 적 체력 0 이하 처리 함수
@@ -2834,6 +2937,20 @@ func handle_enemy_defeated():
 			return
 
 	await win_battle()
+# 페이즈 전환 텍스트 생성 함수
+func get_phase_transition_text():
+	return str(enemy_data.get(
+		"phase_transition_text",
+		"어둠속에서 무언가가 다시 나타나기 시작한다..."
+	))
+# 페이즈 전환 텍스트 표시 함수
+func show_phase_transition_text():
+	set_battle_text_with_accept(get_phase_transition_text())
+	await wait_for_accept_input()
+# 현재 적 등장 텍스트 표시 함수
+func show_current_enemy_encounter_text():
+	set_battle_text_with_accept(get_current_enemy_encounter_text())
+	await wait_for_accept_input()
 # 적 페이즈 전환 함수
 func change_enemy_phase():
 	var next_enemy_id = get_next_phase_enemy_id()
@@ -2849,12 +2966,7 @@ func change_enemy_phase():
 	set_action_buttons_disabled(true)
 
 	# 1. 페이즈1 쪽 전환 텍스트 표시
-	battle_text.text = enemy_data.get(
-		"phase_transition_text",
-		"어둠속에서 무언가가 다시 나타나기 시작한다..."
-	) + "\n\n[Space]"
-
-	await wait_for_accept_input()
+	await show_phase_transition_text()
 
 	# 2. 암전
 	await fade_to_black(2)
@@ -2883,17 +2995,27 @@ func change_enemy_phase():
 	play_enemy_encounter_sound()
 
 	# 9. 페이즈2 encounter_text 표시 후 Space 대기
-	battle_text.text = enemy_data.get(
-		"encounter_text",
-		enemy_data.get("name", "무언가") + "가 나타났다..."
-	) + "\n\n[Space]"
-
-	await wait_for_accept_input()
+	await show_current_enemy_encounter_text()
 
 	# 10. Space를 누른 뒤에야 페이즈2 확정 패턴 경고문 표시
 	await start_enemy_turn_with_forced_pattern()
 	
 	return true
+# 적 패턴 경고 텍스트 생성 함수
+func get_enemy_pattern_warning_text(pattern):
+	if pattern == null:
+		return get_current_enemy_name() + "이(가) 공격하려고 한다..."
+
+	if typeof(pattern) != TYPE_DICTIONARY:
+		return get_current_enemy_name() + "이(가) 공격하려고 한다..."
+
+	return str(pattern.get(
+		"warning_text",
+		get_current_enemy_name() + "이(가) 공격하려고 한다..."
+	))
+# 적 패턴 경고 텍스트 표시 함수
+func show_enemy_pattern_warning_text(pattern):
+	set_battle_text_with_accept(get_enemy_pattern_warning_text(pattern))
 # 적 페이즈 전환 확정 패턴 사용 함수
 func start_enemy_turn_with_forced_pattern():
 	var pattern_id = enemy_data.get("phase_start_pattern_id", "")
@@ -2916,12 +3038,7 @@ func start_enemy_turn_with_forced_pattern():
 	current_enemy_pattern["owner_type"] = "body"
 	current_enemy_pattern["owner_id"] = ""
 
-	var warning_text = current_enemy_pattern.get(
-		"warning_text",
-		enemy_data.get("name", "적") + "이(가) 공격하려고 한다..."
-	)
-
-	battle_text.text = warning_text + "\n\n[Space]"
+	show_enemy_pattern_warning_text(current_enemy_pattern)
 # 적 페이즈 전환 확정 패턴 탐색 함수
 func get_enemy_pattern_by_id(pattern_id):
 	for pattern in enemy_data.get("patterns", []):
@@ -3109,7 +3226,7 @@ func apply_parry_counter_to_body(counter_damage):
 	show_damage_popup(counter_damage, true)
 	start_enemy_hit_feedback()
 
-	battle_text.text = "패링 반격!\n" + str(int(counter_damage)) + " 의 피해를 주었다."
+	set_battle_text(make_parry_counter_body_text(counter_damage))
 # 플레이어 파츠 패링 반격 함수
 func apply_parry_counter_to_part(part_id, counter_damage):
 	if destroyed_parts.has(part_id):
@@ -3132,10 +3249,14 @@ func apply_parry_counter_to_part(part_id, counter_damage):
 	show_damage_popup(counter_damage, true)
 	start_enemy_hit_feedback()
 
-	var part = enemy_parts.get(part_id, {})
-	var part_name = part.get("name", "부위")
+	var part_name = get_enemy_part_name_by_id(part_id)
 
-	battle_text.text = "패링 반격!\n" + part_name + "에 " + str(int(counter_damage)) + " 의 피해를 주었다."
+	set_battle_text(
+		make_parry_counter_part_text(
+			part_name,
+			counter_damage
+		)
+	)
 
 	if enemy_part_hp[part_id] <= 0:
 		destroy_enemy_part(part_id)
@@ -3284,7 +3405,7 @@ func start_attack_mode():
 	weapon_sprite.visible = true
 	attack_guide.visible = true
 
-	battle_text.text = ""
+	clear_battle_text()
 # 플레이어 방어 모드 시작 함수
 func start_defense_mode():
 	var weapon_data = get_current_weapon_data()
@@ -3339,6 +3460,57 @@ func update_defense_weapon_movement(delta):
 	weapon_sprite.global_position += move_vector * move_speed * delta
 
 	clamp_defense_weapon_to_area()
+# 치명타 접두 텍스트 생성 함수
+func make_critical_prefix_text(is_critical):
+	if is_critical:
+		return "치명타!\n"
+
+	return ""
+# 플레이어 본체 공격 결과 텍스트 생성 함수
+func make_player_attack_body_hit_text(hitbox_name, damage, is_weak, is_critical):
+	var text = make_critical_prefix_text(is_critical)
+
+	if is_weak:
+		text += str(hitbox_name) + " 약점을 공격했다!\n"
+	else:
+		text += str(hitbox_name) + "에 맞았다.\n"
+
+	text += str(int(damage)) + " 의 피해를 주었다."
+
+	return text
+# 플레이어 파츠 공격 결과 텍스트 생성 함수
+func make_player_attack_part_hit_text(hitbox_name, damage, is_critical):
+	var text = make_critical_prefix_text(is_critical)
+
+	text += str(hitbox_name) + "에 맞았다.\n"
+	text += str(int(damage)) + " 의 피해를 주었다."
+
+	return text
+# 플레이어 공격 빗나감 텍스트 생성 함수
+func make_player_attack_miss_text():
+	return "공격이 빗나갔다."
+# part_id 기준 파츠 이름 가져오기 함수
+func get_enemy_part_name_by_id(part_id):
+	var part = get_enemy_part_data_by_id(part_id)
+
+	if part.is_empty():
+		return "부위"
+
+	return get_enemy_part_name_from_data(part, "부위")
+# part_id 기준 파츠 파괴 텍스트 가져오기 함수
+func get_enemy_part_destroy_text(part_id):
+	var part = get_enemy_part_data_by_id(part_id)
+
+	if part.is_empty():
+		return "부위가 파괴되었다."
+
+	return str(part.get("destroy_text", "부위가 파괴되었다."))
+# 본체 패링 반격 텍스트 생성 함수
+func make_parry_counter_body_text(counter_damage):
+	return "패링 반격!\n" + str(int(counter_damage)) + " 의 피해를 주었다."
+# 파츠 패링 반격 텍스트 생성 함수
+func make_parry_counter_part_text(part_name, counter_damage):
+	return "패링 반격!\n" + str(part_name) + "에 " + str(int(counter_damage)) + " 의 피해를 주었다."
 # 플레이어 공격 적용 함수
 func apply_player_attack_hit(hitbox):
 	if hitbox.get("target_type", "body") == "part":
@@ -3377,19 +3549,14 @@ func apply_player_attack_hit(hitbox):
 
 	start_enemy_hit_feedback()
 
-	var text = ""
-
-	if is_critical:
-		text += "치명타!\n"
-
-	if is_weak:
-		text += hitbox_name + " 약점을 공격했다!\n"
-	else:
-		text += hitbox_name + "에 맞았다.\n"
-
-	text += str(int(damage)) + " 의 피해를 주었다."
-
-	battle_text.text = text
+	set_battle_text(
+		make_player_attack_body_hit_text(
+			hitbox_name,
+			damage,
+			is_weak,
+			is_critical
+		)
+	)
 # 플레이어 공격 실행 함수
 func execute_player_attack():
 	if not is_attack_mode:
@@ -3407,7 +3574,7 @@ func execute_player_attack():
 	await fire_player_attack_projectile()
 
 	if not player_attack_hit:
-		battle_text.text = "공격이 빗나갔다."
+		set_battle_text(make_player_attack_miss_text())
 
 	await get_tree().create_timer(1.0).timeout
 
@@ -3877,22 +4044,41 @@ func add_enemy_turn_status_effects(effect_ids):
 			continue
 
 		enemy_turn_applied_status_effects.append(effect_id)
-# 적 턴 플레이어 피해 결과 표시 함수
-func show_enemy_turn_player_damage_result():
-	if enemy_turn_total_damage <= 0 and enemy_turn_applied_status_effects.size() == 0:
-		return
+# 적 턴 플레이어 피해 텍스트 생성 함수
+func make_enemy_turn_damage_text():
+	if enemy_turn_total_damage <= 0:
+		return ""
 
+	return str(int(enemy_turn_total_damage)) + " 의 피해를 입었다."
+# 적 턴 상태이상 적용 텍스트 생성 함수
+func make_enemy_turn_status_effect_text():
+	if enemy_turn_applied_status_effects.size() == 0:
+		return ""
+
+	return get_status_applied_text(enemy_turn_applied_status_effects)
+# 적 턴 플레이어 피해/상태이상 결과 텍스트 생성 함수
+func make_enemy_turn_player_result_text():
 	var lines = []
 
-	if enemy_turn_total_damage > 0:
-		lines.append(str(int(enemy_turn_total_damage)) + " 의 피해를 입었다.")
+	var damage_text = make_enemy_turn_damage_text()
 
-	if enemy_turn_applied_status_effects.size() > 0:
-		lines.append(get_status_applied_text(enemy_turn_applied_status_effects))
+	if damage_text != "":
+		lines.append(damage_text)
 
-	battle_text.text = "\n".join(lines)
+	var status_text = make_enemy_turn_status_effect_text()
 
-	await get_tree().create_timer(1.0).timeout
+	if status_text != "":
+		lines.append(status_text)
+
+	return "\n".join(lines)
+# 적 턴 플레이어 피해 결과 표시 함수
+func show_enemy_turn_player_damage_result():
+	var result_text = make_enemy_turn_player_result_text()
+
+	if result_text == "":
+		return
+
+	await show_battle_text_for_seconds(result_text, 1.0)
 # 플레이어 탄막 피격 처리 함수
 func apply_projectile_hit_to_player(projectile_info, projectile_data, danger_type):
 	var damage = projectile_info.get("damage", current_enemy_pattern.get("damage", 1))
@@ -4023,7 +4209,7 @@ func update_player_action_text_by_status():
 	if waiting_enemy_attack:
 		return
 
-	battle_text.text = get_player_turn_start_text()
+	show_player_turn_start_text()
 # 플레이어 턴 시작 텍스트 함수
 func get_player_turn_start_text():
 	if has_player_status_effect("despair"):
@@ -4059,25 +4245,45 @@ func _on_player_portrait_gui_input(event):
 			show_status_popup()
 # 플레이어 상태이상 설명 팝업 표시 함수
 func show_status_popup():
-	var text = get_player_status_description_text()
-
-	if text == "":
-		text = "정상 상태 : \n\n안정적인 상태이다."
-
-	status_popup_text.text = text
+	status_popup_text.text = get_player_status_description_text()
 	status_popup_panel.visible = true
-# 플레이어 상태이상 설명 텍스트 함수
-func get_player_status_description_text():
+# 정상 상태 설명 텍스트 생성 함수
+func make_normal_status_description_text():
+	return "정상 상태 : \n\n안정적인 상태이다."
+# 플레이어가 보유한 상태이상 설명 목록 생성 함수
+func make_player_status_description_lines():
 	var lines = []
 
 	if has_player_status_effect("fear"):
-		lines.append("공포 상태 : \n\n공격 무기의\n스윙 스피드가 50% 빨라진다.")
+		lines.append(make_status_effect_description_text("fear"))
 
 	if has_player_status_effect("lethargy"):
-		lines.append("무기력 상태 : \n\n방어 무기의\n이동속도가 30% 느려진다.")
+		lines.append(make_status_effect_description_text("lethargy"))
 
 	if has_player_status_effect("despair"):
-		lines.append("절망 상태 : \n\n받는 데미지가\n50% 증가한다.")
+		lines.append(make_status_effect_description_text("despair"))
+
+	return lines
+# 상태이상 설명 텍스트 생성 함수
+func make_status_effect_description_text(effect_id):
+	match effect_id:
+		"fear":
+			return "공포 상태 : \n공격 무기의\n스윙 스피드가 50% 빨라진다.\n"
+
+		"lethargy":
+			return "무기력 상태 : \n방어 무기의\n이동속도가 30% 느려진다.\n"
+
+		"despair":
+			return "절망 상태 : \n받는 데미지가\n50% 증가한다.\n"
+
+		_:
+			return get_status_effect_name(effect_id) + " 상태 : \n알 수 없는 상태이상이다.\n"
+# 플레이어 상태이상 설명 텍스트 함수
+func get_player_status_description_text():
+	var lines = make_player_status_description_lines()
+
+	if lines.size() == 0:
+		return make_normal_status_description_text()
 
 	return "\n".join(lines)
 # 플레이어 피격시 왼쪽 패널 빨간 플래시 함수

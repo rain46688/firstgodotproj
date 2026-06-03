@@ -655,6 +655,21 @@ func get_debug_start_item_ids():
 				"tranquilizer",
 				"tranquilizer",
 				"tranquilizer",
+				#"tranquilizer",
+				#"tranquilizer",
+				#"tranquilizer",
+				#"tranquilizer",
+				#"tranquilizer",
+				#"tranquilizer",
+				#"tranquilizer",
+				#"tranquilizer",
+				#"tranquilizer",
+				#"tranquilizer",
+				#"tranquilizer",
+				#"tranquilizer",
+				#"tranquilizer",
+				#"tranquilizer",
+				#"tranquilizer",
 				"lung_model_fetish",
 				"holy_grail_relic",
 				"skull_model_fetish",
@@ -3235,27 +3250,36 @@ func try_merge_inventory_stack_item(source_item, target_slot):
 	if target_index >= inventory.size():
 		return false
 
+	var target_item = inventory[target_index]
+
+	if target_item == null:
+		return false
+
+	if typeof(target_item) != TYPE_DICTIONARY:
+		return false
+
+	if target_item.get("id", "") != source_id:
+		return false
+
 	var source_count = int(source_item.get("count", 1))
-	var target_count = int(inventory[target_index].get("count", 1))
+	var target_count = int(target_item.get("count", 1))
 
 	var move_count = min(source_count, max_stack - target_count)
 
 	if move_count <= 0:
 		return false
 
-	# target_item 변수에 직접 대입하지 않고 inventory index로 수정
+	# count 수정은 inventory index 기준으로 처리
 	inventory[target_index]["count"] = target_count + move_count
 	source_count -= move_count
 
 	if source_count <= 0:
-		if selected_inventory_item == source_item:
-			selected_inventory_item = inventory[target_index]
-
 		inventory.erase(source_item)
 	else:
 		source_item["count"] = source_count
 
-	selected_inventory_item = inventory[target_index]
+	# erase 이후에는 target_index를 다시 쓰지 않고, 미리 저장한 target_item을 사용
+	selected_inventory_item = target_item
 	show_selected_item_info(selected_inventory_item)
 
 	if item_sound != null:
@@ -6165,8 +6189,6 @@ func kill_random_encounter_overlay_tween():
 		encounter_overlay_tween.kill()
 
 	encounter_overlay_tween = null
-
-
 # 랜덤 인카운터 오버레이 초기화 함수
 func reset_random_encounter_overlay():
 	if encounter_danger_overlay == null:
@@ -6174,8 +6196,6 @@ func reset_random_encounter_overlay():
 
 	encounter_danger_overlay.color = Color(1, 0, 0, 0)
 	encounter_danger_overlay.visible = false
-
-
 # 랜덤 인카운터 심장박동 사운드 시작 함수
 func play_random_encounter_heartbeat():
 	if encounter_heartbeat_sound == null:
@@ -6183,8 +6203,6 @@ func play_random_encounter_heartbeat():
 
 	encounter_heartbeat_sound.stop()
 	encounter_heartbeat_sound.play()
-
-
 # 랜덤 인카운터 심장박동 사운드 종료 함수
 func stop_random_encounter_heartbeat():
 	if encounter_heartbeat_sound == null:
