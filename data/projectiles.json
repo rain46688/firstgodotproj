@@ -89,9 +89,7 @@
 		"base_direction": "up",
 		"sound": "slash",
 		"status_effects": [
-			"fear",
-			"despair",
-			"lethargy"
+			"fear"
 		],
 		"hitbox": {
 			"offset": [

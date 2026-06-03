@@ -122,6 +122,12 @@ var battle_item_scroll_start = 0
 var player_effective_stats = {}
 const BATTLE_ITEM_VISIBLE_COUNT = 4
 
+# 게임오버 중복 실행 방지 변수
+var game_over_started = false
+
+# 입력 비동기 처리 중복 방지 변수
+var is_processing_battle_input = false
+
 # 디버그 모드
 var debug_mode = false
 
@@ -173,105 +179,112 @@ var attack_hit_results = []
 # 게임 시작 관련 함수 모음
 # ============================================================
 
-# 프레임 마다 실행 함수
-func _process(delta):
-		# 개발자 모드
+# 디버그 토글 입력 처리 함수
+func update_debug_toggle_input():
 	if Input.is_action_just_pressed("debug_toggle"):
 		debug_mode = !debug_mode
 		update_hitbox_debug()
-	# 관찰중
+# 방어 모드 입력 처리 함수
+func update_defense_mode_input(delta):
+	update_defense_weapon_movement(delta)
+	check_defense_side_warp_input()
+	
+	# 패링 판정 처리 부분 1
+	if Input.is_action_just_pressed("ui_accept"):
+		parry_input_buffer_time = 0.035
+
+	if parry_input_buffer_time > 0:
+		parry_input_buffer_time -= delta
+# 공격 모드 입력 처리 함수
+func update_attack_mode_input(delta):
+	var weapon_data = get_current_weapon_data()
+
+	if weapon_swing_enabled:
+		weapon_move_time += delta
+
+		var swing_speed = get_attack_swing_speed_with_status(weapon_data)
+		var move_range = weapon_data.get("attack_move_range", 460)
+
+		var offset_x = sin(weapon_move_time * swing_speed) * move_range
+		weapon_sprite.position = weapon_base_position + Vector2(offset_x, 0)
+
+	var angle_min = weapon_data.get("attack_angle_min", -45)
+	var angle_max = weapon_data.get("attack_angle_max", 45)
+	var base_rotation = weapon_data.get("attack_base_rotation", 0)
+
+	var angle_step = weapon_data.get("weapon_angle_step", 5)
+	var old_angle = weapon_angle_offset
+
+	if Input.is_action_just_pressed("move_left") or Input.is_action_just_pressed("ui_left"):
+		weapon_angle_offset -= angle_step
+
+	if Input.is_action_just_pressed("move_right") or Input.is_action_just_pressed("ui_right"):
+		weapon_angle_offset += angle_step
+		
+	weapon_angle_offset = clamp(
+		weapon_angle_offset,
+		weapon_data.get("attack_angle_min", -45),
+		weapon_data.get("attack_angle_max", 45)
+	)
+	
+	if weapon_angle_offset != old_angle:
+		play_click_sound()
+
+	weapon_angle_offset = clamp(weapon_angle_offset, angle_min, angle_max)
+	weapon_sprite.rotation_degrees = base_rotation + weapon_angle_offset
+
+	if Input.is_action_just_pressed("ui_accept"):
+		await execute_player_attack()
+# 전투 입력 비동기 처리 시작 가능 여부 확인 함수
+func can_start_battle_input_process():
+	if is_processing_battle_input:
+		return false
+
+	return true
+# 전투 입력 비동기 처리 잠금 함수
+func lock_battle_input_process():
+	is_processing_battle_input = true
+# 전투 입력 비동기 처리 잠금 해제 함수
+func unlock_battle_input_process():
+	is_processing_battle_input = false
+	update_action_button_focus()
+# 우선 처리 입력 모드 갱신 함수
+func update_priority_battle_input(delta):
 	if is_observing:
-		if Input.is_action_just_pressed("move_left") or Input.is_action_just_pressed("ui_left"):
-			move_observe_target(-1)
+		update_observe_mode_input()
+		return true
 
-		if Input.is_action_just_pressed("move_right") or Input.is_action_just_pressed("ui_right"):
-			move_observe_target(1)
-
-		if Input.is_action_just_pressed("ui_accept"):
-			is_observing = false
-			observe_targets.clear()
-			start_enemy_turn()
-
-		return			
-	# 아이템 선택중
 	if is_item_selecting:
-		if Input.is_action_just_pressed("ui_down") or Input.is_action_just_pressed("battle_item_down"):
-			move_battle_item_selection(1)
+		update_battle_item_select_input()
+		return true
 
-		if Input.is_action_just_pressed("ui_up") or Input.is_action_just_pressed("battle_item_up"):
-			move_battle_item_selection(-1)
-
-		if Input.is_action_just_pressed("ui_accept"):
-			use_selected_battle_item()
-
-		if Input.is_action_just_pressed("esc"):
-			is_item_selecting = false
-			show_player_turn_start_text()
-			set_action_buttons_disabled(false)
-
-		return
-	# 적 공격 대기중
 	if waiting_enemy_attack:
-		if Input.is_action_just_pressed("ui_accept"):
-			waiting_enemy_attack = false
-			await execute_enemy_attack()
-		return
-	# 방어 모드
+		await update_enemy_attack_wait_input()
+		return true
+
 	if is_defense_mode:
-		update_defense_weapon_movement(delta)
-		check_defense_side_warp_input()
-		
-		# 패링 판정 처리 부분 1
-		if Input.is_action_just_pressed("ui_accept"):
-			parry_input_buffer_time = 0.035
+		update_defense_mode_input(delta)
+		return true
 
-		if parry_input_buffer_time > 0:
-			parry_input_buffer_time -= delta	
-	# 공격 모드
 	if is_attack_mode:
-		var weapon_data = get_current_weapon_data()
+		await update_attack_mode_input(delta)
+		return true
 
-		if weapon_swing_enabled:
-			weapon_move_time += delta
-
-			var swing_speed = get_attack_swing_speed_with_status(weapon_data)
-			var move_range = weapon_data.get("attack_move_range", 460)
-
-			var offset_x = sin(weapon_move_time * swing_speed) * move_range
-			weapon_sprite.position = weapon_base_position + Vector2(offset_x, 0)
-
-		var angle_min = weapon_data.get("attack_angle_min", -45)
-		var angle_max = weapon_data.get("attack_angle_max", 45)
-		var base_rotation = weapon_data.get("attack_base_rotation", 0)
-
-		var angle_step = weapon_data.get("weapon_angle_step", 5)
-		
-		var old_angle = weapon_angle_offset
-
-		if Input.is_action_just_pressed("move_left") or Input.is_action_just_pressed("ui_left"):
-			weapon_angle_offset -= angle_step
-
-		if Input.is_action_just_pressed("move_right") or Input.is_action_just_pressed("ui_right"):
-			weapon_angle_offset += angle_step
-			
-		weapon_angle_offset = clamp(
-			weapon_angle_offset,
-			weapon_data.get("attack_angle_min", -45),
-			weapon_data.get("attack_angle_max", 45)
-		)
-		
-		if weapon_angle_offset != old_angle:
-			play_click_sound()
-
-		weapon_angle_offset = clamp(weapon_angle_offset, angle_min, angle_max)
-		weapon_sprite.rotation_degrees = base_rotation + weapon_angle_offset
-
-		if Input.is_action_just_pressed("ui_accept"):
-			await execute_player_attack()
-		return
-	# 플레이어 행동 버튼 키보드 조작
-	if is_player_turn and not battle_ended:
+	return false
+# 일반 플레이어 턴 입력 처리 함수
+func update_normal_player_turn_input():
+	if can_player_choose_action():
 		update_action_button_keyboard_input()
+# 프레임 마다 실행 함수
+func _process(delta):
+	update_debug_toggle_input()
+
+	var priority_input_handled = await update_priority_battle_input(delta)
+
+	if priority_input_handled:
+		return
+
+	update_normal_player_turn_input()
 # 처음에 한번 실행 함수
 func _ready():
 	attack_button.focus_mode = Control.FOCUS_NONE
@@ -385,6 +398,8 @@ func reset_battle_runtime_state():
 	is_observing = false
 	is_item_selecting = false
 	waiting_enemy_attack = false
+	is_processing_battle_input = false
+	game_over_started = false
 # 전투 시작 시 플레이어 UI 초기화 함수
 func setup_battle_player_ui():
 	player_status_effects.clear()
@@ -785,53 +800,43 @@ func get_item_name_by_id(item_id):
 
 # 공격 버튼 클릭 함수
 func _on_attack_button_pressed():
-	if not is_player_turn:
+	if not can_player_choose_action():
 		return
 	
 	play_click_sound()
 	start_attack_mode()
 # 관찰 버튼 클릭 함수
 func _on_observe_button_pressed():
-	if not is_player_turn:
+	if not can_player_choose_action():
 		return
 
 	play_click_sound()
-	set_action_buttons_disabled(true)
-
-	is_observing = true
-	observe_targets = make_observe_targets()
-	observe_index = 0
-
-	if observe_targets.size() == 0:
-		set_battle_text_with_accept("관찰할 수 있는 대상이 없다.")
-		return
-
-	show_current_observe_target()
+	start_observe_mode()
 # 아이템 버튼 클릭 함수
 func _on_item_button_pressed():
-	if not is_player_turn:
+	if not can_player_choose_action():
 		return
 
 	play_click_sound()
 	open_battle_item_list()
 # 턴종료 버튼 클릭 함수
 func _on_end_turn_button_pressed():
-	if not is_player_turn:
+	if not can_player_choose_action():
 		return
 
 	play_click_sound()
-	set_action_buttons_disabled(true)
+	hide_player_action_menu()
 
 	await show_battle_text_for_seconds("턴을 종료했다.", 0.7)
 
 	start_enemy_turn()
 # 도망 버튼 클릭 함수
 func _on_run_button_pressed():
-	if not is_player_turn:
+	if not can_player_choose_action():
 		return
 
 	play_click_sound()
-	set_action_buttons_disabled(true)
+	hide_player_action_menu()
 
 	if enemy_data.get("can_escape", true):
 		# 사운드 추가 및 적 이미지 안보이게 수정
@@ -857,18 +862,68 @@ func _on_run_button_pressed():
 # 플레이어 턴 시작 텍스트 표시 함수
 func show_player_turn_start_text():
 	set_battle_text(get_player_turn_start_text())
-# 플레이어 턴 시작 함수
-func start_player_turn():
-	print("start_player_turn")
-
-	is_player_turn = true
-	action_button_index = 0
-	is_attack_mode = false
-	
+# 플레이어 행동 메뉴 표시 함수
+func show_player_action_menu():
+	show_player_turn_start_text()
+	set_action_buttons_disabled(false)
+	update_action_button_focus()
+# 플레이어 행동 메뉴 숨김 함수
+func hide_player_action_menu():
+	set_action_buttons_disabled(true)
+	update_action_button_focus()
+# 전투 무기 액션 표시 초기화 함수
+func reset_weapon_action_visual():
 	weapon_swing_enabled = false
 	weapon_sprite.visible = false
 	weapon_sprite.rotation_degrees = 0
 	attack_guide.visible = false
+# 플레이어 액션 모드 초기화 함수
+func reset_player_action_modes():
+	is_attack_mode = false
+	is_defense_mode = false
+	is_observing = false
+	is_item_selecting = false
+# 플레이어 턴 상태 준비 함수
+func prepare_player_turn_state():
+	is_player_turn = true
+	waiting_enemy_attack = false
+	action_button_index = 0
+
+	reset_player_action_modes()
+	reset_weapon_action_visual()
+# 적 공격 대기 시작 함수
+func start_enemy_attack_wait():
+	waiting_enemy_attack = true
+# 적 공격 대기 종료 함수
+func end_enemy_attack_wait():
+	waiting_enemy_attack = false
+# 적 공격 대기 후 공격 실행 함수
+func confirm_enemy_attack_wait():
+	if not can_start_battle_input_process():
+		return
+
+	lock_battle_input_process()
+
+	end_enemy_attack_wait()
+	await execute_enemy_attack()
+
+	unlock_battle_input_process()
+# 적 공격 대기 입력 처리 함수
+func update_enemy_attack_wait_input():
+	if Input.is_action_just_pressed("ui_accept"):
+		await confirm_enemy_attack_wait()
+# 적 턴 상태 준비 함수
+func prepare_enemy_turn_state():
+	is_player_turn = false
+
+	reset_player_action_modes()
+	reset_weapon_action_visual()
+	start_enemy_attack_wait()
+# 플레이어 턴 시작 함수
+func start_player_turn():
+	print("start_player_turn")
+
+	prepare_player_turn_state()
 
 	set_action_buttons_disabled(true)
 
@@ -877,18 +932,12 @@ func start_player_turn():
 	if not can_continue:
 		return
 
-	show_player_turn_start_text()
-	set_action_buttons_disabled(false)
+	show_player_action_menu()
 # 적 턴 시작 함수
 func start_enemy_turn():
 	print("start_enemy_turn")
-	is_player_turn = false
 	
-	weapon_swing_enabled = false
-	weapon_sprite.visible = false
-	weapon_sprite.rotation_degrees = 0
-	attack_guide.visible = false
-	waiting_enemy_attack = true
+	prepare_enemy_turn_state()
 
 	set_action_buttons_disabled(true)
 	current_enemy_pattern = choose_enemy_pattern()
@@ -980,15 +1029,49 @@ func make_game_over_text():
 # 게임오버 텍스트 표시 함수
 func show_game_over_text():
 	await show_battle_text_for_seconds(make_game_over_text(), 2.0)
+# 게임오버 상태 준비 함수
+func prepare_game_over_state():
+	battle_ended = true
+	is_player_turn = false
+	waiting_enemy_attack = false
+
+	reset_player_action_modes()
+	reset_weapon_action_visual()
+	set_action_buttons_disabled(true)
+# 게임오버 시작 가능 여부 확인 함수
+func can_start_game_over_flow():
+	if game_over_started:
+		return false
+
+	if battle_ended:
+		return false
+
+	if player_hp > 0:
+		return false
+
+	return true
+# 게임오버 플로우 시작 함수
+func start_game_over_flow(delay = 0.0):
+	if not can_start_game_over_flow():
+		return
+
+	game_over_started = true
+	prepare_game_over_state()
+
+	if delay > 0.0:
+		await get_tree().create_timer(delay).timeout
+
+	await game_over()
 # 게임 오버 함수
 func game_over():
-	battle_ended = true
-	set_action_buttons_disabled(true)
+	game_over_started = true
+	prepare_game_over_state()
 
 	await show_game_over_text()
 # 전투 텍스트 표시 함수
 func set_battle_text(text):
-	set_battle_text(str(text))
+	# 여긴 set_battle_text() 함수로 처리하면 안됌 그러면 무하루프에 빠질수가있음!
+	battle_text.text = str(text)
 # 전투 텍스트 비우기 함수
 func clear_battle_text():
 	set_battle_text("")
@@ -1017,6 +1100,35 @@ func make_effect_frames(base_path, count):
 		frames.append(base_path + number + ".png")
 
 	return frames
+# 관찰 모드 시작 함수
+func start_observe_mode():
+	hide_player_action_menu()
+
+	is_observing = true
+	observe_targets = make_observe_targets()
+	observe_index = 0
+
+	if observe_targets.size() == 0:
+		set_battle_text_with_accept("관찰할 수 있는 대상이 없다.")
+		return
+
+	show_current_observe_target()
+# 관찰 모드 종료 함수
+func end_observe_mode():
+	is_observing = false
+	observe_targets.clear()
+	observe_index = 0
+# 관찰 모드 입력 처리 함수
+func update_observe_mode_input():
+	if Input.is_action_just_pressed("move_left") or Input.is_action_just_pressed("ui_left"):
+		move_observe_target(-1)
+
+	if Input.is_action_just_pressed("move_right") or Input.is_action_just_pressed("ui_right"):
+		move_observe_target(1)
+
+	if Input.is_action_just_pressed("ui_accept"):
+		end_observe_mode()
+		start_enemy_turn()
 # 관찰 대상 리스트 생성 함수
 func make_observe_targets():
 	var targets = []
@@ -1168,6 +1280,18 @@ func fade_from_black(duration = 0.5):
 	var tween = create_tween()
 	tween.tween_property(fade_rect, "color:a", 0.0, duration)
 	await tween.finished
+# 전투 아이템 선택 모드 시작 함수
+func start_battle_item_select_mode():
+	hide_player_action_menu()
+	is_item_selecting = true
+	update_battle_item_list()
+# 전투 아이템 선택 모드 종료 함수
+func end_battle_item_select_mode():
+	is_item_selecting = false
+# 전투 아이템 선택 취소 함수
+func cancel_battle_item_select_mode():
+	end_battle_item_select_mode()
+	show_player_action_menu()
 # 아이템 목록 열기 함수
 func open_battle_item_list():
 	battle_consumables.clear()
@@ -1197,13 +1321,10 @@ func open_battle_item_list():
 			
 		await show_battle_text_for_seconds("사용할 수 있는 아이템이 없다.", 1.0)
 
-		set_action_buttons_disabled(false)
-		show_player_turn_start_text()
+		show_player_action_menu()
 		return
 
-	set_action_buttons_disabled(true)
-	is_item_selecting = true
-	update_battle_item_list()
+	start_battle_item_select_mode()
 # 전투 아이템 목록 전체 텍스트 생성 함수
 func make_battle_item_list_text():
 	var text = "사용할 아이템을 선택하세요.\n\n"
@@ -1329,7 +1450,7 @@ func use_selected_battle_item():
 	else:
 		inventory.erase(inventory_item)
 
-	is_item_selecting = false
+	end_battle_item_select_mode()
 
 	await show_battle_item_used_text(item_id)
 
@@ -1422,6 +1543,19 @@ func ensure_key_action(action_name, physical_keycode):
 	var key_event = InputEventKey.new()
 	key_event.physical_keycode = physical_keycode
 	InputMap.action_add_event(action_name, key_event)
+# 전투 아이템 선택 모드 입력 처리 함수
+func update_battle_item_select_input():
+	if Input.is_action_just_pressed("ui_down") or Input.is_action_just_pressed("battle_item_down"):
+		move_battle_item_selection(1)
+
+	if Input.is_action_just_pressed("ui_up") or Input.is_action_just_pressed("battle_item_up"):
+		move_battle_item_selection(-1)
+
+	if Input.is_action_just_pressed("ui_accept"):
+		use_selected_battle_item()
+
+	if Input.is_action_just_pressed("esc"):
+		cancel_battle_item_select_mode()
 # 전투 아이템 선택 이동 함수
 func move_battle_item_selection(direction):
 	if battle_consumables.size() == 0:
@@ -1894,12 +2028,18 @@ func execute_enemy_attack():
 
 	await fire_enemy_projectiles()
 
+	if game_over_started or battle_ended:
+		return
+
 	if player_hp <= 0:
-		await get_tree().create_timer(1.0).timeout
-		await game_over()
+		await start_game_over_flow()
 		return
 
 	await get_tree().create_timer(0.5).timeout
+
+	if game_over_started or battle_ended:
+		return
+
 	start_player_turn()
 # 적 탄막 난이도 보정 함수
 func get_adjusted_projectile_info(projectile_info):
@@ -1976,6 +2116,9 @@ func run_enemy_projectile_motion(
 	var frame_index = 0
 
 	while elapsed_time < projectile_life_time:
+		if battle_ended or game_over_started:
+			return make_enemy_projectile_result("expired")
+
 		if projectile == null:
 			return make_enemy_projectile_result("expired")
 
@@ -2024,6 +2167,9 @@ func clear_enemy_projectile_node(projectile):
 		projectile.queue_free()
 # 적의 탄막 발사 함수
 func fire_enemy_projectile(projectile_info):
+	if battle_ended or game_over_started:
+		return
+
 	projectile_info = get_adjusted_projectile_info(projectile_info)
 
 	if projectile_info == null:
@@ -2218,6 +2364,9 @@ func fire_enemy_projectiles():
 				await get_tree().create_timer(delay).timeout
 
 			await fire_enemy_projectile(projectile_info)
+
+			if battle_ended or game_over_started:
+				return
 
 	end_defense_mode()
 	
@@ -3031,7 +3180,7 @@ func start_enemy_turn_with_forced_pattern():
 		return
 
 	is_player_turn = false
-	waiting_enemy_attack = true
+	start_enemy_attack_wait()
 	set_action_buttons_disabled(true)
 
 	current_enemy_pattern = pattern
@@ -3385,42 +3534,60 @@ func update_weapon_base_position():
 
 	weapon_base_position = guide_center_global - weapon_parent_global_pos - weapon_sprite.pivot_offset
 	weapon_sprite.position = weapon_base_position
-# 플레이어 공격 모드 시작 함수
-func start_attack_mode():
-	set_action_buttons_disabled(true)
-
+# 공격 모드 상태 준비 함수
+func prepare_attack_mode_state():
 	is_attack_mode = true
 	weapon_swing_enabled = true
 	weapon_move_time = 0.0
-
+	weapon_angle_offset = 0.0
+# 공격 모드 무기 비주얼 준비 함수
+func setup_attack_mode_weapon_visual():
 	update_weapon_sprite_texture()
 	apply_weapon_visual_settings()
 	update_weapon_base_position()
-	
-	var weapon_data = get_current_weapon_data()
-	weapon_angle_offset = 0.0
-	weapon_sprite.rotation_degrees = weapon_data.get("attack_base_rotation", 0)
 
+	var weapon_data = get_current_weapon_data()
+
+	weapon_sprite.rotation_degrees = weapon_data.get("attack_base_rotation", 0)
 	weapon_sprite.position = weapon_base_position
 	weapon_sprite.visible = true
 	attack_guide.visible = true
-
+# 공격 모드 UI 시작 처리 함수
+func start_attack_mode_ui():
+	hide_player_action_menu()
 	clear_battle_text()
-# 플레이어 방어 모드 시작 함수
-func start_defense_mode():
+# 공격 모드 종료 함수
+func end_attack_mode():
+	is_attack_mode = false
+	reset_weapon_action_visual()
+# 플레이어 공격 모드 시작 함수
+func start_attack_mode():
+	start_attack_mode_ui()
+	prepare_attack_mode_state()
+	setup_attack_mode_weapon_visual()
+# 방어 모드 상태 준비 함수
+func prepare_defense_mode_state():
+	is_defense_mode = true
+# 방어 모드 무기 비주얼 준비 함수
+func setup_defense_mode_weapon_visual():
 	var weapon_data = get_current_weapon_data()
 
 	update_weapon_sprite_texture()
 	apply_weapon_visual_settings()
 
 	weapon_sprite.rotation_degrees = weapon_data.get("defense_base_rotation", 0)
-
 	weapon_sprite.visible = true
 
 	# 무기 표시/크기/회전 설정 끝난 뒤에 호출
 	move_defense_weapon_to_area_center()
-
-	is_defense_mode = true
+# 방어 모드 무기 비주얼 종료 함수
+func clear_defense_mode_weapon_visual():
+	weapon_sprite.visible = false
+	weapon_sprite.rotation_degrees = 0
+# 플레이어 방어 모드 시작 함수
+func start_defense_mode():
+	setup_defense_mode_weapon_visual()
+	prepare_defense_mode_state()
 # 방어 무기 히트박스를 방어 영역 중앙으로 이동시키는 함수
 func move_defense_weapon_to_area_center():
 	var area = get_defense_area_global_rect()
@@ -3433,8 +3600,7 @@ func move_defense_weapon_to_area_center():
 # 플레이어 방어 모드 종료 함수
 func end_defense_mode():
 	is_defense_mode = false
-	weapon_sprite.visible = false
-	weapon_sprite.rotation_degrees = 0
+	clear_defense_mode_weapon_visual()
 # 방어 무기 이동 함수
 func update_defense_weapon_movement(delta):
 	var move_vector = Vector2.ZERO
@@ -3562,10 +3728,12 @@ func execute_player_attack():
 	if not is_attack_mode:
 		return
 
-	is_attack_mode = false
-	weapon_swing_enabled = false
-	weapon_sprite.visible = false
-	attack_guide.visible = false
+	if not can_start_battle_input_process():
+		return
+
+	lock_battle_input_process()
+
+	end_attack_mode()
 
 	player_attack_hit = false
 	attack_hit_results.clear()
@@ -3580,9 +3748,11 @@ func execute_player_attack():
 
 	if enemy_hp <= 0:
 		await handle_enemy_defeated()
+		unlock_battle_input_process()
 		return
 
 	start_enemy_turn()
+	unlock_battle_input_process()
 # 발사체 사운드 재생 함수
 func play_projectile_sound(sound_id):
 	if sound_id == "":
@@ -3947,16 +4117,80 @@ func get_attack_collided_part_hitboxes(attack_rect):
 func play_click_sound():
 	if click_sound != null:
 		click_sound.play()
+# 행동 버튼 인덱스 보정 함수
+func clamp_action_button_index():
+	if action_buttons.size() == 0:
+		action_button_index = 0
+		return
+
+	if action_button_index < 0:
+		action_button_index = 0
+
+	if action_button_index >= action_buttons.size():
+		action_button_index = action_buttons.size() - 1
+# 행동 버튼 포커스 표시 가능 여부 확인 함수
+func can_show_action_button_focus():
+	if battle_ended:
+		return false
+
+	if not is_player_alive():
+		return false
+
+	if not is_player_turn:
+		return false
+
+	if is_priority_battle_mode_active():
+		return false
+
+	return true
+# 특정 행동 버튼이 현재 포커스 대상인지 확인하는 함수
+func is_action_button_focus_target(index):
+	if not can_show_action_button_focus():
+		return false
+
+	if index != action_button_index:
+		return false
+
+	if index < 0 or index >= action_buttons.size():
+		return false
+
+	var button = action_buttons[index]
+
+	if button == null:
+		return false
+
+	if button.disabled:
+		return false
+
+	return true
+# 행동 버튼 기본 텍스트 가져오기 함수
+func get_action_button_base_text(index):
+	if index >= 0 and index < action_button_base_texts.size():
+		return action_button_base_texts[index]
+
+	if index >= 0 and index < action_buttons.size():
+		var button = action_buttons[index]
+
+		if button != null:
+			return button.text.replace("▶ ", "").strip_edges()
+
+	return ""
 # 플레이어 전투 메뉴 조작 포커스 함수
 func update_action_button_focus():
 	if action_buttons.size() == 0:
 		return
 
+	clamp_action_button_index()
+
 	for i in range(action_buttons.size()):
 		var button = action_buttons[i]
-		var base_text = action_button_base_texts[i]
 
-		if not button.disabled and i == action_button_index and is_player_turn:
+		if button == null:
+			continue
+
+		var base_text = get_action_button_base_text(i)
+
+		if is_action_button_focus_target(i):
 			button.text = "▶ " + base_text
 		else:
 			button.text = "  " + base_text
@@ -3964,6 +4198,8 @@ func update_action_button_focus():
 func move_action_button_focus(direction):
 	if action_buttons.size() == 0:
 		return
+
+	clamp_action_button_index()
 
 	for i in range(action_buttons.size()):
 		action_button_index += direction
@@ -3979,24 +4215,94 @@ func move_action_button_focus(direction):
 
 	play_click_sound()
 	update_action_button_focus()
-# 플레이어 전투 메뉴 키보드 입력 함수
-func update_action_button_keyboard_input():
-	if action_buttons.size() == 0:
-		return
+# 전투 우선 처리 모드 활성 여부 확인 함수
+func is_priority_battle_mode_active():
+	if is_observing:
+		return true
 
+	if is_item_selecting:
+		return true
+
+	if waiting_enemy_attack:
+		return true
+
+	if is_defense_mode:
+		return true
+
+	if is_attack_mode:
+		return true
+
+	return false
+# 플레이어가 전투에서 살아있는지 확인하는 함수
+func is_player_alive():
+	return player_hp > 0
+# 플레이어 기본 행동 가능 여부 확인 함수
+func can_player_choose_action():
+	if battle_ended:
+		return false
+
+	if not is_player_alive():
+		return false
+
+	if not is_player_turn:
+		return false
+
+	if is_processing_battle_input:
+		return false
+
+	if is_priority_battle_mode_active():
+		return false
+
+	return true
+# 플레이어 행동 버튼 입력 가능 여부 확인 함수
+func can_update_action_button_input():
+	if not can_player_choose_action():
+		return false
+
+	if action_buttons.size() == 0:
+		return false
+
+	return true
+# 현재 선택된 행동 버튼 가져오기 함수
+func get_selected_action_button():
+	if action_buttons.size() == 0:
+		return null
+
+	if action_button_index < 0:
+		action_button_index = 0
+
+	if action_button_index >= action_buttons.size():
+		action_button_index = action_buttons.size() - 1
+
+	return action_buttons[action_button_index]
+# 플레이어 행동 버튼 방향 입력 처리 함수
+func update_action_button_direction_input():
 	if Input.is_action_just_pressed("move_back"):
 		move_action_button_focus(1)
 
 	if Input.is_action_just_pressed("move_forward"):
 		move_action_button_focus(-1)
+# 플레이어 행동 버튼 확정 입력 처리 함수
+func update_action_button_confirm_input():
+	if not Input.is_action_just_pressed("ui_accept"):
+		return
 
-	if Input.is_action_just_pressed("ui_accept"):
-		var selected_button = action_buttons[action_button_index]
+	var selected_button = get_selected_action_button()
 
-		if selected_button.disabled:
-			return
+	if selected_button == null:
+		return
 
-		selected_button.emit_signal("pressed")
+	if selected_button.disabled:
+		return
+
+	selected_button.emit_signal("pressed")
+# 플레이어 전투 메뉴 키보드 입력 함수
+func update_action_button_keyboard_input():
+	if not can_update_action_button_input():
+		return
+
+	update_action_button_direction_input()
+	update_action_button_confirm_input()
 # 플레이어 상태이상 부여 함수
 func apply_player_status_effects(effect_ids):
 	var added_new_status = false
@@ -4073,6 +4379,9 @@ func make_enemy_turn_player_result_text():
 	return "\n".join(lines)
 # 적 턴 플레이어 피해 결과 표시 함수
 func show_enemy_turn_player_damage_result():
+	if game_over_started:
+		return
+
 	var result_text = make_enemy_turn_player_result_text()
 
 	if result_text == "":
@@ -4109,6 +4418,9 @@ func apply_projectile_hit_to_player(projectile_info, projectile_data, danger_typ
 		hit_normal_sound.play()
 
 	update_player_hp_ui()
+
+	if player_hp <= 0:
+		start_game_over_flow()
 # 플레이어 받는 데미지 계산 함수
 func get_player_received_damage(base_damage):
 	var damage = float(base_damage)
@@ -4239,7 +4551,7 @@ func clear_selected_player_status_effects(effect_ids):
 	if player_status_effects.size() == 0:
 		status_popup_panel.visible = false
 # 플레이어 초상화 입력 함수
-func _on_player_portrait_gui_input(event):
+func _on_player_portrait_gui_input(event):  
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			show_status_popup()
@@ -4247,9 +4559,9 @@ func _on_player_portrait_gui_input(event):
 func show_status_popup():
 	status_popup_text.text = get_player_status_description_text()
 	status_popup_panel.visible = true
-# 정상 상태 설명 텍스트 생성 함수
+# 상태 설명 텍스트 생성 함수
 func make_normal_status_description_text():
-	return "정상 상태 : \n\n안정적인 상태이다."
+	return "정상 상태 : \n차분한 상태이다."
 # 플레이어가 보유한 상태이상 설명 목록 생성 함수
 func make_player_status_description_lines():
 	var lines = []
@@ -4474,6 +4786,7 @@ func apply_player_turn_start_relic_effects():
 		update_player_hp_ui()
 
 		if player_hp <= 0:
+			prepare_game_over_state()
 			await get_tree().create_timer(0.5).timeout
 			await game_over()
 			return false
