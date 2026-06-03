@@ -41,7 +41,7 @@
 		"hitbox": {
 			"offset": [
 				55,
-				5
+				10
 			],
 			"size": [
 				90,
@@ -111,7 +111,7 @@
 			418,
 			418
 		],
-		"speed": 1200,
+		"speed": 1500,
 		"life_time": 0.9,
 		"max_distance": 1000,
 		"base_direction": "up",

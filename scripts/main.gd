@@ -151,11 +151,11 @@ var arrange_selected_item_text_scroll = null
 # combined_candle_students_phase_01
 # candle_student
 const DEBUG_ADD_START_ITEMS = true
-const DEBUG_OPEN_PENDING_LOOT_TEST = false
+const DEBUG_OPEN_PENDING_LOOT_TEST = true
 const DEBUG_START_BATTLE_TEST = false
 const DEBUG_TEST_BATTLE_ENEMY_ID = "combined_candle_students_phase_01"
 const DEBUG_BATTLE_START_DELAY = 1.0
-const DEBUG_START_ITEM_PRESET = "my_test"
+const DEBUG_START_ITEM_PRESET = "consumable_test"
 
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
@@ -657,8 +657,8 @@ func get_debug_start_item_ids():
 				"tranquilizer",
 				"lung_model_fetish",
 				"holy_grail_relic",
+				"skull_model_fetish",
 				"music_box_relic",
-				"first_aid_box_fetish",
 				"cross_relic",
 				"razor",
 				"cutter_knife"
