@@ -183,7 +183,7 @@
 		"patterns": [
 			{
 				"id": "basic_attack",
-				"weight": 10,
+				"weight": 5,
 				"warning_text": "아무런 행동을 하지 않고 있다.",
 				"fire_mode": "sequential",
 				"projectiles": []
@@ -260,7 +260,7 @@
 				"patterns": [
 					{
 						"id": "pipe_swing",
-						"weight": 45,
+						"weight": 55,
 						"warning_text": "구겨진 파이프를 휘두른다.",
 						"fire_mode": "sequential",
 						"counter_hitbox_id": "left_arm",
@@ -333,7 +333,7 @@
 				"patterns": [
 					{
 						"id": "chair_swing",
-						"weight": 45,
+						"weight": 40,
 						"warning_text": "망가진 의자를 휘두른다.",
 						"fire_mode": "sequential",
 						"counter_hitbox_id": "right_arm",

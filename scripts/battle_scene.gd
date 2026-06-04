@@ -940,9 +940,7 @@ func start_enemy_turn():
 	prepare_enemy_turn_state()
 
 	set_action_buttons_disabled(true)
-	current_enemy_pattern = choose_enemy_pattern()
-
-	show_enemy_pattern_warning_text(current_enemy_pattern)
+	apply_normal_enemy_turn_pattern()
 # 버튼 활성/비활성 함수
 func set_action_buttons_disabled(disabled):
 	attack_button.disabled = disabled
@@ -978,6 +976,8 @@ func make_enemy_defeated_text():
 	return enemy_data.get("name", "적") + "을 쓰러뜨렸다."
 # 전투 승리 텍스트 표시 함수
 func show_battle_win_text():
+	# 전투 종료시 정상 상태로 돌아옴.
+	player_portrait.texture = load(player_portrait_paths["normal"])
 	set_battle_text_with_accept("전투에서 승리했다.")
 	await wait_for_accept_input()
 # 승리 함수 추가
@@ -2022,25 +2022,49 @@ func clear_enemy_projectile_debug_boxes():
 # 적 HP ui 갱신 함수
 func update_enemy_hp_ui():
 	update_debug_hp_labels()
-# 적 공격 함수
-func execute_enemy_attack():
+# 적 공격 실행 시작 준비 함수
+func prepare_enemy_attack_execution():
 	clear_battle_text()
+# 적 공격 후 전투 흐름 중단 여부 확인 함수
+func should_stop_after_enemy_attack():
+	if game_over_started:
+		return true
 
-	await fire_enemy_projectiles()
+	if battle_ended:
+		return true
 
-	if game_over_started or battle_ended:
-		return
+	return false
+# 적 공격 후 플레이어 사망 처리 함수
+func check_player_death_after_enemy_attack():
+	if player_hp > 0:
+		return false
 
-	if player_hp <= 0:
-		await start_game_over_flow()
-		return
-
+	await start_game_over_flow()
+	return true
+# 적 공격 후 플레이어 턴 복귀 대기 함수
+func wait_before_returning_to_player_turn():
 	await get_tree().create_timer(0.5).timeout
+# 적 공격 후 플레이어 턴 복귀 함수
+func return_to_player_turn_after_enemy_attack():
+	await wait_before_returning_to_player_turn()
 
-	if game_over_started or battle_ended:
+	if should_stop_after_enemy_attack():
 		return
 
 	start_player_turn()
+# 적 공격 함수
+func execute_enemy_attack():
+	prepare_enemy_attack_execution()
+
+	await fire_enemy_projectiles()
+
+	if should_stop_after_enemy_attack():
+		return
+
+	if await check_player_death_after_enemy_attack():
+		return
+
+	await return_to_player_turn_after_enemy_attack()
 # 적 탄막 난이도 보정 함수
 func get_adjusted_projectile_info(projectile_info):
 	var adjusted = projectile_info.duplicate(true)
@@ -2100,6 +2124,94 @@ func apply_enemy_projectile_frame(projectile, projectile_frames, frame_index, pr
 
 	if frame_texture != null:
 		projectile.texture = frame_texture
+# 적 탄막 노드 유효성 확인 함수
+func is_valid_enemy_projectile_node(projectile):
+	if projectile == null:
+		return false
+
+	if not is_instance_valid(projectile):
+		return false
+
+	return true
+# 적 탄막 이동 루프 중단 여부 확인 함수
+func should_stop_enemy_projectile_motion(projectile):
+	if should_stop_enemy_projectile_flow():
+		return true
+
+	if not is_valid_enemy_projectile_node(projectile):
+		return true
+
+	return false
+# 적 탄막 1프레임 이동 함수
+func move_enemy_projectile_one_frame(projectile, direction, projectile_speed, projectile_frame_time):
+	projectile.position += direction * projectile_speed * projectile_frame_time
+# 적 탄막 패링 결과 확인 함수
+func get_enemy_projectile_parry_result(projectile, projectile_data):
+	if parry_input_buffer_time <= 0:
+		return {}
+
+	if not check_parry_hit(projectile, projectile_data):
+		return {}
+
+	parry_count += 1
+	projectile.visible = false
+
+	if parry_sound != null:
+		parry_sound.play()
+
+	spawn_parry_effect(
+		get_parry_effect_position_for_projectile(projectile, projectile_data)
+	)
+
+	return make_enemy_projectile_result("parried")
+# 적 탄막 방어 결과 확인 함수
+func get_enemy_projectile_block_result(projectile, projectile_data, danger_type):
+	if danger_type == "parry_only":
+		return {}
+
+	if not check_defense_hit(projectile, projectile_data):
+		return {}
+
+	if block_sound != null:
+		block_sound.play()
+
+	return make_enemy_projectile_result("blocked")
+# 적 탄막 플레이어 피격 결과 확인 함수
+func get_enemy_projectile_player_hit_result(projectile, projectile_data):
+	if not has_enemy_projectile_reached_damage_line(projectile, projectile_data):
+		return {}
+
+	return make_enemy_projectile_result("hit_player")
+# 적 탄막 충돌 결과 확인 함수
+func get_enemy_projectile_collision_result(projectile, projectile_data, danger_type):
+	var parry_result = get_enemy_projectile_parry_result(projectile, projectile_data)
+
+	if not parry_result.is_empty():
+		return parry_result
+
+	var block_result = get_enemy_projectile_block_result(
+		projectile,
+		projectile_data,
+		danger_type
+	)
+
+	if not block_result.is_empty():
+		return block_result
+
+	var hit_result = get_enemy_projectile_player_hit_result(projectile, projectile_data)
+
+	if not hit_result.is_empty():
+		return hit_result
+
+	return {}
+# 적 탄막 프레임 인덱스 갱신 함수
+func get_next_enemy_projectile_frame_index(frame_index, projectile_frames):
+	frame_index += 1
+
+	if projectile_frames.size() > 0 and frame_index >= projectile_frames.size():
+		frame_index = 0
+
+	return frame_index
 # 적 탄막 이동과 충돌 판정 실행 함수
 func run_enemy_projectile_motion(
 	projectile,
@@ -2116,13 +2228,7 @@ func run_enemy_projectile_motion(
 	var frame_index = 0
 
 	while elapsed_time < projectile_life_time:
-		if battle_ended or game_over_started:
-			return make_enemy_projectile_result("expired")
-
-		if projectile == null:
-			return make_enemy_projectile_result("expired")
-
-		if not is_instance_valid(projectile):
+		if should_stop_enemy_projectile_motion(projectile):
 			return make_enemy_projectile_result("expired")
 
 		apply_enemy_projectile_frame(
@@ -2132,31 +2238,31 @@ func run_enemy_projectile_motion(
 			projectile_id
 		)
 
-		projectile.position += direction * projectile_speed * projectile_frame_time
+		move_enemy_projectile_one_frame(
+			projectile,
+			direction,
+			projectile_speed,
+			projectile_frame_time
+		)
 		
 		update_defense_hitbox_debug(projectile, projectile_data)
-		
-		if parry_input_buffer_time > 0 and check_parry_hit(projectile, projectile_data):
-			parry_count += 1
-			projectile.visible = false
-			parry_sound.play()
-			spawn_parry_effect(get_parry_effect_position_for_projectile(projectile, projectile_data))
-			return make_enemy_projectile_result("parried")
-		
-		if danger_type != "parry_only" and check_defense_hit(projectile, projectile_data):
-			block_sound.play()
-			return make_enemy_projectile_result("blocked")
 
-		if has_enemy_projectile_reached_damage_line(projectile, projectile_data):
-			return make_enemy_projectile_result("hit_player")
+		var collision_result = get_enemy_projectile_collision_result(
+			projectile,
+			projectile_data,
+			danger_type
+		)
+
+		if not collision_result.is_empty():
+			return collision_result
 
 		await get_tree().create_timer(projectile_frame_time).timeout
 
 		elapsed_time += projectile_frame_time
-		frame_index += 1
-
-		if projectile_frames.size() > 0 and frame_index >= projectile_frames.size():
-			frame_index = 0
+		frame_index = get_next_enemy_projectile_frame_index(
+			frame_index,
+			projectile_frames
+		)
 
 	return make_enemy_projectile_result("expired")
 # 적 탄막 노드 정리 함수
@@ -2165,17 +2271,80 @@ func clear_enemy_projectile_node(projectile):
 
 	if projectile != null and is_instance_valid(projectile):
 		projectile.queue_free()
-# 적의 탄막 발사 함수
-func fire_enemy_projectile(projectile_info):
-	if battle_ended or game_over_started:
-		return
-
-	projectile_info = get_adjusted_projectile_info(projectile_info)
-
+# 적 탄막 정보 유효성 확인 함수
+func is_valid_enemy_projectile_info(projectile_info):
 	if projectile_info == null:
-		return
+		return false
 
 	if typeof(projectile_info) != TYPE_DICTIONARY:
+		return false
+
+	return true
+# 적 탄막 정보 안전 보정 함수
+func get_safe_adjusted_enemy_projectile_info(projectile_info):
+	if not is_valid_enemy_projectile_info(projectile_info):
+		return {}
+
+	return get_adjusted_projectile_info(projectile_info)
+# 적 탄막 실행 데이터 생성 함수
+func make_enemy_projectile_runtime_data(projectile_data):
+	return {
+		"speed": get_enemy_projectile_speed(projectile_data),
+		"life_time": get_enemy_projectile_life_time(projectile_data),
+		"frame_time": get_enemy_projectile_frame_time(projectile_data),
+		"frames": get_projectile_frames_from_data(projectile_data)
+	}
+# 적 탄막 노드 전투 화면 추가 함수
+func add_enemy_projectile_node(projectile):
+	if projectile == null:
+		return
+
+	enemy_projectile_container.add_child(projectile)
+# 적 탄막 사운드 재생 함수
+func play_enemy_projectile_sound(projectile_data):
+	if projectile_data == null:
+		return
+
+	if typeof(projectile_data) != TYPE_DICTIONARY:
+		return
+
+	var sound_id = projectile_data.get("sound", "")
+	play_projectile_sound(sound_id)
+# 적 탄막 이동 결과 실행 함수
+func run_enemy_projectile_and_get_result(
+	projectile,
+	projectile_data,
+	projectile_id,
+	danger_type,
+	runtime_data
+):
+	return await run_enemy_projectile_motion(
+		projectile,
+		projectile_data,
+		projectile_id,
+		danger_type,
+		float(runtime_data.get("speed", 1200.0)),
+		float(runtime_data.get("life_time", 0.9)),
+		float(runtime_data.get("frame_time", 0.04)),
+		runtime_data.get("frames", [])
+	)
+# 적 탄막 결과 후처리 함수
+func apply_enemy_projectile_result_to_player(
+	projectile_result,
+	projectile_info,
+	projectile_data,
+	danger_type
+):
+	if should_enemy_projectile_damage_player(projectile_result):
+		apply_projectile_hit_to_player(projectile_info, projectile_data, danger_type)
+# 적의 탄막 발사 함수
+func fire_enemy_projectile(projectile_info):
+	if should_stop_enemy_projectile_flow():
+		return
+
+	projectile_info = get_safe_adjusted_enemy_projectile_info(projectile_info)
+
+	if projectile_info.is_empty():
 		return
 
 	var projectile_id = get_projectile_id_from_info(projectile_info)
@@ -2185,11 +2354,7 @@ func fire_enemy_projectile(projectile_info):
 		return
 
 	var danger_type = get_enemy_projectile_danger_type(projectile_info)
-
-	var projectile_speed = get_enemy_projectile_speed(projectile_data)
-	var projectile_life_time = get_enemy_projectile_life_time(projectile_data)
-	var projectile_frame_time = get_enemy_projectile_frame_time(projectile_data)
-	var projectile_frames = get_projectile_frames_from_data(projectile_data)
+	var runtime_data = make_enemy_projectile_runtime_data(projectile_data)
 
 	var projectile = create_enemy_projectile_node(
 		projectile_info,
@@ -2197,26 +2362,28 @@ func fire_enemy_projectile(projectile_info):
 		danger_type
 	)
 
-	enemy_projectile_container.add_child(projectile)
-	
-	var sound_id = projectile_data.get("sound", "")
-	play_projectile_sound(sound_id)
+	add_enemy_projectile_node(projectile)
+	play_enemy_projectile_sound(projectile_data)
 
-	var projectile_result = await run_enemy_projectile_motion(
+	var projectile_result = await run_enemy_projectile_and_get_result(
 		projectile,
 		projectile_data,
 		projectile_id,
 		danger_type,
-		projectile_speed,
-		projectile_life_time,
-		projectile_frame_time,
-		projectile_frames
+		runtime_data
 	)
 
 	clear_enemy_projectile_node(projectile)
 
-	if should_enemy_projectile_damage_player(projectile_result):
-		apply_projectile_hit_to_player(projectile_info, projectile_data, danger_type)
+	if should_stop_enemy_projectile_flow():
+		return
+
+	apply_enemy_projectile_result_to_player(
+		projectile_result,
+		projectile_info,
+		projectile_data,
+		danger_type
+	)
 # 적 탄막 크기 가져오기 함수
 func get_enemy_projectile_size(projectile_data):
 	if projectile_data == null:
@@ -2243,7 +2410,7 @@ func get_enemy_projectile_speed(projectile_data):
 		return 1200.0
 
 	return float(projectile_data.get("speed", 1200.0))
-# 적 탄막 지속 시간 가져오기 함수
+# 적 탄막 지속 시간 가져오기 함수p
 func get_enemy_projectile_life_time(projectile_data):
 	if projectile_data == null:
 		return 0.9
@@ -2338,93 +2505,300 @@ func create_enemy_projectile_node(projectile_info, projectile_data, danger_type)
 	apply_enemy_projectile_danger_visual(projectile, danger_type)
 
 	return projectile
-# 적의 탄막 패턴 발사 함수
-func fire_enemy_projectiles():
-	var projectile_list = current_enemy_pattern.get("projectiles", [])
-	var fire_mode = current_enemy_pattern.get("fire_mode", "sequential")
+# 현재 적 패턴 투사체 목록 가져오기 함수
+func get_current_enemy_pattern_projectiles():
+	if current_enemy_pattern == null:
+		return []
 
+	if typeof(current_enemy_pattern) != TYPE_DICTIONARY:
+		return []
+
+	var projectile_list = current_enemy_pattern.get("projectiles", [])
+
+	if typeof(projectile_list) != TYPE_ARRAY:
+		return []
+
+	return projectile_list
+# 현재 적 패턴 발사 방식 가져오기 함수
+func get_current_enemy_pattern_fire_mode():
+	if current_enemy_pattern == null:
+		return "sequential"
+
+	if typeof(current_enemy_pattern) != TYPE_DICTIONARY:
+		return "sequential"
+
+	var fire_mode = str(current_enemy_pattern.get("fire_mode", "sequential"))
+
+	if fire_mode == "":
+		return "sequential"
+
+	return fire_mode
+# 현재 적 패턴 탄막 존재 여부 확인 함수
+func has_current_enemy_pattern_projectiles():
+	return get_current_enemy_pattern_projectiles().size() > 0
+# 적 턴 탄막 결과 누적값 초기화 함수
+func reset_enemy_projectile_turn_results():
 	parry_count = 0
 	enemy_turn_total_damage = 0
 	enemy_turn_applied_status_effects.clear()
-
-	if projectile_list.size() == 0:
-		await get_tree().create_timer(0.7).timeout
-		return
-
+# 적 탄막 방어 모드 시작 함수
+func start_enemy_projectile_defense_phase():
 	start_defense_mode()
 	await get_tree().create_timer(0.5).timeout
-
-	if fire_mode == "parallel":
-		await fire_enemy_projectiles_parallel(projectile_list)
-	else:
-		for projectile_info in projectile_list:
-			var delay = projectile_info.get("delay", 0.0)
-
-			if delay > 0:
-				await get_tree().create_timer(delay).timeout
-
-			await fire_enemy_projectile(projectile_info)
-
-			if battle_ended or game_over_started:
-				return
-
+# 적 탄막 방어 모드 종료 함수
+func end_enemy_projectile_defense_phase():
 	end_defense_mode()
-	
-	await show_enemy_turn_player_damage_result()
-
+# 적 탄막 방어 디버그 표시 정리 함수
+func clear_enemy_projectile_defense_debug():
 	defense_weapon_hitbox_debug.visible = false
 	enemy_projectile_hitbox_debug.visible = false
 	parry_hitbox_debug.visible = false
 	clear_enemy_projectile_debug_boxes()
+# 적 탄막 흐름 중단 여부 확인 함수
+func should_stop_enemy_projectile_flow():
+	if battle_ended:
+		return true
 
-	if parry_count > 0:
-		var counter_damage = 0
+	if game_over_started:
+		return true
 
-		for i in range(parry_count):
-			counter_damage += get_parry_counter_damage_once()
+	return false
+# 적 탄막 발사 딜레이 가져오기 함수
+func get_enemy_projectile_delay(projectile_info):
+	if projectile_info == null:
+		return 0.0
 
-		apply_parry_counter_damage(counter_damage)
+	if typeof(projectile_info) != TYPE_DICTIONARY:
+		return 0.0
 
-		await get_tree().create_timer(1.0).timeout
+	var delay = float(projectile_info.get("delay", 0.0))
 
-		if enemy_hp <= 0:
-			await handle_enemy_defeated()
-			return
-# 적의 패턴에 동시 탄막 추가 함수
-func fire_enemy_projectiles_parallel(projectile_list):
+	if delay < 0.0:
+		delay = 0.0
+
+	return delay
+# 적 탄막 발사 딜레이 대기 함수
+func wait_enemy_projectile_delay(projectile_info):
+	var delay = get_enemy_projectile_delay(projectile_info)
+
+	if delay > 0.0:
+		await get_tree().create_timer(delay).timeout
+# 적 탄막 sequential 발사 함수
+func fire_enemy_projectiles_sequential(projectile_list):
 	for projectile_info in projectile_list:
-		fire_enemy_projectile_parallel_task(projectile_info)
+		if should_stop_enemy_projectile_flow():
+			return false
 
+		await wait_enemy_projectile_delay(projectile_info)
+
+		if should_stop_enemy_projectile_flow():
+			return false
+
+		await fire_enemy_projectile(projectile_info)
+
+		if should_stop_enemy_projectile_flow():
+			return false
+
+	return true
+# 패링 반격 발생 여부 확인 함수
+func has_parry_counter_result():
+	return parry_count > 0
+# 패링 반격 총 데미지 계산 함수
+func calculate_total_parry_counter_damage():
+	var counter_damage = 0
+
+	for i in range(parry_count):
+		counter_damage += get_parry_counter_damage_once()
+
+	return counter_damage
+# 패링 반격 후 적 처치 확인 함수
+func check_enemy_defeated_after_parry_counter():
+	if enemy_hp <= 0:
+		await handle_enemy_defeated()
+		return true
+
+	return false
+# 적 턴 패링 반격 처리 함수
+func process_enemy_turn_parry_counter():
+	if not has_parry_counter_result():
+		return true
+
+	var counter_damage = calculate_total_parry_counter_damage()
+
+	apply_parry_counter_damage(counter_damage)
+
+	await get_tree().create_timer(1.0).timeout
+
+	if await check_enemy_defeated_after_parry_counter():
+		return false
+
+	return true
+# 적의 탄막 패턴 발사 함수
+func fire_enemy_projectiles():
+	var projectile_list = get_current_enemy_pattern_projectiles()
+	var fire_mode = get_current_enemy_pattern_fire_mode()
+
+	reset_enemy_projectile_turn_results()
+
+	if not has_current_enemy_pattern_projectiles():
+		await get_tree().create_timer(0.7).timeout
+		return
+
+	await start_enemy_projectile_defense_phase()
+
+	var projectile_flow_completed = true
+
+	if fire_mode == "parallel":
+		await fire_enemy_projectiles_parallel(projectile_list)
+		projectile_flow_completed = not should_stop_enemy_projectile_flow()
+	else:
+		projectile_flow_completed = await fire_enemy_projectiles_sequential(projectile_list)
+
+	if not projectile_flow_completed:
+		clear_enemy_projectile_defense_debug()
+		return
+
+	end_enemy_projectile_defense_phase()
+
+	await show_enemy_turn_player_damage_result()
+
+	clear_enemy_projectile_defense_debug()
+
+	var can_continue_after_parry_counter = await process_enemy_turn_parry_counter()
+
+	if not can_continue_after_parry_counter:
+		return
+# 적 병렬 탄막 1개의 예상 종료 시간 가져오기 함수
+func get_enemy_parallel_projectile_wait_time(projectile_info):
+	var delay = get_enemy_projectile_delay(projectile_info)
+	var projectile_id = get_projectile_id_from_info(projectile_info)
+	var life_time = get_projectile_life_time_by_id(projectile_id)
+
+	return delay + life_time + 0.2
+# 적 병렬 탄막 전체 예상 대기 시간 가져오기 함수
+func get_enemy_parallel_projectiles_max_wait_time(projectile_list):
 	var max_wait_time = 0.0
 
 	for projectile_info in projectile_list:
-		var delay = projectile_info.get("delay", 0.0)
-		var projectile_id = get_projectile_id_from_info(projectile_info)
-		var life_time = get_projectile_life_time_by_id(projectile_id)
+		max_wait_time = max(
+			max_wait_time,
+			get_enemy_parallel_projectile_wait_time(projectile_info)
+		)
 
-		max_wait_time = max(max_wait_time, delay + life_time + 0.2)
+	return max_wait_time
+# 적 병렬 탄막 task 시작 함수
+func start_enemy_projectile_parallel_tasks(projectile_list):
+	for projectile_info in projectile_list:
+		if should_stop_enemy_projectile_flow():
+			return
+
+		fire_enemy_projectile_parallel_task(projectile_info)
+# 적 병렬 탄막 전체 종료 예상 시간 대기 함수
+func wait_enemy_projectiles_parallel(projectile_list):
+	var max_wait_time = get_enemy_parallel_projectiles_max_wait_time(projectile_list)
+
+	if max_wait_time <= 0.0:
+		return
 
 	await get_tree().create_timer(max_wait_time).timeout
+# 적의 패턴에 동시 탄막 추가 함수
+func fire_enemy_projectiles_parallel(projectile_list):
+	start_enemy_projectile_parallel_tasks(projectile_list)
+
+	if should_stop_enemy_projectile_flow():
+		return
+
+	await wait_enemy_projectiles_parallel(projectile_list)
 # 적 동시 탄막 추가 함수
 func fire_enemy_projectile_parallel_task(projectile_info):
-	var delay = projectile_info.get("delay", 0.0)
+	if should_stop_enemy_projectile_flow():
+		return
 
-	if delay > 0:
-		await get_tree().create_timer(delay).timeout
+	await wait_enemy_projectile_delay(projectile_info)
+
+	if should_stop_enemy_projectile_flow():
+		return
 
 	await fire_enemy_projectile(projectile_info)
-# 적 패턴 선택 함수
-func choose_enemy_pattern():
-	var candidates = []
+# 현재 적 본체 패턴 목록 가져오기 함수
+func get_current_enemy_body_patterns():
+	if enemy_data.is_empty():
+		return []
 
-	add_pattern_candidates(candidates, enemy_data.get("patterns", []), "body", "")
+	var patterns = enemy_data.get("patterns", [])
+
+	if typeof(patterns) != TYPE_ARRAY:
+		return []
+
+	return patterns
+# 살아있는 적 파츠 ID 목록 가져오기 함수
+func get_active_enemy_part_ids():
+	var active_part_ids = []
 
 	for part_id in enemy_parts.keys():
 		if destroyed_parts.has(part_id):
 			continue
 
-		var part = enemy_parts[part_id]
-		add_pattern_candidates(candidates, part.get("patterns", []), "part", part_id)
+		active_part_ids.append(part_id)
+
+	return active_part_ids
+# 적 파츠 패턴 목록 가져오기 함수
+func get_enemy_part_patterns_by_id(part_id):
+	var part = get_enemy_part_data_by_id(part_id)
+
+	if part.is_empty():
+		return []
+
+	var patterns = part.get("patterns", [])
+
+	if typeof(patterns) != TYPE_ARRAY:
+		return []
+
+	return patterns
+# 적 패턴 후보 데이터 생성 함수
+func make_enemy_pattern_candidate(pattern, owner_type, owner_id):
+	if pattern == null:
+		return {}
+
+	if typeof(pattern) != TYPE_DICTIONARY:
+		return {}
+
+	if int(pattern.get("weight", 100)) <= 0:
+		return {}
+
+	var copied_pattern = pattern.duplicate(true)
+	copied_pattern["owner_type"] = owner_type
+	copied_pattern["owner_id"] = owner_id
+
+	return copied_pattern
+# 적 본체 패턴 후보 추가 함수
+func add_body_pattern_candidates(candidates):
+	add_pattern_candidates(
+		candidates,
+		get_current_enemy_body_patterns(),
+		"body",
+		""
+	)
+# 적 파츠 패턴 후보 추가 함수
+func add_part_pattern_candidates(candidates):
+	for part_id in get_active_enemy_part_ids():
+		add_pattern_candidates(
+			candidates,
+			get_enemy_part_patterns_by_id(part_id),
+			"part",
+			part_id
+		)
+# 적 전체 패턴 후보 목록 생성 함수
+func make_enemy_pattern_candidates():
+	var candidates = []
+
+	add_body_pattern_candidates(candidates)
+	add_part_pattern_candidates(candidates)
+
+	return candidates
+# 적 패턴 선택 함수
+func choose_enemy_pattern():
+	var candidates = make_enemy_pattern_candidates()
 
 	if candidates.size() == 0:
 		return {}
@@ -2432,34 +2806,82 @@ func choose_enemy_pattern():
 	return pick_weighted_pattern(candidates)
 # 적 패턴 리스트 취합 함수
 func add_pattern_candidates(candidates, patterns, owner_type, owner_id):
+	if typeof(patterns) != TYPE_ARRAY:
+		return
+
 	for pattern in patterns:
-		if int(pattern.get("weight", 100)) <= 0:
+		var candidate = make_enemy_pattern_candidate(
+			pattern,
+			owner_type,
+			owner_id
+		)
+
+		if candidate.is_empty():
 			continue
 
-		var copied_pattern = pattern.duplicate(true)
-		copied_pattern["owner_type"] = owner_type
-		copied_pattern["owner_id"] = owner_id
-		candidates.append(copied_pattern)
-# 적 패턴 가중치 기반 랜덤 선택 함수
-func pick_weighted_pattern(patterns):
+		candidates.append(candidate)
+# 적 패턴 가중치 가져오기 함수
+func get_enemy_pattern_weight(pattern):
+	if pattern == null:
+		return 0
+
+	if typeof(pattern) != TYPE_DICTIONARY:
+		return 0
+
+	var weight = int(pattern.get("weight", 100))
+
+	if weight < 0:
+		weight = 0
+
+	return weight
+# 적 패턴 전체 가중치 계산 함수
+func get_total_enemy_pattern_weight(patterns):
 	var total_weight = 0
 
 	for pattern in patterns:
-		total_weight += int(pattern.get("weight", 100))
+		total_weight += get_enemy_pattern_weight(pattern)
 
+	return total_weight
+# 적 패턴 기본 랜덤 선택 함수
+func pick_random_enemy_pattern(patterns):
+	if patterns.size() == 0:
+		return {}
+
+	return patterns.pick_random()
+# 적 패턴 가중치 롤 값 생성 함수
+func roll_enemy_pattern_weight(total_weight):
 	if total_weight <= 0:
-		return patterns.pick_random()
+		return 0
 
-	var roll = randi_range(1, total_weight)
+	return randi_range(1, total_weight)
+# 적 패턴 가중치 롤 결과 선택 함수
+func pick_enemy_pattern_by_weight_roll(patterns, roll):
 	var current = 0
 
 	for pattern in patterns:
-		current += int(pattern.get("weight", 100))
+		current += get_enemy_pattern_weight(pattern)
 
 		if roll <= current:
 			return pattern
 
-	return patterns[0]
+	return {}
+# 적 패턴 가중치 기반 랜덤 선택 함수
+func pick_weighted_pattern(patterns):
+	if patterns.size() == 0:
+		return {}
+
+	var total_weight = get_total_enemy_pattern_weight(patterns)
+
+	if total_weight <= 0:
+		return pick_random_enemy_pattern(patterns)
+
+	var roll = roll_enemy_pattern_weight(total_weight)
+	var selected_pattern = pick_enemy_pattern_by_weight_roll(patterns, roll)
+
+	if selected_pattern.is_empty():
+		return patterns[0]
+
+	return selected_pattern
 # 적 피격시 흔들림 함수
 func play_enemy_hit_shake():
 	if enemy_shake_tween != null and enemy_shake_tween.is_valid():
@@ -3162,36 +3584,114 @@ func get_enemy_pattern_warning_text(pattern):
 		"warning_text",
 		get_current_enemy_name() + "이(가) 공격하려고 한다..."
 	))
+# 적 패턴 데이터 유효성 확인 함수
+func is_valid_enemy_pattern_data(pattern):
+	if pattern == null:
+		return false
+
+	if typeof(pattern) != TYPE_DICTIONARY:
+		return false
+
+	return true
+# 현재 적 패턴 초기화 함수
+func clear_current_enemy_pattern():
+	current_enemy_pattern = {}
+# 현재 적 패턴 설정 함수
+func set_current_enemy_pattern(pattern):
+	if not is_valid_enemy_pattern_data(pattern):
+		clear_current_enemy_pattern()
+		return
+
+	current_enemy_pattern = pattern.duplicate(true)
+# 현재 적 패턴 존재 여부 확인 함수
+func has_current_enemy_pattern():
+	if current_enemy_pattern == null:
+		return false
+
+	if typeof(current_enemy_pattern) != TYPE_DICTIONARY:
+		return false
+
+	return not current_enemy_pattern.is_empty()
+# 현재 적 패턴 경고 텍스트 표시 함수
+func show_current_enemy_pattern_warning_text():
+	show_enemy_pattern_warning_text(current_enemy_pattern)
+# 일반 적 턴 패턴 적용 함수
+func apply_normal_enemy_turn_pattern():
+	var pattern = choose_enemy_pattern()
+
+	set_current_enemy_pattern(pattern)
+	show_current_enemy_pattern_warning_text()
 # 적 패턴 경고 텍스트 표시 함수
 func show_enemy_pattern_warning_text(pattern):
 	set_battle_text_with_accept(get_enemy_pattern_warning_text(pattern))
+# 페이즈 시작 강제 패턴 ID 가져오기 함수
+func get_phase_start_pattern_id():
+	if enemy_data.is_empty():
+		return ""
+
+	return str(enemy_data.get("phase_start_pattern_id", ""))
+# 페이즈 시작 강제 패턴 존재 여부 확인 함수
+func has_phase_start_pattern():
+	return get_phase_start_pattern_id() != ""
+# 적 패턴 ID 일치 여부 확인 함수
+func is_enemy_pattern_id_match(pattern, pattern_id):
+	if pattern == null:
+		return false
+
+	if typeof(pattern) != TYPE_DICTIONARY:
+		return false
+
+	return str(pattern.get("id", "")) == str(pattern_id)
 # 적 페이즈 전환 확정 패턴 사용 함수
 func start_enemy_turn_with_forced_pattern():
-	var pattern_id = enemy_data.get("phase_start_pattern_id", "")
-
-	if pattern_id == "":
+	if not has_phase_start_pattern():
 		start_enemy_turn()
 		return
 
-	var pattern = get_enemy_pattern_by_id(pattern_id)
+	var pattern = get_phase_start_pattern_data()
 
 	if pattern.is_empty():
 		start_enemy_turn()
 		return
 
+	prepare_phase_start_forced_enemy_turn()
+	apply_phase_start_forced_pattern(pattern)
+# 페이즈 시작 강제 패턴 데이터 가져오기 함수
+func get_phase_start_pattern_data():
+	var pattern_id = get_phase_start_pattern_id()
+
+	if pattern_id == "":
+		return {}
+
+	return get_enemy_pattern_by_id(pattern_id)
+# 페이즈 시작 강제 패턴 소유자 정보 적용 함수
+func apply_phase_start_pattern_owner_data(pattern):
+	if pattern.is_empty():
+		return {}
+
+	var copied_pattern = pattern.duplicate(true)
+	copied_pattern["owner_type"] = "body"
+	copied_pattern["owner_id"] = ""
+
+	return copied_pattern
+# 페이즈 시작 강제 패턴 적 턴 상태 준비 함수
+func prepare_phase_start_forced_enemy_turn():
 	is_player_turn = false
 	start_enemy_attack_wait()
 	set_action_buttons_disabled(true)
+# 페이즈 시작 강제 패턴 적용 함수
+func apply_phase_start_forced_pattern(pattern):
+	var forced_pattern = apply_phase_start_pattern_owner_data(pattern)
 
-	current_enemy_pattern = pattern
-	current_enemy_pattern["owner_type"] = "body"
-	current_enemy_pattern["owner_id"] = ""
-
-	show_enemy_pattern_warning_text(current_enemy_pattern)
+	set_current_enemy_pattern(forced_pattern)
+	show_current_enemy_pattern_warning_text()
 # 적 페이즈 전환 확정 패턴 탐색 함수
 func get_enemy_pattern_by_id(pattern_id):
-	for pattern in enemy_data.get("patterns", []):
-		if pattern.get("id", "") == pattern_id:
+	if pattern_id == "":
+		return {}
+
+	for pattern in get_current_enemy_body_patterns():
+		if is_enemy_pattern_id_match(pattern, pattern_id):
 			return pattern.duplicate(true)
 
 	return {}
@@ -4388,11 +4888,14 @@ func show_enemy_turn_player_damage_result():
 		return
 
 	await show_battle_text_for_seconds(result_text, 1.0)
-# 플레이어 탄막 피격 처리 함수
-func apply_projectile_hit_to_player(projectile_info, projectile_data, danger_type):
-	var damage = projectile_info.get("damage", current_enemy_pattern.get("damage", 1))
-	damage = get_player_received_damage(damage)
+# 적 탄막 기본 피해량 가져오기 함수
+func get_enemy_projectile_base_damage(projectile_info):
+	if projectile_info != null and typeof(projectile_info) == TYPE_DICTIONARY:
+		return int(projectile_info.get("damage", current_enemy_pattern.get("damage", 1)))
 
+	return int(current_enemy_pattern.get("damage", 1))
+# 플레이어 탄막 피해 적용 함수
+func apply_enemy_projectile_damage_to_player(damage):
 	var before_hp = player_hp
 
 	player_hp -= damage
@@ -4406,21 +4909,38 @@ func apply_projectile_hit_to_player(projectile_info, projectile_data, danger_typ
 
 	enemy_turn_total_damage += damage
 
-	play_player_hit_flash()
-
+	return before_hp
+# 플레이어 탄막 피격 사운드 재생 함수
+func play_player_projectile_hit_sound(danger_type):
+	if danger_type == "parry_only":
+		if hit_red_sound != null:
+			hit_red_sound.play()
+	else:
+		if hit_normal_sound != null:
+			hit_normal_sound.play()
+# 플레이어 탄막 상태이상 적용 함수
+func apply_enemy_projectile_status_effects_to_player(projectile_info, projectile_data):
 	var status_effects = get_projectile_status_effects(projectile_info, projectile_data)
 	var added_effects = apply_player_status_effects(status_effects)
+
 	add_enemy_turn_status_effects(added_effects)
-
-	if danger_type == "parry_only":
-		hit_red_sound.play()
-	else:
-		hit_normal_sound.play()
-
-	update_player_hp_ui()
-
+# 플레이어 탄막 피격 후 사망 처리 함수
+func check_player_death_after_projectile_hit():
 	if player_hp <= 0:
 		start_game_over_flow()
+# 플레이어 탄막 피격 처리 함수
+func apply_projectile_hit_to_player(projectile_info, projectile_data, danger_type):
+	var base_damage = get_enemy_projectile_base_damage(projectile_info)
+	var damage = get_player_received_damage(base_damage)
+
+	apply_enemy_projectile_damage_to_player(damage)
+
+	play_player_hit_flash()
+	apply_enemy_projectile_status_effects_to_player(projectile_info, projectile_data)
+	play_player_projectile_hit_sound(danger_type)
+
+	update_player_hp_ui()
+	check_player_death_after_projectile_hit()
 # 플레이어 받는 데미지 계산 함수
 func get_player_received_damage(base_damage):
 	var damage = float(base_damage)
