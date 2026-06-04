@@ -166,7 +166,6 @@ var battle_difficulty = "normal"
 # 리펙토링시 삭제 예정 변수
 var weapon_angle_speed = 120.0 
 var attack_projectile_speed = 1200.0
-var attack_hit_results = []
 
 # 패링 판정 처리 부분
 # parry_input_buffer_time 0.035
@@ -3409,47 +3408,28 @@ func apply_player_attack_part_hit(hitbox):
 	if destroyed_parts.has(part_id):
 		return
 
-	var damage = get_player_attack_damage()
 	var hitbox_name = hitbox.get("name", "부위")
-	var is_weak = hitbox.get("weak", false)
-	var is_critical = is_player_attack_critical()
+	var damage_result = make_player_attack_damage_result(hitbox)
+	var damage = get_player_attack_result_damage(damage_result)
+	var is_weak = is_player_attack_result_weak(damage_result)
+	var is_critical = is_player_attack_result_critical(damage_result)
 
-	if is_critical:
-		damage *= get_critical_multiplier()
+	play_player_attack_hit_sound(is_weak, is_critical)
+	apply_player_attack_damage_to_part(part_id, damage)
 
-	if is_weak:
-		damage *= 2
-
-	damage = int(damage)
-
-	if is_critical or is_weak:
-		hit_red_sound.play()
-	else:
-		hit_normal_sound.play()
-
-	enemy_part_hp[part_id] -= damage
-	update_debug_hp_labels()
-
-	if enemy_part_hp[part_id] < 0:
-		enemy_part_hp[part_id] = 0
-
-	hit_effect.position = get_last_hitbox_center_position()
-	show_damage_popup(damage, is_weak or is_critical)
-
-	start_enemy_hit_feedback()
-
-	var hit_text = make_player_attack_part_hit_text(
-		hitbox_name,
+	play_player_attack_hit_feedback(
 		damage,
-		is_critical
+		is_weak or is_critical
 	)
 
 	print(part_id, " HP: ", enemy_part_hp[part_id])
 
-	if enemy_part_hp[part_id] <= 0:
-		destroy_enemy_part(part_id)
-	else:
-		set_battle_text(hit_text)
+	process_part_destroy_after_player_attack(
+		part_id,
+		hitbox_name,
+		damage,
+		is_critical
+	)
 # 적 피격 연출 비동기 시작 함수
 func start_enemy_hit_feedback():
 	var hit_position = get_last_hitbox_center_position()
@@ -3470,7 +3450,7 @@ func spawn_hit_effect(effect_position):
 
 	play_spawned_hit_effect(effect)
 # 적 생성된 타격 이펙트 프레임 재생 함수
-func play_spawned_hit_effect(effect):
+func play_spawned_hit_effect(effect):   
 	for path in hit_frames:
 		if effect == null or not is_instance_valid(effect):
 			return
@@ -4177,44 +4157,68 @@ func make_parry_counter_body_text(counter_damage):
 # 파츠 패링 반격 텍스트 생성 함수
 func make_parry_counter_part_text(part_name, counter_damage):
 	return "패링 반격!\n" + str(part_name) + "에 " + str(int(counter_damage)) + " 의 피해를 주었다."
-# 플레이어 공격 적용 함수
-func apply_player_attack_hit(hitbox):
-	if hitbox.get("target_type", "body") == "part":
-		apply_player_attack_part_hit(hitbox)
-		return
-
-	last_hitbox_data = hitbox
-
-	var damage = get_player_attack_damage()
-	var hitbox_name = last_hitbox_data.get("name", "부위")
-	var is_weak = last_hitbox_data.get("weak", false)
+# 플레이어 공격 데미지 결과 데이터 생성 함수
+func make_player_attack_damage_result(hitbox):
+	var base_damage = get_player_attack_damage()
+	var is_weak = bool(hitbox.get("weak", false))
 	var is_critical = is_player_attack_critical()
+	var final_damage = base_damage
 
 	if is_critical:
-		damage *= get_critical_multiplier()
+		final_damage *= get_critical_multiplier()
 
 	if is_weak:
-		damage *= 2
+		final_damage *= 2
 
-	damage = int(damage)
-
-	if is_critical or is_weak:
-		hit_red_sound.play()
+	return {
+		"damage": int(final_damage),
+		"is_weak": is_weak,
+		"is_critical": is_critical
+	}
+# 플레이어 공격 결과 데미지 가져오기 함수
+func get_player_attack_result_damage(damage_result):
+	return int(damage_result.get("damage", 0))
+# 플레이어 공격 결과 약점 여부 가져오기 함수
+func is_player_attack_result_weak(damage_result):
+	return bool(damage_result.get("is_weak", false))
+# 플레이어 공격 결과 치명타 여부 가져오기 함수
+func is_player_attack_result_critical(damage_result):
+	return bool(damage_result.get("is_critical", false))
+# 플레이어 공격 히트 사운드 재생 함수
+func play_player_attack_hit_sound(is_weak, is_critical):
+	if is_weak or is_critical:
+		if hit_red_sound != null:
+			hit_red_sound.play()
 	else:
-		hit_normal_sound.play()
-
+		if hit_normal_sound != null:
+			hit_normal_sound.play()
+# 적 본체에 플레이어 공격 피해 적용 함수
+func apply_player_attack_damage_to_body(damage):
 	enemy_hp -= damage
 
 	if enemy_hp < 0:
 		enemy_hp = 0
 
 	update_enemy_hp_ui()
+# 적 파츠에 플레이어 공격 피해 적용 함수
+func apply_player_attack_damage_to_part(part_id, damage):
+	if not enemy_part_hp.has(part_id):
+		return
 
+	enemy_part_hp[part_id] -= damage
+
+	if enemy_part_hp[part_id] < 0:
+		enemy_part_hp[part_id] = 0
+
+	update_debug_hp_labels()
+# 플레이어 공격 피격 연출 실행 함수
+func play_player_attack_hit_feedback(damage, is_special_hit):
 	hit_effect.position = get_last_hitbox_center_position()
-	show_damage_popup(damage, is_weak or is_critical)
+	show_damage_popup(damage, is_special_hit)
 
 	start_enemy_hit_feedback()
-
+# 플레이어 본체 공격 결과 텍스트 표시 함수
+func show_player_attack_body_hit_text(hitbox_name, damage, is_weak, is_critical):
 	set_battle_text(
 		make_player_attack_body_hit_text(
 			hitbox_name,
@@ -4223,6 +4227,111 @@ func apply_player_attack_hit(hitbox):
 			is_critical
 		)
 	)
+# 플레이어 파츠 공격 결과 텍스트 표시 함수
+func show_player_attack_part_hit_text(hitbox_name, damage, is_critical):
+	set_battle_text(
+		make_player_attack_part_hit_text(
+			hitbox_name,
+			damage,
+			is_critical
+		)
+	)
+# 플레이어 공격 후 파츠 파괴 여부 처리 함수
+func process_part_destroy_after_player_attack(part_id, hitbox_name, damage, is_critical):
+	if not enemy_part_hp.has(part_id):
+		return
+
+	if enemy_part_hp[part_id] <= 0:
+		destroy_enemy_part(part_id)
+		return
+
+	show_player_attack_part_hit_text(
+		hitbox_name,
+		damage,
+		is_critical
+	)
+# 플레이어 공격 적용 함수
+func apply_player_attack_hit(hitbox):
+	if hitbox.get("target_type", "body") == "part":
+		apply_player_attack_part_hit(hitbox)
+		return
+
+	last_hitbox_data = hitbox
+
+	var hitbox_name = last_hitbox_data.get("name", "부위")
+	var damage_result = make_player_attack_damage_result(last_hitbox_data)
+	var damage = get_player_attack_result_damage(damage_result)
+	var is_weak = is_player_attack_result_weak(damage_result)
+	var is_critical = is_player_attack_result_critical(damage_result)
+
+	play_player_attack_hit_sound(is_weak, is_critical)
+	apply_player_attack_damage_to_body(damage)
+
+	play_player_attack_hit_feedback(
+		damage,
+		is_weak or is_critical
+	)
+
+	show_player_attack_body_hit_text(
+		hitbox_name,
+		damage,
+		is_weak,
+		is_critical
+	)
+# 플레이어 공격 빗나감 결과 처리 함수
+func process_player_attack_miss_result():
+	if player_attack_hit:
+		return
+
+	set_battle_text(make_player_attack_miss_text())
+# 플레이어 공격 후 결과 대기 함수
+func wait_after_player_attack_result():
+	await get_tree().create_timer(1.0).timeout
+# 플레이어 공격 후 적 처치 확인 함수
+func check_enemy_defeated_after_player_attack():
+	if enemy_hp > 0:
+		return false
+
+	await handle_enemy_defeated()
+	return true
+# 플레이어 공격 후 적 턴 시작 함수
+func start_enemy_turn_after_player_attack():
+	start_enemy_turn()
+# 플레이어 공격 종료 처리 함수
+func finish_player_attack_flow():
+	process_player_attack_miss_result()
+
+	await wait_after_player_attack_result()
+
+	if await check_enemy_defeated_after_player_attack():
+		return
+
+	start_enemy_turn_after_player_attack()
+# 플레이어 공격 입력 잠금 해제 함수
+func finish_player_attack_input_process():
+	unlock_battle_input_process()
+
+	if battle_ended:
+		set_action_buttons_disabled(true)
+# 플레이어 공격 충돌 상태 초기화 함수
+func reset_player_attack_collision_state():
+	player_attack_hit = false
+	pierced_hitbox_ids.clear()
+	player_attack_hitbox_debug.visible = false
+# 플레이어 공격 투사체 상태 초기화 함수
+func reset_player_attack_projectile_state():
+	active_attack_projectile = null
+	active_attack_direction = Vector2.ZERO
+	current_projectile_data = {}
+# 플레이어 공격 시작 상태 초기화 함수
+func reset_player_attack_start_state():
+	reset_player_attack_collision_state()
+	reset_player_attack_projectile_state()
+# 플레이어 공격 종료 상태 정리 함수
+func reset_player_attack_end_state():
+	player_attack_hitbox_debug.visible = false
+	active_attack_projectile = null
+	active_attack_direction = Vector2.ZERO
 # 플레이어 공격 실행 함수
 func execute_player_attack():
 	if not is_attack_mode:
@@ -4235,24 +4344,12 @@ func execute_player_attack():
 
 	end_attack_mode()
 
-	player_attack_hit = false
-	attack_hit_results.clear()
-	pierced_hitbox_ids.clear()
+	reset_player_attack_start_state()
 
 	await fire_player_attack_projectile()
+	await finish_player_attack_flow()
 
-	if not player_attack_hit:
-		set_battle_text(make_player_attack_miss_text())
-
-	await get_tree().create_timer(1.0).timeout
-
-	if enemy_hp <= 0:
-		await handle_enemy_defeated()
-		unlock_battle_input_process()
-		return
-
-	start_enemy_turn()
-	unlock_battle_input_process()
+	finish_player_attack_input_process()
 # 발사체 사운드 재생 함수
 func play_projectile_sound(sound_id):
 	if sound_id == "":
@@ -4402,24 +4499,96 @@ func setup_player_attack_projectile_visual():
 func clear_player_attack_projectile_visual():
 	slash_effect.visible = false
 	slash_effect.texture = null
-	player_attack_hitbox_debug.visible = false
-	active_attack_projectile = null
 	current_projectile_data = {}
-# 플레이어 공격 투사체 발사 함수
-func fire_player_attack_projectile():
+
+	reset_player_attack_end_state()
+# 플레이어 공격 투사체 데이터 유효성 확인 함수
+func is_valid_player_attack_projectile_data(projectile_data):
+	if projectile_data == null:
+		return false
+
+	if typeof(projectile_data) != TYPE_DICTIONARY:
+		return false
+
+	if projectile_data.is_empty():
+		return false
+
+	return true
+# 현재 플레이어 공격 투사체 데이터 준비 함수
+func prepare_current_attack_projectile_data():
 	current_projectile_data = get_current_projectile_data()
 
-	if current_projectile_data.is_empty():
+	if not is_valid_player_attack_projectile_data(current_projectile_data):
 		push_error("투사체 데이터가 없음: " + get_current_attack_projectile_id())
-		return
+		current_projectile_data = {}
+		return false
 
+	return true
+# 플레이어 공격 투사체 상태 준비 함수
+func prepare_player_attack_projectile_state():
 	active_attack_projectile = slash_effect
 	active_attack_direction = Vector2.UP.rotated(deg_to_rad(weapon_angle_offset))
+# 플레이어 공격 투사체 실행 데이터 생성 함수
+func make_player_attack_projectile_runtime_data():
+	return {
+		"speed": get_current_attack_projectile_speed(),
+		"life_time": get_current_attack_projectile_life_time(),
+		"frame_time": get_current_attack_projectile_frame_time(),
+		"frames": get_current_attack_projectile_frames()
+	}
+# 플레이어 공격 투사체 프레임 적용 함수
+func apply_player_attack_projectile_frame(projectile_frames, frame_index):
+	var frame_texture = get_player_attack_projectile_frame_texture(
+		projectile_frames,
+		frame_index
+	)
 
-	var projectile_speed = get_current_attack_projectile_speed()
-	var projectile_life_time = get_current_attack_projectile_life_time()
-	var projectile_frame_time = get_current_attack_projectile_frame_time()
-	var projectile_frames = get_current_attack_projectile_frames()
+	if frame_texture != null:
+		slash_effect.texture = frame_texture
+# 플레이어 공격 투사체 1프레임 이동 함수
+func move_player_attack_projectile_one_frame(projectile_speed, projectile_frame_time):
+	slash_effect.position += active_attack_direction * projectile_speed * projectile_frame_time
+# 플레이어 공격 투사체 디버그 표시 함수
+func update_player_attack_projectile_debug():
+	if not debug_mode:
+		return
+
+	var attack_rect = get_player_attack_hit_rect()
+	player_attack_hitbox_debug.visible = true
+	player_attack_hitbox_debug.position = attack_rect.position
+	player_attack_hitbox_debug.size = attack_rect.size
+# 플레이어 공격 투사체 충돌 처리 함수
+func process_player_attack_projectile_collision():
+	var weapon_data = get_current_weapon_data()
+	var piercing = bool(weapon_data.get("piercing", false))
+
+	var collided_hitboxes = get_attack_collided_hitboxes()
+
+	return apply_player_attack_to_collided_hitboxes(
+		collided_hitboxes,
+		piercing
+	)
+# 플레이어 공격 투사체 프레임 인덱스 갱신 함수
+func get_next_player_attack_projectile_frame_index(frame_index, projectile_frames):
+	frame_index += 1
+
+	if projectile_frames.size() > 0 and frame_index >= projectile_frames.size():
+		frame_index = 0
+
+	return frame_index
+# 플레이어 공격 투사체 발사 함수
+func fire_player_attack_projectile():
+	if not prepare_current_attack_projectile_data():
+		return
+
+	prepare_player_attack_projectile_state()
+
+	var runtime_data = make_player_attack_projectile_runtime_data()
+
+	var projectile_speed = float(runtime_data.get("speed", 1200.0))
+	var projectile_life_time = float(runtime_data.get("life_time", 0.9))
+	var projectile_frame_time = float(runtime_data.get("frame_time", 0.04))
+	var projectile_frames = runtime_data.get("frames", [])
 
 	setup_player_attack_projectile_visual()
 	play_current_attack_projectile_sound()
@@ -4428,30 +4597,19 @@ func fire_player_attack_projectile():
 	var frame_index = 0
 
 	while elapsed_time < projectile_life_time:
-		var frame_texture = get_player_attack_projectile_frame_texture(
+		apply_player_attack_projectile_frame(
 			projectile_frames,
 			frame_index
 		)
 
-		if frame_texture != null:
-			slash_effect.texture = frame_texture
-
-		slash_effect.position += active_attack_direction * projectile_speed * projectile_frame_time
-
-		if debug_mode:
-			var attack_rect = get_player_attack_hit_rect()
-			player_attack_hitbox_debug.visible = true
-			player_attack_hitbox_debug.position = attack_rect.position
-			player_attack_hitbox_debug.size = attack_rect.size
-
-		var weapon_data = get_current_weapon_data()
-		var piercing = bool(weapon_data.get("piercing", false))
-
-		var collided_hitboxes = get_attack_collided_hitboxes()
-		var should_stop_projectile = apply_player_attack_to_collided_hitboxes(
-			collided_hitboxes,
-			piercing
+		move_player_attack_projectile_one_frame(
+			projectile_speed,
+			projectile_frame_time
 		)
+
+		update_player_attack_projectile_debug()
+
+		var should_stop_projectile = process_player_attack_projectile_collision()
 
 		if should_stop_projectile:
 			break
@@ -4459,31 +4617,53 @@ func fire_player_attack_projectile():
 		await get_tree().create_timer(projectile_frame_time).timeout
 
 		elapsed_time += projectile_frame_time
-		frame_index += 1
-
-		if projectile_frames.size() > 0 and frame_index >= projectile_frames.size():
-			frame_index = 0
+		frame_index = get_next_player_attack_projectile_frame_index(
+			frame_index,
+			projectile_frames
+		)
 			
 	clear_player_attack_projectile_visual()
+# 배열 데이터를 Vector2로 안전하게 변환하는 함수
+func get_vector2_from_array_data(value, fallback_value):
+	if typeof(value) != TYPE_ARRAY:
+		return fallback_value
+
+	if value.size() < 2:
+		return fallback_value
+
+	return Vector2(value[0], value[1])
+# 플레이어 공격 히트박스 offset 가져오기 함수
+func get_player_attack_hitbox_offset():
+	var hitbox_data = current_projectile_data.get("hitbox", {})
+
+	if typeof(hitbox_data) != TYPE_DICTIONARY:
+		return Vector2(55, 20)
+
+	return get_vector2_from_array_data(
+		hitbox_data.get("offset", [55, 20]),
+		Vector2(55, 20)
+	)
+# 플레이어 공격 히트박스 size 가져오기 함수
+func get_player_attack_hitbox_size():
+	var hitbox_data = current_projectile_data.get("hitbox", {})
+
+	if typeof(hitbox_data) != TYPE_DICTIONARY:
+		return Vector2(90, 90)
+
+	return get_vector2_from_array_data(
+		hitbox_data.get("size", [90, 90]),
+		Vector2(90, 90)
+	)
 # 플레이어 공격 히트박스 함수 
 func get_player_attack_hit_rect():
 	var rect = slash_effect.get_global_rect()
+	var hitbox_offset = get_player_attack_hitbox_offset()
+	var hitbox_size = get_player_attack_hitbox_size()
 
-	var hitbox_data = current_projectile_data.get("hitbox", {})
-	var hitbox_offset = hitbox_data.get("offset", [55, 20])
-	var hitbox_size_data = hitbox_data.get("size", [90, 90])
-
-	var hitbox_position = rect.position + Vector2(
-		hitbox_offset[0],
-		hitbox_offset[1]
+	return Rect2(
+		rect.position + hitbox_offset,
+		hitbox_size
 	)
-
-	var hitbox_size = Vector2(
-		hitbox_size_data[0],
-		hitbox_size_data[1]
-	)
-
-	return Rect2(hitbox_position, hitbox_size)
 # 플레이어 공격에 맞은 히트박스 고유 ID 생성 함수
 func get_attack_hitbox_unique_id(hitbox):
 	if hitbox == null:
@@ -4518,6 +4698,47 @@ func mark_pierced_hitbox(hitbox):
 		return
 
 	pierced_hitbox_ids.append(unique_id)
+# 공격 충돌 hitbox 유효성 확인 함수
+func is_valid_attack_collided_hitbox(hitbox):
+	if hitbox == null:
+		return false
+
+	if typeof(hitbox) != TYPE_DICTIONARY:
+		return false
+
+	if hitbox.is_empty():
+		return false
+
+	return true
+# 공격 충돌 hitbox 1개 적용 함수
+func apply_player_attack_to_single_hitbox(hitbox):
+	if not is_valid_attack_collided_hitbox(hitbox):
+		return false
+
+	apply_player_attack_hit(hitbox)
+	return true
+# 일반 공격 충돌 처리 함수
+func apply_normal_player_attack_to_hitboxes(collided_hitboxes):
+	for hitbox in collided_hitboxes:
+		if not apply_player_attack_to_single_hitbox(hitbox):
+			continue
+
+		return true
+
+	return false
+# 관통 공격 충돌 처리 함수
+func apply_piercing_player_attack_to_hitboxes(collided_hitboxes):
+	for hitbox in collided_hitboxes:
+		if not is_valid_attack_collided_hitbox(hitbox):
+			continue
+
+		if has_pierced_hitbox(hitbox):
+			continue
+
+		mark_pierced_hitbox(hitbox)
+		apply_player_attack_hit(hitbox)
+
+	return false
 # 플레이어 공격에 충돌한 히트박스 목록 처리 함수
 func apply_player_attack_to_collided_hitboxes(collided_hitboxes, piercing):
 	if typeof(collided_hitboxes) != TYPE_ARRAY:
@@ -4529,33 +4750,64 @@ func apply_player_attack_to_collided_hitboxes(collided_hitboxes, piercing):
 	player_attack_hit = true
 	player_attack_hitbox_debug.visible = false
 
-	for hitbox in collided_hitboxes:
+	if piercing:
+		return apply_piercing_player_attack_to_hitboxes(collided_hitboxes)
+
+	return apply_normal_player_attack_to_hitboxes(collided_hitboxes)
+# 공격 충돌 결과 목록 추가 함수
+func append_attack_collided_hitboxes(results, hitboxes):
+	if typeof(hitboxes) != TYPE_ARRAY:
+		return
+
+	for hitbox in hitboxes:
 		if hitbox == null:
 			continue
 
 		if typeof(hitbox) != TYPE_DICTIONARY:
 			continue
 
-		if piercing:
-			if has_pierced_hitbox(hitbox):
-				continue
+		if hitbox.is_empty():
+			continue
 
-			mark_pierced_hitbox(hitbox)
-			apply_player_attack_hit(hitbox)
-		else:
-			apply_player_attack_hit(hitbox)
-			return true
-
-	return not piercing	
-# 플레이어 공격 투사체 히트 판정 체크 함수
-func get_attack_collided_hitboxes():
+		results.append(hitbox)
+# 본체 공격 충돌 대상 수집 함수
+func collect_body_attack_collisions(attack_rect):
+	return get_attack_collided_body_hitboxes(attack_rect)
+# 파츠 공격 충돌 대상 수집 함수
+func collect_part_attack_collisions(attack_rect):
+	return get_attack_collided_part_hitboxes(attack_rect)
+# 플레이어 공격 충돌 대상 전체 수집 함수
+func collect_attack_collisions(attack_rect):
 	var results = []
-	var attack_rect = get_player_attack_hit_rect()
 
-	results.append_array(get_attack_collided_body_hitboxes(attack_rect))
-	results.append_array(get_attack_collided_part_hitboxes(attack_rect))
+	append_attack_collided_hitboxes(
+		results,
+		collect_body_attack_collisions(attack_rect)
+	)
+
+	append_attack_collided_hitboxes(
+		results,
+		collect_part_attack_collisions(attack_rect)
+	)
 
 	return results
+# 플레이어 공격 투사체 히트 판정 체크 함수
+func get_attack_collided_hitboxes():
+	var attack_rect = get_player_attack_hit_rect()
+
+	return collect_attack_collisions(attack_rect)
+# 적 파츠 공격 충돌 hitbox 데이터 생성 함수
+func make_part_attack_hitbox_copy(part_id):
+	var hitbox = get_enemy_part_hitbox_by_part_id(part_id)
+
+	if hitbox.is_empty():
+		return {}
+
+	var copied_hitbox = hitbox.duplicate(true)
+	copied_hitbox["target_type"] = "part"
+	copied_hitbox["part_id"] = part_id
+
+	return copied_hitbox
 # 몸체 히트 박스 함수
 func get_attack_collided_body_hitboxes(attack_rect):
 	var results = []
@@ -4574,43 +4826,39 @@ func get_attack_collided_body_hitboxes(attack_rect):
 			results.append(copied_hitbox)
 
 	return results
+# 적 파츠 공격 판정 Rect 생성 함수
+func make_part_attack_hitbox_rect(part_id, enemy_rect):
+	var hitbox = get_enemy_part_hitbox_by_part_id(part_id)
+
+	if hitbox.is_empty():
+		return Rect2()
+
+	var rect_data = get_hitbox_rect_data(hitbox)
+
+	if rect_data.size() < 4:
+		return Rect2()
+
+	return make_scaled_hitbox_rect(enemy_rect, rect_data)
 # 파츠 히트 박스 함수
 func get_attack_collided_part_hitboxes(attack_rect):
 	var results = []
-
-	var base_size = enemy_data.get("hitbox_base_size", [667, 1000])
-	var base_width = float(base_size[0])
-	var base_height = float(base_size[1])
-
 	var enemy_rect = enemy_sprite.get_global_rect()
 
-	var scale_x = enemy_rect.size.x / base_width
-	var scale_y = enemy_rect.size.y / base_height
+	for part_id in get_active_enemy_part_ids():
+		var hitbox_rect = make_part_attack_hitbox_rect(part_id, enemy_rect)
 
-	for part_id in enemy_parts.keys():
-		if destroyed_parts.has(part_id):
+		if hitbox_rect.size == Vector2.ZERO:
 			continue
 
-		var part = enemy_parts[part_id]
-
-		if not part.has("hitbox"):
+		if not attack_rect.intersects(hitbox_rect):
 			continue
 
-		var hitbox = part["hitbox"]
-		var rect_data = hitbox["rect"]
+		var copied_hitbox = make_part_attack_hitbox_copy(part_id)
 
-		var hitbox_rect = Rect2(
-			enemy_rect.position.x + rect_data[0] * scale_x,
-			enemy_rect.position.y + rect_data[1] * scale_y,
-			rect_data[2] * scale_x,
-			rect_data[3] * scale_y
-		)
+		if copied_hitbox.is_empty():
+			continue
 
-		if attack_rect.intersects(hitbox_rect):
-			var copied_hitbox = hitbox.duplicate(true)
-			copied_hitbox["target_type"] = "part"
-			copied_hitbox["part_id"] = part_id
-			results.append(copied_hitbox)
+		results.append(copied_hitbox)
 
 	return results
 # 플레이어 전투 뉴뉴 조작 사운드 함수

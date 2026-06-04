@@ -245,10 +245,10 @@
 					0
 				],
 				"destroyable": true,
-				"destroy_text": "구겨진 파이프를 든 팔이 떨어져 나갔다.",
+				"destroy_text": "구겨진 파이프를 들고있는 오른팔이 떨어져 나갔다.",
 				"hitbox": {
 					"id": "left_arm",
-					"name": "오른팔",
+					"name": "구겨진 파이프를 들고있는 오른팔",
 					"rect": [
 						120,
 						220,
@@ -318,10 +318,10 @@
 					0
 				],
 				"destroyable": true,
-				"destroy_text": "망가진 의자를 든 팔이 떨어져 나갔다.",
+				"destroy_text": "망가진 의자를 들고있는 왼팔이 뜯겨져 나갔다.",
 				"hitbox": {
 					"id": "right_arm",
-					"name": "왼팔",
+					"name": "망가진 의자를 들고있는 왼팔",
 					"rect": [
 						720,
 						220,
