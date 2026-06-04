@@ -5533,107 +5533,173 @@ func clamp_battle_player_hp():
 
 	if player_hp < 0:
 		player_hp = 0
+# 턴 시작 플레이어 피해량 가져오기 함수
+func get_turn_start_player_damage():
+	return int(player_effective_stats.get("turn_start_player_damage", 0))
+# 턴 시작 플레이어 회복량 가져오기 함수
+func get_turn_start_player_heal():
+	return int(player_effective_stats.get("turn_start_player_heal", 0))
+# 턴 시작 적 피해량 가져오기 함수
+func get_turn_start_enemy_damage():
+	return int(player_effective_stats.get("turn_start_enemy_damage", 0))
+# 플레이어 턴 시작 피해 적용 함수
+func apply_turn_start_player_damage_effect(player_damage):
+	if player_damage <= 0:
+		return false
+
+	var before_hp = player_hp
+
+	player_hp -= player_damage
+
+	if bool(player_effective_stats.get("cannot_die", false)) and before_hp >= 1 and player_hp < 1:
+		play_player_hit_flash()
+		play_overlap_sound_from_player(hit_normal_sound)
+		player_hp = 1
+
+	clamp_battle_player_hp()
+
+	var player_was_damaged = before_hp > player_hp
+
+	if player_was_damaged:
+		play_player_hit_flash()
+		play_overlap_sound_from_player(hit_normal_sound)
+
+	update_player_hp_ui()
+
+	return player_was_damaged
+# 턴 시작 플레이어 사망 처리 함수
+func check_player_death_after_turn_start_effect():
+	if player_hp > 0:
+		return false
+
+	prepare_game_over_state()
+	await get_tree().create_timer(0.5).timeout
+	await game_over()
+
+	return true
+# 턴 시작 적 본체 피해 적용 함수
+func apply_turn_start_enemy_damage_to_body(enemy_damage):
+	if enemy_damage <= 0:
+		return false
+
+	if enemy_hp <= 0:
+		return false
+
+	enemy_hp -= enemy_damage
+	clamp_enemy_body_hp()
+
+	return true
+# 턴 시작 적 파츠 피해 적용 함수
+func apply_turn_start_enemy_damage_to_parts(enemy_damage):
+	if enemy_damage <= 0:
+		return false
+
+	var damaged_enemy = false
+
+	for part_id in enemy_part_hp.keys():
+		if destroyed_parts.has(part_id):
+			continue
+
+		enemy_part_hp[part_id] -= enemy_damage
+		clamp_enemy_part_hp(part_id)
+
+		damaged_enemy = true
+
+		if is_enemy_part_defeated(part_id):
+			destroy_enemy_part(part_id)
+
+	return damaged_enemy
+# 턴 시작 적 피해 연출 함수
+func play_turn_start_enemy_damage_feedback(enemy_damage):
+	play_overlap_sound_from_player(hit_normal_sound)
+
+	set_top_hitbox_as_last_hitbox()
+	show_damage_popup(enemy_damage, false)
+	start_enemy_hit_feedback()
+# 턴 시작 적 피해 전체 처리 함수
+func apply_turn_start_enemy_damage_effect(enemy_damage):
+	if enemy_damage <= 0:
+		return false
+
+	var damaged_body = apply_turn_start_enemy_damage_to_body(enemy_damage)
+	var damaged_parts = apply_turn_start_enemy_damage_to_parts(enemy_damage)
+	var damaged_enemy = damaged_body or damaged_parts
+
+	if damaged_enemy:
+		play_turn_start_enemy_damage_feedback(enemy_damage)
+
+	update_enemy_hp_ui()
+	update_debug_hp_labels()
+
+	return damaged_enemy
+# 턴 시작 적 처치 처리 함수
+func check_enemy_defeated_after_turn_start_effect():
+	if not is_enemy_body_defeated():
+		return false
+
+	await get_tree().create_timer(0.5).timeout
+	await handle_enemy_defeated()
+
+	return true
+# 턴 시작 플레이어 회복 효과 적용 함수
+func apply_turn_start_player_heal_effect(player_heal):
+	if player_heal <= 0:
+		return false
+
+	var before_heal_hp = player_hp
+
+	player_hp += player_heal
+
+	if player_hp > player_max_hp:
+		player_hp = player_max_hp
+
+	var healed = player_hp > before_heal_hp
+
+	if healed:
+		if healing_sound != null:
+			healing_sound.play()
+
+	update_player_hp_ui()
+
+	return healed
 # 플레이어 턴 시작 성물/주물 효과 적용 함수
 func apply_player_turn_start_relic_effects():
-	var player_damage = int(player_effective_stats.get("turn_start_player_damage", 0))
-	var player_heal = int(player_effective_stats.get("turn_start_player_heal", 0))
-	var enemy_damage = int(player_effective_stats.get("turn_start_enemy_damage", 0))
+	var player_damage = get_turn_start_player_damage()
+	var player_heal = get_turn_start_player_heal()
+	var enemy_damage = get_turn_start_enemy_damage()
 
 	var effect_happened = false
 	var player_was_damaged = false
 
 	# 1. 먼저 플레이어 피해 효과 적용
 	if player_damage > 0:
-		var before_hp = player_hp
+		player_was_damaged = apply_turn_start_player_damage_effect(player_damage)
 
-		player_hp -= player_damage
-
-		if bool(player_effective_stats.get("cannot_die", false)) and before_hp >= 1 and player_hp < 1:
-			# cannot_die 여도 연출은 추가하기
-			play_player_hit_flash()
-			play_overlap_sound_from_player(hit_normal_sound)
-			player_hp = 1
-
-		if player_hp < 0:
-			player_hp = 0
-
-		if before_hp > player_hp:
-			play_player_hit_flash()
-			play_overlap_sound_from_player(hit_normal_sound)
-
-			player_was_damaged = true
+		if player_was_damaged:
 			effect_happened = true
 
-		update_player_hp_ui()
-
-		if player_hp <= 0:
-			prepare_game_over_state()
-			await get_tree().create_timer(0.5).timeout
-			await game_over()
+		if await check_player_death_after_turn_start_effect():
 			return false
-		
+
 		if player_was_damaged and enemy_damage > 0:
 			await get_tree().create_timer(0.10).timeout
 
 	# 2. 적 본체/파츠 피해 효과 적용
 	if enemy_damage > 0:
-		var damaged_enemy = false
-
-		if enemy_hp > 0:
-			enemy_hp -= enemy_damage
-
-			if enemy_hp < 0:
-				enemy_hp = 0
-
-			damaged_enemy = true
-
-		for part_id in enemy_part_hp.keys():
-			if destroyed_parts.has(part_id):
-				continue
-
-			enemy_part_hp[part_id] -= enemy_damage
-
-			if enemy_part_hp[part_id] < 0:
-				enemy_part_hp[part_id] = 0
-
-			damaged_enemy = true
-
-			if enemy_part_hp[part_id] <= 0:
-				destroy_enemy_part(part_id)
+		var damaged_enemy = apply_turn_start_enemy_damage_effect(enemy_damage)
 
 		if damaged_enemy:
-			play_overlap_sound_from_player(hit_normal_sound)
-
-			set_top_hitbox_as_last_hitbox()
-			show_damage_popup(enemy_damage, false)
-			start_enemy_hit_feedback()
-
 			effect_happened = true
 
-		update_enemy_hp_ui()
-		update_debug_hp_labels()
-
-		if enemy_hp <= 0:
-			await get_tree().create_timer(0.5).timeout
-			await handle_enemy_defeated()
+		if await check_enemy_defeated_after_turn_start_effect():
 			return false
 
 	# 3. 마지막에 플레이어 회복 효과 적용
 	if player_heal > 0:
-		var before_heal_hp = player_hp
+		var healed = apply_turn_start_player_heal_effect(player_heal)
 
-		player_hp += player_heal
-
-		if player_hp > player_max_hp:
-			player_hp = player_max_hp
-
-		if player_hp > before_heal_hp:
-			if healing_sound != null:
-				healing_sound.play()
-
+		if healed:
 			effect_happened = true
-
-		update_player_hp_ui()
 
 	if effect_happened:
 		await get_tree().create_timer(0.45).timeout
