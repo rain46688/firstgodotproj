@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://bbnwdglh02n0f"]
+
+[ext_resource type="Script" uid="uid://dv5h1enkfbbv2" path="res://scripts/game_over_scene.gd" id="1_64dwf"]
+[ext_resource type="AudioStream" uid="uid://b2p5y3ta6bfww" path="res://sounds/clcik.mp3" id="2_k0nam"]
+[ext_resource type="AudioStream" uid="uid://bj7if30qwmwg0" path="res://sounds/bgm6.mp3" id="3_weh2h"]
+
+[node name="GameOverScene" type="Control" unique_id=1393296489]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_64dwf")
+
+[node name="Background" type="ColorRect" parent="." unique_id=625321627]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CenterBox" type="VBoxContainer" parent="." unique_id=138260791]
+custom_minimum_size = Vector2(500, 360)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -180.0
+offset_right = 250.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="CenterBox" unique_id=969129180]
+layout_mode = 2
+
+[node name="MessageLabel" type="Label" parent="CenterBox" unique_id=1576855667]
+layout_mode = 2
+
+[node name="ContinueButton" type="Button" parent="CenterBox" unique_id=990295716]
+layout_mode = 2
+
+[node name="QuitButton" type="Button" parent="CenterBox" unique_id=955204307]
+layout_mode = 2
+
+[node name="ClickSound" type="AudioStreamPlayer" parent="." unique_id=1497532936]
+stream = ExtResource("2_k0nam")
+
+[node name="GameOverBgm" type="AudioStreamPlayer" parent="." unique_id=1869103956]
+stream = ExtResource("3_weh2h")

@@ -11,13 +11,14 @@ config_version=5
 [application]
 
 config/name="test"
-run/main_scene="uid://db3x6hhv5s5yi"
+run/main_scene="uid://25x42y0brplt"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 TimeController="*uid://bt6mu73j1rvkt"
+GameSession="*uid://c7hk3wxepb27f"
 
 [display]
 

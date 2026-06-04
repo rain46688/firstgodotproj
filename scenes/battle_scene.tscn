@@ -346,7 +346,6 @@ volume_db = -8.0
 
 [node name="ClickSound" type="AudioStreamPlayer" parent="." unique_id=797732391]
 stream = ExtResource("10_yt3ua")
-volume_db = -10.0
 
 [node name="SlashSound" type="AudioStreamPlayer" parent="." unique_id=129709013]
 stream = ExtResource("11_3xrod")

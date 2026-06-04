@@ -521,6 +521,9 @@ func start_initial_battle_turn():
 		start_player_turn()
 # 전투 화면 설정 함수
 func setup_battle(data):
+	# 전투 씬의 BGM/SFX에도 현재 설정값 적용
+	apply_battle_audio_settings()
+
 	if not is_valid_battle_setup_data(data):
 		push_error("전투 시작 데이터가 올바르지 않음")
 		return
@@ -545,8 +548,15 @@ func setup_battle(data):
 		push_error("전투 enemy_data가 비어있음: " + str(enemy_id))
 		return
 
-	enemy_max_hp = int(enemy_data.get("max_hp", 10))
+	# main.gd에서 넘겨받은 현재 난이도
+	battle_difficulty = get_setup_string(data, "battle_difficulty", GameSession.DIFFICULTY_NORMAL)
+
+	# 난이도 배율이 적용된 적 체력 설정
+	enemy_max_hp = get_adjusted_enemy_max_hp(enemy_data)
 	enemy_hp = enemy_max_hp
+
+	print("전투 난이도: " + str(battle_difficulty))
+	print("적 체력 적용: " + str(enemy_hp) + " / " + str(enemy_max_hp))
 
 	# 성물/주물 적용 능력치
 	player_effective_stats = get_setup_dictionary(data, "player_effective_stats")
@@ -969,6 +979,9 @@ func make_battle_win_result(rewards, reward_flags):
 # 전투 도주 결과 데이터 생성 함수
 func make_battle_escape_result():
 	return make_battle_finish_result("escaped")
+# 전투 게임오버 결과 데이터 생성 함수
+func make_battle_game_over_result():
+	return make_battle_finish_result("game_over")
 # 전투 종료 신호 전달 함수
 func finish_battle(result_data):
 	emit_signal("battle_finished", result_data)
@@ -1029,6 +1042,9 @@ func finish_battle_with_win_result(rewards, reward_flags):
 			reward_flags
 		)
 	)
+# 전투 게임오버 종료 처리 함수
+func finish_battle_with_game_over_result():
+	finish_battle(make_battle_game_over_result())
 # 승리 함수
 func win_battle():
 	prepare_battle_win_state()
@@ -1093,7 +1109,13 @@ func game_over():
 	game_over_started = true
 	prepare_game_over_state()
 
-	await show_game_over_text()
+	# 이제 전투 씬 안에서 YOU DIED를 오래 보여주지 않고,
+	# main.gd에 게임오버 결과를 넘긴 뒤 GameOverScene으로 이동한다.
+	#
+	# 짧은 딜레이는 피격 연출이 너무 즉시 끊기는 느낌을 줄이기 위한 용도.
+	await get_tree().create_timer(0.4).timeout
+
+	finish_battle_with_game_over_result()
 # 전투 텍스트 표시 함수
 func set_battle_text(text):
 	# 여긴 set_battle_text() 함수로 처리하면 안됌 그러면 무하루프에 빠질수가있음!
@@ -1673,8 +1695,19 @@ func fade_bgm_volume(target_volume_db, duration):
 	if bgm_volume_tween != null and bgm_volume_tween.is_valid():
 		bgm_volume_tween.kill()
 
+	# target_volume_db는 전투 BGM의 기본 목표 볼륨이다.
+	# 여기에 유저 BGM 설정값을 반영한 값을 실제 fade 목표로 사용한다.
+	set_battle_bgm_base_volume(target_volume_db)
+
+	var adjusted_target_volume_db = get_adjusted_bgm_volume_db(target_volume_db)
+
 	bgm_volume_tween = create_tween()
-	bgm_volume_tween.tween_property(battle_bgm, "volume_db", target_volume_db, duration)
+	bgm_volume_tween.tween_property(
+		battle_bgm,
+		"volume_db",
+		adjusted_target_volume_db,
+		duration
+	)
 # BGM 정지 함수
 func stop_battle_bgm(fade_out = true, fade_time = 0.8):
 	battle_bgm_should_loop = false
@@ -1688,7 +1721,11 @@ func stop_battle_bgm(fade_out = true, fade_time = 0.8):
 		await tween.finished
 
 	battle_bgm.stop()
-	battle_bgm.volume_db = default_battle_bgm_volume_db
+
+	# 정지 후 기본 전투 BGM 볼륨 상태로 되돌리되,
+	# 유저 BGM 설정값은 반영해둔다.
+	set_battle_bgm_base_volume(default_battle_bgm_volume_db)
+	battle_bgm.volume_db = get_adjusted_bgm_volume_db(default_battle_bgm_volume_db)
 # BGM 재생 함수
 func play_battle_bgm(
 	next_stream,
@@ -1700,14 +1737,20 @@ func play_battle_bgm(
 	if next_stream == null:
 		return
 
+	# target_volume_db는 전투 BGM의 "기본 볼륨"이다.
+	# 실제 재생 볼륨은 GameSession의 BGM 설정값을 더해서 계산한다.
 	if target_volume_db == null:
 		target_volume_db = default_battle_bgm_volume_db
+
+	target_volume_db = float(target_volume_db)
 
 	set_audio_stream_loop(next_stream, loop)
 	battle_bgm_should_loop = loop
 
 	var same_stream = is_same_audio_stream(battle_bgm.stream, next_stream)
 
+	# 같은 BGM이 이미 재생 중이면, 기본 목표 볼륨만 바꾸고
+	# 유저 설정이 반영된 볼륨으로 fade한다.
 	if same_stream and battle_bgm.playing and not restart_if_same:
 		fade_bgm_volume(target_volume_db, 0.2)
 		return
@@ -1718,17 +1761,27 @@ func play_battle_bgm(
 	battle_bgm_should_loop = loop
 	battle_bgm.stream = next_stream
 
+	# 이 BGM의 기본 볼륨을 저장한다.
+	# 설정 슬라이더는 이 기본 볼륨에 추가로 적용된다.
+	set_battle_bgm_base_volume(target_volume_db)
+
 	if fade_in:
+		# fade 시작점은 거의 무음으로 둔다.
 		battle_bgm.volume_db = -40.0
 	else:
-		battle_bgm.volume_db = target_volume_db
+		# fade가 없으면 바로 설정 반영된 볼륨으로 재생한다.
+		battle_bgm.volume_db = get_adjusted_bgm_volume_db(target_volume_db)
 
 	battle_bgm.play()
 
 	if fade_in:
+		# fade 목표값도 유저 설정 반영된 값으로 이동한다.
 		fade_bgm_volume(target_volume_db, fade_time)
 # 오디오 단발 효과음 재생 함수
 func play_one_shot_sound(player, sound_path = "", fallback_stream = null, volume_db = null):
+	if player == null:
+		return
+
 	var next_stream = fallback_stream
 
 	if sound_path != "":
@@ -1740,8 +1793,14 @@ func play_one_shot_sound(player, sound_path = "", fallback_stream = null, volume
 	player.stop()
 	player.stream = next_stream
 
+	# volume_db가 들어오면 이 값을 효과음의 기본 볼륨으로 저장한다.
+	# 실제 재생 볼륨은 SFX 설정값을 반영해서 적용한다.
 	if volume_db != null:
-		player.volume_db = volume_db
+		player.set_meta("base_volume_db", float(volume_db))
+		player.volume_db = float(volume_db)
+
+	# 유저 SFX 설정 적용
+	apply_sfx_volume_to_player(player)
 
 	player.play()
 # 오디오 적 등장 효과음 재생 함수
@@ -1765,9 +1824,22 @@ func play_overlap_sound_from_player(source_player):
 
 	var sound = AudioStreamPlayer.new()
 	sound.stream = source_player.stream
-	sound.volume_db = source_player.volume_db
 	sound.pitch_scale = source_player.pitch_scale
 	sound.bus = source_player.bus
+
+	# source_player.volume_db는 이미 SFX 설정이 적용된 값일 수 있다.
+	# 그래서 그대로 복사한 뒤 apply_sfx_volume_to_player()를 또 호출하면
+	# SFX 설정이 두 번 적용될 수 있다.
+	var base_volume_db = source_player.volume_db
+
+	if source_player.has_meta("base_volume_db"):
+		base_volume_db = float(source_player.get_meta("base_volume_db"))
+
+	sound.volume_db = base_volume_db
+	sound.set_meta("base_volume_db", base_volume_db)
+
+	# 임시 효과음에도 현재 SFX 설정 적용
+	apply_sfx_volume_to_player(sound)
 
 	add_child(sound)
 
@@ -2091,23 +2163,44 @@ func execute_enemy_attack():
 		return
 
 	await return_to_player_turn_after_enemy_attack()
+# 적 체력 난이도 배율 반환 함수
+func get_enemy_hp_multiplier_by_difficulty():
+	if battle_difficulty == GameSession.DIFFICULTY_HARD:
+		return 1.5
+	elif battle_difficulty == GameSession.DIFFICULTY_NIGHTMARE:
+		return 2.0
+	elif battle_difficulty == GameSession.DIFFICULTY_HARDCORE:
+		return 2.0
+
+	return 1.0
+# 난이도 배율이 적용된 적 최대 체력 반환 함수
+func get_adjusted_enemy_max_hp(target_enemy_data):
+	var base_max_hp = int(target_enemy_data.get("max_hp", 10))
+	var hp_multiplier = get_enemy_hp_multiplier_by_difficulty()
+
+	return max(1, int(round(base_max_hp * hp_multiplier)))
 # 적 탄막 난이도 보정 함수
 func get_adjusted_projectile_info(projectile_info):
 	var adjusted = projectile_info.duplicate(true)
-	var danger_type = adjusted.get("danger_type", "normal")
-	
-	if battle_difficulty == "easy":
-		if danger_type == "parry_only":
-			adjusted["danger_type"] = "normal"
+	var danger_type = str(adjusted.get("danger_type", "normal"))
 
-	elif battle_difficulty == "hard":
+	# 어려움:
+	# 일반 탄막 중 일부를 빨간 탄막으로 변경한다.
+	if battle_difficulty == GameSession.DIFFICULTY_HARD:
 		if danger_type == "normal":
 			if randf() < 0.35:
 				adjusted["danger_type"] = "parry_only"
 
-	elif battle_difficulty == "nightmare":
+	# 악몽 / 하드코어:
+	# 모든 탄막을 빨간 탄막으로 변경한다.
+	elif battle_difficulty == GameSession.DIFFICULTY_NIGHTMARE:
 		adjusted["danger_type"] = "parry_only"
 
+	elif battle_difficulty == GameSession.DIFFICULTY_HARDCORE:
+		adjusted["danger_type"] = "parry_only"
+
+	# 일반 난이도:
+	# 별도 변경 없음
 	return adjusted
 # 적 탄막 처리 결과 Dictionary 생성 함수
 func make_enemy_projectile_result(result_type):
@@ -3553,7 +3646,9 @@ func change_enemy_phase():
 	# 4. 페이즈2 적 데이터로 교체
 	enemy_id = next_enemy_id
 	enemy_data = next_enemy_data
-	enemy_max_hp = enemy_data.get("max_hp", 10)
+
+	# 페이즈2 적 체력에도 현재 난이도 배율을 적용한다.
+	enemy_max_hp = get_adjusted_enemy_max_hp(enemy_data)
 	enemy_hp = enemy_max_hp
 
 	# 5. 페이즈2 BGM 갱신
@@ -5732,3 +5827,95 @@ func apply_player_turn_start_relic_effects():
 		await get_tree().create_timer(0.45).timeout
 
 	return true
+
+# ============================================================
+# 전투 오디오 설정 관련 함수 모음
+# ============================================================
+
+# BGM 기본 볼륨에 유저 설정 볼륨을 더해서 실제 재생 볼륨을 반환하는 함수
+func get_adjusted_bgm_volume_db(base_volume_db):
+	return float(base_volume_db) + GameSession.get_bgm_volume_db()
+# BattleBgm의 기본 볼륨 메타데이터를 갱신하는 함수
+func set_battle_bgm_base_volume(base_volume_db):
+	if battle_bgm == null:
+		return
+
+	battle_bgm.set_meta("base_volume_db", float(base_volume_db))
+# 특정 노드 아래의 모든 AudioStreamPlayer를 재귀적으로 찾는 함수
+func collect_audio_stream_players(node, result):
+	if node == null:
+		return
+
+	if node is AudioStreamPlayer:
+		result.append(node)
+
+	for child in node.get_children():
+		collect_audio_stream_players(child, result)
+# 전투 씬 안의 모든 AudioStreamPlayer 목록 반환 함수
+func get_all_battle_audio_players():
+	var players = []
+	collect_audio_stream_players(self, players)
+	return players
+# 이름 기준으로 BGM 플레이어인지 확인하는 함수
+func is_battle_bgm_player(player):
+	if player == null:
+		return false
+
+	var lower_name = str(player.name).to_lower()
+
+	# 노드 이름에 bgm이 들어가 있으면 BGM으로 처리
+	return lower_name.contains("bgm")
+# 전투 BGM 플레이어 목록 반환 함수
+func get_battle_bgm_players():
+	var result = []
+
+	for player in get_all_battle_audio_players():
+		if is_battle_bgm_player(player):
+			result.append(player)
+
+	return result
+# 전투 SFX 플레이어 목록 반환 함수
+func get_battle_sfx_players():
+	var result = []
+
+	for player in get_all_battle_audio_players():
+		if not is_battle_bgm_player(player):
+			result.append(player)
+
+	return result
+# AudioStreamPlayer 기본 볼륨 저장
+func register_audio_base_volume(player):
+	if player == null:
+		return
+
+	if not player.has_meta("base_volume_db"):
+		player.set_meta("base_volume_db", player.volume_db)
+# BGM 볼륨 설정 적용
+func apply_bgm_volume_to_player(player):
+	if player == null:
+		return
+
+	register_audio_base_volume(player)
+
+	var base_volume_db = float(player.get_meta("base_volume_db"))
+	var setting_volume_db = GameSession.get_bgm_volume_db()
+
+	player.volume_db = base_volume_db + setting_volume_db
+# SFX 볼륨 설정 적용
+func apply_sfx_volume_to_player(player):
+	if player == null:
+		return
+
+	register_audio_base_volume(player)
+
+	var base_volume_db = float(player.get_meta("base_volume_db"))
+	var setting_volume_db = GameSession.get_sfx_volume_db()
+
+	player.volume_db = base_volume_db + setting_volume_db
+# 전투 씬의 모든 오디오에 현재 설정 적용
+func apply_battle_audio_settings():
+	for player in get_battle_bgm_players():
+		apply_bgm_volume_to_player(player)
+
+	for player in get_battle_sfx_players():
+		apply_sfx_volume_to_player(player)

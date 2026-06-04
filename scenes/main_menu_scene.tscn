@@ -1,0 +1,162 @@
+[gd_scene format=3 uid="uid://25x42y0brplt"]
+
+[ext_resource type="Script" uid="uid://b8oa4dh6btljt" path="res://scripts/main_menu_scene.gd" id="1_vfskp"]
+[ext_resource type="FontFile" uid="uid://bhxde28nnpeiv" path="res://fonts/SB 어그로 L.ttf" id="1_xhf6x"]
+[ext_resource type="AudioStream" uid="uid://b2p5y3ta6bfww" path="res://sounds/clcik.mp3" id="3_7hcs8"]
+
+[node name="MainMenuScene" type="Control" unique_id=647454908]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vfskp")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1652161195]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CenterBox" type="VBoxContainer" parent="." unique_id=1515997514]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -180.0
+offset_right = 210.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="CenterBox" unique_id=12017999]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_xhf6x")
+text = "TEST"
+horizontal_alignment = 1
+
+[node name="StartButton" type="Button" parent="CenterBox" unique_id=1567850429]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_xhf6x")
+text = "처음부터"
+
+[node name="ContinueButton" type="Button" parent="CenterBox" unique_id=502703269]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_xhf6x")
+text = "이어하"
+
+[node name="SettingButton" type="Button" parent="CenterBox" unique_id=1134293091]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_xhf6x")
+text = "처음부터"
+
+[node name="QuitButton" type="Button" parent="CenterBox" unique_id=204916300]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_xhf6x")
+text = "종료"
+
+[node name="DifficultyPanel" type="PanelContainer" parent="." unique_id=1452549911]
+visible = false
+custom_minimum_size = Vector2(520, 420)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -210.0
+offset_right = 260.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DifficultyBox" type="VBoxContainer" parent="DifficultyPanel" unique_id=1673434360]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="DifficultyTitleLabel" type="Label" parent="DifficultyPanel/DifficultyBox" unique_id=2116193390]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_xhf6x")
+text = "난이도를 선택하세요"
+horizontal_alignment = 1
+
+[node name="NormalButton" type="Button" parent="DifficultyPanel/DifficultyBox" unique_id=826226208]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_xhf6x")
+text = "일반 - 기본 난이도"
+
+[node name="HardButton" type="Button" parent="DifficultyPanel/DifficultyBox" unique_id=1305531218]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_xhf6x")
+text = "어려움 - 적 체력 1.5배 / 빨간 탄막 증가"
+
+[node name="NightmareButton" type="Button" parent="DifficultyPanel/DifficultyBox" unique_id=964046168]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_xhf6x")
+text = "악몽 - 적 체력 2배 / 모든 탄막 빨간색"
+
+[node name="HardcoreButton" type="Button" parent="DifficultyPanel/DifficultyBox" unique_id=1792058417]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_xhf6x")
+text = "하드코어 - 사망 시 세이브 삭제"
+
+[node name="BackButton" type="Button" parent="DifficultyPanel/DifficultyBox" unique_id=1416976560]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_xhf6x")
+text = "뒤로가기"
+
+[node name="SettingsPanel" type="PanelContainer" parent="." unique_id=1596392880]
+visible = false
+custom_minimum_size = Vector2(520, 360)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -180.0
+offset_right = 260.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SettingsBox" type="VBoxContainer" parent="SettingsPanel" unique_id=1867688647]
+layout_mode = 2
+
+[node name="SettingsTitleLabel" type="Label" parent="SettingsPanel/SettingsBox" unique_id=2108747372]
+layout_mode = 2
+
+[node name="BgmVolumeLabel" type="Label" parent="SettingsPanel/SettingsBox" unique_id=1992257683]
+layout_mode = 2
+
+[node name="BgmVolumeSlider" type="HSlider" parent="SettingsPanel/SettingsBox" unique_id=756303454]
+layout_mode = 2
+value = 100.0
+
+[node name="SfxVolumeLabel" type="Label" parent="SettingsPanel/SettingsBox" unique_id=986245257]
+layout_mode = 2
+
+[node name="SfxVolumeSlider" type="HSlider" parent="SettingsPanel/SettingsBox" unique_id=186116222]
+layout_mode = 2
+value = 100.0
+
+[node name="SettingsResetButton" type="Button" parent="SettingsPanel/SettingsBox" unique_id=1568090827]
+layout_mode = 2
+text = "초기화"
+
+[node name="SettingsBackButton" type="Button" parent="SettingsPanel/SettingsBox" unique_id=1526717666]
+layout_mode = 2
+
+[node name="ClickSound" type="AudioStreamPlayer" parent="." unique_id=485109698]
+stream = ExtResource("3_7hcs8")

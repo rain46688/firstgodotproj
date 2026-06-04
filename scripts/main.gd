@@ -63,11 +63,14 @@ extends Control
 @onready var arrange_slot_highlight_container = $InventoryArrangeUI/ArrangeSlotHighlightContainer
 @onready var arrange_selected_focus_container = $InventoryArrangeUI/ArrangeSelectedFocusContainer
 @onready var inventory_portrait = get_node_or_null("InventoryUI/InventoryPortrait")
+@onready var result_sound = $ResultSound
+@onready var dialogue_type_sound = $ChoiceSound
 
 # 일반 변수 모음
 var arrow_time = 0.0
 var is_moving = false
 var current_room = "hallway_2"
+var current_difficulty = "normal"
 var rooms = {}
 var is_choosing = false
 var choice_index = 0
@@ -104,6 +107,9 @@ var story_events = {}
 var is_story_playing = false
 var enemies = {}
 var battle_scene = null
+var pause_ui_scene = null
+var is_game_paused = false
+var current_bgm_base_volume_db = -5.0
 var projectiles = {}
 var encounters = {}
 var encounter_events = {}
@@ -166,6 +172,9 @@ const MSG_DOOR_LOCKED = "문이 굳게 잠겨있다..."
 const MSG_DOOR_UNLOCK = "교실키로 문을 열었다."
 const MSG_ITEM_GAINED_SUFFIX = "을 얻었다."
 const BATTLE_SCENE_PATH = "res://scenes/battle_scene.tscn"
+const GAME_OVER_SCENE_PATH = "res://scenes/game_over_scene.tscn"
+const PAUSE_UI_SCENE_PATH = "res://scenes/pause_ui_scene.tscn"
+const MAIN_MENU_SCENE_PATH = "res://scenes/main_menu_scene.tscn"
 const STAT_GOOD_COLOR = "#55ff77"
 const STAT_BAD_COLOR = "#ff5555"
 const STAT_INFO_COLOR = "#88ccff"
@@ -261,6 +270,13 @@ func _process(delta):
 			close_inventory()
 
 		return
+		
+	# 일반 탐색 상태에서 ESC를 누르면 일시정지 UI를 연다.
+	# 인벤토리/정리 화면은 위쪽 분기에서 ESC로 닫히기 때문에
+	# Pause는 그보다 아래에서 처리해야 입력이 충돌하지 않는다.
+	if Input.is_action_just_pressed("esc") or Input.is_action_just_pressed("ui_cancel"):
+		open_pause_ui()
+		return	
 
 	# 이동 중이면 아무 입력도 받지 않음
 	if is_moving:
@@ -375,38 +391,78 @@ func setup_initial_ui_helpers():
 	# Space를 눌렀을 때 버튼이 다시 눌리는 문제 방지
 	bag_button.focus_mode = Control.FOCUS_NONE
 # 처음에 한번 실행 함수
-func _ready():   
-	
+func _ready():
 	# 시작시 기본 브금 실행
 	play_bgm("res://sounds/bgm2.mp3")
 
 	# 게임 시작 시 UI의 기본 표시 상태를 초기화하는 함수
 	setup_initial_ui_state()
-	
+
 	# 게임 시작 시 UI 레이어 순서를 초기화하는 함수
 	setup_initial_z_index()
-	
+
 	# 게임 시작 시 UI 보조 기능과 버튼 연결을 초기화하는 함수
 	setup_initial_ui_helpers()
-	
+
+	# 효과음 기본 볼륨 저장 및 현재 SFX 설정 적용
+	register_sfx_base_volumes()
+	apply_sfx_volume_to_all()
+
 	# 게임 시작 데이터 로드
 	if not load_startup_game_data():
 		return
 
-	# 세이브 파일 로드 테스트
-	#load_game(1)
-	
+	# GameSession에 저장된 시작 모드에 따라 새 게임/이어하기 분기
+	await start_game_from_session()
+# GameSession 정보에 따라 새 게임 또는 이어하기를 시작하는 함수
+func start_game_from_session():
+	# 메인 메뉴에서 선택한 난이도를 main.gd에도 저장한다.
+	current_difficulty = GameSession.difficulty
+
+	print("게임 시작 모드: " + str(GameSession.start_mode))
+	print("현재 난이도: " + GameSession.get_difficulty_name())
+
+	# 이어하기 모드라면 저장 파일을 불러온다.
+	if GameSession.start_mode == GameSession.START_MODE_LOAD:
+		await start_loaded_game_from_session()
+		return
+
+	# 그 외에는 새 게임으로 시작한다.
+	await start_new_game_from_session()
+# 새 게임 시작 함수
+func start_new_game_from_session():
+	# 새 게임일 때는 GameSession의 난이도를 현재 난이도로 사용한다.
+	current_difficulty = GameSession.difficulty
+
+	print("새 게임 시작")
+	print("난이도: " + GameSession.get_difficulty_name())
+
 	# 디버그 아이템 테스트
+	# 개발 중에는 기존 테스트 흐름을 유지한다.
 	await add_debug_start_items()
-	
+
 	# 디버그 방 갱신 전 개발 테스트 흐름, 아이템 정리 화면 테스트
 	await run_debug_before_room_update_flow()
 
 	# 방 갱신 함수 호출
 	update_room()
-	
+
 	# 디버그 방 갱신 후 개발 테스트 흐름, 적 배틀 테스트
 	await run_debug_after_room_update_flow()
+# 이어하기 시작 함수
+func start_loaded_game_from_session():
+	var slot_index = GameSession.save_slot_index
+
+	print("이어하기 시작")
+	print("세이브 슬롯: " + str(slot_index))
+
+	var success = await load_game(slot_index)
+
+	if not success:
+		push_error("이어하기 실패. 저장 파일을 불러올 수 없음.")
+		return
+
+	print("이어하기 완료")
 # 게임 시작에 필요한 데이터 로드 함수
 func load_startup_game_data():
 	var load_steps = [
@@ -519,7 +575,10 @@ func start_battle(enemy_id, first_turn = ""):
 		"inventory": inventory,
 		"projectiles": projectiles,
 		"flags": flags,
-		"first_turn": first_turn
+		"first_turn": first_turn,
+
+		# 현재 선택된 난이도를 전투 씬으로 전달
+		"battle_difficulty": current_difficulty
 	}
 	
 	if bgm_player.playing:
@@ -528,32 +587,68 @@ func start_battle(enemy_id, first_turn = ""):
 	battle_scene.setup_battle(battle_data)
 # 전투 종료 함수
 func end_battle(result_data):
+	var result_type = str(result_data.get("result", ""))
+
+	# 전투 종료 시 플레이어 체력은 항상 반영한다.
 	player_hp = result_data.get("player_hp", player_hp)
 
+	print("전투 종료 결과: " + result_type)
+
+	# 게임오버라면 보상/인벤토리 정리/맵 복귀를 하지 않고
+	# 게임오버 전용 처리로 이동한다.
+	if result_type == "game_over":
+		await handle_battle_game_over_result(result_data)
+		return
+
+	# 승리 보상 플래그 적용
 	for flag_id in result_data.get("reward_flags", []):
 		set_flag(flag_id)
 
 	var battle_rewards = result_data.get("rewards", [])
 
+	# 일회성 보상 플래그 적용
 	for reward in battle_rewards:
 		if reward.has("once_flag"):
 			set_flag(reward["once_flag"])
 
+	# 전투 씬 제거
 	if battle_scene != null:
 		battle_scene.queue_free()
 		battle_scene = null
 
+	# 인게임 화면 복귀
 	is_story_playing = false
 	show_game_ui()
-	
+
+	# 기존 탐색 BGM 재생
 	bgm_player.play()
-	
+
+	# 보상 아이템 지급 및 인벤토리 정리 화면 처리
 	await give_items_with_pending_loot(battle_rewards)
 	await open_inventory_arrange_if_pending_loot("loot")
+# 전투 게임오버 결과 처리 함수
+@warning_ignore("unused_parameter")
+func handle_battle_game_over_result(result_data):
+	# 전투 씬 제거
+	if battle_scene != null:
+		battle_scene.queue_free()
+		battle_scene = null
 
-	print("전투 종료 결과: " + str(result_data.get("result", "")))
+	# 하드코어 모드라면 사망 즉시 세이브 파일 삭제
+	if current_difficulty == GameSession.DIFFICULTY_HARDCORE:
+		print("하드코어 사망: 세이브 파일 삭제 시도")
+		GameSession.delete_save_file(1)
 
-# ============================================================
+	# 게임오버 화면으로 이동하기 전 상태 정리
+	is_story_playing = false
+
+	# 메인 씬의 BGM이 다시 재생되지 않도록 정지
+	if bgm_player.playing:
+		bgm_player.stop()
+
+	# 게임오버 씬으로 이동
+	get_tree().change_scene_to_file(GAME_OVER_SCENE_PATH)
+# =================================s===========================
 # 디버그 관련 함수 모음
 # ============================================================
 
@@ -1787,6 +1882,35 @@ func get_story_event_data_by_id(story_event_id, show_error = true):
 		return {}
 
 	return story_event_data
+# 대사 글자 출력 사운드 재생 함수
+func play_dialogue_type_sound():
+	# 현재는 ChoiceSound의 오디오 파일을 글자 출력 사운드로 재사용한다.
+	if dialogue_type_sound == null:
+		return
+
+	if dialogue_type_sound.stream == null:
+		return
+
+	# 같은 AudioStreamPlayer를 계속 play()하면 소리가 끊기거나 재시작되어
+	# 글자마다 "딱딱딱" 들리지 않을 수 있다.
+	# 그래서 임시 AudioStreamPlayer를 만들어 겹쳐 재생한다.
+	var temp_player = AudioStreamPlayer.new()
+	temp_player.stream = dialogue_type_sound.stream
+	temp_player.volume_db = dialogue_type_sound.volume_db
+	temp_player.pitch_scale = dialogue_type_sound.pitch_scale
+	
+	# 현재 SFX 볼륨 설정 적용
+	apply_sfx_volume_to_player(temp_player)
+
+	add_child(temp_player)
+
+	temp_player.play()
+
+	# 사운드 재생이 끝나면 임시 노드 제거
+	temp_player.finished.connect(
+		func():
+			temp_player.queue_free()
+	)
 # 대사 출력 함수
 func show_dialogue(text, mode = "normal"):
 	# - 글자를 한 글자씩 출력
@@ -1815,9 +1939,12 @@ func show_dialogue(text, mode = "normal"):
 
 		current_text += text[i]
 		$DialogueBox/DialogueText.text = current_text
-		choice_sound.play()
+
+		# 글자마다 타이핑 사운드 재생
+		play_dialogue_type_sound()
+
 		# 타이핑 속도 0.04
-		await get_tree().create_timer(0.04).timeout
+		await get_tree().create_timer(0.05).timeout
 
 	$DialogueBox/DialogueText.text = text
 	is_typing = false
@@ -2253,6 +2380,7 @@ func run_single_event(event):
 				has_reward = true
 
 		if has_reward:
+			play_battle_result_sound()
 			if count > 1:
 				await show_dialogue(get_item_name(item_id) + " " + str(count) + "개" + MSG_ITEM_GAINED_SUFFIX)
 			else:
@@ -2268,6 +2396,10 @@ func run_single_event(event):
 
 	else:
 		push_error("알 수 없는 event type: " + str(event_type))
+# 전투 결과 사운드 재생 함수
+func play_battle_result_sound():
+	if result_sound != null:
+		result_sound.play()
 # events 배열을 순서대로 실행하는 함수
 func run_events(events):
 	if typeof(events) != TYPE_ARRAY:
@@ -2630,6 +2762,167 @@ func change_room_by_story(room_id):
 	apply_room_change(room_id)
 
 # ============================================================
+# 일시정지 UI 관련 함수 모음
+# ============================================================
+
+# Pause UI에서 BGM 볼륨 슬라이더가 변경되었을 때 호출
+@warning_ignore("unused_parameter")
+func _on_pause_bgm_volume_changed(value):
+	apply_bgm_volume()
+# Pause UI에서 SFX 볼륨 슬라이더가 변경되었을 때 호출
+func _on_pause_sfx_volume_changed(value):
+	print("SFX 볼륨 변경 요청: " + str(int(value)) + "%")
+
+	# main.gd의 모든 효과음에 즉시 적용
+	apply_sfx_volume_to_all()
+# 현재 일시정지 UI를 열 수 있는 상태인지 확인하는 함수
+func can_open_pause_ui():
+	if is_game_paused:
+		return false
+
+	if pause_ui_scene != null:
+		return false
+
+	# 전투 중에는 아직 Pause UI를 열지 않는다.
+	if battle_scene != null:
+		return false
+
+	# 스토리 이벤트, 대사, 선택지 중에는 열지 않는다.
+	if is_story_playing:
+		return false
+
+	if is_dialogue_showing:
+		return false
+
+	if is_choosing:
+		return false
+
+	# 인벤토리/정리 화면은 각 UI의 ESC 닫기 처리를 우선한다.
+	if is_inventory_open:
+		return false
+
+	if is_inventory_arrange_open:
+		return false
+
+	# 방 이동/상호작용 중에도 열지 않는다.
+	if is_moving:
+		return false
+
+	if is_interacting:
+		return false
+
+	return true
+# 일시정지 UI 열기 함수
+func open_pause_ui():
+	if not can_open_pause_ui():
+		return
+
+	var pause_scene_resource = load(PAUSE_UI_SCENE_PATH)
+
+	if pause_scene_resource == null:
+		push_error("Pause UI 씬 로드 실패: " + PAUSE_UI_SCENE_PATH)
+		return
+
+	pause_ui_scene = pause_scene_resource.instantiate()
+
+	# Pause UI는 최상단에 보여야 한다.
+	pause_ui_scene.z_index = 4096
+
+	add_child(pause_ui_scene)
+
+	# Pause UI 시그널 연결
+	pause_ui_scene.resume_requested.connect(close_pause_ui)
+	pause_ui_scene.quit_to_title_requested.connect(quit_to_title_from_pause)
+	
+	pause_ui_scene.bgm_volume_changed.connect(_on_pause_bgm_volume_changed)
+	pause_ui_scene.sfx_volume_changed.connect(_on_pause_sfx_volume_changed)
+
+	is_game_paused = true
+
+	# 트리 일시정지
+	# PauseUIScene은 process_mode = ALWAYS라서 paused 상태에서도 입력 가능하다.
+	get_tree().paused = true
+
+	print("일시정지 UI 열림")
+# 일시정지 UI 닫기 함수
+func close_pause_ui():
+	if pause_ui_scene != null:
+		pause_ui_scene.queue_free()
+		pause_ui_scene = null
+
+	is_game_paused = false
+	get_tree().paused = false
+
+	print("일시정지 UI 닫힘")
+# 일시정지 UI에서 메인 메뉴로 이동하는 함수
+func quit_to_title_from_pause():
+	# 씬 이동 전에 반드시 paused를 풀어야 한다.
+	get_tree().paused = false
+	is_game_paused = false
+
+	if pause_ui_scene != null:
+		pause_ui_scene.queue_free()
+		pause_ui_scene = null
+
+	# 탐색 BGM 정지
+	if bgm_player != null and bgm_player.playing:
+		bgm_player.stop()
+
+	print("일시정지 UI에서 메인 메뉴로 이동")
+
+	get_tree().change_scene_to_file(MAIN_MENU_SCENE_PATH)
+
+# ============================================================
+# 오디오 설정 관련 함수 모음
+# ============================================================
+
+# main.gd에서 사용하는 효과음 AudioStreamPlayer 목록 반환 함수
+func get_main_sfx_players():
+	return [
+		footstep_sound,
+		locked_sound,
+		choice_sound,
+		unlocked_sound,
+		bag_open_sound,
+		item_sound,
+		healing_sound,
+		equip_sound,
+		save_ui_open_sound,
+		save_ui_close_sound,
+		save_complete_sound,
+		encounter_heartbeat_sound,
+		result_sound
+	]
+# 효과음들의 기본 볼륨을 저장하는 함수
+func register_sfx_base_volumes():
+	for player in get_main_sfx_players():
+		if player == null:
+			continue
+
+		if not player.has_meta("base_volume_db"):
+			player.set_meta("base_volume_db", player.volume_db)
+# 특정 효과음 플레이어에 SFX 볼륨 설정을 적용하는 함수
+func apply_sfx_volume_to_player(player):
+	if player == null:
+		return
+
+	var base_volume_db = 0.0
+
+	if player.has_meta("base_volume_db"):
+		base_volume_db = float(player.get_meta("base_volume_db"))
+	else:
+		base_volume_db = player.volume_db
+		player.set_meta("base_volume_db", base_volume_db)
+
+	var setting_volume_db = GameSession.get_sfx_volume_db()
+
+	player.volume_db = base_volume_db + setting_volume_db
+# 모든 효과음에 SFX 볼륨 설정을 적용하는 함수
+func apply_sfx_volume_to_all():
+	for player in get_main_sfx_players():
+		apply_sfx_volume_to_player(player)
+
+# ============================================================
 # 기타 함수 모음
 # ============================================================
 
@@ -2744,9 +3037,23 @@ func play_bgm(path, volume_db = -5.0, loop = true):
 	elif stream is AudioStreamOggVorbis:
 		stream.loop = loop
 
+	# 이 BGM의 기본 볼륨을 저장한다.
+	# 설정 슬라이더는 이 기본 볼륨에 추가로 적용된다.
+	current_bgm_base_volume_db = volume_db
+
 	bgm_player.stream = stream
-	bgm_player.volume_db = volume_db
+	apply_bgm_volume()
 	bgm_player.play()
+# 현재 설정값을 BGMPlayer에 적용하는 함수
+func apply_bgm_volume():
+	if bgm_player == null:
+		return
+
+	# GameSession의 BGM 설정값을 dB로 변환한다.
+	# 예: 100% = 0db, 50% = 약 -6db, 0% = -80db
+	var setting_volume_db = GameSession.get_bgm_volume_db()
+
+	bgm_player.volume_db = current_bgm_base_volume_db + setting_volume_db
 # BGM 정지 함수
 func stop_bgm():
 	bgm_player.stop()
@@ -5722,6 +6029,10 @@ func get_save_data():
 		equipped_weapon_slot = int(equipped_weapon["slot"])
 
 	return {
+		"system": {
+			"difficulty": current_difficulty,
+			"is_hardcore": current_difficulty == GameSession.DIFFICULTY_HARDCORE
+		},
 		"room": {
 			"current_room": current_room
 		},
@@ -5801,8 +6112,14 @@ func load_game(slot_index):
 
 	var save_data = json.data
 
+	var system_data = save_data.get("system", {})
 	var room_data = save_data.get("room", {})
 	var player_data = save_data.get("player", {})
+
+	# 저장된 난이도가 있으면 복구한다.
+	# 예전 세이브 파일처럼 system 데이터가 없으면 일반 난이도로 처리한다.
+	current_difficulty = system_data.get("difficulty", GameSession.DIFFICULTY_NORMAL)
+	GameSession.difficulty = current_difficulty
 
 	current_room = room_data.get("current_room", "hallway_1")
 

@@ -19,6 +19,7 @@
 [ext_resource type="AudioStream" uid="uid://bca0o8rrmsb8h" path="res://sounds/save_ui_close.mp3" id="17_bb450"]
 [ext_resource type="AudioStream" uid="uid://dcvrjg58exxw0" path="res://sounds/save_complete.mp3" id="18_bb450"]
 [ext_resource type="AudioStream" uid="uid://b4idj20vru21j" path="res://sounds/heartbeats.mp3" id="18_nfivy"]
+[ext_resource type="AudioStream" uid="uid://b3onferv05h72" path="res://sounds/result.mp3" id="20_1nqs0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bjd11"]
 bg_color = Color(0, 0, 0, 0)
@@ -495,6 +496,10 @@ volume_db = -5.0
 [node name="EncounterHeartbeatSound" type="AudioStreamPlayer" parent="." unique_id=676020408]
 stream = ExtResource("18_nfivy")
 volume_db = 6.0
+
+[node name="ResultSound" type="AudioStreamPlayer" parent="." unique_id=1583150485]
+stream = ExtResource("20_1nqs0")
+volume_db = -5.0
 
 [connection signal="pressed" from="BagButton" to="." method="_on_bag_button_pressed"]
 [connection signal="pressed" from="InventoryUI/InventoryContextMenu/MenuTexts/UseButton" to="." method="_on_use_button_pressed"]
