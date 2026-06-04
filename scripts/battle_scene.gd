@@ -2612,11 +2612,11 @@ func calculate_total_parry_counter_damage():
 	return counter_damage
 # 패링 반격 후 적 처치 확인 함수
 func check_enemy_defeated_after_parry_counter():
-	if enemy_hp <= 0:
-		await handle_enemy_defeated()
-		return true
+	if not is_enemy_body_defeated():
+		return false
 
-	return false
+	await handle_enemy_defeated()
+	return true
 # 적 턴 패링 반격 처리 함수
 func process_enemy_turn_parry_counter():
 	if not has_parry_counter_result():
@@ -3479,9 +3479,7 @@ func destroy_enemy_part(part_id):
 	update_debug_hp_labels()
 # 적 체력 0 이하 처리 함수
 func handle_enemy_defeated():
-	var next_enemy_id = get_next_phase_enemy_id()
-
-	if next_enemy_id != "":
+	if has_next_enemy_phase():
 		var phase_changed = await change_enemy_phase()
 
 		if phase_changed:
@@ -3686,6 +3684,32 @@ func calculate_enemy_defeat_flags():
 		result_flags.append(flag_id)
 
 	return result_flags
+# 적 본체 HP 보정 함수
+func clamp_enemy_body_hp():
+	if enemy_hp < 0:
+		enemy_hp = 0
+
+	if enemy_hp > enemy_max_hp:
+		enemy_hp = enemy_max_hp
+# 적 파츠 HP 보정 함수
+func clamp_enemy_part_hp(part_id):
+	if not enemy_part_hp.has(part_id):
+		return
+
+	if enemy_part_hp[part_id] < 0:
+		enemy_part_hp[part_id] = 0
+# 적 본체 처치 여부 확인 함수
+func is_enemy_body_defeated():
+	return enemy_hp <= 0
+# 적 파츠 처치 여부 확인 함수
+func is_enemy_part_defeated(part_id):
+	if not enemy_part_hp.has(part_id):
+		return false
+
+	return enemy_part_hp[part_id] <= 0
+# 다음 페이즈 존재 여부 확인 함수
+func has_next_enemy_phase():
+	return get_next_phase_enemy_id() != ""
 
 # ============================================================
 # 플레이어 관련 함수 모음
@@ -3839,10 +3863,7 @@ func apply_parry_counter_damage(counter_damage):
 # 플레이어 본체 패링 반격 함수
 func apply_parry_counter_to_body(counter_damage):
 	enemy_hp -= counter_damage
-
-	if enemy_hp < 0:
-		enemy_hp = 0
-
+	clamp_enemy_body_hp()
 	update_enemy_hp_ui()
 
 	var counter_hitbox_id = current_enemy_pattern.get("counter_hitbox_id", "head")
@@ -3867,10 +3888,8 @@ func apply_parry_counter_to_part(part_id, counter_damage):
 		return
 
 	enemy_part_hp[part_id] -= counter_damage
+	clamp_enemy_part_hp(part_id)
 	update_debug_hp_labels()
-
-	if enemy_part_hp[part_id] < 0:
-		enemy_part_hp[part_id] = 0
 
 	last_hitbox_data = get_part_hitbox_by_id(part_id)
 
@@ -3887,7 +3906,7 @@ func apply_parry_counter_to_part(part_id, counter_damage):
 		)
 	)
 
-	if enemy_part_hp[part_id] <= 0:
+	if is_enemy_part_defeated(part_id):
 		destroy_enemy_part(part_id)
 # 플레이어 패링 이펙트 노드 생성 함수
 func spawn_parry_effect(effect_position):
@@ -4195,10 +4214,7 @@ func play_player_attack_hit_sound(is_weak, is_critical):
 # 적 본체에 플레이어 공격 피해 적용 함수
 func apply_player_attack_damage_to_body(damage):
 	enemy_hp -= damage
-
-	if enemy_hp < 0:
-		enemy_hp = 0
-
+	clamp_enemy_body_hp()
 	update_enemy_hp_ui()
 # 적 파츠에 플레이어 공격 피해 적용 함수
 func apply_player_attack_damage_to_part(part_id, damage):
@@ -4206,10 +4222,7 @@ func apply_player_attack_damage_to_part(part_id, damage):
 		return
 
 	enemy_part_hp[part_id] -= damage
-
-	if enemy_part_hp[part_id] < 0:
-		enemy_part_hp[part_id] = 0
-
+	clamp_enemy_part_hp(part_id)
 	update_debug_hp_labels()
 # 플레이어 공격 피격 연출 실행 함수
 func play_player_attack_hit_feedback(damage, is_special_hit):
@@ -4241,7 +4254,7 @@ func process_part_destroy_after_player_attack(part_id, hitbox_name, damage, is_c
 	if not enemy_part_hp.has(part_id):
 		return
 
-	if enemy_part_hp[part_id] <= 0:
+	if is_enemy_part_defeated(part_id):
 		destroy_enemy_part(part_id)
 		return
 
@@ -4289,7 +4302,7 @@ func wait_after_player_attack_result():
 	await get_tree().create_timer(1.0).timeout
 # 플레이어 공격 후 적 처치 확인 함수
 func check_enemy_defeated_after_player_attack():
-	if enemy_hp > 0:
+	if not is_enemy_body_defeated():
 		return false
 
 	await handle_enemy_defeated()
