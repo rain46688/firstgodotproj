@@ -163,10 +163,6 @@ var enemy_sprite_default_position = Vector2.ZERO
 # easy, normal, hard, nightmare
 var battle_difficulty = "normal"
 
-# 리펙토링시 삭제 예정 변수
-var weapon_angle_speed = 120.0 
-var attack_projectile_speed = 1200.0
-
 # 패링 판정 처리 부분
 # parry_input_buffer_time 0.035
 # parry_height 6
@@ -837,27 +833,33 @@ func _on_run_button_pressed():
 	play_click_sound()
 	hide_player_action_menu()
 
-	if enemy_data.get("can_escape", true):
-		# 사운드 추가 및 적 이미지 안보이게 수정
-		if result_sound != null:
-			result_sound.play()
-		enemy_sprite.visible = false
-
-		await show_battle_text_for_seconds("당신은 도망쳤다.", 1.0)
-
-		finish_battle(make_battle_escape_result())
+	if can_escape_from_current_enemy():
+		await process_battle_escape_success()
 	else:
-		# 사운드 추가
-		if result_sound != null:
-			result_sound.play()
-		await show_battle_text_for_seconds("당신은 도망칠 수 없다...", 1.0)
-
-		start_enemy_turn()
+		await process_battle_escape_failed()
 
 # ============================================================
 # 기타 함수 모음
 # ============================================================
 
+# 도주 성공 처리 함수
+func process_battle_escape_success():
+	play_battle_result_sound()
+	enemy_sprite.visible = false
+
+	await show_battle_text_for_seconds("당신은 도망쳤다.", 1.0)
+
+	finish_battle(make_battle_escape_result())
+# 도주 실패 처리 함수
+func process_battle_escape_failed():
+	play_battle_result_sound()
+
+	await show_battle_text_for_seconds("당신은 도망칠 수 없다...", 1.0)
+
+	start_enemy_turn()
+# 도주 가능 여부 확인 함수
+func can_escape_from_current_enemy():
+	return bool(enemy_data.get("can_escape", true))
 # 플레이어 턴 시작 텍스트 표시 함수
 func show_player_turn_start_text():
 	set_battle_text(get_player_turn_start_text())
@@ -979,11 +981,17 @@ func show_battle_win_text():
 	player_portrait.texture = load(player_portrait_paths["normal"])
 	set_battle_text_with_accept("전투에서 승리했다.")
 	await wait_for_accept_input()
-# 승리 함수 추가
-func win_battle():
+# 전투 결과 사운드 재생 함수
+func play_battle_result_sound():
+	if result_sound != null:
+		result_sound.play()
+# 전투 승리 상태 준비 함수
+func prepare_battle_win_state():
 	battle_ended = true
+	hide_player_action_menu()
 	set_action_buttons_disabled(true)
-
+# 적 사망 페이드 연출 함수
+func play_enemy_defeat_fade():
 	set_battle_text(make_enemy_defeated_text())
 
 	var tween = create_tween()
@@ -996,32 +1004,51 @@ func win_battle():
 			tween.parallel().tween_property(part_sprite, "modulate:a", 0.0, 1.0)
 
 	await tween.finished
-	
-	clear_enemy_parts()
-	
-	# 적 드랍
+# 전투 승리 보상 데이터 생성 함수
+func make_battle_win_reward_data():
 	var rewards = calculate_enemy_drops()
 	var reward_flags = calculate_enemy_defeat_flags()
 	var reward_messages = make_reward_messages(rewards)
-	
-	await stop_battle_bgm(true, 0.8)
-	
-	# 사운드 추가
-	if result_sound != null:
-		result_sound.play()
 
-	await show_battle_win_text()
+	return {
+		"rewards": rewards,
+		"reward_flags": reward_flags,
+		"reward_messages": reward_messages
+	}
+# 전투 보상 메시지 표시 함수
+func show_battle_reward_messages(reward_messages):
+	if reward_messages.size() <= 0:
+		return
 
-	if reward_messages.size() > 0:
-		await show_battle_result_messages(reward_messages)
-
-	# 전투 종료 후 메인에 전달할 변수들
+	await show_battle_result_messages(reward_messages)
+# 전투 승리 종료 처리 함수
+func finish_battle_with_win_result(rewards, reward_flags):
 	finish_battle(
 		make_battle_win_result(
 			rewards,
 			reward_flags
 		)
 	)
+# 승리 함수
+func win_battle():
+	prepare_battle_win_state()
+
+	await play_enemy_defeat_fade()
+	clear_enemy_parts()
+
+	var reward_data = make_battle_win_reward_data()
+	var rewards = reward_data.get("rewards", [])
+	var reward_flags = reward_data.get("reward_flags", [])
+	var reward_messages = reward_data.get("reward_messages", [])
+
+	await stop_battle_bgm(true, 0.8)
+
+	play_battle_result_sound()
+
+	await show_battle_win_text()
+	await show_battle_reward_messages(reward_messages)
+
+	finish_battle_with_win_result(rewards, reward_flags)
 # 게임오버 텍스트 생성 함수
 func make_game_over_text():
 	return "YOU DIED"

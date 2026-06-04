@@ -155,7 +155,7 @@
 	"combined_candle_students_phase_01": {
 		"name": "합쳐진 밀랍 학생들",
 		"phase": 1,
-		"max_hp": 300,
+		"max_hp": 350,
 		"battle_bgm": "",
 		"battle_bgm_volume_db": -3.0,
 		"battle_bgm_loop": true,
