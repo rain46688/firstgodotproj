@@ -69,7 +69,7 @@ extends Control
 # 일반 변수 모음
 var arrow_time = 0.0
 var is_moving = false
-var current_room = "hallway_2"
+var current_room = "my_room"
 var current_difficulty = "normal"
 var rooms = {}
 var is_choosing = false
@@ -100,7 +100,7 @@ var pressed_item_button = null
 var pressed_mouse_position = Vector2.ZERO
 var context_menu_item = null
 var equipped_weapon = null
-var player_hp = 75
+var player_hp = 100
 var player_max_hp = 100
 var characters = {}
 var story_events = {}
@@ -110,6 +110,10 @@ var battle_scene = null
 var pause_ui_scene = null
 var is_game_paused = false
 var current_bgm_base_volume_db = -5.0
+# 스토리 연출용 단일색 화면 오버레이
+var story_color_overlay = null
+# 스토리 카메라 연출 트윈
+var story_camera_tween = null
 var projectiles = {}
 var encounters = {}
 var encounter_events = {}
@@ -383,6 +387,9 @@ func setup_initial_z_index():
 func setup_initial_ui_helpers():
 	setup_equipped_weapon_text_scroll()
 	setup_selected_item_description_scrolls()
+
+	# 스토리 연출용 단일색 화면 오버레이 생성
+	setup_story_color_overlay()
 
 	encounter_heartbeat_sound.stop()
 
@@ -668,6 +675,7 @@ func handle_battle_game_over_result(result_data):
 
 	# 게임오버 씬으로 이동
 	get_tree().change_scene_to_file(GAME_OVER_SCENE_PATH)
+
 # =================================s===========================
 # 디버그 관련 함수 모음
 # ============================================================
@@ -2628,7 +2636,7 @@ func run_story_event(event_id):
 	await run_story_events(events)
 
 	is_story_playing = false
-# 스토리 이벤트 1개 실행 함수
+# 스토리 이벤트 1개 실행 함수 (스토리 이벤트 json 연결 부분)
 func run_single_story_event(event):
 	if event == null:
 		return
@@ -2647,9 +2655,38 @@ func run_single_story_event(event):
 
 	elif event_type == "fade":
 		await effect(false, false, true, "")
+		
+	elif event_type == "wait":
+		await run_story_wait_event(event)
+
+	elif event_type == "screen_color":
+		await run_story_screen_color_event(event)
+
+	elif event_type == "screen_color_clear":
+		await run_story_screen_color_clear_event(event)
+
+	elif event_type == "camera_zoom":
+		await run_story_camera_zoom_event(event)
+
+	elif event_type == "camera_pan":
+		await run_story_camera_pan_event(event)
+
+	elif event_type == "camera_reset":
+		await run_story_camera_reset_event(event)
 			
 	elif event_type == "bgm":
-		play_bgm(event.get("path", ""))
+		play_bgm(
+			event.get("path", ""),
+			float(event.get("volume_db", -5.0)),
+			bool(event.get("loop", true))
+		)
+
+	elif event_type == "sound":
+		await play_story_sound(
+			event.get("path", ""),
+			float(event.get("volume_db", 0.0)),
+			bool(event.get("wait", false))
+		)
 			
 	elif event_type == "stop_bgm":
 		stop_bgm()
@@ -2943,6 +2980,219 @@ func apply_sfx_volume_to_all():
 		apply_sfx_volume_to_player(player)
 
 # ============================================================
+# 스토리 화면 연출 함수 모음
+# ============================================================
+
+# 스토리 연출용 단일색 화면 오버레이 생성 함수
+func setup_story_color_overlay():
+	if story_color_overlay != null:
+		return
+
+	story_color_overlay = ColorRect.new()
+	story_color_overlay.name = "StoryColorOverlay"
+
+	# 화면 전체를 덮는 ColorRect
+	story_color_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	story_color_overlay.offset_left = 0
+	story_color_overlay.offset_top = 0
+	story_color_overlay.offset_right = 0
+	story_color_overlay.offset_bottom = 0
+
+	# 처음에는 완전 투명
+	story_color_overlay.color = Color(0, 0, 0, 0)
+	story_color_overlay.visible = true
+
+	# 입력은 막지 않음
+	story_color_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	# 배경/스탠딩보다 위, 대화창보다 아래에 표시
+	# dialogue_box.z_index = 20 이므로 19로 둔다.
+	story_color_overlay.z_index = 19
+
+	add_child(story_color_overlay)
+
+# 스토리 이벤트 대기 함수
+func run_story_wait_event(event):
+	var wait_time = float(event.get("time", 1.0))
+
+	if wait_time <= 0.0:
+		return
+
+	await get_tree().create_timer(wait_time).timeout
+
+# 스토리 단일색 화면 표시 함수
+func run_story_screen_color_event(event):
+	setup_story_color_overlay()
+
+	var color_text = str(event.get("color", "#000000"))
+	var target_alpha = clamp(float(event.get("alpha", 1.0)), 0.0, 1.0)
+	var duration = max(float(event.get("duration", 0.0)), 0.0)
+	var should_wait = bool(event.get("wait", true))
+
+	var target_color = Color(color_text)
+	target_color.a = target_alpha
+
+	story_color_overlay.visible = true
+
+	if duration <= 0.0:
+		story_color_overlay.color = target_color
+		return
+
+	var tween = create_tween()
+	tween.tween_property(
+		story_color_overlay,
+		"color",
+		target_color,
+		duration
+	)
+
+	if should_wait:
+		await tween.finished
+
+# 스토리 단일색 화면 제거 함수
+func run_story_screen_color_clear_event(event):
+	setup_story_color_overlay()
+
+	var duration = max(float(event.get("duration", 0.0)), 0.0)
+	var should_wait = bool(event.get("wait", true))
+
+	var target_color = story_color_overlay.color
+	target_color.a = 0.0
+
+	if duration <= 0.0:
+		story_color_overlay.color = target_color
+		return
+
+	var tween = create_tween()
+	tween.tween_property(
+		story_color_overlay,
+		"color",
+		target_color,
+		duration
+	)
+
+	if should_wait:
+		await tween.finished
+
+# 스토리 카메라 트윈 정리 함수
+func kill_story_camera_tween():
+	if story_camera_tween != null and story_camera_tween.is_valid():
+		story_camera_tween.kill()
+
+	story_camera_tween = null
+
+# 특정 배경 좌표가 화면 중앙에 오도록 background.position 계산
+func get_story_camera_background_position(target_point, zoom_value):
+	var viewport_size = get_viewport_rect().size
+	var screen_center = viewport_size / 2.0
+
+	return screen_center - target_point * zoom_value
+
+# 스토리 카메라 이동/줌 공통 함수
+func tween_story_camera_to(target_point, zoom_value, duration, should_wait = true):
+	kill_story_camera_tween()
+
+	zoom_value = max(float(zoom_value), 0.01)
+	duration = max(float(duration), 0.0)
+
+	var target_scale = Vector2(zoom_value, zoom_value)
+	var target_position = get_story_camera_background_position(target_point, zoom_value)
+
+	if duration <= 0.0:
+		background.scale = target_scale
+		background.position = target_position
+		return
+
+	story_camera_tween = create_tween()
+	story_camera_tween.set_parallel(true)
+
+	story_camera_tween.tween_property(
+		background,
+		"scale",
+		target_scale,
+		duration
+	)
+
+	story_camera_tween.tween_property(
+		background,
+		"position",
+		target_position,
+		duration
+	)
+
+	if should_wait:
+		await story_camera_tween.finished
+
+# 스토리 카메라 줌 이벤트
+func run_story_camera_zoom_event(event):
+	var target_point = Vector2(
+		float(event.get("x", 960.0)),
+		float(event.get("y", 540.0))
+	)
+
+	var zoom_value = float(event.get("zoom", 1.0))
+	var duration = float(event.get("duration", 1.0))
+	var should_wait = bool(event.get("wait", true))
+
+	await tween_story_camera_to(
+		target_point,
+		zoom_value,
+		duration,
+		should_wait
+	)
+
+# 스토리 카메라 이동 이벤트
+func run_story_camera_pan_event(event):
+	var target_point = Vector2(
+		float(event.get("x", 960.0)),
+		float(event.get("y", 540.0))
+	)
+
+	# 현재 확대 상태를 유지한 채 위치만 이동
+	var current_zoom = background.scale.x
+	var duration = float(event.get("duration", 1.0))
+	var should_wait = bool(event.get("wait", true))
+
+	await tween_story_camera_to(
+		target_point,
+		current_zoom,
+		duration,
+		should_wait
+	)
+
+# 스토리 카메라 원위치 이벤트
+func run_story_camera_reset_event(event):
+	var duration = float(event.get("duration", 1.0))
+	var should_wait = bool(event.get("wait", true))
+
+	kill_story_camera_tween()
+
+	if duration <= 0.0:
+		background.scale = Vector2(1.0, 1.0)
+		background.position = Vector2.ZERO
+		return
+
+	story_camera_tween = create_tween()
+	story_camera_tween.set_parallel(true)
+
+	story_camera_tween.tween_property(
+		background,
+		"scale",
+		Vector2(1.0, 1.0),
+		duration
+	)
+
+	story_camera_tween.tween_property(
+		background,
+		"position",
+		Vector2.ZERO,
+		duration
+	)
+
+	if should_wait:
+		await story_camera_tween.finished
+
+# ============================================================
 # 기타 함수 모음
 # ============================================================
 
@@ -3044,6 +3294,40 @@ func update_player_status_ui():
 	var display_max_hp = clamp_player_hp_to_current_max()
 
 	player_hp_text.text = str(int(player_hp)) + " / " + str(int(display_max_hp))
+# 스토리 이벤트용 단발 효과음 재생 함수
+func play_story_sound(path, volume_db = 0.0, wait_until_finished = false):
+	if path == "":
+		return
+
+	var stream = load(path)
+
+	if stream == null:
+		push_error("스토리 효과음 로드 실패: " + str(path))
+		return
+
+	# 효과음은 기본적으로 루프하지 않도록 강제
+	if stream is AudioStreamMP3:
+		stream.loop = false
+	elif stream is AudioStreamOggVorbis:
+		stream.loop = false
+
+	var sound = AudioStreamPlayer.new()
+	sound.stream = stream
+	sound.volume_db = float(volume_db)
+	sound.set_meta("base_volume_db", float(volume_db))
+
+	# 현재 SFX 설정 적용
+	apply_sfx_volume_to_player(sound)
+
+	add_child(sound)
+
+	sound.play()
+
+	if wait_until_finished:
+		await sound.finished
+		sound.queue_free()
+	else:
+		sound.finished.connect(Callable(sound, "queue_free"))
 # BGM 재생 함수
 func play_bgm(path, volume_db = -5.0, loop = true):
 	if path == "":

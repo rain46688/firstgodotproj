@@ -1,4 +1,62 @@
-{
+{	"my_room": {
+		"background": "res://imgs/backgrounds/my_room.png",
+		"interactions": {
+			"desk": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 책상들이 늘어져있다."
+					},
+					{
+						"type": "text",
+						"text": "소름끼칠 정도로 깨끗하게 정리 되어있다."
+					},
+					{
+						"type": "item",
+						"item": "cutter_knife"
+					}
+				]
+			},
+			"window": {
+				"click_rect": [
+					0,
+					203,
+					203,
+					373
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "익숙한 풍경이 어둠속에 잠겨있다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 열고 바깥을 살핀다",
+								"events": [
+									{
+										"type": "text",
+										"text": "아래는 어둠이 짙게 깔려서 높이를 가늠할 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		}
+	},
 	"hallway_1": {
 		"background": "res://imgs/backgrounds/hallway_open.png",
 		"exits": {

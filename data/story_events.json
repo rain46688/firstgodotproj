@@ -13,18 +13,106 @@
 			},
 			{
 				"type": "bgm",
-				"path": "res://sounds/blood_sound.mp3",
-				"volume_db": -10,
-				"loop": false
+				"path": "res://sounds/bgm9.mp3",
+				"volume_db": -5,
+				"loop": true
 			},
 			{
 				"type": "background",
 				"path": "res://imgs/events/prologue1_1920x1080.png"
 			},
 			{
+				"type": "camera_zoom",
+				"x": 760,
+				"y": 340,
+				"zoom": 2.5,
+				"duration": 0.1,
+				"wait": false
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.5,
+				"wait": false
+			},
+			{
 				"type": "story_dialogue",
 				"name": "???",
-				"text": "도망가세요..."
+				"text": "...."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "???",
+				"text": "살려.."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "???",
+				"text": "살려주세요..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "???",
+				"text": "제발..."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/blood_sound.mp3",
+				"volume_db": -10,
+				"wait": false
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "camera_reset",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/my_room.png"
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/morning_call.mp3",
+				"volume_db": 0,
+				"wait": false
+			},
+			{
+				"type":"wait",
+				"time": 7.0
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm4.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "음...?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "나 자고있었나?"
+			},
+			{
+				"type": "fade"
 			},
 			{
 				"type": "show_game_ui"
