@@ -1,6 +1,6 @@
 {
-	"prologue": {
-		"start_flag": "prologue_1_done",
+	"prologue_part_1": {
+		"start_flag": "prologue_part_1_done",
 		"events": [
 			{
 				"type": "hide_game_ui"
@@ -14,7 +14,7 @@
 			{
 				"type": "bgm",
 				"path": "res://sounds/bgm9.mp3",
-				"volume_db": -5,
+				"volume_db": 0,
 				"loop": true
 			},
 			{
@@ -25,7 +25,7 @@
 				"type": "camera_zoom",
 				"x": 760,
 				"y": 340,
-				"zoom": 2.5,
+				"zoom": 2.0,
 				"duration": 0.1,
 				"wait": false
 			},
@@ -49,6 +49,11 @@
 			{
 				"type": "story_dialogue",
 				"name": "???",
+				"text": "..줘"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "???",
 				"text": "살려주세요..."
 			},
 			{
@@ -59,7 +64,7 @@
 			{
 				"type": "sound",
 				"path": "res://sounds/blood_sound.mp3",
-				"volume_db": -10,
+				"volume_db": 0,
 				"wait": false
 			},
 			{
@@ -79,6 +84,18 @@
 				"type": "fade"
 			},
 			{
+				"type": "flag",
+				"flag": "prologue_part_1_done"
+			}
+		]
+	},
+	"prologue_part_2": {
+		"start_flag": "prologue_part_2_done",
+		"events": [
+			{
+				"type": "fade"
+			},
+			{
 				"type": "background",
 				"path": "res://imgs/backgrounds/my_room.png"
 			},
@@ -89,7 +106,7 @@
 				"wait": false
 			},
 			{
-				"type":"wait",
+				"type": "wait",
 				"time": 7.0
 			},
 			{
@@ -102,24 +119,477 @@
 				"loop": true
 			},
 			{
-				"type": "story_dialogue",
-				"name": "나",
-				"text": "음...?"
+				"type": "camera_zoom",
+				"x": 550,
+				"y": 350,
+				"zoom": 1.5,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "camera_pan",
+				"x": 1500,
+				"y": 350,
+				"duration": 120.0,
+				"wait": false
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "나 자고있었나?"
+				"text": "음..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "대체 언제 잔거지?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "창문 틈 사이로 들어온 햇살이 눈꺼풀 위를 억지로 비집고 들어왔다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "눈을 뜨기도 전에 먼저 느껴진 건 따가울 정도로 밝은 빛이었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "어제 밤에 보던 인터넷 커뮤니티 화면이 그대로 떠 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "아...켜놓고 그냥 잤네."
+			},
+			{
+				"type": "camera_reset",
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 천천히 몸을 일으켰다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "어젯밤, 아니 정확히는 오늘 새벽까지 나는 인터넷 커뮤니티에 게임 공략글을 쓰고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그냥 적당히 쓰고 잘 생각이었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "처음에는 정말 그랬다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 쓰다 보니 빠뜨린 게 보였고, 다시 하다 보니 설명이 부족해 보였고, 그렇게 한 줄, 두 줄 고치다 보니 어느새 바깥이 밝아지고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 마른 눈을 비비며 스마트폰 시계를 바라봤다, 오전 8시도 안된 이른 시각이었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "토요일 아침, 평소 같았으면 점심까지 자고도 모자랐을 시간이었다, 하지만 이상하게도 눈이 완전히 떠져 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "몸은 피곤한데 정신만 억지로 깨어 있는 기분, 마치 누가 일부러 나를 깨운 것처럼."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 멍하니 방문 쪽을 바라봤다, 집 안은 조용했다, 토요일인데도 두 분은 일찍 직장에 나가셨을 것이다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "외동으로 태어난 나는 집에서 토요일 아침이 조용한 건 익숙했다, 오히려 편했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "아무도 나한테 말을 걸지 않고, 아무도 오늘 뭐 할 거냐고 묻지 않고, 아무도 밖에 좀 나가라고 하지 않는 시간, 그게 내겐 주말이었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "점심때까지 게임이나 하자."
 			},
 			{
 				"type": "fade"
 			},
 			{
 				"type": "show_game_ui"
+			}
+		]
+	},
+	"prologue_part_3": {
+		"start_flag": "prologue_part_3_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm10.mp3",
+				"volume_db": -15,
+				"loop": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/events/prologue2_1920x1080.png"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "어디보자..."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/mouse_click2.mp3",
+				"volume_db": 5,
+				"wait": false
+			},
+			{
+				"type": "camera_zoom",
+				"x": 550,
+				"y": 750,
+				"zoom": 1.5,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "camera_pan",
+				"x": 1500,
+				"y": 750,
+				"duration": 120.0,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "어제 내가 올린 글 제목은 아직 기억하고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "[바하 공략]바이오하자드 RE4 리메이크 - 모든 보물 위치 & 완벽 공략."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "조회수 2,845회, 추천 갯수 35개."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "솔직히 제목은 조금 낚시 같았다, 하지만 내용은 진심이었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "아이템 위치, 적 출현 조건, 보스 패턴, 노가다 추천 구간, 날먹 방법, 초반 탄약 관리법까지 전부 정리했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "직접 여러 번 죽어가며 확인한 내용이었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "아무리 생각해도 이 정도면 추천을 안 받을 수가 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 내 게시글을 클릭했다, 다시 봐도 길었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "중간중간 이미지를 넣어둔 덕분에 그나마 읽을 만해 보였지만, 스크롤바가 작게 줄어들어 있는 걸 보니 새삼 내가 무슨 짓을 했나 싶었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 댓글 창으로 내려갔다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "ㅇㅇ : 아니 저렇게 지나갈수 있었냐."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "피자곰 : 이거 보고 깼다 고맙다 게이야."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "ㅇㅇ : 이 정도면 개발자 아님?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "아이작 : 보스 2페이즈에서 계속 죽었는데 설명 개잘돼있네."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "클레어 : 당신은 우리 공많갤의 보배인데쑤."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "오 주딱도 개추 줬네ㅋㅋㅋㅋ"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "공많갤 게임 갤러리 특성상 마이너 하고 유저가 별로 없어서 대부분 자주 보고 친구 처럼 지내온 고정 닉네임들이었다, 거진 내가 올린 공략글에는 개추를 눌러준다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "여긴 더 마이너한 공포 게임 갤러리 중 하나이다, 사람 많은갤에 글도 올려보곤 했지만, 여기만큼 나를 알아주는곳이 없다."
+			},
+			{
+				"type": "camera_zoom",
+				"x": 500,
+				"y": 500,
+				"zoom": 1.5,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "피자곰 : 갤 관리자 없냐 야1짤 달린다 ㅋㅋㅋㅋ"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "저놈은 질리지도 않네, 저러니 완장한테 맨날 정지 먹지ㅋㅋ, 파딱까지 달고 꾸준하다 진짜."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "완장이나 주딱은 닉네임 옆에 주황색 딱지를 달고있는 갤러리의 매니저 클레어씨를 말하는거고 파딱은 파란 딱지를 달고있는 우리 부매니저들을 칭하는 은어이다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "처음에는 용어를 잘 몰라서 실수도 하고 욕도 먹고 그랬다, 다들 익명이라 서로 반말하는게 일상이지만, 나름대로 갤질 하다보면 얼굴도 나이도 성별도 몰라도 자주보니 정이 가게된다."
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm9.mp3",
+				"volume_db": 0,
+				"loop": true
+			},
+			{
+				"type": "camera_zoom",
+				"x": 550,
+				"y": 350,
+				"zoom": 1.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "camera_pan",
+				"x": 1500,
+				"y": 350,
+				"duration": 120.0,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그때였다"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "게시글 목록 가장 위에 이상한 글 하나가 보였다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "제목이 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "글쓴이도 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "조회수 0."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "추천수 0."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "작성 시간은 방금 전?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 처음에 로딩 오류인 줄 알았다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "또 광고글 이겠지, 이딴 시골갤에 왜 자꾸 쳐 오는거지, 내가 삭제 할까?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 게시글 위에 마우스를 올리고 클릭했다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/mouse_click3.mp3",
+				"volume_db": -5,
+				"wait": true
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/events/prologue3_1920x1080.png"
+			},
+			{
+				"type": "camera_zoom",
+				"x": 350,
+				"y": 550,
+				"zoom": 1.5,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "camera_pan",
+				"x": 1500,
+				"y": 550,
+				"duration": 120.0,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "음... 이게 뭐지?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "여태 갤질하면서 이런 구조의 광고는 본적이 없다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 그 정도는 알고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "클릭하지 않는 게 맞았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "수상한 링크 하나 못 거를 정도는 아니었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "잠을 못 자면 판단력이 흐려진다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그리고 솔직히 말해서, 조금 궁금했다."
+			},
+			{
+				"type": "camera_reset",
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "wait",
+				"time": 5.0
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/mouse_click1.mp3",
+				"volume_db": 10,
+				"wait": true
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/heartbeats.mp3",
+				"volume_db": 0,
+				"loop": true
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "갑자기 졸음이 쏟아진다, 이만큼이나 잠이 부족했던것일까?"
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 그자리에서 의식을 잃었다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "..."
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm2.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "change_room",
+				"room": "classroom_1"
+			},
+			{
+				"type": "show_game_ui"
 			},
 			{
 				"type": "flag",
-				"flag": "prologue_1_done"
+				"flag": "prologue_part_3_done"
+			},
+			{
+				"type": "auto_save",
+				"slot": 1,
+				"show_message": false,
+				"play_sound": true
 			}
 		]
 	},

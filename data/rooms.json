@@ -1,61 +1,149 @@
-{	"my_room": {
+{
+	"my_room": {
 		"background": "res://imgs/backgrounds/my_room.png",
 		"interactions": {
-			"desk": {
+			"computer": {
 				"click_rect": [
-					1,
-					634,
-					1236,
-					263
+					1375,
+					380,
+					200,
+					200
 				],
 				"events": [
 					{
 						"type": "text",
-						"text": "낡은 책상들이 늘어져있다."
-					},
-					{
-						"type": "text",
-						"text": "소름끼칠 정도로 깨끗하게 정리 되어있다."
-					},
-					{
-						"type": "item",
-						"item": "cutter_knife"
+						"text": "내 컴퓨터다, 의자에 앉아서 내가 어제 올린 공략글 조회수나 확인해보자."
 					}
 				]
 			},
-			"window": {
+			"chair": {
 				"click_rect": [
-					0,
-					203,
-					203,
-					373
+					850,
+					542,
+					260,
+					260
 				],
 				"events": [
 					{
 						"type": "text",
-						"text": "익숙한 풍경이 어둠속에 잠겨있다."
+						"text": "생일 선물로 받은 의자다."
 					},
 					{
 						"type": "choices",
 						"choices": [
 							{
-								"text": "문을 열고 바깥을 살핀다",
+								"text": "의자에 앉을까?",
+								"flag": "prologue_part_2_done",
+								"already_events": [],
 								"events": [
 									{
-										"type": "text",
-										"text": "아래는 어둠이 짙게 깔려서 높이를 가늠할 수 없다."
+										"type": "flag",
+										"flag": "prologue_part_2_done"
 									}
 								]
-							},
-							{
-								"text": "그만둔다",
-								"events": []
 							}
 						]
 					}
 				]
+			},
+			"box1": {
+				"click_rect": [
+					1475,
+					139,
+					125,
+					45
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "잡동사니를 모아놓은곳이다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "무언가 주머니에 넣을까?",
+								"flag": "got_cutter_knife_prologue",
+								"already_events": [
+									{
+										"type": "text",
+										"text": "무의식적으로 무언가를 집어서 주머니에 넣었다."
+									},
+									{
+										"type": "item",
+										"item": "cutter_knife"
+									}
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "뭐 딱히 없다."
+									},
+									{
+										"type": "flag",
+										"flag": "got_cutter_knife_prologue"
+									}
+								]
+							}
+						]
+					}
+				]
+			},
+			"window": {
+				"click_rect": [
+					740,
+					27,
+					530,
+					500
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "익숙한 풍경이다."
+					}
+				]
+			},
+			"bed": {
+				"click_rect": [
+					0,
+					1026,
+					990,
+					60
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "방금 자고 일어난 침대다."
+					}
+				]
+			},
+			"box2": {
+				"click_rect": [
+					40,
+					415,
+					320,
+					400
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "잡동사니를 모아놓은곳이다."
+					}
+				]
 			}
-		}
+		},
+		"enter_stories": [
+			{
+				"event": "prologue_part_2",
+				"required_flag": "prologue_part_1_done",
+				"required_flag_missing": "prologue_part_2_done"
+			},
+			{
+				"event": "prologue_part_3",
+				"required_flag": "prologue_part_2_done",
+				"required_flag_missing": "prologue_part_3_done"
+			}
+		]
 	},
 	"hallway_1": {
 		"background": "res://imgs/backgrounds/hallway_open.png",

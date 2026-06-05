@@ -153,6 +153,12 @@ var equipped_weapon_text_scroll = null
 var selected_item_description_scroll = null
 var arrange_selected_item_text_scroll = null
 
+# 스토리 이벤트가 중간에 전투 시작 등으로 현재 events 루프를 멈춰야 하는지 여부
+var story_event_should_stop = false
+
+# 현재 room 조건 스토리 체인을 검사 중인지 여부
+var is_checking_room_story_chain = false
+
 # 디버그 관련 상수 변수 모음
 # false
 # true
@@ -182,7 +188,7 @@ const MAIN_MENU_SCENE_PATH = "res://scenes/main_menu_scene.tscn"
 const STAT_GOOD_COLOR = "#55ff77"
 const STAT_BAD_COLOR = "#ff5555"
 const STAT_INFO_COLOR = "#88ccff"
-const PROLOGUE_STORY_EVENT_ID = "prologue"
+const PROLOGUE_STORY_EVENT_ID = "prologue_part_1"
 
 # ============================================================
 # 게임 시작 관련 함수 모음
@@ -383,7 +389,7 @@ func setup_initial_z_index():
 
 	# Fade는 최상단
 	fade.z_index = 4096
-# 게임 시작 시 UI 보조 기능과 버튼 연결을 초기화하는 함수
+# 게임 시작 시 UI 보조 기능과 버튼 연결을 초기화하는 함수pp
 func setup_initial_ui_helpers():
 	setup_equipped_weapon_text_scroll()
 	setup_selected_item_description_scrolls()
@@ -653,6 +659,10 @@ func end_battle(result_data):
 	# 보상 아이템 지급 및 인벤토리 정리 화면 처리
 	await give_items_with_pending_loot(battle_rewards)
 	await open_inventory_arrange_if_pending_loot("loot")
+	
+	# 전투 승리 후 reward_flags 등으로 조건이 열린 스토리가 있으면 현재 room에서 자동 실행
+	if result_type == "win":
+		await check_room_enter_story()
 # 전투 게임오버 결과 처리 함수
 @warning_ignore("unused_parameter")
 func handle_battle_game_over_result(result_data):
@@ -2034,9 +2044,6 @@ func get_choice_text(index):
 	return "  " + choice_text
 # 상호작용 실행 함수
 func run_interaction(interaction_id):
-	# rooms.json의 interaction events 배열을 순서대로 실행
-	# text / portrait / choices / item / flag / save 등을 처리
-
 	if is_interacting:
 		return
 
@@ -2064,6 +2071,10 @@ func run_interaction(interaction_id):
 
 	set_interaction_buttons_disabled(false)
 	is_interacting = false
+
+	# 상호작용 결과로 flag가 켜졌을 수 있으므로,
+	# 현재 room의 enter_stories 조건을 다시 검사한다.
+	await check_room_enter_story()
 # 상호작용 중 버튼 클릭 안되게 막는 함수
 func set_interaction_buttons_disabled(disabled):
 	
@@ -2608,7 +2619,7 @@ func show_game_ui():
 
 	set_interaction_buttons_disabled(false)
 # 스토리 이벤트 실행 함수
-func run_story_event(event_id):
+func run_story_event(event_id, auto_check_next_story = true):
 	if is_story_playing:
 		return
 
@@ -2631,11 +2642,23 @@ func run_story_event(event_id):
 		return
 
 	is_story_playing = true
+	story_event_should_stop = false
 	set_interaction_buttons_disabled(true)
 
 	await run_story_events(events)
 
+	var stopped_by_battle = story_event_should_stop
+
+	story_event_should_stop = false
 	is_story_playing = false
+
+	# 전투로 넘어간 경우에는 전투 종료 후 end_battle()에서 다음 스토리를 체크한다.
+	if stopped_by_battle:
+		return
+
+	# 일반 스토리 종료 후 현재 room + flag 조건으로 이어지는 스토리가 있으면 실행한다.
+	if auto_check_next_story:
+		await check_room_enter_story()
 # 스토리 이벤트 1개 실행 함수 (스토리 이벤트 json 연결 부분)
 func run_single_story_event(event):
 	if event == null:
@@ -2712,6 +2735,12 @@ func run_single_story_event(event):
 
 	elif event_type == "choices":
 		await run_story_choices(event.get("choices", []))
+		
+	elif event_type == "start_battle":
+		await run_story_start_battle_event(event)
+
+	elif event_type == "auto_save":
+		await run_story_auto_save_event(event)
 
 	elif event_type == "flag":
 		set_flag(event.get("flag", ""))
@@ -2726,6 +2755,11 @@ func run_story_events(events):
 
 	for event in events:
 		await run_single_story_event(event)
+
+		# start_battle 같은 이벤트가 현재 스토리 흐름 중단을 요청하면
+		# 뒤쪽 이벤트는 실행하지 않는다.
+		if story_event_should_stop:
+			break
 # 스토리 이벤트 선택지 실행 함수
 func run_story_choices(choices):
 	if typeof(choices) != TYPE_ARRAY:
@@ -2778,45 +2812,169 @@ func show_story_dialogue(speaker, text):
 	$DialogueBox/DialogueText.size = Vector2(1600, 180)
 
 	await show_dialogue(text, "story")
-# 방 진입 시 스토리 이벤트 확인 함수
-func check_room_enter_story():
-	var room = get_current_room_data()
+# room 데이터에서 실행 가능한 스토리 후보 목록 가져오기
+func get_room_enter_story_candidates(room):
+	var candidates = []
 
 	if room.is_empty():
-		return
+		return candidates
 
-	var story_event_id = get_room_enter_story_id(room)
+	# 새 구조: 여러 개의 조건부 스토리
+	if room.has("enter_stories"):
+		var enter_stories = room["enter_stories"]
+
+		if typeof(enter_stories) == TYPE_ARRAY:
+			for enter_story in enter_stories:
+				candidates.append(enter_story)
+		elif typeof(enter_stories) == TYPE_STRING or typeof(enter_stories) == TYPE_DICTIONARY:
+			candidates.append(enter_stories)
+
+	# 기존 구조도 계속 지원
+	if room.has("enter_story"):
+		candidates.append(room["enter_story"])
+
+	return candidates
+# enter_story 후보에서 story event id 가져오기
+func get_enter_story_candidate_event_id(candidate):
+	if typeof(candidate) == TYPE_STRING:
+		return str(candidate)
+
+	if typeof(candidate) == TYPE_DICTIONARY:
+		return str(candidate.get("event", ""))
+
+	return ""
+# enter_story 후보가 현재 flag 조건에 맞는지 확인
+func can_run_enter_story_candidate(candidate):
+	var story_event_id = get_enter_story_candidate_event_id(candidate)
 
 	if story_event_id == "":
-		return
-		
-	if not can_run_room_enter_story(room):
-		return
+		return false
 
-	# 이미 실행한 일회성 방 진입 이벤트라면 실행하지 않음
+	var story_event_data = get_story_event_data_by_id(story_event_id, false)
+
+	if story_event_data.is_empty():
+		return false
+
+	# story_events.json의 start_flag가 이미 있으면 실행하지 않음
+	var start_flag = str(story_event_data.get("start_flag", ""))
+
+	if start_flag != "" and has_flag(start_flag):
+		return false
+
+	# 같은 room 진입 스토리 중복 실행 방지
 	var enter_story_flag = "room_enter_story_done_" + str(story_event_id)
 
 	if has_flag(enter_story_flag):
-		return
+		return false
 
-	var story_event_data = get_story_event_data_by_id(story_event_id)
+	# 문자열 구조면 별도 조건 없음
+	if typeof(candidate) == TYPE_STRING:
+		return true
 
-	if story_event_data.is_empty():
-		return
+	if typeof(candidate) != TYPE_DICTIONARY:
+		return false
 
-	if not story_event_data.has("events"):
-		push_error("events가 없는 스토리 이벤트: " + str(story_event_id))
-		return
+	# 특정 플래그가 있을 때만 실행
+	var required_flag = str(candidate.get("required_flag", ""))
 
-	set_flag(enter_story_flag)
+	if required_flag != "" and not has_flag(required_flag):
+		return false
 
-	await run_story_event(story_event_id)
+	# 특정 플래그가 없을 때만 실행
+	var required_flag_missing = str(candidate.get("required_flag_missing", ""))
+
+	if required_flag_missing != "" and has_flag(required_flag_missing):
+		return false
+
+	return true
+# 현재 room에서 다음으로 실행 가능한 스토리 이벤트 ID 찾기
+func get_next_runnable_room_enter_story_id():
+	var room = get_current_room_data()
+
+	if room.is_empty():
+		return ""
+
+	var candidates = get_room_enter_story_candidates(room)
+
+	for candidate in candidates:
+		if can_run_enter_story_candidate(candidate):
+			return get_enter_story_candidate_event_id(candidate)
+
+	return ""
+# 방 진입/현재 방 조건 스토리 이벤트 확인 함수
+func check_room_enter_story():
+	# 이미 현재 room 스토리 체인을 검사 중이면 중복 실행 방지
+	if is_checking_room_story_chain:
+		return false
+
+	is_checking_room_story_chain = true
+
+	var ran_any_story = false
+	var safety_count = 0
+	var max_chain_count = 20
+
+	while safety_count < max_chain_count:
+		var story_event_id = get_next_runnable_room_enter_story_id()
+
+		if story_event_id == "":
+			break
+
+		# 같은 room에서 같은 enter story가 반복 실행되지 않게 먼저 플래그 설정
+		var enter_story_flag = "room_enter_story_done_" + str(story_event_id)
+		set_flag(enter_story_flag)
+
+		await run_story_event(story_event_id, false)
+
+		ran_any_story = true
+		safety_count += 1
+
+	if safety_count >= max_chain_count:
+		push_warning("room enter story chain이 너무 길어서 중단됨")
+
+	is_checking_room_story_chain = false
+
+	return ran_any_story
 # 스토리 이벤트용 방 변경 함수
 func change_room_by_story(room_id):
 	if get_room_data_by_id(room_id).is_empty():
 		return
 
 	apply_room_change(room_id)
+# 스토리 이벤트에서 전투를 시작하는 함수
+func run_story_start_battle_event(event):
+	var enemy_id = str(event.get("enemy", event.get("enemy_id", "")))
+	var first_turn = str(event.get("first_turn", ""))
+
+	if enemy_id == "":
+		push_error("start_battle 이벤트에 enemy 값이 없음")
+		return
+
+	# 현재 스토리 events 루프는 여기서 멈춘다.
+	# start_battle 이벤트는 story_events.json에서 마지막 이벤트로 사용하는 것을 권장한다.
+	story_event_should_stop = true
+
+	start_battle(enemy_id, first_turn)
+# 스토리 이벤트용 자동 저장 함수
+func run_story_auto_save_event(event):
+	var slot_index = int(event.get("slot", 1))
+	var show_message = bool(event.get("show_message", false))
+	var play_sound = bool(event.get("play_sound", false))
+
+	var success = save_game(slot_index)
+
+	if success:
+		if play_sound and save_complete_sound != null:
+			save_complete_sound.play()
+
+		print("스토리 자동 저장 완료: slot " + str(slot_index))
+
+		if show_message:
+			await show_dialogue("저장 완료.")
+	else:
+		push_error("스토리 자동 저장 실패: slot " + str(slot_index))
+
+		if show_message:
+			await show_dialogue("저장에 실패했다.")
 
 # ============================================================
 # 일시정지 UI 관련 함수 모음

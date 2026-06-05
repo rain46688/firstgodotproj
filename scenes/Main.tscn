@@ -206,6 +206,7 @@ offset_bottom = 160.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("11_qmy6f")
 theme_override_font_sizes/font_size = 25
+autowrap_mode = 2
 
 [node name="ChoiceBox" type="VBoxContainer" parent="DialogueBox" unique_id=1066981331]
 layout_mode = 0
@@ -457,11 +458,11 @@ volume_db = -10.0
 
 [node name="UnLockedSound" type="AudioStreamPlayer" parent="." unique_id=793091637]
 stream = ExtResource("9_q8u5g")
-volume_db = 5.0
+volume_db = -5.0
 
 [node name="LockedSound" type="AudioStreamPlayer" parent="." unique_id=732505376]
 stream = ExtResource("7_lgr22")
-volume_db = 10.0
+volume_db = 20.0
 
 [node name="FootstepSound" type="AudioStreamPlayer" parent="." unique_id=696735495]
 stream = ExtResource("4_3dxm6")
