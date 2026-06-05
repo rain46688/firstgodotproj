@@ -1,4 +1,40 @@
 {
+	"prologue": {
+		"start_flag": "prologue_1_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/blood_sound.mp3",
+				"volume_db": -10,
+				"loop": false
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/events/prologue1_1920x1080.png"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "???",
+				"text": "도망가세요..."
+			},
+			{
+				"type": "show_game_ui"
+			},
+			{
+				"type": "flag",
+				"flag": "prologue_1_done"
+			}
+		]
+	},
 	"first_enter_classroom_2": {
 		"start_flag": "story_first_enter_classroom_2_done",
 		"events": [
@@ -9,17 +45,17 @@
 				"type": "fade"
 			},
 			{
-			  "type": "background",
-			  "path": "res://imgs/backgrounds/classroom.png"
+				"type": "background",
+				"path": "res://imgs/backgrounds/classroom.png"
 			},
 			{
-			  "type": "stop_bgm"
+				"type": "stop_bgm"
 			},
 			{
-			  "type": "bgm",
-			  "path": "res://sounds/bgm3.mp3",
-			  "volume_db": -20,
-			  "loop": true
+				"type": "bgm",
+				"path": "res://sounds/bgm3.mp3",
+				"volume_db": -20,
+				"loop": true
 			},
 			{
 				"type": "standing",
@@ -86,17 +122,17 @@
 				"text": "저는 클레어에요 그냥 클레어라고 불러주세요."
 			},
 			{
-			  "type": "stop_bgm"
+				"type": "stop_bgm"
 			},
 			{
-			  "type": "bgm",
-			  "path": "res://sounds/bgm2.mp3",
-			  "volume_db": -5,
-			  "loop": true
+				"type": "bgm",
+				"path": "res://sounds/bgm2.mp3",
+				"volume_db": -5,
+				"loop": true
 			},
 			{
-			  "type": "change_room",
-			  "room": "classroom_1"
+				"type": "change_room",
+				"room": "classroom_1"
 			},
 			{
 				"type": "show_game_ui"

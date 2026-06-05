@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://b8oa4dh6btljt" path="res://scripts/main_menu_scene.gd" id="1_vfskp"]
 [ext_resource type="FontFile" uid="uid://bhxde28nnpeiv" path="res://fonts/SB 어그로 L.ttf" id="1_xhf6x"]
 [ext_resource type="AudioStream" uid="uid://b2p5y3ta6bfww" path="res://sounds/clcik.mp3" id="3_7hcs8"]
+[ext_resource type="FontFile" uid="uid://dshbp46j15be4" path="res://fonts/x12y12pxMaruMinyaHangul.ttf" id="3_yj20m"]
+[ext_resource type="AudioStream" uid="uid://chgc8sq11sx00" path="res://sounds/bgm7.mp3" id="4_sb6w7"]
 
 [node name="MainMenuScene" type="Control" unique_id=647454908]
 layout_mode = 3
@@ -158,5 +160,29 @@ text = "초기화"
 [node name="SettingsBackButton" type="Button" parent="SettingsPanel/SettingsBox" unique_id=1526717666]
 layout_mode = 2
 
+[node name="FadeRect" type="ColorRect" parent="." unique_id=1212208387]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="LoadingLabel" type="Label" parent="." unique_id=341142756]
+visible = false
+layout_mode = 0
+offset_left = 1560.0
+offset_top = 990.0
+offset_right = 1860.0
+offset_bottom = 1050.0
+theme_override_fonts/font = ExtResource("3_yj20m")
+theme_override_font_sizes/font_size = 25
+text = "불러오는 중..."
+
 [node name="ClickSound" type="AudioStreamPlayer" parent="." unique_id=485109698]
 stream = ExtResource("3_7hcs8")
+
+[node name="MainMenuBgm" type="AudioStreamPlayer" parent="." unique_id=295968873]
+stream = ExtResource("4_sb6w7")

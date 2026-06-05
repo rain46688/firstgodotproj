@@ -17,7 +17,6 @@ extends Control
 # GameSession에 선택 정보가 정상 저장되는지만 확인한다.
 # ============================================================
 
-
 # ------------------------------------------------------------
 # 폰트 경로
 # ------------------------------------------------------------
@@ -50,7 +49,6 @@ const BUTTON_FOCUS_BORDER_COLOR = Color(1.0, 1.0, 1.0, 0.9)
 
 const PANEL_COLOR = Color(0.0, 0.0, 0.0, 0.78)
 const PANEL_BORDER_COLOR = Color(0.7, 0.7, 0.7, 0.35)
-
 
 # ------------------------------------------------------------
 # 메인 메뉴 UI 노드
@@ -97,13 +95,18 @@ const PANEL_BORDER_COLOR = Color(0.7, 0.7, 0.7, 0.35)
 @onready var settings_reset_button = $SettingsPanel/SettingsBox/SettingsResetButton
 @onready var settings_back_button = $SettingsPanel/SettingsBox/SettingsBackButton
 
+# 전환 암전 / 로딩 표시
+@onready var fade_rect = $FadeRect
+@onready var loading_label = $LoadingLabel
 
 # 메인 메뉴 BGM
 @onready var main_menu_bgm = get_node_or_null("MainMenuBgm")
 
-
 # 포커스가 처음 잡힐 때 바로 효과음이 나는 것을 막기 위한 변수
 var can_play_focus_sound = false
+
+# 씬 전환 중 중복 입력 방지
+var is_transitioning = false
 
 
 func _ready():
@@ -135,6 +138,9 @@ func _ready():
 	difficulty_panel.visible = false
 	settings_panel.visible = false
 	center_box.visible = true
+	
+	# 전환 연출 초기 상태
+	setup_transition_ui()
 
 	# 키보드 조작을 위해 첫 버튼에 포커스 부여
 	start_button.grab_focus()
@@ -143,12 +149,11 @@ func _ready():
 	await get_tree().process_frame
 	can_play_focus_sound = true
 
-
 # ------------------------------------------------------------
 # UI 기본 텍스트 설정
 # ------------------------------------------------------------
 func setup_texts():
-	title_label.text = "게임 제목 임시"
+	title_label.text = "TEST"
 
 	start_button.text = "처음부터"
 	continue_button.text = "이어하기"
@@ -166,7 +171,6 @@ func setup_texts():
 	settings_title_label.text = "설정"
 	settings_reset_button.text = "초기화"
 	settings_back_button.text = "뒤로"
-
 
 # ------------------------------------------------------------
 # UI 스타일 전체 적용
@@ -196,7 +200,6 @@ func apply_ui_style():
 	for button in get_all_menu_buttons():
 		apply_button_style(button, text_font)
 
-
 # ------------------------------------------------------------
 # 폰트 로드
 # ------------------------------------------------------------
@@ -208,7 +211,6 @@ func load_font_or_null(font_path):
 	print("폰트 파일을 찾을 수 없음: " + font_path)
 	return null
 
-
 # ------------------------------------------------------------
 # 라벨 스타일 적용
 # ------------------------------------------------------------
@@ -219,7 +221,6 @@ func apply_label_style(label, font, font_size):
 
 	if font != null:
 		label.add_theme_font_override("font", font)
-
 
 # ------------------------------------------------------------
 # 패널 스타일 적용
@@ -236,7 +237,6 @@ func apply_panel_style(panel):
 	panel_style.content_margin_bottom = 24
 
 	panel.add_theme_stylebox_override("panel", panel_style)
-
 
 # ------------------------------------------------------------
 # 버튼 스타일 적용
@@ -266,7 +266,6 @@ func apply_button_style(button, font):
 	button.add_theme_stylebox_override("disabled", make_button_style(BUTTON_DISABLED_COLOR, BUTTON_BORDER_COLOR))
 	button.add_theme_stylebox_override("focus", make_button_style(Color(0, 0, 0, 0), BUTTON_FOCUS_BORDER_COLOR))
 
-
 # ------------------------------------------------------------
 # 버튼 StyleBox 생성
 # ------------------------------------------------------------
@@ -285,7 +284,6 @@ func make_button_style(bg_color, border_color):
 
 	return style
 
-
 # ------------------------------------------------------------
 # 모든 메뉴 버튼 배열 반환
 # ------------------------------------------------------------
@@ -303,7 +301,6 @@ func get_all_menu_buttons():
 		settings_reset_button,
 		settings_back_button
 	]
-
 
 # ------------------------------------------------------------
 # 버튼 시그널 연결
@@ -333,7 +330,6 @@ func connect_button_signals():
 		button.mouse_entered.connect(_on_menu_button_focused_or_hovered.bind(button))
 		button.focus_entered.connect(_on_menu_button_focused_or_hovered.bind(button))
 
-
 # ------------------------------------------------------------
 # 버튼 이동/마우스 올림 사운드
 # ------------------------------------------------------------
@@ -346,7 +342,6 @@ func _on_menu_button_focused_or_hovered(button):
 
 	play_click_sound()
 
-
 # ------------------------------------------------------------
 # 클릭 사운드 재생
 # ------------------------------------------------------------
@@ -357,7 +352,6 @@ func play_click_sound():
 	# 같은 사운드가 빠르게 반복될 때 처음부터 다시 재생되도록 처리
 	click_sound.stop()
 	click_sound.play()
-
 
 # ------------------------------------------------------------
 # 이어하기 버튼 상태 갱신
@@ -374,7 +368,6 @@ func update_continue_button_state():
 	else:
 		continue_button.text = "이어하기 - 세이브 없음"
 
-
 # ------------------------------------------------------------
 # 난이도 선택 패널 표시
 # ------------------------------------------------------------
@@ -387,7 +380,6 @@ func show_difficulty_panel():
 
 	# 키보드 조작을 위해 일반 버튼에 포커스 부여
 	normal_button.grab_focus()
-
 
 # ------------------------------------------------------------
 # 난이도 선택 패널 닫기
@@ -402,11 +394,13 @@ func hide_difficulty_panel():
 	# 키보드 조작을 위해 처음부터 버튼에 포커스 부여
 	start_button.grab_focus()
 
-
 # ------------------------------------------------------------
 # 새 게임 시작 정보 설정
 # ------------------------------------------------------------
 func start_new_game_with_difficulty(selected_difficulty):
+	if is_transitioning:
+		return
+
 	play_click_sound()
 
 	GameSession.setup_new_game(selected_difficulty)
@@ -414,11 +408,7 @@ func start_new_game_with_difficulty(selected_difficulty):
 	print("선택된 난이도: " + GameSession.get_difficulty_name())
 	print("새 게임 씬으로 이동")
 
-	if main_menu_bgm != null and main_menu_bgm.playing:
-		main_menu_bgm.stop()
-
-	get_tree().change_scene_to_file(MAIN_SCENE_PATH)
-
+	await transition_to_main_scene()
 
 # ------------------------------------------------------------
 # 메인 메뉴 버튼 이벤트
@@ -431,9 +421,10 @@ func _on_start_button_pressed():
 	# 처음부터 클릭 시 난이도 선택 창 표시
 	show_difficulty_panel()
 
-
 func _on_continue_button_pressed():
-	# 클릭 사운드 재생
+	if is_transitioning:
+		return
+
 	play_click_sound()
 
 	# 세이브 파일이 없으면 이어하기 불가
@@ -446,13 +437,8 @@ func _on_continue_button_pressed():
 
 	print("이어하기 선택됨")
 	print("로드 게임 씬으로 이동")
-	
-	if main_menu_bgm != null and main_menu_bgm.playing:
-		main_menu_bgm.stop()
 
-	# 기존 게임 플레이 씬으로 이동
-	get_tree().change_scene_to_file(MAIN_SCENE_PATH)
-
+	await transition_to_main_scene()
 
 func _on_quit_button_pressed():
 	# 클릭 사운드 재생
@@ -461,7 +447,6 @@ func _on_quit_button_pressed():
 	# 게임 종료
 	get_tree().quit()
 
-
 # ------------------------------------------------------------
 # 난이도 버튼 이벤트
 # ------------------------------------------------------------
@@ -469,18 +454,14 @@ func _on_quit_button_pressed():
 func _on_normal_button_pressed():
 	start_new_game_with_difficulty(GameSession.DIFFICULTY_NORMAL)
 
-
 func _on_hard_button_pressed():
 	start_new_game_with_difficulty(GameSession.DIFFICULTY_HARD)
-
 
 func _on_nightmare_button_pressed():
 	start_new_game_with_difficulty(GameSession.DIFFICULTY_NIGHTMARE)
 
-
 func _on_hardcore_button_pressed():
 	start_new_game_with_difficulty(GameSession.DIFFICULTY_HARDCORE)
-
 
 func _on_back_button_pressed():
 	# 클릭 사운드 재생
@@ -488,7 +469,6 @@ func _on_back_button_pressed():
 
 	# 난이도 선택 창에서 뒤로가기
 	hide_difficulty_panel()
-
 
 # ------------------------------------------------------------
 # 키보드 입력 처리
@@ -514,7 +494,6 @@ func register_main_menu_sfx_base_volumes():
 
 	if not click_sound.has_meta("base_volume_db"):
 		click_sound.set_meta("base_volume_db", click_sound.volume_db)
-
 
 # ------------------------------------------------------------
 # 메인 메뉴 효과음 볼륨 적용
@@ -545,7 +524,6 @@ func setup_settings_panel():
 	update_bgm_volume_label()
 	update_sfx_volume_label()
 
-
 # ------------------------------------------------------------
 # 설정 패널 열기
 # ------------------------------------------------------------
@@ -556,7 +534,6 @@ func open_settings_panel():
 
 	bgm_volume_slider.grab_focus()
 
-
 # ------------------------------------------------------------
 # 설정 패널 닫기
 # ------------------------------------------------------------
@@ -566,13 +543,11 @@ func close_settings_panel():
 
 	setting_button.grab_focus()
 
-
 # ------------------------------------------------------------
 # BGM 볼륨 라벨 갱신
 # ------------------------------------------------------------
 func update_bgm_volume_label():
 	bgm_volume_label.text = "BGM 볼륨 : " + str(int(bgm_volume_slider.value)) + "%"
-
 
 # ------------------------------------------------------------
 # SFX 볼륨 라벨 갱신
@@ -589,7 +564,6 @@ func register_main_menu_bgm_base_volume():
 
 	if not main_menu_bgm.has_meta("base_volume_db"):
 		main_menu_bgm.set_meta("base_volume_db", main_menu_bgm.volume_db)
-
 
 # ------------------------------------------------------------
 # 메인 메뉴 BGM 볼륨 적용
@@ -608,6 +582,17 @@ func apply_main_menu_bgm_volume():
 
 	main_menu_bgm.volume_db = base_volume_db + GameSession.get_bgm_volume_db()
 
+# ------------------------------------------------------------
+# 메인 메뉴 BGM 루프 설정
+# ------------------------------------------------------------
+func set_main_menu_bgm_loop(stream, loop = true):
+	if stream == null:
+		return
+
+	if stream is AudioStreamMP3:
+		stream.loop = loop
+	elif stream is AudioStreamOggVorbis:
+		stream.loop = loop
 
 # ------------------------------------------------------------
 # 메인 메뉴 BGM 재생
@@ -619,17 +604,18 @@ func play_main_menu_bgm():
 	if main_menu_bgm.stream == null:
 		return
 
+	# 메인 메뉴 BGM은 반복 재생되도록 설정
+	set_main_menu_bgm_loop(main_menu_bgm.stream, true)
+
 	main_menu_bgm.play()
 	
 func _on_setting_button_pressed():
 	play_click_sound()
 	open_settings_panel()
 
-
 func _on_settings_back_button_pressed():
 	play_click_sound()
 	close_settings_panel()
-
 
 func _on_bgm_volume_slider_changed(value):
 	GameSession.set_bgm_volume_percent(value)
@@ -637,7 +623,6 @@ func _on_bgm_volume_slider_changed(value):
 
 	# 메인 메뉴 BGM이 있다면 즉시 볼륨 적용
 	apply_main_menu_bgm_volume()
-
 
 func _on_sfx_volume_slider_changed(value):
 	GameSession.set_sfx_volume_percent(value)
@@ -665,3 +650,83 @@ func _on_settings_reset_button_pressed():
 	apply_main_menu_sfx_volume()
 
 	print("메인 메뉴 설정 초기화 완료")
+
+# ------------------------------------------------------------
+# 전환 연출 UI 초기화
+# ------------------------------------------------------------
+func setup_transition_ui():
+	# 메인 메뉴 전환 암전은 모든 메뉴 UI보다 위에 보여야 한다.
+	fade_rect.z_index = 100
+	loading_label.z_index = 101
+
+	# 처음에는 투명한 검은 화면
+	fade_rect.visible = true
+	fade_rect.color = Color(0, 0, 0, 0)
+
+	# 로딩 문구는 처음에는 숨김
+	loading_label.visible = false
+	loading_label.text = "게임 불러오는 중..."
+
+	# 배경 클릭을 막을 필요는 없으므로 평소에는 입력 무시
+	fade_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	loading_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+# ------------------------------------------------------------
+# 메인 메뉴 모든 버튼 활성/비활성 처리
+# ------------------------------------------------------------
+func set_all_menu_buttons_disabled(disabled):
+	for button in get_all_menu_buttons():
+		if button == null:
+			continue
+
+		button.disabled = disabled
+
+# ------------------------------------------------------------
+# 메인 게임 씬으로 전환하는 함수
+# ------------------------------------------------------------
+func transition_to_main_scene():
+	if is_transitioning:
+		return
+
+	is_transitioning = true
+
+	# 전환 중 버튼 중복 입력 방지
+	set_all_menu_buttons_disabled(true)
+
+	# 메인 메뉴 BGM 정지
+	if main_menu_bgm != null and main_menu_bgm.playing:
+		main_menu_bgm.stop()
+
+	# 로딩 문구 표시
+	loading_label.visible = true
+	loading_label.modulate.a = 0.0
+
+	# 암전 시작
+	fade_rect.visible = true
+	fade_rect.color = Color(0, 0, 0, 0)
+
+	var tween = create_tween()
+
+	# 화면을 검게 덮음
+	tween.tween_property(
+		fade_rect,
+		"color:a",
+		1.0,
+		0.45
+	)
+
+	# 로딩 문구를 살짝 늦게 표시
+	tween.parallel().tween_property(
+		loading_label,
+		"modulate:a",
+		1.0,
+		0.25
+	)
+
+	await tween.finished
+
+	# 아주 짧게 검은 화면 유지
+	await get_tree().create_timer(0.25).timeout
+
+	# 기존 게임 플레이 씬으로 이동
+	get_tree().change_scene_to_file(MAIN_SCENE_PATH)

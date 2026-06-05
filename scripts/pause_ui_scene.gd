@@ -13,7 +13,6 @@ extends Control
 # - 설정 버튼은 추후 구현 예정
 # ============================================================
 
-
 # ------------------------------------------------------------
 # 시그널
 # ------------------------------------------------------------
@@ -29,13 +28,11 @@ signal bgm_volume_changed(value)
 # main.gd가 이 시그널을 받아 SFX 볼륨을 적용한다.
 signal sfx_volume_changed(value)
 
-
 # ------------------------------------------------------------
 # 폰트 경로
 # ------------------------------------------------------------
 const TITLE_FONT_PATH = "res://fonts/SB 어그로 L.ttf"
 const TEXT_FONT_PATH = "res://fonts/x12y12pxMaruMinyaHangul.ttf"
-
 
 # ------------------------------------------------------------
 # 색상 설정
@@ -46,12 +43,18 @@ const TITLE_COLOR = Color("#ffffff")
 const TEXT_COLOR = Color("#ffffff")
 const DISABLED_TEXT_COLOR = Color(0.45, 0.45, 0.45, 1.0)
 
-const BUTTON_NORMAL_COLOR = Color(0.02, 0.02, 0.02, 0.72)
-const BUTTON_HOVER_COLOR = Color(0.18, 0.18, 0.18, 0.82)
-const BUTTON_PRESSED_COLOR = Color(0.35, 0.35, 0.35, 0.9)
+# 메인 메뉴 버튼과 동일한 스타일
+const BUTTON_NORMAL_COLOR = Color(0.02, 0.02, 0.02, 0.65)
+const BUTTON_HOVER_COLOR = Color(0.18, 0.18, 0.18, 0.75)
+const BUTTON_PRESSED_COLOR = Color(0.35, 0.35, 0.35, 0.85)
+const BUTTON_DISABLED_COLOR = Color(0.02, 0.02, 0.02, 0.35)
+
 const BUTTON_BORDER_COLOR = Color(0.75, 0.75, 0.75, 0.45)
 const BUTTON_FOCUS_BORDER_COLOR = Color(1.0, 1.0, 1.0, 0.9)
 
+# 메인 메뉴 설정 패널과 동일한 스타일
+const PANEL_COLOR = Color(0.0, 0.0, 0.0, 0.78)
+const PANEL_BORDER_COLOR = Color(0.7, 0.7, 0.7, 0.35)
 
 # ------------------------------------------------------------
 # UI 노드
@@ -78,10 +81,8 @@ const BUTTON_FOCUS_BORDER_COLOR = Color(1.0, 1.0, 1.0, 0.9)
 @onready var settings_reset_button = $SettingsPanel/SettingsBox/SettingsResetButton
 @onready var settings_back_button = $SettingsPanel/SettingsBox/SettingsBackButton
 
-
 # 처음 포커스가 잡힐 때 효과음이 바로 나는 것을 막기 위한 변수
 var can_play_focus_sound = false
-
 
 func _ready():
 	# 일시정지 상태에서도 이 UI는 입력을 받아야 한다.
@@ -103,7 +104,6 @@ func _ready():
 	await get_tree().process_frame
 	can_play_focus_sound = true
 
-
 # ------------------------------------------------------------
 # UI 텍스트 설정
 # ------------------------------------------------------------
@@ -117,7 +117,6 @@ func setup_texts():
 	settings_reset_button.text = "초기화"
 	settings_back_button.text = "뒤로"
 
-
 # ------------------------------------------------------------
 # UI 스타일 적용
 # ------------------------------------------------------------
@@ -127,8 +126,19 @@ func apply_ui_style():
 	var title_font = load_font_or_null(TITLE_FONT_PATH)
 	var text_font = load_font_or_null(TEXT_FONT_PATH)
 
+	# Pause 메인 제목
 	apply_label_style(title_label, title_font, 44, TITLE_COLOR)
 
+	# 설정 패널 제목 / 라벨
+	# 메인 메뉴 설정창과 동일한 크기와 정렬
+	apply_label_style(settings_title_label, title_font, 34, TITLE_COLOR)
+	apply_label_style(bgm_volume_label, text_font, 22, TEXT_COLOR)
+	apply_label_style(sfx_volume_label, text_font, 22, TEXT_COLOR)
+
+	# 설정 패널 스타일
+	apply_panel_style(settings_panel)
+
+	# 모든 버튼 스타일 적용
 	for button in get_all_buttons():
 		apply_button_style(button, text_font)
 
@@ -137,8 +147,8 @@ func apply_ui_style():
 # ------------------------------------------------------------
 func apply_panel_style(panel):
 	var panel_style = StyleBoxFlat.new()
-	panel_style.bg_color = Color(0.0, 0.0, 0.0, 0.82)
-	panel_style.border_color = Color(0.7, 0.7, 0.7, 0.35)
+	panel_style.bg_color = PANEL_COLOR
+	panel_style.border_color = PANEL_BORDER_COLOR
 	panel_style.set_border_width_all(2)
 	panel_style.set_corner_radius_all(8)
 	panel_style.content_margin_left = 24
@@ -158,7 +168,6 @@ func load_font_or_null(font_path):
 	print("폰트 파일을 찾을 수 없음: " + font_path)
 	return null
 
-
 # ------------------------------------------------------------
 # 라벨 스타일 적용
 # ------------------------------------------------------------
@@ -169,7 +178,6 @@ func apply_label_style(label, font, font_size, font_color):
 
 	if font != null:
 		label.add_theme_font_override("font", font)
-
 
 # ------------------------------------------------------------
 # 버튼 스타일 적용
@@ -192,8 +200,8 @@ func apply_button_style(button, font):
 	button.add_theme_stylebox_override("normal", make_button_style(BUTTON_NORMAL_COLOR, BUTTON_BORDER_COLOR))
 	button.add_theme_stylebox_override("hover", make_button_style(BUTTON_HOVER_COLOR, BUTTON_BORDER_COLOR))
 	button.add_theme_stylebox_override("pressed", make_button_style(BUTTON_PRESSED_COLOR, BUTTON_BORDER_COLOR))
+	button.add_theme_stylebox_override("disabled", make_button_style(BUTTON_DISABLED_COLOR, BUTTON_BORDER_COLOR))
 	button.add_theme_stylebox_override("focus", make_button_style(Color(0, 0, 0, 0), BUTTON_FOCUS_BORDER_COLOR))
-
 
 # ------------------------------------------------------------
 # 버튼 StyleBox 생성
@@ -213,7 +221,6 @@ func make_button_style(bg_color, border_color):
 
 	return style
 
-
 # ------------------------------------------------------------
 # 버튼 배열 반환
 # ------------------------------------------------------------
@@ -225,7 +232,6 @@ func get_all_buttons():
 		settings_reset_button,
 		settings_back_button
 	]
-
 
 # ------------------------------------------------------------
 # 버튼 시그널 연결
@@ -245,7 +251,6 @@ func connect_button_signals():
 		button.mouse_entered.connect(_on_button_focused_or_hovered.bind(button))
 		button.focus_entered.connect(_on_button_focused_or_hovered.bind(button))
 
-
 # ------------------------------------------------------------
 # 버튼 이동/마우스 올림 사운드
 # ------------------------------------------------------------
@@ -257,7 +262,6 @@ func _on_button_focused_or_hovered(button):
 		return
 
 	play_click_sound()
-
 
 # ------------------------------------------------------------
 # 클릭 사운드 재생
@@ -272,7 +276,6 @@ func play_click_sound():
 	click_sound.stop()
 	click_sound.play()
 
-
 # ------------------------------------------------------------
 # 버튼 이벤트
 # ------------------------------------------------------------
@@ -280,16 +283,13 @@ func _on_setting_button_pressed():
 	play_click_sound()
 	open_settings_panel()
 
-
 func _on_resume_button_pressed():
 	play_click_sound()
 	resume_requested.emit()
 
-
 func _on_quit_button_pressed():
 	play_click_sound()
 	quit_to_title_requested.emit()
-
 
 func _on_settings_back_button_pressed():
 	play_click_sound()
@@ -301,7 +301,6 @@ func _on_bgm_volume_slider_changed(value):
 
 	# main.gd에 BGM 볼륨 변경 요청
 	bgm_volume_changed.emit(value)
-
 
 func _on_sfx_volume_slider_changed(value):
 	GameSession.set_sfx_volume_percent(value)
@@ -338,7 +337,6 @@ func setup_settings_panel():
 	update_bgm_volume_label()
 	update_sfx_volume_label()
 
-
 # ------------------------------------------------------------
 # 설정 패널 열기
 # ------------------------------------------------------------
@@ -347,7 +345,6 @@ func open_settings_panel():
 	settings_panel.visible = true
 
 	bgm_volume_slider.grab_focus()
-
 
 # ------------------------------------------------------------
 # 설정 패널 닫기
@@ -358,13 +355,11 @@ func close_settings_panel():
 
 	setting_button.grab_focus()
 
-
 # ------------------------------------------------------------
 # BGM 볼륨 라벨 갱신
 # ------------------------------------------------------------
 func update_bgm_volume_label():
 	bgm_volume_label.text = "BGM 볼륨 : " + str(int(bgm_volume_slider.value)) + "%"
-
 
 # ------------------------------------------------------------
 # SFX 볼륨 라벨 갱신
@@ -381,7 +376,6 @@ func register_pause_sfx_base_volumes():
 
 	if not click_sound.has_meta("base_volume_db"):
 		click_sound.set_meta("base_volume_db", click_sound.volume_db)
-
 
 # ------------------------------------------------------------
 # Pause UI 효과음 볼륨 적용

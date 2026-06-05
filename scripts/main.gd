@@ -156,8 +156,8 @@ var arrange_selected_item_text_scroll = null
 # my_test
 # combined_candle_students_phase_01
 # candle_student
-const DEBUG_ADD_START_ITEMS = true
-const DEBUG_OPEN_PENDING_LOOT_TEST = true
+const DEBUG_ADD_START_ITEMS = false
+const DEBUG_OPEN_PENDING_LOOT_TEST = false
 const DEBUG_START_BATTLE_TEST = false
 const DEBUG_TEST_BATTLE_ENEMY_ID = "combined_candle_students_phase_01"
 const DEBUG_BATTLE_START_DELAY = 1.0
@@ -178,6 +178,7 @@ const MAIN_MENU_SCENE_PATH = "res://scenes/main_menu_scene.tscn"
 const STAT_GOOD_COLOR = "#55ff77"
 const STAT_BAD_COLOR = "#ff5555"
 const STAT_INFO_COLOR = "#88ccff"
+const PROLOGUE_STORY_EVENT_ID = "prologue"
 
 # ============================================================
 # 게임 시작 관련 함수 모음
@@ -407,7 +408,7 @@ func _ready():
 	# 효과음 기본 볼륨 저장 및 현재 SFX 설정 적용
 	register_sfx_base_volumes()
 	apply_sfx_volume_to_all()
-
+	
 	# 게임 시작 데이터 로드
 	if not load_startup_game_data():
 		return
@@ -429,6 +430,18 @@ func start_game_from_session():
 
 	# 그 외에는 새 게임으로 시작한다.
 	await start_new_game_from_session()
+# 새 게임 시작 시 프롤로그 스토리 이벤트를 실행하는 함수
+func run_new_game_prologue():
+	# prologue 이벤트가 없으면 조용히 넘어간다.
+	if not story_events.has(PROLOGUE_STORY_EVENT_ID):
+		push_warning("프롤로그 스토리 이벤트가 없음: " + PROLOGUE_STORY_EVENT_ID)
+		return
+
+	print("프롤로그 실행 시작")
+
+	await run_story_event(PROLOGUE_STORY_EVENT_ID)
+
+	print("프롤로그 실행 종료")
 # 새 게임 시작 함수
 func start_new_game_from_session():
 	# 새 게임일 때는 GameSession의 난이도를 현재 난이도로 사용한다.
@@ -441,11 +454,18 @@ func start_new_game_from_session():
 	# 개발 중에는 기존 테스트 흐름을 유지한다.
 	await add_debug_start_items()
 
-	# 디버그 방 갱신 전 개발 테스트 흐름, 아이템 정리 화면 테스트
-	await run_debug_before_room_update_flow()
-
 	# 방 갱신 함수 호출
+	# 프롤로그가 끝난 뒤 show_game_ui()에서 update_room()을 다시 호출하므로,
+	# 먼저 현재 방을 세팅해둔다.
 	update_room()
+
+	# 새 게임 시작 시 프롤로그 실행
+	await run_new_game_prologue()
+
+	# 디버그 방 갱신 전 개발 테스트 흐름, 아이템 정리 화면 테스트
+	# 프롤로그 테스트 중에는 DEBUG_OPEN_PENDING_LOOT_TEST가 true이면
+	# 프롤로그 이후 인벤토리 정리 화면이 열릴 수 있다.
+	await run_debug_before_room_update_flow()
 
 	# 디버그 방 갱신 후 개발 테스트 흐름, 적 배틀 테스트
 	await run_debug_after_room_update_flow()

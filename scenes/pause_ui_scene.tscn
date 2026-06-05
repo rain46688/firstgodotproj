@@ -73,6 +73,7 @@ grow_vertical = 2
 
 [node name="SettingsBox" type="VBoxContainer" parent="SettingsPanel" unique_id=1929818918]
 layout_mode = 2
+alignment = 1
 
 [node name="SettingsTitleLabel" type="Label" parent="SettingsPanel/SettingsBox" unique_id=1975241842]
 layout_mode = 2

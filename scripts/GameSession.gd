@@ -124,7 +124,6 @@ func set_bgm_volume_percent(value):
 	# 설정값 변경 즉시 저장
 	save_audio_settings()
 
-
 # SFX 볼륨 설정
 func set_sfx_volume_percent(value):
 	sfx_volume_percent = clamp(int(value), 0, 100)
@@ -133,15 +132,12 @@ func set_sfx_volume_percent(value):
 	# 설정값 변경 즉시 저장
 	save_audio_settings()
 
-
 # 0~100 값을 오디오 배율 0.0~1.0으로 변환
 func get_bgm_volume_linear():
 	return float(bgm_volume_percent) / 100.0
 
-
 func get_sfx_volume_linear():
 	return float(sfx_volume_percent) / 100.0
-
 
 # 볼륨 퍼센트를 dB로 변환
 func percent_to_db(percent):
@@ -152,10 +148,8 @@ func percent_to_db(percent):
 
 	return linear_to_db(linear)
 
-
 func get_bgm_volume_db():
 	return percent_to_db(bgm_volume_percent)
-
 
 func get_sfx_volume_db():
 	return percent_to_db(sfx_volume_percent)
@@ -170,7 +164,6 @@ func get_audio_settings_data():
 		"bgm_volume_percent": bgm_volume_percent,
 		"sfx_volume_percent": sfx_volume_percent
 	}
-
 
 # 오디오 설정 저장
 func save_audio_settings():
@@ -188,7 +181,6 @@ func save_audio_settings():
 
 	print("설정 저장 완료: " + SETTINGS_SAVE_PATH)
 	return true
-
 
 # 오디오 설정 불러오기
 func load_audio_settings():
@@ -226,7 +218,6 @@ func load_audio_settings():
 	print("SFX: " + str(sfx_volume_percent) + "%")
 
 	return true
-
 
 # 오디오 설정 초기화
 func reset_audio_settings():
