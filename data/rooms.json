@@ -199,13 +199,35 @@
 				],
 				"move_effect": "enter",
 				"locked": true,
-				"required_item": "classroom_key",
-				"open_flag": "opened_classroom_2",
+				"open_flag": "opened_classroom_2"
+			}
+		},
+		"interactions": {
+			"classroom_2_door": {
 				"click_rect": [
 					1390,
 					270,
 					300,
 					560
+				],
+				"hide_if_flag": "opened_classroom_2",
+				"events": [
+					{
+						"type": "text",
+						"text": "교실 문이 닫혀있다. 문을 열을까?"
+					},
+					{
+						"type": "unlock_exit",
+						"direction": "right",
+						"required_item": "classroom_key",
+						"master_key": "master_key",
+						"consume_required_key": true,
+						"consume_master_key": false,
+						"success_effect": "fade",
+						"required_key_success_text": "{item_name}로 문을 열었다.",
+						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+						"fail_text": "자물쇠로 잠겨있어서 열 수 없다."
+					}
 				]
 			}
 		},
@@ -346,8 +368,8 @@
 										"item": "classroom_key"
 									},
 									{
-										"type": "flag",
-										"flag": "got_classroom_key"
+										"type": "item",
+										"item": "master_key"
 									}
 								]
 							},

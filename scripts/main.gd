@@ -188,7 +188,10 @@ const MAIN_MENU_SCENE_PATH = "res://scenes/main_menu_scene.tscn"
 const STAT_GOOD_COLOR = "#55ff77"
 const STAT_BAD_COLOR = "#ff5555"
 const STAT_INFO_COLOR = "#88ccff"
+# 게임 처음 시작 스토리 이벤트
 const PROLOGUE_STORY_EVENT_ID = "prologue_part_1"
+# 만능 열쇠
+const DEFAULT_MASTER_KEY_ID = "master_key"
 
 # ============================================================
 # 게임 시작 관련 함수 모음
@@ -1532,6 +1535,205 @@ func load_encounter_events():
 # 방 함수 모음
 # ============================================================
 
+# ============================================================
+# 문 잠금 해제 이벤트 함수 모음
+# ============================================================
+
+# unlock_exit 이벤트에서 사용할 출구 데이터 가져오기
+func get_unlock_exit_target_data(event):
+	var room = get_current_room_data()
+
+	if room.is_empty():
+		return {}
+
+	var direction = str(event.get("direction", ""))
+
+	if direction == "":
+		push_error("unlock_exit 이벤트에 direction 값이 없음")
+		return {}
+
+	var exit_data = get_exit_data_from_room(room, direction, true)
+
+	if exit_data.is_empty():
+		push_error("unlock_exit 대상 exit가 없음: " + current_room + " / " + direction)
+		return {}
+
+	return exit_data
+# unlock_exit 이벤트에서 사용할 open_flag 가져오기
+func get_unlock_exit_open_flag(event, exit_data):
+	var open_flag = str(event.get("open_flag", ""))
+
+	if open_flag != "":
+		return open_flag
+
+	return str(exit_data.get("open_flag", ""))
+# unlock_exit 이벤트에서 사용할 전용 열쇠 ID 가져오기
+func get_unlock_exit_required_item(event, exit_data):
+	var required_item = str(event.get("required_item", ""))
+
+	if required_item != "":
+		return required_item
+
+	# 이전 구조와의 호환용.
+	# exits 안에 required_item이 남아 있어도 읽을 수 있게 둔다.
+	return str(exit_data.get("required_item", ""))
+# unlock_exit 이벤트에서 사용할 만능 열쇠 후보 목록 가져오기
+func get_unlock_exit_master_key_ids(event):
+	var result = []
+
+	# 단일 만능 열쇠
+	var master_key = str(event.get("master_key", ""))
+
+	if master_key != "":
+		result.append(master_key)
+
+	# 여러 후보를 쓰고 싶을 때를 위한 확장용
+	if event.has("master_keys"):
+		var master_keys = event["master_keys"]
+
+		if typeof(master_keys) == TYPE_ARRAY:
+			for key_id in master_keys:
+				var key_text = str(key_id)
+
+				if key_text != "" and not result.has(key_text):
+					result.append(key_text)
+
+	# 아무것도 지정하지 않으면 기본 master_key 사용
+	if result.size() == 0:
+		result.append(DEFAULT_MASTER_KEY_ID)
+
+	return result
+# 사용할 만능 열쇠 ID 찾기
+func find_owned_master_key_id(event):
+	var master_key_ids = get_unlock_exit_master_key_ids(event)
+
+	for key_id in master_key_ids:
+		if has_item(key_id):
+			return key_id
+
+	return ""
+# unlock_exit에 실제 사용할 열쇠 결정
+func get_unlock_exit_used_key_info(event, exit_data):
+	var required_item = get_unlock_exit_required_item(event, exit_data)
+
+	# 1순위: 전용 열쇠
+	if required_item != "" and has_item(required_item):
+		return {
+			"item_id": required_item,
+			"key_type": "required"
+		}
+
+	# 2순위: 만능 열쇠
+	var master_key_id = find_owned_master_key_id(event)
+
+	if master_key_id != "":
+		return {
+			"item_id": master_key_id,
+			"key_type": "master"
+		}
+
+	return {
+		"item_id": "",
+		"key_type": ""
+	}
+# unlock_exit 성공 대사 생성
+func make_unlock_exit_success_text(event, key_info):
+	var item_id = str(key_info.get("item_id", ""))
+	var key_type = str(key_info.get("key_type", ""))
+	var item_name = get_item_name(item_id)
+
+	var text = ""
+
+	if key_type == "required":
+		text = str(event.get("required_key_success_text", ""))
+	elif key_type == "master":
+		text = str(event.get("master_key_success_text", ""))
+
+	if text == "":
+		text = str(event.get("success_text", ""))
+
+	if text == "":
+		text = "{item_name}로 문을 열었다."
+
+	return text.replace("{item_name}", item_name)
+# unlock_exit 실패 대사 가져오기
+func get_unlock_exit_fail_text(event):
+	return str(event.get("fail_text", MSG_DOOR_LOCKED))
+# unlock_exit 이미 열림 대사 가져오기
+func get_unlock_exit_already_open_text(event):
+	return str(event.get("already_open_text", "이미 문이 열려 있다."))
+# unlock_exit 성공 시 열쇠 소모 처리
+func consume_unlock_exit_key_if_needed(event, key_info):
+	var item_id = str(key_info.get("item_id", ""))
+	var key_type = str(key_info.get("key_type", ""))
+
+	if item_id == "":
+		return
+
+	if key_type == "required":
+		if bool(event.get("consume_required_key", true)):
+			consume_item_by_id(item_id)
+
+	elif key_type == "master":
+		if bool(event.get("consume_master_key", false)):
+			consume_item_by_id(item_id)
+# unlock_exit 성공 연출 처리
+func run_unlock_exit_success_effect(event):
+	var success_effect = str(event.get("success_effect", "fade"))
+
+	if success_effect == "fade":
+		await effect(false, false, true, "")
+	elif success_effect == "none":
+		return
+	else:
+		# 알 수 없는 값이면 일단 페이드 처리
+		await effect(false, false, true, "")
+# unlock_exit 이벤트 실행 함수
+func run_unlock_exit_event(event):
+	var exit_data = get_unlock_exit_target_data(event)
+
+	if exit_data.is_empty():
+		return
+
+	var open_flag = get_unlock_exit_open_flag(event, exit_data)
+
+	if open_flag == "":
+		push_error("unlock_exit 대상 exit에 open_flag가 없음")
+		return
+
+	# 이미 열린 문이면 안내만 출력
+	if has_flag(open_flag):
+		await show_dialogue(get_unlock_exit_already_open_text(event))
+		return
+
+	var key_info = get_unlock_exit_used_key_info(event, exit_data)
+	var used_key_id = str(key_info.get("item_id", ""))
+
+	# 사용할 수 있는 열쇠가 없음
+	if used_key_id == "":
+		if locked_sound != null:
+			locked_sound.play()
+
+		await show_dialogue(get_unlock_exit_fail_text(event))
+		return
+
+	# 문 열기 성공
+	if unlocked_sound != null:
+		unlocked_sound.play()
+
+	set_flag(open_flag)
+
+	consume_unlock_exit_key_if_needed(event, key_info)
+
+	await show_dialogue(make_unlock_exit_success_text(event, key_info))
+
+	await run_unlock_exit_success_effect(event)
+
+	# open_flag가 켜졌으므로 배경과 이동 화살표 갱신
+	update_room()
+
+	# 문이 열린 결과로 조건 스토리가 열릴 수도 있으니 검사
+	await check_room_enter_story()
 # room_id 기준으로 방 데이터 가져오기 함수
 func get_room_data_by_id(room_id, show_error = true):
 	if room_id == "":
@@ -1635,6 +1837,47 @@ func get_room_background_path(room):
 		push_error(current_room + "에 background 값이 없음")
 		return ""
 
+	# ------------------------------------------------------------
+	# 1순위: background_by_flag
+	# ------------------------------------------------------------
+	# 여러 문이 있는 방에서 특정 flag에 따라 다른 배경을 보여주기 위한 구조.
+	#
+	# 예:
+	# "background_by_flag": {
+	#     "opened_classroom_2": "res://imgs/backgrounds/hallway_open.png",
+	#     "opened_storage": "res://imgs/backgrounds/hallway_storage_open.png"
+	# }
+	#
+	# 해당 flag가 켜져 있으면 그 배경을 사용한다.
+	if room.has("background_by_flag"):
+		var background_by_flag = room["background_by_flag"]
+
+		if typeof(background_by_flag) == TYPE_DICTIONARY:
+			# 선택 사항:
+			# 여러 flag가 동시에 켜졌을 때 우선순위를 명확히 하고 싶으면
+			# background_flag_priority 배열을 사용할 수 있다.
+			if room.has("background_flag_priority"):
+				var background_flag_priority = room["background_flag_priority"]
+
+				if typeof(background_flag_priority) == TYPE_ARRAY:
+					for flag_id in background_flag_priority:
+						var flag_text = str(flag_id)
+
+						if background_by_flag.has(flag_text) and has_flag(flag_text):
+							return str(background_by_flag[flag_text])
+
+			# priority가 없으면 background_by_flag에 등록된 순서대로 검사한다.
+			for flag_id in background_by_flag.keys():
+				var flag_text = str(flag_id)
+
+				if has_flag(flag_text):
+					return str(background_by_flag[flag_text])
+
+	# ------------------------------------------------------------
+	# 2순위: 기존 opened_background
+	# ------------------------------------------------------------
+	# 기존 방식 유지:
+	# exits 중 하나라도 open_flag로 열린 상태라면 opened_background 사용.
 	if not room.has("exits"):
 		return background_path
 
@@ -1650,9 +1893,11 @@ func get_room_background_path(room):
 			continue
 
 		if is_exit_unlocked(exit_data) and room.has("opened_background"):
-			background_path = room["opened_background"]
-			break
+			return str(room["opened_background"])
 
+	# ------------------------------------------------------------
+	# 3순위: 기본 background
+	# ------------------------------------------------------------
 	return background_path
 # 현재 방 배경 이미지 갱신 함수
 func update_room_background(room):
@@ -1833,6 +2078,77 @@ func get_interaction_data_from_room(room, interaction_id, show_error = false):
 		return {}
 
 	return interaction_data
+# interaction 조건용 flag 목록 가져오기 함수
+func get_interaction_condition_flags(interaction, key_name):
+	var result = []
+
+	if interaction == null:
+		return result
+
+	if typeof(interaction) != TYPE_DICTIONARY:
+		return result
+
+	if not interaction.has(key_name):
+		return result
+
+	var value = interaction[key_name]
+
+	if typeof(value) == TYPE_STRING:
+		var flag_id = str(value)
+
+		if flag_id != "":
+			result.append(flag_id)
+
+	elif typeof(value) == TYPE_ARRAY:
+		for flag_value in value:
+			var flag_id = str(flag_value)
+
+			if flag_id != "":
+				result.append(flag_id)
+
+	return result
+# interaction 버튼을 현재 상태에서 보여줄지 확인하는 함수
+func should_show_interaction(interaction):
+	if interaction == null:
+		return false
+
+	if typeof(interaction) != TYPE_DICTIONARY:
+		return false
+
+	# 특정 flag가 있으면 숨김
+	# 예: "hide_if_flag": "opened_classroom_2"
+	for flag_id in get_interaction_condition_flags(interaction, "hide_if_flag"):
+		if has_flag(flag_id):
+			return false
+
+	# 특정 flag가 있어야만 표시
+	# 예: "show_if_flag": "some_flag"
+	var show_if_flags = get_interaction_condition_flags(interaction, "show_if_flag")
+
+	if show_if_flags.size() > 0:
+		var has_any_required_flag = false
+
+		for flag_id in show_if_flags:
+			if has_flag(flag_id):
+				has_any_required_flag = true
+				break
+
+		if not has_any_required_flag:
+			return false
+
+	# 특정 flag가 없을 때만 표시
+	# 예: "required_flag_missing": "opened_classroom_2"
+	for flag_id in get_interaction_condition_flags(interaction, "required_flag_missing"):
+		if has_flag(flag_id):
+			return false
+
+	# 특정 flag가 있을 때만 표시
+	# 예: "required_flag": "prologue_part_2_done"
+	for flag_id in get_interaction_condition_flags(interaction, "required_flag"):
+		if not has_flag(flag_id):
+			return false
+
+	return true
 # 방 데이터에서 진입 스토리 이벤트 ID 가져오기 함수
 func get_room_enter_story_id(room):
 	if room.is_empty():
@@ -2101,6 +2417,10 @@ func create_interaction_buttons(room):
 		var interaction = get_interaction_data_from_room(room, interaction_id)
 
 		if interaction.is_empty():
+			continue
+			
+		# 현재 flag 조건상 표시되지 않아야 하는 상호작용은 버튼 생성하지 않음
+		if not should_show_interaction(interaction):
 			continue
 
 		# click_rect가 없는 상호작용은 버튼 생성하지 않음
@@ -2432,6 +2752,9 @@ func run_single_event(event):
 
 	elif event_type == "choices":
 		await run_event_choices(event.get("choices", []))
+		
+	elif event_type == "unlock_exit":
+		await run_unlock_exit_event(event)
 
 	else:
 		push_error("알 수 없는 event type: " + str(event_type))
@@ -2741,6 +3064,9 @@ func run_single_story_event(event):
 
 	elif event_type == "auto_save":
 		await run_story_auto_save_event(event)
+		
+	elif event_type == "unlock_exit":
+		await run_unlock_exit_event(event)	
 
 	elif event_type == "flag":
 		set_flag(event.get("flag", ""))

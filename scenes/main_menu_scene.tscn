@@ -4,7 +4,7 @@
 [ext_resource type="FontFile" uid="uid://bhxde28nnpeiv" path="res://fonts/SB 어그로 L.ttf" id="1_xhf6x"]
 [ext_resource type="AudioStream" uid="uid://b2p5y3ta6bfww" path="res://sounds/clcik.mp3" id="3_7hcs8"]
 [ext_resource type="FontFile" uid="uid://dshbp46j15be4" path="res://fonts/x12y12pxMaruMinyaHangul.ttf" id="3_yj20m"]
-[ext_resource type="AudioStream" uid="uid://chgc8sq11sx00" path="res://sounds/bgm7.mp3" id="4_sb6w7"]
+[ext_resource type="AudioStream" uid="uid://c5wfqtef6oosk" path="res://sounds/bgm7.mp3" id="4_sb6w7"]
 
 [node name="MainMenuScene" type="Control" unique_id=647454908]
 layout_mode = 3
