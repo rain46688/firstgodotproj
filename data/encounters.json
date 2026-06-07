@@ -2,23 +2,9 @@
 	"school_hallway": [
 		{
 			"enemy": "candle_student",
-			"weight": 20,
-			"required_flag": "story_first_enter_classroom_2_done",
+			"weight": 100,
+			"required_flag": "battle_tutorial_done",
 			"missing_flag": "",
-			"first_turn": ""
-		},
-		{
-			"enemy": "candle_student_tutorial",
-			"weight": 50,
-			"required_flag": "story_first_enter_classroom_2_done",
-			"missing_flag": "",
-			"first_turn": ""
-		},
-		{
-			"enemy": "combined_candle_students_phase_01",
-			"weight": 30,
-			"required_flag": "defeated_tutorial_enemy",
-			"missing_flag": "got_razor_from_candle_student",
 			"first_turn": ""
 		}
 	]

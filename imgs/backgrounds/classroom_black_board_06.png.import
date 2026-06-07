@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bya6wqhs5pav8"
-path="res://.godot/imported/prologue1_1920x1080.png-6a326a894c45618886247f21ce8b1c84.ctex"
+uid="uid://cul37yyr3n1ba"
+path="res://.godot/imported/classroom_black_board_06.png-675da5cd826187dc77fad5571f72b514.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/events/prologue1_1920x1080.png"
-dest_files=["res://.godot/imported/prologue1_1920x1080.png-6a326a894c45618886247f21ce8b1c84.ctex"]
+source_file="res://imgs/backgrounds/classroom_black_board_06.png"
+dest_files=["res://.godot/imported/classroom_black_board_06.png-675da5cd826187dc77fad5571f72b514.ctex"]
 
 [params]
 

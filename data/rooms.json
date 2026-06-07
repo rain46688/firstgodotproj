@@ -32,18 +32,18 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "의자에 앉을까?",
-								"flag": "prologue_part_2_done",
+								"text": "의자에 앉아서 컴퓨터를 확인해보자.",
+								"flag": "prologue_part_02_done",
 								"already_events": [],
 								"events": [
 									{
 										"type": "flag",
-										"flag": "prologue_part_2_done"
+										"flag": "prologue_part_02_done"
 									}
 								]
 							},
 							{
-								"text": "조금 더 있다가."
+								"text": "좀만 더 있다가."
 							}
 						]
 					}
@@ -137,29 +137,29 @@
 		},
 		"enter_stories": [
 			{
-				"event": "prologue_part_2",
-				"required_flag": "prologue_part_1_done",
-				"required_flag_missing": "prologue_part_2_done"
+				"event": "prologue_part_02",
+				"required_flag": "prologue_part_01_done",
+				"required_flag_missing": "prologue_part_02_done"
 			},
 			{
-				"event": "prologue_part_3",
-				"required_flag": "prologue_part_2_done",
-				"required_flag_missing": "prologue_part_3_done"
+				"event": "prologue_part_03",
+				"required_flag": "prologue_part_02_done",
+				"required_flag_missing": "prologue_part_03_done"
 			}
 		]
 	},
-	"hallway_1": {
-		"background": "res://imgs/backgrounds/hallway_open.png",
+	"school_hallway_01": {
+		"background": "res://imgs/backgrounds/school_hallway_01.png",
 		"exits": {
 			"up": {
-				"target": "hallway_2",
+				"target": "school_hallway_02",
 				"position": [
 					860,
 					30
 				]
 			},
 			"right": {
-				"target": "classroom_1",
+				"target": "classroom_01",
 				"position": [
 					1390,
 					540
@@ -173,100 +173,18 @@
 			"chance": 25
 		}
 	},
-	"hallway_2": {
-		"background": "res://imgs/backgrounds/hallway_closed.png",
-		"opened_background": "res://imgs/backgrounds/hallway_open.png",
+	"classroom_01": {
+		"background": "res://imgs/backgrounds/classroom_01.png",
 		"exits": {
 			"up": {
-				"target": "hallway_3",
+				"target": "classroom_01_02",
 				"position": [
 					860,
 					30
 				]
 			},
-			"down": {
-				"target": "hallway_1",
-				"position": [
-					900,
-					950
-				]
-			},
 			"right": {
-				"target": "classroom_2",
-				"position": [
-					1390,
-					540
-				],
-				"move_effect": "enter",
-				"locked": true,
-				"open_flag": "opened_classroom_2"
-			}
-		},
-		"interactions": {
-			"classroom_2_door": {
-				"click_rect": [
-					1390,
-					270,
-					300,
-					560
-				],
-				"hide_if_flag": "opened_classroom_2",
-				"events": [
-					{
-						"type": "text",
-						"text": "교실 문이 닫혀있다. 문을 열을까?"
-					},
-					{
-						"type": "unlock_exit",
-						"direction": "right",
-						"required_item": "classroom_key",
-						"master_key": "master_key",
-						"consume_required_key": true,
-						"consume_master_key": false,
-						"success_effect": "fade",
-						"required_key_success_text": "{item_name}로 문을 열었다.",
-						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-						"fail_text": "자물쇠로 잠겨있어서 열 수 없다."
-					}
-				]
-			}
-		},
-		"random_encounter": {
-			"enemy_table": "school_hallway",
-			"event_table": "school_hallway",
-			"chance": 25
-		}
-	},
-	"hallway_3": {
-		"background": "res://imgs/backgrounds/hallway_open_end.png",
-		"exits": {
-			"down": {
-				"target": "hallway_2",
-				"position": [
-					900,
-					950
-				]
-			},
-			"right": {
-				"target": "classroom_3",
-				"position": [
-					1390,
-					540
-				],
-				"move_effect": "enter"
-			}
-		},
-		"random_encounter": {
-			"enemy_table": "school_hallway",
-			"event_table": "school_hallway",
-			"chance": 25
-		}
-	},
-	"classroom_1": {
-		"background": "res://imgs/backgrounds/classroom.png",
-		"exits": {
-			"right": {
-				"target": "hallway_1",
+				"target": "school_hallway_01",
 				"position": [
 					1390,
 					540
@@ -293,7 +211,7 @@
 					},
 					{
 						"type": "item",
-						"item": "cutter_knife"
+						"item": "master_key"
 					}
 				]
 			},
@@ -328,13 +246,41 @@
 						]
 					}
 				]
+			}
+		}
+	},
+	"classroom_01_02": {
+		"background": "res://imgs/backgrounds/classroom_black_board_01.png",
+		"exits": {
+			"down": {
+				"target": "classroom_01",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"black_board": {
+				"click_rect": [
+					591,
+					293,
+					911,
+					367
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "깨끗한 칠판이다."
+					}
+				]
 			},
 			"locker": {
 				"click_rect": [
-					258,
-					550,
-					740,
-					64
+					191,
+					732,
+					1532,
+					209
 				],
 				"events": [
 					{
@@ -355,21 +301,10 @@
 							},
 							{
 								"text": "여섯 번째 사물함을 연다",
-								"flag": "got_classroom_key",
-								"already_events": [
-									{
-										"type": "text",
-										"text": "이미 비어 있다."
-									}
-								],
 								"events": [
 									{
-										"type": "item",
-										"item": "classroom_key"
-									},
-									{
-										"type": "item",
-										"item": "master_key"
+										"type": "text",
+										"text": "비어 있다."
 									}
 								]
 							},
@@ -388,15 +323,82 @@
 			}
 		}
 	},
-	"classroom_2": {
-		"background": "res://imgs/backgrounds/classroom_monitor.png",
-		"enter_story": {
-			"event": "first_enter_classroom_2",
-			"required_flag_missing": "story_first_enter_classroom_2_done"
-		},
+	"school_hallway_02": {
+		"background": "res://imgs/backgrounds/school_hallway_02.png",
+		"opened_background": "res://imgs/backgrounds/school_hallway_01.png",
 		"exits": {
+			"up": {
+				"target": "school_hallway_03",
+				"position": [
+					860,
+					30
+				]
+			},
+			"down": {
+				"target": "school_hallway_01",
+				"position": [
+					900,
+					950
+				]
+			},
 			"right": {
-				"target": "hallway_2",
+				"target": "classroom_02",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter",
+				"locked": true,
+				"open_flag": "opened_classroom_02"
+			}
+		},
+		"interactions": {
+			"classroom_02_door": {
+				"click_rect": [
+					1390,
+					270,
+					300,
+					560
+				],
+				"hide_if_flag": "opened_classroom_02",
+				"events": [
+					{
+						"type": "text",
+						"text": "교실 문이 닫혀있다. 문을 열을까?"
+					},
+					{
+						"type": "unlock_exit",
+						"direction": "right",
+						"required_item": "classroom_keyA",
+						"master_key": "master_key",
+						"consume_required_key": true,
+						"consume_master_key": false,
+						"success_effect": "fade",
+						"required_key_success_text": "{item_name}로 문을 열었다.",
+						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+						"fail_text": "자물쇠로 잠겨있어서 열 수 없다."
+					}
+				]
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "school_hallway",
+			"event_table": "school_hallway",
+			"chance": 25
+		}
+	},
+	"classroom_02": {
+		"background": "res://imgs/backgrounds/classroom_03.png",
+		"exits": {
+			"up": {
+				"target": "classroom_02_02",
+				"position": [
+					860,
+					30
+				]
+			},
+			"right": {
+				"target": "school_hallway_02",
 				"position": [
 					1390,
 					540
@@ -405,20 +407,921 @@
 			}
 		},
 		"interactions": {
-			"monitor": {
+			"desk": {
 				"click_rect": [
-					560,
-					488,
-					90,
-					60
+					1,
+					634,
+					1236,
+					263
 				],
 				"events": [
 					{
-						"type": "portrait",
-						"character": "claire",
-						"emotion": "normal",
-						"text": "흠.. 이건 어떻게 작동하는걸까요?"
+						"type": "text",
+						"text": "낡은 책상들이 늘어져있다."
 					},
+					{
+						"type": "text",
+						"text": "소름끼칠 정도로 깨끗하게 정리 되어있다."
+					}
+				]
+			},
+			"window": {
+				"click_rect": [
+					0,
+					203,
+					203,
+					373
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "익숙한 풍경이 어둠속에 잠겨있다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 열고 바깥을 살핀다",
+								"events": [
+									{
+										"type": "text",
+										"text": "아래는 어둠이 짙게 깔려서 높이를 가늠할 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"classroom_02_02": {
+		"background": "res://imgs/backgrounds/classroom_black_board_05.png",
+		"exits": {
+			"down": {
+				"target": "classroom_02",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"black_board": {
+				"click_rect": [
+					591,
+					293,
+					911,
+					367
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "칠판 가득 무언가 적혀있다."
+					},
+					{
+						"type": "text",
+						"text": "가까이에서 보니 멀리선 보이지 않던 문양이 그려져있다."
+					}
+				]
+			},
+			"locker": {
+				"click_rect": [
+					191,
+					732,
+					1532,
+					209
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "교탁과 사물함이 붙어있어 기묘한 위화감을 자아낸다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "두 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "다섯 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "아홉 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"school_hallway_03": {
+		"background": "res://imgs/backgrounds/school_hallway_01.png",
+		"exits": {
+			"up": {
+				"target": "school_hallway_04",
+				"position": [
+					860,
+					30
+				]
+			},
+			"down": {
+				"target": "school_hallway_02",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "classroom_03",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "school_hallway",
+			"event_table": "school_hallway",
+			"chance": 25
+		}
+	},
+	"classroom_03": {
+		"background": "res://imgs/backgrounds/classroom_03.png",
+		"exits": {
+			"up": {
+				"target": "classroom_03_02",
+				"position": [
+					860,
+					30
+				]
+			},
+			"right": {
+				"target": "school_hallway_03",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"desk": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 책상들이 늘어져있다."
+					},
+					{
+						"type": "text",
+						"text": "소름끼칠 정도로 깨끗하게 정리 되어있다."
+					}
+				]
+			},
+			"window": {
+				"click_rect": [
+					0,
+					203,
+					203,
+					373
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "익숙한 풍경이 어둠속에 잠겨있다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 열고 바깥을 살핀다",
+								"events": [
+									{
+										"type": "text",
+										"text": "아래는 어둠이 짙게 깔려서 높이를 가늠할 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"classroom_03_02": {
+		"background": "res://imgs/backgrounds/classroom_black_board_03.png",
+		"exits": {
+			"down": {
+				"target": "classroom_03",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"black_board": {
+				"click_rect": [
+					591,
+					293,
+					911,
+					367
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "칠판 가득 무언가 적혀있다."
+					},
+					{
+						"type": "text",
+						"text": "가까이에서 보니 멀리선 보이지 않던 문양이 그려져있다."
+					}
+				]
+			},
+			"locker": {
+				"click_rect": [
+					191,
+					732,
+					1532,
+					209
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "교탁과 사물함이 붙어있어 기묘한 위화감을 자아낸다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "첫 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "세 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "여덟 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"school_hallway_04": {
+		"background": "res://imgs/backgrounds/school_hallway_01.png",
+		"exits": {
+			"up": {
+				"target": "school_hallway_05",
+				"position": [
+					860,
+					30
+				]
+			},
+			"down": {
+				"target": "school_hallway_03",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "classroom_04",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "school_hallway",
+			"event_table": "school_hallway",
+			"chance": 25
+		}
+	},
+	"classroom_04": {
+		"background": "res://imgs/backgrounds/classroom_03.png",
+		"exits": {
+			"up": {
+				"target": "classroom_04_02",
+				"position": [
+					860,
+					30
+				]
+			},
+			"right": {
+				"target": "school_hallway_04",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"desk": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 책상들이 늘어져있다."
+					},
+					{
+						"type": "text",
+						"text": "소름끼칠 정도로 깨끗하게 정리 되어있다."
+					}
+				]
+			},
+			"window": {
+				"click_rect": [
+					0,
+					203,
+					203,
+					373
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "익숙한 풍경이 어둠속에 잠겨있다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 열고 바깥을 살핀다",
+								"events": [
+									{
+										"type": "text",
+										"text": "아래는 어둠이 짙게 깔려서 높이를 가늠할 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"classroom_04_02": {
+		"background": "res://imgs/backgrounds/classroom_black_board_02.png",
+		"exits": {
+			"down": {
+				"target": "classroom_04",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"black_board": {
+				"click_rect": [
+					591,
+					293,
+					911,
+					367
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "칠판 가득 무언가 적혀있다."
+					}
+				]
+			},
+			"locker": {
+				"click_rect": [
+					191,
+					732,
+					1532,
+					209
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "교탁과 사물함이 붙어있어 기묘한 위화감을 자아낸다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "첫 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "두 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "text",
+										"text": "안에 무언가 있다."
+									},
+									{
+										"type": "item",
+										"item": "beverage_a",
+										"count": 3
+									}
+								]
+							},
+							{
+								"text": "여덟 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"school_hallway_05": {
+		"background": "res://imgs/backgrounds/school_hallway_01.png",
+		"exits": {
+			"up": {
+				"target": "school_stairs_hall_01",
+				"position": [
+					860,
+					30
+				]
+			},
+			"down": {
+				"target": "school_hallway_04",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "classroom_05",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "school_hallway",
+			"event_table": "school_hallway",
+			"chance": 25
+		}
+	},
+	"classroom_05": {
+		"background": "res://imgs/backgrounds/classroom_03.png",
+		"exits": {
+			"up": {
+				"target": "classroom_05_02",
+				"position": [
+					860,
+					30
+				]
+			},
+			"right": {
+				"target": "school_hallway_05",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"desk": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 책상들이 늘어져있다."
+					},
+					{
+						"type": "text",
+						"text": "소름끼칠 정도로 깨끗하게 정리 되어있다."
+					}
+				]
+			},
+			"window": {
+				"click_rect": [
+					0,
+					203,
+					203,
+					373
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "익숙한 풍경이 어둠속에 잠겨있다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 열고 바깥을 살핀다",
+								"events": [
+									{
+										"type": "text",
+										"text": "아래는 어둠이 짙게 깔려서 높이를 가늠할 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"classroom_05_02": {
+		"background": "res://imgs/backgrounds/classroom_black_board_02.png",
+		"exits": {
+			"down": {
+				"target": "classroom_05",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"black_board": {
+				"click_rect": [
+					591,
+					293,
+					911,
+					367
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "칠판 가득 무언가 적혀있다."
+					}
+				]
+			},
+			"locker": {
+				"click_rect": [
+					191,
+					732,
+					1532,
+					209
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "교탁과 사물함이 붙어있어 기묘한 위화감을 자아낸다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "첫 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "두 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "여덟 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "text",
+										"text": "비어 있다."
+									},
+									{
+										"type": "text",
+										"text": "자세히 확인해보니 작은 무언가 반짝이고있다."
+									},
+									{
+										"type": "item",
+										"item": "classroom_keyB"
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"school_stairs_hall_01": {
+		"background": "res://imgs/backgrounds/school_stairs_hall_01.png",
+		"background_by_flag": {
+			"opened_school_stairs_hall_02": "res://imgs/backgrounds/school_stairs_hall_03.png",
+			"opened_school_stairs_hall_04": "res://imgs/backgrounds/school_stairs_hall_02.png"
+		},
+		"exits": {
+			"up": {
+				"target": "school_stairs_hall_02",
+				"position": [
+					1200,
+					30
+				],
+				"locked": true,
+				"open_flag": "opened_school_stairs_hall_02"
+			},
+			"down": {
+				"target": "school_stairs_hall_04",
+				"position": [
+					707,
+					30
+				],
+				"locked": true,
+				"open_flag": "opened_school_stairs_hall_04"
+			},
+			"left": {
+				"target": "school_hallway_06",
+				"position": [
+					60,
+					540
+				]
+			},
+			"right": {
+				"target": "school_hallway_05",
+				"position": [
+					1830,
+					540
+				]
+			}
+		},
+		"interactions": {
+			"school_stairs_hall_02_door": {
+				"click_rect": [
+					1036,
+					219,
+					324,
+					544
+				],
+				"hide_if_flag": "opened_school_stairs_hall_02",
+				"events": [
+					{
+						"type": "text",
+						"text": "철문으로 굳게 닫혀있다. 문을 열을까?"
+					},
+					{
+						"type": "unlock_exit",
+						"direction": "up",
+						"required_item": "",
+						"master_key": "master_key",
+						"consume_required_key": true,
+						"consume_master_key": false,
+						"success_effect": "fade",
+						"required_key_success_text": "{item_name}로 문을 열었다.",
+						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+						"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+					}
+				]
+			},
+			"school_stairs_hall_04_door": {
+				"click_rect": [
+					564,
+					219,
+					324,
+					544
+				],
+				"hide_if_flag": "opened_school_stairs_hall_04",
+				"events": [
+					{
+						"type": "text",
+						"text": "철문으로 굳게 닫혀있다. 문을 열을까?"
+					},
+					{
+						"type": "unlock_exit",
+						"direction": "down",
+						"required_item": "",
+						"master_key": "master_key",
+						"consume_required_key": true,
+						"consume_master_key": false,
+						"success_effect": "fade",
+						"required_key_success_text": "{item_name}로 문을 열었다.",
+						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+						"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+					}
+				]
+			}
+		}
+	},
+	"school_hallway_06": {
+		"background": "res://imgs/backgrounds/school_hallway_01.png",
+		"exits": {
+			"up": {
+				"target": "school_hallway_07",
+				"position": [
+					860,
+					30
+				]
+			},
+			"down": {
+				"target": "school_stairs_hall_01",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "classroom_06",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "school_hallway",
+			"event_table": "school_hallway",
+			"chance": 25
+		}
+	},
+	"classroom_06": {
+		"background": "res://imgs/backgrounds/classroom_02.png",
+		"exits": {
+			"up": {
+				"target": "classroom_06_02",
+				"position": [
+					860,
+					30
+				]
+			},
+			"right": {
+				"target": "school_hallway_06",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"desk": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 책상들이 늘어져있다."
+					},
+					{
+						"type": "text",
+						"text": "소름끼칠 정도로 깨끗하게 정리 되어있다."
+					}
+				]
+			},
+			"window": {
+				"click_rect": [
+					0,
+					203,
+					203,
+					373
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "익숙한 풍경이 어둠속에 잠겨있다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 열고 바깥을 살핀다",
+								"events": [
+									{
+										"type": "text",
+										"text": "아래는 어둠이 짙게 깔려서 높이를 가늠할 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"classroom_06_02": {
+		"background": "res://imgs/backgrounds/classroom_black_board_06.png",
+		"exits": {
+			"down": {
+				"target": "classroom_06",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"monitor_cables": {
+				"click_rect": [
+					925,
+					2,
+					66,
+					661
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "천장으로 여러갈래의 케이블이 연결되어있다."
+					}
+				]
+			},"monitor": {
+				"click_rect": [
+					870,
+					670,
+					163,
+					130
+				],
+				"events": [
 					{
 						"type": "text",
 						"text": "오래된 CRT 모니터다. 화면에는 흐릿한 글자가 떠 있다."
@@ -428,19 +1331,7 @@
 					}
 				]
 			}
-		}
-	},
-	"classroom_3": {
-		"background": "res://imgs/backgrounds/classroom.png",
-		"exits": {
-			"right": {
-				"target": "hallway_3",
-				"position": [
-					1390,
-					540
-				],
-				"move_effect": "enter"
-			}
+
 		}
 	}
 }

@@ -1,6 +1,6 @@
 {
-	"classroom_key": {
-		"name": "교실키",
+	"classroom_keyA": {
+		"name": "교실키A",
 		"description": "낡은 교실 문을 열 수 있는 열쇠다.",
 		"image": "res://imgs/items/classroom_key180x180.png",
 		"width": 1,
@@ -8,6 +8,26 @@
 		"type": "key",
 		"stackable": false,
 		"consumed_on_use": true
+	},
+	"classroom_keyB": {
+		"name": "교실키B",
+		"description": "낡은 교실 문을 열 수 있는 열쇠다.",
+		"image": "res://imgs/items/classroom_key180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "key",
+		"stackable": false,
+		"consumed_on_use": true
+	},
+	"master_key": {
+		"name": "만능키",
+		"description": "이걸로 모든 문을 열 수 있을 거 같다.",
+		"image": "res://imgs/items/master_key180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "key",
+		"stackable": false,
+		"consumed_on_use": false
 	},
 	"cutter_knife": {
 		"name": "커터칼",
@@ -202,16 +222,6 @@
 		"type": "coin",
 		"stackable": true,
 		"max_stack": 100
-	},
-		"master_key": {
-		"name": "만능키",
-		"description": "이걸로 모든 문을 열 수 있을 거 같다.",
-		"image": "res://imgs/items/master_key180x180.png",
-		"width": 1,
-		"height": 1,
-		"type": "key",
-		"stackable": false,
-		"consumed_on_use": false
 	},
 	"old_water_ball": {
 		"name": "오래된 워터볼",

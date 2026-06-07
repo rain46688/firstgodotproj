@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://daggm8grehgo2"
-path="res://.godot/imported/prologue3_1920x1080.png-16892809d3c9b1ff4b008484ba406ebd.ctex"
+uid="uid://d4a7glustxn0a"
+path="res://.godot/imported/school_hallway_03.png-c8d88610fbbdd9f39fbcc15bd175430c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/events/prologue3_1920x1080.png"
-dest_files=["res://.godot/imported/prologue3_1920x1080.png-16892809d3c9b1ff4b008484ba406ebd.ctex"]
+source_file="res://imgs/backgrounds/school_hallway_03.png"
+dest_files=["res://.godot/imported/school_hallway_03.png-c8d88610fbbdd9f39fbcc15bd175430c.ctex"]
 
 [params]
 

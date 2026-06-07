@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dtna5r4qc5tbe"
-path="res://.godot/imported/classroom_monitor.png-a78c47d441a48f0018917720e50d7560.ctex"
+uid="uid://ba62aiyxdhtbe"
+path="res://.godot/imported/prologue_01.png-a007edf1686dc768d9a2662917380654.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/backgrounds/classroom_monitor.png"
-dest_files=["res://.godot/imported/classroom_monitor.png-a78c47d441a48f0018917720e50d7560.ctex"]
+source_file="res://imgs/events/prologue_01.png"
+dest_files=["res://.godot/imported/prologue_01.png-a007edf1686dc768d9a2662917380654.ctex"]
 
 [params]
 

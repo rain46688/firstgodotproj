@@ -1,6 +1,6 @@
 {
-	"prologue_part_1": {
-		"start_flag": "prologue_part_1_done",
+	"prologue_part_01": {
+		"start_flag": "prologue_part_01_done",
 		"events": [
 			{
 				"type": "hide_game_ui"
@@ -19,7 +19,7 @@
 			},
 			{
 				"type": "background",
-				"path": "res://imgs/events/prologue1_1920x1080.png"
+				"path": "res://imgs/events/prologue_01.png"
 			},
 			{
 				"type": "camera_zoom",
@@ -85,12 +85,12 @@
 			},
 			{
 				"type": "flag",
-				"flag": "prologue_part_1_done"
+				"flag": "prologue_part_01_done"
 			}
 		]
 	},
-	"prologue_part_2": {
-		"start_flag": "prologue_part_2_done",
+	"prologue_part_02": {
+		"start_flag": "prologue_part_02_done",
 		"events": [
 			{
 				"type": "fade"
@@ -226,8 +226,8 @@
 			}
 		]
 	},
-	"prologue_part_3": {
-		"start_flag": "prologue_part_3_done",
+	"prologue_part_03": {
+		"start_flag": "prologue_part_03_done",
 		"events": [
 			{
 				"type": "hide_game_ui"
@@ -246,7 +246,7 @@
 			},
 			{
 				"type": "background",
-				"path": "res://imgs/events/prologue2_1920x1080.png"
+				"path": "res://imgs/events/prologue_02.png"
 			},
 			{
 				"type": "story_dialogue",
@@ -461,7 +461,7 @@
 			},
 			{
 				"type": "background",
-				"path": "res://imgs/events/prologue3_1920x1080.png"
+				"path": "res://imgs/events/prologue_03.png"
 			},
 			{
 				"type": "camera_zoom",
@@ -601,14 +601,14 @@
 			},
 			{
 				"type": "change_room",
-				"room": "classroom_1"
+				"room": "classroom_01"
 			},
 			{
 				"type": "show_game_ui"
 			},
 			{
 				"type": "flag",
-				"flag": "prologue_part_3_done"
+				"flag": "prologue_part_03_done"
 			},
 			{
 				"type": "auto_save",
@@ -618,8 +618,8 @@
 			}
 		]
 	},
-	"first_enter_classroom_2": {
-		"start_flag": "story_first_enter_classroom_2_done",
+	"first_enter_classroom_02": {
+		"start_flag": "story_first_enter_classroom_02_done",
 		"events": [
 			{
 				"type": "hide_game_ui"
@@ -722,7 +722,7 @@
 			},
 			{
 				"type": "flag",
-				"flag": "story_first_enter_classroom_2_done"
+				"flag": "story_first_enter_classroom_02_done"
 			}
 		]
 	}
