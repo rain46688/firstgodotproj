@@ -1227,6 +1227,16 @@
 					30
 				]
 			},
+			"down": {
+				"target": "classroom_06_03",
+				"position": [
+					900,
+					950
+				],
+				"move_effect": "enter",
+				"locked": true,
+				"open_flag": "opened_classroom_06_03"
+			},
 			"right": {
 				"target": "school_hallway_06",
 				"position": [
@@ -1314,7 +1324,8 @@
 						"text": "천장으로 여러갈래의 케이블이 연결되어있다."
 					}
 				]
-			},"monitor": {
+			},
+			"monitor": {
 				"click_rect": [
 					870,
 					670,
@@ -1323,15 +1334,117 @@
 				],
 				"events": [
 					{
+						"type": "sound",
+						"path": "res://sounds/save_ui_open.mp3",
+						"volume_db": -5,
+						"wait": false
+					},
+					{
 						"type": "text",
 						"text": "오래된 CRT 모니터다. 화면에는 흐릿한 글자가 떠 있다."
 					},
 					{
-						"type": "save"
+						"type": "input_prompt",
+						"message": "패스워드를 입력하시겠습니까?",
+						"placeholder": "0000",
+						"allow_letters": false,
+						"allow_numbers": true,
+						"min_length": 4,
+						"max_length": 4,
+						"answer": "8775",
+						"success_events": [
+							{
+								"type": "sound",
+								"path": "res://sounds/save_complete.mp3",
+								"volume_db": -5,
+								"wait": false
+							},
+							{
+								"type": "text",
+								"text": "승인되었습니다."
+							},
+							{
+								"type": "flag",
+								"flag": "opened_classroom_06_03"
+							},
+							{
+								"type": "sound",
+								"path": "res://sounds/ladder_down.mp3",
+								"volume_db": -5,
+								"wait": false
+							},
+							{
+								"type": "text",
+								"text": "뒤에서 무언가 소리가 났다."
+							}
+						],
+						"fail_events": [
+							{
+								"type": "sound",
+								"path": "res://sounds/save_ui_close.mp3",
+								"volume_db": -5,
+								"wait": false
+							},
+							{
+								"type": "text",
+								"text": "거절되었습니다."
+							}
+						]
+					}
+				]
+			},
+			"classroom_06_document": {
+				"click_rect": [
+					1500,
+					535,
+					70,
+					105
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/documents/school_document_01_01.png",
+						"next_pattern": "res://imgs/documents/school_document_01_%02d.png",
+						"start_page": 1,
+						"sound": "res://sounds/paper.mp3",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "text",
+						"text": "종이를 위로 넘겨보니 무언가 붙어있다."
+					},
+					{
+						"type": "document_popup",
+						"path": "res://imgs/documents/school_document_02_01.png",
+						"next_pattern": "res://imgs/documents/school_document_01_%02d.png",
+						"start_page": 1,
+						"sound": "res://sounds/paper.mp3",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
 					}
 				]
 			}
-
 		}
+	},
+	"classroom_06_03": {
+		"background": "res://imgs/backgrounds/classroom_ladder_01.png",
+		"exits": {
+			"up": {
+				"target": "classroom_16",
+				"position": [
+					860,
+					30
+				]
+			},
+			"down": {
+				"target": "classroom_06",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {}
 	}
 }

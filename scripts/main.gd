@@ -159,6 +159,25 @@ var story_event_should_stop = false
 # 현재 room 조건 스토리 체인을 검사 중인지 여부
 var is_checking_room_story_chain = false
 
+# 문서 이미지 팝업 UI
+var document_popup_layer = null
+var document_popup_dim = null
+var document_popup_image = null
+var is_document_popup_open = false
+
+# 입력 프롬프트 UI
+var input_prompt_layer = null
+var input_prompt_panel = null
+var input_prompt_message_label = null
+var input_prompt_line_edit = null
+var input_prompt_help_label = null
+
+var is_input_prompt_open = false
+var input_prompt_allow_letters = true
+var input_prompt_allow_numbers = true
+var input_prompt_max_length = 0
+var is_filtering_input_prompt_text = false
+
 # 디버그 관련 상수 변수 모음
 # false
 # true
@@ -2710,6 +2729,19 @@ func run_single_event(event):
 
 	if event_type == "text":
 		await show_dialogue(event.get("text", ""))
+		
+	elif event_type == "sound":
+		await play_story_sound(
+			event.get("path", ""),
+			float(event.get("volume_db", 0.0)),
+			bool(event.get("wait", false))
+		)	
+	
+	elif event_type == "document_popup":
+		await run_document_popup_event(event)
+		
+	elif event_type == "input_prompt":
+		await run_input_prompt_event(event)
 
 	elif event_type == "portrait":
 		await show_npc_dialogue(
@@ -2720,6 +2752,9 @@ func run_single_event(event):
 
 	elif event_type == "save":
 		await run_save_point()
+	
+	elif event_type == "save_to_slot":
+		await run_event_save_to_slot(event)	
 
 	elif event_type == "item":
 		var item_id = event.get("item", "")
@@ -3494,7 +3529,6 @@ func setup_story_color_overlay():
 	story_color_overlay.z_index = 19
 
 	add_child(story_color_overlay)
-
 # 스토리 이벤트 대기 함수
 func run_story_wait_event(event):
 	var wait_time = float(event.get("time", 1.0))
@@ -3503,7 +3537,6 @@ func run_story_wait_event(event):
 		return
 
 	await get_tree().create_timer(wait_time).timeout
-
 # 스토리 단일색 화면 표시 함수
 func run_story_screen_color_event(event):
 	setup_story_color_overlay()
@@ -3532,7 +3565,6 @@ func run_story_screen_color_event(event):
 
 	if should_wait:
 		await tween.finished
-
 # 스토리 단일색 화면 제거 함수
 func run_story_screen_color_clear_event(event):
 	setup_story_color_overlay()
@@ -3557,21 +3589,18 @@ func run_story_screen_color_clear_event(event):
 
 	if should_wait:
 		await tween.finished
-
 # 스토리 카메라 트윈 정리 함수
 func kill_story_camera_tween():
 	if story_camera_tween != null and story_camera_tween.is_valid():
 		story_camera_tween.kill()
 
 	story_camera_tween = null
-
 # 특정 배경 좌표가 화면 중앙에 오도록 background.position 계산
 func get_story_camera_background_position(target_point, zoom_value):
 	var viewport_size = get_viewport_rect().size
 	var screen_center = viewport_size / 2.0
 
 	return screen_center - target_point * zoom_value
-
 # 스토리 카메라 이동/줌 공통 함수
 func tween_story_camera_to(target_point, zoom_value, duration, should_wait = true):
 	kill_story_camera_tween()
@@ -3606,7 +3635,6 @@ func tween_story_camera_to(target_point, zoom_value, duration, should_wait = tru
 
 	if should_wait:
 		await story_camera_tween.finished
-
 # 스토리 카메라 줌 이벤트
 func run_story_camera_zoom_event(event):
 	var target_point = Vector2(
@@ -3624,7 +3652,6 @@ func run_story_camera_zoom_event(event):
 		duration,
 		should_wait
 	)
-
 # 스토리 카메라 이동 이벤트
 func run_story_camera_pan_event(event):
 	var target_point = Vector2(
@@ -3643,7 +3670,6 @@ func run_story_camera_pan_event(event):
 		duration,
 		should_wait
 	)
-
 # 스토리 카메라 원위치 이벤트
 func run_story_camera_reset_event(event):
 	var duration = float(event.get("duration", 1.0))
@@ -3675,6 +3701,478 @@ func run_story_camera_reset_event(event):
 
 	if should_wait:
 		await story_camera_tween.finished
+
+# ============================================================
+# 문서 팝업 함수 모음
+# ============================================================
+
+# 문서 팝업 UI 생성 함수
+func setup_document_popup_ui():
+	if document_popup_layer != null:
+		return
+
+	document_popup_layer = Control.new()
+	document_popup_layer.name = "DocumentPopupLayer"
+	document_popup_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
+	document_popup_layer.offset_left = 0
+	document_popup_layer.offset_top = 0
+	document_popup_layer.offset_right = 0
+	document_popup_layer.offset_bottom = 0
+	document_popup_layer.visible = false
+
+	# 인벤토리보다 위, Fade보다 아래
+	document_popup_layer.z_index = 200
+	document_popup_layer.mouse_filter = Control.MOUSE_FILTER_STOP
+
+	document_popup_dim = ColorRect.new()
+	document_popup_dim.name = "DocumentDim"
+	document_popup_dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	document_popup_dim.offset_left = 0
+	document_popup_dim.offset_top = 0
+	document_popup_dim.offset_right = 0
+	document_popup_dim.offset_bottom = 0
+	document_popup_dim.color = Color(0, 0, 0, 0.72)
+	document_popup_dim.mouse_filter = Control.MOUSE_FILTER_STOP
+
+	document_popup_image = TextureRect.new()
+	document_popup_image.name = "DocumentImage"
+
+	# 1920x1080 기준 중앙 배치.
+	# 문서 이미지가 너무 크면 이 영역 안에서 비율 유지로 표시된다.
+	document_popup_image.position = Vector2(460, 90)
+	document_popup_image.size = Vector2(1000, 900)
+	document_popup_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	document_popup_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	document_popup_image.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	document_popup_layer.add_child(document_popup_dim)
+	document_popup_layer.add_child(document_popup_image)
+
+	add_child(document_popup_layer)
+# 문서 팝업 사운드 재생 함수
+func play_document_popup_sound(event):
+	var sound_path = str(event.get("sound", ""))
+
+	if sound_path == "":
+		return
+
+	await play_story_sound(
+		sound_path,
+		float(event.get("sound_volume_db", 0.0)),
+		false
+	)
+# 문서 이미지 경로가 실제로 존재하는지 확인하는 함수
+func document_image_exists(path):
+	if path == "":
+		return false
+
+	return ResourceLoader.exists(path)
+# 문서 팝업 이미지 표시 함수
+func set_document_popup_image(path):
+	if not document_image_exists(path):
+		push_warning("문서 이미지가 없음: " + str(path))
+		return false
+
+	var texture = load(path)
+
+	if texture == null:
+		push_warning("문서 이미지 로드 실패: " + str(path))
+		return false
+
+	document_popup_image.texture = texture
+	return true
+# next_pattern과 page 번호로 문서 이미지 경로 만들기
+func get_document_popup_page_path(pattern, page):
+	if pattern == "":
+		return ""
+
+	# 예:
+	# "res://imgs/documents/school_document_01_%02d.png"
+	# page 2 -> school_document_01_02.png
+	return pattern % int(page)
+# 다음 문서 페이지 경로 가져오기
+func get_next_document_popup_page_path(event, next_page):
+	var pattern = str(event.get("next_pattern", ""))
+
+	if pattern == "":
+		return ""
+
+	var next_path = get_document_popup_page_path(pattern, next_page)
+
+	if not document_image_exists(next_path):
+		return ""
+
+	return next_path
+# 문서 팝업 이벤트 실행 함수
+func run_document_popup_event(event):
+	setup_document_popup_ui()
+
+	var first_path = str(event.get("path", ""))
+	var current_page = int(event.get("start_page", 1))
+	var close_on_last_page = bool(event.get("close_on_last_page", true))
+
+	if first_path == "":
+		push_error("document_popup 이벤트에 path 값이 없음")
+		return
+
+	if not set_document_popup_image(first_path):
+		return
+
+	is_document_popup_open = true
+	document_popup_layer.visible = true
+
+	# 문서를 처음 열 때 사운드 재생
+	await play_document_popup_sound(event)
+
+	# 방금 대사를 넘긴 Space/마우스 입력이 남아있어
+	# 문서가 즉시 넘어가는 것을 방지하기 위해 한 프레임 대기
+	await get_tree().process_frame
+
+	while is_document_popup_open:
+		await get_tree().process_frame
+
+		# ESC로 문서 닫기
+		if Input.is_action_just_pressed("esc") or Input.is_action_just_pressed("ui_cancel"):
+			await play_document_popup_sound(event)
+			break
+
+		# Space 또는 마우스 왼쪽 클릭으로 다음 장
+		if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("mouse_left"):
+			var next_page = current_page + 1
+			var next_path = get_next_document_popup_page_path(event, next_page)
+
+			# 다음 페이지가 있으면 넘김
+			if next_path != "":
+				current_page = next_page
+				await play_document_popup_sound(event)
+				set_document_popup_image(next_path)
+				continue
+
+			# 다음 페이지가 없고 close_on_last_page가 true면 닫기
+			if close_on_last_page:
+				await play_document_popup_sound(event)
+				break
+
+	# 팝업 종료
+	document_popup_layer.visible = false
+	document_popup_image.texture = null
+	is_document_popup_open = false
+
+# ============================================================
+# 입력 프롬프트 함수 모음
+# ============================================================
+
+# 입력 프롬프트 UI 생성 함수
+func setup_input_prompt_ui():
+	if input_prompt_layer != null:
+		return
+
+	input_prompt_layer = Control.new()
+	input_prompt_layer.name = "InputPromptLayer"
+	input_prompt_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
+	input_prompt_layer.offset_left = 0
+	input_prompt_layer.offset_top = 0
+	input_prompt_layer.offset_right = 0
+	input_prompt_layer.offset_bottom = 0
+	input_prompt_layer.visible = false
+	input_prompt_layer.z_index = 210
+	input_prompt_layer.mouse_filter = Control.MOUSE_FILTER_STOP
+
+	var dim = ColorRect.new()
+	dim.name = "InputPromptDim"
+	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.offset_left = 0
+	dim.offset_top = 0
+	dim.offset_right = 0
+	dim.offset_bottom = 0
+	dim.color = Color(0, 0, 0, 0.72)
+	dim.mouse_filter = Control.MOUSE_FILTER_STOP
+
+	input_prompt_panel = Panel.new()
+	input_prompt_panel.name = "InputPromptPanel"
+	input_prompt_panel.position = Vector2(560, 350)
+	input_prompt_panel.size = Vector2(800, 360)
+	input_prompt_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+
+	var panel_style = StyleBoxFlat.new()
+	panel_style.bg_color = Color(0.02, 0.02, 0.02, 0.92)
+	panel_style.border_color = Color(0.75, 0.75, 0.75, 0.45)
+	panel_style.set_border_width_all(2)
+	panel_style.set_corner_radius_all(8)
+	panel_style.content_margin_left = 24
+	panel_style.content_margin_right = 24
+	panel_style.content_margin_top = 24
+	panel_style.content_margin_bottom = 24
+	input_prompt_panel.add_theme_stylebox_override("panel", panel_style)
+
+	var font = load("res://fonts/x12y12pxMaruMinyaHangul.ttf")
+
+	input_prompt_message_label = Label.new()
+	input_prompt_message_label.name = "MessageLabel"
+	input_prompt_message_label.position = Vector2(40, 36)
+	input_prompt_message_label.size = Vector2(720, 80)
+	input_prompt_message_label.text = ""
+	input_prompt_message_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	input_prompt_message_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	input_prompt_message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	input_prompt_message_label.add_theme_color_override("font_color", Color("#d8d0c8"))
+	input_prompt_message_label.add_theme_font_override("font", font)
+	input_prompt_message_label.add_theme_font_size_override("font_size", 28)
+
+	input_prompt_line_edit = LineEdit.new()
+	input_prompt_line_edit.name = "InputLineEdit"
+	input_prompt_line_edit.position = Vector2(100, 145)
+	input_prompt_line_edit.size = Vector2(600, 54)
+	input_prompt_line_edit.placeholder_text = ""
+	input_prompt_line_edit.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	input_prompt_line_edit.clear_button_enabled = true
+	input_prompt_line_edit.add_theme_font_override("font", font)
+	input_prompt_line_edit.add_theme_font_size_override("font_size", 28)
+
+	input_prompt_help_label = Label.new()
+	input_prompt_help_label.name = "HelpLabel"
+	input_prompt_help_label.position = Vector2(40, 230)
+	input_prompt_help_label.size = Vector2(720, 80)
+	input_prompt_help_label.text = "Enter/Space : 확인    ESC : 취소"
+	input_prompt_help_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	input_prompt_help_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	input_prompt_help_label.add_theme_color_override("font_color", Color("#a8a0a0"))
+	input_prompt_help_label.add_theme_font_override("font", font)
+	input_prompt_help_label.add_theme_font_size_override("font_size", 22)
+
+	input_prompt_panel.add_child(input_prompt_message_label)
+	input_prompt_panel.add_child(input_prompt_line_edit)
+	input_prompt_panel.add_child(input_prompt_help_label)
+
+	input_prompt_layer.add_child(dim)
+	input_prompt_layer.add_child(input_prompt_panel)
+
+	add_child(input_prompt_layer)
+
+	if not input_prompt_line_edit.text_changed.is_connected(_on_input_prompt_text_changed):
+		input_prompt_line_edit.text_changed.connect(_on_input_prompt_text_changed)
+# 입력 프롬프트에서 허용되는 글자인지 확인하는 함수
+func is_allowed_input_prompt_character(character_text):
+	if character_text == "":
+		return false
+
+	var code = character_text.unicode_at(0)
+
+	# 숫자 0~9
+	if input_prompt_allow_numbers:
+		if code >= 48 and code <= 57:
+			return true
+
+	# 영문 A~Z / a~z
+	if input_prompt_allow_letters:
+		if code >= 65 and code <= 90:
+			return true
+
+		if code >= 97 and code <= 122:
+			return true
+
+	return false
+# 입력 프롬프트 문자열 필터링 함수
+func filter_input_prompt_text(text):
+	var result = ""
+
+	for i in range(text.length()):
+		var character_text = text.substr(i, 1)
+
+		if is_allowed_input_prompt_character(character_text):
+			result += character_text
+
+		if input_prompt_max_length > 0 and result.length() >= input_prompt_max_length:
+			break
+
+	return result
+# 입력값이 변경될 때 허용 문자만 남기는 함수
+func _on_input_prompt_text_changed(new_text):
+	if is_filtering_input_prompt_text:
+		return
+
+	var filtered_text = filter_input_prompt_text(new_text)
+
+	if filtered_text != new_text:
+		is_filtering_input_prompt_text = true
+		input_prompt_line_edit.text = filtered_text
+		input_prompt_line_edit.caret_column = filtered_text.length()
+		is_filtering_input_prompt_text = false
+
+	# 입력 프롬프트가 열린 상태에서 실제 입력 변화가 있을 때 효과음 재생
+	if is_input_prompt_open:
+		if choice_sound != null:
+			choice_sound.play()
+# 입력 프롬프트 표시 함수
+func show_input_prompt(event):
+	setup_input_prompt_ui()
+
+	input_prompt_allow_letters = bool(event.get("allow_letters", true))
+	input_prompt_allow_numbers = bool(event.get("allow_numbers", true))
+	input_prompt_max_length = int(event.get("max_length", 0))
+
+	var min_length = int(event.get("min_length", 0))
+	var message = str(event.get("message", "값을 입력하세요."))
+	var placeholder = str(event.get("placeholder", ""))
+
+	input_prompt_message_label.text = message
+	is_filtering_input_prompt_text = true
+	input_prompt_line_edit.text = ""
+	is_filtering_input_prompt_text = false
+	input_prompt_line_edit.placeholder_text = placeholder
+	input_prompt_line_edit.max_length = input_prompt_max_length
+	input_prompt_line_edit.secret = bool(event.get("secret", false))
+
+	input_prompt_help_label.text = make_input_prompt_help_text(event)
+
+	input_prompt_layer.visible = true
+	is_input_prompt_open = true
+
+	input_prompt_line_edit.grab_focus()
+
+	# 직전 Space/마우스 입력이 바로 확인으로 처리되는 것 방지
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	while is_input_prompt_open:
+		await get_tree().process_frame
+
+		if Input.is_action_just_pressed("esc") or Input.is_action_just_pressed("ui_cancel"):
+			is_input_prompt_open = false
+			input_prompt_layer.visible = false
+
+			return {
+				"confirmed": false,
+				"text": ""
+			}
+
+		if Input.is_action_just_pressed("ui_accept"):
+			var input_text = input_prompt_line_edit.text.strip_edges()
+
+			#if input_text.length() < min_length:
+				#input_prompt_help_label.text = "최소 " + str(min_length) + "글자 이상 입력해야 한다."
+				#continue
+
+			is_input_prompt_open = false
+			input_prompt_layer.visible = false
+
+			return {
+				"confirmed": true,
+				"text": input_text
+			}
+
+	input_prompt_layer.visible = false
+
+	return {
+		"confirmed": false,
+		"text": ""
+	}
+# 입력 프롬프트 도움말 텍스트 생성 함수
+func make_input_prompt_help_text(_event):
+	#var allow_letters = bool(event.get("allow_letters", true))
+	#var allow_numbers = bool(event.get("allow_numbers", true))
+	#var min_length = int(event.get("min_length", 0))
+	#var max_length = int(event.get("max_length", 0))
+
+	#var type_text = ""
+#
+	#if allow_letters and allow_numbers:
+		#type_text = "영문/숫자"
+	#elif allow_letters:
+		#type_text = "영문"
+	#elif allow_numbers:
+		#type_text = "숫자"
+	#else:
+		#type_text = "입력 불가"
+#
+	#var length_text = ""
+#
+	#if min_length > 0 and max_length > 0:
+		#length_text = " / " + str(min_length) + "~" + str(max_length) + "글자"
+	#elif min_length > 0:
+		#length_text = " / 최소 " + str(min_length) + "글자"
+	#elif max_length > 0:
+		#length_text = " / 최대 " + str(max_length) + "글자"
+
+	return "\nEnter/Space : 확인"
+# 입력값 비교용 정규화 함수
+func normalize_input_prompt_answer(text, case_sensitive):
+	var result = str(text).strip_edges()
+
+	if not case_sensitive:
+		result = result.to_lower()
+
+	return result
+# 입력값이 정답인지 확인하는 함수
+func is_input_prompt_answer_correct(event, input_text):
+	var case_sensitive = bool(event.get("case_sensitive", false))
+	var normalized_input = normalize_input_prompt_answer(input_text, case_sensitive)
+
+	# answers 배열이 있으면 여러 정답 허용
+	if event.has("answers"):
+		var answers = event["answers"]
+
+		if typeof(answers) == TYPE_ARRAY:
+			for answer_value in answers:
+				var normalized_array_answer = normalize_input_prompt_answer(
+					str(answer_value),
+					case_sensitive
+				)
+
+				if normalized_input == normalized_array_answer:
+					return true
+
+			return false
+
+	# answer 하나만 있는 경우
+	var single_answer = str(event.get("answer", ""))
+
+	# answer가 비어 있으면 입력이 유효한 것만으로 성공 처리
+	if single_answer == "":
+		return true
+
+	var normalized_single_answer = normalize_input_prompt_answer(
+		single_answer,
+		case_sensitive
+	)
+
+	return normalized_input == normalized_single_answer
+# input_prompt 이벤트 실행 함수
+func run_input_prompt_event(event):
+	var result = await show_input_prompt(event)
+
+	if not bool(result.get("confirmed", false)):
+		var cancel_events = event.get("cancel_events", [])
+
+		if typeof(cancel_events) == TYPE_ARRAY and cancel_events.size() > 0:
+			await run_events(cancel_events)
+
+		return
+
+	var input_text = str(result.get("text", ""))
+	var is_correct = is_input_prompt_answer_correct(event, input_text)
+
+	if is_correct:
+		var success_flag = str(event.get("success_flag", ""))
+
+		if success_flag != "":
+			set_flag(success_flag)
+
+		var success_events = event.get("success_events", [])
+
+		if typeof(success_events) == TYPE_ARRAY and success_events.size() > 0:
+			await run_events(success_events)
+
+	else:
+		var fail_flag = str(event.get("fail_flag", ""))
+
+		if fail_flag != "":
+			set_flag(fail_flag)
+
+		var fail_events = event.get("fail_events", [])
+
+		if typeof(fail_events) == TYPE_ARRAY and fail_events.size() > 0:
+			await run_events(fail_events)
 
 # ============================================================
 # 기타 함수 모음
@@ -6939,6 +7437,44 @@ func restore_equipped_weapon(saved_slot):
 		if inventory_item.has("slot") and int(inventory_item["slot"]) == int(saved_slot):
 			equipped_weapon = inventory_item
 			return
+# JSON 이벤트에서 바로 저장하는 함수
+func run_event_save_to_slot(event):
+	var slot_index = int(event.get("slot", 1))
+
+	var success_text = str(event.get("success_text", "저장 완료."))
+	var fail_text = str(event.get("fail_text", "저장에 실패했다."))
+
+	var success_sound_path = str(event.get("success_sound", ""))
+	var fail_sound_path = str(event.get("fail_sound", ""))
+
+	var sound_volume_db = float(event.get("sound_volume_db", 0.0))
+	var wait_sound = bool(event.get("wait_sound", false))
+
+	var success = save_game(slot_index)
+
+	if success:
+		if success_sound_path != "":
+			await play_story_sound(
+				success_sound_path,
+				sound_volume_db,
+				wait_sound
+			)
+		elif save_complete_sound != null:
+			save_complete_sound.play()
+
+		if success_text != "":
+			await show_dialogue(success_text)
+
+	else:
+		if fail_sound_path != "":
+			await play_story_sound(
+				fail_sound_path,
+				sound_volume_db,
+				wait_sound
+			)
+
+		if fail_text != "":
+			await show_dialogue(fail_text)
 
 # ============================================================
 # 랜덤 인카운터 함수 모음

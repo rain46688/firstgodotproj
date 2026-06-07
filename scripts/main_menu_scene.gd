@@ -108,7 +108,6 @@ var can_play_focus_sound = false
 # 씬 전환 중 중복 입력 방지
 var is_transitioning = false
 
-
 func _ready():
 	# UI 기본 텍스트 설정
 	setup_texts()
