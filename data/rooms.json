@@ -467,13 +467,14 @@
 			}
 		},
 		"interactions": {
-			"black_board": {
+			"black_board_before_claire": {
 				"click_rect": [
 					591,
 					293,
 					911,
 					367
 				],
+				"required_flag_missing": "story_first_enter_classroom_08_done",
 				"events": [
 					{
 						"type": "text",
@@ -482,6 +483,44 @@
 					{
 						"type": "text",
 						"text": "가까이에서 보니 멀리선 보이지 않던 문양이 그려져있다."
+					}
+				]
+			},
+			"black_board_after_claire": {
+				"click_rect": [
+					591,
+					293,
+					911,
+					367
+				],
+				"required_flag": "story_first_enter_classroom_08_done",
+				"required_flag_missing": "story_first_enter_classroom_06_03_done",
+				"events": [
+					{
+						"type": "portrait",
+						"character": "claire",
+						"emotion": "normal",
+						"text": "맞는 문양을 찾아야 되는 거 같은데 X 표시된 것들은 제외라는 의미겠지?"
+					},
+					{
+						"type": "text",
+						"name": "나",
+						"text": "아마도 그럴 거 같아, 다른 교실을 다시 확인해 보자."
+					}
+				]
+			},
+			"black_board_after_claire_died": {
+				"click_rect": [
+					591,
+					293,
+					911,
+					367
+				],
+				"required_flag": "story_first_enter_classroom_06_03_done",
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
 					}
 				]
 			},
@@ -501,7 +540,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "두 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다",
 								"events": [
 									{
 										"type": "text",
@@ -510,7 +549,7 @@
 								]
 							},
 							{
-								"text": "다섯 번째 사물함을 연다",
+								"text": "세 번째 사물함을 연다",
 								"events": [
 									{
 										"type": "text",
@@ -519,7 +558,7 @@
 								]
 							},
 							{
-								"text": "아홉 번째 사물함을 연다",
+								"text": "여덟 번째 사물함을 연다",
 								"events": [
 									{
 										"type": "text",
@@ -531,13 +570,14 @@
 					}
 				]
 			},
-			"classroom_document": {
+			"classroom_document_before_claire": {
 				"click_rect": [
 					1500,
 					535,
 					70,
 					105
 				],
+				"required_flag_missing": "story_first_enter_classroom_08_done",
 				"events": [
 					{
 						"type": "document_popup",
@@ -553,11 +593,60 @@
 					},
 					{
 						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_03_01.png",
+						"path": "res://imgs/documents/school_document_04_01.png",
 						"start_page": 1,
 						"sound": "res://sounds/paper.mp3",
 						"sound_volume_db": 10,
 						"close_on_last_page": true
+					}
+				]
+			},
+			"classroom_document_after_claire": {
+				"click_rect": [
+					1500,
+					535,
+					70,
+					105
+				],
+				"required_flag": "story_first_enter_classroom_08_done",
+				"required_flag_missing": "story_first_enter_classroom_06_03_done",
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/documents/school_document_01_01.png",
+						"start_page": 1,
+						"sound": "res://sounds/paper.mp3",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "portrait",
+						"character": "claire",
+						"emotion": "normal",
+						"text": "이거 봐봐 X 표시의 위치가 달라."
+					},
+					{
+						"type": "document_popup",
+						"path": "res://imgs/documents/school_document_04_01.png",
+						"start_page": 1,
+						"sound": "res://sounds/paper.mp3",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					}
+				]
+			},
+			"classroom_document_after_claire_died": {
+				"click_rect": [
+					1500,
+					535,
+					70,
+					105
+				],
+				"required_flag": "story_first_enter_classroom_06_03_done",
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
 					}
 				]
 			}
@@ -679,13 +768,14 @@
 			}
 		},
 		"interactions": {
-			"black_board": {
+			"black_board_before_claire": {
 				"click_rect": [
 					591,
 					293,
 					911,
 					367
 				],
+				"required_flag_missing": "story_first_enter_classroom_08_done",
 				"events": [
 					{
 						"type": "text",
@@ -694,6 +784,55 @@
 					{
 						"type": "text",
 						"text": "가까이에서 보니 멀리선 보이지 않던 문양이 그려져있다."
+					}
+				]
+			},
+			"black_board_after_claire": {
+				"click_rect": [
+					591,
+					293,
+					911,
+					367
+				],
+				"required_flag": "story_first_enter_classroom_08_done",
+				"required_flag_missing": "story_first_enter_classroom_06_03_done",
+				"events": [
+					{
+						"type": "portrait",
+						"character": "claire",
+						"emotion": "normal",
+						"text": "이런 거 특기야?"
+					},
+					{
+						"type": "text",
+						"name": "나",
+						"text": "뭐... 잘한다기 보단 이런 퍼즐류는 게임에서 많이 해봤지."
+					},
+					{
+						"type": "portrait",
+						"character": "claire",
+						"emotion": "annoyed",
+						"text": "참나, 이 상황에 뭔 게임..."
+					},
+					{
+						"type": "text",
+						"name": "나",
+						"text": "뭔가 알거같아, 특정 교실에 있는 문양으로 봐서는 이 수수께끼를 풀어야만 여기서 나갈 수 있을 거 같아."
+					}
+				]
+			},
+			"black_board_after_claire_died": {
+				"click_rect": [
+					591,
+					293,
+					911,
+					367
+				],
+				"required_flag": "story_first_enter_classroom_06_03_done",
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
 					}
 				]
 			},
@@ -743,13 +882,14 @@
 					}
 				]
 			},
-			"classroom_document": {
+			"classroom_document_before_claire": {
 				"click_rect": [
 					1500,
 					535,
 					70,
 					105
 				],
+				"required_flag_missing": "story_first_enter_classroom_08_done",
 				"events": [
 					{
 						"type": "document_popup",
@@ -770,6 +910,55 @@
 						"sound": "res://sounds/paper.mp3",
 						"sound_volume_db": 10,
 						"close_on_last_page": true
+					}
+				]
+			},
+			"classroom_document_after_claire": {
+				"click_rect": [
+					1500,
+					535,
+					70,
+					105
+				],
+				"required_flag": "story_first_enter_classroom_08_done",
+				"required_flag_missing": "story_first_enter_classroom_06_03_done",
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/documents/school_document_01_01.png",
+						"start_page": 1,
+						"sound": "res://sounds/paper.mp3",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "portrait",
+						"character": "claire",
+						"emotion": "normal",
+						"text": "이거 봐봐 X 표시의 위치가 달라."
+					},
+					{
+						"type": "document_popup",
+						"path": "res://imgs/documents/school_document_04_01.png",
+						"start_page": 1,
+						"sound": "res://sounds/paper.mp3",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					}
+				]
+			},
+			"classroom_document_after_claire_died": {
+				"click_rect": [
+					1500,
+					535,
+					70,
+					105
+				],
+				"required_flag": "story_first_enter_classroom_06_03_done",
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
 					}
 				]
 			}
@@ -1172,6 +1361,11 @@
 				"event": "first_enter_school_stairs_hall_01_after_classroom_08_event",
 				"required_flag": "story_first_enter_classroom_08_done",
 				"required_flag_missing": "first_enter_school_stairs_hall_01_after_classroom_08_event_done"
+			},
+			{
+				"event": "defeated_tutorial_candle_student",
+				"required_flag": "defeated_candle_student_tutorial",
+				"required_flag_missing": "story_defeated_tutorial_candle_student_done"
 			}
 		],
 		"exits": {
@@ -1381,6 +1575,18 @@
 	},
 	"classroom_06_02": {
 		"background": "res://imgs/backgrounds/classroom_black_board_06.png",
+		"enter_stories": [
+			{
+				"event": "first_enter_classroom_06_03",
+				"required_flag": "opened_classroom_06_03",
+				"required_flag_missing": "story_first_enter_classroom_06_03_done"
+			},
+			{
+				"event": "defeated_tutorial_combined_candle_students",
+				"required_flag": "defeated_combined_candle_students_tutorial",
+				"required_flag_missing": "story_defeated_tutorial_combined_candle_students_done"
+			}
+		],
 		"exits": {
 			"down": {
 				"target": "classroom_06",
@@ -1412,6 +1618,8 @@
 					163,
 					130
 				],
+				"required_flag": "story_first_enter_classroom_08_done",
+				"required_flag_missing": "story_first_enter_classroom_06_03_done",
 				"events": [
 					{
 						"type": "sound",
@@ -1448,6 +1656,10 @@
 								"flag": "opened_classroom_06_03"
 							},
 							{
+								"type": "flag",
+								"flag": "opened_school_stairs_hall_02"
+							},
+							{
 								"type": "sound",
 								"path": "res://sounds/ladder_down.mp3",
 								"volume_db": -5,
@@ -1455,7 +1667,7 @@
 							},
 							{
 								"type": "text",
-								"text": "뒤에서 무언가 소리가 났다."
+								"text": "갑자기 큰 소리가 났다."
 							}
 						],
 						"fail_events": [
@@ -1473,13 +1685,68 @@
 					}
 				]
 			},
-			"classroom_document": {
+			"monitor_after_claire": {
+				"click_rect": [
+					870,
+					670,
+					163,
+					130
+				],
+				"required_flag": "story_first_enter_classroom_06_03_done",
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/save_ui_open.mp3",
+						"volume_db": -5,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "컴퓨터에 현재 상태를 저장하시겠습니까?"
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "예",
+								"events": [
+									{
+										"type": "save_to_slot",
+										"slot": 1,
+										"success_text": "저장 완료.",
+										"fail_text": "저장에 실패했다.",
+										"success_sound": "res://sounds/save_complete.mp3",
+										"sound_volume_db": -5
+									}
+								]
+							},
+							{
+								"text": "아니오",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/save_ui_close.mp3",
+										"volume_db": -5,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "저장을 취소했다."
+									}
+								]
+							}
+						]
+					}
+				]
+			},
+			"classroom_document_before_claire": {
 				"click_rect": [
 					1500,
 					535,
 					70,
 					105
 				],
+				"required_flag_missing": "story_first_enter_classroom_08_done",
 				"events": [
 					{
 						"type": "document_popup",
@@ -1495,11 +1762,65 @@
 					},
 					{
 						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_02_01.png",
+						"path": "res://imgs/documents/school_document_04_01.png",
 						"start_page": 1,
 						"sound": "res://sounds/paper.mp3",
 						"sound_volume_db": 10,
 						"close_on_last_page": true
+					}
+				]
+			},
+			"classroom_document_after_claire": {
+				"click_rect": [
+					1500,
+					535,
+					70,
+					105
+				],
+				"required_flag": "story_first_enter_classroom_08_done",
+				"required_flag_missing": "story_first_enter_classroom_06_03_done",
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/documents/school_document_01_01.png",
+						"start_page": 1,
+						"sound": "res://sounds/paper.mp3",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "portrait",
+						"character": "claire",
+						"emotion": "normal",
+						"text": "표에 적혀있는 문자들이 비밀번호랑 연관이 되어있는거같아."
+					},
+					{
+						"type": "text",
+						"name": "나",
+						"text": "그런거 같아, 다시 한번 비교해보자."
+					},
+					{
+						"type": "document_popup",
+						"path": "res://imgs/documents/school_document_04_01.png",
+						"start_page": 1,
+						"sound": "res://sounds/paper.mp3",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					}
+				]
+			},
+			"classroom_document_after_claire_died": {
+				"click_rect": [
+					1500,
+					535,
+					70,
+					105
+				],
+				"required_flag": "story_first_enter_classroom_06_03_done",
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
 					}
 				]
 			}
@@ -1508,13 +1829,6 @@
 	"classroom_06_03": {
 		"background": "res://imgs/backgrounds/classroom_ladder_01.png",
 		"exits": {
-			"up": {
-				"target": "classroom_16",
-				"position": [
-					860,
-					30
-				]
-			},
 			"down": {
 				"target": "classroom_06",
 				"position": [
@@ -1863,42 +2177,16 @@
 			}
 		},
 		"interactions": {
-			"black_board": {
+			"black_board_after_claire": {
 				"click_rect": [
 					591,
 					293,
 					911,
 					367
 				],
-				"required_flag": "story_first_enter_classroom_06_03_done",
-				"events": [
-					{
-						"type": "text",
-						"text": "칠판 가득 무언가 적혀있다."
-					},
-					{
-						"type": "text",
-						"text": "가까이에서 보니 멀리선 보이지 않던 문양이 그려져있다."
-					}
-				]
-			},
-			"black_board_claire": {
-				"click_rect": [
-					591,
-					293,
-					911,
-					367
-				],
+				"required_flag": "story_first_enter_classroom_08_done",
 				"required_flag_missing": "story_first_enter_classroom_06_03_done",
 				"events": [
-					{
-						"type": "text",
-						"text": "칠판 가득 무언가 적혀있다."
-					},
-					{
-						"type": "text",
-						"text": "가까이에서 보니 멀리선 보이지 않던 문양이 그려져있다."
-					},
 					{
 						"type": "portrait",
 						"character": "claire",
@@ -1915,6 +2203,21 @@
 						"character": "claire",
 						"emotion": "normal",
 						"text": "음... 오른쪽에 붙어있는 종이랑 한번 비교해 보죠."
+					}
+				]
+			},
+			"black_board_after_claire_died": {
+				"click_rect": [
+					591,
+					293,
+					911,
+					367
+				],
+				"required_flag": "story_first_enter_classroom_06_03_done",
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
 					}
 				]
 			},
@@ -1964,44 +2267,14 @@
 					}
 				]
 			},
-			"classroom_document": {
+			"classroom_document_after_claire": {
 				"click_rect": [
 					1500,
 					535,
 					70,
 					105
 				],
-				"required_flag": "story_first_enter_classroom_06_03_done",
-				"events": [
-					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_01_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "text",
-						"text": "종이를 위로 넘겨보니 무언가 붙어있다."
-					},
-					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_05_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					}
-				]
-			},
-			"classroom_document_claire": {
-				"click_rect": [
-					1500,
-					535,
-					70,
-					105
-				],
+				"required_flag": "story_first_enter_classroom_08_done",
 				"required_flag_missing": "story_first_enter_classroom_06_03_done",
 				"events": [
 					{
@@ -2013,20 +2286,21 @@
 						"close_on_last_page": true
 					},
 					{
-						"type": "text",
-						"text": "종이를 위로 넘겨보니 무언가 붙어있다."
-					},
-					{
 						"type": "portrait",
 						"character": "claire",
 						"emotion": "normal",
 						"text": "이건 주기율표?"
 					},
 					{
+						"type": "text",
+						"name": "나",
+						"text": "맞아, 군데군데 X 표시가 되어있어, 무슨 의미가 있는거같아."
+					},
+					{
 						"type": "portrait",
 						"character": "claire",
 						"emotion": "pain",
-						"text": "이름은 기억이 안나는데, 다른건 또 기억하고 있네."
+						"text": "에효... 자기 이름은 기억이 안나는데, 다른건 또 기억하고 있네."
 					},
 					{
 						"type": "document_popup",
@@ -2035,6 +2309,21 @@
 						"sound": "res://sounds/paper.mp3",
 						"sound_volume_db": 10,
 						"close_on_last_page": true
+					}
+				]
+			},
+			"classroom_document_claire_died": {
+				"click_rect": [
+					1500,
+					535,
+					70,
+					105
+				],
+				"required_flag": "story_first_enter_classroom_06_03_done",
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
 					}
 				]
 			}

@@ -3467,6 +3467,12 @@ func check_room_enter_story():
 		ran_any_story = true
 		safety_count += 1
 
+		# 스토리 이벤트 도중 전투가 시작되면
+		# 같은 room의 다음 enter_story 후보를 지금 검사하면 안 된다.
+		# 전투 종료 후 end_battle()에서 다시 check_room_enter_story()를 호출한다.
+		if battle_scene != null:
+			break
+
 	if safety_count >= max_chain_count:
 		push_warning("room enter story chain이 너무 길어서 중단됨")
 
@@ -3525,7 +3531,7 @@ func run_story_auto_save_event(event):
 @warning_ignore("unused_parameter")
 func _on_pause_bgm_volume_changed(value):
 	apply_bgm_volume()
-# Pause UI에서 SFX 볼륨 슬라이더가 변경되었을 때 호출
+# Pause UI에서 SFX 볼륨 슬라이더가 변경되었을 때 호출 
 func _on_pause_sfx_volume_changed(value):
 	print("SFX 볼륨 변경 요청: " + str(int(value)) + "%")
 

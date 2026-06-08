@@ -166,7 +166,7 @@
 			},
 			{
 				"type": "camera_reset",
-				"duration": 1.0,
+				"duration": 0.5,
 				"wait": true
 			},
 			{
@@ -521,7 +521,7 @@
 			},
 			{
 				"type": "camera_reset",
-				"duration": 1.0,
+				"duration": 0.5,
 				"wait": true
 			},
 			{
@@ -755,8 +755,8 @@
 			},
 			{
 				"type": "camera_reset",
-				"duration": 1.0,
-				"wait": false
+				"duration": 0.5,
+				"wait": true
 			},
 			{
 				"type": "story_dialogue",
@@ -1086,8 +1086,8 @@
 			},
 			{
 				"type": "camera_reset",
-				"duration": 1.0,
-				"wait": false
+				"duration": 0.5,
+				"wait": true
 			},
 			{
 				"type": "change_room",
@@ -1420,6 +1420,268 @@
 				"type": "start_battle",
 				"enemy": "candle_student_tutorial",
 				"first_turn": "player"
+			}
+		]
+	},
+	"defeated_tutorial_candle_student": {
+		"start_flag": "story_defeated_tutorial_candle_student_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "이겼다."
+			},
+			{
+				"type": "flag",
+				"flag": "story_defeated_tutorial_candle_student_done"
+			},
+			{
+				"type": "show_game_ui"
+			}
+		]
+	},
+	"first_enter_classroom_06_03": {
+		"start_flag": "story_first_enter_classroom_06_03_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm2.mp3",
+				"volume_db": 0,
+				"loop": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/classroom_02.png"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "우리는 뒤에서 난 큰 소리에 급하게 돌아봤다."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"text": "이거 뭐야 아까 까진 천장에 저런 구멍 없었잖아."
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "camera_zoom",
+				"x": 760,
+				"y": 340,
+				"zoom": 2.0,
+				"duration": 0.1,
+				"wait": false
+			},
+			{
+				"type": "camera_pan",
+				"x": 1500,
+				"y": 350,
+				"duration": 120.0,
+				"wait": false
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/classroom_ladder_01.png"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "분명 조금 전까지 매워져 있던 천장이 부자연스럽게 동그란 형태로 뚫려있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 아래로 철제 사다리가 교실 바닥까지 내려와 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "승인이면, 정답 인건가..."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "normal",
+				"text": "출구... 맞겠죠?"
+			},
+			{
+				"type": "camera_reset",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/classroom_ladder_02.png"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "올라가면 나갈 수 있을지도 몰라."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "처음으로 희망이라는 단어가 머릿속에 떠올랐다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이곳에서 벗어날 수 있을지도 모른다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "내 방으로 돌아갈 수 있을지도 모른다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "토요일 아침으로."
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그때였다."
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/classroom_ladder_01.png"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm9.mp3",
+				"volume_db": 0,
+				"loop": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "멀리서 소리가 났다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "쿵. 쿵. 쿵."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "무언가 이쪽으로 오고 있었다."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "normal",
+				"text": "방금 사디리 소리 때문에..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "쉿..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "좀 전의 괴물과는 급이 다른 무언가임에는 틀림없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "무거운 무언가가 복도를 밟고 오는 소리."
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "change_room",
+				"room": "classroom_06_02"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm2.mp3",
+				"volume_db": 5,
+				"loop": true
+			},
+			{
+				"type": "camera_reset",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_classroom_06_03_done"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "start_battle",
+				"enemy": "combined_candle_students_tutorial",
+				"first_turn": "enemy",
+				"game_over_on_lose": false,
+				"lose_story": "lose_tutorial_combined_candle_students",
+				"defeat_player_hp": 1,
+				"lose_flag": "lose_combined_candle_students_tutorial"
+			}
+		]
+	},
+	"lose_tutorial_combined_candle_students": {
+		"start_flag": "story_lose_tutorial_combined_candle_students_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "졌다."
+			},
+			{
+				"type": "flag",
+				"flag": "story_lose_tutorial_combined_candle_students_done"
+			},
+			{
+				"type": "show_game_ui"
+			}
+		]
+	},
+	"defeated_tutorial_combined_candle_students": {
+		"start_flag": "story_defeated_tutorial_combined_candle_students_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "이겼다."
+			},
+			{
+				"type": "flag",
+				"flag": "story_defeated_tutorial_combined_candle_students_done"
+			},
+			{
+				"type": "show_game_ui"
 			}
 		]
 	}

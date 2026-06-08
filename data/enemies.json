@@ -155,7 +155,7 @@
 	"combined_candle_students_phase_01": {
 		"name": "합쳐진 밀랍 학생들",
 		"phase": 1,
-		"max_hp": 350,
+		"max_hp": 400,
 		"battle_bgm": "",
 		"battle_bgm_volume_db": -3.0,
 		"battle_bgm_loop": true,
@@ -164,7 +164,7 @@
 		"encounter_sound": "res://sounds/enemy_encounter.mp3",
 		"encounter_sound_volume_db": -10.0,
 		"image": "res://imgs/enemies/combined_candle_students_phase_01.png",
-		"battle_background": "res://imgs/backgrounds/classroom_06.png",
+		"battle_background": "",
 		"battle_background_alpha": 0.2,
 		"enemy_size": [
 			650,
@@ -272,7 +272,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 5,
+								"damage": 10,
 								"delay": 0.0,
 								"danger_type": "parry_only"
 							},
@@ -283,7 +283,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 5,
+								"damage": 10,
 								"delay": 0.3,
 								"danger_type": "parry_only"
 							},
@@ -294,7 +294,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 5,
+								"damage": 10,
 								"delay": 0.3,
 								"danger_type": "parry_only"
 							}
@@ -345,7 +345,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 5,
+								"damage": 10,
 								"delay": 0.0
 							},
 							{
@@ -355,7 +355,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 5,
+								"damage": 10,
 								"delay": 0.3
 							},
 							{
@@ -365,7 +365,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 5,
+								"damage": 10,
 								"delay": 0.3
 							}
 						]
@@ -387,7 +387,7 @@
 		"encounter_sound": "res://sounds/enemy_encounter.mp3",
 		"encounter_sound_volume_db": -10.0,
 		"image": "res://imgs/enemies/combined_candle_students_phase_02.png",
-		"battle_background": "res://imgs/backgrounds/classroom_06.png",
+		"battle_background": "",
 		"battle_background_alpha": 0.2,
 		"enemy_size": [
 			650,
@@ -491,7 +491,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 0.0,
 						"danger_type": "parry_only"
 					},
@@ -502,7 +502,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 0.7,
 						"danger_type": "parry_only"
 					},
@@ -513,7 +513,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 1.2,
 						"danger_type": "parry_only"
 					}
@@ -734,7 +734,7 @@
 	"candle_student_tutorial": {
 		"name": "밀랍을 뒤집어쓴 학생",
 		"skip_if_flag": "defeated_tutorial_enemy",
-		"max_hp": 8,
+		"max_hp": 80,
 		"battle_bgm": "",
 		"battle_bgm_volume_db": -3.0,
 		"battle_bgm_loop": true,
@@ -868,7 +868,231 @@
 		],
 		"drops": [],
 		"defeat_flags": [
-			"defeated_tutorial_enemy"
+			"defeated_candle_student_tutorial"
+		]
+	},
+	"combined_candle_students_tutorial": {
+		"name": "합쳐진 밀랍 학생들",
+		"phase": 1,
+		"max_hp": 3,
+		"battle_bgm": "",
+		"battle_bgm_volume_db": -3.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/enemy_encounter.mp3",
+		"encounter_sound_volume_db": -10.0,
+		"image": "res://imgs/enemies/combined_candle_students_phase_01.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.2,
+		"enemy_size": [
+			650,
+			760
+		],
+		"enemy_position": [
+			635,
+			-40
+		],
+		"can_escape": false,
+		"encounter_text": "합쳐진 밀랍 학생들이 축축한 소리를 내며 몸을 다가온다.",
+		"observe_text": "사람의 형체가 뭉쳐져서 만들어진것 같다.",
+		"weakness_text": "",
+		"patterns": [
+			{
+				"id": "basic_attack",
+				"weight": 5,
+				"warning_text": "아무런 행동을 하지 않고 있다.",
+				"fire_mode": "sequential",
+				"projectiles": []
+			}
+		],
+		"hitbox_base_size": [
+			1024,
+			1535
+		],
+		"hitboxes": [
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					445,
+					600,
+					100,
+					230
+				],
+				"weak": false
+			},
+			{
+				"id": "left_body",
+				"name": "왼쪽 몸통",
+				"rect": [
+					280,
+					400,
+					160,
+					420
+				],
+				"weak": false
+			},
+			{
+				"id": "right_body",
+				"name": "오른쪽 몸통",
+				"rect": [
+					550,
+					400,
+					160,
+					420
+				],
+				"weak": false
+			}
+		],
+		"parts": [
+			{
+				"id": "left_arm",
+				"name": "구겨진 파이프를 들고있는 오른팔",
+				"max_hp": 200,
+				"z_index": 6,
+				"image": "res://imgs/enemies/combined_candle_students_left.png",
+				"observe_text": "팔 부위를 먼저 노리는게 좋을거같다.",
+				"size": [
+					296,
+					795
+				],
+				"position": [
+					80,
+					0
+				],
+				"destroyable": true,
+				"destroy_text": "구겨진 파이프를 들고있는 오른팔이 떨어져 나갔다.",
+				"hitbox": {
+					"id": "left_arm",
+					"name": "구겨진 파이프를 들고있는 오른팔",
+					"rect": [
+						120,
+						220,
+						160,
+						550
+					],
+					"weak": false
+				},
+				"patterns": [
+					{
+						"id": "pipe_swing",
+						"weight": 55,
+						"warning_text": "구겨진 파이프를 휘두른다.",
+						"fire_mode": "sequential",
+						"counter_hitbox_id": "left_arm",
+						"projectiles": [
+							{
+								"projectile": "fear_slash",
+								"start": [
+									700,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "fear_slash",
+								"start": [
+									900,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "fear_slash",
+								"start": [
+									1100,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							}
+						]
+					}
+				]
+			},
+			{
+				"id": "right_arm",
+				"name": "망가진 의자를 들고있는 왼팔",
+				"max_hp": 300,
+				"z_index": 6,
+				"image": "res://imgs/enemies/combined_candle_students_right.png",
+				"observe_text": "팔 부위를 먼저 노리는게 좋을거같다.",
+				"size": [
+					324,
+					830
+				],
+				"position": [
+					620,
+					0
+				],
+				"destroyable": true,
+				"destroy_text": "망가진 의자를 들고있는 왼팔이 뜯겨져 나갔다.",
+				"hitbox": {
+					"id": "right_arm",
+					"name": "망가진 의자를 들고있는 왼팔",
+					"rect": [
+						720,
+						220,
+						160,
+						550
+					],
+					"weak": false
+				},
+				"patterns": [
+					{
+						"id": "chair_swing",
+						"weight": 40,
+						"warning_text": "망가진 의자를 휘두른다.",
+						"fire_mode": "sequential",
+						"counter_hitbox_id": "right_arm",
+						"projectiles": [
+							{
+								"projectile": "impact_basic",
+								"start": [
+									700,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.0
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									900,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.3
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									1100,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.3
+							}
+						]
+					}
+				]
+			}
+		],
+		"drops": [],
+		"defeat_flags": [
+			"defeated_combined_candle_students_tutorial"
 		]
 	}
 }
