@@ -178,6 +178,10 @@ var input_prompt_allow_numbers = true
 var input_prompt_max_length = 0
 var is_filtering_input_prompt_text = false
 
+# 현재 전투가 어떤 방식으로 시작되었는지 기록하는 정보
+# 일반 전투 / 스토리 전투 / 패배 이벤트 분기 등에 사용
+var current_battle_context = {}
+
 # 디버그 관련 상수 변수 모음
 # false
 # true
@@ -207,8 +211,8 @@ const MAIN_MENU_SCENE_PATH = "res://scenes/main_menu_scene.tscn"
 const STAT_GOOD_COLOR = "#55ff77"
 const STAT_BAD_COLOR = "#ff5555"
 const STAT_INFO_COLOR = "#88ccff"
-# 게임 처음 시작 스토리 이벤트
-const PROLOGUE_STORY_EVENT_ID = "prologue_part_01"
+# 게임 처음 시작 스토리 이벤트 # prologue_part_01
+const PROLOGUE_STORY_EVENT_ID = "first_enter_school_stairs_hall_01_after_classroom_08_event"
 # 만능 열쇠
 const DEFAULT_MASTER_KEY_ID = "master_key"
 
@@ -256,6 +260,11 @@ func _process(delta):
 			else:
 				dialogue_finished = true
 		return
+		
+	# 전투 씬이 떠 있으면 main.gd의 탐색 입력은 전부 막는다.
+	# 전투 중 방향키 입력이 뒤쪽 방 이동/막힌 길 대사로 처리되는 문제 방지.
+	if battle_scene != null:
+		return	
 	
 	# 스토리 이벤트 중이면 일반 조작 차단
 	if is_story_playing:
@@ -590,11 +599,16 @@ func get_enemy_data_by_id(enemy_id, show_error = true):
 
 	return enemy_data
 # 전투 시작 함수
-func start_battle(enemy_id, first_turn = ""):
+func start_battle(enemy_id, first_turn = "", battle_context = {}):
 	var enemy_data = get_enemy_data_by_id(enemy_id)
 
 	if enemy_data.is_empty():
 		return
+
+	# 이번 전투의 시작 정보를 저장한다.
+	# 일반 전투라면 빈 Dictionary가 들어오고,
+	# 스토리 전투라면 lose_story 같은 정보가 들어온다.
+	current_battle_context = battle_context.duplicate(true)
 
 	var skip_flag = enemy_data.get("skip_if_flag", "")
 
@@ -649,10 +663,15 @@ func end_battle(result_data):
 
 	print("전투 종료 결과: " + result_type)
 
-	# 게임오버라면 보상/인벤토리 정리/맵 복귀를 하지 않고
-	# 게임오버 전용 처리로 이동한다.
+	# 게임오버 결과인 경우
 	if result_type == "game_over":
-		await handle_battle_game_over_result(result_data)
+		# 특정 스토리 전투는 패배해도 게임오버가 아니라
+		# 지정된 패배 스토리 이벤트로 이어진다.
+		if should_handle_story_battle_lose_event():
+			await handle_story_battle_lose_result(result_data)
+		else:
+			await handle_battle_game_over_result(result_data)
+
 		return
 
 	# 승리 보상 플래그 적용
@@ -682,6 +701,9 @@ func end_battle(result_data):
 	await give_items_with_pending_loot(battle_rewards)
 	await open_inventory_arrange_if_pending_loot("loot")
 	
+	# 일반 전투 종료 후 컨텍스트 초기화
+	clear_current_battle_context()
+	
 	# 전투 승리 후 reward_flags 등으로 조건이 열린 스토리가 있으면 현재 room에서 자동 실행
 	if result_type == "win":
 		await check_room_enter_story()
@@ -705,8 +727,83 @@ func handle_battle_game_over_result(result_data):
 	if bgm_player.playing:
 		bgm_player.stop()
 
+	clear_current_battle_context()
+	
 	# 게임오버 씬으로 이동
 	get_tree().change_scene_to_file(GAME_OVER_SCENE_PATH)
+# 현재 전투 컨텍스트 초기화 함수
+func clear_current_battle_context():
+	current_battle_context.clear()
+# 스토리 전투 컨텍스트 생성 함수
+func make_story_battle_context(event):
+	return {
+		"is_story_battle": true,
+
+		# true면 기존처럼 패배 시 게임오버.
+		# false면 게임오버 대신 lose_story 실행.
+		"game_over_on_lose": bool(event.get("game_over_on_lose", true)),
+
+		# 패배 후 실행할 스토리 이벤트 ID
+		"lose_story": str(event.get("lose_story", "")),
+
+		# 패배 후 플레이어 체력 보정값
+		"defeat_player_hp": int(event.get("defeat_player_hp", 1)),
+
+		# 패배 시 설정할 선택 플래그
+		"lose_flag": str(event.get("lose_flag", ""))
+	}
+# 현재 전투가 패배 이벤트 처리 대상인지 확인하는 함수
+func should_handle_story_battle_lose_event():
+	if current_battle_context.is_empty():
+		return false
+
+	if not bool(current_battle_context.get("is_story_battle", false)):
+		return false
+
+	# game_over_on_lose가 false인 스토리 전투만 게임오버를 우회한다.
+	if bool(current_battle_context.get("game_over_on_lose", true)):
+		return false
+
+	return true
+# 스토리 전투 패배 이벤트 처리 함수
+func handle_story_battle_lose_result(result_data):
+	# 전투 종료 시 체력 반영
+	player_hp = int(result_data.get("player_hp", player_hp))
+
+	var lose_story_id = str(current_battle_context.get("lose_story", ""))
+	var lose_flag = str(current_battle_context.get("lose_flag", ""))
+	var defeat_player_hp = int(current_battle_context.get("defeat_player_hp", 1))
+
+	# 패배 이벤트 후 바로 죽은 상태가 되지 않도록 체력 보정
+	player_hp = max(defeat_player_hp, 1)
+	clamp_player_hp_to_current_max()
+	update_player_status_ui()
+
+	if lose_flag != "":
+		set_flag(lose_flag)
+
+	# 전투 씬 제거
+	if battle_scene != null:
+		battle_scene.queue_free()
+		battle_scene = null
+
+	# 전투 컨텍스트 초기화
+	clear_current_battle_context()
+
+	# run_story_event()는 is_story_playing이 true면 실행되지 않으므로,
+	# 패배 후 스토리 이벤트를 시작하기 전에 false로 풀어준다.
+	is_story_playing = false
+
+	# 패배 후 스토리 이벤트가 있으면 실행
+	if lose_story_id != "":
+		await run_story_event(lose_story_id)
+		return
+
+	# lose_story가 없으면 일반 탐색으로 복귀
+	show_game_ui()
+
+	if bgm_player != null and not bgm_player.playing:
+		bgm_player.play()
 
 # =================================s===========================
 # 디버그 관련 함수 모음
@@ -1857,6 +1954,58 @@ func get_room_background_path(room):
 		return ""
 
 	# ------------------------------------------------------------
+	# 0순위: background_by_flags
+	# ------------------------------------------------------------
+	# 여러 flag 조합에 따라 배경을 바꾸기 위한 구조.
+	#
+	# 예:
+	# "background_by_flags": [
+	#     {
+	#         "flags": ["opened_left", "opened_right"],
+	#         "path": "res://imgs/backgrounds/both_open.png"
+	#     },
+	#     {
+	#         "flags": ["opened_left"],
+	#         "path": "res://imgs/backgrounds/left_open.png"
+	#     }
+	# ]
+	#
+	# 위에서부터 순서대로 검사하므로,
+	# 여러 flag 조합 조건은 단일 flag 조건보다 위에 둬야 한다.
+	if room.has("background_by_flags"):
+		var background_by_flags = room["background_by_flags"]
+
+		if typeof(background_by_flags) == TYPE_ARRAY:
+			for background_rule in background_by_flags:
+				if typeof(background_rule) != TYPE_DICTIONARY:
+					continue
+
+				var rule_flags = background_rule.get("flags", [])
+				var rule_path = str(background_rule.get("path", ""))
+
+				if rule_path == "":
+					continue
+
+				if typeof(rule_flags) != TYPE_ARRAY:
+					continue
+
+				var all_flags_matched = true
+
+				for flag_id in rule_flags:
+					var flag_text = str(flag_id)
+
+					if flag_text == "":
+						all_flags_matched = false
+						break
+
+					if not has_flag(flag_text):
+						all_flags_matched = false
+						break
+
+				if all_flags_matched:
+					return rule_path
+
+	# ------------------------------------------------------------
 	# 1순위: background_by_flag
 	# ------------------------------------------------------------
 	# 여러 문이 있는 방에서 특정 flag에 따라 다른 배경을 보여주기 위한 구조.
@@ -2707,7 +2856,7 @@ func show_npc_dialogue(character_id, emotion, text):
 		return
 
 	speaker_name.text = get_character_name_by_id(character_id)
-
+	
 	var portrait_path = get_character_portrait_path(character_id, emotion)
 
 	if portrait_path != "":
@@ -2716,7 +2865,7 @@ func show_npc_dialogue(character_id, emotion, text):
 		speaker_portrait.texture = null
 
 	await show_dialogue(text, "npc")
-# 일반 이벤트 1개 실행 함수
+# 일반 이벤트 1개 실행 함수 (상호작용)
 func run_single_event(event):
 	if event == null:
 		return
@@ -2728,7 +2877,17 @@ func run_single_event(event):
 	var event_type = event.get("type", "")
 
 	if event_type == "text":
-		await show_dialogue(event.get("text", ""))
+		var speaker_name_text = str(event.get("name", ""))
+		var dialogue_text = str(event.get("text", ""))
+
+		# name 값이 있으면 이름이 표시되는 대사로 출력
+		if speaker_name_text != "":
+			await show_story_dialogue(
+				speaker_name_text,
+				dialogue_text
+			)
+		else:
+			await show_dialogue(dialogue_text)
 		
 	elif event_type == "sound":
 		await play_story_sound(
@@ -2743,6 +2902,12 @@ func run_single_event(event):
 	elif event_type == "input_prompt":
 		await run_input_prompt_event(event)
 
+	elif event_type == "story_dialogue":
+		await show_story_dialogue(
+			event.get("name", ""),
+			event.get("text", "")
+		)
+	
 	elif event_type == "portrait":
 		await show_npc_dialogue(
 			event.get("character", ""),
@@ -3008,11 +3173,14 @@ func run_story_event(event_id, auto_check_next_story = true):
 	var stopped_by_battle = story_event_should_stop
 
 	story_event_should_stop = false
-	is_story_playing = false
 
-	# 전투로 넘어간 경우에는 전투 종료 후 end_battle()에서 다음 스토리를 체크한다.
+	# 전투로 넘어간 경우에는 전투가 끝날 때까지
+	# main.gd의 일반 탐색 입력을 계속 막아야 한다.
+	# is_story_playing은 end_battle()에서 false로 돌린다.
 	if stopped_by_battle:
 		return
+
+	is_story_playing = false
 
 	# 일반 스토리 종료 후 현재 room + flag 조건으로 이어지는 스토리가 있으면 실행한다.
 	if auto_check_next_story:
@@ -3084,6 +3252,16 @@ func run_single_story_event(event):
 			event.get("emotion", "normal"),
 			event.get("position", "center")
 		)
+		
+	elif event_type == "standing_clear":
+		await hide_story_standing()
+		
+	elif event_type == "portrait":
+		await show_npc_dialogue(
+			event.get("character", ""),
+			event.get("emotion", "normal"),
+			event.get("text", "")
+		)	
 
 	elif event_type == "story_dialogue":
 		await show_story_dialogue(
@@ -3314,7 +3492,9 @@ func run_story_start_battle_event(event):
 	# start_battle 이벤트는 story_events.json에서 마지막 이벤트로 사용하는 것을 권장한다.
 	story_event_should_stop = true
 
-	start_battle(enemy_id, first_turn)
+	var battle_context = make_story_battle_context(event)
+
+	start_battle(enemy_id, first_turn, battle_context)
 # 스토리 이벤트용 자동 저장 함수
 func run_story_auto_save_event(event):
 	var slot_index = int(event.get("slot", 1))
@@ -4011,7 +4191,7 @@ func show_input_prompt(event):
 	input_prompt_allow_numbers = bool(event.get("allow_numbers", true))
 	input_prompt_max_length = int(event.get("max_length", 0))
 
-	var min_length = int(event.get("min_length", 0))
+	#var min_length = int(event.get("min_length", 0))
 	var message = str(event.get("message", "값을 입력하세요."))
 	var placeholder = str(event.get("placeholder", ""))
 

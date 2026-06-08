@@ -10,7 +10,7 @@
 		"encounter_sound": "res://sounds/enemy_encounter2.mp3",
 		"encounter_sound_volume_db": 10.0,
 		"image": "res://imgs/enemies/candle_student.png",
-		"battle_background": "res://imgs/backgrounds/hallway_open.png",
+		"battle_background": "res://imgs/backgrounds/hallway_01.png",
 		"battle_background_alpha": 0.2,
 		"enemy_size": [
 			550,
@@ -164,7 +164,7 @@
 		"encounter_sound": "res://sounds/enemy_encounter.mp3",
 		"encounter_sound_volume_db": -10.0,
 		"image": "res://imgs/enemies/combined_candle_students_phase_01.png",
-		"battle_background": "res://imgs/backgrounds/hallway_open.png",
+		"battle_background": "res://imgs/backgrounds/classroom_06.png",
 		"battle_background_alpha": 0.2,
 		"enemy_size": [
 			650,
@@ -387,7 +387,7 @@
 		"encounter_sound": "res://sounds/enemy_encounter.mp3",
 		"encounter_sound_volume_db": -10.0,
 		"image": "res://imgs/enemies/combined_candle_students_phase_02.png",
-		"battle_background": "res://imgs/backgrounds/hallway_open.png",
+		"battle_background": "res://imgs/backgrounds/classroom_06.png",
 		"battle_background_alpha": 0.2,
 		"enemy_size": [
 			650,
@@ -734,7 +734,7 @@
 	"candle_student_tutorial": {
 		"name": "밀랍을 뒤집어쓴 학생",
 		"skip_if_flag": "defeated_tutorial_enemy",
-		"max_hp": 80,
+		"max_hp": 8,
 		"battle_bgm": "",
 		"battle_bgm_volume_db": -3.0,
 		"battle_bgm_loop": true,
@@ -743,7 +743,7 @@
 		"encounter_sound": "res://sounds/enemy_encounter.mp3",
 		"encounter_sound_volume_db": -10.0,
 		"image": "res://imgs/enemies/candle_student.png",
-		"battle_background": "res://imgs/backgrounds/hallway_open.png",
+		"battle_background": "res://imgs/backgrounds/school_stairs_hall_01.png",
 		"battle_background_alpha": 0.2,
 		"enemy_size": [
 			550,
