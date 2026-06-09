@@ -32,5 +32,17 @@
 			"fear": "res://imgs/characters/protagonist/portrait/fear.png",
 			"shy": "res://imgs/characters/protagonist/portrait/shy.png"
 		}
+	},
+	"brown_hair": {
+		"name": "갈색 머리 여자",
+		"portrait": {
+			"normal": "res://imgs/characters/claire/portrait/normal.png",
+			"pain": "res://imgs/characters/claire/portrait/pain.png",
+			"embarrassed": "res://imgs/characters/claire/portrait/embarrassed.png",
+			"angry": "res://imgs/characters/claire/portrait/angry.png",
+			"annoyed": "res://imgs/characters/claire/portrait/annoyed.png",
+			"expressionless": "res://imgs/characters/claire/portrait/expressionless.png",
+			"shy": "res://imgs/characters/claire/portrait/shy.png"
+		}
 	}
 }

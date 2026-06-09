@@ -93,7 +93,13 @@
 		"start_flag": "prologue_part_02_done",
 		"events": [
 			{
+				"type": "hide_game_ui"
+			},
+			{
 				"type": "fade"
+			},
+			{
+				"type": "stop_bgm"
 			},
 			{
 				"type": "background",
@@ -108,9 +114,6 @@
 			{
 				"type": "wait",
 				"time": 7.0
-			},
-			{
-				"type": "stop_bgm"
 			},
 			{
 				"type": "bgm",
@@ -226,7 +229,17 @@
 				"type": "fade"
 			},
 			{
+				"type": "change_room",
+				"room": "my_room"
+			},
+			{
 				"type": "show_game_ui"
+			},
+			{
+				"type": "auto_save",
+				"slot": 1,
+				"show_message": false,
+				"play_sound": true
 			}
 		]
 	},
@@ -598,14 +611,14 @@
 				"type": "fade"
 			},
 			{
+				"type": "change_room",
+				"room": "classroom_01"
+			},
+			{
 				"type": "bgm",
 				"path": "res://sounds/bgm2.mp3",
 				"volume_db": -5,
 				"loop": true
-			},
-			{
-				"type": "change_room",
-				"room": "classroom_01"
 			},
 			{
 				"type": "show_game_ui"
@@ -653,13 +666,13 @@
 				"time": 1.5
 			},
 			{
+				"type": "fade"
+			},
+			{
 				"type": "bgm",
 				"path": "res://sounds/bgm2.mp3",
 				"volume_db": -5,
 				"loop": true
-			},
-			{
-				"type": "fade"
 			},
 			{
 				"type": "show_game_ui"
@@ -678,6 +691,15 @@
 			},
 			{
 				"type": "fade"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm2.mp3",
+				"volume_db": -5,
+				"loop": true
 			},
 			{
 				"type": "background",
@@ -1073,10 +1095,14 @@
 				"text": "우린 그 이후로 이 알 수 없는 공간에 대해 서로 조사했던 내용을 공유했다."
 			},
 			{
+				"type": "stop_bgm"
+			},
+			{
 				"type": "fade"
 			},
 			{
-				"type": "stop_bgm"
+				"type": "change_room",
+				"room": "classroom_08"
 			},
 			{
 				"type": "bgm",
@@ -1088,10 +1114,6 @@
 				"type": "camera_reset",
 				"duration": 0.5,
 				"wait": true
-			},
-			{
-				"type": "change_room",
-				"room": "classroom_08"
 			},
 			{
 				"type": "show_game_ui"
@@ -1112,6 +1134,15 @@
 				"type": "fade"
 			},
 			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm2.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
 				"type": "background",
 				"path": "res://imgs/backgrounds/school_stairs_hall_01.png"
 			},
@@ -1120,9 +1151,14 @@
 				"time": 3.0
 			},
 			{
-				"type": "portrait",
+				"type": "standing",
 				"character": "claire",
 				"emotion": "normal",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "갈색 머리 여자",
 				"text": "잠깐만요."
 			},
 			{
@@ -1131,10 +1167,17 @@
 				"text": "???"
 			},
 			{
+				"type": "story_dialogue",
+				"text": "그녀는 갑자기 나를 막았다."
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
 				"type": "portrait",
-				"character": "claire",
-				"emotion": "pain",
-				"text": "...왔어"
+				"character": "brown_hair",
+				"emotion": "normal",
+				"text": "쉿...저기"
 			},
 			{
 				"type": "story_dialogue",
@@ -1143,9 +1186,20 @@
 			},
 			{
 				"type": "portrait",
-				"character": "claire",
+				"character": "brown_hair",
 				"emotion": "pain",
 				"text": "아까 말한 그 괴물..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그녀는 건너편 복도 쪽 어둠을 손으로 가리키고 있었다."
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/school_hallway_01.png"
 			},
 			{
 				"type": "camera_zoom",
@@ -1177,42 +1231,38 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "도망쳐야 한다."
-			},
-			{
-				"type": "story_dialogue",
 				"text": "나는 주먹을 꽉 쥐었다."
 			},
 			{
 				"type": "portrait",
-				"character": "claire",
+				"character": "brown_hair",
 				"emotion": "embarrassed",
 				"text": "다시 뒤로 돌아가자."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "거긴 안 돼! 복도 끝은 막혀있었잖아."
+				"text": "거긴 안 돼, 복도 끝은 막혀있어."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "아까처럼 교실까지 숨어 들어갈 수 있다는 보장은 없어."
+				"text": "그리고 아까처럼 교실까지 안전하게 숨어 들어갈 수 있다는 보장은 없어."
 			},
 			{
 				"type": "portrait",
-				"character": "claire",
+				"character": "brown_hair",
 				"emotion": "embarrassed",
 				"text": "아니, 그럼 어쩌라고."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "따라와봐."
+				"text": "일단, 따라와봐."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "우린 조심스럽게 천천히 구석으로 가기 시작했고, 정체를 알 수 없는 물체는 지나갈 것이었다."
+				"text": "우린 조심스럽게 천천히 구석으로 가기 시작했고, 정체를 알 수 없는 물체는 그대로 정면으로 움직이고 있었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -1220,11 +1270,15 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "하지만 우리는 지금 빛이 안 드는 구석 쪽에 있어서 저쪽에서는 식별하지 못할 것이다."
+				"text": "하지만 우리는 지금 구석 쪽에 있어서 저쪽에서는 식별하지 못할 것이다."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그것은 사람의 형태를 하고 있으면서도, 짐승 같기도 했다."
+				"text": "그리고 그녀의 말에 따르면 시야가 그리 좋지 못한거같았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그것은 사람의 형태를 하고 있으면서도, 사람이 아닌 존재 같기도 했다."
 			},
 			{
 				"type": "story_dialogue",
@@ -1237,17 +1291,22 @@
 			},
 			{
 				"type": "portrait",
-				"character": "claire",
+				"character": "brown_hair",
 				"emotion": "pain",
 				"text": "읍."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "우리 둘은 입을 막고 그것이 조용히 지나가기를 기다리고 있었다."
+				"text": "그녀는 입을 막고 그것이 조용히 지나가기를 기다리고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "하아..."
 			},
 			{
 				"type": "portrait",
-				"character": "claire",
+				"character": "brown_hair",
 				"emotion": "pain",
 				"text": "휴우..."
 			},
@@ -1258,7 +1317,11 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "자, 이제 우리도 오른쪽으로 조금씩 걸어가자."
+				"text": "자, 이제 우리도 오른쪽으로 천천히 걸어가자."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "여기까지 너무 순탄했다."
 			},
 			{
 				"type": "story_dialogue",
@@ -1275,6 +1338,13 @@
 			{
 				"type": "story_dialogue",
 				"text": "그때였다."
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/school_stairs_hall_01.png"
 			},
 			{
 				"type": "sound",
@@ -1297,17 +1367,30 @@
 			},
 			{
 				"type": "portrait",
-				"character": "claire",
+				"character": "brown_hair",
 				"emotion": "embarrassed",
 				"text": "아, 미친! 알람..."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그녀의 휴대폰이 울리기 시작했다, 처음 이 장소에 들어온 이후 휴대폰을 확인해 봤지만 아무것도 작동하지 않았고 배터리도 없어서 버렸었다."
+				"text": "그녀의 휴대폰이 격렬하게 울리기 시작했다."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "괴물이 이 쪽을 향에 고개를 돌리고 이쪽으로 오고있었다."
+				"text": "나는 처음 이 장소에 들어온 이후 휴대폰을 확인해 봤지만 아무것도 작동하지 않았고 배터리도 없어서 버렸었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "빨리 저 쪽으로 던져!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그녀는 자신의 휴대폰을 복도 반대편으로 힘껏 던졌다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 알람 소리는 금새 잦아들었고, 괴물이 이쪽을 향에 고개를 돌리고 이쪽으로 오고 있었다."
 			},
 			{
 				"type": "screen_color",
@@ -1328,9 +1411,9 @@
 			},
 			{
 				"type": "portrait",
-				"character": "claire",
+				"character": "brown_hair",
 				"emotion": "pain",
-				"text": "죄송해요..."
+				"text": "죄송해요... 죄송해요..."
 			},
 			{
 				"type": "story_dialogue",
@@ -1404,17 +1487,25 @@
 				"type": "stop_bgm"
 			},
 			{
+				"type": "fade"
+			},
+			{
 				"type": "change_room",
 				"room": "school_stairs_hall_01"
 			},
 			{
 				"type": "bgm",
 				"path": "res://sounds/bgm2.mp3",
-				"volume_db": 5,
+				"volume_db": -5,
 				"loop": true
 			},
 			{
-				"type": "fade"
+				"type": "camera_reset",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "show_game_ui"
 			},
 			{
 				"type": "start_battle",
@@ -1433,16 +1524,323 @@
 				"type": "fade"
 			},
 			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm2.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/school_stairs_hall_01.png"
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/fall_down.mp3",
+				"volume_db": 5,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "눈 앞의 괴물은 균형을 잃고 쓰러졌다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그리고 그것은 무너지듯 형태가 사라졌고, 알수없는 하얀 물체만이 그자리에 남아있었다."
+			},
+			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "이겼다."
+				"text": "해치웠나...?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 한동안 움직이지 못했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "손이 덜덜 떨리고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그녀가 조심스럽게 다가왔다."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "갈색 머리 여자",
+				"text": "괜찮아?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 숨을 몰아쉬었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "심장이 미친 듯이 뛰고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "무서웠다, 하지만 해치웠다."
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/classroom_03.png"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm4.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그녀는 나를 부축해서 근처 교실로 들어왔다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "나... 방급 해치웠어."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "갈색 머리 여자",
+				"text": "뭐?... 그게 웃을 일이야?"
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "입가가 저절로 올라갔다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나도 모르게 웃고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "알아."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "하지만 방금 뭔가 깨달았어. 피하는 타이밍, 공격하는 타이밍, 어디를 노려야 하는지."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이건 마치..."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "annoyed",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "갈색 머리 여자",
+				"text": "너... 아니, 저기 진짜 뭐 하는 사람이세요?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "갈색 머리 여자",
+				"text": "음... 서로 자기 이름을 기억 못하니 딱히 부를말이 없네."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "갈색 머리 여자",
+				"text": "나는 그냥 클레어라고 불러줘요, 그게 내가 자주 사용하는 닉네임이니깐."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "음..?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "닉네임... 클레어..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "클레어씨...?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 그 이름을 알고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "공많갤 매니저?"
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "히익!... 아니 어떻게?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "분명 이곳에 들어오기 마지막에 갤러리에서 게시글을 확인하고 있었고."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그곳의 매니저 이름이 몇 년 동안 알고 지내던 클레어 씨였다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "것보다, 여자였냐."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "항상 이상한 소리를 해서 당연히 내 또래 털 수북한 아저씨라고만 생각했었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "나야 나 공포게임 공략러 닉네임 rain46688!"
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "너가 그 게임 폐인 레인? 아니 대체 이게 무슨 일..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "하... 팩트라 뭐라 말을 못하겠지만, 자연스럽게 욕을..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "나는 이곳에 오기 직전까지 내 방에서 갤러리 게시글을 확인하고 있었고, 거기서 이상한 게시글 링크를..."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "pain",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그녀의 얼굴이 굳었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "혹시... 너도?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "어...비슷한걸 봤어."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "annoyed",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "평소처럼 갤을 관리하던 중에 또 그 새끼가 똥글 쳐올렸는지 알고 삭제하려고 눌렀는데..."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "pain",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "..."
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "우리는 동시에 입을 다물었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 사실 하나만으로도 충분했다, 우리가 적어도 비슷한 방식으로 이 공간에 끌려왔다는 건 분명했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "지금은 그저 이곳에서 아는 사람을 만났다는 것 자체가 기뻤고 무엇보다 안심이 됐다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하나만큼은 명확해졌다, 이 악몽 같은 곳에서 나가야 한다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그러려면 더 조사해보자."
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "change_room",
+				"room": "classroom_04"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm2.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "camera_reset",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "show_game_ui"
 			},
 			{
 				"type": "flag",
 				"flag": "story_defeated_tutorial_candle_student_done"
-			},
-			{
-				"type": "show_game_ui"
 			}
 		]
 	},
@@ -1461,7 +1859,7 @@
 			{
 				"type": "bgm",
 				"path": "res://sounds/bgm2.mp3",
-				"volume_db": 0,
+				"volume_db": -5,
 				"loop": true
 			},
 			{
@@ -1516,7 +1914,7 @@
 			{
 				"type": "portrait",
 				"character": "claire",
-				"emotion": "normal",
+				"emotion": "pain",
 				"text": "출구... 맞겠죠?"
 			},
 			{
@@ -1567,53 +1965,297 @@
 				"path": "res://imgs/backgrounds/classroom_ladder_01.png"
 			},
 			{
+				"type": "story_dialogue",
+				"text": "멀리서 커다란 소리가 났다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "쿵!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "점점 소리는 가까워지고 있었다, 무언가 이쪽으로 오고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "점점 속도가 삘라지고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "발소리가 한둘이 아닌 거 같다, 여러 명의 둔탁하고 거대한 발소리."
+			},
+			{
 				"type": "bgm",
-				"path": "res://sounds/bgm9.mp3",
-				"volume_db": 0,
+				"path": "res://sounds/bgm11.mp3",
+				"volume_db": -10,
 				"loop": true
 			},
 			{
 				"type": "story_dialogue",
-				"text": "멀리서 소리가 났다."
-			},
-			{
-				"type": "story_dialogue",
-				"text": "쿵. 쿵. 쿵."
-			},
-			{
-				"type": "story_dialogue",
-				"text": "무언가 이쪽으로 오고 있었다."
+				"name": "나",
+				"text": "올라가!"
 			},
 			{
 				"type": "portrait",
 				"character": "claire",
-				"emotion": "normal",
-				"text": "방금 사디리 소리 때문에..."
+				"emotion": "embarrassed",
+				"text": "히익! 방금 사디리 소리 때문에..."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "쉿..."
+				"text": "빨리 올라가자!"
 			},
 			{
 				"type": "story_dialogue",
-				"text": "좀 전의 괴물과는 급이 다른 무언가임에는 틀림없었다."
+				"text": "좀 전과는 급이 다른 무언가임에는 틀림없었다."
 			},
 			{
 				"type": "story_dialogue",
 				"text": "무거운 무언가가 복도를 밟고 오는 소리."
 			},
 			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "먼저 올라가, 나는 뒤 따라서 올라갈게."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"text": "하아? 뭔소리야, 빨리와!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 순간 이었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그녀가 사다리를 올라가는 순간."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "끼이익!!! 끼이이이익!!!!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "철제 사다리가 시끄러운 소리를 내었고 그 소리는 교실 천장에 뚫려있는 구멍의 크기만큼 공명되어서 교실 전체에 크게 울려 퍼졌다."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "pain",
+				"text": "안되겠어, 이러다..."
+			},
+			{
 				"type": "stop_bgm"
 			},
 			{
-				"type": "change_room",
-				"room": "classroom_06_02"
+				"type": "bgm",
+				"path": "res://sounds/bgm12.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이러다??... 급하게 말을 이어가던 그녀의 말투가 끊겼다. "
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 그녀를 올려다보았다, 그녀는 교실 바깥에 무언가를 응시하고 사색에 잠긴 표정을 하고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "마치 무언가 소름 끼치는 것을 본 것 마냥."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "pain",
+				"text": "끼야아앗!!!!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "퍽!"
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "먼저 올라간 그녀는 사다리에서 중심을 잃고 떨어져 바닥으로 곤두박질쳐졌다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "으윽.. 안되겠어, 이쪽으로 숨자."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "pain",
+				"text": "교실 바로 앞에..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그녀는 공포에 질린 표정으로 온몸을 덜덜 떨고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 그녀의 손을 잡고 끌었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "우리는 복도와 교실 사이의 벽을 등지고 벽 밖에 있는 무언가의 시선을 피하고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 순간."
+			},
+			{
+				"type": "wait",
+				"time": 1.0
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/break_wall.mp3",
+				"volume_db": 5,
+				"wait": false
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/jump_scare.mp3",
+				"volume_db": 5,
+				"wait": false
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/heartbeats.mp3",
+				"volume_db": 0,
+				"loop": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "거대한 무언가가 굉음을 지르며 벽을 부수고 들어왔다."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "pain",
+				"text": "으아아아악!!"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "윽..."
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "부서진 벽돌 파편이 온 사방에 튀었고 귀가 띵하고 머리가 아팠다, 아마 파편에 맞은거겠지."
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "pain",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그녀는 옆쪽 교실 바닥에 쓰러져있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "여기서 죽을거같다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 그 전에 뭐라도 해야된다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "지금 사다리로 뛰는 순간 죽는다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "빈틈을 만들어야 한다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "싸워야 한다."
+			},
+			{
+				"type": "stop_bgm"
 			},
 			{
 				"type": "bgm",
 				"path": "res://sounds/bgm2.mp3",
-				"volume_db": 5,
+				"volume_db": -5,
 				"loop": true
 			},
 			{
@@ -1627,6 +2269,10 @@
 			},
 			{
 				"type": "fade"
+			},
+			{
+				"type": "change_room",
+				"room": "classroom_06_02"
 			},
 			{
 				"type": "start_battle",

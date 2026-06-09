@@ -155,7 +155,7 @@
 	"combined_candle_students_phase_01": {
 		"name": "합쳐진 밀랍 학생들",
 		"phase": 1,
-		"max_hp": 400,
+		"max_hp": 300,
 		"battle_bgm": "",
 		"battle_bgm_volume_db": -3.0,
 		"battle_bgm_loop": true,
@@ -734,7 +734,7 @@
 	"candle_student_tutorial": {
 		"name": "밀랍을 뒤집어쓴 학생",
 		"skip_if_flag": "defeated_tutorial_enemy",
-		"max_hp": 80,
+		"max_hp": 8,
 		"battle_bgm": "",
 		"battle_bgm_volume_db": -3.0,
 		"battle_bgm_loop": true,
@@ -874,7 +874,7 @@
 	"combined_candle_students_tutorial": {
 		"name": "합쳐진 밀랍 학생들",
 		"phase": 1,
-		"max_hp": 3,
+		"max_hp": 10,
 		"battle_bgm": "",
 		"battle_bgm_volume_db": -3.0,
 		"battle_bgm_loop": true,
@@ -949,7 +949,7 @@
 			{
 				"id": "left_arm",
 				"name": "구겨진 파이프를 들고있는 오른팔",
-				"max_hp": 200,
+				"max_hp": 100,
 				"z_index": 6,
 				"image": "res://imgs/enemies/combined_candle_students_left.png",
 				"observe_text": "팔 부위를 먼저 노리는게 좋을거같다.",
@@ -1022,7 +1022,7 @@
 			{
 				"id": "right_arm",
 				"name": "망가진 의자를 들고있는 왼팔",
-				"max_hp": 300,
+				"max_hp": 200,
 				"z_index": 6,
 				"image": "res://imgs/enemies/combined_candle_students_right.png",
 				"observe_text": "팔 부위를 먼저 노리는게 좋을거같다.",

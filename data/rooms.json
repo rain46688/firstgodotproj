@@ -498,7 +498,7 @@
 				"events": [
 					{
 						"type": "portrait",
-						"character": "claire",
+						"character": "brown_hair",
 						"emotion": "normal",
 						"text": "맞는 문양을 찾아야 되는 거 같은데 X 표시된 것들은 제외라는 의미겠지?"
 					},
@@ -621,7 +621,7 @@
 					},
 					{
 						"type": "portrait",
-						"character": "claire",
+						"character": "brown_hair",
 						"emotion": "normal",
 						"text": "이거 봐봐 X 표시의 위치가 달라."
 					},
@@ -799,7 +799,7 @@
 				"events": [
 					{
 						"type": "portrait",
-						"character": "claire",
+						"character": "brown_hair",
 						"emotion": "normal",
 						"text": "이런 거 특기야?"
 					},
@@ -810,7 +810,7 @@
 					},
 					{
 						"type": "portrait",
-						"character": "claire",
+						"character": "brown_hair",
 						"emotion": "annoyed",
 						"text": "참나, 이 상황에 뭔 게임..."
 					},
@@ -933,7 +933,7 @@
 					},
 					{
 						"type": "portrait",
-						"character": "claire",
+						"character": "brown_hair",
 						"emotion": "normal",
 						"text": "이거 봐봐 X 표시의 위치가 달라."
 					},
@@ -1790,7 +1790,7 @@
 					},
 					{
 						"type": "portrait",
-						"character": "claire",
+						"character": "brown_hair",
 						"emotion": "normal",
 						"text": "표에 적혀있는 문자들이 비밀번호랑 연관이 되어있는거같아."
 					},
@@ -2189,7 +2189,7 @@
 				"events": [
 					{
 						"type": "portrait",
-						"character": "claire",
+						"character": "brown_hair",
 						"emotion": "normal",
 						"text": "가운데 그려져있는 글자는 무슨 상형문자?"
 					},
@@ -2200,7 +2200,7 @@
 					},
 					{
 						"type": "portrait",
-						"character": "claire",
+						"character": "brown_hair",
 						"emotion": "normal",
 						"text": "음... 오른쪽에 붙어있는 종이랑 한번 비교해 보죠."
 					}
@@ -2287,7 +2287,7 @@
 					},
 					{
 						"type": "portrait",
-						"character": "claire",
+						"character": "brown_hair",
 						"emotion": "normal",
 						"text": "이건 주기율표?"
 					},
@@ -2298,7 +2298,7 @@
 					},
 					{
 						"type": "portrait",
-						"character": "claire",
+						"character": "brown_hair",
 						"emotion": "pain",
 						"text": "에효... 자기 이름은 기억이 안나는데, 다른건 또 기억하고 있네."
 					},
