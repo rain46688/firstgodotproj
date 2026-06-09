@@ -734,7 +734,7 @@
 	"candle_student_tutorial": {
 		"name": "밀랍을 뒤집어쓴 학생",
 		"skip_if_flag": "defeated_tutorial_enemy",
-		"max_hp": 8,
+		"max_hp": 80,
 		"battle_bgm": "",
 		"battle_bgm_volume_db": -3.0,
 		"battle_bgm_loop": true,
@@ -873,8 +873,7 @@
 	},
 	"combined_candle_students_tutorial": {
 		"name": "합쳐진 밀랍 학생들",
-		"phase": 1,
-		"max_hp": 10,
+		"max_hp": 100,
 		"battle_bgm": "",
 		"battle_bgm_volume_db": -3.0,
 		"battle_bgm_loop": true,

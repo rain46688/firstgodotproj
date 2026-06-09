@@ -494,7 +494,7 @@
 					367
 				],
 				"required_flag": "story_first_enter_classroom_08_done",
-				"required_flag_missing": "story_first_enter_classroom_06_03_done",
+				"required_flag_missing": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "portrait",
@@ -516,7 +516,7 @@
 					911,
 					367
 				],
-				"required_flag": "story_first_enter_classroom_06_03_done",
+				"required_flag": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "text",
@@ -609,7 +609,7 @@
 					105
 				],
 				"required_flag": "story_first_enter_classroom_08_done",
-				"required_flag_missing": "story_first_enter_classroom_06_03_done",
+				"required_flag_missing": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "document_popup",
@@ -642,7 +642,7 @@
 					70,
 					105
 				],
-				"required_flag": "story_first_enter_classroom_06_03_done",
+				"required_flag": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "text",
@@ -795,7 +795,7 @@
 					367
 				],
 				"required_flag": "story_first_enter_classroom_08_done",
-				"required_flag_missing": "story_first_enter_classroom_06_03_done",
+				"required_flag_missing": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "portrait",
@@ -828,7 +828,7 @@
 					911,
 					367
 				],
-				"required_flag": "story_first_enter_classroom_06_03_done",
+				"required_flag": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "text",
@@ -921,7 +921,7 @@
 					105
 				],
 				"required_flag": "story_first_enter_classroom_08_done",
-				"required_flag_missing": "story_first_enter_classroom_06_03_done",
+				"required_flag_missing": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "document_popup",
@@ -954,7 +954,7 @@
 					70,
 					105
 				],
-				"required_flag": "story_first_enter_classroom_06_03_done",
+				"required_flag": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "text",
@@ -1356,18 +1356,6 @@
 				"path": "res://imgs/backgrounds/school_stairs_hall_03.png"
 			}
 		],
-		"enter_stories": [
-			{
-				"event": "first_enter_school_stairs_hall_01_after_classroom_08_event",
-				"required_flag": "story_first_enter_classroom_08_done",
-				"required_flag_missing": "first_enter_school_stairs_hall_01_after_classroom_08_event_done"
-			},
-			{
-				"event": "defeated_tutorial_candle_student",
-				"required_flag": "defeated_candle_student_tutorial",
-				"required_flag_missing": "story_defeated_tutorial_candle_student_done"
-			}
-		],
 		"exits": {
 			"up": {
 				"target": "school_stairs_hall_02",
@@ -1461,6 +1449,18 @@
 	},
 	"school_hallway_06": {
 		"background": "res://imgs/backgrounds/school_hallway_01.png",
+		"enter_stories": [
+			{
+				"event": "first_enter_school_hallway_06_after_classroom_08_event",
+				"required_flag": "story_first_enter_classroom_08_done",
+				"required_flag_missing": "first_enter_school_hallway_06_after_classroom_08_event_done"
+			},
+			{
+				"event": "defeated_tutorial_candle_student",
+				"required_flag": "defeated_candle_student_tutorial",
+				"required_flag_missing": "story_defeated_tutorial_candle_student_done"
+			}
+		],
 		"exits": {
 			"up": {
 				"target": "school_hallway_07",
@@ -1577,9 +1577,9 @@
 		"background": "res://imgs/backgrounds/classroom_black_board_06.png",
 		"enter_stories": [
 			{
-				"event": "first_enter_classroom_06_03",
+				"event": "first_enter_classroom_06_02",
 				"required_flag": "opened_classroom_06_03",
-				"required_flag_missing": "story_first_enter_classroom_06_03_done"
+				"required_flag_missing": "story_first_enter_classroom_06_02_done"
 			},
 			{
 				"event": "defeated_tutorial_combined_candle_students",
@@ -1619,7 +1619,7 @@
 					130
 				],
 				"required_flag": "story_first_enter_classroom_08_done",
-				"required_flag_missing": "story_first_enter_classroom_06_03_done",
+				"required_flag_missing": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "sound",
@@ -1692,7 +1692,7 @@
 					163,
 					130
 				],
-				"required_flag": "story_first_enter_classroom_06_03_done",
+				"required_flag": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "sound",
@@ -1778,7 +1778,7 @@
 					105
 				],
 				"required_flag": "story_first_enter_classroom_08_done",
-				"required_flag_missing": "story_first_enter_classroom_06_03_done",
+				"required_flag_missing": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "document_popup",
@@ -1816,7 +1816,7 @@
 					70,
 					105
 				],
-				"required_flag": "story_first_enter_classroom_06_03_done",
+				"required_flag": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "text",
@@ -2185,7 +2185,7 @@
 					367
 				],
 				"required_flag": "story_first_enter_classroom_08_done",
-				"required_flag_missing": "story_first_enter_classroom_06_03_done",
+				"required_flag_missing": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "portrait",
@@ -2213,7 +2213,7 @@
 					911,
 					367
 				],
-				"required_flag": "story_first_enter_classroom_06_03_done",
+				"required_flag": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "text",
@@ -2275,7 +2275,7 @@
 					105
 				],
 				"required_flag": "story_first_enter_classroom_08_done",
-				"required_flag_missing": "story_first_enter_classroom_06_03_done",
+				"required_flag_missing": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "document_popup",
@@ -2319,7 +2319,7 @@
 					70,
 					105
 				],
-				"required_flag": "story_first_enter_classroom_06_03_done",
+				"required_flag": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "text",
@@ -2674,5 +2674,26 @@
 				]
 			}
 		}
+	},
+	"classroom_11": {
+		"background": "res://imgs/backgrounds/classroom_03.png",
+		"exits": {
+			"up": {
+				"target": "classroom_10_02",
+				"position": [
+					860,
+					30
+				]
+			},
+			"right": {
+				"target": "school_hallway_10",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {}
 	}
 }
