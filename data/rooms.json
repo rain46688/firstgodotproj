@@ -70,7 +70,7 @@
 								"already_events": [
 									{
 										"type": "text",
-										"text": "무의식적으로 무언가를 집어서 주머니에 넣었다."
+										"text": "계속 더 뒤져보았다."
 									},
 									{
 										"type": "item",
@@ -1123,7 +1123,11 @@
 								"events": [
 									{
 										"type": "text",
-										"text": "안에 무언가 있다."
+										"text": "비어 있다."
+									},
+									{
+										"type": "text",
+										"text": "깊숙이 손을 넣고 더 뒤져보았다."
 									},
 									{
 										"type": "item",
@@ -1319,7 +1323,7 @@
 									},
 									{
 										"type": "text",
-										"text": "자세히 확인해보니 작은 무언가 반짝이고있다."
+										"text": "자세히 들여다보면서 더 뒤져보았다."
 									},
 									{
 										"type": "item",
@@ -1448,7 +1452,7 @@
 		}
 	},
 	"school_hallway_06": {
-		"background": "res://imgs/backgrounds/school_hallway_01.png",
+		"background": "res://imgs/backgrounds/school_hallway_05.png",
 		"enter_stories": [
 			{
 				"event": "first_enter_school_hallway_06_after_classroom_08_event",
@@ -2002,7 +2006,11 @@
 								"events": [
 									{
 										"type": "text",
-										"text": "안에 무언가 있다."
+										"text": "비어 있다."
+									},
+									{
+										"type": "text",
+										"text": "자세히 들여다보면서 더 뒤져보았다."
 									},
 									{
 										"type": "item",
