@@ -365,7 +365,7 @@
 					{
 						"type": "unlock_exit",
 						"direction": "right",
-						"required_item": "classroom_keyA",
+						"required_item": "classroom_key_a",
 						"master_key": "master_key",
 						"consume_required_key": true,
 						"consume_master_key": false,
@@ -474,7 +474,7 @@
 					911,
 					367
 				],
-				"required_flag_missing": "story_first_enter_classroom_08_done",
+				"required_flag_missing": "story_first_enter_school_hallway_06_after_classroom_08_event_done",
 				"events": [
 					{
 						"type": "text",
@@ -493,12 +493,12 @@
 					911,
 					367
 				],
-				"required_flag": "story_first_enter_classroom_08_done",
+				"required_flag": "story_first_enter_school_hallway_06_after_classroom_08_event_done",
 				"required_flag_missing": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "portrait",
-						"character": "brown_hair",
+						"character": "claire",
 						"emotion": "normal",
 						"text": "맞는 문양을 찾아야 되는 거 같은데 X 표시된 것들은 제외라는 의미겠지?"
 					},
@@ -577,7 +577,7 @@
 					70,
 					105
 				],
-				"required_flag_missing": "story_first_enter_classroom_08_done",
+				"required_flag_missing": "story_first_enter_school_hallway_06_after_classroom_08_event_done",
 				"events": [
 					{
 						"type": "document_popup",
@@ -608,7 +608,7 @@
 					70,
 					105
 				],
-				"required_flag": "story_first_enter_classroom_08_done",
+				"required_flag": "story_first_enter_school_hallway_06_after_classroom_08_event_done",
 				"required_flag_missing": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
@@ -621,9 +621,9 @@
 					},
 					{
 						"type": "portrait",
-						"character": "brown_hair",
+						"character": "claire",
 						"emotion": "normal",
-						"text": "이거 봐봐 X 표시의 위치가 달라."
+						"text": "이거 봐봐 X 표시의 위치가 다 달라."
 					},
 					{
 						"type": "document_popup",
@@ -775,7 +775,7 @@
 					911,
 					367
 				],
-				"required_flag_missing": "story_first_enter_classroom_08_done",
+				"required_flag_missing": "story_first_enter_school_hallway_06_after_classroom_08_event_done",
 				"events": [
 					{
 						"type": "text",
@@ -794,12 +794,12 @@
 					911,
 					367
 				],
-				"required_flag": "story_first_enter_classroom_08_done",
+				"required_flag": "story_first_enter_school_hallway_06_after_classroom_08_event_done",
 				"required_flag_missing": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "portrait",
-						"character": "brown_hair",
+						"character": "claire",
 						"emotion": "normal",
 						"text": "이런 거 특기야?"
 					},
@@ -810,7 +810,7 @@
 					},
 					{
 						"type": "portrait",
-						"character": "brown_hair",
+						"character": "claire",
 						"emotion": "annoyed",
 						"text": "참나, 이 상황에 뭔 게임..."
 					},
@@ -889,7 +889,7 @@
 					70,
 					105
 				],
-				"required_flag_missing": "story_first_enter_classroom_08_done",
+				"required_flag_missing": "story_first_enter_school_hallway_06_after_classroom_08_event_done",
 				"events": [
 					{
 						"type": "document_popup",
@@ -920,7 +920,7 @@
 					70,
 					105
 				],
-				"required_flag": "story_first_enter_classroom_08_done",
+				"required_flag": "story_first_enter_school_hallway_06_after_classroom_08_event_done",
 				"required_flag_missing": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
@@ -933,9 +933,20 @@
 					},
 					{
 						"type": "portrait",
-						"character": "brown_hair",
+						"character": "claire",
 						"emotion": "normal",
-						"text": "이거 봐봐 X 표시의 위치가 달라."
+						"text": "이건 주기율표?"
+					},
+					{
+						"type": "text",
+						"name": "나",
+						"text": "맞아, 군데군데 X 표시가 되어있어, 무슨 의미가 있는거같아."
+					},
+					{
+						"type": "portrait",
+						"character": "claire",
+						"emotion": "pain",
+						"text": "에효... 자기 이름은 기억이 안나는데, 다른건 또 기억하고 있네."
 					},
 					{
 						"type": "document_popup",
@@ -1120,6 +1131,13 @@
 							},
 							{
 								"text": "두 번째 사물함을 연다",
+								"flag": "got_beverage_a_classroom_04_02",
+								"already_events": [
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								],
 								"events": [
 									{
 										"type": "text",
@@ -1133,6 +1151,10 @@
 										"type": "item",
 										"item": "beverage_a",
 										"count": 3
+									},
+									{
+										"type": "flag",
+										"flag": "got_beverage_a_classroom_04_02"
 									}
 								]
 							},
@@ -1316,6 +1338,13 @@
 							},
 							{
 								"text": "여덟 번째 사물함을 연다",
+								"flag": "got_classroom_key_b_classroom_05_02",
+								"already_events": [
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								],
 								"events": [
 									{
 										"type": "text",
@@ -1323,11 +1352,15 @@
 									},
 									{
 										"type": "text",
-										"text": "자세히 들여다보면서 더 뒤져보았다."
+										"text": "깊숙이 손을 넣고 더 뒤져보았다."
 									},
 									{
 										"type": "item",
-										"item": "classroom_keyB"
+										"item": "classroom_key_b"
+									},
+									{
+										"type": "flag",
+										"flag": "got_classroom_key_b_classroom_05_02"
 									}
 								]
 							}
@@ -1622,7 +1655,6 @@
 					163,
 					130
 				],
-				"required_flag": "story_first_enter_classroom_08_done",
 				"required_flag_missing": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
@@ -1689,7 +1721,7 @@
 					}
 				]
 			},
-			"monitor_after_claire": {
+			"monitor_after_claire_died": {
 				"click_rect": [
 					870,
 					670,
@@ -1750,7 +1782,7 @@
 					70,
 					105
 				],
-				"required_flag_missing": "story_first_enter_classroom_08_done",
+				"required_flag_missing": "story_first_enter_school_hallway_06_after_classroom_08_event_done",
 				"events": [
 					{
 						"type": "document_popup",
@@ -1781,7 +1813,7 @@
 					70,
 					105
 				],
-				"required_flag": "story_first_enter_classroom_08_done",
+				"required_flag": "story_first_enter_school_hallway_06_after_classroom_08_event_done",
 				"required_flag_missing": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
@@ -1794,7 +1826,7 @@
 					},
 					{
 						"type": "portrait",
-						"character": "brown_hair",
+						"character": "claire",
 						"emotion": "normal",
 						"text": "표에 적혀있는 문자들이 비밀번호랑 연관이 되어있는거같아."
 					},
@@ -2003,6 +2035,13 @@
 							},
 							{
 								"text": "두 번째 사물함을 연다",
+								"flag": "got_classroom_key_a_classroom_07_02",
+								"already_events": [
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								],
 								"events": [
 									{
 										"type": "text",
@@ -2014,7 +2053,11 @@
 									},
 									{
 										"type": "item",
-										"item": "classroom_keyA"
+										"item": "classroom_key_a"
+									},
+									{
+										"type": "flag",
+										"flag": "got_classroom_key_a_classroom_07_02"
 									}
 								]
 							},
@@ -2079,7 +2122,7 @@
 					{
 						"type": "unlock_exit",
 						"direction": "right",
-						"required_item": "classroom_keyB",
+						"required_item": "classroom_key_b",
 						"master_key": "master_key",
 						"consume_required_key": true,
 						"consume_master_key": false,
@@ -2185,6 +2228,25 @@
 			}
 		},
 		"interactions": {
+			"black_board_before_claire": {
+				"click_rect": [
+					591,
+					293,
+					911,
+					367
+				],
+				"required_flag_missing": "story_first_enter_school_hallway_06_after_classroom_08_event_done",
+				"events": [
+					{
+						"type": "text",
+						"text": "칠판 가득 무언가 적혀있다."
+					},
+					{
+						"type": "text",
+						"text": "가까이에서 보니 멀리선 보이지 않던 문양이 그려져있다."
+					}
+				]
+			},
 			"black_board_after_claire": {
 				"click_rect": [
 					591,
@@ -2192,23 +2254,23 @@
 					911,
 					367
 				],
-				"required_flag": "story_first_enter_classroom_08_done",
+				"required_flag": "story_first_enter_school_hallway_06_after_classroom_08_event_done",
 				"required_flag_missing": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
 						"type": "portrait",
-						"character": "brown_hair",
+						"character": "claire",
 						"emotion": "normal",
 						"text": "가운데 그려져있는 글자는 무슨 상형문자?"
 					},
 					{
 						"type": "text",
 						"name": "나",
-						"text": "제가 보기엔 무슨 알파벳 모양을 나타내는 거 같아."
+						"text": "내가 보기엔 무슨 알파벳 모양을 나타내는 거 같아."
 					},
 					{
 						"type": "portrait",
-						"character": "brown_hair",
+						"character": "claire",
 						"emotion": "normal",
 						"text": "음... 오른쪽에 붙어있는 종이랑 한번 비교해 보죠."
 					}
@@ -2275,6 +2337,37 @@
 					}
 				]
 			},
+			"classroom_document_before_claire": {
+				"click_rect": [
+					1500,
+					535,
+					70,
+					105
+				],
+				"required_flag_missing": "story_first_enter_school_hallway_06_after_classroom_08_event_done",
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/documents/school_document_01_01.png",
+						"start_page": 1,
+						"sound": "res://sounds/paper.mp3",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "text",
+						"text": "종이를 위로 넘겨보니 무언가 붙어있다."
+					},
+					{
+						"type": "document_popup",
+						"path": "res://imgs/documents/school_document_04_01.png",
+						"start_page": 1,
+						"sound": "res://sounds/paper.mp3",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					}
+				]
+			},
 			"classroom_document_after_claire": {
 				"click_rect": [
 					1500,
@@ -2282,7 +2375,7 @@
 					70,
 					105
 				],
-				"required_flag": "story_first_enter_classroom_08_done",
+				"required_flag": "story_first_enter_school_hallway_06_after_classroom_08_event_done",
 				"required_flag_missing": "story_first_enter_classroom_06_02_done",
 				"events": [
 					{
@@ -2295,20 +2388,9 @@
 					},
 					{
 						"type": "portrait",
-						"character": "brown_hair",
+						"character": "claire",
 						"emotion": "normal",
-						"text": "이건 주기율표?"
-					},
-					{
-						"type": "text",
-						"name": "나",
-						"text": "맞아, 군데군데 X 표시가 되어있어, 무슨 의미가 있는거같아."
-					},
-					{
-						"type": "portrait",
-						"character": "brown_hair",
-						"emotion": "pain",
-						"text": "에효... 자기 이름은 기억이 안나는데, 다른건 또 기억하고 있네."
+						"text": "이거 봐봐 X 표시의 위치가 다 달라."
 					},
 					{
 						"type": "document_popup",
@@ -2339,6 +2421,14 @@
 	},
 	"school_hallway_09": {
 		"background": "res://imgs/backgrounds/school_hallway_04.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"story_first_enter_classroom_06_02_done"
+				],
+				"path": "res://imgs/backgrounds/school_hallway_02.png"
+			}
+		],
 		"exits": {
 			"up": {
 				"target": "school_hallway_10",
@@ -2353,6 +2443,16 @@
 					900,
 					950
 				]
+			},
+			"right": {
+				"target": "classroom_09",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter",
+				"locked": true,
+				"open_flag": "story_first_enter_classroom_06_02_done"
 			}
 		},
 		"random_encounter": {
@@ -2494,15 +2594,26 @@
 							},
 							{
 								"text": "여덟 번째 사물함을 연다",
+								"flag": "got_beverage_a_classroom_09_02",
+								"already_events": [
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								],
 								"events": [
 									{
 										"type": "text",
-										"text": "안에 무언가 있다."
+										"text": "깊숙이 손을 넣고 더 뒤져보았다."
 									},
 									{
 										"type": "item",
 										"item": "beverage_a",
 										"count": 3
+									},
+									{
+										"type": "flag",
+										"flag": "got_beverage_a_classroom_09_02"
 									}
 								]
 							}
@@ -2610,7 +2721,7 @@
 		}
 	},
 	"classroom_10_02": {
-		"background": "res://imgs/backgrounds/classroom_black_board_02.png",
+		"background": "res://imgs/backgrounds/classroom_black_board_01.png",
 		"exits": {
 			"down": {
 				"target": "classroom_10",
@@ -2685,23 +2796,7 @@
 	},
 	"classroom_11": {
 		"background": "res://imgs/backgrounds/classroom_03.png",
-		"exits": {
-			"up": {
-				"target": "classroom_10_02",
-				"position": [
-					860,
-					30
-				]
-			},
-			"right": {
-				"target": "school_hallway_10",
-				"position": [
-					1390,
-					540
-				],
-				"move_effect": "enter"
-			}
-		},
+		"exits": {},
 		"interactions": {}
 	}
 }

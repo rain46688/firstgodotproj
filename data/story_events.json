@@ -1125,7 +1125,7 @@
 		]
 	},
 	"first_enter_school_hallway_06_after_classroom_08_event": {
-		"start_flag": "first_enter_school_hallway_06_after_classroom_08_event_done",
+		"start_flag": "story_first_enter_school_hallway_06_after_classroom_08_event_done",
 		"events": [
 			{
 				"type": "hide_game_ui"
@@ -1509,7 +1509,7 @@
 			},
 			{
 				"type": "flag",
-				"flag": "first_enter_school_hallway_06_after_classroom_08_event_done"
+				"flag": "story_first_enter_school_hallway_06_after_classroom_08_event_done"
 			},
 			{
 				"type": "start_battle",
@@ -1751,7 +1751,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "나는 이곳에 오기 직전까지 내 방에서 갤러리 게시글을 확인하고 있었고, 거기서 이상한 게시글 링크를..."
+				"text": "나는 이곳에 오기 직전까지 내 방에서 갤러리를 확인하고 있었고, 거기서 이상한 게시글 링크를..."
 			},
 			{
 				"type": "standing",
@@ -1771,7 +1771,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "어...비슷한걸 봤어."
+				"text": "어... 나도 비슷한걸 봤어."
 			},
 			{
 				"type": "standing",
@@ -1782,7 +1782,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "평소처럼 갤을 관리하던 중에 또 그 새끼가 똥글 쳐올렸는지 알고 삭제하려고 눌렀는데..."
+				"text": "평소처럼 또 그 새끼가 똥글 쳐올렸는지 알고 삭제하려고 눌렀는데..."
 			},
 			{
 				"type": "standing",
@@ -2757,6 +2757,15 @@
 				"text": "아..알았어."
 			},
 			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm9.mp3",
+				"volume_db": 0,
+				"loop": true
+			},
+			{
 				"type": "story_dialogue",
 				"text": "나는 괴물의 공격을 최대한 막고 피하고 있었다, 제대로 맞으면 무조건 죽는다."
 			},
@@ -2766,7 +2775,33 @@
 			},
 			{
 				"type": "story_dialogue",
+				"text": "괴물은 알 수 없는 말을 중얼거리기 시작했다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/jump_scare.mp3",
+				"volume_db": 5,
+				"wait": false
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
 				"text": "그 순간 알 수 없는 공포에 몸이 전혀 움직이지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "내 몸이 말을 듣지 않는다, 팔 다리가 후들거리고 있었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -2780,15 +2815,6 @@
 				"type": "story_dialogue",
 				"name": "나",
 				"text": "으아아악!!"
-			},
-			{
-				"type": "stop_bgm"
-			},
-			{
-				"type": "bgm",
-				"path": "res://sounds/bgm9.mp3",
-				"volume_db": 0,
-				"loop": true
 			},
 			{
 				"type": "sound",
@@ -2825,6 +2851,10 @@
 			},
 			{
 				"type": "story_dialogue",
+				"text": "그녀가 나를 밀치고 대신 괴물의 공격을 몸으로 받았다."
+			},
+			{
+				"type": "story_dialogue",
 				"name": "클레어",
 				"text": "..."
 			},
@@ -2856,7 +2886,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "도망가...."
+				"text": "미안...."
 			},
 			{
 				"type": "sound",

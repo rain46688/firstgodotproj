@@ -3382,6 +3382,35 @@ func get_enter_story_candidate_event_id(candidate):
 		return str(candidate.get("event", ""))
 
 	return ""
+# enter_story 조건용 flag 목록 가져오기 함수
+func get_enter_story_condition_flags(candidate, key_name):
+	var result = []
+
+	if candidate == null:
+		return result
+
+	if typeof(candidate) != TYPE_DICTIONARY:
+		return result
+
+	if not candidate.has(key_name):
+		return result
+
+	var value = candidate[key_name]
+
+	if typeof(value) == TYPE_STRING:
+		var flag_id = str(value)
+
+		if flag_id != "":
+			result.append(flag_id)
+
+	elif typeof(value) == TYPE_ARRAY:
+		for flag_value in value:
+			var flag_id = str(flag_value)
+
+			if flag_id != "":
+				result.append(flag_id)
+
+	return result
 # enter_story 후보가 현재 flag 조건에 맞는지 확인
 func can_run_enter_story_candidate(candidate):
 	var story_event_id = get_enter_story_candidate_event_id(candidate)
@@ -3413,17 +3442,21 @@ func can_run_enter_story_candidate(candidate):
 	if typeof(candidate) != TYPE_DICTIONARY:
 		return false
 
-	# 특정 플래그가 있을 때만 실행
-	var required_flag = str(candidate.get("required_flag", ""))
+	# 특정 플래그들이 모두 있을 때만 실행
+	# 예:
+	# "required_flag": "story_a_done"
+	# "required_flag": ["story_a_done", "story_b_done"]
+	for flag_id in get_enter_story_condition_flags(candidate, "required_flag"):
+		if not has_flag(flag_id):
+			return false
 
-	if required_flag != "" and not has_flag(required_flag):
-		return false
-
-	# 특정 플래그가 없을 때만 실행
-	var required_flag_missing = str(candidate.get("required_flag_missing", ""))
-
-	if required_flag_missing != "" and has_flag(required_flag_missing):
-		return false
+	# 특정 플래그들이 모두 없을 때만 실행
+	# 예:
+	# "required_flag_missing": "story_a_done"
+	# "required_flag_missing": ["story_a_done", "story_b_done"]
+	for flag_id in get_enter_story_condition_flags(candidate, "required_flag_missing"):
+		if has_flag(flag_id):
+			return false
 
 	return true
 # 현재 room에서 다음으로 실행 가능한 스토리 이벤트 ID 찾기

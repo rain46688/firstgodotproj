@@ -948,7 +948,7 @@
 			{
 				"id": "left_arm",
 				"name": "구겨진 파이프를 들고있는 오른팔",
-				"max_hp": 100,
+				"max_hp": 150,
 				"z_index": 6,
 				"image": "res://imgs/enemies/combined_candle_students_left.png",
 				"observe_text": "팔 부위를 먼저 노리는게 좋을거같다.",
@@ -1021,7 +1021,7 @@
 			{
 				"id": "right_arm",
 				"name": "망가진 의자를 들고있는 왼팔",
-				"max_hp": 200,
+				"max_hp": 250,
 				"z_index": 6,
 				"image": "res://imgs/enemies/combined_candle_students_right.png",
 				"observe_text": "팔 부위를 먼저 노리는게 좋을거같다.",

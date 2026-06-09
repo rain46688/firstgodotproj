@@ -7,7 +7,7 @@ var base_physics_steps_per_frame := Engine.max_physics_steps_per_frame
 var time_scale_factor := 1.0
 
 func _ready() -> void:
-	time_scale_factor = 2.0
+	time_scale_factor = 1.0
 	update_time_scale()
 
 # 게임 배속 조절하기 위한 스크립트일 뿐 게임이랑 무관함

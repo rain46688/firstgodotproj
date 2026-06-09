@@ -1,7 +1,7 @@
 {
-	"classroom_keyA": {
+	"classroom_key_a": {
 		"name": "교실키A",
-		"description": "낡은 교실 문을 열 수 있는 열쇠다.",
+		"description": "어딘가의 교실 문을 열 수 있는 열쇠다.",
 		"image": "res://imgs/items/classroom_key180x180.png",
 		"width": 1,
 		"height": 1,
@@ -9,9 +9,9 @@
 		"stackable": false,
 		"consumed_on_use": true
 	},
-	"classroom_keyB": {
+	"classroom_key_b": {
 		"name": "교실키B",
-		"description": "낡은 교실 문을 열 수 있는 열쇠다.",
+		"description": "어딘가의 교실 문을 열 수 있는 열쇠다.",
 		"image": "res://imgs/items/classroom_key180x180.png",
 		"width": 1,
 		"height": 1,
@@ -37,7 +37,7 @@
 		"height": 1,
 		"type": "weapon",
 		"stackable": false,
-		"attack_min": 3,
+		"attack_min": 2,
 		"attack_max": 4,
 		"critical_chance": 0.25,
 		"critical_multiplier": 2.0,
@@ -154,8 +154,8 @@
 		"height": 1,
 		"type": "weapon",
 		"stackable": false,
-		"attack_min": 1,
-		"attack_max": 4,
+		"attack_min": 2,
+		"attack_max": 2,
 		"critical_chance": 0.1,
 		"critical_multiplier": 2.2,
 		"consumed_on_use": false,
