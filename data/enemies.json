@@ -23,7 +23,7 @@
 		"can_escape": true,
 		"encounter_text": "머리에 알수없는걸 뒤집어쓴 무언가가 다가왔다.",
 		"observe_text": "기분 나쁜 살이 타는 냄새가 코를 찌른다.",
-		"weakness_text": "들고있는 양초가 약점인 것 같다.",
+		"weakness_text": "손에 들고있는 양초가 약점인 것 같다.",
 		"patterns": [
 			{
 				"id": "basic_attack",
@@ -136,21 +136,19 @@
 		"drops": [
 			{
 				"item": "unknown_coin",
-				"chance": 100,
+				"chance": 50,
 				"min": 1,
-				"max": 3
+				"max": 2
 			},
 			{
 				"item": "razor",
-				"chance": 100,
+				"chance": 1,
 				"min": 1,
 				"max": 1,
 				"once_flag": "got_razor_from_candle_student"
 			}
 		],
-		"defeat_flags": [
-			"got_razor_from_candle_student"
-		]
+		"defeat_flags": []
 	},
 	"combined_candle_students_phase_01": {
 		"name": "합쳐진 밀랍 학생들",
@@ -1093,5 +1091,254 @@
 		"defeat_flags": [
 			"defeated_combined_candle_students_tutorial"
 		]
+	},
+	"candle_student_woman": {
+		"name": "밀랍을 뒤집어쓴 여학생",
+		"max_hp": 130,
+		"battle_bgm": "",
+		"battle_bgm_volume_db": -3.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/enemy_encounter2.mp3",
+		"encounter_sound_volume_db": 10.0,
+		"image": "res://imgs/enemies/candle_student_woman.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.2,
+		"enemy_size": [
+			550,
+			660
+		],
+		"enemy_position": [
+			635,
+			0
+		],
+		"can_escape": true,
+		"encounter_text": "밀랍을 뒤집어쓴 여학생이 비틀거리며 다가온다.",
+		"observe_text": "굳어붙은 밀랍이 들러붙어 있다. 머리 위의 작은 양초가 희미하게 흔들린다.",
+		"weakness_text": "머리의 양초가 약점인 것 같다.",
+		"patterns": [
+			{
+				"id": "awl_three_slash",
+				"weight": 40,
+				"warning_text": "오른손의 칼을 짧게 휘두른다...",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							740,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.0
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.25
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1060,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.5
+					}
+				]
+			},
+			{
+				"id": "chair_heavy_swing",
+				"weight": 25,
+				"warning_text": "왼손에 끌고 있던 의자를 크게 휘두른다...",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "impact_basic",
+						"start": [
+							780,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 0.15
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							1020,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 0.55
+					}
+				]
+			},
+			{
+				"id": "wax_stagger_slash",
+				"weight": 25,
+				"warning_text": "굳어붙은 밀랍이 갈라지며 사방으로 튄다...",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							700,
+							0
+						],
+						"rotation": 180,
+						"damage": 4,
+						"delay": 0.0
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							840,
+							0
+						],
+						"rotation": 180,
+						"damage": 4,
+						"delay": 0.3
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							980,
+							0
+						],
+						"rotation": 180,
+						"damage": 4,
+						"delay": 0.6
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							1120,
+							0
+						],
+						"rotation": 180,
+						"damage": 4,
+						"delay": 0.9
+					}
+				]
+			},
+			{
+				"id": "desperate_rush",
+				"weight": 10,
+				"warning_text": "오른손의 칼을 휘두른다...",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							760,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.0
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.2
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1040,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.4
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 0.8
+					}
+				]
+			}
+		],
+		"hitbox_base_size": [
+			556,
+			1000
+		],
+		"hitboxes": [
+			{
+				"id": "body",
+				"name": "몸통",
+				"rect": [
+					170,
+					190,
+					160,
+					313
+				],
+				"weak": false
+			},
+			{
+				"id": "right_arm",
+				"name": "오른쪽 팔",
+				"rect": [
+					335,
+					265,
+					50,
+					250
+				],
+				"weak": false
+			},
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					150,
+					40,
+					140,
+					160
+				],
+				"weak": true
+			}
+		],
+		"drops": [
+			{
+				"item": "unknown_coin",
+				"chance": 50,
+				"min": 1,
+				"max": 3
+			},
+			{
+				"item": "cutter_knife",
+				"chance": 1,
+				"min": 1,
+				"max": 1,
+				"once_flag": "got_cutter_knife_from_candle_student_woman"
+			}
+		],
+		"defeat_flags": []
 	}
 }

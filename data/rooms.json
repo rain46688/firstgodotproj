@@ -170,7 +170,7 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway",
 			"event_table": "school_hallway",
-			"chance": 25
+			"chance": 40
 		}
 	},
 	"classroom_01": {
@@ -380,7 +380,7 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway",
 			"event_table": "school_hallway",
-			"chance": 25
+			"chance": 40
 		}
 	},
 	"classroom_02": {
@@ -681,7 +681,7 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway",
 			"event_table": "school_hallway",
-			"chance": 25
+			"chance": 40
 		}
 	},
 	"classroom_03": {
@@ -1004,7 +1004,7 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway",
 			"event_table": "school_hallway",
-			"chance": 25
+			"chance": 40
 		}
 	},
 	"classroom_04": {
@@ -1202,7 +1202,7 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway",
 			"event_table": "school_hallway",
-			"chance": 25
+			"chance": 40
 		}
 	},
 	"classroom_05": {
@@ -1525,7 +1525,7 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway",
 			"event_table": "school_hallway",
-			"chance": 25
+			"chance": 40
 		}
 	},
 	"classroom_06": {
@@ -1904,7 +1904,7 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway",
 			"event_table": "school_hallway",
-			"chance": 25
+			"chance": 40
 		}
 	},
 	"classroom_07": {
@@ -2137,7 +2137,7 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway",
 			"event_table": "school_hallway",
-			"chance": 25
+			"chance": 40
 		}
 	},
 	"classroom_08": {
@@ -2458,7 +2458,7 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway",
 			"event_table": "school_hallway",
-			"chance": 25
+			"chance": 40
 		}
 	},
 	"classroom_09": {
@@ -2645,7 +2645,7 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway",
 			"event_table": "school_hallway",
-			"chance": 25
+			"chance": 40
 		}
 	},
 	"classroom_10": {
@@ -2794,6 +2794,31 @@
 			}
 		}
 	},
+	"school_hallway_11": {
+		"background": "res://imgs/backgrounds/school_hallway_07.png",
+		"exits": {
+			"up": {
+				"target": "school_hallway_12",
+				"position": [
+					860,
+					30
+				]
+			},
+			"right": {
+				"target": "classroom_11",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "school_hallway",
+			"event_table": "school_hallway",
+			"chance": 40
+		}
+	},
 	"classroom_11": {
 		"background": "res://imgs/backgrounds/classroom_04.png",
 		"enter_stories": [
@@ -2803,7 +2828,16 @@
 				"required_flag_missing": "story_first_enter_classroom_11_done"
 			}
 		],
-		"exits": {},
+		"exits": {
+			"right": {
+				"target": "school_hallway_11",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
 		"interactions": {}
 	}
 }

@@ -2,8 +2,15 @@
 	"school_hallway": [
 		{
 			"enemy": "candle_student",
-			"weight": 100,
-			"required_flag": "battle_tutorial_done",
+			"weight": 60,
+			"required_flag": "opened_school_stairs_hall_02",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "candle_student_woman",
+			"weight": 40,
+			"required_flag": "opened_school_stairs_hall_02",
 			"missing_flag": "",
 			"first_turn": ""
 		}

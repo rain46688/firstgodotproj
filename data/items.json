@@ -49,6 +49,7 @@
 		"defense_move_speed": 300,
 		"parry_window": 0.1,
 		"piercing": false,
+		"defense_start_offset": [0, 90],
 		"battle_sprite_size": [
 			220,
 			220
@@ -89,11 +90,12 @@
 		"defense_move_speed": 500,
 		"parry_window": 0.25,
 		"piercing": false,
+		"defense_start_offset": [0, 100],
 		"battle_sprite_size": [
 			140,
 			140
 		],
-		"attack_move_range": 380,
+		"attack_move_range": 400,
 		"attack_swing_speed": 2.5,
 		"weapon_angle_step": 5,
 		"attack_projectile": "impact_basic",
@@ -115,8 +117,8 @@
 		"width": 1,
 		"height": 4,
 		"type": "weapon",
-		"attack_min": 20,
-		"attack_max": 20,
+		"attack_min": 5,
+		"attack_max": 10,
 		"critical_chance": 0.1,
 		"critical_multiplier": 2.0,
 		"consumed_on_use": false,
@@ -127,6 +129,7 @@
 		"defense_move_speed": 500,
 		"parry_window": 0.05,
 		"piercing": true,
+		"defense_start_offset": [0, 90],
 		"battle_sprite_size": [
 			300,
 			300
@@ -166,6 +169,7 @@
 		"defense_move_speed": 400,
 		"parry_window": 0.15,
 		"piercing": false,
+		"defense_start_offset": [0, 90],
 		"battle_sprite_size": [
 			140,
 			140

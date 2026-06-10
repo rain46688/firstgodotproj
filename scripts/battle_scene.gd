@@ -164,7 +164,7 @@ var enemy_sprite_default_position = Vector2.ZERO
 var battle_difficulty = "normal"
 
 # 패링 판정 처리 부분
-# parry_input_buffer_time 0.035
+# parry_input_buffer_time 0.04
 # parry_height 6
 
 # 상수 변수 모음
@@ -186,7 +186,7 @@ func update_defense_mode_input(delta):
 	
 	# 패링 판정 처리 부분 1
 	if Input.is_action_just_pressed("ui_accept"):
-		parry_input_buffer_time = 0.035
+		parry_input_buffer_time = 0.04
 
 	if parry_input_buffer_time > 0:
 		parry_input_buffer_time -= delta
@@ -4216,6 +4216,12 @@ func move_defense_weapon_to_area_center():
 
 	var correction = area.get_center() - hit_rect.get_center()
 	weapon_sprite.global_position += correction
+
+	var weapon_data = get_current_weapon_data()
+	var offset_data = weapon_data.get("defense_start_offset", [0, 0])
+	var defense_start_offset = Vector2(offset_data[0], offset_data[1])
+
+	weapon_sprite.global_position += defense_start_offset
 
 	clamp_defense_weapon_to_area()
 # 플레이어 방어 모드 종료 함수

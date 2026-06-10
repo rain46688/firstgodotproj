@@ -189,10 +189,10 @@ var current_battle_context = {}
 # my_test
 # combined_candle_students_phase_01
 # candle_student
-const DEBUG_ADD_START_ITEMS = false
-const DEBUG_OPEN_PENDING_LOOT_TEST = false
+const DEBUG_ADD_START_ITEMS = true
+const DEBUG_OPEN_PENDING_LOOT_TEST = true
 const DEBUG_START_BATTLE_TEST = false
-const DEBUG_TEST_BATTLE_ENEMY_ID = "combined_candle_students_phase_01"
+const DEBUG_TEST_BATTLE_ENEMY_ID = "candle_student_woman"
 const DEBUG_BATTLE_START_DELAY = 1.0
 const DEBUG_START_ITEM_PRESET = "consumable_test"
 
@@ -527,6 +527,11 @@ func start_loaded_game_from_session():
 		return
 
 	print("이어하기 완료")
+	
+	# 이어하기에서도 개발 테스트 흐름을 실행하고 싶을 때 사용
+	await add_debug_start_items()
+	await run_debug_before_room_update_flow()
+	await run_debug_after_room_update_flow()
 # 게임 시작에 필요한 데이터 로드 함수
 func load_startup_game_data():
 	var load_steps = [
@@ -931,8 +936,8 @@ func get_debug_start_item_ids():
 				#"holy_grail_relic",
 				#"music_box_relic",
 				"cross_relic",
-				"razor",
-				"cutter_knife"
+				#"razor",
+				#"cutter_knife"
 			]
 
 		"weapon_count_test":
