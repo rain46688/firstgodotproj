@@ -212,7 +212,7 @@ const STAT_GOOD_COLOR = "#55ff77"
 const STAT_BAD_COLOR = "#ff5555"
 const STAT_INFO_COLOR = "#88ccff"
 # 게임 처음 시작 스토리 이벤트 # prologue_part_01
-const PROLOGUE_STORY_EVENT_ID = "prologue_part_01"
+const PROLOGUE_STORY_EVENT_ID = "first_enter_classroom_11"
 # 만능 열쇠
 const DEFAULT_MASTER_KEY_ID = "master_key"
 

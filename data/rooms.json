@@ -2795,7 +2795,14 @@
 		}
 	},
 	"classroom_11": {
-		"background": "res://imgs/backgrounds/classroom_03.png",
+		"background": "res://imgs/backgrounds/classroom_04.png",
+		"enter_stories": [
+			{
+				"event": "first_enter_classroom_11",
+				"required_flag": "opened_classroom_06_03",
+				"required_flag_missing": "story_first_enter_classroom_11_done"
+			}
+		],
 		"exits": {},
 		"interactions": {}
 	}

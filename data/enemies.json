@@ -10,7 +10,7 @@
 		"encounter_sound": "res://sounds/enemy_encounter2.mp3",
 		"encounter_sound_volume_db": 10.0,
 		"image": "res://imgs/enemies/candle_student.png",
-		"battle_background": "res://imgs/backgrounds/hallway_01.png",
+		"battle_background": "",
 		"battle_background_alpha": 0.2,
 		"enemy_size": [
 			550,

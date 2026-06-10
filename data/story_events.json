@@ -234,12 +234,6 @@
 			},
 			{
 				"type": "show_game_ui"
-			},
-			{
-				"type": "auto_save",
-				"slot": 1,
-				"show_message": false,
-				"play_sound": true
 			}
 		]
 	},
@@ -2346,7 +2340,7 @@
 				"first_turn": "enemy",
 				"game_over_on_lose": false,
 				"lose_story": "lose_tutorial_combined_candle_students",
-				"defeat_player_hp": 1,
+				"defeat_player_hp": 90,
 				"lose_flag": "lose_combined_candle_students_tutorial"
 			}
 		]
@@ -3056,6 +3050,310 @@
 			{
 				"type": "flag",
 				"flag": "story_defeated_tutorial_combined_candle_students_done"
+			}
+		]
+	},
+	"first_enter_classroom_11": {
+		"start_flag": "story_first_enter_classroom_11_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm2.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/classroom_04.png"
+			},
+			{
+				"type": "camera_zoom",
+				"x": 300,
+				"y": 350,
+				"zoom": 1.5,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "camera_pan",
+				"x": 500,
+				"y": 350,
+				"duration": 200.0,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 한동안 이 교실에 머물러 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "정확히 얼마나 시간이 흘렀는지는 알 수 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "교실로 보이는 창밖은 늘 어두웠고, 시간은 멈춰있는 것 같았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "처음에는 몇 시간 정도라고 생각했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그다음에는 하루쯤 지났을지도 모른다고 생각했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 아무리 기다려도 배가 고프지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "목이 마르지도 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "몸은 분명히 살아 있는데, 살아 있는 몸이라면 당연히 느껴야 할 것들이 하나씩 빠져나간 기분이었다"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "여긴 진짜 현실이 아닌건가..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 내 손등을 내려다보았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "괴물과 싸울 때 긁혔던 자국은 거의 사라져 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "처음에는 따끔거렸고, 피가 맺힌 것처럼 보였지만, 시간이 지나자 상처가 천천히 닫혔다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그냥 알아서 아물었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "마치 이 공간이 나를 죽지 않을 정도로만 고쳐놓는 것처럼."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 사실이 오히려 더 불쾌했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "죽지 않게 만든다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "계속 움직이게 만든다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 아직도 그날의 기억이 생생하게 떠오른다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그때 우리가 바로 사다리를 올랐다면 어땠을까."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "숨지 않고, 망설이지 않고, 그냥 무작정 올라갔다면."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "둘 다 살 수 있었을까."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 오만했다, 무언가 해냈다는 마음에 우쭐댄 것일지도 몰랐다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "무섭지만 할 수 있다고."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이곳의 규칙을 이해하면 살아남을 수 있다고."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "마치 비디오 게임처럼..."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/radio_sound.mp3",
+				"volume_db": 0,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "치직... 치지직..."
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "camera_zoom",
+				"x": 550,
+				"y": 5,
+				"zoom": 2.5,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "방송?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 반사적으로 몸을 일으켰다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이곳에 온 뒤 처음 듣는 소리였다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "괴물의 발소리도 아니고, 문이 삐걱거리는 소리도 아니고, 알 수 없는 울음소리도 아니었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "스피커 너머에서 희미한 목소리가 들렸다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/radio_sound.mp3",
+				"volume_db": 0,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"name": "의문의 여성",
+				"text": "치지직... □□□ 살아... 계시다면...."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "의문의 여성",
+				"text": "위층... □□□ 생존... 교내 방송실...."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "뭐?"
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/radio_sound.mp3",
+				"volume_db": 0,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 스피커 아래로 다가갔다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "잡음 때문에 정확히 알아듣기 힘들었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "뚝"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "더 이상 아무런 말도 하지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 이전과 같은 조용함은 아니었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 한동안 스피커를 올려다보았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "방송실, 위층, 생존자"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 단어들이 머릿속에서 계속 맴돌았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "생존자가 있다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "아직 살아 있는 사람이 나 이외에 있다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "어딘가에서 방송 장비를 켜고, 다른 사람에게 와달라고 말하는 사람이 있다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 사실 하나만으로도 멈춰 있던 심장이 다시 움직이기 시작하는 것 같았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 교실 문 앞에 섰다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "미안"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 누구에게 하는 말인지 모를 사과를 남기고 문을 열었다."
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "change_room",
+				"room": "classroom_11"
+			},
+			{
+				"type": "show_game_ui"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm2.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "camera_reset",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_classroom_11_done"
+			},
+			{
+				"type": "auto_save",
+				"slot": 1,
+				"show_message": false,
+				"play_sound": true
 			}
 		]
 	}
