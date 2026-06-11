@@ -4,7 +4,6 @@
 [ext_resource type="FontFile" uid="uid://dshbp46j15be4" path="res://fonts/x12y12pxMaruMinyaHangul.ttf" id="2_kinr6"]
 [ext_resource type="Texture2D" uid="uid://bjv05s6l00lcm" path="res://imgs/ui/전투화면_no_black_1920x1080.png" id="2_tttxe"]
 [ext_resource type="Texture2D" uid="uid://da27cgmes16v3" path="res://imgs/ui/격자1075x342.png" id="4_8qdv8"]
-[ext_resource type="AudioStream" uid="uid://4aw52p440fl" path="res://sounds/bgm8.mp3" id="5_pxwbd"]
 [ext_resource type="AudioStream" uid="uid://bk5gdqchewy3s" path="res://sounds/parry.mp3" id="6_g72on"]
 [ext_resource type="AudioStream" uid="uid://e3lmymn1pujd" path="res://sounds/block.mp3" id="7_tttxe"]
 [ext_resource type="AudioStream" uid="uid://mhg6um17w3u7" path="res://sounds/hit_normal.mp3" id="8_ti0og"]
@@ -325,7 +324,6 @@ theme_override_fonts/font = ExtResource("2_kinr6")
 theme_override_font_sizes/font_size = 20
 
 [node name="BattleBgm" type="AudioStreamPlayer" parent="." unique_id=90345847]
-stream = ExtResource("5_pxwbd")
 volume_db = -5.0
 
 [node name="EnemyEncounterSound" type="AudioStreamPlayer" parent="." unique_id=959709073]

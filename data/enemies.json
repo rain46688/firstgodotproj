@@ -2,8 +2,8 @@
 	"candle_student": {
 		"name": "밀랍을 뒤집어쓴 학생",
 		"max_hp": 100,
-		"battle_bgm": "",
-		"battle_bgm_volume_db": -3.0,
+		"battle_bgm": "res://sounds/bgm15.mp3",
+		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
 		"battle_bgm_fade_in": true,
 		"battle_bgm_fade_time": 3.0,
@@ -141,6 +141,12 @@
 				"max": 2
 			},
 			{
+				"item": "beverage_a",
+				"chance": 10,
+				"min": 1,
+				"max": 2
+			},
+			{
 				"item": "razor",
 				"chance": 1,
 				"min": 1,
@@ -154,8 +160,8 @@
 		"name": "합쳐진 밀랍 학생들",
 		"phase": 1,
 		"max_hp": 300,
-		"battle_bgm": "",
-		"battle_bgm_volume_db": -3.0,
+		"battle_bgm": "res://sounds/bgm13.mp3",
+		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
 		"battle_bgm_fade_in": true,
 		"battle_bgm_fade_time": 3.0,
@@ -175,7 +181,7 @@
 		"can_escape": false,
 		"encounter_text": "합쳐진 밀랍 학생들이 축축한 소리를 내며 몸을 다가온다.",
 		"observe_text": "사람의 형체가 뭉쳐져서 만들어진것 같다.",
-		"weakness_text": "",
+		"weakness_text": "머리가 약점인거같다.",
 		"next_phase_enemy_id": "combined_candle_students_phase_02",
 		"phase_transition_text": "합쳐진 몸이 녹아내리듯 뒤틀리기 시작한다...",
 		"patterns": [
@@ -201,7 +207,7 @@
 					100,
 					230
 				],
-				"weak": false
+				"weak": true
 			},
 			{
 				"id": "left_body",
@@ -303,7 +309,7 @@
 			{
 				"id": "right_arm",
 				"name": "망가진 의자를 들고있는 왼팔",
-				"max_hp": 300,
+				"max_hp": 250,
 				"z_index": 6,
 				"image": "res://imgs/enemies/combined_candle_students_right.png",
 				"observe_text": "팔 부위를 먼저 노리는게 좋을거같다.",
@@ -376,9 +382,9 @@
 	"combined_candle_students_phase_02": {
 		"name": "합쳐진 밀랍 학생들",
 		"phase": 2,
-		"max_hp": 300,
-		"battle_bgm": "",
-		"battle_bgm_volume_db": -3.0,
+		"max_hp": 200,
+		"battle_bgm": "res://sounds/bgm13.mp3",
+		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
 		"battle_bgm_fade_in": true,
 		"battle_bgm_fade_time": 3.0,
@@ -733,8 +739,8 @@
 		"name": "밀랍을 뒤집어쓴 학생",
 		"skip_if_flag": "defeated_tutorial_enemy",
 		"max_hp": 80,
-		"battle_bgm": "",
-		"battle_bgm_volume_db": -3.0,
+		"battle_bgm": "res://sounds/bgm13.mp3",
+		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
 		"battle_bgm_fade_in": true,
 		"battle_bgm_fade_time": 3.0,
@@ -754,7 +760,7 @@
 		"can_escape": false,
 		"encounter_text": "머릿 속에서 무언가가 외치고있다.\n\"정확하게 적을 조준해서 공격하라.\"",
 		"observe_text": "머릿 속에서 무언가가 되뇌고 있다.\n\"적의 공격에 맞춰서 반격하라.\"",
-		"weakness_text": "적의 약점은 적에게 강한 피해를 입힌다.",
+		"weakness_text": "양초를 들고있는 손이 약점인 것 같다.\n\"적의 약점은 적에게 강한 피해를 입힌다.\"",
 		"patterns": [
 			{
 				"id": "basic_attack",
@@ -872,8 +878,8 @@
 	"combined_candle_students_tutorial": {
 		"name": "합쳐진 밀랍 학생들",
 		"max_hp": 100,
-		"battle_bgm": "",
-		"battle_bgm_volume_db": -3.0,
+		"battle_bgm": "res://sounds/bgm13.mp3",
+		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
 		"battle_bgm_fade_in": true,
 		"battle_bgm_fade_time": 3.0,
@@ -893,7 +899,7 @@
 		"can_escape": false,
 		"encounter_text": "합쳐진 밀랍 학생들이 축축한 소리를 내며 몸을 다가온다.",
 		"observe_text": "사람의 형체가 뭉쳐져서 만들어진것 같다.",
-		"weakness_text": "",
+		"weakness_text": "머리가 약점인거같다.",
 		"patterns": [
 			{
 				"id": "basic_attack",
@@ -917,7 +923,7 @@
 					100,
 					230
 				],
-				"weak": false
+				"weak": true
 			},
 			{
 				"id": "left_body",
@@ -946,7 +952,7 @@
 			{
 				"id": "left_arm",
 				"name": "구겨진 파이프를 들고있는 오른팔",
-				"max_hp": 150,
+				"max_hp": 200,
 				"z_index": 6,
 				"image": "res://imgs/enemies/combined_candle_students_left.png",
 				"observe_text": "팔 부위를 먼저 노리는게 좋을거같다.",
@@ -1095,8 +1101,8 @@
 	"candle_student_woman": {
 		"name": "밀랍을 뒤집어쓴 여학생",
 		"max_hp": 130,
-		"battle_bgm": "",
-		"battle_bgm_volume_db": -3.0,
+		"battle_bgm": "res://sounds/bgm15.mp3",
+		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
 		"battle_bgm_fade_in": true,
 		"battle_bgm_fade_time": 3.0,
@@ -1330,6 +1336,18 @@
 				"chance": 30,
 				"min": 1,
 				"max": 3
+			},
+			{
+				"item": "beverage_a",
+				"chance": 10,
+				"min": 1,
+				"max": 3
+			},
+			{
+				"item": "tranquilizer",
+				"chance": 10,
+				"min": 1,
+				"max": 1
 			},
 			{
 				"item": "cutter_knife",
