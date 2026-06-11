@@ -131,9 +131,9 @@
 			},
 			{
 				"type": "camera_pan",
-				"x": 1500,
+				"x": 1000,
 				"y": 350,
-				"duration": 120.0,
+				"duration": 200.0,
 				"wait": false
 			},
 			{
@@ -280,9 +280,9 @@
 			},
 			{
 				"type": "camera_pan",
-				"x": 1500,
+				"x": 1000,
 				"y": 750,
-				"duration": 120.0,
+				"duration": 200.0,
 				"wait": false
 			},
 			{
@@ -410,9 +410,9 @@
 			},
 			{
 				"type": "camera_pan",
-				"x": 1500,
+				"x": 1000,
 				"y": 350,
-				"duration": 120.0,
+				"duration": 200.0,
 				"wait": false
 			},
 			{
@@ -484,9 +484,9 @@
 			},
 			{
 				"type": "camera_pan",
-				"x": 1500,
+				"x": 1000,
 				"y": 550,
-				"duration": 120.0,
+				"duration": 200.0,
 				"wait": false
 			},
 			{
@@ -629,8 +629,8 @@
 			}
 		]
 	},
-	"first_enter_classroom_07_02": {
-		"start_flag": "story_first_enter_classroom_07_02_done",
+	"first_enter_classroom_10_02": {
+		"start_flag": "story_first_enter_classroom_10_02_done",
 		"events": [
 			{
 				"type": "hide_game_ui"
@@ -673,12 +673,12 @@
 			},
 			{
 				"type": "flag",
-				"flag": "story_first_enter_classroom_07_02_done"
+				"flag": "story_first_enter_classroom_10_02_done"
 			}
 		]
 	},
-	"first_enter_classroom_08": {
-		"start_flag": "story_first_enter_classroom_08_done",
+	"first_enter_classroom_09": {
+		"start_flag": "story_first_enter_classroom_09_done",
 		"events": [
 			{
 				"type": "hide_game_ui"
@@ -709,9 +709,9 @@
 			},
 			{
 				"type": "camera_pan",
-				"x": 1500,
+				"x": 1000,
 				"y": 350,
-				"duration": 120.0,
+				"duration": 200.0,
 				"wait": false
 			},
 			{
@@ -1096,7 +1096,7 @@
 			},
 			{
 				"type": "change_room",
-				"room": "classroom_08"
+				"room": "classroom_09"
 			},
 			{
 				"type": "bgm",
@@ -1114,12 +1114,12 @@
 			},
 			{
 				"type": "flag",
-				"flag": "story_first_enter_classroom_08_done"
+				"flag": "story_first_enter_classroom_09_done"
 			}
 		]
 	},
-	"first_enter_school_hallway_06_after_classroom_08_event": {
-		"start_flag": "story_first_enter_school_hallway_06_after_classroom_08_event_done",
+	"first_enter_school_hallway_08_after_classroom_09_event": {
+		"start_flag": "story_first_enter_school_hallway_08_after_classroom_09_event_done",
 		"events": [
 			{
 				"type": "hide_game_ui"
@@ -1205,9 +1205,9 @@
 			},
 			{
 				"type": "camera_pan",
-				"x": 1500,
+				"x": 1000,
 				"y": 350,
-				"duration": 120.0,
+				"duration": 200.0,
 				"wait": false
 			},
 			{
@@ -1485,7 +1485,7 @@
 			},
 			{
 				"type": "change_room",
-				"room": "school_hallway_06"
+				"room": "school_hallway_08"
 			},
 			{
 				"type": "bgm",
@@ -1503,7 +1503,7 @@
 			},
 			{
 				"type": "flag",
-				"flag": "story_first_enter_school_hallway_06_after_classroom_08_event_done"
+				"flag": "story_first_enter_school_hallway_08_after_classroom_09_event_done"
 			},
 			{
 				"type": "start_battle",
@@ -1842,8 +1842,8 @@
 			}
 		]
 	},
-	"first_enter_classroom_06_02": {
-		"start_flag": "story_first_enter_classroom_06_02_done",
+	"first_enter_classroom_08_02": {
+		"start_flag": "story_first_enter_classroom_08_02_done",
 		"events": [
 			{
 				"type": "hide_game_ui"
@@ -1884,16 +1884,16 @@
 			{
 				"type": "camera_zoom",
 				"x": 760,
-				"y": 340,
+				"y": 350,
 				"zoom": 2.0,
-				"duration": 0.1,
-				"wait": false
+				"duration": 1.0,
+				"wait": true
 			},
 			{
 				"type": "camera_pan",
-				"x": 1500,
+				"x": 1000,
 				"y": 350,
-				"duration": 120.0,
+				"duration": 200.0,
 				"wait": false
 			},
 			{
@@ -2325,14 +2325,14 @@
 			},
 			{
 				"type": "flag",
-				"flag": "story_first_enter_classroom_06_02_done"
+				"flag": "story_first_enter_classroom_08_02_done"
 			},
 			{
 				"type": "fade"
 			},
 			{
 				"type": "change_room",
-				"room": "classroom_06_02"
+				"room": "classroom_08_02"
 			},
 			{
 				"type": "start_battle",
@@ -2459,7 +2459,7 @@
 				"type": "camera_pan",
 				"x": 1000,
 				"y": 350,
-				"duration": 120.0,
+				"duration": 200.0,
 				"wait": false
 			},
 			{
@@ -2832,7 +2832,7 @@
 				"type": "camera_pan",
 				"x": 1000,
 				"y": 350,
-				"duration": 120.0,
+				"duration": 200.0,
 				"wait": false
 			},
 			{

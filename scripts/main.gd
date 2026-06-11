@@ -114,6 +114,27 @@ var current_bgm_base_volume_db = -5.0
 var story_color_overlay = null
 # 스토리 카메라 연출 트윈
 var story_camera_tween = null
+
+# 방 대기 화면 미세 이동 변수
+var room_idle_motion_enabled = false
+var room_idle_motion_time = 0.0
+var room_idle_motion_base_position = Vector2.ZERO
+var room_idle_motion_scale = 1.0
+var room_idle_motion_amplitude_x = 0.0
+var room_idle_motion_amplitude_y = 0.0
+var room_idle_motion_speed = 0.3
+
+# 방 분위기 오버레이 변수
+var room_ambient_overlay = null
+var room_ambient_overlay_frames = []
+var room_ambient_overlay_frame_index = 0
+var room_ambient_overlay_frame_timer = 0.0
+var room_ambient_overlay_fps = 6.0
+
+# 방 분위기 루프 사운드 변수
+var room_ambient_sound_player = null
+var current_room_ambient_sound_path = ""
+
 var projectiles = {}
 var encounters = {}
 var encounter_events = {}
@@ -189,8 +210,8 @@ var current_battle_context = {}
 # my_test
 # combined_candle_students_phase_01
 # candle_student
-const DEBUG_ADD_START_ITEMS = true
-const DEBUG_OPEN_PENDING_LOOT_TEST = true
+const DEBUG_ADD_START_ITEMS = false
+const DEBUG_OPEN_PENDING_LOOT_TEST = false
 const DEBUG_START_BATTLE_TEST = false
 const DEBUG_TEST_BATTLE_ENEMY_ID = "candle_student_woman"
 const DEBUG_BATTLE_START_DELAY = 1.0
@@ -212,7 +233,7 @@ const STAT_GOOD_COLOR = "#55ff77"
 const STAT_BAD_COLOR = "#ff5555"
 const STAT_INFO_COLOR = "#88ccff"
 # 게임 처음 시작 스토리 이벤트 # prologue_part_01
-const PROLOGUE_STORY_EVENT_ID = "first_enter_classroom_11"
+const PROLOGUE_STORY_EVENT_ID = "prologue_part_01"
 # 만능 열쇠
 const DEFAULT_MASTER_KEY_ID = "master_key"
 
@@ -222,6 +243,9 @@ const DEFAULT_MASTER_KEY_ID = "master_key"
 
 # 프레임 마다 실행 함수
 func _process(delta):
+	update_room_idle_motion(delta)
+	update_room_ambient_overlay_animation(delta)
+
 	# 입력 우선순위:
 	# 1. 선택지 조작
 	# 2. 대사 넘기기
@@ -428,6 +452,12 @@ func setup_initial_ui_helpers():
 	# 스토리 연출용 단일색 화면 오버레이 생성
 	setup_story_color_overlay()
 
+	# 방 분위기 오버레이 생성
+	setup_room_ambient_overlay()
+	
+	# 방 분위기 루프 사운드 플레이어 생성
+	setup_room_ambient_sound_player()
+
 	encounter_heartbeat_sound.stop()
 
 	connect_inventory_context_menu_buttons()
@@ -620,6 +650,10 @@ func start_battle(enemy_id, first_turn = "", battle_context = {}):
 	if skip_flag != "" and has_flag(skip_flag):
 		print("이미 처치한 적이라 전투 스킵: " + enemy_id)
 		return
+	
+	stop_room_idle_motion(true)
+	clear_room_ambient_overlay()
+	stop_room_ambient_sound()
 	
 	is_story_playing = true
 	hide_game_ui()
@@ -2125,11 +2159,344 @@ func update_room():
 		return
 
 	update_room_background(room)
+	update_room_ambient_overlay(room)
+	update_room_ambient_sound(room)
+	update_room_idle_motion_setting(room)
 	update_room_move_arrows(room)
 
 	# 현재 방의 interactions 데이터를 기준으로 클릭 버튼 자동 생성
 	create_interaction_buttons(room)
 	create_exit_buttons(room)
+# 현재 방 idle motion 설정 갱신 함수
+func update_room_idle_motion_setting(room):
+	stop_room_idle_motion(true)
+
+	if not room.has("idle_motion"):
+		return
+
+	var idle_data = room["idle_motion"]
+
+	if typeof(idle_data) != TYPE_DICTIONARY:
+		return
+
+	room_idle_motion_enabled = bool(idle_data.get("enabled", true))
+
+	if not room_idle_motion_enabled:
+		return
+
+	room_idle_motion_scale = max(float(idle_data.get("scale", 1.012)), 1.0)
+	room_idle_motion_amplitude_x = float(idle_data.get("amplitude_x", 4.0))
+	room_idle_motion_amplitude_y = float(idle_data.get("amplitude_y", 1.0))
+	room_idle_motion_speed = max(float(idle_data.get("speed", 0.28)), 0.01)
+	room_idle_motion_time = randf_range(0.0, 100.0)
+	room_idle_motion_base_position = get_room_idle_motion_base_position(room_idle_motion_scale)
+
+	background.scale = Vector2(room_idle_motion_scale, room_idle_motion_scale)
+	background.position = room_idle_motion_base_position
+# idle motion 기준 위치 계산 함수
+func get_room_idle_motion_base_position(scale_value):
+	var visual_size = background.size
+
+	if visual_size.x <= 0.0 or visual_size.y <= 0.0:
+		visual_size = get_viewport_rect().size
+
+	return Vector2(
+		-visual_size.x * (scale_value - 1.0) * 0.5,
+		-visual_size.y * (scale_value - 1.0) * 0.5
+	)
+# idle motion 실행 가능 상태 확인 함수
+func can_update_room_idle_motion():
+	if not room_idle_motion_enabled:
+		return false
+
+	if is_game_paused:
+		return false
+
+	if get_tree().paused:
+		return false
+
+	if is_moving:
+		return false
+
+	if is_interacting:
+		return false
+
+	if is_story_playing:
+		return false
+
+	if battle_scene != null:
+		return false
+
+	if is_inventory_open:
+		return false
+
+	if is_inventory_arrange_open:
+		return false
+
+	if is_document_popup_open:
+		return false
+
+	if is_input_prompt_open:
+		return false
+
+	if is_choosing:
+		return false
+
+	if fade.color.a > 0.01:
+		return false
+
+	return true
+# idle motion 갱신 함수
+func update_room_idle_motion(delta):
+	if not can_update_room_idle_motion():
+		return
+
+	room_idle_motion_time += delta
+
+	var offset = Vector2(
+		sin(room_idle_motion_time * room_idle_motion_speed) * room_idle_motion_amplitude_x,
+		sin(room_idle_motion_time * room_idle_motion_speed * 0.7) * room_idle_motion_amplitude_y
+	)
+
+	background.scale = Vector2(room_idle_motion_scale, room_idle_motion_scale)
+	background.position = room_idle_motion_base_position + offset
+# idle motion 정지 함수
+func stop_room_idle_motion(reset_background):
+	room_idle_motion_enabled = false
+	room_idle_motion_time = 0.0
+
+	if reset_background:
+		background.scale = Vector2(1.0, 1.0)
+		background.position = Vector2.ZERO
+# 방 분위기 오버레이 생성 함수
+func setup_room_ambient_overlay():
+	if room_ambient_overlay != null:
+		return
+
+	room_ambient_overlay = TextureRect.new()
+	room_ambient_overlay.name = "RoomAmbientOverlay"
+	room_ambient_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	room_ambient_overlay.offset_left = 0
+	room_ambient_overlay.offset_top = 0
+	room_ambient_overlay.offset_right = 0
+	room_ambient_overlay.offset_bottom = 0
+	room_ambient_overlay.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	room_ambient_overlay.stretch_mode = TextureRect.STRETCH_SCALE
+	room_ambient_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	room_ambient_overlay.visible = false
+	room_ambient_overlay.z_index = 1
+
+	# Background 자식으로 넣어서 배경 미세 이동/확대와 같이 움직이게 한다.
+	background.add_child(room_ambient_overlay)
+# 현재 방 분위기 오버레이 갱신 함수
+func update_room_ambient_overlay(room):
+	setup_room_ambient_overlay()
+	clear_room_ambient_overlay()
+
+	if not room.has("ambient_overlay"):
+		return
+
+	var overlay_data = room["ambient_overlay"]
+
+	if typeof(overlay_data) != TYPE_DICTIONARY:
+		return
+
+	room_ambient_overlay_fps = max(float(overlay_data.get("fps", 6.0)), 0.1)
+	room_ambient_overlay.modulate.a = clamp(float(overlay_data.get("alpha", 1.0)), 0.0, 1.0)
+
+	var frame_paths = get_room_ambient_overlay_frame_paths(overlay_data)
+
+	for frame_path in frame_paths:
+		var path_text = str(frame_path)
+
+		if path_text == "":
+			continue
+
+		if not ResourceLoader.exists(path_text):
+			push_warning("방 분위기 오버레이 이미지 없음: " + path_text)
+			continue
+
+		var texture = load(path_text)
+
+		if texture == null:
+			push_warning("방 분위기 오버레이 이미지 로드 실패: " + path_text)
+			continue
+
+		room_ambient_overlay_frames.append(texture)
+
+	if room_ambient_overlay_frames.is_empty():
+		return
+
+	room_ambient_overlay_frame_index = 0
+	room_ambient_overlay_frame_timer = 0.0
+	room_ambient_overlay.texture = room_ambient_overlay_frames[0]
+	room_ambient_overlay.visible = true
+# 방 분위기 오버레이 프레임 경로 목록 생성 함수
+func get_room_ambient_overlay_frame_paths(overlay_data):
+	var result = []
+
+	if overlay_data.has("frames"):
+		var frames = overlay_data["frames"]
+
+		if typeof(frames) != TYPE_ARRAY:
+			return result
+
+		for frame_path in frames:
+			var path_text = str(frame_path)
+
+			if path_text != "":
+				result.append(path_text)
+
+		return result
+
+	if overlay_data.has("frame_pattern"):
+		var frame_pattern = str(overlay_data.get("frame_pattern", ""))
+		var frame_start = int(overlay_data.get("frame_start", 1))
+		var frame_count = int(overlay_data.get("frame_count", 0))
+
+		if frame_pattern == "" or frame_count <= 0:
+			return result
+
+		for i in range(frame_count):
+			result.append(frame_pattern % int(frame_start + i))
+
+		return result
+
+	if overlay_data.has("path"):
+		var single_path = str(overlay_data.get("path", ""))
+
+		if single_path != "":
+			result.append(single_path)
+
+	return result
+# 방 분위기 오버레이 초기화 함수
+func clear_room_ambient_overlay():
+	room_ambient_overlay_frames.clear()
+	room_ambient_overlay_frame_index = 0
+	room_ambient_overlay_frame_timer = 0.0
+
+	if room_ambient_overlay == null:
+		return
+
+	room_ambient_overlay.texture = null
+	room_ambient_overlay.visible = false
+	room_ambient_overlay.modulate.a = 1.0
+# 방 분위기 오버레이 애니메이션 가능 상태 확인 함수
+func can_update_room_ambient_overlay():
+	if room_ambient_overlay == null:
+		return false
+
+	if not room_ambient_overlay.visible:
+		return false
+
+	if is_story_playing:
+		return false
+
+	if battle_scene != null:
+		return false
+
+	if get_tree().paused:
+		return false
+
+	return true
+# 방 분위기 오버레이 애니메이션 갱신 함수
+func update_room_ambient_overlay_animation(delta):
+	if not can_update_room_ambient_overlay():
+		return
+
+	if room_ambient_overlay_frames.size() <= 1:
+		return
+
+	room_ambient_overlay_frame_timer += delta
+
+	var frame_time = 1.0 / room_ambient_overlay_fps
+
+	if room_ambient_overlay_frame_timer < frame_time:
+		return
+
+	room_ambient_overlay_frame_timer = 0.0
+	room_ambient_overlay_frame_index += 1
+
+	if room_ambient_overlay_frame_index >= room_ambient_overlay_frames.size():
+		room_ambient_overlay_frame_index = 0
+
+	room_ambient_overlay.texture = room_ambient_overlay_frames[room_ambient_overlay_frame_index]
+# 방 분위기 루프 사운드 플레이어 생성 함수
+func setup_room_ambient_sound_player():
+	if room_ambient_sound_player != null:
+		return
+
+	room_ambient_sound_player = AudioStreamPlayer.new()
+	room_ambient_sound_player.name = "RoomAmbientSoundPlayer"
+	room_ambient_sound_player.volume_db = -24.0
+	room_ambient_sound_player.set_meta("base_volume_db", -24.0)
+
+	add_child(room_ambient_sound_player)
+
+# 현재 방 분위기 사운드 갱신 함수
+func update_room_ambient_sound(room):
+	setup_room_ambient_sound_player()
+
+	if not room.has("ambient_sound"):
+		stop_room_ambient_sound()
+		return
+
+	var sound_data = room["ambient_sound"]
+
+	if typeof(sound_data) != TYPE_DICTIONARY:
+		stop_room_ambient_sound()
+		return
+
+	var sound_path = str(sound_data.get("path", ""))
+
+	if sound_path == "":
+		stop_room_ambient_sound()
+		return
+
+	var volume_db = float(sound_data.get("volume_db", -24.0))
+	var loop = bool(sound_data.get("loop", true))
+
+	# 같은 방 분위기음이 이미 재생 중이면 다시 처음부터 재생하지 않고 볼륨만 갱신한다.
+	if current_room_ambient_sound_path == sound_path and room_ambient_sound_player.playing:
+		room_ambient_sound_player.set_meta("base_volume_db", volume_db)
+		apply_sfx_volume_to_player(room_ambient_sound_player)
+		return
+
+	if not ResourceLoader.exists(sound_path):
+		push_warning("방 분위기 사운드 파일 없음: " + sound_path)
+		stop_room_ambient_sound()
+		return
+
+	var stream = load(sound_path)
+
+	if stream == null:
+		push_warning("방 분위기 사운드 로드 실패: " + sound_path)
+		stop_room_ambient_sound()
+		return
+
+	# 다른 곳에서 같은 리소스를 쓸 수도 있으니 복제해서 loop 설정을 적용한다.
+	stream = stream.duplicate()
+
+	if stream is AudioStreamMP3:
+		stream.loop = loop
+	elif stream is AudioStreamOggVorbis:
+		stream.loop = loop
+
+	current_room_ambient_sound_path = sound_path
+	room_ambient_sound_player.stream = stream
+	room_ambient_sound_player.set_meta("base_volume_db", volume_db)
+	apply_sfx_volume_to_player(room_ambient_sound_player)
+	room_ambient_sound_player.play()
+
+# 방 분위기 사운드 정지 함수
+func stop_room_ambient_sound():
+	current_room_ambient_sound_path = ""
+
+	if room_ambient_sound_player == null:
+		return
+
+	room_ambient_sound_player.stop()
+	room_ambient_sound_player.stream = null
 # 현재 방을 변경하고 방 UI를 갱신하는 함수
 func apply_room_change(target_room):
 	current_room = target_room
@@ -3133,6 +3500,10 @@ func hide_story_standing():
 func hide_game_ui():
 	$BagButton.visible = false
 
+	stop_room_idle_motion(false)
+	clear_room_ambient_overlay()
+	stop_room_ambient_sound()
+
 	for dir in move_arrows.keys():
 		move_arrows[dir].visible = false
 
@@ -3168,6 +3539,10 @@ func run_story_event(event_id, auto_check_next_story = true):
 	if typeof(events) != TYPE_ARRAY:
 		push_error("스토리 이벤트 events가 Array가 아님: " + str(event_id))
 		return
+
+	stop_room_idle_motion(true)
+	clear_room_ambient_overlay()
+	stop_room_ambient_sound()
 
 	is_story_playing = true
 	story_event_should_stop = false
@@ -3691,7 +4066,8 @@ func get_main_sfx_players():
 		save_ui_close_sound,
 		save_complete_sound,
 		encounter_heartbeat_sound,
-		result_sound
+		result_sound,
+		room_ambient_sound_player
 	]
 # 효과음들의 기본 볼륨을 저장하는 함수
 func register_sfx_base_volumes():
@@ -4404,6 +4780,8 @@ func run_input_prompt_event(event):
 
 # 이펙트 효과 함수
 func effect(sound_effect, shake_effect, fade_effect, direction):
+	# 이동 이펙트 시작 시 강제 OFF
+	stop_room_idle_motion(true)
 	
 	# 발소리 효과
 	if sound_effect:
@@ -4571,6 +4949,10 @@ func stop_bgm():
 func change_background(path):
 	if path == "":
 		return
+
+	stop_room_idle_motion(true)
+	clear_room_ambient_overlay()
+	stop_room_ambient_sound()	
 
 	background.texture = load(path)
 

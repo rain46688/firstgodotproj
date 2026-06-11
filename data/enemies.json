@@ -136,7 +136,7 @@
 		"drops": [
 			{
 				"item": "unknown_coin",
-				"chance": 50,
+				"chance": 30,
 				"min": 1,
 				"max": 2
 			},
@@ -1113,7 +1113,7 @@
 			635,
 			0
 		],
-		"can_escape": true,
+		"can_escape": false,
 		"encounter_text": "밀랍을 뒤집어쓴 여학생이 비틀거리며 다가온다.",
 		"observe_text": "굳어붙은 밀랍이 들러붙어 있다. 머리 위의 작은 양초가 희미하게 흔들린다.",
 		"weakness_text": "머리의 양초가 약점인 것 같다.",
@@ -1327,7 +1327,7 @@
 		"drops": [
 			{
 				"item": "unknown_coin",
-				"chance": 50,
+				"chance": 30,
 				"min": 1,
 				"max": 3
 			},
