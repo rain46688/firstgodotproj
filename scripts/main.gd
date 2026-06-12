@@ -213,7 +213,7 @@ var current_battle_context = {}
 const DEBUG_ADD_START_ITEMS = false
 const DEBUG_OPEN_PENDING_LOOT_TEST = false
 const DEBUG_START_BATTLE_TEST = false
-const DEBUG_TEST_BATTLE_ENEMY_ID = "candle_student_woman"
+const DEBUG_TEST_BATTLE_ENEMY_ID = "ghost"
 const DEBUG_BATTLE_START_DELAY = 1.0
 const DEBUG_START_ITEM_PRESET = "consumable_test"
 
@@ -2522,7 +2522,14 @@ func handle_random_encounter_after_move():
 	return false
 # 방 이동 후 이동 입력 잠금을 해제하는 함수
 func finish_room_move_input_lock():
+	if not is_inside_tree():
+		return
+
 	await get_tree().create_timer(1.5).timeout
+
+	if not is_inside_tree():
+		return
+
 	is_moving = false
 # 방 이동 함수
 func move_to_room(target_room, use_shake, direction):
@@ -2540,6 +2547,17 @@ func move_to_room(target_room, use_shake, direction):
 	
 	# 방 진입 시 스토리 이벤트 확인
 	await handle_room_enter_story_after_move()
+	
+	# 방 진입 스토리 도중 게임오버/전투/씬 전환이 발생했으면
+	# 이후 방 이동 후처리를 진행하지 않는다.
+	if not is_inside_tree():
+		return
+
+	if story_event_should_stop:
+		return
+
+	if battle_scene != null:
+		return
 	
 	# 랜덤 인카운터 체크
 	var encounter_started = await handle_random_encounter_after_move()
@@ -2924,6 +2942,11 @@ func run_interaction(interaction_id):
 		await run_events(interaction["events"])
 	else:
 		push_error("events가 없는 interaction: " + str(interaction_id))
+		
+	# 상호작용 결과로 flag가 바뀌었을 수 있으므로
+	# 현재 방 UI/상호작용 버튼을 다시 생성한다.
+	if is_inside_tree():
+		update_room()
 
 	set_interaction_buttons_disabled(false)
 	is_interacting = false
@@ -3293,6 +3316,9 @@ func run_single_event(event):
 	elif event_type == "save_to_slot":
 		await run_event_save_to_slot(event)	
 
+	elif event_type == "item_payment":
+		await run_item_payment_event(event)
+		
 	elif event_type == "item":
 		var item_id = event.get("item", "")
 		var count = int(event.get("count", 1))
@@ -3330,6 +3356,79 @@ func run_single_event(event):
 
 	else:
 		push_error("알 수 없는 event type: " + str(event_type))
+# 아이템 지불 이벤트에서 요구 아이템 ID 가져오기
+func get_item_payment_item_id(event):
+	return str(event.get("item", event.get("item_id", "")))
+# 아이템 지불 이벤트에서 요구 개수 가져오기
+func get_item_payment_count(event):
+	var count = int(event.get("count", event.get("amount", 1)))
+
+	if count < 1:
+		count = 1
+
+	return count
+# 아이템 지불 실패 대사 생성
+func make_item_payment_fail_text(event, item_id, count):
+	var fail_text = str(event.get("fail_text", ""))
+
+	if fail_text != "":
+		return fail_text
+
+	var item_name = get_item_name(item_id)
+
+	return item_name + " " + str(count) + "개가 부족하다."
+# 아이템 지불 성공 대사 생성
+func make_item_payment_success_text(event, item_id, count):
+	var success_text = str(event.get("success_text", ""))
+
+	if success_text != "":
+		return success_text
+
+	var item_name = get_item_name(item_id)
+
+	return item_name + " " + str(count) + "개를 바쳤다."
+# 아이템 일정 개수 요구/소모 후 성공/실패 이벤트 실행 함수
+func run_item_payment_event(event):
+	var item_id = get_item_payment_item_id(event)
+	var required_count = get_item_payment_count(event)
+
+	if item_id == "":
+		push_error("item_payment 이벤트에 item 값이 없음")
+		return
+
+	var owned_count = get_inventory_item_count(item_id)
+
+	# 아이템 부족
+	if owned_count < required_count:
+		var fail_events = event.get("fail_events", [])
+
+		if typeof(fail_events) == TYPE_ARRAY and fail_events.size() > 0:
+			await run_events(fail_events)
+		else:
+			await show_dialogue(make_item_payment_fail_text(event, item_id, required_count))
+
+		return
+
+	# 아이템 충분함: 요구 개수만큼 제거
+	var removed_count = remove_inventory_item_count_by_id(item_id, required_count)
+
+	if removed_count < required_count:
+		push_error("item_payment 소모 실패: " + str(item_id))
+		return
+
+	# 성공 효과음
+	if item_sound != null:
+		item_sound.play()
+
+	# 성공 대사를 자동으로 출력할지 여부
+	if bool(event.get("show_success_text", true)):
+		await show_dialogue(make_item_payment_success_text(event, item_id, required_count))
+
+	# 성공 후 이벤트 실행
+	var success_events = event.get("success_events", [])
+
+	if typeof(success_events) == TYPE_ARRAY and success_events.size() > 0:
+		await run_events(success_events)
 # 전투 결과 사운드 재생 함수
 func play_battle_result_sound():
 	if result_sound != null:
@@ -3654,6 +3753,9 @@ func run_single_story_event(event):
 		
 	elif event_type == "start_battle":
 		await run_story_start_battle_event(event)
+		
+	elif event_type == "game_over":
+		await run_story_game_over_event(event)
 
 	elif event_type == "auto_save":
 		await run_story_auto_save_event(event)
@@ -3935,6 +4037,29 @@ func run_story_auto_save_event(event):
 
 		if show_message:
 			await show_dialogue("저장에 실패했다.")
+# 스토리 이벤트에서 게임오버로 이동하는 함수
+func run_story_game_over_event(_event):
+	story_event_should_stop = true
+
+	# 방 이동/상호작용/스토리 상태 정리
+	is_moving = false
+	is_interacting = false
+	is_story_playing = false
+
+	# 방 연출/사운드 정리
+	stop_room_idle_motion(true)
+	clear_room_ambient_overlay()
+	stop_room_ambient_sound()
+
+	if bgm_player != null and bgm_player.playing:
+		bgm_player.stop()
+
+	# 하드코어 모드라면 사망 즉시 세이브 파일 삭제
+	if current_difficulty == GameSession.DIFFICULTY_HARDCORE:
+		print("하드코어 스토리 사망: 세이브 파일 삭제 시도")
+		GameSession.delete_save_file(1)
+
+	get_tree().change_scene_to_file(GAME_OVER_SCENE_PATH)
 
 # ============================================================
 # 일시정지 UI 관련 함수 모음
@@ -6967,6 +7092,60 @@ func consume_item_by_id(item_id):
 			return consume_item_if_needed(inventory_item)
 
 	return false
+# item_id 기준으로 지정한 개수만큼 아이템을 강제로 제거하는 함수
+# 금화, 재료, 제물처럼 여러 개를 비용으로 지불할 때 사용한다.
+func remove_inventory_item_count_by_id(item_id, count):
+	if item_id == "":
+		return 0
+
+	var remaining_count = int(count)
+
+	if remaining_count <= 0:
+		return 0
+
+	var removed_count = 0
+
+	# 뒤에서부터 지워야 inventory.remove_at() 해도 인덱스가 꼬이지 않는다.
+	for i in range(inventory.size() - 1, -1, -1):
+		if remaining_count <= 0:
+			break
+
+		var inventory_item = inventory[i]
+
+		if inventory_item == null:
+			continue
+
+		if typeof(inventory_item) != TYPE_DICTIONARY:
+			continue
+
+		if str(inventory_item.get("id", "")) != item_id:
+			continue
+
+		var item_count = int(inventory_item.get("count", 1))
+		var remove_count = min(item_count, remaining_count)
+
+		item_count -= remove_count
+		remaining_count -= remove_count
+		removed_count += remove_count
+
+		if item_count <= 0:
+			# 장착 중인 아이템이 제거되면 장착 해제
+			if equipped_weapon == inventory_item:
+				equipped_weapon = null
+
+			if selected_inventory_item == inventory_item:
+				selected_inventory_item = null
+				clear_selected_item_info()
+
+			inventory.remove_at(i)
+		else:
+			inventory_item["count"] = item_count
+
+	update_inventory_ui()
+	update_equipped_weapon_ui()
+	update_player_status_ui()
+
+	return removed_count
 # 아이템 타입 한글 이름 반환 함수 (성물/주물 타입 반영 필요!)
 func get_item_type_text(item_type_or_data):
 	var item_type = ""

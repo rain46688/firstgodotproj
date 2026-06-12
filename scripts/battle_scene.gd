@@ -167,6 +167,10 @@ var battle_difficulty = "normal"
 # parry_input_buffer_time 0.04
 # parry_height 6
 
+# 플레이어 턴이 몇 번 시작됐는지 세는 변수
+# 특정 적이 일정 턴 후 도망가는 기능에 사용
+var player_turn_count = 0
+
 # 상수 변수 모음
 # 현재 없음
 
@@ -395,6 +399,8 @@ func reset_battle_runtime_state():
 	waiting_enemy_attack = false
 	is_processing_battle_input = false
 	game_over_started = false
+	# 전투마다 플레이어 턴 카운트 초기화
+	player_turn_count = 0
 # 전투 시작 시 플레이어 UI 초기화 함수
 func setup_battle_player_ui():
 	player_status_effects.clear()
@@ -857,19 +863,66 @@ func process_battle_escape_success():
 	play_battle_result_sound()
 	enemy_sprite.visible = false
 
-	await show_battle_text_for_seconds("당신은 도망쳤다.", 1.0)
+	await show_battle_text_for_seconds("당신은 도망쳤다.", 4.0)
 
 	finish_battle(make_battle_escape_result())
 # 도주 실패 처리 함수
 func process_battle_escape_failed():
 	play_battle_result_sound()
 
-	await show_battle_text_for_seconds("당신은 도망칠 수 없다...", 1.0)
+	await show_battle_text_for_seconds("당신은 도망칠 수 없다...", 3.0)
 
 	start_enemy_turn()
 # 도주 가능 여부 확인 함수
 func can_escape_from_current_enemy():
 	return bool(enemy_data.get("can_escape", true))
+# 현재 적이 몇 번째 플레이어 턴 이후 도망가는지 가져오는 함수
+# 0 이하이면 턴 제한 도망 없음
+func get_enemy_escape_after_player_turns():
+	if enemy_data.is_empty():
+		return 0
+
+	return int(enemy_data.get("escape_after_player_turns", 0))
+# 현재 적에게 턴 제한 도망 설정이 있는지 확인하는 함수
+func has_enemy_turn_limit_escape():
+	return get_enemy_escape_after_player_turns() > 0
+# 현재 적이 턴 제한 때문에 도망가야 하는지 확인하는 함수
+func should_enemy_escape_by_turn_limit():
+	if battle_ended:
+		return false
+
+	if not has_enemy_turn_limit_escape():
+		return false
+
+	var escape_after_turns = get_enemy_escape_after_player_turns()
+
+	# 예:
+	# escape_after_player_turns = 10
+	# 1~10번째 플레이어 턴은 행동 가능
+	# 11번째 플레이어 턴 시작 시 도망
+	return player_turn_count > escape_after_turns
+# 적 턴 제한 도망 텍스트 가져오기
+func get_enemy_turn_limit_escape_text():
+	enemy_sprite.visible = false
+	if enemy_data.is_empty():
+		return "적이 도망쳤다."
+
+	return str(enemy_data.get("escape_text", "적이 도망쳤다."))
+# 턴 제한으로 적이 도망가는 처리 함수
+func process_enemy_escape_by_turn_limit():
+	battle_ended = true
+
+	hide_player_action_menu()
+	set_action_buttons_disabled(true)
+	reset_player_action_modes()
+	reset_weapon_action_visual()
+
+	play_battle_result_sound()
+
+	var escape_text = get_enemy_turn_limit_escape_text()
+	await show_battle_text_for_seconds(escape_text, 4.0)
+
+	finish_battle(make_battle_escape_result())
 # 플레이어 턴 시작 텍스트 표시 함수
 func show_player_turn_start_text():
 	set_battle_text(get_player_turn_start_text())
@@ -933,6 +986,14 @@ func prepare_enemy_turn_state():
 # 플레이어 턴 시작 함수
 func start_player_turn():
 	print("start_player_turn")
+
+	# 플레이어가 행동할 수 있는 턴이 시작될 때마다 카운트
+	player_turn_count += 1
+
+	# 특정 적은 지정 턴을 넘기면 플레이어 행동 전에 도망간다.
+	if should_enemy_escape_by_turn_limit():
+		await process_enemy_escape_by_turn_limit()
+		return
 
 	prepare_player_turn_state()
 
@@ -1367,7 +1428,7 @@ func open_battle_item_list():
 		if result_sound != null:
 			result_sound.play()
 			
-		await show_battle_text_for_seconds("사용할 수 있는 아이템이 없다.", 1.0)
+		await show_battle_text_for_seconds("사용할 수 있는 아이템이 없다.", 3.0)
 
 		show_player_action_menu()
 		return

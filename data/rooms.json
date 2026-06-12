@@ -3753,6 +3753,11 @@
 									{
 										"type": "text",
 										"text": "비어 있다."
+									},
+									{
+										"type": "item",
+										"item": "unknown_coin",
+										"count": 20
 									}
 								],
 								"events": [
@@ -3860,7 +3865,7 @@
 		},
 		"ambient_sound": {
 			"path": "res://sounds/ocean_wave.mp3",
-			"volume_db": 0.0,
+			"volume_db": -5.0,
 			"loop": true
 		},
 		"enter_stories": [
@@ -3894,6 +3899,7 @@
 					375,
 					600
 				],
+				"required_flag_missing": "classroom_12_coin_payment_01_done",
 				"events": [
 					{
 						"type": "sound",
@@ -3904,6 +3910,135 @@
 					{
 						"type": "text",
 						"text": "까악. 까악."
+					},
+					{
+						"type": "text",
+						"text": "까마귀 떼가 부서진 건물 잔해 위에서 놀고 있다."
+					},
+					{
+						"type": "text",
+						"name": "까마귀",
+						"text": "너 거기 반짝이는거 많이 놓고 가라."
+					},
+					{
+						"type": "text",
+						"name": "까마귀",
+						"text": "놓고 가면 보물 주겠다."
+					},
+					{
+						"type": "item_payment",
+						"item": "unknown_coin",
+						"count": 30,
+						"success_text": "당신은 금화 30개를 바쳤다.",
+						"fail_text": "금화가 부족하다. (알수없는 코인 30개 필요)",
+						"success_events": [
+							{
+								"type": "item",
+								"item": "old_water_ball",
+								"count": 1
+							},
+							{
+								"type": "flag",
+								"flag": "classroom_12_coin_payment_01_done"
+							}
+						]
+					}
+				]
+			},
+			"crow_after": {
+				"click_rect": [
+					200,
+					150,
+					375,
+					600
+				],
+				"required_flag": "classroom_12_coin_payment_01_done",
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/crow.mp3",
+						"volume_db": 5,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "까마귀 떼가 금화를 쪼아대며 시끄럽게 울고 있다."
+					},
+					{
+						"type": "text",
+						"name": "까마귀",
+						"text": "까악. 거래는 끝났다."
+					}
+				]
+			},
+			"crow_02": {
+				"click_rect": [
+					200,
+					150,
+					375,
+					600
+				],
+				"required_flag": [
+					"classroom_12_coin_payment_01_done",
+					"story_first_enter_school_stairs_hall_02_done"
+				],
+				"required_flag_missing": "classroom_12_coin_payment_02_done",
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/crow.mp3",
+						"volume_db": 5,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"name": "까마귀",
+						"text": "까악. 더 좋은 보물이 있다."
+					},
+					{
+						"type": "text",
+						"name": "까마귀",
+						"text": "이번엔 두배 더 줘라."
+					},
+					{
+						"type": "item_payment",
+						"item": "unknown_coin",
+						"count": 60,
+						"success_text": "당신은 금화 60개를 바쳤다.",
+						"fail_text": "금화가 부족하다. (알수없는 코인 30개 필요)",
+						"success_events": [
+							{
+								"type": "item",
+								"item": "cube_relic",
+								"count": 1
+							},
+							{
+								"type": "flag",
+								"flag": "classroom_12_coin_payment_02_done"
+							}
+						]
+					}
+				]
+			},
+			"crow_done": {
+				"click_rect": [
+					200,
+					150,
+					375,
+					600
+				],
+				"required_flag": "classroom_12_coin_payment_02_done",
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/crow.mp3",
+						"volume_db": 5,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"name": "까마귀",
+						"text": "까악. 이제 만족한다."
 					}
 				]
 			}

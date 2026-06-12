@@ -154,7 +154,9 @@
 				"once_flag": "got_razor_from_candle_student"
 			}
 		],
-		"defeat_flags": []
+		"defeat_flags": [
+			"defeated_candle_student"
+		]
 	},
 	"combined_candle_students_phase_01": {
 		"name": "합쳐진 밀랍 학생들",
@@ -166,7 +168,7 @@
 		"battle_bgm_fade_in": true,
 		"battle_bgm_fade_time": 3.0,
 		"encounter_sound": "res://sounds/enemy_encounter.mp3",
-		"encounter_sound_volume_db": -10.0,
+		"encounter_sound_volume_db": -5.0,
 		"image": "res://imgs/enemies/combined_candle_students_phase_01.png",
 		"battle_background": "",
 		"battle_background_alpha": 0.2,
@@ -389,7 +391,7 @@
 		"battle_bgm_fade_in": true,
 		"battle_bgm_fade_time": 3.0,
 		"encounter_sound": "res://sounds/enemy_encounter.mp3",
-		"encounter_sound_volume_db": -10.0,
+		"encounter_sound_volume_db": -5.0,
 		"image": "res://imgs/enemies/combined_candle_students_phase_02.png",
 		"battle_background": "",
 		"battle_background_alpha": 0.2,
@@ -745,7 +747,7 @@
 		"battle_bgm_fade_in": true,
 		"battle_bgm_fade_time": 3.0,
 		"encounter_sound": "res://sounds/enemy_encounter.mp3",
-		"encounter_sound_volume_db": -10.0,
+		"encounter_sound_volume_db": -5.0,
 		"image": "res://imgs/enemies/candle_student.png",
 		"battle_background": "res://imgs/backgrounds/school_stairs_hall_01.png",
 		"battle_background_alpha": 0.2,
@@ -884,7 +886,7 @@
 		"battle_bgm_fade_in": true,
 		"battle_bgm_fade_time": 3.0,
 		"encounter_sound": "res://sounds/enemy_encounter.mp3",
-		"encounter_sound_volume_db": -10.0,
+		"encounter_sound_volume_db": -5.0,
 		"image": "res://imgs/enemies/combined_candle_students_phase_01.png",
 		"battle_background": "",
 		"battle_background_alpha": 0.2,
@@ -1357,6 +1359,273 @@
 				"once_flag": "got_cutter_knife_from_candle_student_woman"
 			}
 		],
-		"defeat_flags": []
+		"defeat_flags": [
+			"defeated_candle_student_woman"
+		]
+	},
+	"ghost": {
+		"name": "유령",
+		"max_hp": 100,
+		"battle_bgm": "res://sounds/bgm15.mp3",
+		"battle_bgm_volume_db": -5.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/ghost.mp3",
+		"encounter_sound_volume_db": 15.0,
+		"image": "res://imgs/enemies/ghost.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.2,
+		"escape_after_player_turns": 6,
+		"escape_text": "작은 유령은 장난치며 어둠 속으로 사라졌다.",
+		"enemy_size": [
+			150,
+			300
+		],
+		"enemy_position": [
+			900,
+			200
+		],
+		"can_escape": false,
+		"encounter_text": "작은 유령이 나타났다.",
+		"observe_text": "작은 유령은 돌아다니며 놀고있다, 그 형체는 희미하게 비쳐서 곧 사라질 것만 같다.",
+		"weakness_text": "",
+		"patterns": [
+			{
+				"id": "ghost_fear_slash",
+				"weight": 90,
+				"warning_text": "작은 유령은 놀아 달라고 조르고 있다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "body",
+				"projectiles": [
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.25,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.5,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.75,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "ghost_fall_down",
+				"weight": 10,
+				"warning_text": "작은 유령은 놀다가 넘어졌다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "body",
+				"projectiles": []
+			}
+		],
+		"hitbox_base_size": [
+			556,
+			1000
+		],
+		"hitboxes": [
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					250,
+					230,
+					20,
+					10
+				],
+				"weak": true
+			},
+			{
+				"id": "body",
+				"name": "몸통",
+				"rect": [
+					250,
+					250,
+					20,
+					20
+				],
+				"weak": false
+			}
+		],
+		"drops": [
+			{
+				"item": "unknown_coin",
+				"chance": 30,
+				"min": 5,
+				"max": 20
+			},
+			{
+				"item": "old_water_ball",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "old_abacus",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "cube_relic",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "torn_eyepatch",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "dice_relic",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "music_box_relic",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "broken_headset_relic",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "teddy_bear_relic",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "character_figure_relic",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "cross_relic",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "holy_grail_relic",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "bible_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "metal_syringe",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "rosary_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "sneakers_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "dumbbell_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "sandbag_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "lung_model_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "first_aid_box_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "classic_camera_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "hourglass_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "hand_bone_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "skull_model_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "small_frame_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "hand_candlestick_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "brain_model_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "heart_model_fetish",
+				"chance": 1,
+				"count": 1
+			}
+		],
+		"defeat_flags": [
+			"defeated_ghost"
+		]
 	}
 }
