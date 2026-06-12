@@ -108,7 +108,12 @@ var can_play_focus_sound = false
 # 씬 전환 중 중복 입력 방지
 var is_transitioning = false
 
+const CURSOR_BASIC_PATH = "res://imgs/ui/cursors/basic_point.png"
+
 func _ready():
+	# 마우스 커서 변경
+	setup_main_menu_mouse_cursor()
+	
 	# UI 기본 텍스트 설정
 	setup_texts()
 
@@ -729,3 +734,21 @@ func transition_to_main_scene():
 
 	# 기존 게임 플레이 씬으로 이동
 	get_tree().change_scene_to_file(MAIN_SCENE_PATH)
+
+# 메인 메뉴 기본 마우스 포인터 설정 함수
+func setup_main_menu_mouse_cursor():
+	if not ResourceLoader.exists(CURSOR_BASIC_PATH):
+		push_warning("메인 메뉴 마우스 포인터 이미지 없음: " + CURSOR_BASIC_PATH)
+		return
+
+	var cursor_texture = load(CURSOR_BASIC_PATH)
+
+	if cursor_texture == null:
+		push_warning("메인 메뉴 마우스 포인터 로드 실패: " + CURSOR_BASIC_PATH)
+		return
+
+	Input.set_custom_mouse_cursor(
+		cursor_texture,
+		Input.CURSOR_ARROW,
+		Vector2(8, 6)
+	)

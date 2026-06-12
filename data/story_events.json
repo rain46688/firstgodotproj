@@ -22,18 +22,18 @@
 				"path": "res://imgs/events/prologue_01.png"
 			},
 			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": false
+			},
+			{
 				"type": "camera_zoom",
 				"x": 760,
 				"y": 340,
 				"zoom": 2.0,
 				"duration": 0.1,
-				"wait": false
-			},
-			{
-				"type": "screen_color",
-				"color": "#000000",
-				"alpha": 1.0,
-				"duration": 0.5,
 				"wait": false
 			},
 			{
@@ -68,20 +68,24 @@
 				"wait": false
 			},
 			{
+				"type": "stop_bgm"
+			},
+			{
 				"type": "screen_color_clear",
-				"duration": 0.5,
+				"duration": 0.3,
 				"wait": true
 			},
 			{
 				"type": "camera_reset",
 				"duration": 0.5,
-				"wait": true
-			},
-			{
-				"type": "stop_bgm"
+				"wait": false
 			},
 			{
 				"type": "fade"
+			},
+			{
+				"type": "change_room",
+				"room": "my_room"
 			},
 			{
 				"type": "flag",
@@ -113,7 +117,7 @@
 			},
 			{
 				"type": "wait",
-				"time": 7.0
+				"time": 5.0
 			},
 			{
 				"type": "bgm",
@@ -127,7 +131,7 @@
 				"y": 350,
 				"zoom": 1.5,
 				"duration": 1.0,
-				"wait": true
+				"wait": false
 			},
 			{
 				"type": "camera_pan",
@@ -282,7 +286,7 @@
 				"type": "camera_pan",
 				"x": 1000,
 				"y": 750,
-				"duration": 200.0,
+				"duration": 160.0,
 				"wait": false
 			},
 			{
@@ -412,7 +416,7 @@
 				"type": "camera_pan",
 				"x": 1000,
 				"y": 350,
-				"duration": 200.0,
+				"duration": 160.0,
 				"wait": false
 			},
 			{
@@ -536,7 +540,7 @@
 			},
 			{
 				"type": "wait",
-				"time": 3.0
+				"time": 2.0
 			},
 			{
 				"type": "sound",
@@ -1499,9 +1503,6 @@
 				"wait": true
 			},
 			{
-				"type": "show_game_ui"
-			},
-			{
 				"type": "flag",
 				"flag": "story_first_enter_school_hallway_08_after_classroom_09_event_done"
 			},
@@ -2452,7 +2453,7 @@
 				"x": 550,
 				"y": 350,
 				"zoom": 1.5,
-				"duration": 1.0,
+				"duration": 0.1,
 				"wait": true
 			},
 			{
@@ -2825,7 +2826,7 @@
 				"x": 550,
 				"y": 350,
 				"zoom": 1.5,
-				"duration": 1.0,
+				"duration": 0.1,
 				"wait": true
 			},
 			{
@@ -3194,7 +3195,7 @@
 			{
 				"type": "sound",
 				"path": "res://sounds/radio_sound.mp3",
-				"volume_db": 0,
+				"volume_db": 5,
 				"wait": false
 			},
 			{
@@ -3236,7 +3237,7 @@
 			{
 				"type": "sound",
 				"path": "res://sounds/radio_sound.mp3",
-				"volume_db": 0,
+				"volume_db": 5,
 				"wait": false
 			},
 			{

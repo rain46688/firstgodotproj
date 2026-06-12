@@ -313,10 +313,10 @@
 		"interactions": {
 			"black_board": {
 				"click_rect": [
-					591,
-					293,
-					911,
-					367
+					482,
+					308,
+					968,
+					366
 				],
 				"events": [
 					{
@@ -1348,10 +1348,10 @@
 		"interactions": {
 			"black_board": {
 				"click_rect": [
-					591,
-					293,
-					911,
-					367
+					482,
+					308,
+					968,
+					366
 				],
 				"events": [
 					{
@@ -1812,10 +1812,10 @@
 		"interactions": {
 			"black_board": {
 				"click_rect": [
-					591,
-					293,
-					911,
-					367
+					482,
+					308,
+					968,
+					366
 				],
 				"events": [
 					{
@@ -2082,10 +2082,10 @@
 		"interactions": {
 			"black_board": {
 				"click_rect": [
-					591,
-					293,
-					911,
-					367
+					482,
+					308,
+					968,
+					366
 				],
 				"events": [
 					{
@@ -2337,10 +2337,10 @@
 		"interactions": {
 			"black_board": {
 				"click_rect": [
-					591,
-					293,
-					911,
-					367
+					482,
+					308,
+					968,
+					366
 				],
 				"events": [
 					{
@@ -3428,10 +3428,10 @@
 		"interactions": {
 			"black_board": {
 				"click_rect": [
-					591,
-					293,
-					911,
-					367
+					482,
+					308,
+					968,
+					366
 				],
 				"events": [
 					{
@@ -3753,11 +3753,6 @@
 									{
 										"type": "text",
 										"text": "비어 있다."
-									},
-									{
-										"type": "item",
-										"item": "unknown_coin",
-										"count": 20
 									}
 								],
 								"events": [

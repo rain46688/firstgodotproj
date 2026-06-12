@@ -69,7 +69,7 @@ extends Control
 # 일반 변수 모음
 var arrow_time = 0.0
 var is_moving = false
-var current_room = "my_room"
+var current_room = "classroom_01"
 var current_difficulty = "normal"
 var rooms = {}
 var is_choosing = false
@@ -203,6 +203,12 @@ var is_filtering_input_prompt_text = false
 # 일반 전투 / 스토리 전투 / 패배 이벤트 분기 등에 사용
 var current_battle_context = {}
 
+# 마우스 포인터 이미지 캐시
+var mouse_cursor_textures = {}
+
+# 현재 적용 중인 마우스 포인터 타입
+var current_mouse_cursor_type = ""
+
 # 디버그 관련 상수 변수 모음
 # false
 # true
@@ -236,6 +242,23 @@ const STAT_INFO_COLOR = "#88ccff"
 const PROLOGUE_STORY_EVENT_ID = "prologue_part_01"
 # 만능 열쇠
 const DEFAULT_MASTER_KEY_ID = "master_key"
+# 마우스 포인터
+const CURSOR_BASIC_PATH = "res://imgs/ui/cursors/basic_point.png"
+const CURSOR_HOLD_PATH = "res://imgs/ui/cursors/hold_point.png"
+const CURSOR_INTERACT_PATH = "res://imgs/ui/cursors/interact_point.png"
+const CURSOR_MOVE_PATH = "res://imgs/ui/cursors/move_point.png"
+
+const MOUSE_CURSOR_BASIC = "basic"
+const MOUSE_CURSOR_HOLD = "hold"
+const MOUSE_CURSOR_INTERACT = "interact"
+const MOUSE_CURSOR_MOVE = "move"
+
+# 이동 화살표 마우스 판정 기본값
+# 실제 arrow_forward.png 기준 크기
+const MOVE_ARROW_HITBOX_FALLBACK_SIZE = Vector2(100, 74)
+
+# 너무 딱 맞으면 불편하니 약간 여유
+const MOVE_ARROW_HITBOX_PADDING = 8
 
 # ============================================================
 # 게임 시작 관련 함수 모음
@@ -245,6 +268,7 @@ const DEFAULT_MASTER_KEY_ID = "master_key"
 func _process(delta):
 	update_room_idle_motion(delta)
 	update_room_ambient_overlay_animation(delta)
+	update_mouse_cursor()
 
 	# 입력 우선순위:
 	# 1. 선택지 조작
@@ -350,6 +374,12 @@ func _process(delta):
 
 	# 대사/상호작용 중이면 맵 이동 금지
 	if is_interacting:
+		return
+		
+	# 이동 화살표 마우스 클릭 처리
+	var clicked_move_arrow = await handle_move_arrow_mouse_click()
+
+	if clicked_move_arrow:
 		return
 
 	# 여기부터 일반 맵 이동 입력
@@ -478,6 +508,12 @@ func _ready():
 
 	# 게임 시작 시 UI 보조 기능과 버튼 연결을 초기화하는 함수
 	setup_initial_ui_helpers()
+
+	# 마우스 포인터 초기화
+	setup_mouse_cursors()
+
+	# 이동 화살표 마우스 클릭 연결
+	#setup_move_arrow_mouse_input()
 
 	# 효과음 기본 볼륨 저장 및 현재 SFX 설정 적용
 	register_sfx_base_volumes()
@@ -696,6 +732,10 @@ func start_battle(enemy_id, first_turn = "", battle_context = {}):
 # 전투 종료 함수
 func end_battle(result_data):
 	var result_type = str(result_data.get("result", ""))
+
+	# 전투 종료 시 이동/상호작용 잠금이 남지 않게 정리
+	is_moving = false
+	is_interacting = false
 
 	# 전투 종료 시 플레이어 체력은 항상 반영한다.
 	player_hp = result_data.get("player_hp", player_hp)
@@ -2268,6 +2308,70 @@ func stop_room_idle_motion(reset_background):
 	if reset_background:
 		background.scale = Vector2(1.0, 1.0)
 		background.position = Vector2.ZERO
+# 이동 화살표 마우스 입력 연결 함수
+func setup_move_arrow_mouse_input():
+	for direction in move_arrows.keys():
+		var arrow = move_arrows[direction]
+
+		if arrow == null:
+			continue
+
+		# TextureRect/Control이 마우스 입력을 받을 수 있게 설정
+		arrow.mouse_filter = Control.MOUSE_FILTER_STOP
+
+		var move_direction = str(direction)
+
+		arrow.gui_input.connect(
+			func(event):
+				await handle_move_arrow_gui_input(event, move_direction)
+		)
+# 이동 화살표 클릭 처리 함수
+func handle_move_arrow_gui_input(event, direction):
+	if not event is InputEventMouseButton:
+		return
+
+	if not event.pressed:
+		return
+
+	if event.button_index != MOUSE_BUTTON_LEFT:
+		return
+
+	if not can_click_move_arrow():
+		return
+
+	get_viewport().set_input_as_handled()
+
+	await try_move_to_exit(direction)
+# 이동 화살표 클릭 가능 상태 확인 함수
+func can_click_move_arrow():
+	if battle_scene != null:
+		return false
+
+	if is_story_playing:
+		return false
+
+	if is_dialogue_showing:
+		return false
+
+	if is_choosing:
+		return false
+
+	if is_inventory_open:
+		return false
+
+	if is_inventory_arrange_open:
+		return false
+
+	if is_moving:
+		return false
+
+	if is_interacting:
+		return false
+
+	if is_game_paused:
+		return false
+
+	return true
 # 방 분위기 오버레이 생성 함수
 func setup_room_ambient_overlay():
 	if room_ambient_overlay != null:
@@ -2432,7 +2536,6 @@ func setup_room_ambient_sound_player():
 	room_ambient_sound_player.set_meta("base_volume_db", -24.0)
 
 	add_child(room_ambient_sound_player)
-
 # 현재 방 분위기 사운드 갱신 함수
 func update_room_ambient_sound(room):
 	setup_room_ambient_sound_player()
@@ -2487,7 +2590,6 @@ func update_room_ambient_sound(room):
 	room_ambient_sound_player.set_meta("base_volume_db", volume_db)
 	apply_sfx_volume_to_player(room_ambient_sound_player)
 	room_ambient_sound_player.play()
-
 # 방 분위기 사운드 정지 함수
 func stop_room_ambient_sound():
 	current_room_ambient_sound_path = ""
@@ -2554,9 +2656,11 @@ func move_to_room(target_room, use_shake, direction):
 		return
 
 	if story_event_should_stop:
+		is_moving = false
 		return
 
 	if battle_scene != null:
+		is_moving = false
 		return
 	
 	# 랜덤 인카운터 체크
@@ -3679,7 +3783,7 @@ func run_single_story_event(event):
 		hide_game_ui()
 
 	elif event_type == "show_game_ui":
-		show_game_ui()
+		await show_game_ui()
 
 	elif event_type == "fade":
 		await effect(false, false, true, "")
@@ -4012,6 +4116,11 @@ func run_story_start_battle_event(event):
 	# 현재 스토리 events 루프는 여기서 멈춘다.
 	# start_battle 이벤트는 story_events.json에서 마지막 이벤트로 사용하는 것을 권장한다.
 	story_event_should_stop = true
+
+	# 방 이동 중 진입 스토리에서 전투가 시작될 수 있으므로
+	# 이동 잠금이 남지 않게 정리한다.
+	is_moving = false
+	is_interacting = false
 
 	var battle_context = make_story_battle_context(event)
 
@@ -4903,6 +5012,222 @@ func run_input_prompt_event(event):
 # 기타 함수 모음
 # ============================================================
 
+# 이동 화살표의 로컬 기준 판정 크기 반환 함수
+func get_move_arrow_local_hitbox_size(arrow):
+	var hitbox_size = MOVE_ARROW_HITBOX_FALLBACK_SIZE
+
+	# TextureRect의 실제 size가 설정되어 있으면 그걸 우선 사용
+	if arrow is Control:
+		if arrow.size.x > 0 and arrow.size.y > 0:
+			hitbox_size = arrow.size
+
+	# size가 이상하면 texture 원본 크기 사용
+	if arrow is TextureRect:
+		if arrow.texture != null:
+			if hitbox_size.x <= 0 or hitbox_size.y <= 0:
+				hitbox_size = arrow.texture.get_size()
+
+	if hitbox_size.x <= 0 or hitbox_size.y <= 0:
+		hitbox_size = MOVE_ARROW_HITBOX_FALLBACK_SIZE
+
+	return hitbox_size
+# 회전/스케일까지 반영된 이동 화살표 판정 Rect 반환 함수
+func get_move_arrow_hitbox_rect(direction):
+	if not move_arrows.has(direction):
+		return Rect2()
+
+	var arrow = move_arrows[direction]
+
+	if arrow == null:
+		return Rect2()
+
+	if not arrow.visible:
+		return Rect2()
+
+	var hitbox_size = get_move_arrow_local_hitbox_size(arrow)
+	var transform = arrow.get_global_transform()
+
+	# 화살표 로컬 사각형의 네 꼭짓점을 실제 화면 좌표로 변환
+	var p1 = transform * Vector2(0, 0)
+	var p2 = transform * Vector2(hitbox_size.x, 0)
+	var p3 = transform * Vector2(0, hitbox_size.y)
+	var p4 = transform * Vector2(hitbox_size.x, hitbox_size.y)
+
+	var min_x = min(min(p1.x, p2.x), min(p3.x, p4.x))
+	var max_x = max(max(p1.x, p2.x), max(p3.x, p4.x))
+	var min_y = min(min(p1.y, p2.y), min(p3.y, p4.y))
+	var max_y = max(max(p1.y, p2.y), max(p3.y, p4.y))
+
+	var hitbox_rect = Rect2(
+		Vector2(min_x, min_y),
+		Vector2(max_x - min_x, max_y - min_y)
+	)
+
+	return hitbox_rect.grow(MOVE_ARROW_HITBOX_PADDING)
+# 현재 마우스가 올라간 이동 방향 반환
+func get_mouse_over_move_arrow_direction():
+	var mouse_pos = get_global_mouse_position()
+
+	for direction in move_arrows.keys():
+		var hitbox_rect = get_move_arrow_hitbox_rect(direction)
+
+		if hitbox_rect.has_point(mouse_pos):
+			return str(direction)
+
+	return ""
+# 현재 마우스가 이동 화살표 위에 있는지 확인
+func is_mouse_over_visible_move_arrow():
+	return get_mouse_over_move_arrow_direction() != ""
+# 현재 마우스가 상호작용 가능 버튼 위에 있는지 확인
+func is_mouse_over_interaction_button():
+	var mouse_pos = get_global_mouse_position()
+
+	for child in interaction_buttons.get_children():
+		if not child is Button:
+			continue
+
+		if not child.visible:
+			continue
+
+		if child.disabled:
+			continue
+
+		if child.get_global_rect().has_point(mouse_pos):
+			return true
+
+	return false
+# 탐색 화면에서 마우스 포인터를 바꿔도 되는 상태인지 확인
+func can_use_explore_mouse_cursor():
+	if battle_scene != null:
+		return false
+
+	if is_story_playing:
+		return false
+
+	if is_dialogue_showing:
+		return false
+
+	if is_choosing:
+		return false
+
+	if is_moving:
+		return false
+
+	if is_interacting:
+		return false
+
+	if is_game_paused:
+		return false
+
+	return true
+# 현재 상태에 맞춰 마우스 포인터 갱신
+func update_mouse_cursor():
+	# 인벤토리/정리 화면에서 아이템을 들고 있으면 최우선
+	if is_dragging_item or is_arrange_dragging_item:
+		set_mouse_cursor(MOUSE_CURSOR_HOLD)
+		return
+
+	# 일반 탐색 상태가 아니면 기본 포인터
+	if not can_use_explore_mouse_cursor():
+		set_mouse_cursor(MOUSE_CURSOR_BASIC)
+		return
+
+	# 인벤토리나 정리 화면이 열려 있을 때는
+	# 드래그 중이 아니면 기본 포인터 유지
+	if is_inventory_open or is_inventory_arrange_open:
+		set_mouse_cursor(MOUSE_CURSOR_BASIC)
+		return
+
+	# 이동 화살표 위
+	if is_mouse_over_visible_move_arrow():
+		set_mouse_cursor(MOUSE_CURSOR_MOVE)
+		return
+
+	# 상호작용 가능 영역 위
+	if is_mouse_over_interaction_button():
+		set_mouse_cursor(MOUSE_CURSOR_INTERACT)
+		return
+
+	set_mouse_cursor(MOUSE_CURSOR_BASIC)
+# 마우스 포인터 이미지들을 미리 로드하는 함수
+func setup_mouse_cursors():
+	mouse_cursor_textures.clear()
+
+	load_mouse_cursor_texture(MOUSE_CURSOR_BASIC, CURSOR_BASIC_PATH)
+	load_mouse_cursor_texture(MOUSE_CURSOR_HOLD, CURSOR_HOLD_PATH)
+	load_mouse_cursor_texture(MOUSE_CURSOR_INTERACT, CURSOR_INTERACT_PATH)
+	load_mouse_cursor_texture(MOUSE_CURSOR_MOVE, CURSOR_MOVE_PATH)
+
+	set_mouse_cursor(MOUSE_CURSOR_BASIC)
+# 마우스 포인터 이미지 1개 로드 함수
+func load_mouse_cursor_texture(cursor_type, path):
+	if path == "":
+		return
+
+	if not ResourceLoader.exists(path):
+		push_warning("마우스 포인터 이미지 없음: " + str(path))
+		return
+
+	var texture = load(path)
+
+	if texture == null:
+		push_warning("마우스 포인터 이미지 로드 실패: " + str(path))
+		return
+
+	mouse_cursor_textures[cursor_type] = texture
+# 마우스 포인터 기준점 반환 함수
+func get_mouse_cursor_hotspot(cursor_type):
+	# 현재 이미지들이 화살표/손가락처럼 왼쪽 위 끝을 기준으로 찍는 구조라면
+	# 이 값이 가장 무난하다.
+	# 96x96 기준 대략 왼쪽 위쪽 포인터 끝.
+	match cursor_type:
+		MOUSE_CURSOR_BASIC:
+			return Vector2(8, 6)
+
+		MOUSE_CURSOR_HOLD:
+			return Vector2(8, 6)
+
+		MOUSE_CURSOR_INTERACT:
+			return Vector2(8, 6)
+
+		MOUSE_CURSOR_MOVE:
+			return Vector2(8, 6)
+
+		_:
+			return Vector2(0, 0)
+# 실제 마우스 포인터 변경 함수
+func set_mouse_cursor(cursor_type):
+	if current_mouse_cursor_type == cursor_type:
+		return
+
+	if not mouse_cursor_textures.has(cursor_type):
+		return
+
+	current_mouse_cursor_type = cursor_type
+
+	Input.set_custom_mouse_cursor(
+		mouse_cursor_textures[cursor_type],
+		Input.CURSOR_ARROW,
+		get_mouse_cursor_hotspot(cursor_type)
+	)
+# 이동 화살표 마우스 클릭 처리 함수
+func handle_move_arrow_mouse_click():
+	if not Input.is_action_just_pressed("mouse_left"):
+		return false
+
+	if not can_click_move_arrow():
+		return false
+
+	var move_direction = get_mouse_over_move_arrow_direction()
+
+	if move_direction == "":
+		return false
+
+	get_viewport().set_input_as_handled()
+
+	await try_move_to_exit(move_direction)
+
+	return true
 # 이펙트 효과 함수
 func effect(sound_effect, shake_effect, fade_effect, direction):
 	# 이동 이펙트 시작 시 강제 OFF
@@ -5085,6 +5410,21 @@ func change_background(path):
 # 인벤토리 함수 모음
 # ============================================================
 
+# 인벤토리 드래그 종료 상태 정리 함수
+func finish_inventory_drag_state():
+	is_dragging_item = false
+	dragged_item = null
+	dragged_item_button = null
+	pressed_item = null
+	pressed_item_button = null
+
+	slot_highlight.visible = false
+
+	# 드래그 후 선택 포커스가 남지 않게 정리
+	selected_inventory_item = null
+	clear_selected_item_info()
+
+	set_mouse_cursor(MOUSE_CURSOR_BASIC)
 # 인벤토리 상호작용 함수
 func _on_bag_button_pressed():
 	# 스토리 이벤트 중이면 일반 조작 차단
@@ -5203,12 +5543,6 @@ func update_inventory_ui():
 		# 현재 선택된 아이템이면 밝게 표시
 		item_button.modulate = Color(1.0, 1.0, 1.0, 1.0)
 		item_button.z_index = 10
-
-		item_button.pressed.connect(
-			func():
-				item_sound.play()
-				select_inventory_item(inventory_item)
-		)
 		
 		item_button.gui_input.connect(
 			func(event):
@@ -5227,6 +5561,9 @@ func update_inventory_ui():
 						else:
 							if is_dragging_item:
 								stop_drag_item()
+							else:
+								item_sound.play()
+								select_inventory_item(inventory_item)
 
 							pressed_item = null
 							pressed_item_button = null
@@ -5313,104 +5650,79 @@ func start_drag_item(inventory_item, item_button):
 	
 	item_button.z_index = 100
 	item_sound.play()
+
+	set_mouse_cursor(MOUSE_CURSOR_HOLD)
 # 아이템 드래그 종료 함수
 func stop_drag_item():
-
 	if dragged_item == null or dragged_item_button == null:
-		is_dragging_item = false
-		dragged_item = null
-		dragged_item_button = null
-		slot_highlight.visible = false
+		finish_inventory_drag_state()
+		update_inventory_ui()
 		return
 
-	var item_size = get_inventory_item_grid_size(dragged_item)
+	var drop_item = dragged_item
+	var dragged_button_ref = dragged_item_button
+
+	var item_size = get_inventory_item_grid_size(drop_item)
 
 	if item_size.x <= 0 or item_size.y <= 0:
-		if dragged_item_button != null:
-			dragged_item_button.position = dragged_item_original_position
-			dragged_item_button.z_index = 0
+		dragged_button_ref.position = dragged_item_original_position
+		dragged_button_ref.z_index = 0
 
-		is_dragging_item = false
-		dragged_item = null
-		dragged_item_button = null
-		slot_highlight.visible = false
+		finish_inventory_drag_state()
+		update_inventory_ui()
 		return
 
 	var item_width = item_size.x
 	var item_height = item_size.y
-
 	var target_slot = get_slot_from_mouse_position()
 
 	# 스택 아이템이면 먼저 합치기 시도
 	if target_slot != -1:
 		var merged = try_merge_inventory_stack_item(
-			dragged_item,
+			drop_item,
 			target_slot
 		)
 
-		if merged:
-			dragged_item_button.z_index = 0
+		if not merged:
+			# 스택 병합이 안 되는 1x1 아이템끼리는 자리 교환
+			var swapped = try_swap_inventory_1x1_items(
+				drop_item,
+				target_slot
+			)
 
-			is_dragging_item = false
-			dragged_item = null
-			dragged_item_button = null
-			slot_highlight.visible = false
+			if swapped:
+				if item_sound != null:
+					item_sound.play()
 
-			update_inventory_ui()
-			update_equipped_weapon_ui()
-			update_player_status_ui()
-			return
+			else:
+				# 정상 슬롯이고 배치 가능하면 이동
+				if can_place_item_at_except(
+					target_slot,
+					item_width,
+					item_height,
+					drop_item
+				):
+					drop_item["slot"] = target_slot
 
-	# 스택 병합이 안 되는 1x1 아이템끼리는 자리 교환
-	if target_slot != -1:
-		var swapped = try_swap_inventory_1x1_items(
-			dragged_item,
-			target_slot
-		)
+					if item_sound != null:
+						item_sound.play()
 
-		if swapped:
-			item_sound.play()
-
-			dragged_item_button.z_index = 0
-
-			is_dragging_item = false
-			dragged_item = null
-			dragged_item_button = null
-			slot_highlight.visible = false
-
-			update_inventory_ui()
-			update_equipped_weapon_ui()
-			update_player_status_ui()
-			return
-			
-	# 정상 슬롯이고 배치 가능하면 이동
-	if target_slot != -1:
-		if can_place_item_at_except(
-			target_slot,
-			item_width,
-			item_height,
-			dragged_item
-		):
-			dragged_item["slot"] = target_slot
-			item_sound.play()
-			update_inventory_ui()
-			update_equipped_weapon_ui()
-			update_player_status_ui()
-
-		# 놓을 수 없는 위치면 원래 자리 복귀
-		else:
-			dragged_item_button.position = dragged_item_original_position
+				# 놓을 수 없는 위치면 원래 자리 복귀
+				else:
+					dragged_button_ref.position = dragged_item_original_position
 
 	# 가방 밖이면 원래 자리 복귀
 	else:
-		dragged_item_button.position = dragged_item_original_position
+		dragged_button_ref.position = dragged_item_original_position
 
-	dragged_item_button.z_index = 0
+	dragged_button_ref.z_index = 0
 
-	is_dragging_item = false
-	dragged_item = null
-	dragged_item_button = null
-	slot_highlight.visible = false
+	finish_inventory_drag_state()
+
+	# 선택 포커스/하이라이트까지 확실히 지우기 위해 항상 UI 갱신
+	update_inventory_ui()
+	update_equipped_weapon_ui()
+	update_player_status_ui()
 # 인벤토리 아이템이 1x1 크기인지 확인하는 함수
 func is_inventory_item_1x1(inventory_item):
 	var item_size = get_inventory_item_grid_size(inventory_item)
@@ -6046,6 +6358,8 @@ func start_arrange_drag_item(inventory_item, item_button, source):
 	arrange_dragged_original_global_position = item_button.global_position
 
 	item_button.z_index = 100
+
+	set_mouse_cursor(MOUSE_CURSOR_HOLD)
 # 인벤토리 정리 화면 아이템 드래그 종료 함수
 func stop_arrange_drag_item():
 	if arrange_dragged_item == null or arrange_dragged_button == null:
@@ -6357,6 +6671,8 @@ func reset_arrange_drag_state():
 	arrange_pressed_item = null
 	arrange_pressed_button = null
 	arrange_pressed_source = ""
+
+	set_mouse_cursor(MOUSE_CURSOR_BASIC)
 # 인벤토리 정리 화면 닫기 함수 (추후에 창고 만들때 여기서 분리 처리!)
 func close_inventory_arrange():
 	selected_arrange_item = null
