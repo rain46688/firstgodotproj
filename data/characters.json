@@ -33,8 +33,8 @@
 			"shy": "res://imgs/characters/protagonist/portrait/shy.png"
 		}
 	},
-	"brown_hair": {
-		"name": "갈색 머리 여자",
+	"unknown_woman": {
+		"name": "의문의 여성",
 		"portrait": {
 			"normal": "res://imgs/characters/claire/portrait/normal.png",
 			"pain": "res://imgs/characters/claire/portrait/pain.png",

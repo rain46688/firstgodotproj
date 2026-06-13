@@ -23,7 +23,7 @@
 		"can_escape": true,
 		"encounter_text": "머리에 알수없는걸 뒤집어쓴 무언가가 다가왔다.",
 		"observe_text": "기분 나쁜 살이 타는 냄새가 코를 찌른다.",
-		"weakness_text": "손에 들고있는 양초가 약점인 것 같다.",
+		"weakness_text": "손에 들고 있는 양초가 약점인 것 같다.",
 		"patterns": [
 			{
 				"id": "basic_attack",
@@ -181,11 +181,11 @@
 			-40
 		],
 		"can_escape": false,
-		"encounter_text": "합쳐진 밀랍 학생들이 축축한 소리를 내며 몸을 다가온다.",
+		"encounter_text": "합쳐진 생명체 덩어리가 둔탁한 발소리를 내며 몸을 다가온다.",
 		"observe_text": "사람의 형체가 뭉쳐져서 만들어진것 같다.",
-		"weakness_text": "머리가 약점인거같다.",
+		"weakness_text": "머리가 약점인 거 같다.",
 		"next_phase_enemy_id": "combined_candle_students_phase_02",
-		"phase_transition_text": "합쳐진 몸이 녹아내리듯 뒤틀리기 시작한다...",
+		"phase_transition_text": "합쳐진 중앙 부분이 녹아내리듯 뒤틀리기 시작한다...",
 		"patterns": [
 			{
 				"id": "basic_attack",
@@ -406,7 +406,7 @@
 		"can_escape": false,
 		"encounter_text": "뜯겨나간 팔 너머로, 두 개의 몸이 하나처럼 뒤틀리기 시작한다...",
 		"observe_text": "꺼져있던 양초에 불이 붙고 중앙의 얼굴에서는 소름끼치는 살기가 뿜어져나오고있다.",
-		"weakness_text": "머리가 약점인거같다.",
+		"weakness_text": "머리가 약점인 거 같다.",
 		"phase_start_pattern_id": "phase2_start",
 		"patterns": [
 			{
@@ -899,9 +899,9 @@
 			-40
 		],
 		"can_escape": false,
-		"encounter_text": "합쳐진 밀랍 학생들이 축축한 소리를 내며 몸을 다가온다.",
-		"observe_text": "사람의 형체가 뭉쳐져서 만들어진것 같다.",
-		"weakness_text": "머리가 약점인거같다.",
+		"encounter_text": "알 수 없는 거대한 생명체가 둔탁한 발소리를 내며 다가온다.",
+		"observe_text": "사람의 형체가 밀랍과 뭉쳐져서 만들어진 것 같다.",
+		"weakness_text": "머리가 약점인 거 같다.",
 		"patterns": [
 			{
 				"id": "basic_attack",
@@ -1122,8 +1122,8 @@
 			0
 		],
 		"can_escape": false,
-		"encounter_text": "밀랍을 뒤집어쓴 여학생이 비틀거리며 다가온다.",
-		"observe_text": "굳어붙은 밀랍이 들러붙어 있다. 머리 위의 작은 양초가 희미하게 흔들린다.",
+		"encounter_text": "머리에 알수없는걸 뒤집어쓴 여학생이 비틀거리며 다가온다.",
+		"observe_text": "굳어 붙은 밀랍이 들러붙어 있는 것 같다. 머리 위의 작은 양초가 희미하게 흔들린다.",
 		"weakness_text": "머리의 양초가 약점인 것 같다.",
 		"patterns": [
 			{

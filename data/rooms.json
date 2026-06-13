@@ -994,13 +994,19 @@
 					{
 						"type": "text",
 						"name": "나",
-						"text": "뭐... 잘한다기 보단 이런 퍼즐류는 게임에서 많이 해봤지."
+						"text": "뭐... 잘한다기 보단 이런 퍼즐류는 공포 게임에서 많이 해봤지."
 					},
 					{
 						"type": "portrait",
 						"character": "claire",
 						"emotion": "annoyed",
-						"text": "참나, 이 상황에 뭔 게임..."
+						"text": "참나, 이 상황에 뭔 태평한 소리를..."
+					},
+					{
+						"type": "portrait",
+						"character": "claire",
+						"emotion": "annoyed",
+						"text": "난 퍼즐류 게임은 질색이야..."
 					},
 					{
 						"type": "text",
@@ -2595,8 +2601,19 @@
 		"enter_stories": [
 			{
 				"event": "first_enter_classroom_08_02",
-				"required_flag": "opened_classroom_08_ladder",
+				"required_flag": [
+					"opened_classroom_08_ladder",
+					"story_first_enter_classroom_09_done"
+				],
 				"required_flag_missing": "story_first_enter_classroom_08_02_done"
+			},
+			{
+				"event": "first_enter_classroom_08_02_02",
+				"required_flag": "opened_classroom_08_ladder",
+				"required_flag_missing": [
+					"story_first_enter_classroom_08_02_02_done",
+					"story_first_enter_classroom_09_done"
+				]
 			},
 			{
 				"event": "defeated_tutorial_combined_candle_students",
