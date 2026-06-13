@@ -3474,22 +3474,24 @@ func get_item_payment_count(event):
 # 아이템 지불 실패 대사 생성
 func make_item_payment_fail_text(event, item_id, count):
 	var fail_text = str(event.get("fail_text", ""))
+	play_battle_result_sound()
 
 	if fail_text != "":
 		return fail_text
 
 	var item_name = get_item_name(item_id)
-
+	
 	return item_name + " " + str(count) + "개가 부족하다."
 # 아이템 지불 성공 대사 생성
 func make_item_payment_success_text(event, item_id, count):
 	var success_text = str(event.get("success_text", ""))
+	play_battle_result_sound()
 
 	if success_text != "":
 		return success_text
 
 	var item_name = get_item_name(item_id)
-
+	
 	return item_name + " " + str(count) + "개를 바쳤다."
 # 아이템 일정 개수 요구/소모 후 성공/실패 이벤트 실행 함수
 func run_item_payment_event(event):
