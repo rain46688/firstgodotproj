@@ -49,7 +49,10 @@
 		"defense_move_speed": 300,
 		"parry_window": 0.1,
 		"piercing": false,
-		"defense_start_offset": [0, 90],
+		"defense_start_offset": [
+			0,
+			90
+		],
 		"battle_sprite_size": [
 			220,
 			220
@@ -90,7 +93,10 @@
 		"defense_move_speed": 500,
 		"parry_window": 0.25,
 		"piercing": false,
-		"defense_start_offset": [0, 100],
+		"defense_start_offset": [
+			0,
+			100
+		],
 		"battle_sprite_size": [
 			140,
 			140
@@ -129,7 +135,10 @@
 		"defense_move_speed": 500,
 		"parry_window": 0.05,
 		"piercing": true,
-		"defense_start_offset": [0, 90],
+		"defense_start_offset": [
+			0,
+			90
+		],
 		"battle_sprite_size": [
 			300,
 			300
@@ -169,7 +178,10 @@
 		"defense_move_speed": 400,
 		"parry_window": 0.15,
 		"piercing": false,
-		"defense_start_offset": [0, 90],
+		"defense_start_offset": [
+			0,
+			90
+		],
 		"battle_sprite_size": [
 			140,
 			140
@@ -201,7 +213,21 @@
 		"heal": 25,
 		"consumed_on_use": true
 	},
-	"tranquilizer": {
+	"tranquilizer_a": {
+		"name": "진정제",
+		"description": "미지근 하다 마시면 마음이 안정될 것 같다.",
+		"image": "res://imgs/items/tranquilizer180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "consumable",
+		"stackable": true,
+		"max_stack": 3,
+		"clear_status_effects": [
+			"fear"
+		],
+		"consumed_on_use": true
+	},
+	"tranquilizer_b": {
 		"name": "진정제",
 		"description": "미지근 하다 마시면 마음이 안정될 것 같다.",
 		"image": "res://imgs/items/tranquilizer180x180.png",
