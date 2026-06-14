@@ -23,12 +23,6 @@
 		}
 	],
 	"school_hallway_02": [
-		{
-			"enemy": "ghost",
-			"weight": 1,
-			"required_flag": "opened_school_stairs_hall_02",
-			"missing_flag": "",
-			"first_turn": ""
-		}
+		
 	]
 }

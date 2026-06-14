@@ -27,7 +27,17 @@
 		"height": 1,
 		"type": "key",
 		"stackable": false,
-		"consumed_on_use": false
+		"consumed_on_use": true
+	},
+	"schoolhall_key_a": {
+		"name": "철제키A",
+		"description": "이걸로 학교 중앙홀 철제 문을 열 수 있을 거 같다.",
+		"image": "res://imgs/items/metal_key180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "key",
+		"stackable": false,
+		"consumed_on_use": true
 	},
 	"cutter_knife": {
 		"name": "커터칼",

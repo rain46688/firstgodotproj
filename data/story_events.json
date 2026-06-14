@@ -3875,6 +3875,58 @@
 				"flag": "story_first_enter_classroom_11_done"
 			},
 			{
+				"type": "flag",
+				"flag": "defeated_candle_student_tutorial"
+			},
+			{
+				"type": "flag",
+				"flag": "opened_classroom_08_ladder"
+			},
+			{
+				"type": "flag",
+				"flag": "opened_classroom_09"
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_classroom_08_02_done"
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_classroom_09_done"
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_classroom_11_done"
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_school_hallway_08_after_classroom_09_event_done"
+			},
+			{
+				"type": "flag",
+				"flag": "story_defeated_tutorial_candle_student_done"
+			},
+			{
+				"type": "flag",
+				"flag": "room_enter_story_done_first_enter_classroom_08_02"
+			},
+			{
+				"type": "flag",
+				"flag": "room_enter_story_done_first_enter_classroom_09"
+			},
+			{
+				"type": "flag",
+				"flag": "room_enter_story_done_first_enter_classroom_11"
+			},
+			{
+				"type": "flag",
+				"flag": "room_enter_story_done_first_enter_school_hallway_08_after_classroom_09_event"
+			},
+			{
+				"type": "flag",
+				"flag": "room_enter_story_done_defeated_tutorial_candle_student"
+			},
+			{
 				"type": "auto_save",
 				"slot": 1,
 				"show_message": false,
@@ -4521,8 +4573,8 @@
 			}
 		]
 	},
-	"false_kill_statue_classroom_statue_classroom": {
-		"start_flag": "story_false_kill_statue_classroom_statue_classroom_done",
+	"false_kill_statue_classroom_statue_classroom_17_02": {
+		"start_flag": "story_false_kill_statue_classroom_statue_classroom_17_02_done",
 		"events": [
 			{
 				"type": "hide_game_ui"
@@ -4538,6 +4590,9 @@
 				"wait": true
 			},
 			{
+				"type": "fade"
+			},
+			{
 				"type": "screen_color_clear",
 				"duration": 1.0,
 				"wait": true
@@ -4546,7 +4601,41 @@
 				"type": "show_game_ui"
 			},
 			{
+				"type": "flag",
+				"flag": "story_false_kill_statue_classroom_statue_classroom_17_02_done"
+			}
+		]
+	},
+	"false_kill_statue_classroom_statue_classroom_18_02": {
+		"start_flag": "story_false_kill_statue_classroom_statue_classroom_18_02_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
 				"type": "fade"
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "show_game_ui"
+			},
+			{
+				"type": "flag",
+				"flag": "story_false_kill_statue_classroom_statue_classroom_18_02_done"
 			}
 		]
 	}
