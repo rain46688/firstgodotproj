@@ -2,7 +2,7 @@
 	"school_hallway": [
 		{
 			"enemy": "candle_student",
-			"weight": 59,
+			"weight": 55,
 			"required_flag": "opened_school_stairs_hall_02",
 			"missing_flag": "",
 			"first_turn": ""
@@ -16,13 +16,34 @@
 		},
 		{
 			"enemy": "ghost",
-			"weight": 1,
+			"weight": 5,
 			"required_flag": "opened_school_stairs_hall_02",
 			"missing_flag": "",
 			"first_turn": ""
 		}
 	],
 	"school_hallway_02": [
-		
-	]
+		{
+			"enemy": "candle_student",
+			"weight": 40,
+			"required_flag": "opened_school_stairs_hall_02",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "candle_student_woman",
+			"weight": 55,
+			"required_flag": "opened_school_stairs_hall_02",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "ghost",
+			"weight": 5,
+			"required_flag": "opened_school_stairs_hall_02",
+			"missing_flag": "",
+			"first_turn": ""
+		}
+	],
+	"school_hallway_03": []
 }

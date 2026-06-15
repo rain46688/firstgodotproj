@@ -229,7 +229,7 @@ const MSG_NO_BACK = "더 이상 뒤로 갈 수 없다..."
 const MSG_NO_LEFT = "그쪽으로는 갈 수 없다..."
 const MSG_NO_RIGHT = "그쪽으로는 갈 수 없다..."
 const MSG_DOOR_LOCKED = "문이 굳게 잠겨있다..."
-const MSG_DOOR_UNLOCK = "교실키로 문을 열었다."
+const MSG_DOOR_UNLOCK = "문을 열었다."
 const MSG_ITEM_GAINED_SUFFIX = "을 얻었다."
 const BATTLE_SCENE_PATH = "res://scenes/battle_scene.tscn"
 const GAME_OVER_SCENE_PATH = "res://scenes/game_over_scene.tscn"
@@ -1987,8 +1987,8 @@ func should_use_exit_shake(exit_data):
 		return true
 
 	return exit_data.get("move_effect", "") != "enter"
-# 방향별 막힌 길 대사 반환 함수
-func get_no_exit_message(direction):
+# 방향별 기본 막힌 길 대사 반환 함수
+func get_default_no_exit_message(direction):
 	match direction:
 		"up":
 			return MSG_NO_FORWARD
@@ -2000,6 +2000,31 @@ func get_no_exit_message(direction):
 			return MSG_NO_RIGHT
 		_:
 			return "그쪽으로는 갈 수 없다."
+# 방별/방향별 막힌 길 대사 반환 함수
+func get_no_exit_message(room, direction):
+	var default_message = get_default_no_exit_message(direction)
+
+	if room.is_empty():
+		return default_message
+
+	if not room.has("no_exit_messages"):
+		return default_message
+
+	var no_exit_messages = room["no_exit_messages"]
+
+	if typeof(no_exit_messages) != TYPE_DICTIONARY:
+		push_warning("no_exit_messages 데이터가 Dictionary가 아님: " + str(current_room))
+		return default_message
+
+	if not no_exit_messages.has(direction):
+		return default_message
+
+	var custom_message = str(no_exit_messages.get(direction, ""))
+
+	if custom_message == "":
+		return default_message
+
+	return custom_message
 # 모든 이동 화살표 숨김 함수
 func hide_all_move_arrows():
 	for direction in move_arrows.keys():
@@ -2664,9 +2689,9 @@ func try_move_to_exit(direction):
 
 	var exit_data = get_exit_data_from_room(room, direction)
 
-	# 현재 방에 해당 방향 출구가 없으면 방향별 대사 출력
+	# 현재 방에 해당 방향 출구가 없으면 방별/방향별 막힌 길 대사 출력
 	if exit_data.is_empty():
-		await show_dialogue(get_no_exit_message(direction))
+		await show_dialogue(get_no_exit_message(room, direction))
 		return
 
 	# 잠겨 있고 아직 열리지 않은 출구는 방향키로 처리하지 않음

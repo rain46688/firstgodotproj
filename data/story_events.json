@@ -3896,10 +3896,6 @@
 			},
 			{
 				"type": "flag",
-				"flag": "story_first_enter_classroom_11_done"
-			},
-			{
-				"type": "flag",
 				"flag": "story_first_enter_school_hallway_08_after_classroom_09_event_done"
 			},
 			{

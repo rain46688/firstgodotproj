@@ -1197,7 +1197,7 @@
 			{
 				"id": "wax_stagger_slash",
 				"weight": 25,
-				"warning_text": "굳어붙은 밀랍이 갈라지며 사방으로 튄다...",
+				"warning_text": "굳어붙은 밀랍이 갈라지며 사방으로 날카롭게 튄다...",
 				"fire_mode": "parallel",
 				"counter_hitbox_id": "head",
 				"projectiles": [
@@ -1208,8 +1208,9 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 4,
-						"delay": 0.0
+						"damage": 5,
+						"delay": 0.0,
+						"danger_type": "parry_only"
 					},
 					{
 						"projectile": "impact_basic",
@@ -1218,8 +1219,9 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 4,
-						"delay": 0.3
+						"damage": 5,
+						"delay": 0.3,
+						"danger_type": "parry_only"
 					},
 					{
 						"projectile": "slash_basic",
@@ -1228,8 +1230,9 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 4,
-						"delay": 0.6
+						"damage": 5,
+						"delay": 0.6,
+						"danger_type": "parry_only"
 					},
 					{
 						"projectile": "impact_basic",
@@ -1238,8 +1241,9 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 4,
-						"delay": 0.9
+						"damage": 5,
+						"delay": 0.9,
+						"danger_type": "parry_only"
 					}
 				]
 			},
