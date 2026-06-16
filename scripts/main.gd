@@ -223,6 +223,12 @@ const DEBUG_TEST_BATTLE_ENEMY_ID = "ghost"
 const DEBUG_BATTLE_START_DELAY = 1.0
 const DEBUG_START_ITEM_PRESET = "consumable_test"
 
+# 상호작용 클릭 영역 디버그 변수
+var click_rect_debug_enabled = false
+var click_rect_debug_dragging = false
+var click_rect_debug_start_pos = Vector2.ZERO
+var click_rect_debug_preview = null
+
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
 const MSG_NO_BACK = "더 이상 뒤로 갈 수 없다..."
@@ -367,7 +373,7 @@ func _process(delta):
 	if Input.is_action_just_pressed("esc") or Input.is_action_just_pressed("ui_cancel"):
 		open_pause_ui()
 		return	
-
+		
 	# 이동 중이면 아무 입력도 받지 않음
 	if is_moving:
 		return
@@ -1027,6 +1033,117 @@ func get_debug_start_item_ids():
 		_:
 			push_warning("알 수 없는 DEBUG_START_ITEM_PRESET: " + str(DEBUG_START_ITEM_PRESET))
 			return []
+# 클릭 영역 디버그 입력 처리 함수
+func _input(event):
+	handle_click_rect_debug_input(event)
+# 클릭 영역 디버그 입력 처리 함수
+func handle_click_rect_debug_input(event):
+	if event is InputEventKey:
+		if event.pressed and not event.echo and event.is_action_pressed("debug_click_rect"):
+			toggle_click_rect_debug()
+			get_viewport().set_input_as_handled()
+			return
+
+	if not click_rect_debug_enabled:
+		return
+
+	if event is InputEventMouseButton:
+		if event.button_index != MOUSE_BUTTON_LEFT:
+			return
+
+		if event.pressed:
+			start_click_rect_debug_drag(event.position)
+			get_viewport().set_input_as_handled()
+			return
+
+		if click_rect_debug_dragging:
+			finish_click_rect_debug_drag(event.position)
+			get_viewport().set_input_as_handled()
+			return
+
+	if event is InputEventMouseMotion:
+		if click_rect_debug_dragging:
+			update_click_rect_debug_preview(event.position)
+			get_viewport().set_input_as_handled()
+# 클릭 영역 디버그 모드 전환 함수
+func toggle_click_rect_debug():
+	click_rect_debug_enabled = not click_rect_debug_enabled
+	click_rect_debug_dragging = false
+
+	if click_rect_debug_preview != null:
+		click_rect_debug_preview.queue_free()
+		click_rect_debug_preview = null
+
+	if click_rect_debug_enabled:
+		stop_room_idle_motion(true)
+		update_room()
+		print("클릭 영역 디버그 ON: 마우스로 드래그하면 click_rect 값이 출력됩니다.")
+	else:
+		update_room()
+		print("클릭 영역 디버그 OFF")
+# 클릭 영역 디버그 드래그 시작 함수
+func start_click_rect_debug_drag(mouse_position):
+	click_rect_debug_dragging = true
+	click_rect_debug_start_pos = get_interaction_buttons_local_mouse_position(mouse_position)
+
+	if click_rect_debug_preview == null:
+		click_rect_debug_preview = ColorRect.new()
+		click_rect_debug_preview.name = "ClickRectDebugPreview"
+		click_rect_debug_preview.color = Color(1, 0, 0, 0.25)
+		click_rect_debug_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		click_rect_debug_preview.z_index = 999
+		interaction_buttons.add_child(click_rect_debug_preview)
+
+	click_rect_debug_preview.position = click_rect_debug_start_pos
+	click_rect_debug_preview.size = Vector2.ZERO
+	click_rect_debug_preview.visible = true
+# 클릭 영역 디버그 드래그 갱신 함수
+func update_click_rect_debug_preview(mouse_position):
+	if click_rect_debug_preview == null:
+		return
+
+	var current_pos = get_interaction_buttons_local_mouse_position(mouse_position)
+	var rect = make_positive_rect(click_rect_debug_start_pos, current_pos)
+
+	click_rect_debug_preview.position = rect.position
+	click_rect_debug_preview.size = rect.size
+# 클릭 영역 디버그 드래그 종료 함수
+func finish_click_rect_debug_drag(mouse_position):
+	click_rect_debug_dragging = false
+
+	var end_pos = get_interaction_buttons_local_mouse_position(mouse_position)
+	var rect = make_positive_rect(click_rect_debug_start_pos, end_pos)
+
+	var x = int(round(rect.position.x))
+	var y = int(round(rect.position.y))
+	var w = int(round(rect.size.x))
+	var h = int(round(rect.size.y))
+
+	print("")
+	print("click_rect 복사용:")
+	print("\"click_rect\": [")
+	print("\t" + str(x) + ",")
+	print("\t" + str(y) + ",")
+	print("\t" + str(w) + ",")
+	print("\t" + str(h))
+	print("]")
+	print(",")
+
+	if click_rect_debug_preview != null:
+		click_rect_debug_preview.position = Vector2(x, y)
+		click_rect_debug_preview.size = Vector2(w, h)
+# InteractionButtons 기준 마우스 좌표 반환 함수
+func get_interaction_buttons_local_mouse_position(viewport_mouse_position):
+	var inverse_transform = interaction_buttons.get_global_transform().affine_inverse()
+	return inverse_transform * viewport_mouse_position
+# 시작점/끝점으로 양수 크기 Rect 생성 함수
+func make_positive_rect(start_pos, end_pos):
+	var x = min(start_pos.x, end_pos.x)
+	var y = min(start_pos.y, end_pos.y)
+	var w = abs(end_pos.x - start_pos.x)
+	var h = abs(end_pos.y - start_pos.y)
+
+	return Rect2(x, y, w, h)
 
 # ============================================================
 # 성물/주물 관련 함수 모음
@@ -2219,6 +2336,9 @@ func update_room():
 func update_room_idle_motion_setting(room):
 	stop_room_idle_motion(true)
 
+	if click_rect_debug_enabled:
+		return
+
 	if not room.has("idle_motion"):
 		return
 
@@ -2254,6 +2374,9 @@ func get_room_idle_motion_base_position(scale_value):
 	)
 # idle motion 실행 가능 상태 확인 함수
 func can_update_room_idle_motion():
+	if click_rect_debug_enabled:
+		return false
+
 	if not room_idle_motion_enabled:
 		return false
 
@@ -3119,11 +3242,11 @@ func create_interaction_buttons(room):
 
 		# 투명 버튼처럼 사용
 		button.text = ""
-		button.modulate.a = 0.0
+		if click_rect_debug_enabled:
+			button.modulate.a = 0.25
+		else:
+			button.modulate.a = 0.0
 		button.mouse_filter = Control.MOUSE_FILTER_STOP
-
-		# 디버그할 때는 아래처럼 잠깐 보이게 해도 됨
-		# button.modulate.a = 0.25
 
 		var target_interaction_id = str(interaction_id)
 

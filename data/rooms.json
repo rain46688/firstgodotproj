@@ -49,7 +49,7 @@
 					}
 				]
 			},
-			"box1": {
+			"box_01": {
 				"click_rect": [
 					1475,
 					139,
@@ -125,7 +125,7 @@
 					}
 				]
 			},
-			"box2": {
+			"box_02": {
 				"click_rect": [
 					40,
 					415,
@@ -7965,6 +7965,22 @@
 				],
 				"move_effect": "enter"
 			}
+		},
+		"interactions": {
+			"room_sign": {
+				"click_rect": [
+					1206,
+					105,
+					216,
+					89
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "방송실이라 적혀있다."
+					}
+				]
+			}
 		}
 	},
 	"broadcasting_room_01": {
@@ -8000,7 +8016,7 @@
 			"left": {
 				"target": "broadcasting_room_03",
 				"position": [
-					60,
+					5,
 					540
 				],
 				"move_effect": "enter"
@@ -8008,24 +8024,51 @@
 			"right": {
 				"target": "broadcasting_room_02",
 				"position": [
-					1650,
+					1700,
 					540
 				],
 				"move_effect": "enter"
 			}
 		},
 		"interactions": {
-			"floor": {
+			"desk": {
 				"click_rect": [
-					1,
-					634,
-					1236,
-					263
+					502,
+					590,
+					372,
+					189
 				],
 				"events": [
 					{
 						"type": "text",
-						"text": "..."
+						"text": "깨끗하게 정리된 책상과 의자이다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "앉아서 휴식을 취한다.",
+								"events": []
+							},
+							{
+								"text": "그만둔다",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"box_01": {
+				"click_rect": [
+					1066,
+					577,
+					200,
+					138
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "잡동사니를 넣을 수 있는 박스다."
 					}
 				]
 			}
@@ -8063,17 +8106,90 @@
 			}
 		},
 		"interactions": {
-			"floor": {
+			"left_monitor": {
 				"click_rect": [
-					1,
-					634,
-					1236,
-					263
+					700,
+					362,
+					242,
+					217
+				],
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/save_ui_open.mp3",
+						"volume_db": -5,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "컴퓨터에 현재 상태를 저장하시겠습니까?"
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "예",
+								"events": [
+									{
+										"type": "save_to_slot",
+										"slot": 1,
+										"success_text": "저장 완료.",
+										"fail_text": "저장에 실패했다.",
+										"success_sound": "res://sounds/save_complete.mp3",
+										"sound_volume_db": -5
+									}
+								]
+							},
+							{
+								"text": "아니오",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/save_ui_close.mp3",
+										"volume_db": -5,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "저장을 취소했다."
+									}
+								]
+							}
+						]
+					}
+				]
+			},
+			"right_monitor": {
+				"click_rect": [
+					968,
+					365,
+					250,
+					212
+				],
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/save_ui_open.mp3",
+						"volume_db": -5,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "모니터 화면에서는 여러 장소의 CCTV 화면이 비치고 있다."
+					}
+				]
+			},
+			"broadcast_equipments": {
+				"click_rect": [
+					63,
+					625,
+					1777,
+					304
 				],
 				"events": [
 					{
 						"type": "text",
-						"text": "..."
+						"text": "여러 방송용 장비와 서버들이 있다."
 					}
 				]
 			}
@@ -8155,6 +8271,24 @@
 						"fail_text": "잠겨있어서 열 수 없다."
 					}
 				]
+			},
+			"fridge": {
+				"click_rect": [
+					1432,
+					505,
+					294,
+					460
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "냉동고와 정수기가 있다."
+					},
+					{
+						"type": "text",
+						"text": "작동은 되고 있는 거 같다."
+					}
+				]
 			}
 		}
 	},
@@ -8190,17 +8324,22 @@
 			}
 		},
 		"interactions": {
-			"floor": {
+			"albus": {
 				"click_rect": [
-					1,
-					634,
-					1236,
-					263
+					548,
+					47,
+					781,
+					815
 				],
 				"events": [
 					{
 						"type": "text",
-						"text": "..."
+						"text": "거대한 까마귀다."
+					},{
+						"type": "portrait",
+						"character": "albus",
+						"emotion": "normal",
+						"text": "뭘봐."
 					}
 				]
 			}
@@ -9113,7 +9252,7 @@
 		},
 		"ambient_sound": {
 			"path": "res://sounds/wind_sound.mp3",
-			"volume_db": -5.0,
+			"volume_db": 0.0,
 			"loop": true
 		},
 		"exits": {
@@ -9130,6 +9269,26 @@
 				"position": [
 					880,
 					950
+				]
+			}
+		},
+		"interactions": {
+			"huge_hole": {
+				"click_rect": [
+					446,
+					16,
+					988,
+					807
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "거대한 구멍이다."
+					},
+					{
+						"type": "text",
+						"text": "안쪽에서부터 바람이 부딪히는 소리가 들린다."
+					}
 				]
 			}
 		}
@@ -9153,7 +9312,7 @@
 		},
 		"ambient_sound": {
 			"path": "res://sounds/unknown_hall.mp3",
-			"volume_db": -5.0,
+			"volume_db": 0.0,
 			"loop": true
 		},
 		"enter_stories": [],
@@ -9192,17 +9351,49 @@
 			}
 		},
 		"interactions": {
-			"floor": {
+			"huge_door": {
 				"click_rect": [
-					1,
-					634,
-					1236,
-					263
+					649,
+					19,
+					617,
+					903
 				],
 				"events": [
 					{
 						"type": "text",
-						"text": "..."
+						"text": "알 수 없는 문양이 그려져있는 거대한 문이다."
+					},
+					{
+						"type": "text",
+						"text": "이 문을 열 방법을 찾아야 될 거 같은 기분이 든다."
+					}
+				]
+			},
+			"left_grails": {
+				"click_rect": [
+					85,
+					647,
+					385,
+					283
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "양옆으로는 커다란 잔이 2개씩 놓여있다."
+					}
+				]
+			},
+			"right_grails": {
+				"click_rect": [
+					1421,
+					669,
+					389,
+					260
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "양옆으로는 커다란 잔이 2개씩 놓여있다."
 					}
 				]
 			}
@@ -9250,17 +9441,21 @@
 			}
 		},
 		"interactions": {
-			"floor": {
+			"grail": {
 				"click_rect": [
-					1,
-					634,
-					1236,
-					263
+					560,
+					14,
+					847,
+					870
 				],
 				"events": [
 					{
 						"type": "text",
-						"text": "..."
+						"text": "금속 재질의 커다란 잔이다."
+					},
+					{
+						"type": "text",
+						"text": "안은 비어있다."
 					}
 				]
 			}
@@ -9316,17 +9511,21 @@
 			}
 		},
 		"interactions": {
-			"floor": {
+			"grail": {
 				"click_rect": [
-					1,
-					634,
-					1236,
-					263
+					560,
+					14,
+					847,
+					870
 				],
 				"events": [
 					{
 						"type": "text",
-						"text": "..."
+						"text": "금속 재질의 커다란 잔이다."
+					},
+					{
+						"type": "text",
+						"text": "안은 비어있다."
 					}
 				]
 			}
@@ -9382,12 +9581,12 @@
 			}
 		},
 		"interactions": {
-			"floor": {
+			"huge_door": {
 				"click_rect": [
-					1,
-					634,
-					1236,
-					263
+					567,
+					242,
+					817,
+					844
 				],
 				"events": [
 					{
@@ -9448,17 +9647,21 @@
 			}
 		},
 		"interactions": {
-			"floor": {
+			"grail": {
 				"click_rect": [
-					1,
-					634,
-					1236,
-					263
+					560,
+					14,
+					847,
+					870
 				],
 				"events": [
 					{
 						"type": "text",
-						"text": "..."
+						"text": "금속 재질의 커다란 잔이다."
+					},
+					{
+						"type": "text",
+						"text": "안은 비어있다."
 					}
 				]
 			}
@@ -9506,17 +9709,21 @@
 			}
 		},
 		"interactions": {
-			"floor": {
+			"grail": {
 				"click_rect": [
-					1,
-					634,
-					1236,
-					263
+					560,
+					14,
+					847,
+					870
 				],
 				"events": [
 					{
 						"type": "text",
-						"text": "..."
+						"text": "금속 재질의 커다란 잔이다."
+					},
+					{
+						"type": "text",
+						"text": "안은 비어있다."
 					}
 				]
 			}
