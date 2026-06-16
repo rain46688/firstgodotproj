@@ -1656,7 +1656,7 @@
 						"type": "unlock_exit",
 						"direction": "left",
 						"required_item": "",
-						"master_key": "master_key",
+						"master_key": "",
 						"consume_required_key": true,
 						"consume_master_key": true,
 						"success_effect": "fade",
@@ -2541,6 +2541,16 @@
 					30
 				]
 			},
+			"down": {
+				"target": "classroom_08_03",
+				"position": [
+					750,
+					950
+				],
+				"move_effect": "enter",
+				"locked": true,
+				"open_flag": "opened_classroom_08_03"
+			},
 			"right": {
 				"target": "school_hallway_08",
 				"position": [
@@ -2935,6 +2945,38 @@
 				]
 			}
 		}
+	},
+	"classroom_08_03": {
+		"background": "res://imgs/backgrounds/classroom_ladder_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_sound": {
+			"path": "res://sounds/monitor_buzz.mp3",
+			"volume_db": 5.0,
+			"loop": true
+		},
+		"exits": {
+			"up": {
+				"target": "classroom_28",
+				"position": [
+					880,
+					30
+				]
+			},
+			"down": {
+				"target": "classroom_08",
+				"position": [
+					880,
+					950
+				]
+			}
+		},
+		"interactions": {}
 	},
 	"school_hallway_09": {
 		"background": "res://imgs/backgrounds/school_hallway_02.png",
@@ -4390,19 +4432,6 @@
 							},
 							{
 								"text": "세 번째 사물함을 연다",
-								"flag": "got_beverage_a_classroom_11_02",
-								"already_events": [
-									{
-										"type": "sound",
-										"path": "res://sounds/locker_open.mp3",
-										"volume_db": 10,
-										"wait": false
-									},
-									{
-										"type": "text",
-										"text": "비어 있다."
-									}
-								],
 								"events": [
 									{
 										"type": "sound",
@@ -7212,7 +7241,7 @@
 				]
 			},
 			"right": {
-				"target": "classroom_22",
+				"target": "classroom_23",
 				"position": [
 					1390,
 					540
@@ -7437,6 +7466,2057 @@
 								]
 							}
 						]
+					}
+				]
+			}
+		}
+	},
+	"school_hallway_24": {
+		"background": "res://imgs/backgrounds/school_hallway_07.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.35
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"exits": {
+			"up": {
+				"target": "school_stairs_hall_03",
+				"position": [
+					750,
+					30
+				]
+			},
+			"down": {
+				"target": "school_hallway_23",
+				"position": [
+					750,
+					950
+				]
+			},
+			"right": {
+				"target": "classroom_24",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "school_hallway_03",
+			"event_table": "school_hallway",
+			"chance": 40
+		}
+	},
+	"classroom_24": {
+		"background": "res://imgs/backgrounds/classroom_04.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"exits": {
+			"up": {
+				"target": "classroom_24_02",
+				"position": [
+					750,
+					30
+				]
+			},
+			"right": {
+				"target": "school_hallway_24",
+				"position": [
+					1350,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"floor": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "아무것도 없는 바닥이다."
+					}
+				]
+			},
+			"window": {
+				"click_rect": [
+					0,
+					165,
+					280,
+					375
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낯선 풍경이 어둠 속에 잠겨있다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 열고 바깥을 살핀다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/windows_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "창밖의 바닥은 어두워서 보이지 않는다."
+									},
+									{
+										"type": "text",
+										"text": "그 앞은 끝없는 바다가 지평선까지 이어지고 있다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"classroom_24_02": {
+		"background": "res://imgs/backgrounds/classroom_black_board_08.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "classroom_24",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"black_board": {
+				"click_rect": [
+					550,
+					300,
+					960,
+					260
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "깨끗한 칠판이다."
+					}
+				]
+			},
+			"locker": {
+				"click_rect": [
+					227,
+					605,
+					1541,
+					306
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "깨끗한 사물함이다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "두 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "여덟 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "열 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"school_stairs_hall_03": {
+		"background": "res://imgs/backgrounds/school_stairs_hall_01.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"opened_school_stairs_hall_04",
+					"opened_school_stairs_hall_03"
+				],
+				"path": "res://imgs/backgrounds/school_stairs_hall_04.png"
+			},
+			{
+				"flags": [
+					"opened_school_stairs_hall_03"
+				],
+				"path": "res://imgs/backgrounds/school_stairs_hall_02.png"
+			},
+			{
+				"flags": [
+					"opened_school_stairs_hall_04"
+				],
+				"path": "res://imgs/backgrounds/school_stairs_hall_03.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.35
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"enter_stories": [
+			{
+				"event": "first_enter_school_stairs_hall_03",
+				"required_flag": "opened_school_stairs_hall_03",
+				"required_flag_missing": [
+					"story_first_enter_school_stairs_hall_03_done"
+				]
+			}
+		],
+		"exits": {
+			"up": {
+				"target": "school_stairs_hall_03_02",
+				"position": [
+					900,
+					30
+				]
+			},
+			"down": {
+				"target": "school_hallway_24",
+				"position": [
+					900,
+					950
+				]
+			},
+			"left": {
+				"target": "school_hallway_28",
+				"position": [
+					60,
+					540
+				]
+			},
+			"right": {
+				"target": "school_hallway_27",
+				"position": [
+					1830,
+					540
+				]
+			}
+		},
+		"interactions": {}
+	},
+	"school_stairs_hall_03_02": {
+		"background": "res://imgs/backgrounds/school_stairs_hall_door_01.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"opened_school_stairs_hall_04",
+					"opened_school_stairs_hall_03"
+				],
+				"path": "res://imgs/backgrounds/school_stairs_hall_door_04.png"
+			},
+			{
+				"flags": [
+					"opened_school_stairs_hall_03"
+				],
+				"path": "res://imgs/backgrounds/school_stairs_hall_door_02.png"
+			},
+			{
+				"flags": [
+					"opened_school_stairs_hall_04"
+				],
+				"path": "res://imgs/backgrounds/school_stairs_hall_door_03.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.35
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"exits": {
+			"right": {
+				"target": "school_stairs_hall_04",
+				"position": [
+					1300,
+					500
+				],
+				"locked": true,
+				"open_flag": "opened_school_stairs_hall_04"
+			},
+			"left": {
+				"target": "school_stairs_hall_02",
+				"position": [
+					500,
+					500
+				],
+				"locked": true,
+				"open_flag": "opened_school_stairs_hall_03"
+			},
+			"down": {
+				"target": "school_stairs_hall_03",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"school_stairs_hall_04_door": {
+				"click_rect": [
+					1036,
+					219,
+					324,
+					544
+				],
+				"hide_if_flag": "opened_school_stairs_hall_04",
+				"events": [
+					{
+						"type": "text",
+						"text": "철문으로 굳게 닫혀있다. 문을 열을까?"
+					},
+					{
+						"type": "unlock_exit",
+						"direction": "right",
+						"required_item": "",
+						"master_key": "",
+						"consume_required_key": true,
+						"consume_master_key": true,
+						"success_effect": "fade",
+						"required_key_success_text": "{item_name}로 문을 열었다.",
+						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+						"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+					}
+				]
+			},
+			"school_stairs_hall_03_door": {
+				"click_rect": [
+					564,
+					219,
+					324,
+					544
+				],
+				"hide_if_flag": "opened_school_stairs_hall_03",
+				"events": [
+					{
+						"type": "text",
+						"text": "철문으로 굳게 닫혀있다. 문을 열을까?"
+					},
+					{
+						"type": "unlock_exit",
+						"direction": "left",
+						"required_item": "",
+						"master_key": "master_key",
+						"consume_required_key": true,
+						"consume_master_key": true,
+						"success_effect": "fade",
+						"required_key_success_text": "{item_name}로 문을 열었다.",
+						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+						"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+					}
+				]
+			}
+		}
+	},
+	"school_hallway_25": {
+		"background": "res://imgs/backgrounds/school_hallway_11.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.35
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"no_exit_messages": {
+			"down": "뒤로 끝없는 복도가 이어져있다."
+		},
+		"exits": {
+			"up": {
+				"target": "school_hallway_26",
+				"position": [
+					550,
+					30
+				]
+			},
+			"right": {
+				"target": "broadcasting_room_01",
+				"position": [
+					1200,
+					550
+				],
+				"move_effect": "enter"
+			}
+		}
+	},
+	"broadcasting_room_01": {
+		"background": "res://imgs/backgrounds/broadcasting_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.35
+		},
+		"ambient_sound": {
+			"path": "res://sounds/bgm17.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "school_hallway_25",
+				"position": [
+					900,
+					950
+				],
+				"move_effect": "enter"
+			},
+			"left": {
+				"target": "broadcasting_room_03",
+				"position": [
+					60,
+					540
+				],
+				"move_effect": "enter"
+			},
+			"right": {
+				"target": "broadcasting_room_02",
+				"position": [
+					1650,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"floor": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
+					}
+				]
+			}
+		}
+	},
+	"broadcasting_room_02": {
+		"background": "res://imgs/backgrounds/broadcasting_room_02.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.35
+		},
+		"ambient_sound": {
+			"path": "res://sounds/bgm17.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "broadcasting_room_01",
+				"position": [
+					900,
+					950
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"floor": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
+					}
+				]
+			}
+		}
+	},
+	"broadcasting_room_03": {
+		"background": "res://imgs/backgrounds/broadcasting_room_03.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"defeated_combined_candle_students"
+				],
+				"path": "res://imgs/backgrounds/broadcasting_room_04.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.35
+		},
+		"ambient_sound": {
+			"path": "res://sounds/bgm17.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"exits": {
+			"left": {
+				"target": "albus_room_01",
+				"position": [
+					950,
+					540
+				],
+				"locked": true,
+				"open_flag": "defeated_combined_candle_students",
+				"move_effect": "enter"
+			},
+			"down": {
+				"target": "broadcasting_room_01",
+				"position": [
+					900,
+					950
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"albus_room_01_door": {
+				"click_rect": [
+					564,
+					219,
+					324,
+					544
+				],
+				"hide_if_flag": "defeated_combined_candle_students",
+				"events": [
+					{
+						"type": "text",
+						"text": "굳게 닫혀있다. 문을 열을까?"
+					},
+					{
+						"type": "unlock_exit",
+						"direction": "left",
+						"required_item": "",
+						"master_key": "",
+						"consume_required_key": true,
+						"consume_master_key": true,
+						"success_effect": "fade",
+						"required_key_success_text": "{item_name}로 문을 열었다.",
+						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+						"fail_text": "잠겨있어서 열 수 없다."
+					}
+				]
+			}
+		}
+	},
+	"albus_room_01": {
+		"background": "res://imgs/backgrounds/albus_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.35
+		},
+		"ambient_sound": {
+			"path": "res://sounds/bgm18.mp3",
+			"volume_db": -15.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "broadcasting_room_03",
+				"position": [
+					900,
+					950
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"floor": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
+					}
+				]
+			}
+		}
+	},
+	"school_hallway_26": {
+		"background": "res://imgs/backgrounds/school_hallway_07.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.35
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"exits": {
+			"up": {
+				"target": "school_hallway_27",
+				"position": [
+					750,
+					30
+				]
+			},
+			"down": {
+				"target": "school_hallway_25",
+				"position": [
+					750,
+					950
+				]
+			},
+			"right": {
+				"target": "classroom_26",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "school_hallway_03",
+			"event_table": "school_hallway",
+			"chance": 40
+		}
+	},
+	"classroom_26": {
+		"background": "res://imgs/backgrounds/classroom_04.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"enter_stories": [],
+		"exits": {
+			"up": {
+				"target": "classroom_26_02",
+				"position": [
+					750,
+					30
+				]
+			},
+			"right": {
+				"target": "school_hallway_26",
+				"position": [
+					1350,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"floor": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "아무것도 없는 바닥이다."
+					}
+				]
+			},
+			"window": {
+				"click_rect": [
+					0,
+					165,
+					280,
+					375
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낯선 풍경이 어둠 속에 잠겨있다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 열고 바깥을 살핀다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/windows_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "창밖의 바닥은 어두워서 보이지 않는다."
+									},
+									{
+										"type": "text",
+										"text": "그 앞은 끝없는 바다가 지평선까지 이어지고 있다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"classroom_26_02": {
+		"background": "res://imgs/backgrounds/classroom_black_board_08.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "classroom_26",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"black_board": {
+				"click_rect": [
+					550,
+					300,
+					960,
+					260
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "깨끗한 칠판이다."
+					}
+				]
+			},
+			"locker": {
+				"click_rect": [
+					227,
+					605,
+					1541,
+					306
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "깨끗한 사물함이다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "두 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "다섯 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "일곱 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"school_hallway_27": {
+		"background": "res://imgs/backgrounds/school_hallway_07.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.35
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"exits": {
+			"up": {
+				"target": "school_stairs_hall_03",
+				"position": [
+					750,
+					30
+				]
+			},
+			"down": {
+				"target": "school_hallway_26",
+				"position": [
+					750,
+					950
+				]
+			},
+			"right": {
+				"target": "classroom_27",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "school_hallway_03",
+			"event_table": "school_hallway",
+			"chance": 40
+		}
+	},
+	"classroom_27": {
+		"background": "res://imgs/backgrounds/classroom_04.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"enter_stories": [],
+		"exits": {
+			"up": {
+				"target": "classroom_27_02",
+				"position": [
+					750,
+					30
+				]
+			},
+			"right": {
+				"target": "school_hallway_27",
+				"position": [
+					1350,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"floor": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "아무것도 없는 바닥이다."
+					}
+				]
+			},
+			"window": {
+				"click_rect": [
+					0,
+					165,
+					280,
+					375
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낯선 풍경이 어둠 속에 잠겨있다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 열고 바깥을 살핀다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/windows_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "창밖의 바닥은 어두워서 보이지 않는다."
+									},
+									{
+										"type": "text",
+										"text": "그 앞은 끝없는 바다가 지평선까지 이어지고 있다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"classroom_27_02": {
+		"background": "res://imgs/backgrounds/classroom_black_board_08.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "classroom_27",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"black_board": {
+				"click_rect": [
+					550,
+					300,
+					960,
+					260
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "깨끗한 칠판이다."
+					}
+				]
+			},
+			"locker": {
+				"click_rect": [
+					227,
+					605,
+					1541,
+					306
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "깨끗한 사물함이다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "두 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "다섯 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "일곱 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"school_hallway_28": {
+		"background": "res://imgs/backgrounds/school_hallway_07.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.35
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"exits": {
+			"up": {
+				"target": "school_hallway_29",
+				"position": [
+					750,
+					30
+				]
+			},
+			"down": {
+				"target": "school_stairs_hall_03",
+				"position": [
+					750,
+					950
+				]
+			},
+			"right": {
+				"target": "classroom_28",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "school_hallway_03",
+			"event_table": "school_hallway",
+			"chance": 40
+		}
+	},
+	"classroom_28": {
+		"background": "res://imgs/backgrounds/classroom_09.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"enter_stories": [],
+		"exits": {
+			"down": {
+				"target": "classroom_08_03",
+				"position": [
+					600,
+					750
+				],
+				"move_effect": "enter",
+				"locked": true,
+				"open_flag": "opened_classroom_08_03"
+			},
+			"right": {
+				"target": "school_hallway_28",
+				"position": [
+					1350,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"floor_ladder": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "바닥에는 구멍이 뚫려있고 아래로 사다리가 이어져있다."
+					}
+				]
+			},
+			"window": {
+				"click_rect": [
+					0,
+					165,
+					280,
+					375
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낯선 풍경이 어둠 속에 잠겨있다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 열고 바깥을 살핀다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/windows_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "창밖의 바닥은 어두워서 보이지 않는다."
+									},
+									{
+										"type": "text",
+										"text": "그 앞은 끝없는 바다가 지평선까지 이어지고 있다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"school_hallway_29": {
+		"background": "res://imgs/backgrounds/school_hallway_08.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"opened_school_hallway_29_02"
+				],
+				"path": "res://imgs/backgrounds/school_hallway_10.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.35
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"exits": {
+			"up": {
+				"target": "school_hallway_29_02",
+				"position": [
+					750,
+					30
+				],
+				"move_effect": "enter",
+				"locked": true,
+				"open_flag": "opened_school_hallway_29_02"
+			},
+			"down": {
+				"target": "school_hallway_28",
+				"position": [
+					750,
+					950
+				]
+			},
+			"right": {
+				"target": "classroom_29",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter"
+			}
+		}
+	},
+	"classroom_29": {
+		"background": "res://imgs/backgrounds/classroom_04.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"enter_stories": [],
+		"exits": {
+			"up": {
+				"target": "classroom_29_02",
+				"position": [
+					750,
+					30
+				]
+			},
+			"right": {
+				"target": "school_hallway_29",
+				"position": [
+					1350,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"floor": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "아무것도 없는 바닥이다."
+					}
+				]
+			},
+			"window": {
+				"click_rect": [
+					0,
+					165,
+					280,
+					375
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낯선 풍경이 어둠 속에 잠겨있다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 열고 바깥을 살핀다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/windows_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "창밖의 바닥은 어두워서 보이지 않는다."
+									},
+									{
+										"type": "text",
+										"text": "그 앞은 끝없는 바다가 지평선까지 이어지고 있다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"classroom_29_02": {
+		"background": "res://imgs/backgrounds/classroom_black_board_08.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "classroom_29",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"black_board": {
+				"click_rect": [
+					550,
+					300,
+					960,
+					260
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "깨끗한 칠판이다."
+					}
+				]
+			},
+			"locker": {
+				"click_rect": [
+					227,
+					605,
+					1541,
+					306
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "깨끗한 사물함이다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "첫 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "다섯 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "열 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"school_hallway_29_02": {
+		"background": "res://imgs/backgrounds/school_hallway_huge_hole.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.35
+		},
+		"ambient_sound": {
+			"path": "res://sounds/wind_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"exits": {
+			"up": {
+				"target": "unknown_hall_01",
+				"position": [
+					880,
+					30
+				],
+				"move_effect": "enter"
+			},
+			"down": {
+				"target": "school_hallway_29",
+				"position": [
+					880,
+					950
+				]
+			}
+		}
+	},
+	"unknown_hall_01": {
+		"background": "res://imgs/backgrounds/unknown_hall_01.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"opened_unknown_hall_door"
+				],
+				"path": "res://imgs/backgrounds/unknown_hall_02.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_sound": {
+			"path": "res://sounds/unknown_hall.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"enter_stories": [],
+		"exits": {
+			"up": {
+				"target": "unknown_hall_04",
+				"position": [
+					900,
+					30
+				],
+				"move_effect": "enter"
+			},
+			"down": {
+				"target": "school_hallway_29_02",
+				"position": [
+					900,
+					950
+				],
+				"move_effect": "enter"
+			},
+			"left": {
+				"target": "unknown_hall_02",
+				"position": [
+					400,
+					500
+				],
+				"move_effect": "enter"
+			},
+			"right": {
+				"target": "unknown_hall_06",
+				"position": [
+					1400,
+					500
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"floor": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
+					}
+				]
+			}
+		}
+	},
+	"unknown_hall_02": {
+		"background": "res://imgs/backgrounds/unknown_grail_01.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"filled_unknown_grail_01"
+				],
+				"path": "res://imgs/backgrounds/unknown_grail_02.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_sound": {
+			"path": "res://sounds/unknown_hall.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"enter_stories": [],
+		"exits": {
+			"down": {
+				"target": "unknown_hall_01",
+				"position": [
+					900,
+					950
+				],
+				"move_effect": "enter"
+			},
+			"right": {
+				"target": "unknown_hall_03",
+				"position": [
+					1800,
+					500
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"floor": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
+					}
+				]
+			}
+		}
+	},
+	"unknown_hall_03": {
+		"background": "res://imgs/backgrounds/unknown_grail_01.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"filled_unknown_grail_02"
+				],
+				"path": "res://imgs/backgrounds/unknown_grail_02.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_sound": {
+			"path": "res://sounds/unknown_hall.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"enter_stories": [],
+		"exits": {
+			"down": {
+				"target": "unknown_hall_01",
+				"position": [
+					900,
+					950
+				],
+				"move_effect": "enter"
+			},
+			"left": {
+				"target": "unknown_hall_02",
+				"position": [
+					5,
+					500
+				],
+				"move_effect": "enter"
+			},
+			"right": {
+				"target": "unknown_hall_04",
+				"position": [
+					1800,
+					500
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"floor": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
+					}
+				]
+			}
+		}
+	},
+	"unknown_hall_04": {
+		"background": "res://imgs/backgrounds/unknown_hall_03.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"opened_unknown_hall_door"
+				],
+				"path": "res://imgs/backgrounds/unknown_hall_04.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_sound": {
+			"path": "res://sounds/unknown_hall.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"enter_stories": [],
+		"exits": {
+			"down": {
+				"target": "unknown_hall_01",
+				"position": [
+					900,
+					950
+				],
+				"move_effect": "enter"
+			},
+			"left": {
+				"target": "unknown_hall_03",
+				"position": [
+					5,
+					500
+				],
+				"move_effect": "enter"
+			},
+			"right": {
+				"target": "unknown_hall_05",
+				"position": [
+					1800,
+					500
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"floor": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
+					}
+				]
+			}
+		}
+	},
+	"unknown_hall_05": {
+		"background": "res://imgs/backgrounds/unknown_grail_01.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"filled_unknown_grail_03"
+				],
+				"path": "res://imgs/backgrounds/unknown_grail_02.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_sound": {
+			"path": "res://sounds/unknown_hall.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"enter_stories": [],
+		"exits": {
+			"down": {
+				"target": "unknown_hall_01",
+				"position": [
+					900,
+					950
+				],
+				"move_effect": "enter"
+			},
+			"left": {
+				"target": "unknown_hall_04",
+				"position": [
+					5,
+					500
+				],
+				"move_effect": "enter"
+			},
+			"right": {
+				"target": "unknown_hall_06",
+				"position": [
+					1800,
+					500
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"floor": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
+					}
+				]
+			}
+		}
+	},
+	"unknown_hall_06": {
+		"background": "res://imgs/backgrounds/unknown_grail_01.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"filled_unknown_grail_04"
+				],
+				"path": "res://imgs/backgrounds/unknown_grail_02.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_sound": {
+			"path": "res://sounds/unknown_hall.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"enter_stories": [],
+		"exits": {
+			"down": {
+				"target": "unknown_hall_01",
+				"position": [
+					900,
+					950
+				],
+				"move_effect": "enter"
+			},
+			"left": {
+				"target": "unknown_hall_05",
+				"position": [
+					5,
+					500
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"floor": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
 					}
 				]
 			}

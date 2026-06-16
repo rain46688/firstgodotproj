@@ -18,7 +18,7 @@
 			"annoyed": "res://imgs/characters/claire/standing/annoyed.png",
 			"shy": "res://imgs/characters/claire/standing/shy.png",
 			"expressionless": "res://imgs/characters/claire/standing/expressionless.png",
-			"expressionless2": "res://imgs/characters/claire/standing/expressionless2.png"
+			"expressionless_02": "res://imgs/characters/claire/standing/expressionless_02.png"
 		}
 	},
 	"protagonist": {
@@ -43,6 +43,48 @@
 			"annoyed": "res://imgs/characters/claire/portrait/annoyed.png",
 			"expressionless": "res://imgs/characters/claire/portrait/expressionless.png",
 			"shy": "res://imgs/characters/claire/portrait/shy.png"
+		}
+	},
+	"isaac": {
+		"name": "클레어",
+		"portrait": {
+			"normal": "res://imgs/characters/isaac/portrait/normal.png",
+			"pain": "res://imgs/characters/isaac/portrait/pain.png",
+			"embarrassed": "res://imgs/characters/isaac/portrait/embarrassed.png",
+			"angry": "res://imgs/characters/isaac/portrait/angry.png",
+			"annoyed": "res://imgs/characters/isaac/portrait/annoyed.png",
+			"expressionless": "res://imgs/characters/isaac/portrait/expressionless.png",
+			"shy": "res://imgs/characters/isaac/portrait/shy.png"
+		},
+		"standing": {
+			"normal": "res://imgs/characters/isaac/standing/normal.png",
+			"joy": "res://imgs/characters/isaac/standing/joy.png",
+			"embarrassed": "res://imgs/characters/isaac/standing/embarrassed.png",
+			"angry": "res://imgs/characters/isaac/standing/angry.png"
+		}
+	},
+	"monster_crow": {
+		"name": "거대한 괴물 까마귀",
+		"portrait": {
+			"normal": "res://imgs/characters/albus/portrait/normal.png",
+			"pain": "res://imgs/characters/albus/portrait/pain.png",
+			"embarrassed": "res://imgs/characters/albus/portrait/embarrassed.png",
+			"angry": "res://imgs/characters/albus/portrait/angry.png",
+			"annoyed": "res://imgs/characters/albus/portrait/annoyed.png",
+			"expressionless": "res://imgs/characters/albus/portrait/expressionless.png",
+			"shy": "res://imgs/characters/albus/portrait/shy.png"
+		}
+	},
+	"albus": {
+		"name": "알버스",
+		"portrait": {
+			"normal": "res://imgs/characters/albus/portrait/normal.png",
+			"pain": "res://imgs/characters/albus/portrait/pain.png",
+			"embarrassed": "res://imgs/characters/albus/portrait/embarrassed.png",
+			"angry": "res://imgs/characters/albus/portrait/angry.png",
+			"annoyed": "res://imgs/characters/albus/portrait/annoyed.png",
+			"expressionless": "res://imgs/characters/albus/portrait/expressionless.png",
+			"shy": "res://imgs/characters/albus/portrait/shy.png"
 		}
 	}
 }

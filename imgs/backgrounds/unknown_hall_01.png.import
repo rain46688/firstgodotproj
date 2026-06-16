@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dsti5skr26os2"
-path="res://.godot/imported/unknown_temple_02.png-983cf55e83c433c27c042fda3ad493cf.ctex"
+uid="uid://caa472ei2tf5j"
+path="res://.godot/imported/unknown_hall_01.png-355440ddf05f0844205bf913050b5ee2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/backgrounds/unknown_temple_02.png"
-dest_files=["res://.godot/imported/unknown_temple_02.png-983cf55e83c433c27c042fda3ad493cf.ctex"]
+source_file="res://imgs/backgrounds/unknown_hall_01.png"
+dest_files=["res://.godot/imported/unknown_hall_01.png-355440ddf05f0844205bf913050b5ee2.ctex"]
 
 [params]
 

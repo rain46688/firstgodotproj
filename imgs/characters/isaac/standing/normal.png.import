@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://nffvha26hwdr"
-path="res://.godot/imported/unknown_temple_01.png-18983bde365cff76b20efe28e56ca348.ctex"
+uid="uid://bn8skbp3u2h2q"
+path="res://.godot/imported/normal.png-77d9b89ca94bad7293c39f586706afc1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/backgrounds/unknown_temple_01.png"
-dest_files=["res://.godot/imported/unknown_temple_01.png-18983bde365cff76b20efe28e56ca348.ctex"]
+source_file="res://imgs/characters/isaac/standing/normal.png"
+dest_files=["res://.godot/imported/normal.png-77d9b89ca94bad7293c39f586706afc1.ctex"]
 
 [params]
 

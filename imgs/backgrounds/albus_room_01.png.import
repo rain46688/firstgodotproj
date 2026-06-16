@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b557imggxgkv2"
-path="res://.godot/imported/unknown_temple_03.png-6b3e487bcae2bda9e718ac6af713eb73.ctex"
+uid="uid://dywc6s5ahjgy3"
+path="res://.godot/imported/albus_room_01.png-5a30878826223cc357e0b64ada05d457.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/backgrounds/unknown_temple_03.png"
-dest_files=["res://.godot/imported/unknown_temple_03.png-6b3e487bcae2bda9e718ac6af713eb73.ctex"]
+source_file="res://imgs/backgrounds/albus_room_01.png"
+dest_files=["res://.godot/imported/albus_room_01.png-5a30878826223cc357e0b64ada05d457.ctex"]
 
 [params]
 

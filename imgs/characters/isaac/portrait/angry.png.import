@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cvpw8aeoc5w61"
-path="res://.godot/imported/expressionless2.png-b964a1e90a6283f38d95932c67df9d7d.ctex"
+uid="uid://dqjrsscht60ap"
+path="res://.godot/imported/angry.png-c0afaeee084a74e86a8ed5e7b880844f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/characters/claire/standing/expressionless2.png"
-dest_files=["res://.godot/imported/expressionless2.png-b964a1e90a6283f38d95932c67df9d7d.ctex"]
+source_file="res://imgs/characters/isaac/portrait/angry.png"
+dest_files=["res://.godot/imported/angry.png-c0afaeee084a74e86a8ed5e7b880844f.ctex"]
 
 [params]
 
