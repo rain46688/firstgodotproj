@@ -222,6 +222,7 @@ const DEBUG_START_BATTLE_TEST = false
 const DEBUG_TEST_BATTLE_ENEMY_ID = "ghost"
 const DEBUG_BATTLE_START_DELAY = 1.0
 const DEBUG_START_ITEM_PRESET = "consumable_test"
+# 이벤트 json 연결 부분 <-- 검색용
 
 # 상호작용 클릭 영역 디버그 변수
 var click_rect_debug_enabled = false
@@ -2103,7 +2104,17 @@ func should_use_exit_shake(exit_data):
 	if exit_data.is_empty():
 		return true
 
-	return exit_data.get("move_effect", "") != "enter"
+	var move_effect = str(exit_data.get("move_effect", "default"))
+
+	# enter는 문/입장 연출용. 흔들림 없이 암전만 사용한다.
+	if move_effect == "enter":
+		return false
+
+	# fade도 같은 의미로 쓸 수 있게 예비 지원
+	if move_effect == "fade":
+		return false
+
+	return true
 # 방향별 기본 막힌 길 대사 반환 함수
 func get_default_no_exit_message(direction):
 	match direction:
@@ -2772,8 +2783,13 @@ func move_to_room(target_room, use_shake, direction):
 	# 이동 중에는 추가 입력을 막음
 	is_moving = true
 	
+	# 현재 방/출구 기준 걷기 사운드 데이터 가져오기
+	var room = get_current_room_data()
+	var exit_data = get_exit_data_from_room(room, direction)
+	var footstep_data = get_move_footstep_data(room, exit_data)
+
 	# use_shake가 true면 흔들림 사용, false면 암전만 사용
-	await effect(true, use_shake, true, direction)
+	await effect(true, use_shake, true, direction, footstep_data)
 	
 	# 실제 방 변경 및 UI 갱신
 	apply_room_change(target_room)
@@ -3495,7 +3511,7 @@ func show_npc_dialogue(character_id, emotion, text):
 		speaker_portrait.texture = null
 
 	await show_dialogue(text, "npc")
-# 일반 이벤트 1개 실행 함수 (상호작용)
+# 일반 이벤트 1개 실행 함수 (상호작용 이벤트 json 연결 부분)
 func run_single_event(event):
 	if event == null:
 		return
@@ -3553,6 +3569,9 @@ func run_single_event(event):
 
 	elif event_type == "item_payment":
 		await run_item_payment_event(event)
+		
+	elif event_type == "heal_player":
+		await run_player_heal_event(event)
 		
 	elif event_type == "item":
 		var item_id = event.get("item", "")
@@ -3952,6 +3971,9 @@ func run_single_story_event(event):
 			float(event.get("volume_db", 0.0)),
 			bool(event.get("wait", false))
 		)
+		
+	elif event_type == "heal_player":
+		await run_player_heal_event(event)
 			
 	elif event_type == "stop_bgm":
 		stop_bgm()
@@ -4532,6 +4554,81 @@ func run_story_screen_color_event(event):
 
 	if should_wait:
 		await tween.finished
+# 화면 전체에 짧은 색상 플래시를 보여주는 함수
+func run_screen_flash(color_text = "#66ff99", alpha = 0.22, fade_in = 0.25, hold = 0.12, fade_out = 0.6, should_wait = true):
+	setup_story_color_overlay()
+
+	var target_color = Color(str(color_text))
+	target_color.a = clamp(float(alpha), 0.0, 1.0)
+
+	var clear_color = target_color
+	clear_color.a = 0.0
+
+	story_color_overlay.visible = true
+
+	var tween = create_tween()
+
+	tween.tween_property(
+		story_color_overlay,
+		"color",
+		target_color,
+		max(float(fade_in), 0.0)
+	)
+
+	if float(hold) > 0.0:
+		tween.tween_interval(float(hold))
+
+	tween.tween_property(
+		story_color_overlay,
+		"color",
+		clear_color,
+		max(float(fade_out), 0.0)
+	)
+
+	if should_wait:
+		await tween.finished
+# 플레이어 체력 회복 이벤트 실행 함수
+func run_player_heal_event(event):
+	var heal_to_full = bool(event.get("full", false))
+	var heal_amount = int(event.get("amount", event.get("heal", 0)))
+
+	if not heal_to_full and heal_amount <= 0:
+		return
+
+	var current_max_hp = get_current_player_max_hp()
+	var before_hp = int(player_hp)
+
+	if heal_to_full:
+		player_hp = current_max_hp
+	else:
+		player_hp = min(int(player_hp) + heal_amount, current_max_hp)
+
+	clamp_player_hp_to_current_max()
+	update_player_status_ui()
+
+	var recovered_amount = int(player_hp) - before_hp
+	print("플레이어 체력 회복: +" + str(recovered_amount) + " / 현재 체력: " + str(int(player_hp)))
+
+	if bool(event.get("play_sound", true)):
+		var sound_path = str(event.get("sound", ""))
+
+		if sound_path != "":
+			play_one_shot_sfx(
+				sound_path,
+				float(event.get("sound_volume_db", 0.0))
+			)
+		elif healing_sound != null:
+			healing_sound.play()
+
+	if bool(event.get("flash", true)):
+		await run_screen_flash(
+			str(event.get("color", "#66ff99")),
+			float(event.get("alpha", 0.22)),
+			float(event.get("fade_in", 0.25)),
+			float(event.get("hold", 0.12)),
+			float(event.get("fade_out", 0.6)),
+			bool(event.get("wait", true))
+		)
 # 스토리 단일색 화면 제거 함수
 func run_story_screen_color_clear_event(event):
 	setup_story_color_overlay()
@@ -5315,7 +5412,7 @@ func get_mouse_cursor_hotspot(cursor_type):
 	# 96x96 기준 대략 왼쪽 위쪽 포인터 끝.
 	match cursor_type:
 		MOUSE_CURSOR_BASIC:
-			return Vector2(8, 6)
+			return Vector2(20, 10)
 
 		MOUSE_CURSOR_HOLD:
 			return Vector2(8, 6)
@@ -5362,13 +5459,13 @@ func handle_move_arrow_mouse_click():
 
 	return true
 # 이펙트 효과 함수
-func effect(sound_effect, shake_effect, fade_effect, direction):
+func effect(sound_effect, shake_effect, fade_effect, direction, footstep_data = {}):
 	# 이동 이펙트 시작 시 강제 OFF
 	stop_room_idle_motion(true)
 	
 	# 발소리 효과
 	if sound_effect:
-		footstep_sound.play()
+		play_move_footstep_sound(footstep_data)
 		
 	if shake_effect:
 		var shake_tween = create_tween()
@@ -5495,6 +5592,86 @@ func play_story_sound(path, volume_db = 0.0, wait_until_finished = false):
 		sound.queue_free()
 	else:
 		sound.finished.connect(Callable(sound, "queue_free"))
+# 단발 효과음 재생 함수
+func play_one_shot_sfx(path, volume_db = 0.0):
+	if path == "":
+		return
+
+	if not ResourceLoader.exists(path):
+		push_warning("단발 효과음 파일 없음: " + str(path))
+		return
+
+	var stream = load(path)
+
+	if stream == null:
+		push_warning("단발 효과음 로드 실패: " + str(path))
+		return
+
+	stream = stream.duplicate()
+
+	if stream is AudioStreamMP3:
+		stream.loop = false
+	elif stream is AudioStreamOggVorbis:
+		stream.loop = false
+
+	var sound = AudioStreamPlayer.new()
+	sound.stream = stream
+	sound.volume_db = float(volume_db)
+	sound.set_meta("base_volume_db", float(volume_db))
+
+	apply_sfx_volume_to_player(sound)
+
+	add_child(sound)
+	sound.play()
+
+	sound.finished.connect(
+		func():
+			sound.queue_free()
+	)
+# footstep_sound 값을 Dictionary 형태로 정리하는 함수
+func normalize_footstep_sound_data(value):
+	if typeof(value) == TYPE_DICTIONARY:
+		return value
+
+	if typeof(value) == TYPE_STRING:
+		var path_text = str(value)
+
+		if path_text == "":
+			return {}
+
+		return {
+			"path": path_text
+		}
+
+	return {}
+# 현재 방/출구 기준 걷기 사운드 데이터 가져오기
+func get_move_footstep_data(room, exit_data):
+	var result = {}
+
+	# 방 전체 기본 걷기 사운드
+	if not room.is_empty() and room.has("footstep_sound"):
+		result = normalize_footstep_sound_data(room["footstep_sound"])
+
+	# 특정 출구 걷기 사운드가 있으면 우선 적용
+	if not exit_data.is_empty() and exit_data.has("footstep_sound"):
+		result = normalize_footstep_sound_data(exit_data["footstep_sound"])
+
+	return result
+# 이동용 걷기 사운드 재생 함수
+func play_move_footstep_sound(footstep_data):
+	if typeof(footstep_data) == TYPE_DICTIONARY:
+		var sound_path = str(footstep_data.get("path", ""))
+
+		if sound_path != "":
+			play_one_shot_sfx(
+				sound_path,
+				float(footstep_data.get("volume_db", 0.0))
+			)
+			return
+
+	# 별도 지정이 없으면 기존 FootstepSound 사용
+	if footstep_sound != null:
+		footstep_sound.play()
 # BGM 재생 함수
 func play_bgm(path, volume_db = -5.0, loop = true):
 	if path == "":

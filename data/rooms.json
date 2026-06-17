@@ -1,6 +1,13 @@
 {
 	"my_room": {
 		"background": "res://imgs/backgrounds/my_room.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
 		"interactions": {
 			"computer": {
 				"click_rect": [
@@ -67,7 +74,7 @@
 						"choices": [
 							{
 								"text": "무언가 주머니에 넣을까?",
-								"flag": "search_box1_prologue",
+								"flag": "search_box_01_prologue",
 								"already_events": [
 									{
 										"type": "text",
@@ -89,11 +96,26 @@
 									},
 									{
 										"type": "flag",
-										"flag": "search_box1_prologue"
+										"flag": "search_box_01_prologue"
 									}
 								]
 							}
 						]
+					}
+				]
+			},
+			"box_01_after_search": {
+				"click_rect": [
+					1475,
+					139,
+					125,
+					45
+				],
+				"required_flag": "got_cutter_knife_prologue",
+				"events": [
+					{
+						"type": "text",
+						"text": "잡동사니를 모아놓은곳이다."
 					}
 				]
 			},
@@ -132,6 +154,82 @@
 					320,
 					400
 				],
+				"hide_if_flag": "search_box_02_prologue",
+				"events": [
+					{
+						"type": "text",
+						"text": "잡동사니를 모아놓은곳이다."
+					},
+					{
+						"type": "text",
+						"text": "하나만 챙겨가자."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "만능 열쇠",
+								"events": [
+									{
+										"type": "item",
+										"item": "master_key",
+										"count": 1
+									},
+									{
+										"type": "flag",
+										"flag": "search_box_02_prologue"
+									}
+								]
+							},
+							{
+								"text": "면도칼",
+								"events": [
+									{
+										"type": "item",
+										"item": "razor",
+										"count": 1
+									},
+									{
+										"type": "flag",
+										"flag": "search_box_02_prologue"
+									}
+								]
+							},
+							{
+								"text": "알수없는 코인",
+								"events": [
+									{
+										"type": "item",
+										"item": "unknown_coin",
+										"count": 10
+									},
+									{
+										"type": "flag",
+										"flag": "search_box_02_prologue"
+									}
+								]
+							},
+							{
+								"text": "아무것도 가져가지 않는다.",
+								"events": [
+									{
+										"type": "flag",
+										"flag": "search_box_02_prologue"
+									}
+								]
+							}
+						]
+					}
+				]
+			},
+			"box_02_after_search": {
+				"click_rect": [
+					40,
+					415,
+					320,
+					400
+				],
+				"required_flag": "search_box_02_prologue",
 				"events": [
 					{
 						"type": "text",
@@ -277,11 +375,6 @@
 									{
 										"type": "text",
 										"text": "아래는 어둠이 짙게 깔려서 높이를 가늠할 수 없다."
-									},
-									{
-										"type": "item",
-										"item": "master_key",
-										"count": 1
 									}
 								]
 							},
@@ -2957,7 +3050,7 @@
 		},
 		"ambient_sound": {
 			"path": "res://sounds/monitor_buzz.mp3",
-			"volume_db": 5.0,
+			"volume_db": -3.0,
 			"loop": true
 		},
 		"exits": {
@@ -2966,7 +3059,11 @@
 				"position": [
 					880,
 					30
-				]
+				],
+				"footstep_sound": {
+					"path": "res://sounds/ladder_step.mp3",
+					"volume_db": 0.0
+				}
 			},
 			"down": {
 				"target": "classroom_08",
@@ -4740,6 +4837,33 @@
 						"type": "choices",
 						"choices": [
 							{
+								"text": "첫 번째 글귀를 확인해 본다.",
+								"events": [
+									{
+										"type": "text",
+										"text": "이곳에 진실이 담겨있으며, 네가 갈구하는 것은 이곳에 있다."
+									}
+								]
+							},
+							{
+								"text": "두 번째 글귀를 확인해 본다.",
+								"events": [
+									{
+										"type": "text",
+										"text": "다른 모든 석상은 거짓이며, 그들의 말에는 진실이 하나도 없다."
+									}
+								]
+							},
+							{
+								"text": "세 번째 글귀를 확인해 본다.",
+								"events": [
+									{
+										"type": "text",
+										"text": "네가 갈구하는 것을 찾고 싶다면, 가서 거짓된 석상을 때려 부숴라."
+									}
+								]
+							},
+							{
 								"text": "석상을 부순다.",
 								"events": [
 									{
@@ -4751,16 +4875,6 @@
 									{
 										"type": "flag",
 										"flag": "kill_statue_classroom_statue_classroom_14_02"
-									}
-								]
-							},
-							{
-								"text": "그만둔다.",
-								"events": [
-									{
-										"type": "text",
-										"name": "의문의 석상",
-										"text": "헤헤"
 									}
 								]
 							}
@@ -4792,6 +4906,33 @@
 						"type": "choices",
 						"choices": [
 							{
+								"text": "첫 번째 글귀를 확인해 본다.",
+								"events": [
+									{
+										"type": "text",
+										"text": "이곳에 진실이 담겨있으며, 네가 갈구하는 것은 이곳에 있다."
+									}
+								]
+							},
+							{
+								"text": "두 번째 글귀를 확인해 본다.",
+								"events": [
+									{
+										"type": "text",
+										"text": "다른 모든 석상은 거짓이며, 그들의 말에는 진실이 하나도 없다."
+									}
+								]
+							},
+							{
+								"text": "세 번째 글귀를 확인해 본다.",
+								"events": [
+									{
+										"type": "text",
+										"text": "네가 갈구하는 것을 찾고 싶다면, 가서 거짓된 석상을 때려 부숴라."
+									}
+								]
+							},
+							{
 								"text": "석상을 부순다.",
 								"events": [
 									{
@@ -4803,16 +4944,6 @@
 									{
 										"type": "flag",
 										"flag": "kill_statue_classroom_statue_classroom_14_02"
-									}
-								]
-							},
-							{
-								"text": "그만둔다.",
-								"events": [
-									{
-										"type": "text",
-										"name": "의문의 석상",
-										"text": "헤헤"
 									}
 								]
 							}
@@ -8004,6 +8135,15 @@
 			"volume_db": -10.0,
 			"loop": true
 		},
+		"enter_stories": [
+			{
+				"event": "first_enter_broadcasting_room_01",
+				"required_flag": "opened_school_stairs_hall_03",
+				"required_flag_missing": [
+					"story_first_enter_broadcasting_room_01_done"
+				]
+			}
+		],
 		"exits": {
 			"down": {
 				"target": "school_hallway_25",
@@ -8047,8 +8187,26 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "앉아서 휴식을 취한다.",
-								"events": []
+								"text": "의자에 앉아서 휴식을 취한다.",
+								"events": [
+									{
+										"type": "heal_player",
+										"amount": 50,
+										"color": "#66ff99",
+										"alpha": 0.22,
+										"fade_in": 0.25,
+										"hold": 0.12,
+										"fade_out": 0.6
+									},
+									{
+										"type": "text",
+										"text": "따뜻한 차가 당신의 마음을 녹인다."
+									},
+									{
+										"type": "text",
+										"text": "몸이 조금 가벼워졌다."
+									}
+								]
 							},
 							{
 								"text": "그만둔다",
@@ -8335,7 +8493,8 @@
 					{
 						"type": "text",
 						"text": "거대한 까마귀다."
-					},{
+					},
+					{
 						"type": "portrait",
 						"character": "albus",
 						"emotion": "normal",
@@ -8912,7 +9071,11 @@
 				],
 				"move_effect": "enter",
 				"locked": true,
-				"open_flag": "opened_classroom_08_03"
+				"open_flag": "opened_classroom_08_03",
+				"footstep_sound": {
+					"path": "res://sounds/ladder_step.mp3",
+					"volume_db": 0.0
+				}
 			},
 			"right": {
 				"target": "school_hallway_28",
@@ -9275,10 +9438,10 @@
 		"interactions": {
 			"huge_hole": {
 				"click_rect": [
-					446,
-					16,
-					988,
-					807
+					559,
+					148,
+					773,
+					656
 				],
 				"events": [
 					{
@@ -9353,10 +9516,10 @@
 		"interactions": {
 			"huge_door": {
 				"click_rect": [
-					649,
-					19,
-					617,
-					903
+					724,
+					197,
+					478,
+					639
 				],
 				"events": [
 					{
@@ -9371,10 +9534,10 @@
 			},
 			"left_grails": {
 				"click_rect": [
-					85,
-					647,
-					385,
-					283
+					308,
+					598,
+					285,
+					234
 				],
 				"events": [
 					{
@@ -9385,10 +9548,10 @@
 			},
 			"right_grails": {
 				"click_rect": [
-					1421,
-					669,
-					389,
-					260
+					1300,
+					585,
+					309,
+					264
 				],
 				"events": [
 					{
@@ -9443,10 +9606,10 @@
 		"interactions": {
 			"grail": {
 				"click_rect": [
-					560,
-					14,
-					847,
-					870
+					620,
+					168,
+					700,
+					636
 				],
 				"events": [
 					{
@@ -9513,10 +9676,10 @@
 		"interactions": {
 			"grail": {
 				"click_rect": [
-					560,
-					14,
-					847,
-					870
+					620,
+					168,
+					700,
+					636
 				],
 				"events": [
 					{
@@ -9583,10 +9746,10 @@
 		"interactions": {
 			"huge_door": {
 				"click_rect": [
-					567,
-					242,
-					817,
-					844
+					638,
+					232,
+					634,
+					788
 				],
 				"events": [
 					{
@@ -9649,10 +9812,10 @@
 		"interactions": {
 			"grail": {
 				"click_rect": [
-					560,
-					14,
-					847,
-					870
+					620,
+					168,
+					700,
+					636
 				],
 				"events": [
 					{
@@ -9711,10 +9874,10 @@
 		"interactions": {
 			"grail": {
 				"click_rect": [
-					560,
-					14,
-					847,
-					870
+					620,
+					168,
+					700,
+					636
 				],
 				"events": [
 					{

@@ -46,7 +46,7 @@
 		}
 	},
 	"isaac": {
-		"name": "클레어",
+		"name": "아이작",
 		"portrait": {
 			"normal": "res://imgs/characters/isaac/portrait/normal.png",
 			"pain": "res://imgs/characters/isaac/portrait/pain.png",

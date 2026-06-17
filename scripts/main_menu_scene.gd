@@ -750,5 +750,5 @@ func setup_main_menu_mouse_cursor():
 	Input.set_custom_mouse_cursor(
 		cursor_texture,
 		Input.CURSOR_ARROW,
-		Vector2(8, 6)
+		Vector2(20, 10)
 	)

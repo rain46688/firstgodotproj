@@ -21,7 +21,7 @@
 	},
 	"master_key": {
 		"name": "만능키",
-		"description": "이걸로 모든 문을 열 수 있을 거 같다.",
+		"description": "이걸로 웬만한 문을 열 수 있을 거 같다.",
 		"image": "res://imgs/items/master_key180x180.png",
 		"width": 1,
 		"height": 1,
@@ -224,7 +224,7 @@
 		"consumed_on_use": true
 	},
 	"tranquilizer_a": {
-		"name": "진정제",
+		"name": "진정제A",
 		"description": "미지근 하다 마시면 마음이 안정될 것 같다.",
 		"image": "res://imgs/items/tranquilizer180x180.png",
 		"width": 1,
@@ -238,7 +238,7 @@
 		"consumed_on_use": true
 	},
 	"tranquilizer_b": {
-		"name": "진정제",
+		"name": "진정제B",
 		"description": "미지근 하다 마시면 마음이 안정될 것 같다.",
 		"image": "res://imgs/items/tranquilizer180x180.png",
 		"width": 1,
@@ -262,6 +262,16 @@
 		"type": "coin",
 		"stackable": true,
 		"max_stack": 999
+	},
+	"wax_heart": {
+		"name": "밀랍 심장",
+		"description": "밀랍으로 뒤덮여있는 심장이다. 어딘가에 쓰일 거 같다.",
+		"image": "res://imgs/items/wax_heart180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "etc",
+		"effect_scope": "inventory",
+		"stackable": false
 	},
 	"old_water_ball": {
 		"name": "오래된 워터볼",
@@ -552,7 +562,7 @@
 	"heart_model_fetish": {
 		"name": "심장 모형",
 		"description": "천천히 뛰고 있는 듯한 심장 모형.최대 체력이 30 감소한다.효과 적용 후 최대 체력이 30 이하라면 현재 체력이 1 이상일 때 한 번에 죽지 않고 1로 버틴다.",
-		"image": "res://imgs/items/주물180x180.png",
+		"image": "res://imgs/items/heart_model_fetish180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
