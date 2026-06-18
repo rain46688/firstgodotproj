@@ -12,6 +12,7 @@
 		},
 		"standing": {
 			"normal": "res://imgs/characters/claire/standing/normal.png",
+			"joy": "res://imgs/characters/claire/standing/joy.png",
 			"pain": "res://imgs/characters/claire/standing/pain.png",
 			"embarrassed": "res://imgs/characters/claire/standing/embarrassed.png",
 			"angry": "res://imgs/characters/claire/standing/angry.png",
@@ -19,6 +20,22 @@
 			"shy": "res://imgs/characters/claire/standing/shy.png",
 			"expressionless": "res://imgs/characters/claire/standing/expressionless.png",
 			"expressionless_02": "res://imgs/characters/claire/standing/expressionless_02.png"
+		},
+		"standing_layout": {
+			"offsets": {
+				"left": [
+					50,
+					-50
+				],
+				"center": [
+					0,
+					-50
+				],
+				"right": [
+					150,
+					-50
+				]
+			}
 		}
 	},
 	"protagonist": {
@@ -50,17 +67,67 @@
 		"portrait": {
 			"normal": "res://imgs/characters/isaac/portrait/normal.png",
 			"pain": "res://imgs/characters/isaac/portrait/pain.png",
-			"embarrassed": "res://imgs/characters/isaac/portrait/embarrassed.png",
 			"angry": "res://imgs/characters/isaac/portrait/angry.png",
+			"embarrassed": "res://imgs/characters/isaac/portrait/embarrassed.png",
 			"annoyed": "res://imgs/characters/isaac/portrait/annoyed.png",
 			"expressionless": "res://imgs/characters/isaac/portrait/expressionless.png",
 			"shy": "res://imgs/characters/isaac/portrait/shy.png"
 		},
 		"standing": {
 			"normal": "res://imgs/characters/isaac/standing/normal.png",
+			"normal_02": "res://imgs/characters/isaac/standing/normal_02.png",
 			"joy": "res://imgs/characters/isaac/standing/joy.png",
 			"embarrassed": "res://imgs/characters/isaac/standing/embarrassed.png",
-			"angry": "res://imgs/characters/isaac/standing/angry.png"
+			"angry": "res://imgs/characters/isaac/standing/angry.png",
+			"expressionless": "res://imgs/characters/isaac/standing/expressionless.png"
+		},
+		"standing_layout": {
+			"offsets": {
+				"left": [
+					-100,
+					-200
+				],
+				"center": [
+					-150,
+					-200
+				],
+				"right": [
+					0,
+					-200
+				]
+			},
+			"emotion_offsets": {
+				"angry": {
+					"center": [
+						30,
+						0
+					]
+				},
+				"joy": {
+					"center": [
+						0,
+						0
+					]
+				},
+				"normal": {
+					"center": [
+						30,
+						5
+					]
+				},
+				"normal_02": {
+					"center": [
+						-40,
+						0
+					]
+				},
+				"expressionless": {
+					"center": [
+						30,
+						0
+					]
+				}
+			}
 		}
 	},
 	"monster_crow": {

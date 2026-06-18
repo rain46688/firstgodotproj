@@ -8178,6 +8178,7 @@
 					372,
 					189
 				],
+				"required_flag": "story_first_enter_broadcasting_room_01_done",
 				"events": [
 					{
 						"type": "text",
@@ -8223,6 +8224,7 @@
 					200,
 					138
 				],
+				"required_flag": "story_first_enter_broadcasting_room_01_done",
 				"events": [
 					{
 						"type": "text",
@@ -9087,6 +9089,21 @@
 			}
 		},
 		"interactions": {
+			"floor_ladder_open": {
+				"click_rect": [
+					1,
+					634,
+					1236,
+					263
+				],
+				"required_flag": "opened_classroom_08_03",
+				"events": [
+					{
+						"type": "text",
+						"text": "바닥에는 구멍이 뚫려있고 아래로 사다리가 이어져있다."
+					}
+				]
+			},
 			"floor_ladder": {
 				"click_rect": [
 					1,
@@ -9094,10 +9111,15 @@
 					1236,
 					263
 				],
+				"required_flag_missing": "opened_classroom_08_03",
 				"events": [
 					{
 						"type": "text",
 						"text": "바닥에는 구멍이 뚫려있고 아래로 사다리가 이어져있다."
+					},
+					{
+						"type": "text",
+						"text": "자세히 들여다보니 기묘하게도 바닥이 막혀있는 것 같다."
 					}
 				]
 			},

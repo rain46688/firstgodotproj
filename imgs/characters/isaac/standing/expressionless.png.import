@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bse25m15s2361"
-path="res://.godot/imported/normal.png-77d9b89ca94bad7293c39f586706afc1.ctex"
+uid="uid://ifvqwapj3xch"
+path="res://.godot/imported/expressionless.png-5b8c293c7a4d080698047762bd679f24.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/characters/isaac/standing/normal.png"
-dest_files=["res://.godot/imported/normal.png-77d9b89ca94bad7293c39f586706afc1.ctex"]
+source_file="res://imgs/characters/isaac/standing/expressionless.png"
+dest_files=["res://.godot/imported/expressionless.png-5b8c293c7a4d080698047762bd679f24.ctex"]
 
 [params]
 

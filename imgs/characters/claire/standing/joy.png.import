@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0g4tg343wn1m"
-path="res://.godot/imported/embarrassed.png-3458c1eb782ab865d8d1df1d2bfcf041.ctex"
+uid="uid://cary2x1w74mw0"
+path="res://.godot/imported/joy.png-a1e292eab5975ca4a86d28a779068d1c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/characters/isaac/standing/embarrassed.png"
-dest_files=["res://.godot/imported/embarrassed.png-3458c1eb782ab865d8d1df1d2bfcf041.ctex"]
+source_file="res://imgs/characters/claire/standing/joy.png"
+dest_files=["res://.godot/imported/joy.png-a1e292eab5975ca4a86d28a779068d1c.ctex"]
 
 [params]
 

@@ -115,6 +115,13 @@ var story_color_overlay = null
 # 스토리 카메라 연출 트윈
 var story_camera_tween = null
 
+# 스토리 스탠딩 CG 여러 명 표시용 변수
+# key: character_id, value: TextureRect
+var active_story_standings = {}
+
+# key: position_name(left/center/right), value: character_id
+var active_story_standing_positions = {}
+
 # 방 대기 화면 미세 이동 변수
 var room_idle_motion_enabled = false
 var room_idle_motion_time = 0.0
@@ -434,6 +441,10 @@ func setup_initial_ui_state():
 	inventory_arrange_ui.visible = false
 
 	background.scale = Vector2(1, 1)
+	
+	story_standing.visible = false
+	story_standing.texture = null
+	story_standing.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	encounter_danger_overlay.color = Color(1, 0, 0, 0)
 	# start_random_encounter_effect()에서 다시 visible = true를 해주기 때문에 문제 없음
@@ -3796,51 +3807,112 @@ func run_event_choices(choices):
 
 	if choice_flag != "":
 		set_flag(choice_flag)
-# 스토리 스탠딩 CG 표시 함수
-func show_story_standing(character_id, emotion, position_name = "center"):
-	var character_data = get_character_data_by_id(character_id)
+# 스토리 스탠딩 위치 이름을 실제 좌표로 변환하는 함수
+func get_default_story_standing_position(position_name):
+	match str(position_name):
+		"left":
+			return Vector2(100, 200)
+
+		"right":
+			return Vector2(1300, 200)
+
+		"center":
+			return Vector2(800, 200)
+
+		_:
+			push_warning("알 수 없는 standing position: " + str(position_name) + " / center로 처리")
+			return Vector2(800, 200)
+# JSON 배열 [x, y]를 Vector2로 변환하는 함수
+func get_vector2_from_json_array(value, default_value = Vector2.ZERO):
+	if typeof(value) != TYPE_ARRAY:
+		return default_value
+
+	if value.size() < 2:
+		return default_value
+
+	return Vector2(
+		float(value[0]),
+		float(value[1])
+	)
+# 캐릭터별 standing_layout 데이터 가져오기
+func get_character_standing_layout(character_id):
+	var character_data = get_character_data_by_id(character_id, false)
 
 	if character_data.is_empty():
+		return {}
+
+	var layout = character_data.get("standing_layout", {})
+
+	if typeof(layout) != TYPE_DICTIONARY:
+		return {}
+
+	return layout
+# 캐릭터별/표정별/위치별 스탠딩 보정값 가져오기
+func get_character_standing_offset(character_id, emotion, position_name):
+	var layout = get_character_standing_layout(character_id)
+
+	if layout.is_empty():
+		return Vector2.ZERO
+
+	var result = Vector2.ZERO
+	var position_key = str(position_name)
+	var emotion_key = str(emotion)
+
+	# 캐릭터 공통 위치 보정
+	var offsets = layout.get("offsets", {})
+
+	if typeof(offsets) == TYPE_DICTIONARY:
+		if offsets.has(position_key):
+			result += get_vector2_from_json_array(offsets[position_key])
+
+	# 특정 표정 위치 보정
+	var emotion_offsets = layout.get("emotion_offsets", {})
+
+	if typeof(emotion_offsets) == TYPE_DICTIONARY:
+		if emotion_offsets.has(emotion_key):
+			var emotion_data = emotion_offsets[emotion_key]
+
+			if typeof(emotion_data) == TYPE_DICTIONARY:
+				if emotion_data.has(position_key):
+					result += get_vector2_from_json_array(emotion_data[position_key])
+
+	return result
+# 캐릭터별 보정까지 적용한 스탠딩 위치 반환 함수
+func get_story_standing_position(character_id, emotion, position_name):
+	var base_position = get_default_story_standing_position(position_name)
+	var offset = get_character_standing_offset(character_id, emotion, position_name)
+
+	return base_position + offset
+# 스토리 스탠딩 노드 생성 함수
+func create_story_standing_node(character_id, standing_path, position_name, emotion):
+	var node = TextureRect.new()
+
+	node.name = "StoryStanding_" + str(character_id)
+	node.texture = load(standing_path)
+	node.position = get_story_standing_position(character_id, emotion, position_name)
+
+	node.size = story_standing.size
+	node.expand_mode = story_standing.expand_mode
+	node.stretch_mode = story_standing.stretch_mode
+	node.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	node.z_index = story_standing.z_index
+	node.visible = true
+	node.modulate.a = 0.0
+
+	add_child(node)
+
+	return node
+# 특정 스탠딩 노드 페이드아웃 후 제거 함수
+func fade_out_and_remove_story_standing_node(node):
+	if node == null:
 		return
 
-	var standing_path = get_character_standing_path(character_id, emotion)
-
-	if standing_path == "":
-		push_error("존재하지 않는 standing emotion: " + str(character_id) + " / " + str(emotion))
+	if not is_instance_valid(node):
 		return
-
-	story_standing.texture = load(standing_path)
-	story_standing.visible = true
-
-	if position_name == "center":
-		story_standing.position = Vector2(770, 140)
-
-	elif position_name == "left":
-		story_standing.position = Vector2(420, 140)
-
-	elif position_name == "right":
-		story_standing.position = Vector2(1120, 140)
-
-	story_standing.modulate.a = 0.0
-	story_standing.visible = true
 
 	var tween = create_tween()
 	tween.tween_property(
-		story_standing,
-		"modulate:a",
-		1.0,
-		0.25
-	)
-
-	await tween.finished
-# 스토리 스탠딩 CG 숨김 함수
-func hide_story_standing():
-	if not story_standing.visible:
-		return
-
-	var tween = create_tween()
-	tween.tween_property(
-		story_standing,
+		node,
 		"modulate:a",
 		0.0,
 		0.25
@@ -3848,9 +3920,111 @@ func hide_story_standing():
 
 	await tween.finished
 
-	story_standing.visible = false
-	story_standing.texture = null
-	story_standing.modulate.a = 1.0
+	if is_instance_valid(node):
+		node.queue_free()
+# 특정 캐릭터 스탠딩 숨김 함수
+func hide_story_standing_by_character(character_id):
+	var character_key = str(character_id)
+
+	if character_key == "":
+		return
+
+	if not active_story_standings.has(character_key):
+		return
+
+	var node = active_story_standings[character_key]
+
+	active_story_standings.erase(character_key)
+
+	for position_key in active_story_standing_positions.keys():
+		if active_story_standing_positions[position_key] == character_key:
+			active_story_standing_positions.erase(position_key)
+			break
+
+	await fade_out_and_remove_story_standing_node(node)
+# 특정 위치 스탠딩 숨김 함수
+func hide_story_standing_at_position(position_name):
+	var position_key = str(position_name)
+
+	if position_key == "":
+		return
+
+	if not active_story_standing_positions.has(position_key):
+		return
+
+	var character_id = str(active_story_standing_positions[position_key])
+
+	await hide_story_standing_by_character(character_id)
+# 모든 스토리 스탠딩 숨김 함수
+func hide_all_story_standings():
+	var character_ids = active_story_standings.keys()
+
+	for character_id in character_ids:
+		await hide_story_standing_by_character(character_id)
+
+	active_story_standings.clear()
+	active_story_standing_positions.clear()
+# 스토리 스탠딩 CG 표시 함수
+func show_story_standing(character_id, emotion, position_name = "center"):
+	var character_key = str(character_id)
+	var position_key = str(position_name)
+
+	var character_data = get_character_data_by_id(character_key)
+
+	if character_data.is_empty():
+		return
+
+	var standing_path = get_character_standing_path(character_key, emotion)
+
+	if standing_path == "":
+		push_error("존재하지 않는 standing emotion: " + character_key + " / " + str(emotion))
+		return
+
+	# 같은 캐릭터는 화면에 중복으로 존재할 수 없으므로 기존 스탠딩 제거
+	if active_story_standings.has(character_key):
+		await hide_story_standing_by_character(character_key)
+
+	# 같은 위치에 다른 캐릭터가 있으면 겹치지 않게 기존 위치 스탠딩 제거
+	if active_story_standing_positions.has(position_key):
+		var old_character_id = str(active_story_standing_positions[position_key])
+
+		if old_character_id != character_key:
+			await hide_story_standing_by_character(old_character_id)
+
+	var node = create_story_standing_node(
+		character_key,
+		standing_path,
+		position_key,
+		emotion
+	)
+
+	active_story_standings[character_key] = node
+	active_story_standing_positions[position_key] = character_key
+
+	var tween = create_tween()
+	tween.tween_property(
+		node,
+		"modulate:a",
+		1.0,
+		0.25
+	)
+
+	await tween.finished
+# 스토리 스탠딩 CG 숨김 함수
+# character_id와 position_name이 비어 있으면 전체 제거
+func hide_story_standing(character_id = "", position_name = ""):
+	var character_key = str(character_id)
+	var position_key = str(position_name)
+
+	if character_key != "":
+		await hide_story_standing_by_character(character_key)
+		return
+
+	if position_key != "":
+		await hide_story_standing_at_position(position_key)
+		return
+
+	await hide_all_story_standings()
 # 스토리 이벤트 중 게임 UI 숨김 함수
 func hide_game_ui():
 	$BagButton.visible = false
@@ -3992,7 +4166,10 @@ func run_single_story_event(event):
 		)
 		
 	elif event_type == "standing_clear":
-		await hide_story_standing()
+		await hide_story_standing(
+			event.get("character", ""),
+			event.get("position", "")
+		)
 		
 	elif event_type == "portrait":
 		await show_npc_dialogue(
@@ -4402,6 +4579,9 @@ func open_pause_ui():
 	pause_ui_scene.sfx_volume_changed.connect(_on_pause_sfx_volume_changed)
 
 	is_game_paused = true
+	
+	# Pause UI에서는 탐색용 커서가 남지 않도록 기본 커서로 되돌린다.
+	set_mouse_cursor(MOUSE_CURSOR_BASIC)
 
 	# 트리 일시정지
 	# PauseUIScene은 process_mode = ALWAYS라서 paused 상태에서도 입력 가능하다.
@@ -4416,6 +4596,8 @@ func close_pause_ui():
 
 	is_game_paused = false
 	get_tree().paused = false
+	
+	set_mouse_cursor(MOUSE_CURSOR_BASIC)
 
 	print("일시정지 UI 닫힘")
 # 일시정지 UI에서 메인 메뉴로 이동하는 함수
