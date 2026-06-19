@@ -4612,7 +4612,7 @@
 			},
 			{
 				"type": "screen_color_clear",
-				"duration": 1.0,
+				"duration": 0.5,
 				"wait": true
 			},
 			{
@@ -4645,7 +4645,7 @@
 			},
 			{
 				"type": "screen_color_clear",
-				"duration": 1.0,
+				"duration": 0.5,
 				"wait": true
 			},
 			{
@@ -4678,6 +4678,96 @@
 			{
 				"type": "background",
 				"path": "res://imgs/backgrounds/school_stairs_hall_02.png"
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "..."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "angry",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "..."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "annoyed",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "..."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "expressionless",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "..."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "expressionless_02",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "..."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "joy",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "..."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "normal",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "..."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "pain",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "..."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "shy",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "..."
 			},
 			{
 				"type": "story_dialogue",
@@ -5302,6 +5392,11 @@
 				"type": "standing_clear"
 			},
 			{
+				"type": "screen_color_clear",
+				"duration": 0.1,
+				"wait": true
+			},
+			{
 				"type": "fade"
 			},
 			{
@@ -5759,12 +5854,6 @@
 			{
 				"type": "story_dialogue",
 				"text": "하지만 가장 중요한 말은 삼켰다."
-			},
-			{
-				"type": "sound",
-				"path": "res://sounds/footsteps.mp3",
-				"volume_db": 20,
-				"wait": false
 			},
 			{
 				"type": "screen_color",

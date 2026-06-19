@@ -109,6 +109,13 @@ var enemies = {}
 var battle_scene = null
 var pause_ui_scene = null
 var is_game_paused = false
+
+# Pause UI ESC 입력이 같은 프레임에 다시 열리는 것을 막는 잠금
+var pause_input_locked = false
+
+# 메인 메뉴로 나가는 중인지 확인
+var is_quitting_to_title = false
+
 var current_bgm_base_volume_db = -5.0
 # 스토리 연출용 단일색 화면 오버레이
 var story_color_overlay = null
@@ -283,6 +290,15 @@ func _process(delta):
 	update_room_idle_motion(delta)
 	update_room_ambient_overlay_animation(delta)
 	update_mouse_cursor()
+	
+	update_pause_input_lock()
+
+	# ESC / ui_cancel은 선택지, 대사, 스토리 차단보다 먼저 검사한다.
+	# Pause UI를 ESC로 닫은 직후 같은 입력으로 다시 열리는 것은 pause_input_locked로 방지한다.
+	if is_pause_input_just_pressed() and not pause_input_locked:
+		if can_open_pause_ui():
+			open_pause_ui()
+			return
 
 	# 입력 우선순위:
 	# 1. 선택지 조작
@@ -374,13 +390,6 @@ func _process(delta):
 			close_inventory()
 
 		return
-		
-	# 일반 탐색 상태에서 ESC를 누르면 일시정지 UI를 연다.
-	# 인벤토리/정리 화면은 위쪽 분기에서 ESC로 닫히기 때문에
-	# Pause는 그보다 아래에서 처리해야 입력이 충돌하지 않는다.
-	if Input.is_action_just_pressed("esc") or Input.is_action_just_pressed("ui_cancel"):
-		open_pause_ui()
-		return	
 		
 	# 이동 중이면 아무 입력도 받지 않음
 	if is_moving:
@@ -3110,6 +3119,9 @@ func show_dialogue(text, mode = "normal"):
 	for i in text.length():
 		if typing_finished:
 			break
+			
+		if not is_inside_tree() or is_quitting_to_title:
+			return
 
 		current_text += text[i]
 		$DialogueBox/DialogueText.text = current_text
@@ -3119,12 +3131,18 @@ func show_dialogue(text, mode = "normal"):
 
 		# 타이핑 속도 0.04
 		await get_tree().create_timer(0.05).timeout
+		
+		if not is_inside_tree() or is_quitting_to_title:
+			return
 
 	$DialogueBox/DialogueText.text = text
 	is_typing = false
 	typing_finished = true
 
 	while not dialogue_finished:
+		if not is_inside_tree() or is_quitting_to_title:
+			return
+
 		await get_tree().process_frame
 
 	$DialogueBox.visible = false
@@ -3145,6 +3163,9 @@ func show_choices(choices):
 	update_choice_ui()
 	
 	while is_choosing:
+		if not is_inside_tree() or is_quitting_to_title:
+			return -1
+
 		await get_tree().process_frame
 
 	choice_box.visible = false
@@ -4091,6 +4112,13 @@ func run_story_event(event_id, auto_check_next_story = true):
 
 	is_story_playing = false
 
+	# 스토리 도중 flag/change_room/show_game_ui 순서에 따라
+	# 상호작용 조건이 늦게 열릴 수 있으므로,
+	# 게임 UI가 이미 복구된 상태라면 방 UI를 한 번 더 갱신한다.
+	if bag_button.visible and battle_scene == null:
+		update_room()
+		set_interaction_buttons_disabled(false)
+
 	# 일반 스토리 종료 후 현재 room + flag 조건으로 이어지는 스토리가 있으면 실행한다.
 	if auto_check_next_story:
 		await check_room_enter_story()
@@ -4518,24 +4546,28 @@ func _on_pause_sfx_volume_changed(value):
 	apply_sfx_volume_to_all()
 # 현재 일시정지 UI를 열 수 있는 상태인지 확인하는 함수
 func can_open_pause_ui():
+	if is_quitting_to_title:
+		return false
+
+	if pause_input_locked:
+		return false
+
 	if is_game_paused:
 		return false
 
 	if pause_ui_scene != null:
 		return false
 
-	# 전투 중에는 아직 Pause UI를 열지 않는다.
+	# 전투 중에는 Pause UI를 열지 않는다.
 	if battle_scene != null:
 		return false
 
-	# 스토리 이벤트, 대사, 선택지 중에는 열지 않는다.
-	if is_story_playing:
+	# 문서 팝업은 ESC로 문서 닫기를 우선한다.
+	if is_document_popup_open:
 		return false
 
-	if is_dialogue_showing:
-		return false
-
-	if is_choosing:
+	# 입력 프롬프트는 ESC 취소를 우선한다.
+	if is_input_prompt_open:
 		return false
 
 	# 인벤토리/정리 화면은 각 UI의 ESC 닫기 처리를 우선한다.
@@ -4545,12 +4577,23 @@ func can_open_pause_ui():
 	if is_inventory_arrange_open:
 		return false
 
-	# 방 이동/상호작용 중에도 열지 않는다.
-	if is_moving:
-		return false
+	# 일반 대사/선택지 중에는 Pause 금지.
+	# 단, 스토리 이벤트 중 대사/선택지는 Pause 허용.
+	if not is_story_playing:
+		if is_dialogue_showing:
+			return false
 
-	if is_interacting:
-		return false
+		if is_choosing:
+			return false
+
+	# 일반 이동/상호작용 중에는 Pause 금지.
+	# 단, 스토리 이벤트가 이동/상호작용에서 이어진 경우는 Pause 허용.
+	if not is_story_playing:
+		if is_moving:
+			return false
+
+		if is_interacting:
+			return false
 
 	return true
 # 일시정지 UI 열기 함수
@@ -4565,6 +4608,12 @@ func open_pause_ui():
 		return
 
 	pause_ui_scene = pause_scene_resource.instantiate()
+
+	# 같은 ESC 입력으로 닫았다가 다시 열리는 것을 방지
+	lock_pause_input()
+
+	# Pause UI는 게임이 paused 상태여도 입력을 받아야 한다.
+	pause_ui_scene.process_mode = Node.PROCESS_MODE_ALWAYS
 
 	# Pause UI는 최상단에 보여야 한다.
 	pause_ui_scene.z_index = 4096
@@ -4590,25 +4639,57 @@ func open_pause_ui():
 	print("일시정지 UI 열림")
 # 일시정지 UI 닫기 함수
 func close_pause_ui():
+	# ESC로 닫힌 직후 같은 입력으로 다시 열리는 것을 방지
+	lock_pause_input()
+
 	if pause_ui_scene != null:
 		pause_ui_scene.queue_free()
 		pause_ui_scene = null
 
 	is_game_paused = false
 	get_tree().paused = false
-	
+
 	set_mouse_cursor(MOUSE_CURSOR_BASIC)
 
 	print("일시정지 UI 닫힘")
 # 일시정지 UI에서 메인 메뉴로 이동하는 함수
 func quit_to_title_from_pause():
+	if is_quitting_to_title:
+		return
+
+	is_quitting_to_title = true
+
 	# 씬 이동 전에 반드시 paused를 풀어야 한다.
 	get_tree().paused = false
 	is_game_paused = false
 
+	# 진행 중인 대사/선택지/스토리 루프가 더 진행되지 않게 정리
+	story_event_should_stop = true
+	dialogue_finished = true
+	typing_finished = true
+	is_typing = false
+	is_dialogue_showing = false
+	is_choosing = false
+	is_document_popup_open = false
+	is_input_prompt_open = false
+	is_moving = false
+	is_interacting = false
+	is_story_playing = false
+
 	if pause_ui_scene != null:
 		pause_ui_scene.queue_free()
 		pause_ui_scene = null
+
+	if document_popup_layer != null:
+		document_popup_layer.visible = false
+
+	if input_prompt_layer != null:
+		input_prompt_layer.visible = false
+
+	kill_story_camera_tween()
+	clear_room_ambient_overlay()
+	stop_room_ambient_sound()
+	stop_room_idle_motion(true)
 
 	# 탐색 BGM 정지
 	if bgm_player != null and bgm_player.playing:
@@ -4616,7 +4697,30 @@ func quit_to_title_from_pause():
 
 	print("일시정지 UI에서 메인 메뉴로 이동")
 
+	# show_dialogue() 같은 await 루프가 정리될 시간을 아주 짧게 준다.
+	await get_tree().create_timer(0.08).timeout
+
+	if not is_inside_tree():
+		return
+
 	get_tree().change_scene_to_file(MAIN_MENU_SCENE_PATH)
+# Pause 입력이 현재 눌려 있는지 확인하는 함수
+func is_pause_input_pressed():
+	return Input.is_action_pressed("esc") or Input.is_action_pressed("ui_cancel")
+# Pause 입력이 방금 눌렸는지 확인하는 함수
+func is_pause_input_just_pressed():
+	return Input.is_action_just_pressed("esc") or Input.is_action_just_pressed("ui_cancel")
+# Pause 입력 잠금 함수
+func lock_pause_input():
+	pause_input_locked = true
+# ESC를 뗐을 때 Pause 입력 잠금을 해제하는 함수
+func update_pause_input_lock():
+	if not pause_input_locked:
+		return
+
+	if not is_pause_input_pressed():
+		pause_input_locked = false
+
 
 # ============================================================
 # 오디오 설정 관련 함수 모음

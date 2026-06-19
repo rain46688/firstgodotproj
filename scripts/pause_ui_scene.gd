@@ -315,14 +315,26 @@ func _on_sfx_volume_slider_changed(value):
 # ------------------------------------------------------------
 # ESC 입력 처리
 # ------------------------------------------------------------
-func _unhandled_input(event):
+func _input(event):
+	if not event is InputEventKey:
+		return
+
+	if not event.pressed:
+		return
+
+	if event.echo:
+		return
+
 	if event.is_action_pressed("esc") or event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+
 		# 설정 패널이 열려 있으면 Pause UI를 닫지 않고 설정 패널만 닫는다.
 		if settings_panel.visible:
 			play_click_sound()
 			close_settings_panel()
 			return
 
+		play_click_sound()
 		resume_requested.emit()
 		
 # ------------------------------------------------------------
@@ -395,6 +407,7 @@ func apply_pause_sfx_volume():
 	click_sound.volume_db = base_volume_db + GameSession.get_sfx_volume_db()
 
 func _on_settings_reset_button_pressed():
+	
 	play_click_sound()
 
 	# GameSession의 오디오 설정을 기본값으로 초기화하고 settings.json에 저장한다.
