@@ -9205,6 +9205,21 @@
 			"volume_db": -10.0,
 			"loop": true
 		},
+		"enter_stories": [
+			{
+				"event": "first_enter_school_hallway_29",
+				"required_flag": "story_first_enter_broadcasting_room_02_done",
+				"required_flag_missing": [
+					"story_first_enter_school_hallway_29_done"
+				]
+			},{
+				"event": "defeated_combined_candle_students",
+				"required_flag": "defeated_combined_candle_students",
+				"required_flag_missing": [
+					"story_defeated_combined_candle_students_done"
+				]
+			}
+		],
 		"exits": {
 			"up": {
 				"target": "school_hallway_29_02",

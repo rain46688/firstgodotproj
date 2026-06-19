@@ -6123,7 +6123,604 @@
 				"room": "broadcasting_room_02"
 			},
 			{
+				"type": "camera_reset",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_broadcasting_room_02_done"
+			},
+			{
+				"type": "flag",
+				"flag": "opened_school_hallway_29_02"
+			},
+			{
+				"type": "flag",
+				"flag": "opened_classroom_08_03"
+			},
+			{
 				"type": "show_game_ui"
+			}
+		]
+	},
+	"first_enter_school_hallway_29": {
+		"start_flag": "story_first_enter_school_hallway_29_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/school_hallway_10.png"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "복도 끝 벽이 사라져 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "정확히 말하면, 무언가가 바깥에서 안쪽으로 뚫고 들어온 것처럼 거대한 구멍이 나 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "구멍은 복도를 거의 가득 채울 만큼 컸고, 그 안쪽은 빛이 닿지 않았다."
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/school_hallway_huge_hole.png"
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "normal",
+				"text": "이건. 엄청난데."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "내 손끝이 차갑게 식었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 알고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "저 구멍이 무엇에 의해 생긴건지."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "normal",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "왜 그래요?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "아니에요."
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "angry",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "아니긴. 머가 아니야. 얼굴이 완전히 굳었는데."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "저 안에... 아직 뭔가 있어요."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "angry",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "뒤로 물러나요."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/school_hallway_10.png"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "우리는 각자의 무기를 들고 준비를 했다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 1.0,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/heartbeats.mp3",
+				"volume_db": 5,
+				"loop": true
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/school_hallway_huge_hole.png"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "어둠 속에서 거대한 밀랍 덩어리가 모습을 드러냈다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "여러 형체가 한데 뭉친 듯한 모습."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 중앙에는 소녀처럼 보이는 얼굴이 파묻혀 있었다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/jump_scare.mp3",
+				"volume_db": 0,
+				"wait": false
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "거대한 녀석은 우리를 바라보며 크게 울부짖었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "심장이 크게 요동친다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "사실. 두렵다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만... 이번엔 다르다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 손에 힘을 꽉 쥐었다."
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "angry",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "무기 들어. 온다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/jump_scare.mp3",
+				"volume_db": 5,
+				"wait": false
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "change_room",
+				"room": "school_hallway_29"
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_school_hallway_29_done"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "start_battle",
+				"enemy": "combined_candle_students_phase_01",
+				"first_turn": "player"
+			}
+		]
+	},
+	"defeated_combined_candle_students": {
+		"start_flag": "story_defeated_combined_candle_students_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm11.mp3",
+				"volume_db": -10,
+				"loop": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/school_hallway_10.png"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "괴물은 큰 타격을 입었는지 휘청거리며 녹아내리기 시작했다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/jump_scare.mp3",
+				"volume_db": 0,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그리고 괴물은 마지막 괴성을 지르며 서서히 무너져 내렸다."
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/fall_down.mp3",
+				"volume_db": 10,
+				"wait": true
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "끈적한 밀랍이 복도 바닥 위로 퍼지고, 그 안에 갇혀 있던 얼굴도 함께 흐트러졌다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "더 이상 움직임은 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이번엔 도망치지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "동료들이 있었기에 가능했다."
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "angry",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "끝났나?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "... 대단한 녀석이었어."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "아직도 몸이 떨려요."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 괴물이 무너진 자리에서 이상한 것을 발견했다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "가까이 가지 마세요."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "밀랍 속에 감싸인 작은 덩어리."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "심장...?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그것은 조용히 뛰고 있었다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "normal",
+				"position": "center"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "그걸 왜 가지고 있는 거죠?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "모르겠어요. 그런데..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 그것에서 눈을 뗄 수 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "마치 이 공간이 나에게 이것을 가져가라고 말하는 것 같았다."
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "normal_02",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "찝찝한 건 맞는데, 그냥 두고 가기도 그렇군."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "그럼. 조심해서 챙겨가요. 움직이면 바로 버리고요."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 밀랍에 감싸인 심장을 조심스럽게 가방 안에 넣었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "손바닥으로 희미한 진동이 전해졌다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/school_hallway_huge_hole.png"
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 동시에 확신이 들었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이건 귀중한 물건이다."
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "normal",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "저 구멍 안쪽, 길이 이어져 있어."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "annoyed",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "들어갈 건가요?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "네 여기서 멈추면 아무것도 못 알아내요."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "맞는 말이야."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "클레어는 불안한 얼굴로 구멍 안쪽을 바라보았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 결국 고개를 끄덕였다."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "normal",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "그럼 셋이 같이 가요. 절대 흩어지지 말고요."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "저 너머 안쪽에서 바람이 불어오고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 바람 소리는 마치 우리를 안쪽으로 이끌려는 듯했다."
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "change_room",
+				"room": "school_hallway_29_02"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm2.mp3",
+				"volume_db": -5,
+				"loop": true
 			},
 			{
 				"type": "camera_reset",
@@ -6132,7 +6729,10 @@
 			},
 			{
 				"type": "flag",
-				"flag": "story_first_enter_broadcasting_room_02_done"
+				"flag": "story_defeated_combined_candle_students_done"
+			},
+			{
+				"type": "show_game_ui"
 			}
 		]
 	}

@@ -265,7 +265,7 @@
 	},
 	"wax_heart": {
 		"name": "밀랍 심장",
-		"description": "밀랍으로 뒤덮여있는 심장이다. 어딘가에 쓰일 거 같다.",
+		"description": "밀랍으로 뒤덮여있는 심장이다. 미세하게 뛰고 있다.",
 		"image": "res://imgs/items/wax_heart180x180.png",
 		"width": 1,
 		"height": 1,
