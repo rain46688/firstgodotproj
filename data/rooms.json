@@ -168,7 +168,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "만능 열쇠",
+								"text": "기이한 모양의 열쇠",
 								"events": [
 									{
 										"type": "item",
@@ -196,7 +196,7 @@
 								]
 							},
 							{
-								"text": "알수없는 코인",
+								"text": "잡다한 동전 주머니",
 								"events": [
 									{
 										"type": "item",
@@ -8255,6 +8255,15 @@
 			"volume_db": -10.0,
 			"loop": true
 		},
+		"enter_stories": [
+			{
+				"event": "first_enter_broadcasting_room_02",
+				"required_flag": "story_first_enter_broadcasting_room_01_done",
+				"required_flag_missing": [
+					"story_first_enter_broadcasting_room_02_done"
+				]
+			}
+		],
 		"exits": {
 			"down": {
 				"target": "broadcasting_room_01",

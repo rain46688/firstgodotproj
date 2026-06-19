@@ -430,7 +430,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그때였다..."
+				"text": "그때였다."
 			},
 			{
 				"type": "story_dialogue",
@@ -1401,7 +1401,7 @@
 			},
 			{
 				"type": "screen_color",
-				"color": "#FF0000",
+				"color": "#000000",
 				"alpha": 0.8,
 				"duration": 1.0,
 				"wait": true
@@ -1721,7 +1721,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그곳의 매니저 이름이 몇 년 동안 알고 지내던 클레어 씨였다."
+				"text": "그곳의 매니저 이름이 몇 년 동안 알고 지내던 클레어씨였다."
 			},
 			{
 				"type": "story_dialogue",
@@ -4603,7 +4603,7 @@
 			{
 				"type": "screen_color",
 				"color": "#FF0000",
-				"alpha": 0.8,
+				"alpha": 1.0,
 				"duration": 0.1,
 				"wait": true
 			},
@@ -4636,7 +4636,7 @@
 			{
 				"type": "screen_color",
 				"color": "#FF0000",
-				"alpha": 0.8,
+				"alpha": 1.0,
 				"duration": 0.1,
 				"wait": true
 			},
@@ -4678,96 +4678,6 @@
 			{
 				"type": "background",
 				"path": "res://imgs/backgrounds/school_stairs_hall_02.png"
-			},
-			{
-				"type": "standing",
-				"character": "claire",
-				"emotion": "embarrassed",
-				"position": "center"
-			},
-			{
-				"type": "story_dialogue",
-				"text": "..."
-			},
-			{
-				"type": "standing",
-				"character": "claire",
-				"emotion": "angry",
-				"position": "center"
-			},
-			{
-				"type": "story_dialogue",
-				"text": "..."
-			},
-			{
-				"type": "standing",
-				"character": "claire",
-				"emotion": "annoyed",
-				"position": "center"
-			},
-			{
-				"type": "story_dialogue",
-				"text": "..."
-			},
-			{
-				"type": "standing",
-				"character": "claire",
-				"emotion": "expressionless",
-				"position": "center"
-			},
-			{
-				"type": "story_dialogue",
-				"text": "..."
-			},
-			{
-				"type": "standing",
-				"character": "claire",
-				"emotion": "expressionless_02",
-				"position": "center"
-			},
-			{
-				"type": "story_dialogue",
-				"text": "..."
-			},
-			{
-				"type": "standing",
-				"character": "claire",
-				"emotion": "joy",
-				"position": "center"
-			},
-			{
-				"type": "story_dialogue",
-				"text": "..."
-			},
-			{
-				"type": "standing",
-				"character": "claire",
-				"emotion": "normal",
-				"position": "center"
-			},
-			{
-				"type": "story_dialogue",
-				"text": "..."
-			},
-			{
-				"type": "standing",
-				"character": "claire",
-				"emotion": "pain",
-				"position": "center"
-			},
-			{
-				"type": "story_dialogue",
-				"text": "..."
-			},
-			{
-				"type": "standing",
-				"character": "claire",
-				"emotion": "shy",
-				"position": "center"
-			},
-			{
-				"type": "story_dialogue",
-				"text": "..."
 			},
 			{
 				"type": "story_dialogue",
@@ -4833,15 +4743,15 @@
 			{
 				"type": "camera_zoom",
 				"x": 1000,
-				"y": 150,
-				"zoom": 1.5,
+				"y": 0,
+				"zoom": 2.0,
 				"duration": 0.1,
 				"wait": true
 			},
 			{
 				"type": "camera_pan",
 				"x": 1400,
-				"y": 150,
+				"y": 0,
 				"duration": 300.0,
 				"wait": false
 			},
@@ -4889,7 +4799,7 @@
 			},
 			{
 				"type": "wait",
-				"time": 3.0
+				"time": 1.0
 			},
 			{
 				"type": "sound",
@@ -4963,9 +4873,6 @@
 				"type": "hide_game_ui"
 			},
 			{
-				"type": "fade"
-			},
-			{
 				"type": "stop_bgm"
 			},
 			{
@@ -4974,16 +4881,16 @@
 			},
 			{
 				"type": "camera_zoom",
-				"x": 350,
-				"y": 350,
+				"x": 500,
+				"y": 150,
 				"zoom": 1.5,
 				"duration": 0.1,
 				"wait": true
 			},
 			{
 				"type": "camera_pan",
-				"x": 1000,
-				"y": 350,
+				"x": 800,
+				"y": 150,
 				"duration": 300.0,
 				"wait": false
 			},
@@ -5004,16 +4911,8 @@
 				"text": "나는 그 얼굴을 보자마자 숨이 멎는 줄 알았다."
 			},
 			{
-				"type": "fade"
-			},
-			{
-				"type": "camera_reset",
-				"duration": 0.1,
-				"wait": true
-			},
-			{
 				"type": "camera_zoom",
-				"x": 350,
+				"x": 500,
 				"y": 350,
 				"zoom": 1.5,
 				"duration": 0.1,
@@ -5043,15 +4942,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "나는 어째서 그 이름을 내뱉었는지 나도 잘 모르겠다."
-			},
-			{
-				"type": "story_dialogue",
-				"text": "그냥 문뜩 그녀의 얼굴을 보자마자 떠올랐다."
-			},
-			{
-				"type": "story_dialogue",
-				"text": "그녀가 천천히 이쪽으로 고개를 돌렸다."
+				"text": "나는 어째서 그 이름을 내뱉었는지 나도 모르겠다."
 			},
 			{
 				"type": "story_dialogue",
@@ -5075,11 +4966,19 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그런데 지금 그녀는 내 눈앞에 서 있었다."
+				"text": "그런데 지금 그녀는 내 눈앞에 앉아 있었다."
 			},
 			{
 				"type": "story_dialogue",
 				"text": "아무 일도 없었다는 듯이."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "문을 들어와서 가만히 서있는 내 모습에 이상함을 눈치챈 그녀가."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "천천히 이쪽으로 고개를 돌렸다."
 			},
 			{
 				"type": "standing",
@@ -5097,29 +4996,23 @@
 				"text": "그녀는 깜짝 놀란 듯이 눈이 동그래졌다."
 			},
 			{
-				"type": "standing",
-				"character": "claire",
-				"emotion": "normal",
-				"position": "center"
-			},
-			{
-				"type": "story_dialogue",
-				"text": "그러나 다시 상황을 정리한 듯 다시 날카로운 표정으로 돌아왔다."
-			},
-			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "네?"
+				"text": "네? 클레어씨 저에요 저."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그녀는 자리에서 일어나서 이쪽을 쳐다보며 말했다."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "당신은 대체 누구세요? 그리고... 저를 아시나요?"
+				"text": "당신은 누구세요? 그리고... 저를 아시나요?"
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "저... 제가 아래층에서 당신을..."
+				"text": "저... 아래층에서 당신을..."
 			},
 			{
 				"type": "story_dialogue",
@@ -5134,11 +5027,11 @@
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "잠깐만요. 당신 뭐야... 가까이 오지 마세요."
+				"text": "잠깐만요. 당신...더 이상 가까이 오지 마세요."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그녀는 책상 위에 놓인 커터 칼을 집어 들었다."
+				"text": "그녀는 주머니에서 커터 칼을 집어 들었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -5152,7 +5045,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "아니, 기억이고 자시고, 처음 보는 사람이 갑자기 제 이름을 부르면 당연히 수상하죠!"
+				"text": "아니, 기억이고 자시고, 처음 보는 사람이 갑자기 제 이름을 부르면서 다가오면 당연히 수상하죠!"
 			},
 			{
 				"type": "story_dialogue",
@@ -5187,7 +5080,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "2층 복도에서."
+				"text": "2층 복도에서..."
 			},
 			{
 				"type": "story_dialogue",
@@ -5207,11 +5100,18 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "클레어의 눈빛이 흔들렸다."
+				"text": "그녀의 눈빛이 흔들렸다."
 			},
 			{
 				"type": "story_dialogue",
 				"text": "그때였다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
 			},
 			{
 				"type": "standing_clear"
@@ -5224,9 +5124,6 @@
 				"path": "res://sounds/bgm11.mp3",
 				"volume_db": -10,
 				"loop": true
-			},
-			{
-				"type": "fade"
 			},
 			{
 				"type": "background",
@@ -5254,6 +5151,11 @@
 				"wait": false
 			},
 			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
 				"type": "story_dialogue",
 				"text": "방송실 문이 거칠게 열렸다."
 			},
@@ -5272,12 +5174,12 @@
 			},
 			{
 				"type": "story_dialogue",
-				"name": "???",
+				"name": "근육질의 남성",
 				"text": "너 누구야?"
 			},
 			{
 				"type": "story_dialogue",
-				"name": "???",
+				"name": "근육질의 남성",
 				"text": "사람이야? 아니면 사람 흉내 내는 그딴 거야?"
 			},
 			{
@@ -5287,7 +5189,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"name": "???",
+				"name": "근육질의 남성",
 				"text": "증명해."
 			},
 			{
@@ -5297,7 +5199,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"name": "???",
+				"name": "근육질의 남성",
 				"text": "대답해. 어디서 왔어?"
 			},
 			{
@@ -5306,7 +5208,11 @@
 				"text": "크억! 2층에서 콜록! 올라왔어요! 방송 듣고! 열쇠...! 계단으로... 콜록!"
 			},
 			{
-				"type": "fade"
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
 			},
 			{
 				"type": "camera_reset",
@@ -5324,6 +5230,11 @@
 				"position": "right"
 			},
 			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
 				"type": "story_dialogue",
 				"name": "클레어",
 				"text": "아이작씨, 잠깐만요."
@@ -5335,14 +5246,8 @@
 				"position": "center"
 			},
 			{
-				"type": "standing",
-				"character": "claire",
-				"emotion": "expressionless",
-				"position": "right"
-			},
-			{
 				"type": "story_dialogue",
-				"name": "아이작",
+				"name": "근육질의 남성",
 				"text": "잠깐 뒤로 물러나 있어."
 			},
 			{
@@ -5353,13 +5258,22 @@
 				"type": "stop_bgm"
 			},
 			{
-				"type": "fade"
-			},
-			{
 				"type": "sound",
 				"path": "res://sounds/fall_down.mp3",
 				"volume_db": 5,
 				"wait": false
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 0.8,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.1,
+				"wait": true
 			},
 			{
 				"type": "story_dialogue",
@@ -5375,13 +5289,13 @@
 			},
 			{
 				"type": "story_dialogue",
-				"name": "아이작",
+				"name": "근육질의 남성",
 				"text": "좋아, 말해봐."
 			},
 			{
 				"type": "screen_color",
 				"color": "#000000",
-				"alpha": 0.8,
+				"alpha": 1.0,
 				"duration": 0.1,
 				"wait": true
 			},
@@ -5392,18 +5306,15 @@
 				"type": "standing_clear"
 			},
 			{
-				"type": "screen_color_clear",
-				"duration": 0.1,
-				"wait": true
-			},
-			{
-				"type": "fade"
-			},
-			{
 				"type": "bgm",
 				"path": "res://sounds/bgm17.mp3",
-				"volume_db": -15,
+				"volume_db": -20,
 				"loop": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
 			},
 			{
 				"type": "story_dialogue",
@@ -5416,8 +5327,16 @@
 			{
 				"type": "standing",
 				"character": "isaac",
-				"emotion": "normal_02",
+				"emotion": "normal",
 				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그는 하얗게 염색한 머리카락에 나보다 한참 큰 키."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그리고 근육질 몸이 드러나는 옷을 입고 있었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -5435,15 +5354,18 @@
 				"text": "뭐?"
 			},
 			{
-				"type": "standing",
-				"character": "isaac",
-				"emotion": "expressionless",
-				"position": "center"
+				"type": "story_dialogue",
+				"text": "나의 떨떠름한 대답에, 그는 순간 무서운 표정으로 나를 내려다봤다."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "공많갤 아이작?"
+				"text": "아! 아니에요."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "그 혹시... 공많갤 아이작씨?"
 			},
 			{
 				"type": "story_dialogue",
@@ -5451,15 +5373,9 @@
 				"text": "..."
 			},
 			{
-				"type": "standing",
-				"character": "isaac",
-				"emotion": "normal",
-				"position": "center"
-			},
-			{
 				"type": "story_dialogue",
 				"name": "아이작",
-				"text": "네가 어떻게 그걸 알고있냐?"
+				"text": "네가 그걸 어떻게 알고있냐?"
 			},
 			{
 				"type": "story_dialogue",
@@ -5472,12 +5388,6 @@
 				"text": "저는 rain46688 닉네임으로 활동하던 사람입니다."
 			},
 			{
-				"type": "standing",
-				"character": "isaac",
-				"emotion": "normal",
-				"position": "center"
-			},
-			{
 				"type": "story_dialogue",
 				"name": "아이작",
 				"text": "너 설마."
@@ -5485,12 +5395,12 @@
 			{
 				"type": "story_dialogue",
 				"name": "아이작",
-				"text": "공략글 쓰던 그 사람?"
+				"text": "맨날 논문급 게임 공략글 올려주던 그 사람이냐?"
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "네, 맞습니다."
+				"text": "네네, 맞습니다."
 			},
 			{
 				"type": "standing",
@@ -5509,16 +5419,16 @@
 				"text": "그쪽은 생각보다 너무 근육질인데요..."
 			},
 			{
-				"type": "sound",
-				"path": "res://sounds/sparkle.mp3",
-				"volume_db": 0,
-				"wait": false
-			},
-			{
 				"type": "standing",
 				"character": "isaac",
 				"emotion": "joy",
 				"position": "center"
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/sparkle.mp3",
+				"volume_db": 0,
+				"wait": false
 			},
 			{
 				"type": "story_dialogue",
@@ -5528,16 +5438,21 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
 				"text": "아, 네. 닉네임만 보고는 상상도 못 했네요..."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "네, 저기 클레어 씨도 거기서 총괄 매니저였잖아요?"
+				"text": "네, 저기 클레어씨도 거기서 총괄 매니저였잖아요?"
 			},
 			{
 				"type": "story_dialogue",
-				"text": "나는 옆에 앉아있던 클레어 씨를 바라보며 말을 꺼냈다."
+				"text": "나는 옆에 앉아있던 클레어씨를 바라보며 말을 꺼냈다."
 			},
 			{
 				"type": "standing",
@@ -5558,7 +5473,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "이곳에 오기 전에 우리가 알던 사이였나요?"
+				"text": "우리 어디서 만난 적 있나요?"
 			},
 			{
 				"type": "story_dialogue",
@@ -5600,7 +5515,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "..."
+				"text": "하아?"
 			},
 			{
 				"type": "standing",
@@ -5647,7 +5562,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "아이작",
-				"text": "그쪽에서 올라오는 계단은 분명 철문으로 막혀있을텐데?"
+				"text": "그쪽에서 올라오는 계단은 분명 단단한 철문으로 막혀있을텐데?"
 			},
 			{
 				"type": "story_dialogue",
@@ -5675,10 +5590,19 @@
 				"text": "..."
 			},
 			{
-				"type": "standing",
-				"character": "isaac",
-				"emotion": "normal",
-				"position": "right"
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "당신이 그 공략글 쓰던 게임 폐인씨고, 우리처럼 여기로 끌려온 사람이란 거죠?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "네, 그래요. 일단 믿어보죠."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "네, 감사합니다..."
 			},
 			{
 				"type": "story_dialogue",
@@ -5692,13 +5616,30 @@
 			},
 			{
 				"type": "story_dialogue",
-				"name": "클레어",
-				"text": "네, 그래요. 일단 믿어보죠."
+				"name": "나",
+				"text": "저 여기에 오시기 전에 갤러리에서 이상한 게시글을 못 봤나요?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "너도... 그 링크를 클릭했구나?"
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "네, 감사합니다..."
+				"text": "네..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "갤러리, 의문의 게시글 링크..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "알 수 없는 공간, 괴물..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "우리가 놓인 이 비상식적이고도 비현실적인 상황에 그저 허탈함을 느낄 뿐이었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -5729,7 +5670,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "저는 처음에 3층의 다른 교실에서 눈을 떴어요. 그러다가 아이작씨를 만났고요."
+				"text": "저는 처음에 여기 층의 다른 교실에서 눈을 떴어요. 그러다가 아이작씨를 만났고요."
 			},
 			{
 				"type": "story_dialogue",
@@ -5754,7 +5695,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "나는 나도 모르게 무의식적으로 미묘한 표정을 하고 있었나 보다."
+				"text": "나는 나도 모르게 무의식적으로 복잡한 심정에 미묘한 표정을 하고 있었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -5767,7 +5708,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "아이작",
-				"text": "나는 이상한 곳에서 깨어나서 괴물 같은 놈들 때려눕히면서 여기까지 오게 됐고."
+				"text": "나도 이상한 곳에서 깨어나서 괴물 같은 놈들 때려눕히면서 여기까지 오게 됐고."
 			},
 			{
 				"type": "standing",
@@ -5778,12 +5719,12 @@
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "방송실은 이상하게 안전했어요. 밖에 있는 것들이 이 안까지는 들어오지 않았거든요."
+				"text": "방송실은 이상하게 안전했어요. 밖에 있는 것들이 이 밖 복도까지는 들어오지 않았거든요."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "아이작",
-				"text": "그래서 여기서 버틴 거야. 마이크랑 방송 장비가 살아 있어서, 혹시 다른 생존자가 있으면 들을 수 있게 계속 방송했고."
+				"text": "그래서 여기서 버틴 거야. 상태는 안좋지만 마이크랑 방송 장비가 살아 있어서, 혹시 다른 생존자가 있으면 들을 수 있게 계속 방송했고."
 			},
 			{
 				"type": "story_dialogue",
@@ -5831,7 +5772,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "자신이 한번 죽었다는 사실을 들은 클레어 씨가 무너질지도 모른다."
+				"text": "자신이 한번 죽었다는 사실을 들은 클레어씨가 무너질지도 모른다."
 			},
 			{
 				"type": "story_dialogue",
@@ -5856,24 +5797,24 @@
 				"text": "하지만 가장 중요한 말은 삼켰다."
 			},
 			{
-				"type": "screen_color",
-				"color": "#000000",
-				"alpha": 0.8,
-				"duration": 0.1,
-				"wait": true
-			},
-			{
 				"type": "stop_bgm"
 			},
 			{
-				"type": "standing_clear"
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
 			},
 			{
 				"type": "fade"
 			},
 			{
+				"type": "standing_clear"
+			},
+			{
 				"type": "screen_color_clear",
-				"duration": 0.1,
+				"duration": 0.5,
 				"wait": true
 			},
 			{
@@ -5891,6 +5832,307 @@
 			{
 				"type": "flag",
 				"flag": "story_first_enter_broadcasting_room_01_done"
+			}
+		]
+	},
+	"first_enter_broadcasting_room_02": {
+		"start_flag": "story_first_enter_broadcasting_room_02_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/broadcasting_room_02.png"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "내부에는 오래된 모니터와 방송용 장비들이 여러 대 놓여 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 중 몇 개는 알아볼 수 있는 장비였고, 몇 개는 알아볼 수 없는 장비들이 있었다."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "normal",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "여기 있는 장비들은 이상해요. 전원 선이 빠져 있어도 켜져 있고, 채널을 돌리면 여기가 아닌 다른 장소가 보여요."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "다른 장소요?"
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "normal",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "지금 우리가 있는 학교 안이 아닌 다른 알 수 없는 곳도 보여."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "그래서 저희는 그 화면들을 조사하고 있었어요. 어쩌면 여기서 나갈 수 있는 단서가 있을지도 모르니까요."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "그럼 밖에는 계속 나갔던 거예요?"
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "normal_02",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "지금은 필요할 때만. 물건 찾고, 복도 확인하고, 괴물 움직임 보는 정도?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "여기는 안전하지만, 식량이 필요한 것도 아니고 잠을 제대로 잘 수 있는 것도 아니니까요. 계속 숨어만 있으면 결국 아무것도 못 해요."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "맞아. 가끔씩 괴물들 때려눕히면서 운동도 해줘야 된다는 말씀."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "맞는 말이긴 한데..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "그쪽 의견에는 동의 못하겠네요..."
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 방송실 문 쪽을 바라봤다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "닫혀 있는 문 너머로 복도의 어둠이 보이는 것 같았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그때였다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/thumping.mp3",
+				"volume_db": -2,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "쿠웅."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "공간 전체가 낮게 울렸다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "마치 무언가가 벽을 밀어붙이는 것 같은 소리였다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/thumping.mp3",
+				"volume_db": 0,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "쿠우웅."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "normal",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "방금..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "소리..."
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "normal",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "밖이다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/bomb.mp3",
+				"volume_db": -5,
+				"wait": false
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/break_wall.mp3",
+				"volume_db": -5,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "쿠우우우웅!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "저 멀리에서 벽이 무너지는 듯한 굉음이 복도 전체를 타고 방송실까지 들이닥쳤다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "angry",
+				"position": "center"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "큰놈인 거 같아."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "클레어, 방송 장비 끄고 뒤쪽 방에 들어가 있어."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "normal",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "아니에요. 저도 갈게요."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "위험할 수도 있어."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "여기서 혼자 기다리는 것도 위험한 건 마찬가지예요."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 자리에서 일어났다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "심장이 불길하게 뛰기 시작했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 이 소리를 알고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "벽을 울리는 둔탁한 진동."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "야, 너 싸울 수 있지?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "네, 조금은요."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "그래 따라와."
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "change_room",
+				"room": "broadcasting_room_02"
+			},
+			{
+				"type": "show_game_ui"
+			},
+			{
+				"type": "camera_reset",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_broadcasting_room_02_done"
 			}
 		]
 	}

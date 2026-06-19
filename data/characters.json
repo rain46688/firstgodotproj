@@ -25,16 +25,24 @@
 			"offsets": {
 				"left": [
 					50,
-					-50
+					-20
 				],
 				"center": [
 					0,
-					-50
+					-20
 				],
 				"right": [
 					150,
-					-50
+					-20
 				]
+			},
+			"emotion_offsets": {
+				"joy": {
+					"center": [
+						-13,
+						0
+					]
+				}
 			}
 		}
 	},
@@ -128,18 +136,6 @@
 					]
 				}
 			}
-		}
-	},
-	"monster_crow": {
-		"name": "거대한 괴물 까마귀",
-		"portrait": {
-			"normal": "res://imgs/characters/albus/portrait/normal.png",
-			"pain": "res://imgs/characters/albus/portrait/pain.png",
-			"embarrassed": "res://imgs/characters/albus/portrait/embarrassed.png",
-			"angry": "res://imgs/characters/albus/portrait/angry.png",
-			"annoyed": "res://imgs/characters/albus/portrait/annoyed.png",
-			"expressionless": "res://imgs/characters/albus/portrait/expressionless.png",
-			"shy": "res://imgs/characters/albus/portrait/shy.png"
 		}
 	},
 	"albus": {
