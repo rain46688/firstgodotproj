@@ -7105,5 +7105,439 @@
                 "flag": "story_first_grail_filled_unknown_hall_02_done"
             }
         ]
+    },
+    "first_enter_broadcasting_room_03_after_defeated_combined_candle_students": {
+        "start_flag": "story_first_enter_broadcasting_room_03_after_defeated_combined_candle_students_done",
+        "events": [
+            {
+                "type": "hide_game_ui"
+            },
+            {
+                "type": "stop_bgm"
+            },
+            {
+                "type": "background",
+                "path": "res://imgs/backgrounds/broadcasting_room_01.png"
+            },
+            {
+                "type": "bgm",
+                "path": "res://sounds/bgm15.mp3",
+                "volume_db": -5,
+                "loop": true
+            },
+            {
+                "type": "story_dialogue",
+                "text": "나는 방송실 구석을 바라보았다."
+            },
+            {
+                "type": "story_dialogue",
+                "text": "사용하고 있는지 모르는 가전과 잡다한 잡동사니 상자들."
+            },
+            {
+                "type": "story_dialogue",
+                "name": "나",
+                "text": "...?"
+            },
+            {
+                "type": "screen_color",
+                "color": "#000000",
+                "alpha": 1.0,
+                "duration": 0.1,
+                "wait": true
+            },
+            {
+                "type": "background",
+                "path": "res://imgs/backgrounds/broadcasting_room_04.png"
+            },
+            {
+                "type": "screen_color_clear",
+                "duration": 0.5,
+                "wait": true
+            },
+            {
+                "type": "story_dialogue",
+                "text": "책상 옆에 붉은색 문이 눈에 들어왔다."
+            },
+            {
+                "type": "story_dialogue",
+                "text": "조금 열려있었다."
+            },
+            {
+                "type": "story_dialogue",
+                "text": "이전에도 저런 문이 있었나?"
+            },
+            {
+                "type": "story_dialogue",
+                "text": "나는 열려 있는 문에 대해 물어보았다."
+            },
+            {
+                "type": "story_dialogue",
+                "name": "나",
+                "text": "저 문 원래 있었나요?"
+            },
+            {
+                "type": "standing",
+                "character": "claire",
+                "emotion": "embarrassed",
+                "position": "center"
+            },
+            {
+                "type": "story_dialogue",
+                "name": "클레어",
+                "text": "...?"
+            },
+            {
+                "type": "story_dialogue",
+                "name": "클레어",
+                "text": "잠깐만요."
+            },
+            {
+                "type": "story_dialogue",
+                "text": "클레어 씨는 눈이 동그래져서 내가 가리킨 문을 바라보았다."
+            },
+            {
+                "type": "standing",
+                "character": "isaac",
+                "emotion": "normal",
+                "position": "right"
+            },
+            {
+                "type": "story_dialogue",
+                "name": "아이작",
+                "text": "뭐야. 저 문 열려 있었나?"
+            },
+            {
+                "type": "story_dialogue",
+                "text": "옆에 있던 아이작도 문을 보더니 놀란 표정으로 말했다."
+            },
+            {
+                "type": "story_dialogue",
+                "name": "클레어",
+                "text": "아니요, 저 문은 계속 잠겨 있었어요. 손잡이도 안 돌아갔고, 밀어도 꿈쩍도 안 했어요."
+            },
+            {
+                "type": "story_dialogue",
+                "name": "아이작",
+                "text": "아, 맞아. 내가 힘으로 밀어도 안 열렸어."
+            },
+            {
+                "type": "story_dialogue",
+                "name": "나",
+                "text": "그런데 지금은..."
+            },
+            {
+                "type": "story_dialogue",
+                "text": "문은 살짝 열려 있었다."
+            },
+            {
+                "type": "story_dialogue",
+                "text": "안쪽에서는 희미한 빛이 새어 나오고 있었다."
+            },
+            {
+                "type": "standing",
+                "character": "claire",
+                "emotion": "normal",
+                "position": "center"
+            },
+            {
+                "type": "story_dialogue",
+                "name": "클레어",
+                "text": "들어가 볼까요?"
+            },
+            {
+                "type": "standing",
+                "character": "isaac",
+                "emotion": "angry",
+                "position": "right"
+            },
+            {
+                "type": "story_dialogue",
+                "name": "아이작",
+                "text": "내가 앞에 설게."
+            },
+            {
+                "type": "screen_color",
+                "color": "#000000",
+                "alpha": 1.0,
+                "duration": 0.1,
+                "wait": true
+            },
+            {
+                "type": "standing_clear"
+            },
+            {
+                "type": "stop_bgm"
+            },
+            {
+                "type": "story_dialogue",
+                "text": "우리는 조심스럽게 문을 밀었다."
+            },
+            {
+                "type": "story_dialogue",
+                "text": "문이 열리는 순간, 우리는 동시에 굳어버렸다."
+            },
+            {
+                "type": "story_dialogue",
+                "text": "방 안은 넓었다."
+            },
+            {
+                "type": "story_dialogue",
+                "text": "방송실 안에 이런 공간이 있다는 것 자체가 말이 안 됐다."
+            },
+            {
+                "type": "background",
+                "path": "res://imgs/backgrounds/albus_room_01.png"
+            },
+            {
+                "type": "camera_zoom",
+                "x": 550,
+                "y": 700,
+                "zoom": 1.5,
+                "duration": 0.1,
+                "wait": true
+            },
+            {
+                "type": "camera_pan",
+                "x": 800,
+                "y": 700,
+                "duration": 300.0,
+                "wait": false
+            },
+            {
+                "type": "screen_color_clear",
+                "duration": 0.5,
+                "wait": true
+            },
+            {
+                "type": "story_dialogue",
+                "text": "천장 가까이까지 쌓인 금화."
+            },
+            {
+                "type": "story_dialogue",
+                "text": "온갖 잡동사니들."
+            },
+            {
+                "type": "story_dialogue",
+                "text": "그리고 그 한가운데."
+            },
+            {
+                "type": "camera_reset",
+                "duration": 0.1,
+                "wait": true
+            },
+            {
+                "type": "bgm",
+                "path": "res://sounds/bgm18.mp3",
+                "volume_db": -10,
+                "loop": true
+            },
+            {
+                "type": "story_dialogue",
+                "text": "거대한 흰 까마귀가 앉아 있었다."
+            },
+            {
+                "type": "story_dialogue",
+                "text": "그 까마귀는 우리를 내려다보고 있었다."
+            },
+            {
+                "type": "story_dialogue",
+                "name": "???",
+                "text": "늦었군."
+            },
+            {
+                "type": "story_dialogue",
+                "name": "나",
+                "text": "괴...물?"
+            },
+            {
+                "type": "portrait",
+                "character": "isaac",
+                "emotion": "normal",
+                "text": "뒤로 물러나."
+            },
+            {
+                "type": "story_dialogue",
+                "name": "???",
+                "text": "무례하군. 처음 만난 상대에게 괴물이라니."
+            },
+            {
+                "type": "portrait",
+                "character": "claire",
+                "emotion": "embarrassed",
+                "text": "말을... 해?"
+            },
+            {
+                "type": "story_dialogue",
+                "name": "???",
+                "text": "눈도 있고 귀도 있는데 말까지 하면 그리 놀랄 일인가?"
+            },
+            {
+                "type": "story_dialogue",
+                "name": "나",
+                "text": "놀랄 일이죠."
+            },
+            {
+                "type": "story_dialogue",
+                "name": "알버스",
+                "text": "내 이름은 알버스다. 기억해라."
+            },
+            {
+                "type": "portrait",
+                "character": "isaac",
+                "emotion": "normal",
+                "text": "너도 여기 있는 것들 중 하나냐?"
+            },
+            {
+                "type": "story_dialogue",
+                "name": "알버스",
+                "text": "싸움에는 이제 관심 없다. 피곤하고, 시끄럽고, 남는 것도 없지."
+            },
+            {
+                "type": "portrait",
+                "character": "claire",
+                "emotion": "embarrassed",
+                "text": "그럼 여긴 뭐예요?"
+            },
+            {
+                "type": "story_dialogue",
+                "name": "알버스",
+                "text": "내 둥지다. 내가 모은 것들로 가득한 훌륭한 장소지."
+            },
+            {
+                "type": "portrait",
+                "character": "isaac",
+                "emotion": "expressionless",
+                "text": "이 방송실이 안전했던 이유가..."
+            },
+            {
+                "type": "story_dialogue",
+                "name": "알버스",
+                "text": "그래. 내가 여기 있으니까."
+            },
+            {
+                "type": "story_dialogue",
+                "text": "알버스는 날개를 천천히 펼쳤다."
+            },
+            {
+                "type": "story_dialogue",
+                "text": "그 순간 방 안의 공기가 무거워졌다."
+            },
+            {
+                "type": "story_dialogue",
+                "text": "아이작도 더 이상 앞으로 나서지 않았다."
+            },
+            {
+                "type": "story_dialogue",
+                "name": "알버스",
+                "text": "너희가 여기서 숨 쉬고 있는 건 내 관대함 덕분이다. 그러니 대가를 내라."
+            },
+            {
+                "type": "story_dialogue",
+                "name": "나",
+                "text": "무슨 대가요?"
+            },
+            {
+                "type": "story_dialogue",
+                "name": "알버스",
+                "text": "반짝이는 것. 금화. 오래된 물건. 쓸모 있는 보물."
+            },
+            {
+                "type": "portrait",
+                "character": "isaac",
+                "emotion": "normal",
+                "text": "금화를 바치라는 건가?"
+            },
+            {
+                "type": "story_dialogue",
+                "name": "알버스",
+                "text": "바친다기보다, 거래라고 해두지. 나는 쓸모없는 반짝임을 좋아하고, 너희는 살아남는 데 필요한 물건을 원한다."
+            },
+            {
+                "type": "portrait",
+                "character": "isaac",
+                "emotion": "normal",
+                "text": "괴물들이 가끔 금화 같은 걸 갖고있던데."
+            },
+            {
+                "type": "story_dialogue",
+                "name": "알버스",
+                "text": "그래. 그걸 가져와라. 그러면 내가 적당한 보물을 골라주마."
+            },
+            {
+                "type": "portrait",
+                "character": "claire",
+                "emotion": "annoyed",
+                "text": "말투 진짜 재수 없네요."
+            },
+            {
+                "type": "story_dialogue",
+                "name": "알버스",
+                "text": "하지만 살아남고 싶으면 다시 찾아오겠지."
+            },
+            {
+                "type": "portrait",
+                "character": "isaac",
+                "emotion": "expressionless",
+                "text": "얘들아, 일단 싸우지 않는 게 좋겠어."
+            },
+            {
+                "type": "story_dialogue",
+                "name": "나",
+                "text": "네 동의합니다."
+            },
+            {
+                "type": "portrait",
+                "character": "claire",
+                "emotion": "normal",
+                "text": "네 저도요."
+            },
+            {
+                "type": "story_dialogue",
+                "text": "거대한 까마귀는 만족스럽게 고개를 끄덕였다."
+            },
+            {
+                "type": "stop_bgm"
+            },
+            {
+                "type": "bgm",
+                "path": "res://sounds/bgm2.mp3",
+                "volume_db": -5,
+                "loop": true
+            },
+            {
+                "type": "screen_color",
+                "color": "#000000",
+                "alpha": 1.0,
+                "duration": 0.1,
+                "wait": true
+            },
+            {
+                "type": "fade"
+            },
+            {
+                "type": "standing_clear"
+            },
+            {
+                "type": "screen_color_clear",
+                "duration": 0.5,
+                "wait": true
+            },
+            {
+                "type": "change_room",
+                "room": "albus_room_01"
+            },
+            {
+                "type": "show_game_ui"
+            },
+            {
+                "type": "camera_reset",
+                "duration": 0.5,
+                "wait": true
+            },
+            {
+                "type": "flag",
+                "flag": "story_first_enter_broadcasting_room_03_after_defeated_combined_candle_students_done"
+            }
+        ]
     }
 }

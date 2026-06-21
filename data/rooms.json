@@ -8393,6 +8393,15 @@
 			"volume_db": -10.0,
 			"loop": true
 		},
+		"enter_stories": [
+			{
+				"event": "first_enter_broadcasting_room_03_after_defeated_combined_candle_students",
+				"required_flag": "defeated_combined_candle_students",
+				"required_flag_missing": [
+					"story_first_enter_broadcasting_room_03_after_defeated_combined_candle_students_done"
+				]
+			}
+		],
 		"exits": {
 			"left": {
 				"target": "albus_room_01",
@@ -9098,21 +9107,6 @@
 			}
 		},
 		"interactions": {
-			"floor_ladder_open": {
-				"click_rect": [
-					1,
-					634,
-					1236,
-					263
-				],
-				"required_flag": "opened_classroom_08_03",
-				"events": [
-					{
-						"type": "text",
-						"text": "바닥에는 구멍이 뚫려있고 아래로 사다리가 이어져있다."
-					}
-				]
-			},
 			"floor_ladder": {
 				"click_rect": [
 					1,
