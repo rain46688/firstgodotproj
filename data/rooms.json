@@ -9212,7 +9212,8 @@
 				"required_flag_missing": [
 					"story_first_enter_school_hallway_29_done"
 				]
-			},{
+			},
+			{
 				"event": "defeated_combined_candle_students",
 				"required_flag": "defeated_combined_candle_students",
 				"required_flag_missing": [
@@ -9524,7 +9525,15 @@
 			"volume_db": 0.0,
 			"loop": true
 		},
-		"enter_stories": [],
+		"enter_stories": [
+			{
+				"event": "first_enter_unknown_hall_01",
+				"required_flag": "story_defeated_combined_candle_students_done",
+				"required_flag_missing": [
+					"story_first_enter_unknown_hall_01_done"
+				]
+			}
+		],
 		"exits": {
 			"up": {
 				"target": "unknown_hall_04",
@@ -9613,7 +9622,7 @@
 		"background_by_flags": [
 			{
 				"flags": [
-					"filled_unknown_grail_01"
+					"grail_filled_unknown_hall_02_done"
 				],
 				"path": "res://imgs/backgrounds/unknown_grail_02.png"
 			}
@@ -9630,7 +9639,15 @@
 			"volume_db": -5.0,
 			"loop": true
 		},
-		"enter_stories": [],
+		"enter_stories": [
+			{
+				"event": "first_grail_filled_unknown_hall_02",
+				"required_flag": "grail_filled_unknown_hall_02_done",
+				"required_flag_missing": [
+					"story_first_grail_filled_unknown_hall_02_done"
+				]
+			}
+		],
 		"exits": {
 			"down": {
 				"target": "unknown_hall_01",
@@ -9657,6 +9674,39 @@
 					700,
 					636
 				],
+				"required_flag": "story_defeated_combined_candle_students_done",
+				"required_flag_missing": "grail_filled_unknown_hall_02_done",
+				"events": [
+					{
+						"type": "text",
+						"text": "금속 재질의 커다란 잔이다."
+					},
+					{
+						"type": "item_payment",
+						"item": "wax_heart",
+						"count": 1,
+						"success_text": "당신은 심장을 잔 안에 올려놓았다.",
+						"fail_text": "안은 비어있다.",
+						"success_events": [
+							{
+								"type": "flag",
+								"flag": "grail_filled_unknown_hall_02_done"
+							}
+						]
+					}
+				]
+			},
+			"grail_filled": {
+				"click_rect": [
+					620,
+					168,
+					700,
+					636
+				],
+				"required_flag": [
+					"story_defeated_combined_candle_students_done",
+					"grail_filled_unknown_hall_02_done"
+				],
 				"events": [
 					{
 						"type": "text",
@@ -9664,7 +9714,7 @@
 					},
 					{
 						"type": "text",
-						"text": "안은 비어있다."
+						"text": "안은 붉은 액체로 가득 차있다."
 					}
 				]
 			}
