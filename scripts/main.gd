@@ -1059,8 +1059,17 @@ func _input(event):
 	handle_click_rect_debug_input(event)
 # 클릭 영역 디버그 입력 처리 함수
 func handle_click_rect_debug_input(event):
+	# 전투가 떠 있는 동안 F7은 battle_scene.gd의 적 hitbox 제작 도구가 처리한다.
+	# queue_free()된 이전 전투 씬 참조가 남아 있는 경우까지 안전하게 제외한다.
+	if battle_scene != null and is_instance_valid(battle_scene):
+		return
+
+	# Input Map에 별도 액션을 등록하지 않아도 항상 동작하도록 F7 키를 직접 확인한다.
 	if event is InputEventKey:
-		if event.pressed and not event.echo and event.is_action_pressed("debug_click_rect"):
+		if event.pressed and not event.echo and (
+			event.keycode == KEY_F7
+			or event.physical_keycode == KEY_F7
+		):
 			toggle_click_rect_debug()
 			get_viewport().set_input_as_handled()
 			return

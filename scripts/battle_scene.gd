@@ -131,6 +131,13 @@ var is_processing_battle_input = false
 # 디버그 모드
 var debug_mode = false
 
+# F7 적 본체 hitbox rect 제작 디버그
+# rect 값은 화면 좌표가 아니라 hitbox_base_size 기준 원본 이미지 좌표로 출력된다.
+var enemy_hitbox_rect_debug_enabled = false
+var enemy_hitbox_rect_debug_dragging = false
+var enemy_hitbox_rect_debug_start_pos = Vector2.ZERO
+var enemy_hitbox_rect_debug_preview = null
+
 # 적 탄막별 디버그 박스 목록
 var enemy_projectile_debug_boxes = {}
 
@@ -178,6 +185,179 @@ var player_turn_count = 0
 # 게임 시작 관련 함수 모음
 # ============================================================
 
+# F7 적 본체 hitbox rect 제작 디버그 입력 처리 함수
+func _input(event):
+	handle_enemy_hitbox_rect_debug_input(event)
+# F7 적 본체 hitbox rect 제작 디버그 입력 처리 함수
+func handle_enemy_hitbox_rect_debug_input(event):
+	# Input Map의 debug_click_rect 등록 여부와 무관하게 F7 키를 직접 처리한다.
+	if event is InputEventKey:
+		if event.pressed and not event.echo and (
+			event.keycode == KEY_F7
+			or event.physical_keycode == KEY_F7
+		):
+			toggle_enemy_hitbox_rect_debug()
+			get_viewport().set_input_as_handled()
+			return
+
+	if not enemy_hitbox_rect_debug_enabled:
+		return
+
+	if event is InputEventMouseButton:
+		if event.button_index != MOUSE_BUTTON_LEFT:
+			return
+
+		if event.pressed:
+			start_enemy_hitbox_rect_debug_drag(event.position)
+			get_viewport().set_input_as_handled()
+			return
+
+		if enemy_hitbox_rect_debug_dragging:
+			finish_enemy_hitbox_rect_debug_drag(event.position)
+			get_viewport().set_input_as_handled()
+			return
+
+	if event is InputEventMouseMotion and enemy_hitbox_rect_debug_dragging:
+		update_enemy_hitbox_rect_debug_preview(event.position)
+		get_viewport().set_input_as_handled()
+# F7 적 본체 hitbox rect 제작 디버그 ON/OFF 함수
+func toggle_enemy_hitbox_rect_debug():
+	enemy_hitbox_rect_debug_enabled = not enemy_hitbox_rect_debug_enabled
+	enemy_hitbox_rect_debug_dragging = false
+
+	if enemy_hitbox_rect_debug_preview != null:
+		enemy_hitbox_rect_debug_preview.queue_free()
+		enemy_hitbox_rect_debug_preview = null
+
+	if enemy_hitbox_rect_debug_enabled:
+		var base_size = get_enemy_hitbox_base_size()
+		print("적 hitbox rect 디버그 ON: 적 이미지 위에서 좌클릭 드래그하면 hitbox_base_size 기준 rect 값이 출력됩니다. (" + str(int(base_size.x)) + " x " + str(int(base_size.y)) + ")")
+	else:
+		print("적 hitbox rect 디버그 OFF")
+# 드래그 시작 위치가 실제 적 이미지 위인지 확인하는 함수
+func is_enemy_hitbox_rect_debug_mouse_on_enemy(viewport_mouse_position):
+	if enemy_sprite == null:
+		return false
+
+	if enemy_sprite.size.x <= 0 or enemy_sprite.size.y <= 0:
+		return false
+
+	var inverse_transform = enemy_sprite.get_global_transform().affine_inverse()
+	var enemy_local_mouse_position = inverse_transform * viewport_mouse_position
+	var enemy_local_rect = Rect2(Vector2.ZERO, enemy_sprite.size)
+
+	return enemy_local_rect.has_point(enemy_local_mouse_position)
+# 화면 마우스 좌표를 hitbox_base_size 기준 원본 이미지 좌표로 변환하는 함수
+func get_enemy_hitbox_rect_debug_base_mouse_position(viewport_mouse_position):
+	var base_size = get_enemy_hitbox_base_size()
+	var inverse_transform = enemy_sprite.get_global_transform().affine_inverse()
+	var enemy_local_mouse_position = inverse_transform * viewport_mouse_position
+	var display_width = max(enemy_sprite.size.x, 1.0)
+	var display_height = max(enemy_sprite.size.y, 1.0)
+
+	return Vector2(
+		clamp(enemy_local_mouse_position.x / display_width * base_size.x, 0.0, base_size.x),
+		clamp(enemy_local_mouse_position.y / display_height * base_size.y, 0.0, base_size.y)
+	)
+# 원본 이미지 기준 rect를 현재 전투 화면 표시 크기로 변환하는 함수
+func get_enemy_hitbox_rect_debug_display_rect(base_rect):
+	var hitbox_scale = get_enemy_hitbox_scale()
+
+	return Rect2(
+		base_rect.position.x * hitbox_scale.x,
+		base_rect.position.y * hitbox_scale.y,
+		base_rect.size.x * hitbox_scale.x,
+		base_rect.size.y * hitbox_scale.y
+	)
+# F7 드래그 미리보기 노드 생성 함수
+func ensure_enemy_hitbox_rect_debug_preview():
+	if enemy_hitbox_rect_debug_preview != null and is_instance_valid(enemy_hitbox_rect_debug_preview):
+		return
+
+	enemy_hitbox_rect_debug_preview = ColorRect.new()
+	enemy_hitbox_rect_debug_preview.name = "EnemyHitboxRectDebugPreview"
+	enemy_hitbox_rect_debug_preview.color = Color(0.2, 1.0, 0.35, 0.28)
+	enemy_hitbox_rect_debug_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# F3 히트박스 디버그 박스보다도 위에 보이도록 절대 z_index를 사용한다.
+	enemy_hitbox_rect_debug_preview.z_as_relative = false
+	enemy_hitbox_rect_debug_preview.z_index = 1000
+	enemy_sprite.add_child(enemy_hitbox_rect_debug_preview)
+# F7 드래그 시작 함수
+func start_enemy_hitbox_rect_debug_drag(viewport_mouse_position):
+	if not is_enemy_hitbox_rect_debug_mouse_on_enemy(viewport_mouse_position):
+		print("적 이미지 내부에서 드래그를 시작해주세요.")
+		return
+
+	enemy_hitbox_rect_debug_dragging = true
+	enemy_hitbox_rect_debug_start_pos = get_enemy_hitbox_rect_debug_base_mouse_position(viewport_mouse_position)
+	ensure_enemy_hitbox_rect_debug_preview()
+
+	enemy_hitbox_rect_debug_preview.position = get_enemy_hitbox_rect_debug_display_rect(
+		Rect2(enemy_hitbox_rect_debug_start_pos, Vector2.ZERO)
+	).position
+	enemy_hitbox_rect_debug_preview.size = Vector2.ZERO
+	enemy_hitbox_rect_debug_preview.visible = true
+# F7 드래그 미리보기 갱신 함수
+func update_enemy_hitbox_rect_debug_preview(viewport_mouse_position):
+	if enemy_hitbox_rect_debug_preview == null:
+		return
+
+	var current_pos = get_enemy_hitbox_rect_debug_base_mouse_position(viewport_mouse_position)
+	var base_rect = make_enemy_hitbox_rect_debug_positive_rect(
+		enemy_hitbox_rect_debug_start_pos,
+		current_pos
+	)
+	var display_rect = get_enemy_hitbox_rect_debug_display_rect(base_rect)
+
+	enemy_hitbox_rect_debug_preview.position = display_rect.position
+	enemy_hitbox_rect_debug_preview.size = display_rect.size
+# F7 드래그 종료 및 JSON rect 출력 함수
+func finish_enemy_hitbox_rect_debug_drag(viewport_mouse_position):
+	enemy_hitbox_rect_debug_dragging = false
+
+	var end_pos = get_enemy_hitbox_rect_debug_base_mouse_position(viewport_mouse_position)
+	var base_rect = make_enemy_hitbox_rect_debug_positive_rect(
+		enemy_hitbox_rect_debug_start_pos,
+		end_pos
+	)
+
+	if base_rect.size.x < 1.0 or base_rect.size.y < 1.0:
+		print("적 hitbox rect 생성 취소: 최소 1px 이상 드래그해주세요.")
+		if enemy_hitbox_rect_debug_preview != null:
+			enemy_hitbox_rect_debug_preview.visible = false
+		return
+
+	var x = int(round(base_rect.position.x))
+	var y = int(round(base_rect.position.y))
+	var w = int(round(base_rect.size.x))
+	var h = int(round(base_rect.size.y))
+
+	var display_rect = get_enemy_hitbox_rect_debug_display_rect(base_rect)
+	if enemy_hitbox_rect_debug_preview != null:
+		enemy_hitbox_rect_debug_preview.position = display_rect.position
+		enemy_hitbox_rect_debug_preview.size = display_rect.size
+		enemy_hitbox_rect_debug_preview.visible = true
+
+	print("")
+	print("적 hitbox 복사용 (hitbox_base_size 기준):")
+	print("{")
+	print("\t\"id\": \"new_hitbox_id\",")
+	print("\t\"name\": \"새 부위\",")
+	print("\t\"rect\": [")
+	print("\t\t" + str(x) + ",")
+	print("\t\t" + str(y) + ",")
+	print("\t\t" + str(w) + ",")
+	print("\t\t" + str(h))
+	print("\t]")
+	print("},")
+# 시작점과 끝점으로 항상 양수 크기의 Rect2 생성 함수
+func make_enemy_hitbox_rect_debug_positive_rect(start_pos, end_pos):
+	return Rect2(
+		min(start_pos.x, end_pos.x),
+		min(start_pos.y, end_pos.y),
+		abs(end_pos.x - start_pos.x),
+		abs(end_pos.y - start_pos.y)
+	)
 # 디버그 토글 입력 처리 함수
 func update_debug_toggle_input():
 	if Input.is_action_just_pressed("debug_toggle"):

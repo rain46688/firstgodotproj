@@ -13,13 +13,6 @@
 			"required_flag": "opened_school_stairs_hall_02",
 			"missing_flag": "",
 			"first_turn": ""
-		},
-		{
-			"enemy": "ghost",
-			"weight": 5,
-			"required_flag": "opened_school_stairs_hall_02",
-			"missing_flag": "",
-			"first_turn": ""
 		}
 	],
 	"school_hallway_02": [
@@ -45,5 +38,27 @@
 			"first_turn": ""
 		}
 	],
-	"school_hallway_03": []
+	"school_hallway_03": [
+		{
+			"enemy": "combined_candle_students_charger",
+			"weight": 35,
+			"required_flag": "defeated_combined_candle_students",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "candle_student_woman",
+			"weight": 60,
+			"required_flag": "opened_school_stairs_hall_02",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "ghost",
+			"weight": 5,
+			"required_flag": "opened_school_stairs_hall_02",
+			"missing_flag": "",
+			"first_turn": ""
+		}
+	]
 }

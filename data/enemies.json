@@ -1637,5 +1637,304 @@
 		"defeat_flags": [
 			"defeated_ghost"
 		]
+	},
+	"combined_candle_students_charger": {
+		"name": "합쳐진 밀랍 차저",
+		"max_hp": 350,
+		"battle_bgm": "res://sounds/bgm13.mp3",
+		"battle_bgm_volume_db": -5.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/enemy_encounter2.mp3",
+		"encounter_sound_volume_db": -5.0,
+		"image": "res://imgs/enemies/combined_candle_students_charger.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.2,
+		"enemy_size": [
+			650,
+			760
+		],
+		"enemy_position": [
+			635,
+			-40
+		],
+		"can_escape": false,
+		"encounter_text": "합쳐진 덩어리가 이쪽으로 돌진해온다.",
+		"observe_text": "구멍속에서 무언가 꿈틀거리는거같다.",
+		"weakness_text": "",
+		"patterns": [
+			{
+				"id": "head_screaming",
+				"weight": 50,
+				"warning_text": "가운데 위치한 깊은 구멍에서 비명소리가 들려온다...",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "fear_slash",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 1.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 1.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 1.8,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 1.8,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "head_charge",
+				"weight": 50,
+				"warning_text": "거대한 몸둥이가 앞으로 돌진한다...",
+				"fire_mode": "parallel",
+				"projectiles": [
+					{
+						"projectile": "impact_basic",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							880,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							1000,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.8
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							1080,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.8
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							1200,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 2.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							1280,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 2.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							300,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 3.6
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							380,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 3.6
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							600,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 4.2
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							680,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 4.2
+					}
+				]
+			}
+		],
+		"hitbox_base_size": [
+			1023,
+			1537
+		],
+		"hitboxes": [
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					423,
+					548,
+					157,
+					265
+				],
+				"weak": true
+			},
+			{
+				"id": "left_body",
+				"name": "왼쪽 몸통",
+				"rect": [
+					251,
+					419,
+					153,
+					420
+				],
+				"weak": true
+			},
+			{
+				"id": "right_body",
+				"name": "오른쪽 몸통",
+				"rect": [
+					571,
+					412,
+					179,
+					441
+				],
+				"weak": true
+			}
+		],
+		"drops": [
+			{
+				"item": "unknown_coin",
+				"chance": 100,
+				"min": 5,
+				"max": 10
+			},
+			{
+				"item": "beverage_a",
+				"chance": 10,
+				"min": 1,
+				"max": 5
+			},
+			{
+				"item": "tranquilizer",
+				"chance": 10,
+				"min": 1,
+				"max": 2
+			}
+		],
+		"defeat_flags": [
+			"defeated_combined_candle_students_charger"
+		]
 	}
 }
