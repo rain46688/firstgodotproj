@@ -1,0 +1,44 @@
+{
+	"debug_shop_01": {
+		"name": "테스트 상점",
+		"currency_item": "unknown_coin",
+		"products": [
+			{
+				"product_id": "beverage_a",
+				"item": "beverage_a",
+				"count": 1,
+				"price": 3,
+				"stock": -1,
+				"slot": 0,
+				"page": 0
+			},
+			{
+				"product_id": "tranquilizer_a",
+				"item": "tranquilizer_a",
+				"count": 1,
+				"price": 5,
+				"stock": 3,
+				"slot": 1,
+				"page": 0
+			},
+			{
+				"product_id": "tranquilizer_b",
+				"item": "tranquilizer_b",
+				"count": 1,
+				"price": 12,
+				"stock": 1,
+				"slot": 2,
+				"page": 0
+			},
+			{
+				"product_id": "razor",
+				"item": "razor",
+				"count": 1,
+				"price": 25,
+				"stock": 1,
+				"slot": 0,
+				"page": 1
+			}
+		]
+	}
+}

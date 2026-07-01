@@ -8506,7 +8506,7 @@
 			}
 		},
 		"interactions": {
-			"albus": {
+			"albus_shop": {
 				"click_rect": [
 					548,
 					47,
@@ -8522,7 +8522,11 @@
 						"type": "portrait",
 						"character": "albus",
 						"emotion": "normal",
-						"text": "뭘봐."
+						"text": "원하는걸 말해라."
+					},
+					{
+						"type": "open_shop",
+						"shop_id": "debug_shop_01"
 					}
 				]
 			}

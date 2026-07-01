@@ -84,6 +84,11 @@ extends Control
 
 # 일반 변수 모음
 var arrow_time = 0.0
+
+# 창고 / 상점 페이지 화살표 애니메이션용
+var arrange_page_arrow_time = 0.0
+var arrange_page_arrow_base_positions = {}
+
 var is_moving = false
 var current_room = "classroom_01"
 var current_difficulty = "normal"
@@ -101,6 +106,7 @@ var flags = {}
 var arrow_base_positions = {}
 var is_inventory_open = false
 var items = {}
+var shops = {}
 # 기존 인벤토리 변수
 var inventory_slot_size = 150
 var inventory_slot_gap = 5
@@ -273,6 +279,7 @@ var current_mouse_cursor_type = ""
 # candle_student
 const DEBUG_ADD_START_ITEMS = false
 const DEBUG_OPEN_PENDING_LOOT_TEST = false
+const DEBUG_OPEN_SHOP_TEST = false
 const DEBUG_START_BATTLE_TEST = false
 const DEBUG_TEST_BATTLE_ENEMY_ID = "ghost"
 const DEBUG_BATTLE_START_DELAY = 1.0
@@ -322,6 +329,11 @@ const MOVE_ARROW_HITBOX_FALLBACK_SIZE = Vector2(100, 74)
 # 너무 딱 맞으면 불편하니 약간 여유
 const MOVE_ARROW_HITBOX_PADDING = 8
 
+# 상점 구매 성공 효과음
+const SHOP_PURCHASE_SOUND_PATH = "res://sounds/coin.mp3"
+
+const SHOP_PURCHASE_FAIL_SOUND_PATH = "res://sounds/fail.mp3"
+
 # ============================================================
 # 게임 시작 관련 함수 모음
 # ============================================================
@@ -331,6 +343,7 @@ func _process(delta):
 	update_room_idle_motion(delta)
 	update_room_ambient_overlay_animation(delta)
 	update_mouse_cursor()
+	update_arrange_page_arrow_animation(delta)
 	
 	update_pause_input_lock()
 
@@ -566,6 +579,9 @@ func setup_initial_ui_helpers():
 	
 	# 창고 / 상점 왼쪽 목록 페이지 버튼 연결
 	connect_arrange_left_page_buttons()
+	
+	# 페이지 버튼 원래 위치 기록 및 애니메이션 초기화
+	setup_arrange_page_arrow_animation()
 
 	# 버튼이 키보드 포커스를 가져가지 않게 설정
 	# Space를 눌렀을 때 버튼이 다시 눌리는 문제 방지
@@ -686,6 +702,10 @@ func load_startup_game_data():
 		{
 			"loader": Callable(self, "load_items"),
 			"error": "아이템 데이터 로드 실패로 게임 초기화 중단"
+		},
+		{
+			"loader": Callable(self, "load_shops"),
+			"error": "상점 데이터 로드 실패로 게임 초기화 중단"
 		},
 		{
 			"loader": Callable(self, "load_characters"),
@@ -981,34 +1001,28 @@ func add_debug_start_items():
 		await add_item(item_id)
 # 방 갱신 전에 실행할 개발 테스트 흐름
 func run_debug_before_room_update_flow():
-	if not DEBUG_OPEN_PENDING_LOOT_TEST:
-		return
+	# 전리품 정리 화면 테스트
+	if DEBUG_OPEN_PENDING_LOOT_TEST:
+		open_inventory_arrange(
+			ARRANGE_MODE_LOOT,
+			[
+				{
+					"id": "beverage_a",
+					"count": 3
+				},
+				{
+					"id": "tranquilizer_a",
+					"count": 2
+				}
+			]
+		)
 
-	# 창고 기본 동작 테스트
-	# 처음 열 때만 아래 아이템들이 창고에 생성된다.
-	open_storage(
-		"debug_storage_01",
-		[
-			{
-				"id": "beverage_a",
-				"count": 3,
-				"slot": 0,
-				"page": 0
-			},
-			{
-				"id": "tranquilizer_a",
-				"count": 2,
-				"slot": 1,
-				"page": 0
-			},
-			{
-				"id": "beverage_a",
-				"count": 5,
-				"slot": 0,
-				"page": 1
-			}
-		]
-	)
+	# 상점 화면 테스트
+	if DEBUG_OPEN_SHOP_TEST:
+		# 테스트용 코인 지급
+		await add_item("unknown_coin", 50, false)
+
+		open_shop("debug_shop_01")
 # 방 갱신 후 실행할 개발 테스트 흐름
 func run_debug_after_room_update_flow():
 	if DEBUG_START_BATTLE_TEST:
@@ -1847,6 +1861,19 @@ func load_items():
 
 	items = data
 	print("items.json 로드 성공")
+	return true
+# 상점 데이터 로드 함수
+func load_shops():
+	var data = load_json_dictionary(
+		"res://data/shops.json",
+		"shops.json"
+	)
+
+	if data == null:
+		return false
+
+	shops = data
+	print("shops.json 로드 성공")
 	return true
 # NPC 캐릭터 데이터 로드 및 예외 처리 함수
 func load_characters():
@@ -3667,6 +3694,12 @@ func run_single_event(event):
 		var initial_items = event.get("initial_items", event.get("items", []))
 
 		open_storage(storage_id, initial_items)
+		
+	elif event_type == "open_shop":
+		# shops.json에 등록된 shop_id의 상점을 연다.
+		var shop_id = str(event.get("shop_id", ""))
+
+		open_shop(shop_id)
 
 	elif event_type == "story_dialogue":
 		await show_story_dialogue(
@@ -6903,6 +6936,70 @@ func connect_arrange_left_page_buttons():
 
 	arrange_left_page_prev_button.pressed.connect(_on_arrange_left_page_prev_button_pressed)
 	arrange_left_page_next_button.pressed.connect(_on_arrange_left_page_next_button_pressed)
+
+# ============================================================
+# 창고 / 상점 페이지 화살표 애니메이션
+# ============================================================
+
+# Inspector에서 배치한 페이지 버튼의 원래 위치를 기억한다.
+func setup_arrange_page_arrow_animation():
+	arrange_page_arrow_base_positions = {
+		"prev": arrange_left_page_prev_button.position,
+		"next": arrange_left_page_next_button.position
+	}
+
+	reset_arrange_page_arrow_positions()
+# 페이지 버튼을 Inspector에서 설정한 원래 위치로 되돌린다.
+func reset_arrange_page_arrow_positions():
+	if arrange_page_arrow_base_positions.has("prev"):
+		arrange_left_page_prev_button.position = (
+			arrange_page_arrow_base_positions["prev"]
+		)
+
+	if arrange_page_arrow_base_positions.has("next"):
+		arrange_left_page_next_button.position = (
+			arrange_page_arrow_base_positions["next"]
+		)
+# 창고 / 상점 페이지 화살표를 탐색 화살표처럼 좌우로 움직인다.
+func update_arrange_page_arrow_animation(delta):
+	if not arrange_page_arrow_base_positions.has("prev"):
+		return
+
+	if not arrange_page_arrow_base_positions.has("next"):
+		return
+
+	# 창고 / 상점 UI가 닫혔거나, 페이지 버튼이 숨겨진 경우 원래 위치 복구
+	if not is_inventory_arrange_open:
+		reset_arrange_page_arrow_positions()
+		return
+
+	if inventory_arrange_mode == ARRANGE_MODE_LOOT:
+		reset_arrange_page_arrow_positions()
+		return
+
+	if (
+		not arrange_left_page_prev_button.visible
+		and not arrange_left_page_next_button.visible
+	):
+		reset_arrange_page_arrow_positions()
+		return
+
+	arrange_page_arrow_time += delta
+
+	# 탐색 화살표와 같은 속도 / 이동 거리
+	var offset = sin(arrange_page_arrow_time * 2.0) * 6.0
+
+	# 왼쪽 버튼은 좌우로 이동
+	arrange_left_page_prev_button.position = (
+		arrange_page_arrow_base_positions["prev"]
+		+ Vector2(offset, 0)
+	)
+
+	# 오른쪽 버튼은 반대 방향으로 이동
+	arrange_left_page_next_button.position = (
+		arrange_page_arrow_base_positions["next"]
+		- Vector2(offset, 0)
+	)
 # 이전 페이지 버튼 클릭
 func _on_arrange_left_page_prev_button_pressed():
 	if not is_inventory_arrange_open:
@@ -6919,6 +7016,11 @@ func _on_arrange_left_page_prev_button_pressed():
 
 	if item_sound != null:
 		item_sound.play()
+
+	# 페이지가 바뀌면 이전 페이지에서 선택했던 아이템 정보와
+	# 흰색 포커스를 완전히 제거한다.
+	selected_arrange_item = null
+	selected_arrange_source = ""
 
 	clear_arrange_selected_focus()
 	clear_arrange_selected_item_info()
@@ -6939,6 +7041,11 @@ func _on_arrange_left_page_next_button_pressed():
 
 	if item_sound != null:
 		item_sound.play()
+
+	# 페이지가 바뀌면 이전 페이지에서 선택했던 아이템 정보와
+	# 흰색 포커스를 완전히 제거한다.
+	selected_arrange_item = null
+	selected_arrange_source = ""
 
 	clear_arrange_selected_focus()
 	clear_arrange_selected_item_info()
@@ -7069,6 +7176,582 @@ func open_storage(storage_id, initial_items = []):
 	open_inventory_arrange(
 		ARRANGE_MODE_STORAGE,
 		storage_inventories[storage_key]
+	)
+
+# ============================================================
+# 능능
+# ============================================================
+
+# shop_id 기준 상점 데이터 반환
+func get_shop_data_by_id(shop_id, show_error = true):
+	var shop_key = str(shop_id).strip_edges()
+
+	if shop_key == "":
+		if show_error:
+			push_error("상점 ID가 비어있음")
+		return {}
+
+	if not shops.has(shop_key):
+		if show_error:
+			push_error("존재하지 않는 상점: " + shop_key)
+		return {}
+
+	var shop_data = shops[shop_key]
+
+	if typeof(shop_data) != TYPE_DICTIONARY:
+		if show_error:
+			push_error("상점 데이터가 Dictionary가 아님: " + shop_key)
+		return {}
+
+	return shop_data
+# 상점 상품의 flag 조건 목록 반환
+func get_shop_product_flag_list(product, key_name):
+	var result = []
+
+	if product == null or typeof(product) != TYPE_DICTIONARY:
+		return result
+
+	if not product.has(key_name):
+		return result
+
+	var value = product[key_name]
+
+	if typeof(value) == TYPE_STRING:
+		var flag_id = str(value)
+
+		if flag_id != "":
+			result.append(flag_id)
+
+	elif typeof(value) == TYPE_ARRAY:
+		for flag_value in value:
+			var flag_id = str(flag_value)
+
+			if flag_id != "":
+				result.append(flag_id)
+
+	return result
+# 상품이 현재 상점에 표시되어야 하는지 확인
+func should_show_shop_product(product):
+	if product == null or typeof(product) != TYPE_DICTIONARY:
+		return false
+
+	# required_flag가 있으면 모든 flag가 있어야 표시
+	for flag_id in get_shop_product_flag_list(product, "required_flag"):
+		if not has_flag(flag_id):
+			return false
+
+	# hide_if_flag가 있으면 해당 flag 보유 시 숨김
+	for flag_id in get_shop_product_flag_list(product, "hide_if_flag"):
+		if has_flag(flag_id):
+			return false
+
+	return true
+# ============================================================
+# 상점 재고 상태 / 상품 목록 처리
+# ============================================================
+
+# 저장된 상점별 재고 상태 가져오기
+# 구조 예시:
+# {
+#     "debug_shop_01": {
+#         "remaining_stocks": {
+#             "tranquilizer_a": 2
+#         }
+#     }
+# }
+func get_shop_product_remaining_stock(shop_id, product_id, default_stock):
+	var initial_stock = int(default_stock)
+
+	# -1은 무제한 재고
+	if initial_stock < 0:
+		return -1
+
+	var shop_key = str(shop_id).strip_edges()
+	var product_key = str(product_id).strip_edges()
+
+	if shop_key == "" or product_key == "":
+		return max(initial_stock, 0)
+
+	if not shop_states.has(shop_key):
+		return max(initial_stock, 0)
+
+	var shop_state = shop_states[shop_key]
+
+	if typeof(shop_state) != TYPE_DICTIONARY:
+		return max(initial_stock, 0)
+
+	var remaining_stocks = shop_state.get("remaining_stocks", {})
+
+	if typeof(remaining_stocks) != TYPE_DICTIONARY:
+		return max(initial_stock, 0)
+
+	# 아직 한 번도 구매하지 않은 상품이면 shops.json 기본 재고 사용
+	if not remaining_stocks.has(product_key):
+		return max(initial_stock, 0)
+
+	return max(int(remaining_stocks[product_key]), 0)
+# 유한 재고 상품의 남은 재고 저장
+func set_shop_product_remaining_stock(shop_id, product_id, remaining_stock):
+	var shop_key = str(shop_id).strip_edges()
+	var product_key = str(product_id).strip_edges()
+
+	if shop_key == "" or product_key == "":
+		return
+
+	if not shop_states.has(shop_key):
+		shop_states[shop_key] = {}
+
+	var shop_state = shop_states[shop_key]
+
+	if typeof(shop_state) != TYPE_DICTIONARY:
+		shop_state = {}
+
+	var remaining_stocks = shop_state.get("remaining_stocks", {})
+
+	if typeof(remaining_stocks) != TYPE_DICTIONARY:
+		remaining_stocks = {}
+
+	remaining_stocks[product_key] = max(int(remaining_stock), 0)
+
+	shop_state["remaining_stocks"] = remaining_stocks
+	shop_states[shop_key] = shop_state
+# ============================================================
+# 상점 구매용 인벤토리 처리
+# ============================================================
+
+# 특정 목록 안에 아이템 ID가 존재하는지 확인
+func item_list_has_item_id(item_list, item_id):
+	for inventory_item in item_list:
+		if inventory_item == null:
+			continue
+
+		if typeof(inventory_item) != TYPE_DICTIONARY:
+			continue
+
+		if str(inventory_item.get("id", "")) == item_id:
+			return true
+
+	return false
+# 특정 목록에서 아이템을 count만큼 제거
+# 코인 차감 전용이므로 장착 해제 같은 처리는 하지 않는다.
+func remove_item_count_from_item_list(item_list, item_id, count):
+	var remaining_count = int(count)
+	var removed_count = 0
+
+	if item_id == "" or remaining_count <= 0:
+		return 0
+
+	for i in range(item_list.size() - 1, -1, -1):
+		if remaining_count <= 0:
+			break
+
+		var inventory_item = item_list[i]
+
+		if inventory_item == null:
+			continue
+
+		if typeof(inventory_item) != TYPE_DICTIONARY:
+			continue
+
+		if str(inventory_item.get("id", "")) != item_id:
+			continue
+
+		var current_count = int(inventory_item.get("count", 1))
+		var remove_count = min(current_count, remaining_count)
+
+		current_count -= remove_count
+		remaining_count -= remove_count
+		removed_count += remove_count
+
+		if current_count <= 0:
+			item_list.remove_at(i)
+		else:
+			inventory_item["count"] = current_count
+
+	return removed_count
+# 특정 아이템 목록에서 지정 위치에 아이템 배치 가능 여부
+func can_place_item_in_item_list(item_list, start_slot, item_width, item_height):
+	if start_slot < 0:
+		return false
+
+	var start_col = int(start_slot) % inventory_cols
+	var start_row = floori(int(start_slot) / float(inventory_cols))
+
+	if start_col + int(item_width) > inventory_cols:
+		return false
+
+	if start_row + int(item_height) > inventory_rows:
+		return false
+
+	var target_slots = get_grid_slots_from_size(
+		start_slot,
+		item_width,
+		item_height,
+		inventory_cols
+	)
+
+	for other_item in item_list:
+		if other_item == null:
+			continue
+
+		if typeof(other_item) != TYPE_DICTIONARY:
+			continue
+
+		var occupied_slots = get_inventory_item_occupied_slots(other_item)
+
+		for slot in target_slots:
+			if occupied_slots.has(slot):
+				return false
+
+	return true
+# 특정 목록에서 item_id가 들어갈 첫 빈 슬롯 찾기
+func find_empty_slot_in_item_list(item_list, item_id):
+	var item_size = get_item_grid_size_by_id(item_id)
+
+	if item_size.x <= 0 or item_size.y <= 0:
+		return -1
+
+	var total_slots = inventory_cols * inventory_rows
+
+	for slot in range(total_slots):
+		if can_place_item_in_item_list(
+			item_list,
+			slot,
+			item_size.x,
+			item_size.y
+		):
+			return slot
+
+	return -1
+# 현재 목록에 item_id / count 전체를 넣을 수 있는지 검사
+func can_add_item_to_item_list(item_list, item_id, count):
+	var item_data = get_item_data_by_id(item_id)
+
+	if item_data.is_empty():
+		return false
+
+	var add_count_total = int(count)
+
+	if add_count_total <= 0:
+		return false
+
+	var is_stackable = bool(item_data.get("stackable", false))
+	var max_stack = max(int(item_data.get("max_stack", 1)), 1)
+
+	# 중첩 불가 아이템은 중복 구매하지 않도록 제한
+	if not is_stackable:
+		if add_count_total != 1:
+			return false
+
+		return not item_list_has_item_id(item_list, item_id)
+
+	# 실제 목록에 영향을 주지 않도록 복사본에서 배치 가능 여부를 확인
+	var test_items = item_list.duplicate(true)
+	var remaining_count = add_count_total
+
+	# 기존 스택부터 채우기
+	for inventory_item in test_items:
+		if remaining_count <= 0:
+			break
+
+		if str(inventory_item.get("id", "")) != item_id:
+			continue
+
+		var current_count = int(inventory_item.get("count", 1))
+
+		if current_count >= max_stack:
+			continue
+
+		var add_count = min(remaining_count, max_stack - current_count)
+
+		inventory_item["count"] = current_count + add_count
+		remaining_count -= add_count
+
+	# 남은 수량은 새 슬롯에 배치 가능한지 확인
+	while remaining_count > 0:
+		var empty_slot = find_empty_slot_in_item_list(test_items, item_id)
+
+		if empty_slot == -1:
+			return false
+
+		var add_count = min(remaining_count, max_stack)
+
+		test_items.append({
+			"id": item_id,
+			"count": add_count,
+			"slot": empty_slot
+		})
+
+		remaining_count -= add_count
+
+	return true
+# 검사 완료 후 실제 목록에 아이템 추가
+# 상점 구매에서는 pending_loot로 보내지 않고 반드시 전량 들어갈 때만 호출한다.
+func add_item_to_item_list(item_list, item_id, count):
+	if not can_add_item_to_item_list(item_list, item_id, count):
+		return false
+
+	var item_data = get_item_data_by_id(item_id)
+	var is_stackable = bool(item_data.get("stackable", false))
+	var max_stack = max(int(item_data.get("max_stack", 1)), 1)
+	var remaining_count = int(count)
+
+	# 기존 스택부터 채움
+	if is_stackable:
+		for inventory_item in item_list:
+			if remaining_count <= 0:
+				break
+
+			if str(inventory_item.get("id", "")) != item_id:
+				continue
+
+			var current_count = int(inventory_item.get("count", 1))
+
+			if current_count >= max_stack:
+				continue
+
+			var add_count = min(remaining_count, max_stack - current_count)
+
+			inventory_item["count"] = current_count + add_count
+			remaining_count -= add_count
+
+	# 남은 수량을 새 슬롯에 배치
+	while remaining_count > 0:
+		var empty_slot = find_empty_slot_in_item_list(item_list, item_id)
+
+		if empty_slot == -1:
+			return false
+
+		var new_item = {
+			"id": item_id,
+			"slot": empty_slot
+		}
+
+		if is_stackable:
+			var add_count = min(remaining_count, max_stack)
+			new_item["count"] = add_count
+			remaining_count -= add_count
+		else:
+			remaining_count -= 1
+
+		item_list.append(new_item)
+
+	return true
+# 상점 중앙 설명창 아래에 결과 메시지 추가
+func append_shop_purchase_message(message, color):
+	if arrange_selected_item_text is RichTextLabel:
+		arrange_selected_item_text.append_text(
+			"\n[color="
+			+ color
+			+ "]"
+			+ escape_rich_text(message)
+			+ "[/color]"
+		)
+	else:
+		arrange_selected_item_text.text += "\n" + message
+# 상점 상품 구매 실행
+func try_buy_shop_product(shop_item):
+	if inventory_arrange_mode != ARRANGE_MODE_SHOP:
+		return
+
+	if current_shop_id == "":
+		return
+
+	if shop_item == null or typeof(shop_item) != TYPE_DICTIONARY:
+		return
+
+	var item_id = str(shop_item.get("id", ""))
+	var product_id = str(shop_item.get("shop_product_id", ""))
+	var product_count = max(int(shop_item.get("count", 1)), 1)
+	var price = max(int(shop_item.get("shop_price", 0)), 0)
+	var stock = int(shop_item.get("shop_stock", -1))
+
+	if item_id == "" or product_id == "":
+		return
+
+	# 혹시 화면 갱신 직전 품절된 경우 안전 처리
+	if stock == 0:
+		append_shop_purchase_message("이미 품절된 상품이다.", "#ff7777")
+		return
+
+	var shop_data = get_shop_data_by_id(current_shop_id, false)
+
+	if shop_data.is_empty():
+		return
+
+	var currency_item_id = str(shop_data.get("currency_item", "unknown_coin"))
+	var currency_name = get_item_name(currency_item_id)
+
+	# 코인 부족: 안내 문구는 추가하지 않고 실패 효과음만 재생
+	if get_inventory_item_count(currency_item_id) < price:
+		play_one_shot_sfx(SHOP_PURCHASE_FAIL_SOUND_PATH)
+		return
+
+	# 코인을 먼저 차감한 상태를 가정해 가방 공간을 검사한다.
+	# 마지막 코인을 사용하면서 빈칸이 생기는 경우도 정상 구매 가능하다.
+	var test_inventory = inventory.duplicate(true)
+
+	var test_removed_count = remove_item_count_from_item_list(
+		test_inventory,
+		currency_item_id,
+		price
+	)
+
+	if test_removed_count != price:
+		append_shop_purchase_message("결제 처리에 실패했다.", "#ff7777")
+		return
+
+	if not can_add_item_to_item_list(test_inventory, item_id, product_count):
+		var item_data = get_item_data_by_id(item_id)
+
+		if not bool(item_data.get("stackable", false)) and has_item(item_id):
+			append_shop_purchase_message(
+				"이미 가지고 있는 아이템이다.",
+				"#ff7777"
+			)
+		else:
+			append_shop_purchase_message(
+				"가방에 공간이 부족하다.",
+				"#ff7777"
+			)
+
+		return
+
+	# 실제 코인 차감
+	var removed_count = remove_item_count_from_item_list(
+		inventory,
+		currency_item_id,
+		price
+	)
+
+	if removed_count != price:
+		append_shop_purchase_message("결제 처리에 실패했다.", "#ff7777")
+		return
+
+	# 실제 아이템 지급
+	if not add_item_to_item_list(inventory, item_id, product_count):
+		# 이론상 여기까지 오지 않지만, 문제가 생기면 코인을 복구한다.
+		add_item_to_item_list(inventory, currency_item_id, removed_count)
+
+		append_shop_purchase_message("구매 처리에 실패했다.", "#ff7777")
+		return
+
+	# 유한 재고만 1 감소
+	if stock > 0:
+		set_shop_product_remaining_stock(
+			current_shop_id,
+			product_id,
+			stock - 1
+		)
+
+	# 구매 성공 효과음
+	play_one_shot_sfx(SHOP_PURCHASE_SOUND_PATH)
+
+	print(
+		"상점 구매 성공: ",
+		get_item_name(item_id),
+		" / 가격 ",
+		price,
+		" ",
+		currency_name
+	)
+
+	# 품절된 상품은 사라지고, 남은 상품은 최신 재고로 갱신한다.
+	arrange_left_inventory = make_shop_display_items(current_shop_id)
+
+	selected_arrange_item = null
+	selected_arrange_source = ""
+
+	clear_arrange_selected_focus()
+	clear_arrange_selected_item_info()
+	update_inventory_arrange_ui()
+
+	# 아이템 구매로 성물/주물 효과가 바뀔 수 있으므로 상태 UI 갱신
+	update_inventory_ui()
+	update_equipped_weapon_ui()
+	update_player_status_ui()
+# shops.json 상품 목록을 정리 UI 왼쪽 표시용 목록으로 변환
+func make_shop_display_items(shop_id):
+	var shop_data = get_shop_data_by_id(shop_id, false)
+
+	if shop_data.is_empty():
+		return []
+
+	var products = shop_data.get("products", [])
+
+	if typeof(products) != TYPE_ARRAY:
+		return []
+
+	var display_items = []
+
+	for product_index in range(products.size()):
+		var product = products[product_index]
+
+		if product == null or typeof(product) != TYPE_DICTIONARY:
+			continue
+
+		if not should_show_shop_product(product):
+			continue
+
+		var item_id = str(product.get("item", ""))
+
+		if item_id == "":
+			continue
+
+		if get_item_data_by_id(item_id).is_empty():
+			push_warning("상점 상품 아이템이 items.json에 없음: " + item_id)
+			continue
+
+		var product_id = str(product.get("product_id", ""))
+
+		if product_id == "":
+			product_id = item_id + "_" + str(product_index)
+
+		var default_stock = int(product.get("stock", -1))
+		var remaining_stock = get_shop_product_remaining_stock(
+			shop_id,
+			product_id,
+			default_stock
+		)
+
+		# 품절된 상품은 목록에서 제거한다.
+		# slot 값은 그대로 유지되므로 다른 상품이 앞으로 당겨지지 않는다.
+		if remaining_stock == 0:
+			continue
+
+		display_items.append({
+			"id": item_id,
+			"count": max(int(product.get("count", 1)), 1),
+			"slot": max(int(product.get("slot", product_index)), 0),
+			"page": max(int(product.get("page", 0)), 0),
+
+			"shop_product_id": product_id,
+			"shop_price": max(int(product.get("price", 0)), 0),
+			"shop_stock": remaining_stock
+		})
+
+	return display_items
+# 상점 열기
+func open_shop(shop_id):
+	var shop_key = str(shop_id).strip_edges()
+
+	if shop_key == "":
+		push_error("open_shop 호출 실패: shop_id가 비어있음")
+		return
+
+	if is_inventory_arrange_open:
+		return
+
+	var shop_data = get_shop_data_by_id(shop_key)
+
+	if shop_data.is_empty():
+		return
+
+	current_shop_id = shop_key
+
+	open_inventory_arrange(
+		ARRANGE_MODE_SHOP,
+		make_shop_display_items(shop_key)
 	)
 # 인벤토리 정리 화면 열기 함수
 func open_inventory_arrange(mode, left_items):
@@ -7222,8 +7905,21 @@ func create_arrange_item_icon(inventory_item, parent_node, grid_position, grid_c
 						if is_arrange_dragging_item:
 							stop_arrange_drag_item()
 						else:
-							item_sound.play()
-							select_arrange_item(inventory_item, source)
+							# 상점 왼쪽 상품은
+							# 첫 클릭: 설명 / 가격 / 재고 확인
+							# 같은 상품 두 번째 클릭: 구매
+							if (
+								inventory_arrange_mode == ARRANGE_MODE_SHOP
+								and source == "left"
+								and selected_arrange_item == inventory_item
+								and selected_arrange_source == "left"
+							):
+								try_buy_shop_product(inventory_item)
+							else:
+								if item_sound != null:
+									item_sound.play()
+
+								select_arrange_item(inventory_item, source)
 
 						arrange_pressed_item = null
 						arrange_pressed_button = null
@@ -7235,6 +7931,10 @@ func create_arrange_item_icon(inventory_item, parent_node, grid_position, grid_c
 	add_item_count_label(icon, inventory_item)
 # 인벤토리 정리 화면 아이템 드래그 시작 함수
 func start_arrange_drag_item(inventory_item, item_button, source):
+	# 상점 왼쪽은 상품 목록이므로 드래그 이동 금지
+	if inventory_arrange_mode == ARRANGE_MODE_SHOP and source == "left":
+		return
+		
 	is_arrange_dragging_item = true
 
 	arrange_dragged_item = inventory_item
@@ -7343,7 +8043,7 @@ func stop_arrange_drag_item():
 	select_arrange_item(moved_item, moved_target_source)
 
 	clear_arrange_slot_highlights()
-# 인벤토리 정리 화면 드롭 위치가 왼쪽/오른쪽 중 어디인지 반환하는 함수
+# 인벤토리 정리 화면 드롭 위치가 왼쪽/오른쪽 중 어디인지 반환
 func get_arrange_drop_target_source(global_pos):
 	var left_rect = Rect2(
 		arrange_left_grid_position,
@@ -7355,13 +8055,21 @@ func get_arrange_drop_target_source(global_pos):
 		get_arrange_grid_pixel_size(arrange_right_cols, arrange_right_rows)
 	)
 
+	var target_source = ""
+
 	if left_rect.has_point(global_pos):
-		return "left"
+		target_source = "left"
 
-	if right_rect.has_point(global_pos):
-		return "right"
+	elif right_rect.has_point(global_pos):
+		target_source = "right"
 
-	return ""
+	# 상점에서는 가방 ↔ 상품 목록 이동 금지
+	# 오른쪽 가방 내부 정리만 허용한다.
+	if inventory_arrange_mode == ARRANGE_MODE_SHOP:
+		if target_source != "" and target_source != arrange_dragged_source:
+			return ""
+
+	return target_source
 # 인벤토리 정리 화면 사이즈 그리드 사이즈 함수
 func get_arrange_grid_pixel_size(cols, rows):
 	return Vector2(
@@ -7614,6 +8322,7 @@ func close_inventory_arrange():
 	is_inventory_arrange_open = false
 	inventory_arrange_mode = ""
 	current_storage_id = ""
+	current_shop_id = ""
 	
 	arrange_left_page = 0
 	arrange_left_page_count = 1
@@ -7621,11 +8330,6 @@ func close_inventory_arrange():
 
 	# 추후에 창고 만들때 여기서 분리 처리!
 	arrange_left_inventory.clear()
-	
-	#if inventory_arrange_mode == "storage":
-		#storage_inventory = arrange_left_inventory.duplicate(true)
-	#else:
-		#arrange_left_inventory.clear()
 
 	inventory_arrange_ui.visible = false
 	arrange_discard_notice_label.visible = false
@@ -7991,13 +8695,72 @@ func make_discarded_item_messages(discarded_items):
 		messages.append(item_name + " " + str(count) + "개를 버렸다.")
 
 	return messages
-# 인벤토리 정리 화면 선택 아이템 정보 표시 함수
+# 인벤토리 정리 화면 선택 아이템 정보 표시
 func show_arrange_selected_item_info(inventory_item):
 	show_item_info_ui(
 		inventory_item,
 		arrange_selected_item_image,
 		arrange_selected_item_text
 	)
+
+	# 상점 화면에서는 왼쪽 상품 / 오른쪽 가방 아이템 모두
+	# 중앙 선택 이미지 영역을 사용하지 않는다.
+	if inventory_arrange_mode == ARRANGE_MODE_SHOP:
+		arrange_selected_item_image.texture = null
+		arrange_selected_item_image.visible = false
+
+	# 상점 왼쪽 상품이 아니면 기존 설명만 표시
+	if inventory_arrange_mode != ARRANGE_MODE_SHOP:
+		return
+
+	if selected_arrange_source != "left":
+		return
+
+	if inventory_item == null or typeof(inventory_item) != TYPE_DICTIONARY:
+		return
+
+	var shop_data = get_shop_data_by_id(current_shop_id, false)
+
+	if shop_data.is_empty():
+		return
+
+	var currency_item_id = str(shop_data.get("currency_item", "unknown_coin"))
+	var currency_name = get_item_name(currency_item_id)
+
+	var price = max(int(inventory_item.get("shop_price", 0)), 0)
+	var stock = int(inventory_item.get("shop_stock", -1))
+
+	var stock_text = "무제한"
+
+	if stock >= 0:
+		stock_text = str(stock) + "개"
+
+	var shop_info_text = (
+		"\n\n[color=#f2d06b]가격: "
+		+ currency_name
+		+ " "
+		+ str(price)
+		+ "개[/color]"
+		+ "\n[color=#b8b8b8]재고: "
+		+ stock_text
+		+ "[/color]"
+		+ "\n[color=#8ad4ff]같은 상품 한 번 더 클릭시 구매[/color]"
+		)
+
+	if arrange_selected_item_text is RichTextLabel:
+		arrange_selected_item_text.append_text(shop_info_text)
+	else:
+		arrange_selected_item_text.text += (
+			"\n\n가격: "
+			+ currency_name
+			+ " "
+			+ str(price)
+			+ "개"
+			+ "\n[color=#b8b8b8]재고: "
+			+ stock_text
+			+ "[/color]"
+			+ "\n[color=#8ad4ff]같은 상품 한 번 더 클릭시 구매[/color]"
+			)
 # 인벤토리 정리 화면 선택 아이템 정보 제거 함수
 func clear_arrange_selected_item_info():
 	clear_item_info_ui(
@@ -9378,7 +10141,9 @@ func get_save_data():
 		"flags": flags,
 
 		# 창고별 아이템 목록 저장
-		"storage_inventories": storage_inventories
+		"storage_inventories": storage_inventories,
+		
+		"shop_states": shop_states
 	}
 # 저장 파일 경로 반환 함수
 func get_save_path(slot_index):
@@ -9473,6 +10238,14 @@ func load_game(slot_index):
 		storage_inventories = {}
 
 	current_storage_id = ""
+	
+	# 상점 세이브 없는 경우 처리 과정
+	shop_states = save_data.get("shop_states", {})
+
+	if typeof(shop_states) != TYPE_DICTIONARY:
+		shop_states = {}
+
+	current_shop_id = ""
 
 	restore_equipped_weapon(player_data.get("equipped_weapon_slot", -1))
 
