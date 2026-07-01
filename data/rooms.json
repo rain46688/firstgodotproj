@@ -8229,6 +8229,10 @@
 					{
 						"type": "text",
 						"text": "잡동사니를 넣을 수 있는 박스다."
+					},
+					{
+						"type": "open_storage",
+						"storage_id": "broadcasting_room_01_box_01"
 					}
 				]
 			}

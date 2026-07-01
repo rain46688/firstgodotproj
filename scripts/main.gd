@@ -66,6 +66,22 @@ extends Control
 @onready var result_sound = $ResultSound
 @onready var dialogue_type_sound = $ChoiceSound
 
+# 왼쪽 창고 / 상점 목록 페이지 이동 버튼
+@onready var arrange_left_page_prev_button = $InventoryArrangeUI/ArrangeLeftPagePrevButton
+@onready var arrange_left_page_next_button = $InventoryArrangeUI/ArrangeLeftPageNextButton
+
+# ============================================================
+# 상점 / 창고 인벤토리 정리 UI 리소스
+# Inspector에서 각각 대응되는 PNG 파일을 연결한다.
+# ============================================================
+@export_group("상점 / 창고 UI 배경")
+
+@export var shop_background_4x4: Texture2D
+@export var shop_background_4x5: Texture2D
+
+@export var storage_background_4x4: Texture2D
+@export var storage_background_4x5: Texture2D
+
 # 일반 변수 모음
 var arrow_time = 0.0
 var is_moving = false
@@ -161,6 +177,31 @@ var pending_loot = []
 var is_inventory_arrange_open = false
 var inventory_arrange_mode = ""
 var arrange_left_inventory = []
+
+# 인벤토리 정리 화면 모드 상수
+const ARRANGE_MODE_LOOT = "loot"
+const ARRANGE_MODE_STORAGE = "storage"
+const ARRANGE_MODE_SHOP = "shop"
+
+# 왼쪽 3x6 목록 페이지 상태
+# 창고와 상점은 왼쪽 목록이 18칸을 넘을 수 있으므로 별도 페이지를 사용한다.
+var arrange_left_page = 0
+var arrange_left_page_count = 1
+
+# 기존 전리품 정리 화면에서 사용하던 배경을 기억해둔다.
+# 상점/창고를 닫거나 전리품 화면을 열 때 원래 배경으로 되돌리기 위해 필요하다.
+var arrange_loot_background_texture: Texture2D = null
+
+# 창고 데이터
+# 예: { "school_storage_01": [아이템 목록] }
+var storage_inventories = {}
+var current_storage_id = ""
+
+# 상점 구매 상태
+# 예: 품절된 1회 구매 상품의 남은 재고 등을 저장한다.
+var shop_states = {}
+var current_shop_id = ""
+
 # 인벤토리 정리 UI 좌표 설정
 var arrange_left_grid_position = Vector2(55, 60)
 var arrange_right_grid_position = Vector2(1200, 190)
@@ -461,6 +502,10 @@ func setup_initial_ui_state():
 	encounter_danger_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	arrange_discard_notice_label.visible = false
+	
+	# 창고 / 상점을 열기 전에는 페이지 버튼을 숨긴다.
+	arrange_left_page_prev_button.visible = false
+	arrange_left_page_next_button.visible = false
 
 	arrange_selected_item_image.texture = null
 	arrange_selected_item_image.visible = false
@@ -518,6 +563,9 @@ func setup_initial_ui_helpers():
 	encounter_heartbeat_sound.stop()
 
 	connect_inventory_context_menu_buttons()
+	
+	# 창고 / 상점 왼쪽 목록 페이지 버튼 연결
+	connect_arrange_left_page_buttons()
 
 	# 버튼이 키보드 포커스를 가져가지 않게 설정
 	# Space를 눌렀을 때 버튼이 다시 눌리는 문제 방지
@@ -529,6 +577,9 @@ func _ready():
 
 	# 게임 시작 시 UI의 기본 표시 상태를 초기화하는 함수
 	setup_initial_ui_state()
+	
+	# 기존 전리품 정리 화면 배경 보관
+	arrange_loot_background_texture = arrange_background.texture
 
 	# 게임 시작 시 UI 레이어 순서를 초기화하는 함수
 	setup_initial_z_index()
@@ -930,15 +981,34 @@ func add_debug_start_items():
 		await add_item(item_id)
 # 방 갱신 전에 실행할 개발 테스트 흐름
 func run_debug_before_room_update_flow():
-	if DEBUG_OPEN_PENDING_LOOT_TEST:
-		await give_items_with_pending_loot([
-			{
-				"item": "beverage_a",
-				"count": 1
-			}
-		])
+	if not DEBUG_OPEN_PENDING_LOOT_TEST:
+		return
 
-		await open_inventory_arrange_if_pending_loot("loot")
+	# 창고 기본 동작 테스트
+	# 처음 열 때만 아래 아이템들이 창고에 생성된다.
+	open_storage(
+		"debug_storage_01",
+		[
+			{
+				"id": "beverage_a",
+				"count": 3,
+				"slot": 0,
+				"page": 0
+			},
+			{
+				"id": "tranquilizer_a",
+				"count": 2,
+				"slot": 1,
+				"page": 0
+			},
+			{
+				"id": "beverage_a",
+				"count": 5,
+				"slot": 0,
+				"page": 1
+			}
+		]
+	)
 # 방 갱신 후 실행할 개발 테스트 흐름
 func run_debug_after_room_update_flow():
 	if DEBUG_START_BATTLE_TEST:
@@ -1020,7 +1090,8 @@ func get_debug_start_item_ids():
 				#"holy_grail_relic",
 				#"music_box_relic",
 				"cross_relic",
-				#"razor",
+				"razor",
+				"razor",
 				#"cutter_knife"
 			]
 
@@ -3588,6 +3659,14 @@ func run_single_event(event):
 		
 	elif event_type == "input_prompt":
 		await run_input_prompt_event(event)
+	
+	elif event_type == "open_storage":
+		# initial_items는 해당 창고가 처음 생성될 때만 적용된다.
+		# 이미 한 번 열었던 storage_id라면 기존 저장 내용을 그대로 사용한다.
+		var storage_id = str(event.get("storage_id", ""))
+		var initial_items = event.get("initial_items", event.get("items", []))
+
+		open_storage(storage_id, initial_items)
 
 	elif event_type == "story_dialogue":
 		await show_story_dialogue(
@@ -6810,17 +6889,209 @@ func should_show_weapon_piercing_effect(_item_id, item_data, is_current_equipped
 			return true
 
 	return false
+
+# ============================================================
+# 인벤토리 정리 화면 - 왼쪽 목록 페이지 기능
+# 창고 / 상점에서만 사용한다.
+# 기존 전리품(loot)은 항상 0페이지로 유지된다.
+# ============================================================
+
+# 페이지 화살표 버튼 연결
+func connect_arrange_left_page_buttons():
+	arrange_left_page_prev_button.focus_mode = Control.FOCUS_NONE
+	arrange_left_page_next_button.focus_mode = Control.FOCUS_NONE
+
+	arrange_left_page_prev_button.pressed.connect(_on_arrange_left_page_prev_button_pressed)
+	arrange_left_page_next_button.pressed.connect(_on_arrange_left_page_next_button_pressed)
+# 이전 페이지 버튼 클릭
+func _on_arrange_left_page_prev_button_pressed():
+	if not is_inventory_arrange_open:
+		return
+
+	# 아이템을 들고 있는 도중 페이지 이동 방지
+	if is_arrange_dragging_item:
+		return
+
+	if arrange_left_page <= 0:
+		return
+
+	arrange_left_page -= 1
+
+	if item_sound != null:
+		item_sound.play()
+
+	clear_arrange_selected_focus()
+	clear_arrange_selected_item_info()
+	update_inventory_arrange_ui()
+# 다음 페이지 버튼 클릭
+func _on_arrange_left_page_next_button_pressed():
+	if not is_inventory_arrange_open:
+		return
+
+	# 아이템을 들고 있는 도중 페이지 이동 방지
+	if is_arrange_dragging_item:
+		return
+
+	if arrange_left_page >= arrange_left_page_count - 1:
+		return
+
+	arrange_left_page += 1
+
+	if item_sound != null:
+		item_sound.play()
+
+	clear_arrange_selected_focus()
+	clear_arrange_selected_item_info()
+	update_inventory_arrange_ui()
+# 아이템이 속한 왼쪽 목록 페이지 반환
+# page가 없는 기존 전리품은 0페이지로 처리한다.
+func get_arrange_item_page(item):
+	if item == null:
+		return 0
+
+	if typeof(item) != TYPE_DICTIONARY:
+		return 0
+
+	return max(int(item.get("page", 0)), 0)
+# 현재 왼쪽 목록에 존재하는 페이지 수 계산
+func calculate_arrange_left_page_count():
+	var max_page = 0
+
+	for item in arrange_left_inventory:
+		if item == null:
+			continue
+
+		if typeof(item) != TYPE_DICTIONARY:
+			continue
+
+		max_page = max(max_page, get_arrange_item_page(item))
+
+	# 창고는 비어 있어도
+	# 0페이지 + 다음 빈 페이지 1페이지를 항상 제공한다.
+	# 그래서 처음 열 때부터 다음 화살표가 표시된다.
+	if inventory_arrange_mode == ARRANGE_MODE_STORAGE:
+		return max_page + 2
+
+	# 전리품 / 상점은 실제 등록된 마지막 페이지만 사용
+	return max_page + 1
+# 현재 페이지가 유효한 범위를 벗어나지 않게 보정
+func refresh_arrange_left_page_state():
+	arrange_left_page_count = calculate_arrange_left_page_count()
+
+	arrange_left_page = clamp(
+		arrange_left_page,
+		0,
+		max(arrange_left_page_count - 1, 0)
+	)
+# 왼쪽 목록에서 현재 페이지의 아이템만 판정에 사용할지 확인
+func should_filter_arrange_left_items_by_page():
+	return (
+		inventory_arrange_mode == ARRANGE_MODE_STORAGE
+		or inventory_arrange_mode == ARRANGE_MODE_SHOP
+	)
+# 창고 / 상점에서만 페이지 화살표를 표시한다.
+func update_arrange_left_page_controls():
+	var can_change_page = (
+		is_inventory_arrange_open
+		and inventory_arrange_mode != "loot"
+		and arrange_left_page_count > 1
+	)
+
+	arrange_left_page_prev_button.visible = can_change_page
+	arrange_left_page_next_button.visible = can_change_page
+
+	if not can_change_page:
+		return
+
+	arrange_left_page_prev_button.disabled = arrange_left_page <= 0
+	arrange_left_page_next_button.disabled = arrange_left_page >= arrange_left_page_count - 1
+
+# ============================================================
+# 창고 기능
+# ============================================================
+
+# 현재 인벤토리 행 수에 맞는 정리 화면 배경 반환
+func get_arrange_background_texture():
+	var target_texture: Texture2D = arrange_loot_background_texture
+
+	if inventory_arrange_mode == ARRANGE_MODE_STORAGE:
+		if inventory_rows >= 5:
+			target_texture = storage_background_4x5
+		else:
+			target_texture = storage_background_4x4
+
+	elif inventory_arrange_mode == ARRANGE_MODE_SHOP:
+		if inventory_rows >= 5:
+			target_texture = shop_background_4x5
+		else:
+			target_texture = shop_background_4x4
+
+	# Inspector에 이미지가 비어 있어도 기존 전리품 배경으로 안전하게 처리
+	if target_texture == null:
+		target_texture = arrange_loot_background_texture
+
+	return target_texture
+# 현재 모드에 맞는 배경과 오른쪽 가방 크기 적용
+func apply_arrange_mode_visuals():
+	# 가방 업그레이드로 4x5가 된 경우에도 오른쪽 칸 수를 맞춘다.
+	arrange_right_rows = inventory_rows
+
+	var target_texture = get_arrange_background_texture()
+
+	if target_texture != null:
+		arrange_background.texture = target_texture
+# 창고 열기
+# storage_id가 같으면 같은 창고 내용을 계속 사용한다.
+# 처음 열 때만 initial_items가 해당 창고의 초기 아이템이 된다.
+func open_storage(storage_id, initial_items = []):
+	var storage_key = str(storage_id).strip_edges()
+
+	if storage_key == "":
+		push_error("open_storage 호출 실패: storage_id가 비어있음")
+		return
+
+	if is_inventory_arrange_open:
+		return
+
+	# 처음 생성되는 창고만 초기 아이템을 넣는다.
+	if not storage_inventories.has(storage_key):
+		if typeof(initial_items) != TYPE_ARRAY:
+			initial_items = []
+
+		storage_inventories[storage_key] = initial_items.duplicate(true)
+
+	# 혹시 저장 데이터가 깨졌거나 배열이 아닌 경우 안전하게 초기화
+	if typeof(storage_inventories[storage_key]) != TYPE_ARRAY:
+		storage_inventories[storage_key] = []
+
+	current_storage_id = storage_key
+
+	open_inventory_arrange(
+		ARRANGE_MODE_STORAGE,
+		storage_inventories[storage_key]
+	)
 # 인벤토리 정리 화면 열기 함수
 func open_inventory_arrange(mode, left_items):
 	is_inventory_arrange_open = true
 	inventory_arrange_mode = mode
+
+	# 창고 / 상점 / 전리품 모드에 맞는 배경 및 오른쪽 가방 행 수 적용
+	apply_arrange_mode_visuals()
+
 	arrange_left_inventory = left_items.duplicate(true)
+
+	# 창고 / 상점은 열 때 항상 첫 페이지부터 시작한다.
+	arrange_left_page = 0
+
 	selected_arrange_item = null
 	selected_arrange_source = ""
 	clear_arrange_selected_focus()
 	clear_arrange_selected_item_info()
 	
 	normalize_arrange_left_slots()
+	
+	# 왼쪽 아이템들의 page 값을 기준으로 페이지 수 계산
+	arrange_left_page_count = calculate_arrange_left_page_count()
 
 	# 기존 인벤토리 여는 효과음과 동일하게 사용
 	if bag_open_sound != null:
@@ -6836,6 +7107,7 @@ func open_inventory_arrange(mode, left_items):
 		arrange_discard_notice_label.visible = false
 	
 	update_inventory_arrange_ui()
+	update_arrange_left_page_controls()
 
 	print("인벤토리 정리 화면 열림 mode: ", inventory_arrange_mode)
 	print("left items: ", arrange_left_inventory)
@@ -6851,6 +7123,9 @@ func normalize_arrange_left_slots():
 		next_slot += 1
 # 인벤토리 정리 화면 UI 갱신 함수
 func update_inventory_arrange_ui():
+	# 아이템 이동 후 페이지 수와 현재 페이지를 다시 계산
+	refresh_arrange_left_page_state()
+	
 	for child in arrange_left_items.get_children():
 		child.queue_free()
 
@@ -6858,6 +7133,11 @@ func update_inventory_arrange_ui():
 		child.queue_free()
 
 	for item in arrange_left_inventory:
+		# 현재 선택된 왼쪽 페이지에 속한 아이템만 화면에 표시한다.
+		# page 값이 없는 전리품은 0페이지로 처리된다.
+		if get_arrange_item_page(item) != arrange_left_page:
+			continue
+
 		create_arrange_item_icon(
 			item,
 			arrange_left_items,
@@ -6876,6 +7156,7 @@ func update_inventory_arrange_ui():
 		)
 
 	update_arrange_selected_focus()
+	update_arrange_left_page_controls()
 # 인벤토리 정리 화면 아이템 아이콘 생성 함수
 func create_arrange_item_icon(inventory_item, parent_node, grid_position, grid_cols, source):
 	if inventory_item == null:
@@ -7148,7 +7429,8 @@ func move_arrange_item_to_grid(item, from_source, to_source, target_slot):
 		item_height,
 		target_cols,
 		target_rows,
-		item
+		item,
+		to_source
 	):
 		return false
 
@@ -7161,8 +7443,14 @@ func move_arrange_item_to_grid(item, from_source, to_source, target_slot):
 	item["slot"] = target_slot
 
 	if to_source == "left":
+		# 현재 보고 있는 창고 페이지에 아이템을 넣는다.
+		item["page"] = arrange_left_page
 		arrange_left_inventory.append(item)
 	else:
+		# 플레이어 가방에는 창고 페이지 정보가 필요 없다.
+		if item.has("page"):
+			item.erase("page")
+
 		inventory.append(item)
 
 	if selected_arrange_item == item:
@@ -7217,8 +7505,18 @@ func get_arrange_occupied_slots(item, cols):
 		item_size.y,
 		cols
 	)
-# 인벤토리 정리 화면 특정 위치에 아이템 배치 가능 여부 확인 함수
-func can_place_item_at_arrange_grid(item_list, start_slot, item_width, item_height, cols, rows, ignore_item = null):
+# 인벤토리 정리 화면 특정 위치에 아이템 배치 가능 여부 확인
+# source가 left인 창고 / 상점에서는 현재 페이지 아이템만 충돌 검사한다.
+func can_place_item_at_arrange_grid(
+	item_list,
+	start_slot,
+	item_width,
+	item_height,
+	cols,
+	rows,
+	ignore_item = null,
+	source = ""
+):
 	if start_slot < 0:
 		return false
 
@@ -7231,7 +7529,7 @@ func can_place_item_at_arrange_grid(item_list, start_slot, item_width, item_heig
 	var start_col = int(start_slot) % int(cols)
 	var start_row = floori(int(start_slot) / float(cols))
 
-	# 오른쪽/아래로 정리 가방 범위를 넘으면 배치 불가
+	# 오른쪽 또는 아래쪽으로 그리드 범위를 벗어나면 배치 불가
 	if start_col + int(item_width) > int(cols):
 		return false
 
@@ -7248,6 +7546,17 @@ func can_place_item_at_arrange_grid(item_list, start_slot, item_width, item_heig
 	for other_item in item_list:
 		if other_item == ignore_item:
 			continue
+
+		if other_item == null:
+			continue
+
+		if typeof(other_item) != TYPE_DICTIONARY:
+			continue
+
+		# 창고 / 상점 왼쪽은 현재 페이지 아이템끼리만 충돌 검사
+		if source == "left" and should_filter_arrange_left_items_by_page():
+			if get_arrange_item_page(other_item) != arrange_left_page:
+				continue
 
 		var occupied_slots = get_arrange_occupied_slots(other_item, cols)
 
@@ -7288,13 +7597,28 @@ func close_inventory_arrange():
 	if is_arrange_dragging_item:
 		cancel_arrange_drag_item()
 		
+	var closing_mode = inventory_arrange_mode
+	var closing_storage_id = current_storage_id
 	var discarded_items = []
 
-	if inventory_arrange_mode == "loot":
+	# 전리품만 왼쪽에 남은 아이템을 버린다.
+	if closing_mode == ARRANGE_MODE_LOOT:
 		discarded_items = arrange_left_inventory.duplicate(true)
+
+	# 창고는 왼쪽 목록을 버리지 않고 storage_inventories에 저장한다.
+	elif closing_mode == ARRANGE_MODE_STORAGE:
+		if closing_storage_id != "":
+			storage_inventories[closing_storage_id] = arrange_left_inventory.duplicate(true)
+			print("창고 저장 완료: ", closing_storage_id)
 
 	is_inventory_arrange_open = false
 	inventory_arrange_mode = ""
+	current_storage_id = ""
+	
+	arrange_left_page = 0
+	arrange_left_page_count = 1
+	update_arrange_left_page_controls()
+
 	# 추후에 창고 만들때 여기서 분리 처리!
 	arrange_left_inventory.clear()
 	
@@ -7474,8 +7798,8 @@ func can_merge_arrange_stack_item(source_item, to_source, target_slot):
 	var target_count = int(target_item.get("count", 1))
 
 	return target_count < max_stack
-# 인벤토리 정리 화면 특정 슬롯을 차지하고 있는 아이템 index 찾기 함수
-# ignore_item을 넣으면 해당 아이템은 검사에서 제외함
+# 인벤토리 정리 화면 특정 슬롯을 차지하는 아이템 index 반환
+# 창고 / 상점의 왼쪽 목록은 현재 보고 있는 페이지 아이템만 검사한다.
 func get_arrange_item_index_at_slot(source, slot, ignore_item = null):
 	if slot < 0:
 		return -1
@@ -7494,6 +7818,11 @@ func get_arrange_item_index_at_slot(source, slot, ignore_item = null):
 
 		if typeof(item) != TYPE_DICTIONARY:
 			continue
+
+		# 왼쪽 창고 / 상점은 현재 페이지와 다른 아이템을 무시한다.
+		if source == "left" and should_filter_arrange_left_items_by_page():
+			if get_arrange_item_page(item) != arrange_left_page:
+				continue
 
 		if not item.has("slot"):
 			continue
@@ -7618,6 +7947,17 @@ func try_swap_arrange_1x1_items(source_item, from_source, to_source, target_slot
 
 	source_item["slot"] = target_item_slot
 	target_item["slot"] = source_slot
+
+	# 왼쪽 창고에 들어오는 아이템은 현재 페이지를 기록한다.
+	if to_source == "left":
+		source_item["page"] = arrange_left_page
+	elif source_item.has("page"):
+		source_item.erase("page")
+
+	if from_source == "left":
+		target_item["page"] = arrange_left_page
+	elif target_item.has("page"):
+		target_item.erase("page")
 
 	from_list.append(target_item)
 	to_list.append(source_item)
@@ -7753,7 +8093,8 @@ func update_arrange_drag_slot_highlight():
 		item_height,
 		target_cols,
 		target_rows,
-		arrange_dragged_item
+		arrange_dragged_item,
+		target_source
 	)
 
 	var is_valid = can_merge or can_swap or can_place
@@ -9034,7 +9375,10 @@ func get_save_data():
 			"equipped_weapon_slot": equipped_weapon_slot
 		},
 		"inventory": inventory,
-		"flags": flags
+		"flags": flags,
+
+		# 창고별 아이템 목록 저장
+		"storage_inventories": storage_inventories
 	}
 # 저장 파일 경로 반환 함수
 func get_save_path(slot_index):
@@ -9120,6 +9464,15 @@ func load_game(slot_index):
 
 	inventory = save_data.get("inventory", [])
 	flags = save_data.get("flags", {})
+	
+	# 이전 세이브 파일에는 창고 데이터가 없을 수 있으므로
+	# 없으면 빈 Dictionary로 안전하게 처리한다.
+	storage_inventories = save_data.get("storage_inventories", {})
+
+	if typeof(storage_inventories) != TYPE_DICTIONARY:
+		storage_inventories = {}
+
+	current_storage_id = ""
 
 	restore_equipped_weapon(player_data.get("equipped_weapon_slot", -1))
 
