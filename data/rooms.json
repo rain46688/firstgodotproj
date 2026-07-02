@@ -50,7 +50,7 @@
 								]
 							},
 							{
-								"text": "좀만 더 있다가."
+								"text": "조금만 더 둘러본다."
 							}
 						]
 					}
@@ -162,13 +162,13 @@
 					},
 					{
 						"type": "text",
-						"text": "하나만 챙겨가자."
+						"text": "무언가 주머니에 넣을까?"
 					},
 					{
 						"type": "choices",
 						"choices": [
 							{
-								"text": "기이한 모양의 열쇠",
+								"text": "이상한 모양의 열쇠",
 								"events": [
 									{
 										"type": "item",
@@ -182,7 +182,7 @@
 								]
 							},
 							{
-								"text": "면도칼",
+								"text": "비상용 면도칼",
 								"events": [
 									{
 										"type": "item",
@@ -196,7 +196,7 @@
 								]
 							},
 							{
-								"text": "잡다한 동전 주머니",
+								"text": "무언가 들어있는 주머니",
 								"events": [
 									{
 										"type": "item",
@@ -210,7 +210,7 @@
 								]
 							},
 							{
-								"text": "아무것도 가져가지 않는다.",
+								"text": "그만둔다.",
 								"events": [
 									{
 										"type": "flag",
@@ -833,7 +833,7 @@
 					},
 					{
 						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_04_01.png",
+						"path": "res://imgs/documents/school_document_02_01.png",
 						"start_page": 1,
 						"sound": "res://sounds/paper.mp3",
 						"sound_volume_db": 10,
@@ -867,7 +867,7 @@
 					},
 					{
 						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_04_01.png",
+						"path": "res://imgs/documents/school_document_02_01.png",
 						"start_page": 1,
 						"sound": "res://sounds/paper.mp3",
 						"sound_volume_db": 10,
@@ -1218,7 +1218,7 @@
 					},
 					{
 						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_04_01.png",
+						"path": "res://imgs/documents/school_document_03_01.png",
 						"start_page": 1,
 						"sound": "res://sounds/paper.mp3",
 						"sound_volume_db": 10,
@@ -1263,7 +1263,7 @@
 					},
 					{
 						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_04_01.png",
+						"path": "res://imgs/documents/school_document_03_01.png",
 						"start_page": 1,
 						"sound": "res://sounds/paper.mp3",
 						"sound_volume_db": 10,
@@ -3426,7 +3426,7 @@
 					},
 					{
 						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_04_01.png",
+						"path": "res://imgs/documents/school_document_05_01.png",
 						"start_page": 1,
 						"sound": "res://sounds/paper.mp3",
 						"sound_volume_db": 10,
@@ -5803,7 +5803,10 @@
 				"random_targets": [
 					{
 						"target": "classroom_14",
-						"weight": 60
+						"weight": 60,
+						"required_flag_missing": [
+							"kill_statue_classroom_statue_classroom_17_02"
+						]
 					},
 					{
 						"target": "classroom_17",
@@ -6090,10 +6093,13 @@
 			},
 			"right": {
 				"target": "classroom_18",
-					"random_targets": [
+				"random_targets": [
 					{
 						"target": "classroom_14",
-						"weight": 60
+						"weight": 60,
+						"required_flag_missing": [
+							"kill_statue_classroom_statue_classroom_18_02"
+						]
 					},
 					{
 						"target": "classroom_18",
