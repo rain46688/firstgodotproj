@@ -280,7 +280,7 @@
 	"old_water_ball": {
 		"name": "오래된 워터볼",
 		"description": "흐릿한 물속에 무언가가 흔들리고 있다.소지시 장착한 무기의 최소 공격력이 3 증가한다.",
-		"image": "res://imgs/items/성물180x180.png",
+		"image": "res://imgs/items/old_water_ball180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -291,7 +291,7 @@
 	"old_abacus": {
 		"name": "낡은 주판",
 		"description": "몇 개의 알이 제멋대로 움직이는 낡은 주판.소지시 장착한 무기의 최대 공격력이 3 증가한다.",
-		"image": "res://imgs/items/성물180x180.png",
+		"image": "res://imgs/items/old_abacus180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -302,7 +302,7 @@
 	"cube_relic": {
 		"name": "큐브",
 		"description": "맞춰도 맞춰도 원래대로 돌아오는 작은 큐브.소지시 최대 체력이 30 증가한다.",
-		"image": "res://imgs/items/성물180x180.png",
+		"image": "res://imgs/items/cube_relic180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -313,7 +313,7 @@
 	"torn_eyepatch": {
 		"name": "찢어진 안대",
 		"description": "오래된 얼룩이 남아있는 찢어진 안대.장착 무기 주변 1칸에 있을 때 치명타 확률이 30% 증가한다.",
-		"image": "res://imgs/items/성물180x180.png",
+		"image": "res://imgs/items/torn_eyepatch180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -324,7 +324,7 @@
 	"dice_relic": {
 		"name": "주사위",
 		"description": "어떤 면을 봐도 같은 숫자만 보이는 주사위.장착 무기 주변 1칸에 있을 때 패링 범위가 30% 증가한다.",
-		"image": "res://imgs/items/성물180x180.png",
+		"image": "res://imgs/items/dice_relic180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -335,7 +335,7 @@
 	"bible_fetish": {
 		"name": "성경책",
 		"description": "표지가 검게 그을린 오래된 성경책.소지시 장착한 무기의 최소 공격력이 5 증가한다.",
-		"image": "res://imgs/items/주물180x180.png",
+		"image": "res://imgs/items/bible_fetish180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -346,7 +346,7 @@
 	"metal_syringe": {
 		"name": "금속 주사기",
 		"description": "차갑게 빛나는 금속 주사기.소지시 장착한 무기의 최대 공격력이 5 증가한다.",
-		"image": "res://imgs/items/주물180x180.png",
+		"image": "res://imgs/items/metal_syringe180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -357,7 +357,7 @@
 	"rosary_fetish": {
 		"name": "묵주",
 		"description": "손때가 깊게 밴 낡은 묵주.소지시 받는 피해가 30% 감소하지만 장착한 무기의 최대 공격력이 5 감소한다.",
-		"image": "res://imgs/items/주물180x180.png",
+		"image": "res://imgs/items/rosary_fetish180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -368,7 +368,7 @@
 	"sneakers_fetish": {
 		"name": "운동화",
 		"description": "누군가 오래 신고 다닌 낡은 운동화.소지시 방어 모드 이동 속도가 50% 증가하고 스윙 속도가 30% 증가한다.",
-		"image": "res://imgs/items/주물180x180.png",
+		"image": "res://imgs/items/sneakers_fetish180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -379,7 +379,7 @@
 	"dumbbell_fetish": {
 		"name": "아령",
 		"description": "손잡이에 검은 얼룩이 남은 무거운 아령.소지시 장착한 무기의 스윙 속도가 50% 감소한다.",
-		"image": "res://imgs/items/주물180x180.png",
+		"image": "res://imgs/items/dumbbell_fetish180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -390,7 +390,7 @@
 	"sandbag_fetish": {
 		"name": "모래 주머니",
 		"description": "축축한 모래가 들어있는 작은 주머니.소지시 최대 체력이 50 감소한다.",
-		"image": "res://imgs/items/주물180x180.png",
+		"image": "res://imgs/items/sandbag_fetish180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -401,7 +401,7 @@
 	"lung_model_fetish": {
 		"name": "폐 모형",
 		"description": "숨을 쉬는 듯 들썩이는 폐 모형.소지시 인벤토리 내 소모품 총개수 * 5 만큼 최대 체력이 증가하지만 치명타 확률이 50% 감소한다.",
-		"image": "res://imgs/items/주물180x180.png",
+		"image": "res://imgs/items/lung_model_fetish180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -412,7 +412,7 @@
 	"music_box_relic": {
 		"name": "오르골",
 		"description": "뚜껑이 닫혀 있어도 희미한 선율이 들리는 오르골.소지시 플레이어 턴 시작마다 현재 체력이 3 회복된다.",
-		"image": "res://imgs/items/성물180x180.png",
+		"image": "res://imgs/items/music_box_relic180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -423,7 +423,7 @@
 	"first_aid_box_fetish": {
 		"name": "구급 상자",
 		"description": "안쪽에서 눅눅한 약 냄새가 나는 구급 상자.소지시 플레이어 턴 시작마다 현재 체력이 5 회복되지만 최소 공격력이 5 감소한다.",
-		"image": "res://imgs/items/주물180x180.png",
+		"image": "res://imgs/items/first_aid_box_fetish180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -434,7 +434,7 @@
 	"classic_camera_fetish": {
 		"name": "클래식 카메라",
 		"description": "렌즈 안쪽에서 누군가의 눈동자가 비치는 낡은 카메라.장착 무기 주변 1칸에 있을 때 최소/최대 공격력이 5 증가하지만 플레이어 턴 시작마다 현재 체력이 3 감소한다.",
-		"image": "res://imgs/items/주물180x180.png",
+		"image": "res://imgs/items/classic_camera_fetish180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -445,7 +445,7 @@
 	"hourglass_fetish": {
 		"name": "모래 시계",
 		"description": "뒤집지 않아도 모래가 계속 떨어지는 모래 시계.소지시 플레이어 턴 시작마다 플레이어와 적 본체 및 파츠의 현재 체력이 10 감소한다.",
-		"image": "res://imgs/items/주물180x180.png",
+		"image": "res://imgs/items/hourglass_fetish180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -456,7 +456,7 @@
 	"broken_headset_relic": {
 		"name": "망가진 헤드셋",
 		"description": "잡음이 새어 나오는 망가진 헤드셋.장착 무기 주변 1칸에 있을 때 치명타 배율이 30% 증가한다.",
-		"image": "res://imgs/items/성물180x180.png",
+		"image": "res://imgs/items/broken_headset_relic180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -467,7 +467,7 @@
 	"teddy_bear_relic": {
 		"name": "곰인형",
 		"description": "한쪽 눈이 뜯어진 낡은 곰인형.장착 무기 주변 1칸에 있을 때 장착한 무기의 최소 공격력이 5 증가한다.",
-		"image": "res://imgs/items/성물180x180.png",
+		"image": "res://imgs/items/teddy_bear_relic180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -478,7 +478,7 @@
 	"character_figure_relic": {
 		"name": "캐릭터 피규어",
 		"description": "어딘가 익숙한 캐릭터의 작은 피규어.장착 무기 주변 1칸에 있을 때 장착한 무기의 최대 공격력이 5 증가한다.",
-		"image": "res://imgs/items/성물180x180.png",
+		"image": "res://imgs/items/character_figure_relic180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -489,7 +489,7 @@
 	"hand_bone_fetish": {
 		"name": "손 뼈 모형",
 		"description": "손가락 마디가 제멋대로 움직이는 손 뼈 모형.장착 무기 주변 1칸에 있을 때 치명타 확률이 50% 증가하지만 최대 체력이 30 감소한다.",
-		"image": "res://imgs/items/주물180x180.png",
+		"image": "res://imgs/items/hand_bone_fetish180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -500,7 +500,7 @@
 	"skull_model_fetish": {
 		"name": "해골 모형",
 		"description": "빈 눈구멍 안쪽에서 시선이 느껴지는 해골 모형.장착 무기 주변 1칸에 있을 때 치명타 배율이 50% 증가하지만 최대 체력이 50 감소한다.",
-		"image": "res://imgs/items/주물180x180.png",
+		"image": "res://imgs/items/skull_model_fetish180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -511,7 +511,7 @@
 	"small_frame_fetish": {
 		"name": "작은 액자",
 		"description": "사진 속 인물이 조금씩 가까워지는 작은 액자.장착 무기 주변 1칸에 있을 때 패링 범위가 50% 증가하고 스윙 속도가 30% 증가한다.",
-		"image": "res://imgs/items/주물180x180.png",
+		"image": "res://imgs/items/small_frame_fetish180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -522,7 +522,7 @@
 	"hand_candlestick_fetish": {
 		"name": "손 모양 촛대",
 		"description": "손가락 끝에 촛농이 굳어붙은 촛대.장착 무기 주변 1칸에 있을 때 관통 효과를 얻지만 받는 피해가 50% 증가한다.",
-		"image": "res://imgs/items/주물180x180.png",
+		"image": "res://imgs/items/hand_candlestick_fetish180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -533,7 +533,7 @@
 	"cross_relic": {
 		"name": "십자가",
 		"description": "검게 금이 간 낡은 십자가.인벤토리 내 무기 타입 아이템이 3개 이상이면 장착한 무기의 최대 공격력이 10 증가한다.",
-		"image": "res://imgs/items/성물180x180.png",
+		"image": "res://imgs/items/cross_relic180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -544,7 +544,7 @@
 	"holy_grail_relic": {
 		"name": "성배",
 		"description": "바닥이 보이지 않는 은빛 성배.인벤토리 내 소모품이 0개일 때 장착한 무기에 관통 효과를 부여한다.",
-		"image": "res://imgs/items/성물180x180.png",
+		"image": "res://imgs/items/holy_grail_relic180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",
@@ -555,7 +555,7 @@
 	"brain_model_fetish": {
 		"name": "뇌 모형",
 		"description": "미세하게 꿈틀거리는 뇌 모형.인벤토리가 가득 차 있을 때 장착한 무기의 최대 공격력이 10 증가한다.",
-		"image": "res://imgs/items/주물180x180.png",
+		"image": "res://imgs/items/brain_model_fetish180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "relic",

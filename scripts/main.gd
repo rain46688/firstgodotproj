@@ -2965,7 +2965,7 @@ func try_move_to_exit(direction):
 	if is_exit_blocked_for_movement(exit_data):
 		return
 
-	var target_room = exit_data.get("target", "")
+	var target_room = get_exit_target_room(exit_data)
 
 	if target_room == "":
 		push_error("출구 target 값이 없음: " + current_room + " / " + str(direction))
@@ -3478,7 +3478,7 @@ func run_exit_interaction(direction):
 
 	# 이미 열린 출구이거나 잠겨 있지 않은 출구면 바로 이동
 	if not is_exit_blocked_for_movement(exit_data):
-		var target_room = exit_data.get("target", "")
+		var target_room = get_exit_target_room(exit_data)
 
 		if target_room == "":
 			push_error("출구 target 값이 없음: " + current_room + " / " + str(direction))
@@ -6124,6 +6124,165 @@ func change_background(path):
 	background.texture = load(path)
 
 # ============================================================
+# 랜덤 출구 목적지 처리
+# ============================================================
+
+# 랜덤 출구 규칙에서 required_flag / required_flag_missing 목록 가져오기
+# 문자열 1개 또는 배열 모두 지원한다.
+func get_random_exit_rule_flags(rule, key_name):
+	var result = []
+
+	if rule == null:
+		return result
+
+	if typeof(rule) != TYPE_DICTIONARY:
+		return result
+
+	if not rule.has(key_name):
+		return result
+
+	var value = rule[key_name]
+
+	if typeof(value) == TYPE_STRING:
+		var flag_id = str(value).strip_edges()
+
+		if flag_id != "":
+			result.append(flag_id)
+
+	elif typeof(value) == TYPE_ARRAY:
+		for flag_value in value:
+			var flag_id = str(flag_value).strip_edges()
+
+			if flag_id != "":
+				result.append(flag_id)
+
+	return result
+# 랜덤 목적지 규칙이 현재 플래그 조건에 맞는지 확인
+func can_use_random_exit_rule(rule):
+	if rule == null or typeof(rule) != TYPE_DICTIONARY:
+		return false
+
+	# required_flag는 모두 가지고 있어야 한다.
+	for flag_id in get_random_exit_rule_flags(rule, "required_flag"):
+		if not has_flag(flag_id):
+			return false
+
+	# required_flag_missing은 모두 없어야 한다.
+	for flag_id in get_random_exit_rule_flags(rule, "required_flag_missing"):
+		if has_flag(flag_id):
+			return false
+
+	return true
+# 낮은 확률의 특수 목적지 처리
+# random_overrides는 위에서부터 순서대로 검사한다.
+# 먼저 성공한 규칙 하나만 적용된다.
+func get_random_exit_override_target(exit_data):
+	if not exit_data.has("random_overrides"):
+		return ""
+
+	var random_overrides = exit_data["random_overrides"]
+
+	if typeof(random_overrides) != TYPE_ARRAY:
+		return ""
+
+	for rule in random_overrides:
+		if rule == null or typeof(rule) != TYPE_DICTIONARY:
+			continue
+
+		if not can_use_random_exit_rule(rule):
+			continue
+
+		var target_room = str(rule.get("target", "")).strip_edges()
+
+		if target_room == "":
+			continue
+
+		if get_room_data_by_id(target_room, false).is_empty():
+			push_warning("random_overrides 대상 방이 없음: " + target_room)
+			continue
+
+		# chance는 0~100 기준 퍼센트
+		var chance = clamp(float(rule.get("chance", 0.0)), 0.0, 100.0)
+
+		if randf() * 100.0 < chance:
+			return target_room
+
+	return ""
+# 일반 랜덤 목적지 처리
+# weight 비율에 따라 후보 중 하나를 선택한다.
+func get_weighted_random_exit_target(exit_data):
+	if not exit_data.has("random_targets"):
+		return ""
+
+	var random_targets = exit_data["random_targets"]
+
+	if typeof(random_targets) != TYPE_ARRAY:
+		return ""
+
+	var valid_targets = []
+	var total_weight = 0.0
+
+	for rule in random_targets:
+		if rule == null or typeof(rule) != TYPE_DICTIONARY:
+			continue
+
+		if not can_use_random_exit_rule(rule):
+			continue
+
+		var target_room = str(rule.get("target", "")).strip_edges()
+
+		if target_room == "":
+			continue
+
+		if get_room_data_by_id(target_room, false).is_empty():
+			push_warning("random_targets 대상 방이 없음: " + target_room)
+			continue
+
+		var weight = max(float(rule.get("weight", 0.0)), 0.0)
+
+		if weight <= 0.0:
+			continue
+
+		valid_targets.append({
+			"target": target_room,
+			"weight": weight
+		})
+
+		total_weight += weight
+
+	if valid_targets.is_empty() or total_weight <= 0.0:
+		return ""
+
+	var roll = randf() * total_weight
+	var accumulated_weight = 0.0
+
+	for target_data in valid_targets:
+		accumulated_weight += float(target_data["weight"])
+
+		if roll < accumulated_weight:
+			return str(target_data["target"])
+
+	# 소수점 오차 대비용
+	return str(valid_targets[valid_targets.size() - 1]["target"])
+# 출구의 실제 목적지 결정
+# 우선순위:
+# 1. random_overrides의 특수 확률 이동
+# 2. random_targets의 가중치 랜덤 이동
+# 3. 기존 target 기본 목적지
+func get_exit_target_room(exit_data):
+	var override_target = get_random_exit_override_target(exit_data)
+
+	if override_target != "":
+		return override_target
+
+	var random_target = get_weighted_random_exit_target(exit_data)
+
+	if random_target != "":
+		return random_target
+
+	return str(exit_data.get("target", "")).strip_edges()
+
+# ============================================================
 # 인벤토리 함수 모음
 # ============================================================
 
@@ -7179,7 +7338,7 @@ func open_storage(storage_id, initial_items = []):
 	)
 
 # ============================================================
-# 능능
+# 상점 기능
 # ============================================================
 
 # shop_id 기준 상점 데이터 반환
@@ -7246,6 +7405,7 @@ func should_show_shop_product(product):
 			return false
 
 	return true
+
 # ============================================================
 # 상점 재고 상태 / 상품 목록 처리
 # ============================================================

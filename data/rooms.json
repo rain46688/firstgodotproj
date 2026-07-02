@@ -5800,6 +5800,16 @@
 			},
 			"right": {
 				"target": "classroom_17",
+				"random_targets": [
+					{
+						"target": "classroom_14",
+						"weight": 60
+					},
+					{
+						"target": "classroom_17",
+						"weight": 40
+					}
+				],
 				"position": [
 					1390,
 					540
@@ -6080,6 +6090,16 @@
 			},
 			"right": {
 				"target": "classroom_18",
+					"random_targets": [
+					{
+						"target": "classroom_14",
+						"weight": 60
+					},
+					{
+						"target": "classroom_18",
+						"weight": 40
+					}
+				],
 				"position": [
 					1390,
 					540
@@ -8526,7 +8546,7 @@
 					},
 					{
 						"type": "open_shop",
-						"shop_id": "debug_shop_01"
+						"shop_id": "albus_shop_01"
 					}
 				]
 			}

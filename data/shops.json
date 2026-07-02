@@ -1,13 +1,13 @@
 {
-	"debug_shop_01": {
-		"name": "테스트 상점",
+	"albus_shop_01": {
+		"name": "알버스 상점",
 		"currency_item": "unknown_coin",
 		"products": [
 			{
 				"product_id": "beverage_a",
 				"item": "beverage_a",
 				"count": 1,
-				"price": 3,
+				"price": 5,
 				"stock": -1,
 				"slot": 0,
 				"page": 0
@@ -16,28 +16,263 @@
 				"product_id": "tranquilizer_a",
 				"item": "tranquilizer_a",
 				"count": 1,
-				"price": 5,
+				"price": 10,
 				"stock": 3,
 				"slot": 1,
-				"page": 0
-			},
-			{
-				"product_id": "tranquilizer_b",
-				"item": "tranquilizer_b",
-				"count": 1,
-				"price": 12,
-				"stock": 1,
-				"slot": 2,
 				"page": 0
 			},
 			{
 				"product_id": "razor",
 				"item": "razor",
 				"count": 1,
-				"price": 25,
+				"price": 50,
+				"stock": 1,
+				"slot": 2,
+				"page": 0
+			},
+			{
+				"product_id": "old_water_ball",
+				"item": "old_water_ball",
+				"count": 1,
+				"price": 45,
 				"stock": 1,
 				"slot": 0,
 				"page": 1
+			},
+			{
+				"product_id": "old_abacus",
+				"item": "old_abacus",
+				"count": 1,
+				"price": 45,
+				"stock": 1,
+				"slot": 1,
+				"page": 1
+			},
+			{
+				"product_id": "cube_relic",
+				"item": "cube_relic",
+				"count": 1,
+				"price": 55,
+				"stock": 1,
+				"slot": 2,
+				"page": 1
+			},
+			{
+				"product_id": "torn_eyepatch",
+				"item": "torn_eyepatch",
+				"count": 1,
+				"price": 60,
+				"stock": 1,
+				"slot": 3,
+				"page": 1
+			},
+			{
+				"product_id": "dice_relic",
+				"item": "dice_relic",
+				"count": 1,
+				"price": 60,
+				"stock": 1,
+				"slot": 4,
+				"page": 1
+			},
+			{
+				"product_id": "music_box_relic",
+				"item": "music_box_relic",
+				"count": 1,
+				"price": 75,
+				"stock": 1,
+				"slot": 5,
+				"page": 1
+			},
+			{
+				"product_id": "broken_headset_relic",
+				"item": "broken_headset_relic",
+				"count": 1,
+				"price": 75,
+				"stock": 1,
+				"slot": 6,
+				"page": 1
+			},
+			{
+				"product_id": "teddy_bear_relic",
+				"item": "teddy_bear_relic",
+				"count": 1,
+				"price": 70,
+				"stock": 1,
+				"slot": 7,
+				"page": 1
+			},
+			{
+				"product_id": "character_figure_relic",
+				"item": "character_figure_relic",
+				"count": 1,
+				"price": 70,
+				"stock": 1,
+				"slot": 8,
+				"page": 1
+			},
+			{
+				"product_id": "cross_relic",
+				"item": "cross_relic",
+				"count": 1,
+				"price": 90,
+				"stock": 1,
+				"slot": 9,
+				"page": 1
+			},
+			{
+				"product_id": "holy_grail_relic",
+				"item": "holy_grail_relic",
+				"count": 1,
+				"price": 95,
+				"stock": 1,
+				"slot": 10,
+				"page": 1
+			},
+
+			{
+				"product_id": "bible_fetish",
+				"item": "bible_fetish",
+				"count": 1,
+				"price": 65,
+				"stock": 1,
+				"slot": 0,
+				"page": 2
+			},
+			{
+				"product_id": "metal_syringe",
+				"item": "metal_syringe",
+				"count": 1,
+				"price": 65,
+				"stock": 1,
+				"slot": 1,
+				"page": 2
+			},
+			{
+				"product_id": "rosary_fetish",
+				"item": "rosary_fetish",
+				"count": 1,
+				"price": 50,
+				"stock": 1,
+				"slot": 2,
+				"page": 2
+			},
+			{
+				"product_id": "sneakers_fetish",
+				"item": "sneakers_fetish",
+				"count": 1,
+				"price": 70,
+				"stock": 1,
+				"slot": 3,
+				"page": 2
+			},
+			{
+				"product_id": "dumbbell_fetish",
+				"item": "dumbbell_fetish",
+				"count": 1,
+				"price": 65,
+				"stock": 1,
+				"slot": 4,
+				"page": 2
+			},
+			{
+				"product_id": "sandbag_fetish",
+				"item": "sandbag_fetish",
+				"count": 1,
+				"price": 60,
+				"stock": 1,
+				"slot": 5,
+				"page": 2
+			},
+			{
+				"product_id": "lung_model_fetish",
+				"item": "lung_model_fetish",
+				"count": 1,
+				"price": 65,
+				"stock": 1,
+				"slot": 6,
+				"page": 2
+			},
+			{
+				"product_id": "first_aid_box_fetish",
+				"item": "first_aid_box_fetish",
+				"count": 1,
+				"price": 75,
+				"stock": 1,
+				"slot": 7,
+				"page": 2
+			},
+			{
+				"product_id": "classic_camera_fetish",
+				"item": "classic_camera_fetish",
+				"count": 1,
+				"price": 90,
+				"stock": 1,
+				"slot": 8,
+				"page": 2
+			},
+			{
+				"product_id": "hourglass_fetish",
+				"item": "hourglass_fetish",
+				"count": 1,
+				"price": 95,
+				"stock": 1,
+				"slot": 9,
+				"page": 2
+			},
+			{
+				"product_id": "hand_bone_fetish",
+				"item": "hand_bone_fetish",
+				"count": 1,
+				"price": 85,
+				"stock": 1,
+				"slot": 10,
+				"page": 2
+			},
+			{
+				"product_id": "skull_model_fetish",
+				"item": "skull_model_fetish",
+				"count": 1,
+				"price": 90,
+				"stock": 1,
+				"slot": 11,
+				"page": 2
+			},
+			{
+				"product_id": "small_frame_fetish",
+				"item": "small_frame_fetish",
+				"count": 1,
+				"price": 90,
+				"stock": 1,
+				"slot": 12,
+				"page": 2
+			},
+			{
+				"product_id": "hand_candlestick_fetish",
+				"item": "hand_candlestick_fetish",
+				"count": 1,
+				"price": 95,
+				"stock": 1,
+				"slot": 13,
+				"page": 2
+			},
+			{
+				"product_id": "brain_model_fetish",
+				"item": "brain_model_fetish",
+				"count": 1,
+				"price": 100,
+				"stock": 1,
+				"slot": 14,
+				"page": 2
+			},
+			{
+				"product_id": "heart_model_fetish",
+				"item": "heart_model_fetish",
+				"count": 1,
+				"price": 100,
+				"stock": 1,
+				"slot": 15,
+				"page": 2
 			}
 		]
 	}
