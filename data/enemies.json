@@ -1128,7 +1128,7 @@
 	},
 	"candle_student_woman": {
 		"name": "밀랍을 뒤집어쓴 여학생",
-		"max_hp": 130,
+		"max_hp": 90,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -1376,7 +1376,7 @@
 				"max": 3
 			},
 			{
-				"item": "tranquilizer",
+				"item": "tranquilizer_a",
 				"chance": 10,
 				"min": 1,
 				"max": 1
@@ -1395,7 +1395,7 @@
 	},
 	"ghost": {
 		"name": "유령",
-		"max_hp": 100,
+		"max_hp": 80,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -1660,7 +1660,7 @@
 	},
 	"combined_candle_students_charger": {
 		"name": "합쳐진 밀랍 차저",
-		"max_hp": 350,
+		"max_hp": 300,
 		"battle_bgm": "res://sounds/bgm13.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -1947,7 +1947,7 @@
 				"max": 5
 			},
 			{
-				"item": "tranquilizer",
+				"item": "tranquilizer_a",
 				"chance": 10,
 				"min": 1,
 				"max": 2

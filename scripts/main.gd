@@ -286,6 +286,9 @@ const DEBUG_BATTLE_START_DELAY = 1.0
 const DEBUG_START_ITEM_PRESET = "consumable_test"
 # 이벤트 json 연결 부분 <-- 검색용
 
+# 랜덤 인카운터 발생 시 콘솔에 선택된 적 / 확률 정보 출력
+const DEBUG_PRINT_RANDOM_ENCOUNTER_INFO = true
+
 # 상호작용 클릭 영역 디버그 변수
 var click_rect_debug_enabled = false
 var click_rect_debug_dragging = false
@@ -10506,6 +10509,59 @@ func get_random_encounter_event_table_id(encounter_data, enemy_table_id):
 		return ""
 
 	return str(encounter_data.get("event_table", enemy_table_id))
+# 랜덤 인카운터에서 실제 선택된 적과 확률 정보를 콘솔에 출력
+func print_random_encounter_info(encounter_data, enemy_table_id, enemy_id):
+	if not DEBUG_PRINT_RANDOM_ENCOUNTER_INFO:
+		return
+
+	var enemy_data = get_enemy_data_by_id(enemy_id, false)
+	var enemy_name = str(enemy_data.get("name", enemy_id))
+
+	var encounter_table = get_encounter_table_by_id(enemy_table_id, false)
+	var candidates = get_available_encounter_candidates(encounter_table)
+
+	var total_weight = 0
+	var selected_enemy_weight = 0
+
+	for candidate in candidates:
+		var weight = get_encounter_weight(candidate)
+		var candidate_enemy_id = str(candidate.get("enemy", ""))
+
+		total_weight += weight
+
+		# 같은 적이 테이블에 여러 번 있어도 가중치를 합산한다.
+		if candidate_enemy_id == enemy_id:
+			selected_enemy_weight += weight
+
+	var room_encounter_chance = get_random_encounter_chance(encounter_data)
+
+	var enemy_table_chance = 0.0
+	var final_chance = 0.0
+
+	if total_weight > 0:
+		enemy_table_chance = (
+			float(selected_enemy_weight) / float(total_weight)
+		) * 100.0
+
+		final_chance = (
+			room_encounter_chance * enemy_table_chance
+		) / 100.0
+
+	print("")
+	print("========== 랜덤 인카운터 발생 ==========")
+	print("현재 방: ", current_room)
+	print("선택된 적: ", enemy_name, " (", enemy_id, ")")
+	print("방 인카운터 발생 확률: %.2f%%" % room_encounter_chance)
+	print(
+		"적 테이블 내 확률: %.2f%% (%d / %d)"
+		% [
+			enemy_table_chance,
+			selected_enemy_weight,
+			total_weight
+		]
+	)
+	print("이번 이동 기준 최종 조우 확률: %.2f%%" % final_chance)
+	print("======================================")
 # 현재 방 랜덤 인카운터 확인 함수
 func check_random_encounter():
 	var room = get_current_room_data(false)
@@ -10540,6 +10596,14 @@ func check_random_encounter():
 
 	if enemy_id == "":
 		return false
+
+	# 선택지가 나오기 전에 이미 어떤 적이 뽑혔는지 콘솔에 출력한다.
+	# 도주를 선택해 전투에 들어가지 않아도 확인 가능하다.
+	print_random_encounter_info(
+		encounter_data,
+		enemy_table_id,
+		enemy_id
+	)
 
 	start_random_encounter_effect()
 
