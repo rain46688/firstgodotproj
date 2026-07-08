@@ -2091,6 +2091,24 @@ func play_overlap_sound_from_player(source_player):
 # 디버그 함수 모음
 # ============================================================
 
+# 히트박스 디버그 색상 반환
+# 0배: 회색
+# 1보다 작음: 노란색
+# 1배: 기본색
+# 1보다 큼: 빨간색
+func get_hitbox_debug_color(hitbox, normal_color):
+	var damage_multiplier = get_hitbox_damage_multiplier(hitbox)
+
+	if damage_multiplier <= 0.0:
+		return Color(0.45, 0.45, 0.45, 0.28)
+
+	if damage_multiplier < 1.0:
+		return Color(1.0, 0.75, 0.15, 0.18)
+
+	if damage_multiplier > 1.0:
+		return Color(1, 0, 0, 0.18)
+
+	return normal_color
 # 디버그 히트 박스 확인용 함수
 func update_hitbox_debug():
 	clear_enemy_projectile_debug_boxes()
@@ -2129,10 +2147,7 @@ func update_hitbox_debug():
 
 		var box = ColorRect.new()
 		box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		box.color = Color(1, 1, 1, 0.12)
-
-		if hitbox.get("weak", false):
-			box.color = Color(1, 0, 0, 0.18)
+		box.color = get_hitbox_debug_color(hitbox, Color(1, 1, 1, 0.12))
 
 		var hitbox_rect = make_scaled_hitbox_rect(enemy_rect, rect_data)
 		box.position = hitbox_rect.position
@@ -2189,7 +2204,7 @@ func update_part_hitbox_debug(_base_size, enemy_rect):
 
 		var box = ColorRect.new()
 		box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		box.color = Color(0.2, 0.7, 1, 0.18)
+		box.color = get_hitbox_debug_color(hitbox, Color(0.2, 0.7, 1, 0.18))
 
 		box.position = Vector2(
 			enemy_rect.position.x + rect_data[0] * hitbox_scale.x,
@@ -3774,13 +3789,14 @@ func apply_player_attack_part_hit(hitbox):
 	var damage = get_player_attack_result_damage(damage_result)
 	var is_weak = is_player_attack_result_weak(damage_result)
 	var is_critical = is_player_attack_result_critical(damage_result)
+	var is_no_damage = is_player_attack_result_no_damage(damage_result)
 
-	play_player_attack_hit_sound(is_weak, is_critical)
+	play_player_attack_hit_sound(is_weak, is_critical, is_no_damage)
 	apply_player_attack_damage_to_part(part_id, damage)
 
 	play_player_attack_hit_feedback(
 		damage,
-		is_weak or is_critical
+		(is_weak or is_critical) and not is_no_damage
 	)
 
 	print(part_id, " HP: ", enemy_part_hp[part_id])
@@ -3789,7 +3805,8 @@ func apply_player_attack_part_hit(hitbox):
 		part_id,
 		hitbox_name,
 		damage,
-		is_critical
+		is_critical,
+		is_no_damage
 	)
 # 적 피격 연출 비동기 시작 함수
 func start_enemy_hit_feedback():
@@ -4501,10 +4518,16 @@ func make_critical_prefix_text(is_critical):
 
 	return ""
 # 플레이어 본체 공격 결과 텍스트 생성 함수
-func make_player_attack_body_hit_text(hitbox_name, damage, is_weak, is_critical):
-	var text = make_critical_prefix_text(is_critical)
+func make_player_attack_body_hit_text(hitbox_name, damage, is_weak, is_critical, is_no_damage = false):
+	var text = ""
 
-	if is_weak:
+	# 노데미지 부위는 치명타 문구를 띄우지 않는다.
+	if not is_no_damage:
+		text += make_critical_prefix_text(is_critical)
+
+	if is_no_damage:
+		text += str(hitbox_name) + "에 맞았지만 피해가 들어가지 않았다.\n"
+	elif is_weak:
 		text += str(hitbox_name) + " 약점을 공격했다!\n"
 	else:
 		text += str(hitbox_name) + "에 맞았다.\n"
@@ -4513,10 +4536,17 @@ func make_player_attack_body_hit_text(hitbox_name, damage, is_weak, is_critical)
 
 	return text
 # 플레이어 파츠 공격 결과 텍스트 생성 함수
-func make_player_attack_part_hit_text(hitbox_name, damage, is_critical):
-	var text = make_critical_prefix_text(is_critical)
+func make_player_attack_part_hit_text(hitbox_name, damage, is_critical, is_no_damage = false):
+	var text = ""
 
-	text += str(hitbox_name) + "에 맞았다.\n"
+	if not is_no_damage:
+		text += make_critical_prefix_text(is_critical)
+
+	if is_no_damage:
+		text += str(hitbox_name) + "에 맞았지만 피해가 들어가지 않았다.\n"
+	else:
+		text += str(hitbox_name) + "에 맞았다.\n"
+
 	text += str(int(damage)) + " 의 피해를 주었다."
 
 	return text
@@ -4545,23 +4575,50 @@ func make_parry_counter_body_text(counter_damage):
 # 파츠 패링 반격 텍스트 생성 함수
 func make_parry_counter_part_text(part_name, counter_damage):
 	return "패링 반격!\n" + str(part_name) + "에 " + str(int(counter_damage)) + " 의 피해를 주었다."
+# 히트박스별 플레이어 공격 데미지 배율 가져오기
+# 이제 weak는 사용하지 않고 damage_multiplier만 사용한다.
+#
+# damage_multiplier가 없으면 기본 1.0으로 처리한다.
+# 즉, enemies.json에서 실수로 빠져도 일반 부위로 작동한다.
+func get_hitbox_damage_multiplier(hitbox):
+	if hitbox == null:
+		return 1.0
+
+	if typeof(hitbox) != TYPE_DICTIONARY:
+		return 1.0
+
+	return max(float(hitbox.get("damage_multiplier", 1.0)), 0.0)
+# 히트박스가 약점 판정인지 확인
+# damage_multiplier가 1.0보다 클 때만 약점 취급한다.
+func is_hitbox_weak_hit(hitbox):
+	return get_hitbox_damage_multiplier(hitbox) > 1.0
+# 히트박스가 노데미지 부위인지 확인
+func is_hitbox_no_damage(hitbox):
+	return get_hitbox_damage_multiplier(hitbox) <= 0.0
 # 플레이어 공격 데미지 결과 데이터 생성 함수
 func make_player_attack_damage_result(hitbox):
 	var base_damage = get_player_attack_damage()
-	var is_weak = bool(hitbox.get("weak", false))
+	var damage_multiplier = get_hitbox_damage_multiplier(hitbox)
+	var is_weak = is_hitbox_weak_hit(hitbox)
 	var is_critical = is_player_attack_critical()
-	var final_damage = base_damage
+	var is_no_damage = is_hitbox_no_damage(hitbox)
+	var final_damage = float(base_damage)
 
-	if is_critical:
-		final_damage *= get_critical_multiplier()
+	# 노데미지 부위는 치명타가 떠도 무조건 0 데미지
+	if is_no_damage:
+		final_damage = 0.0
+	else:
+		if is_critical:
+			final_damage *= get_critical_multiplier()
 
-	if is_weak:
-		final_damage *= 2
+		final_damage *= damage_multiplier
 
 	return {
 		"damage": int(final_damage),
 		"is_weak": is_weak,
-		"is_critical": is_critical
+		"is_critical": is_critical,
+		"is_no_damage": is_no_damage,
+		"damage_multiplier": damage_multiplier
 	}
 # 플레이어 공격 결과 데미지 가져오기 함수
 func get_player_attack_result_damage(damage_result):
@@ -4572,8 +4629,17 @@ func is_player_attack_result_weak(damage_result):
 # 플레이어 공격 결과 치명타 여부 가져오기 함수
 func is_player_attack_result_critical(damage_result):
 	return bool(damage_result.get("is_critical", false))
+# 플레이어 공격 결과가 노데미지 부위인지 확인
+func is_player_attack_result_no_damage(damage_result):
+	return bool(damage_result.get("is_no_damage", false))
 # 플레이어 공격 히트 사운드 재생 함수
-func play_player_attack_hit_sound(is_weak, is_critical):
+func play_player_attack_hit_sound(is_weak, is_critical, is_no_damage = false):
+	# 완전 방어 부위는 치명타/약점 여부와 상관없이 block_sound 우선
+	if is_no_damage:
+		if block_sound != null:
+			block_sound.play()
+		return
+
 	if is_weak or is_critical:
 		if hit_red_sound != null:
 			hit_red_sound.play()
@@ -4600,26 +4666,28 @@ func play_player_attack_hit_feedback(damage, is_special_hit):
 
 	start_enemy_hit_feedback()
 # 플레이어 본체 공격 결과 텍스트 표시 함수
-func show_player_attack_body_hit_text(hitbox_name, damage, is_weak, is_critical):
+func show_player_attack_body_hit_text(hitbox_name, damage, is_weak, is_critical, is_no_damage = false):
 	set_battle_text(
 		make_player_attack_body_hit_text(
 			hitbox_name,
 			damage,
 			is_weak,
-			is_critical
+			is_critical,
+			is_no_damage
 		)
 	)
 # 플레이어 파츠 공격 결과 텍스트 표시 함수
-func show_player_attack_part_hit_text(hitbox_name, damage, is_critical):
+func show_player_attack_part_hit_text(hitbox_name, damage, is_critical, is_no_damage = false):
 	set_battle_text(
 		make_player_attack_part_hit_text(
 			hitbox_name,
 			damage,
-			is_critical
+			is_critical,
+			is_no_damage
 		)
 	)
 # 플레이어 공격 후 파츠 파괴 여부 처리 함수
-func process_part_destroy_after_player_attack(part_id, hitbox_name, damage, is_critical):
+func process_part_destroy_after_player_attack(part_id, hitbox_name, damage, is_critical, is_no_damage = false):
 	if not enemy_part_hp.has(part_id):
 		return
 
@@ -4630,7 +4698,8 @@ func process_part_destroy_after_player_attack(part_id, hitbox_name, damage, is_c
 	show_player_attack_part_hit_text(
 		hitbox_name,
 		damage,
-		is_critical
+		is_critical,
+		is_no_damage
 	)
 # 플레이어 공격 적용 함수
 func apply_player_attack_hit(hitbox):
@@ -4645,20 +4714,22 @@ func apply_player_attack_hit(hitbox):
 	var damage = get_player_attack_result_damage(damage_result)
 	var is_weak = is_player_attack_result_weak(damage_result)
 	var is_critical = is_player_attack_result_critical(damage_result)
+	var is_no_damage = is_player_attack_result_no_damage(damage_result)
 
-	play_player_attack_hit_sound(is_weak, is_critical)
+	play_player_attack_hit_sound(is_weak, is_critical, is_no_damage)
 	apply_player_attack_damage_to_body(damage)
 
 	play_player_attack_hit_feedback(
 		damage,
-		is_weak or is_critical
+		(is_weak or is_critical) and not is_no_damage
 	)
 
 	show_player_attack_body_hit_text(
 		hitbox_name,
 		damage,
 		is_weak,
-		is_critical
+		is_critical,
+		is_no_damage
 	)
 # 플레이어 공격 빗나감 결과 처리 함수
 func process_player_attack_miss_result():
@@ -4666,7 +4737,7 @@ func process_player_attack_miss_result():
 		return
 
 	set_battle_text(make_player_attack_miss_text())
-# 플레이어 공격 후 결과 대기 함수
+# 플레이어 공격 후 결과 대기 함수s
 func wait_after_player_attack_result():
 	await get_tree().create_timer(1.0).timeout
 # 플레이어 공격 후 적 처치 확인 함수

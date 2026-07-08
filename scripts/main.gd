@@ -10662,26 +10662,68 @@ func is_valid_encounter_data(encounter):
 		return false
 
 	return true
+# 인카운터 조건용 flag 목록 가져오기
+# 문자열 1개와 배열 둘 다 지원한다.
+func get_encounter_condition_flags(encounter, key_name):
+	var result = []
+
+	if encounter == null:
+		return result
+
+	if typeof(encounter) != TYPE_DICTIONARY:
+		return result
+
+	if not encounter.has(key_name):
+		return result
+
+	var value = encounter[key_name]
+
+	if typeof(value) == TYPE_STRING:
+		var flag_id = str(value).strip_edges()
+
+		if flag_id != "":
+			result.append(flag_id)
+
+	elif typeof(value) == TYPE_ARRAY:
+		for flag_value in value:
+			var flag_id = str(flag_value).strip_edges()
+
+			if flag_id != "":
+				result.append(flag_id)
+
+	return result
 # 인카운터 후보가 현재 플래그 조건에 맞는지 확인하는 함수
 func can_use_encounter_candidate(encounter):
 	if not is_valid_encounter_data(encounter):
 		return false
 
-	var enemy_id = encounter.get("enemy", "")
+	var enemy_id = str(encounter.get("enemy", ""))
 	var enemy_data = get_enemy_data_by_id(enemy_id, false)
 
 	if enemy_data.is_empty():
 		return false
 
-	var required_flag = str(encounter.get("required_flag", ""))
+	# required_flag는 전부 가지고 있어야 한다.
+	# 예:
+	# "required_flag": "flag_a"
+	# "required_flag": ["flag_a", "flag_b"]
+	for flag_id in get_encounter_condition_flags(encounter, "required_flag"):
+		if not has_flag(flag_id):
+			return false
 
-	if required_flag != "" and not has_flag(required_flag):
-		return false
+	# missing_flag는 전부 없어야 한다.
+	# 예:
+	# "missing_flag": "flag_a"
+	# "missing_flag": ["flag_a", "flag_b"]
+	for flag_id in get_encounter_condition_flags(encounter, "missing_flag"):
+		if has_flag(flag_id):
+			return false
 
-	var missing_flag = str(encounter.get("missing_flag", ""))
-
-	if missing_flag != "" and has_flag(missing_flag):
-		return false
+	# 다른 시스템 이름과 맞추고 싶을 때를 위한 예비 지원
+	# "required_flag_missing"도 missing_flag처럼 처리한다.
+	for flag_id in get_encounter_condition_flags(encounter, "required_flag_missing"):
+		if has_flag(flag_id):
+			return false
 
 	var skip_flag = str(enemy_data.get("skip_if_flag", ""))
 
