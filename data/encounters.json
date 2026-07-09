@@ -91,5 +91,23 @@
 			"missing_flag": "",
 			"first_turn": ""
 		}
+	],
+	"school_hallway_04": [
+		{
+			"enemy": "combined_candle_students_charger",
+			"weight": 20,
+			"required_flag": [
+				"opened_school_stairs_hall_04"
+			],
+			"missing_flag": "",
+			"first_turn": "enemy"
+		},
+		{
+			"enemy": "ghost",
+			"weight": 10,
+			"required_flag": "opened_school_stairs_hall_04",
+			"missing_flag": "",
+			"first_turn": ""
+		}
 	]
 }

@@ -5959,7 +5959,7 @@ func effect(sound_effect, shake_effect, fade_effect, direction, footstep_data = 
 			fade,
 			"color:a",
 			0.0,
-			3.3
+			2.3
 		)
 	
 	await get_tree().create_timer(0.3).timeout

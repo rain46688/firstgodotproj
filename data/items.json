@@ -277,6 +277,16 @@
 		"effect_scope": "inventory",
 		"stackable": false
 	},
+	"craw_body": {
+		"name": "까마귀 시체",
+		"description": "죽어있는 까마귀의 시체이다.",
+		"image": "res://imgs/items/craw_180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "etc",
+		"effect_scope": "inventory",
+		"stackable": false
+	},
 	"old_water_ball": {
 		"name": "오래된 워터볼",
 		"description": "흐릿한 물속에 무언가가 흔들리고 있다.소지시 장착한 무기의 최소 공격력이 3 증가한다.",
