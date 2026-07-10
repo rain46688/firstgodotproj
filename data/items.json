@@ -19,6 +19,26 @@
 		"stackable": false,
 		"consumed_on_use": true
 	},
+	"classroom_key_c": {
+		"name": "교실키C",
+		"description": "어딘가의 교실 문을 열 수 있는 열쇠다.",
+		"image": "res://imgs/items/classroom_key180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "key",
+		"stackable": false,
+		"consumed_on_use": true
+	},
+	"classroom_key_d": {
+		"name": "교실키D",
+		"description": "어딘가의 교실 문을 열 수 있는 열쇠다.",
+		"image": "res://imgs/items/classroom_key180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "key",
+		"stackable": false,
+		"consumed_on_use": true
+	},
 	"master_key": {
 		"name": "만능키",
 		"description": "이걸로 웬만한 문을 열 수 있을 거 같다.",
@@ -31,6 +51,16 @@
 	},
 	"schoolhall_key_a": {
 		"name": "철제키A",
+		"description": "이걸로 학교 중앙홀 철제 문을 열 수 있을 거 같다.",
+		"image": "res://imgs/items/metal_key180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "key",
+		"stackable": false,
+		"consumed_on_use": true
+	},
+	"schoolhall_key_b": {
+		"name": "철제키B",
 		"description": "이걸로 학교 중앙홀 철제 문을 열 수 있을 거 같다.",
 		"image": "res://imgs/items/metal_key180x180.png",
 		"width": 1,

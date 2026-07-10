@@ -7666,7 +7666,105 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "000"
+				"text": "모니터 화면이 거칠게 깜빡이더니, 화면 중앙에 미세한 균열이 가기 시작한다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/squeeze_sound.mp3",
+				"volume_db": 0,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "물리적인 액정 유리가 깨지는 소리가 아닌, 무언가 '찢어지는' 듯한 기괴한 소리다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "쩌적... 쩌어억..."
+			},
+			{
+				"type": "screen_color",
+				"color": "#002060",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/monitor_mimic.mp3",
+				"volume_db": 0,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "모니터 화면 한가운데가 마치 살아있는 유기체의 피부처럼 양옆으로 갈라진다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#002060",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/monitor_mimic.mp3",
+				"volume_db": 3,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "갈라진 틈새 사이로, 빛을 흡수하는 듯한 완전한 칠흑색의 액체가 부글거리며 흘러나오기 시작한다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#002060",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/monitor_mimic.mp3",
+				"volume_db": 5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "불과 몇 초도 안되는 찰나였다 거대한 입을 벌리며 무언가가 돌진해온다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/monitor_mimic.mp3",
+				"volume_db": 8,
+				"wait": true
 			},
 			{
 				"type": "stop_bgm"
@@ -7683,8 +7781,8 @@
 			},
 			{
 				"type": "start_battle",
-				"enemy": "monitor_mimic_pride",
-				"first_turn": "player"
+				"enemy": "monitor_mimic_school",
+				"first_turn": "enemy"
 			}
 		]
 	}

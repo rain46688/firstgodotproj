@@ -3653,6 +3653,125 @@ func show_npc_dialogue(character_id, emotion, text):
 		speaker_portrait.texture = null
 
 	await show_dialogue(text, "npc")
+# ============================================================
+# 조건부 이벤트 분기 함수 모음
+# ============================================================
+
+# 조건부 이벤트에서 사용할 플래그 목록 가져오기
+# 문자열 1개 또는 배열을 모두 지원한다.
+func get_conditional_event_flags(condition_data, key_name):
+	var result = []
+
+	if condition_data == null:
+		return result
+
+	if typeof(condition_data) != TYPE_DICTIONARY:
+		return result
+
+	if not condition_data.has(key_name):
+		return result
+
+	var value = condition_data[key_name]
+
+	# 플래그 하나만 지정한 경우
+	if typeof(value) == TYPE_STRING:
+		var flag_id = str(value).strip_edges()
+
+		if flag_id != "":
+			result.append(flag_id)
+
+	# 플래그 여러 개를 배열로 지정한 경우
+	elif typeof(value) == TYPE_ARRAY:
+		for flag_value in value:
+			var flag_id = str(flag_value).strip_edges()
+
+			if flag_id != "":
+				result.append(flag_id)
+
+	return result
+# 조건부 이벤트 branch가 현재 플래그 조건과 일치하는지 확인
+func is_conditional_event_branch_matched(branch):
+	if branch == null:
+		return false
+
+	if typeof(branch) != TYPE_DICTIONARY:
+		return false
+
+	# required_flag에 등록된 플래그는 전부 있어야 한다.
+	#
+	# "required_flag": "flag_a"
+	# "required_flag": ["flag_a", "flag_b"]
+	for flag_id in get_conditional_event_flags(
+		branch,
+		"required_flag"
+	):
+		if not has_flag(flag_id):
+			return false
+
+	# required_flag_missing에 등록된 플래그는 전부 없어야 한다.
+	#
+	# "required_flag_missing": "flag_a"
+	# "required_flag_missing": ["flag_a", "flag_b"]
+	for flag_id in get_conditional_event_flags(
+		branch,
+		"required_flag_missing"
+	):
+		if has_flag(flag_id):
+			return false
+
+	return true
+# 조건부 이벤트 branch의 events 배열 가져오기
+func get_conditional_event_branch_events(branch):
+	if branch == null:
+		return []
+
+	if typeof(branch) != TYPE_DICTIONARY:
+		return []
+
+	var branch_events = branch.get("events", [])
+
+	if typeof(branch_events) != TYPE_ARRAY:
+		return []
+
+	return branch_events
+# 조건부 이벤트 실행
+#
+# branches를 위에서부터 검사하며,
+# 처음 조건이 맞는 branch 하나만 실행한다.
+#
+# 조건에 맞는 branch가 없으면 default_events를 실행한다.
+func run_conditional_events(event):
+	if event == null:
+		return
+
+	if typeof(event) != TYPE_DICTIONARY:
+		return
+
+	var branches = event.get("branches", [])
+
+	if typeof(branches) == TYPE_ARRAY:
+		for branch in branches:
+			if not is_conditional_event_branch_matched(branch):
+				continue
+
+			var branch_events = get_conditional_event_branch_events(
+				branch
+			)
+
+			if branch_events.size() > 0:
+				await run_events(branch_events)
+
+			# 조건이 맞는 첫 번째 branch만 실행
+			return
+
+	# 어떤 branch 조건에도 맞지 않은 경우
+	var default_events = event.get("default_events", [])
+
+	if typeof(default_events) != TYPE_ARRAY:
+		return
+
+	if default_events.size() > 0:
+		await run_events(default_events)
 # 일반 이벤트 1개 실행 함수 (상호작용 이벤트 json 연결 부분)
 func run_single_event(event):
 	if event == null:
@@ -3757,6 +3876,9 @@ func run_single_event(event):
 
 	elif event_type == "flag":
 		set_flag(event.get("flag", ""))
+	
+	elif event_type == "conditional_events":
+		await run_conditional_events(event)
 
 	elif event_type == "choices":
 		await run_event_choices(event.get("choices", []))
