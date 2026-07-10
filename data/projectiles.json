@@ -126,5 +126,55 @@
 				180
 			]
 		}
+	},
+	"pierce": {
+		"name": "관통",
+		"frames_path": "res://imgs/effects/pierce/pierce_",
+		"frame_count": 9,
+		"frame_time": 0.04,
+		"size": [
+			200,
+			200
+		],
+		"speed": 1500,
+		"life_time": 0.9,
+		"max_distance": 1000,
+		"base_direction": "up",
+		"sound": "slash",
+		"hitbox": {
+			"offset": [
+				55,
+				5
+			],
+			"size": [
+				90,
+				90
+			]
+		}
+	},
+	"electric_bullet": {
+		"name": "전격",
+		"frames_path": "res://imgs/effects/electric_bullet/electric_bullet_",
+		"frame_count": 9,
+		"frame_time": 0.04,
+		"size": [
+			137,
+			300
+		],
+		"speed": 1500,
+		"life_time": 0.9,
+		"max_distance": 1000,
+		"base_direction": "up",
+		"sound": "electric",
+		"hitbox": {
+			"offset": [
+				28,
+				0
+			],
+			"size": [
+				80,
+				160
+			]
+		}
 	}
 }

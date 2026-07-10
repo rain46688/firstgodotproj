@@ -50,6 +50,8 @@ signal battle_finished(result_data)
 @onready var status_effect_sound = $StatusEffectSound
 @onready var center_panel = $CenterPanel
 @onready var ui_warp_sound = $UiWarpSound
+@onready var electric_sound = $ElectricSound
+# 발사체 사운드 추가 후에는 반드시 재생 함수에 넣어줘야된다!
 
 # 일반 변수 모음
 var player_hp = 0
@@ -171,7 +173,7 @@ var enemy_sprite_default_position = Vector2.ZERO
 var battle_difficulty = "normal"
 
 # 패링 판정 처리 부분
-# parry_input_buffer_time 0.04
+# parry_input_buffer_time 0.05
 # parry_height 6
 
 # 플레이어 턴이 몇 번 시작됐는지 세는 변수
@@ -370,7 +372,7 @@ func update_defense_mode_input(delta):
 	
 	# 패링 판정 처리 부분 1
 	if Input.is_action_just_pressed("ui_accept"):
-		parry_input_buffer_time = 0.04
+		parry_input_buffer_time = 0.05
 
 	if parry_input_buffer_time > 0:
 		parry_input_buffer_time -= delta
@@ -3933,14 +3935,14 @@ func change_enemy_phase():
 # 적 패턴 경고 텍스트 생성 함수
 func get_enemy_pattern_warning_text(pattern):
 	if pattern == null:
-		return get_current_enemy_name() + "이(가) 공격하려고 한다..."
+		return get_current_enemy_name() + " 이(가) 공격하려고 한다..."
 
 	if typeof(pattern) != TYPE_DICTIONARY:
-		return get_current_enemy_name() + "이(가) 공격하려고 한다..."
+		return get_current_enemy_name() + " 이(가) 공격하려고 한다..."
 
 	return str(pattern.get(
 		"warning_text",
-		get_current_enemy_name() + "이(가) 공격하려고 한다..."
+		get_current_enemy_name() + " 이(가) 공격하려고 한다..."
 	))
 # 적 패턴 데이터 유효성 확인 함수
 func is_valid_enemy_pattern_data(pattern):
@@ -4822,6 +4824,11 @@ func play_projectile_sound(sound_id):
 		if shot_sound != null:
 			shot_sound.stop()
 			shot_sound.play()
+			
+	elif sound_id == "electric":
+		if electric_sound != null:
+			electric_sound.stop()
+			electric_sound.play()
 # 현재 플레이어 공격 투사체 크기 가져오기 함수
 func get_current_attack_projectile_size():
 	var projectile_size = current_projectile_data.get("size", [200, 200])
@@ -5004,12 +5011,41 @@ func move_player_attack_projectile_one_frame(projectile_speed, projectile_frame_
 # 플레이어 공격 투사체 디버그 표시 함수
 func update_player_attack_projectile_debug():
 	if not debug_mode:
+		player_attack_hitbox_debug.visible = false
 		return
 
-	var attack_rect = get_player_attack_hit_rect()
+	var hitbox_offset = get_player_attack_hitbox_offset()
+	var hitbox_size = get_player_attack_hitbox_size()
+
+	var projectile_transform = slash_effect.get_global_transform()
+
+	# 회전이 적용된 히트박스 왼쪽 위 전역 좌표
+	var hitbox_global_position = projectile_transform * hitbox_offset
+
+	var debug_parent = player_attack_hitbox_debug.get_parent()
+	var debug_parent_inverse = debug_parent.get_global_transform().affine_inverse()
+
+	# HitboxDebugContainer 로컬 좌표로 변환
+	var debug_local_position = (
+		debug_parent_inverse * hitbox_global_position
+	)
+
+	var projectile_global_rotation = (
+		slash_effect.get_global_transform().get_rotation()
+	)
+
+	var debug_parent_global_rotation = (
+		debug_parent.get_global_transform().get_rotation()
+	)
+
 	player_attack_hitbox_debug.visible = true
-	player_attack_hitbox_debug.position = attack_rect.position
-	player_attack_hitbox_debug.size = attack_rect.size
+	player_attack_hitbox_debug.size = hitbox_size
+	player_attack_hitbox_debug.pivot_offset = Vector2.ZERO
+	player_attack_hitbox_debug.position = debug_local_position
+	player_attack_hitbox_debug.rotation = (
+		projectile_global_rotation
+		- debug_parent_global_rotation
+	)
 # 플레이어 공격 투사체 충돌 처리 함수
 func process_player_attack_projectile_collision():
 	var weapon_data = get_current_weapon_data()
@@ -5107,15 +5143,122 @@ func get_player_attack_hitbox_size():
 		hitbox_data.get("size", [90, 90]),
 		Vector2(90, 90)
 	)
-# 플레이어 공격 히트박스 함수 
-func get_player_attack_hit_rect():
-	var rect = slash_effect.get_global_rect()
+# 플레이어 공격 히트박스의 회전된 전역 좌표 4개 반환
+func get_player_attack_hit_polygon():
 	var hitbox_offset = get_player_attack_hitbox_offset()
 	var hitbox_size = get_player_attack_hitbox_size()
 
+	# slash_effect 내부 로컬 좌표 기준 히트박스 꼭짓점
+	var local_points = PackedVector2Array([
+		hitbox_offset,
+		hitbox_offset + Vector2(hitbox_size.x, 0),
+		hitbox_offset + hitbox_size,
+		hitbox_offset + Vector2(0, hitbox_size.y)
+	])
+
+	var global_points = PackedVector2Array()
+	var projectile_transform = slash_effect.get_global_transform()
+
+	# 투사체의 위치, 회전, pivot_offset이 적용된 전역 좌표로 변환
+	for point in local_points:
+		global_points.append(projectile_transform * point)
+
+	return global_points
+# Rect2를 사각형 폴리곤으로 변환
+func rect_to_polygon(rect):
+	return PackedVector2Array([
+		rect.position,
+		rect.position + Vector2(rect.size.x, 0),
+		rect.position + rect.size,
+		rect.position + Vector2(0, rect.size.y)
+	])
+# 폴리곤의 충돌 검사 축 목록 생성
+func get_polygon_collision_axes(polygon):
+	var axes = []
+
+	if polygon.size() < 2:
+		return axes
+
+	for i in range(polygon.size()):
+		var current_point = polygon[i]
+		var next_point = polygon[(i + 1) % polygon.size()]
+		var edge = next_point - current_point
+
+		if edge.length_squared() <= 0.0001:
+			continue
+
+		var axis = Vector2(-edge.y, edge.x).normalized()
+		axes.append(axis)
+
+	return axes
+# 하나의 축에 폴리곤을 투영한 최소/최대값 반환
+func project_polygon_to_axis(polygon, axis):
+	if polygon.size() == 0:
+		return Vector2.ZERO
+
+	var min_projection = polygon[0].dot(axis)
+	var max_projection = min_projection
+
+	for i in range(1, polygon.size()):
+		var projection = polygon[i].dot(axis)
+
+		min_projection = min(min_projection, projection)
+		max_projection = max(max_projection, projection)
+
+	return Vector2(min_projection, max_projection)
+# 두 볼록 폴리곤이 서로 겹치는지 SAT 방식으로 검사
+func do_convex_polygons_intersect(polygon_a, polygon_b):
+	if polygon_a.size() < 3:
+		return false
+
+	if polygon_b.size() < 3:
+		return false
+
+	var axes = get_polygon_collision_axes(polygon_a)
+	axes.append_array(get_polygon_collision_axes(polygon_b))
+
+	for axis in axes:
+		var projection_a = project_polygon_to_axis(polygon_a, axis)
+		var projection_b = project_polygon_to_axis(polygon_b, axis)
+
+		# 분리되는 축이 하나라도 있으면 충돌하지 않음
+		if (
+			projection_a.y < projection_b.x
+			or projection_b.y < projection_a.x
+		):
+			return false
+
+	return true
+# 회전된 플레이어 공격 히트박스와 적 Rect2 충돌 검사
+func does_player_attack_polygon_intersect_rect(attack_polygon, target_rect):
+	var target_polygon = rect_to_polygon(target_rect)
+
+	return do_convex_polygons_intersect(
+		attack_polygon,
+		target_polygon
+	)
+# 회전된 공격 히트박스를 전부 포함하는 AABB 반환
+# 실제 충돌 판정은 get_player_attack_hit_polygon()을 사용한다.
+func get_player_attack_hit_rect():
+	var polygon = get_player_attack_hit_polygon()
+
+	if polygon.size() == 0:
+		return Rect2()
+
+	var min_x = polygon[0].x
+	var max_x = polygon[0].x
+	var min_y = polygon[0].y
+	var max_y = polygon[0].y
+
+	for point in polygon:
+		min_x = min(min_x, point.x)
+		max_x = max(max_x, point.x)
+		min_y = min(min_y, point.y)
+		max_y = max(max_y, point.y)
+
 	return Rect2(
-		rect.position + hitbox_offset,
-		hitbox_size
+		Vector2(min_x, min_y),
+		Vector2(max_x - min_x, max_y - min_y)
 	)
 # 플레이어 공격에 맞은 히트박스 고유 ID 생성 함수
 func get_attack_hitbox_unique_id(hitbox):
@@ -5224,31 +5367,30 @@ func append_attack_collided_hitboxes(results, hitboxes):
 
 		results.append(hitbox)
 # 본체 공격 충돌 대상 수집 함수
-func collect_body_attack_collisions(attack_rect):
-	return get_attack_collided_body_hitboxes(attack_rect)
+func collect_body_attack_collisions(attack_polygon):
+	return get_attack_collided_body_hitboxes(attack_polygon)
 # 파츠 공격 충돌 대상 수집 함수
-func collect_part_attack_collisions(attack_rect):
-	return get_attack_collided_part_hitboxes(attack_rect)
+func collect_part_attack_collisions(attack_polygon):
+	return get_attack_collided_part_hitboxes(attack_polygon)
 # 플레이어 공격 충돌 대상 전체 수집 함수
-func collect_attack_collisions(attack_rect):
+func collect_attack_collisions(attack_polygon):
 	var results = []
 
 	append_attack_collided_hitboxes(
 		results,
-		collect_body_attack_collisions(attack_rect)
+		collect_body_attack_collisions(attack_polygon)
 	)
 
 	append_attack_collided_hitboxes(
 		results,
-		collect_part_attack_collisions(attack_rect)
+		collect_part_attack_collisions(attack_polygon)
 	)
 
-	return results
-# 플레이어 공격 투사체 히트 판정 체크 함수
+	return results# 플레이어 공격 투사체 히트 판정 체크 함수
 func get_attack_collided_hitboxes():
-	var attack_rect = get_player_attack_hit_rect()
+	var attack_polygon = get_player_attack_hit_polygon()
 
-	return collect_attack_collisions(attack_rect)
+	return collect_attack_collisions(attack_polygon)
 # 적 파츠 공격 충돌 hitbox 데이터 생성 함수
 func make_part_attack_hitbox_copy(part_id):
 	var hitbox = get_enemy_part_hitbox_by_part_id(part_id)
@@ -5261,8 +5403,8 @@ func make_part_attack_hitbox_copy(part_id):
 	copied_hitbox["part_id"] = part_id
 
 	return copied_hitbox
-# 몸체 히트 박스 함수
-func get_attack_collided_body_hitboxes(attack_rect):
+# 적 본체와 회전된 플레이어 공격 히트박스 충돌 검사
+func get_attack_collided_body_hitboxes(attack_polygon):
 	var results = []
 	var body_hitboxes = get_current_enemy_body_hitboxes()
 	var enemy_rect = enemy_sprite.get_global_rect()
@@ -5272,9 +5414,15 @@ func get_attack_collided_body_hitboxes(attack_rect):
 			continue
 
 		var rect_data = get_hitbox_rect_data(hitbox)
-		var hitbox_rect = make_scaled_hitbox_rect(enemy_rect, rect_data)
+		var hitbox_rect = make_scaled_hitbox_rect(
+			enemy_rect,
+			rect_data
+		)
 
-		if attack_rect.intersects(hitbox_rect):
+		if does_player_attack_polygon_intersect_rect(
+			attack_polygon,
+			hitbox_rect
+		):
 			var copied_hitbox = make_body_hitbox_copy(hitbox)
 			results.append(copied_hitbox)
 
@@ -5292,18 +5440,24 @@ func make_part_attack_hitbox_rect(part_id, enemy_rect):
 		return Rect2()
 
 	return make_scaled_hitbox_rect(enemy_rect, rect_data)
-# 파츠 히트 박스 함수
-func get_attack_collided_part_hitboxes(attack_rect):
+# 적 파츠와 회전된 플레이어 공격 히트박스 충돌 검사
+func get_attack_collided_part_hitboxes(attack_polygon):
 	var results = []
 	var enemy_rect = enemy_sprite.get_global_rect()
 
 	for part_id in get_active_enemy_part_ids():
-		var hitbox_rect = make_part_attack_hitbox_rect(part_id, enemy_rect)
+		var hitbox_rect = make_part_attack_hitbox_rect(
+			part_id,
+			enemy_rect
+		)
 
 		if hitbox_rect.size == Vector2.ZERO:
 			continue
 
-		if not attack_rect.intersects(hitbox_rect):
+		if not does_player_attack_polygon_intersect_rect(
+			attack_polygon,
+			hitbox_rect
+		):
 			continue
 
 		var copied_hitbox = make_part_attack_hitbox_copy(part_id)
