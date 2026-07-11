@@ -295,6 +295,12 @@ var click_rect_debug_dragging = false
 var click_rect_debug_start_pos = Vector2.ZERO
 var click_rect_debug_preview = null
 
+# 현재 재생 중인 ID 기반 스토리 사운드
+#
+# key   : sound 이벤트의 id
+# value : 생성된 AudioStreamPlayer
+var active_story_sounds = {}
+
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
 const MSG_NO_BACK = "더 이상 뒤로 갈 수 없다..."
@@ -407,9 +413,15 @@ func _process(delta):
 		
 	# 인벤토리 정리 화면이 열려 있으면 정리 화면 입력만 처리
 	if is_inventory_arrange_open:
+		# 창고 / 상점에서 방향키 좌우 또는 A/D로 페이지 이동
+		if handle_arrange_page_keyboard_input():
+			return
+
 		if not is_arrange_dragging_item:
 			if arrange_pressed_item != null and arrange_pressed_button != null:
-				var distance = get_global_mouse_position().distance_to(arrange_pressed_mouse_position)
+				var distance = get_global_mouse_position().distance_to(
+					arrange_pressed_mouse_position
+				)
 
 				if distance > 12:
 					start_arrange_drag_item(
@@ -419,12 +431,17 @@ func _process(delta):
 					)
 
 		if is_arrange_dragging_item and arrange_dragged_button != null:
-			arrange_dragged_button.global_position = get_global_mouse_position() - arrange_dragged_button.size / 2
+			arrange_dragged_button.global_position = (
+				get_global_mouse_position()
+				- arrange_dragged_button.size / 2
+			)
+
 			update_arrange_drag_slot_highlight()
 
 		if Input.is_action_just_pressed("esc"):
 			close_inventory_arrange()
-		return	
+
+		return
 
 	# 인벤토리가 열려 있으면 게임 이동/상호작용 입력을 막음
 	if is_inventory_open:
@@ -794,6 +811,10 @@ func start_battle(enemy_id, first_turn = "", battle_context = {}):
 	
 	is_story_playing = true
 	hide_game_ui()
+	
+	# 스토리에서 검은 화면 등을 사용했더라도
+	# 전투 씬으로 넘어갈 때는 자동으로 투명하게 초기화한다.
+	reset_story_color_overlay_for_battle()
 
 	var battle_scene_resource = load(BATTLE_SCENE_PATH)
 	battle_scene = battle_scene_resource.instantiate()
@@ -3356,6 +3377,16 @@ func set_interaction_buttons_disabled(disabled):
 # 플래그 보유 여부 확인 함수
 func has_flag(flag_id):
 	return flags.has(flag_id) and flags[flag_id] == true
+# 플래그 제거 함수
+func clear_flag(flag_id):
+	var flag_text = str(flag_id).strip_edges()
+
+	if flag_text == "":
+		return
+
+	if flags.has(flag_text):
+		flags.erase(flag_text)
+		print("플래그 제거: " + flag_text)
 # 플래그 설정 함수
 func set_flag(flag_id):
 	flags[flag_id] = true
@@ -3657,7 +3688,7 @@ func show_npc_dialogue(character_id, emotion, text):
 # 조건부 이벤트 분기 함수 모음
 # ============================================================
 
-# 조건부 이벤트에서 사용할 플래그 목록 가져오기
+# 조건부 이벤트에서 사용할 플래그 목록 가져오기 
 # 문자열 1개 또는 배열을 모두 지원한다.
 func get_conditional_event_flags(condition_data, key_name):
 	var result = []
@@ -3800,11 +3831,22 @@ func run_single_event(event):
 		await play_story_sound(
 			event.get("path", ""),
 			float(event.get("volume_db", 0.0)),
-			bool(event.get("wait", false))
-		)	
+			bool(event.get("wait", false)),
+			event.get(
+				"id",
+				event.get("sound_id", "")
+			),
+			bool(event.get("loop", false))
+		)
+
+	elif event_type == "stop_sound":
+		await run_stop_story_sound_event(event)	
 	
 	elif event_type == "document_popup":
 		await run_document_popup_event(event)
+		
+	elif event_type == "document_dialogue":
+		await run_document_dialogue_event(event)
 		
 	elif event_type == "input_prompt":
 		await run_input_prompt_event(event)
@@ -3876,6 +3918,9 @@ func run_single_event(event):
 
 	elif event_type == "flag":
 		set_flag(event.get("flag", ""))
+		
+	elif event_type == "clear_flag":
+		clear_flag(event.get("flag", ""))
 	
 	elif event_type == "conditional_events":
 		await run_conditional_events(event)
@@ -4304,7 +4349,7 @@ func hide_game_ui():
 		move_arrows[dir].visible = false
 
 	set_interaction_buttons_disabled(true)
-# 스토리 이벤트 종료 후 게임 UI 복구 함수
+# 스토리 이벤트 종료 후 게임 UI 복구 함수 
 func show_game_ui():
 	await hide_story_standing()
 
@@ -4417,8 +4462,16 @@ func run_single_story_event(event):
 		await play_story_sound(
 			event.get("path", ""),
 			float(event.get("volume_db", 0.0)),
-			bool(event.get("wait", false))
+			bool(event.get("wait", false)),
+			event.get(
+				"id",
+				event.get("sound_id", "")
+			),
+			bool(event.get("loop", false))
 		)
+
+	elif event_type == "stop_sound":
+		await run_stop_story_sound_event(event)
 		
 	elif event_type == "heal_player":
 		await run_player_heal_event(event)
@@ -5185,6 +5238,18 @@ func run_story_screen_color_clear_event(event):
 
 	if should_wait:
 		await tween.finished
+# 전투 시작 전 스토리 단일색 화면을 즉시 투명하게 초기화
+func reset_story_color_overlay_for_battle():
+	setup_story_color_overlay()
+
+	if story_color_overlay == null:
+		return
+
+	var clear_color = story_color_overlay.color
+	clear_color.a = 0.0
+
+	story_color_overlay.color = clear_color
+	story_color_overlay.visible = true
 # 스토리 카메라 트윈 정리 함수
 func kill_story_camera_tween():
 	if story_camera_tween != null and story_camera_tween.is_valid():
@@ -5399,13 +5464,43 @@ func get_next_document_popup_page_path(event, next_page):
 		return ""
 
 	return next_path
-# 문서 팝업 이벤트 실행 함수
+# 문서 팝업을 닫은 입력이 다음 대사로 전달되지 않도록
+# Space, 마우스 클릭, ESC 입력이 완전히 해제될 때까지 기다린다.
+func wait_for_document_popup_input_release():
+	while (
+		Input.is_action_pressed("ui_accept")
+		or Input.is_action_pressed("mouse_left")
+		or Input.is_action_pressed("esc")
+		or Input.is_action_pressed("ui_cancel")
+	):
+		await get_tree().process_frame
+
+	# 입력이 해제된 다음 한 프레임을 추가로 기다린다.
+	await get_tree().process_frame
+# 문서 팝업 표시 상태 초기화
+func close_document_popup():
+	if document_popup_layer != null:
+		document_popup_layer.visible = false
+
+	if document_popup_image != null:
+		document_popup_image.texture = null
+
+	is_document_popup_open = false
+# 일반 문서 팝업 이벤트 실행 함수
+#
+# 기존 기능:
+# - 문서 이미지만 표시
+# - 다음 문서 이미지가 있으면 넘김
+# - 마지막 페이지에서 close_on_last_page가 true면 닫음
+# - ESC로 언제든 닫을 수 있음
 func run_document_popup_event(event):
 	setup_document_popup_ui()
 
 	var first_path = str(event.get("path", ""))
 	var current_page = int(event.get("start_page", 1))
-	var close_on_last_page = bool(event.get("close_on_last_page", true))
+	var close_on_last_page = bool(
+		event.get("close_on_last_page", true)
+	)
 
 	if first_path == "":
 		push_error("document_popup 이벤트에 path 값이 없음")
@@ -5420,39 +5515,105 @@ func run_document_popup_event(event):
 	# 문서를 처음 열 때 사운드 재생
 	await play_document_popup_sound(event)
 
-	# 방금 대사를 넘긴 Space/마우스 입력이 남아있어
-	# 문서가 즉시 넘어가는 것을 방지하기 위해 한 프레임 대기
-	await get_tree().process_frame
+	# 문서를 열게 한 직전 입력이 문서 넘기기로 사용되지 않게 한다.
+	await wait_for_document_popup_input_release()
 
 	while is_document_popup_open:
 		await get_tree().process_frame
 
 		# ESC로 문서 닫기
-		if Input.is_action_just_pressed("esc") or Input.is_action_just_pressed("ui_cancel"):
+		if (
+			Input.is_action_just_pressed("esc")
+			or Input.is_action_just_pressed("ui_cancel")
+		):
 			await play_document_popup_sound(event)
 			break
 
 		# Space 또는 마우스 왼쪽 클릭으로 다음 장
-		if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("mouse_left"):
+		if (
+			Input.is_action_just_pressed("ui_accept")
+			or Input.is_action_just_pressed("mouse_left")
+		):
 			var next_page = current_page + 1
-			var next_path = get_next_document_popup_page_path(event, next_page)
+			var next_path = get_next_document_popup_page_path(
+				event,
+				next_page
+			)
 
-			# 다음 페이지가 있으면 넘김
+			# 다음 페이지가 있으면 이미지 변경
 			if next_path != "":
 				current_page = next_page
+
 				await play_document_popup_sound(event)
 				set_document_popup_image(next_path)
+
+				# 같은 입력이 다시 사용되는 것을 방지
+				await wait_for_document_popup_input_release()
 				continue
 
-			# 다음 페이지가 없고 close_on_last_page가 true면 닫기
+			# 다음 페이지가 없고 자동 닫기가 켜져 있으면 닫기
 			if close_on_last_page:
 				await play_document_popup_sound(event)
 				break
 
 	# 팝업 종료
-	document_popup_layer.visible = false
-	document_popup_image.texture = null
-	is_document_popup_open = false
+	close_document_popup()
+
+	# 팝업을 닫은 입력이 다음 text 이벤트를 넘기지 않도록 한다.
+	await wait_for_document_popup_input_release()
+# 문서 이미지를 화면에 계속 표시하면서
+# 내부의 대사 이벤트를 순서대로 실행하는 함수
+#
+# document_events 안에서는 주로 다음 이벤트를 사용한다.
+# - text
+# - portrait
+# - story_dialogue
+# - sound
+func run_document_dialogue_event(event):
+	setup_document_popup_ui()
+
+	var document_path = str(event.get("path", ""))
+	var document_events = event.get("document_events", [])
+
+	if document_path == "":
+		push_error("document_dialogue 이벤트에 path 값이 없음")
+		return
+
+	if typeof(document_events) != TYPE_ARRAY:
+		push_error(
+			"document_dialogue의 document_events가 Array가 아님"
+		)
+		return
+
+	if not set_document_popup_image(document_path):
+		return
+
+	is_document_popup_open = true
+	document_popup_layer.visible = true
+
+	# 문서 이미지보다 대화창이 위에 보이도록 잠시 z_index를 올린다.
+	var original_dialogue_z_index = dialogue_box.z_index
+
+	dialogue_box.z_index = document_popup_layer.z_index + 1
+
+	# 문서를 처음 열 때 종이 효과음 재생
+	await play_document_popup_sound(event)
+
+	# 문서를 열게 한 입력이 첫 대사로 전달되지 않도록 한다.
+	await wait_for_document_popup_input_release()
+
+	# 문서 이미지를 유지한 채 내부 대사 실행
+	if document_events.size() > 0:
+		await run_events(document_events)
+
+	# 대화창 레이어 원상 복구
+	dialogue_box.z_index = original_dialogue_z_index
+
+	# 내부 대사가 모두 끝나면 문서 이미지도 닫음
+	close_document_popup()
+
+	# 마지막 대사를 닫은 입력이 다음 외부 이벤트로 전달되지 않게 한다.
+	await wait_for_document_popup_input_release()
 
 # ============================================================
 # 입력 프롬프트 함수 모음
@@ -6090,40 +6251,297 @@ func update_player_status_ui():
 	var display_max_hp = clamp_player_hp_to_current_max()
 
 	player_hp_text.text = str(int(player_hp)) + " / " + str(int(display_max_hp))
-# 스토리 이벤트용 단발 효과음 재생 함수
-func play_story_sound(path, volume_db = 0.0, wait_until_finished = false):
-	if path == "":
+# ID 기반 스토리 사운드 Dictionary 등록 해제
+#
+# 같은 ID로 새로운 사운드가 재생된 경우,
+# 이전 사운드의 finished 신호가 새 사운드 등록까지 지우지 않도록
+# 저장된 플레이어가 동일할 때만 제거한다.
+func unregister_story_sound(sound_id, sound):
+	var sound_key = str(sound_id).strip_edges()
+
+	if sound_key == "":
 		return
 
-	var stream = load(path)
+	if not active_story_sounds.has(sound_key):
+		return
+
+	if active_story_sounds[sound_key] == sound:
+		active_story_sounds.erase(sound_key)
+# 재생이 끝난 스토리 사운드 노드 정리
+func cleanup_story_sound_player(sound_id, sound):
+	unregister_story_sound(sound_id, sound)
+
+	if sound == null:
+		return
+
+	if not is_instance_valid(sound):
+		return
+
+	sound.queue_free()
+# 특정 ID의 스토리 사운드 정지
+func stop_story_sound_by_id(sound_id, fade_time = 0.0):
+	var sound_key = str(sound_id).strip_edges()
+
+	if sound_key == "":
+		return
+
+	if not active_story_sounds.has(sound_key):
+		print("정지할 스토리 사운드가 없음: " + sound_key)
+		return
+
+	var sound = active_story_sounds[sound_key]
+
+	# 정지 요청과 동시에 Dictionary에서는 먼저 제거한다.
+	# 같은 ID의 새로운 사운드가 곧바로 재생될 수도 있기 때문이다.
+	active_story_sounds.erase(sound_key)
+
+	if sound == null:
+		return
+
+	if not is_instance_valid(sound):
+		return
+
+	# 페이드 도중 자연 종료 finished 신호가 발생해도
+	# 노드가 먼저 제거되지 않도록 표시한다.
+	sound.set_meta("manual_stop", true)
+
+	var safe_fade_time = max(float(fade_time), 0.0)
+
+	if safe_fade_time > 0.0 and sound.playing:
+		var tween = create_tween()
+
+		tween.tween_property(
+			sound,
+			"volume_db",
+			-80.0,
+			safe_fade_time
+		)
+
+		await tween.finished
+
+	if sound != null and is_instance_valid(sound):
+		sound.stop()
+		sound.queue_free()
+# 현재 ID로 등록된 모든 스토리 사운드 정지
+func stop_all_story_sounds(fade_time = 0.0):
+	var sounds = []
+
+	# Dictionary를 순회하면서 바로 erase하면 문제가 생길 수 있으므로
+	# 먼저 재생 노드 목록을 따로 복사한다.
+	for sound_id in active_story_sounds.keys():
+		var sound = active_story_sounds[sound_id]
+
+		if sound == null:
+			continue
+
+		if not is_instance_valid(sound):
+			continue
+
+		sound.set_meta("manual_stop", true)
+		sounds.append(sound)
+
+	active_story_sounds.clear()
+
+	if sounds.size() == 0:
+		return
+
+	var safe_fade_time = max(float(fade_time), 0.0)
+
+	if safe_fade_time > 0.0:
+		var tween = create_tween()
+		tween.set_parallel(true)
+
+		var has_fade_target = false
+
+		for sound in sounds:
+			if sound == null or not is_instance_valid(sound):
+				continue
+
+			if not sound.playing:
+				continue
+
+			has_fade_target = true
+
+			tween.tween_property(
+				sound,
+				"volume_db",
+				-80.0,
+				safe_fade_time
+			)
+
+		if has_fade_target:
+			await tween.finished
+
+	for sound in sounds:
+		if sound == null or not is_instance_valid(sound):
+			continue
+
+		sound.stop()
+		sound.queue_free()
+# stop_sound JSON 이벤트 실행
+func run_stop_story_sound_event(event):
+	var fade_time = max(
+		float(event.get("fade_time", 0.0)),
+		0.0
+	)
+
+	# 등록된 스토리 사운드 전부 정지
+	if bool(event.get("all", false)):
+		await stop_all_story_sounds(fade_time)
+		return
+
+	# 특정 ID 사운드 정지
+	var sound_id = str(
+		event.get(
+			"id",
+			event.get("sound_id", "")
+		)
+	).strip_edges()
+
+	if sound_id == "":
+		push_warning(
+			"stop_sound 이벤트에 id 또는 all 값이 없음"
+		)
+		return
+
+	await stop_story_sound_by_id(
+		sound_id,
+		fade_time
+	)
+# 스토리 이벤트용 효과음 재생 함수
+#
+# sound_id가 비어 있으면:
+# - 기존처럼 일반 단발 효과음
+# - 재생이 끝나면 자동 제거
+#
+# sound_id가 있으면:
+# - active_story_sounds에 저장
+# - stop_sound 이벤트로 정지 가능
+#
+# loop가 true이면 반드시 sound_id를 지정해야 한다.
+func play_story_sound(
+	path,
+	volume_db = 0.0,
+	wait_until_finished = false,
+	sound_id = "",
+	loop = false
+):
+	var sound_path = str(path).strip_edges()
+	var sound_key = str(sound_id).strip_edges()
+	var should_loop = bool(loop)
+	var should_wait = bool(wait_until_finished)
+
+	if sound_path == "":
+		return
+
+	if not ResourceLoader.exists(sound_path):
+		push_error(
+			"스토리 효과음 파일이 없음: "
+			+ sound_path
+		)
+		return
+
+	# 반복 사운드는 finished 신호가 발생하지 않으므로
+	# 반드시 ID가 있어야 나중에 정지할 수 있다.
+	if should_loop and sound_key == "":
+		push_warning(
+			"loop가 true인 sound 이벤트에는 id가 필요함: "
+			+ sound_path
+		)
+
+		# ID가 없는 무한 루프 노드가 남지 않도록 반복을 해제한다.
+		should_loop = false
+
+	# 반복 사운드를 기다리면 다음 이벤트가 영원히 진행되지 않는다.
+	if should_loop and should_wait:
+		push_warning(
+			"loop가 true인 sound 이벤트는 wait를 사용할 수 없음: "
+			+ sound_key
+		)
+
+		should_wait = false
+
+	# 같은 ID의 사운드가 이미 재생 중이면 기존 사운드를 먼저 정지
+	if sound_key != "" and active_story_sounds.has(sound_key):
+		await stop_story_sound_by_id(
+			sound_key,
+			0.0
+		)
+
+	var stream = load(sound_path)
 
 	if stream == null:
-		push_error("스토리 효과음 로드 실패: " + str(path))
+		push_error(
+			"스토리 효과음 로드 실패: "
+			+ sound_path
+		)
 		return
 
-	# 효과음은 기본적으로 루프하지 않도록 강제
+	# 다른 곳에서 같은 AudioStream 리소스를 사용할 수 있으므로
+	# 복사본에만 loop 설정을 적용한다.
+	stream = stream.duplicate()
+
 	if stream is AudioStreamMP3:
-		stream.loop = false
+		stream.loop = should_loop
+
 	elif stream is AudioStreamOggVorbis:
-		stream.loop = false
+		stream.loop = should_loop
 
 	var sound = AudioStreamPlayer.new()
+
 	sound.stream = stream
 	sound.volume_db = float(volume_db)
-	sound.set_meta("base_volume_db", float(volume_db))
+	sound.set_meta(
+		"base_volume_db",
+		float(volume_db)
+	)
+	sound.set_meta("manual_stop", false)
 
 	# 현재 SFX 설정 적용
 	apply_sfx_volume_to_player(sound)
 
 	add_child(sound)
 
+	# ID가 있는 사운드만 정지 가능한 사운드로 등록
+	if sound_key != "":
+		active_story_sounds[sound_key] = sound
+
+	# wait가 false인 사운드는 재생이 끝났을 때 자동으로 정리
+	if not should_wait:
+		sound.finished.connect(
+			func():
+				if sound == null:
+					return
+
+				if not is_instance_valid(sound):
+					return
+
+				# stop_sound에서 페이드 정지 중이라면
+				# 정지 함수가 직접 노드를 제거한다.
+				if bool(
+					sound.get_meta(
+						"manual_stop",
+						false
+					)
+				):
+					return
+
+				cleanup_story_sound_player(
+					sound_key,
+					sound
+				)
+		)
+
 	sound.play()
 
-	if wait_until_finished:
+	# wait가 true이면 재생 종료까지 현재 이벤트를 대기
+	if should_wait:
 		await sound.finished
-		sound.queue_free()
-	else:
-		sound.finished.connect(Callable(sound, "queue_free"))
+
+		cleanup_story_sound_player(
+			sound_key,
+			sound
+		)
 # 단발 효과음 재생 함수
 func play_one_shot_sfx(path, volume_db = 0.0):
 	if path == "":
@@ -7220,6 +7638,43 @@ func connect_arrange_left_page_buttons():
 
 	arrange_left_page_prev_button.pressed.connect(_on_arrange_left_page_prev_button_pressed)
 	arrange_left_page_next_button.pressed.connect(_on_arrange_left_page_next_button_pressed)
+# 창고 / 상점 페이지 키보드 입력 처리
+# 방향키 좌우 또는 A/D로 페이지를 이동한다.
+func handle_arrange_page_keyboard_input():
+	if not is_inventory_arrange_open:
+		return false
+
+	# 전리품 정리 화면에서는 페이지 키를 사용하지 않는다.
+	if (
+		inventory_arrange_mode != ARRANGE_MODE_STORAGE
+		and inventory_arrange_mode != ARRANGE_MODE_SHOP
+	):
+		return false
+
+	# 아이템을 클릭하거나 드래그하는 도중에는 페이지를 바꾸지 않는다.
+	if is_arrange_dragging_item:
+		return false
+
+	if arrange_pressed_item != null:
+		return false
+
+	# 왼쪽 방향키 또는 A
+	if (
+		Input.is_action_just_pressed("ui_left")
+		or Input.is_action_just_pressed("move_left")
+	):
+		_on_arrange_left_page_prev_button_pressed()
+		return true
+
+	# 오른쪽 방향키 또는 D
+	if (
+		Input.is_action_just_pressed("ui_right")
+		or Input.is_action_just_pressed("move_right")
+	):
+		_on_arrange_left_page_next_button_pressed()
+		return true
+
+	return false
 
 # ============================================================
 # 창고 / 상점 페이지 화살표 애니메이션

@@ -70,6 +70,11 @@ var is_item_selecting = false
 var battle_consumables = []
 var item_index = 0
 var waiting_enemy_attack = false
+
+# 적 패턴 경고문이 표시된 뒤,
+# 이전 Space 입력이 완전히 해제됐는지 확인한다.
+var enemy_attack_confirm_ready = false
+
 var current_enemy_pattern = {}
 var slash_frames = []
 var parry_frames = []
@@ -179,6 +184,7 @@ var battle_difficulty = "normal"
 # 플레이어 턴이 몇 번 시작됐는지 세는 변수
 # 특정 적이 일정 턴 후 도망가는 기능에 사용
 var player_turn_count = 0
+
 
 # 상수 변수 모음
 # 현재 없음
@@ -579,6 +585,7 @@ func reset_battle_runtime_state():
 	is_observing = false
 	is_item_selecting = false
 	waiting_enemy_attack = false
+	enemy_attack_confirm_ready = false
 	is_processing_battle_input = false
 	game_over_started = false
 	# 전투마다 플레이어 턴 카운트 초기화
@@ -1140,9 +1147,14 @@ func prepare_player_turn_state():
 # 적 공격 대기 시작 함수
 func start_enemy_attack_wait():
 	waiting_enemy_attack = true
+
+	# 직전에 등장 대사, 턴 종료 등을 넘길 때 사용한 Space가
+	# 패턴 경고문까지 바로 넘기지 않도록 잠근다.
+	enemy_attack_confirm_ready = false
 # 적 공격 대기 종료 함수
 func end_enemy_attack_wait():
 	waiting_enemy_attack = false
+	enemy_attack_confirm_ready = false
 # 적 공격 대기 후 공격 실행 함수
 func confirm_enemy_attack_wait():
 	if not can_start_battle_input_process():
@@ -1156,6 +1168,18 @@ func confirm_enemy_attack_wait():
 	unlock_battle_input_process()
 # 적 공격 대기 입력 처리 함수
 func update_enemy_attack_wait_input():
+	if not waiting_enemy_attack:
+		return
+
+	# 경고문이 표시되기 전에 사용한 Space 입력이
+	# 완전히 해제될 때까지 확인 입력을 받지 않는다.
+	if not enemy_attack_confirm_ready:
+		if not Input.is_action_pressed("ui_accept"):
+			enemy_attack_confirm_ready = true
+
+		return
+
+	# Space를 놓은 뒤 다시 눌러야 실제 공격이 시작된다.
 	if Input.is_action_just_pressed("ui_accept"):
 		await confirm_enemy_attack_wait()
 # 적 턴 상태 준비 함수

@@ -1652,7 +1652,7 @@
 	},
 	"combined_candle_students_charger": {
 		"name": "합쳐진 밀랍 돌격병",
-		"max_hp": 300,
+		"max_hp": 500,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -1713,6 +1713,28 @@
 						],
 						"rotation": 180,
 						"damage": 6,
+						"delay": 0.3,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.3,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
 						"delay": 0.6,
 						"danger_type": "parry_only"
 					},
@@ -1757,7 +1779,7 @@
 						],
 						"rotation": 180,
 						"damage": 6,
-						"delay": 1.8,
+						"delay": 1.5,
 						"danger_type": "parry_only"
 					},
 					{
@@ -1768,7 +1790,7 @@
 						],
 						"rotation": 180,
 						"damage": 6,
-						"delay": 1.8,
+						"delay": 1.5,
 						"danger_type": "parry_only"
 					}
 				]
@@ -2928,6 +2950,975 @@
 		],
 		"defeat_flags": [
 			"defeated_monitor_mimic_pride"
+		]
+	},
+	"combined_candle_students_butcher": {
+		"name": "합쳐진 밀랍 도살자",
+		"max_hp": 500,
+		"battle_bgm": "res://sounds/bgm15.mp3",
+		"battle_bgm_volume_db": -5.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/enemy_encounter2.mp3",
+		"encounter_sound_volume_db": -5.0,
+		"image": "res://imgs/enemies/combined_candle_students_butcher.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.2,
+		"enemy_size": [
+			650,
+			760
+		],
+		"enemy_position": [
+			635,
+			-40
+		],
+		"can_escape": false,
+		"encounter_text": "합쳐진 덩어리가 이쪽으로 돌진해온다.",
+		"observe_text": "구멍속에서 무언가 꿈틀거리는거같다.",
+		"weakness_text": "",
+		"patterns": [
+			{
+				"id": "basic_attack_01",
+				"weight": 50,
+				"warning_text": "가운데 위치한 깊은 구멍에서 비명소리가 들려온다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "fear_slash",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.3,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.3,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 1.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 1.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 1.5,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 1.5,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "basic_attack_02",
+				"weight": 50,
+				"warning_text": "거대한 몸둥이가 앞으로 돌진한다.",
+				"fire_mode": "parallel",
+				"projectiles": [
+					{
+						"projectile": "impact_basic",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							880,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							1000,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.8
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							1080,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.8
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							1200,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 2.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							1280,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 2.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							300,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 3.6
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							380,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 3.6
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							600,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 4.2
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							680,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 4.2
+					}
+				]
+			},
+			{
+				"id": "basic_attack_03",
+				"weight": 30,
+				"warning_text": "구겨진 파이프를 휘두른다.",
+				"fire_mode": "sequential",
+				"counter_hitbox_id": "left_arm",
+				"projectiles": [
+					{
+						"projectile": "fear_slash",
+						"start": [
+							450,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.3,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							1100,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.3,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "basic_attack_04",
+				"weight": 30,
+				"warning_text": "망가진 의자를 휘두른다.",
+				"fire_mode": "sequential",
+				"counter_hitbox_id": "right_arm",
+				"projectiles": [
+					{
+						"projectile": "impact_basic",
+						"start": [
+							500,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.0
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.3
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							1300,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.3
+					}
+				]
+			}
+		],
+		"hitbox_base_size": [
+			1023,
+			1537
+		],
+		"hitboxes": [
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					423,
+					548,
+					157,
+					265
+				]
+			},
+			{
+				"id": "left_body",
+				"name": "왼쪽 몸통",
+				"rect": [
+					251,
+					419,
+					153,
+					420
+				]
+			},
+			{
+				"id": "right_body",
+				"name": "오른쪽 몸통",
+				"rect": [
+					571,
+					412,
+					179,
+					441
+				]
+			}
+		],
+		"drops": [
+			{
+				"item": "unknown_coin",
+				"chance": 80,
+				"min": 5,
+				"max": 15
+			},
+			{
+				"item": "beverage_a",
+				"chance": 40,
+				"min": 2,
+				"max": 4
+			},
+			{
+				"item": "tranquilizer_a",
+				"chance": 30,
+				"min": 1,
+				"max": 2
+			},
+			{
+				"item": "iron_skewer",
+				"chance": 5,
+				"min": 1,
+				"max": 1
+			}
+		],
+		"defeat_flags": [
+			"defeated_combined_candle_students_butcher"
+		]
+	},
+	"moon": {
+		"name": "달",
+		"max_hp": 2026,
+		"battle_bgm": "res://sounds/bgm21.mp3",
+		"battle_bgm_volume_db": 0.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 0.0,
+		"encounter_sound": "res://sounds/enemy_encounter.mp3",
+		"encounter_sound_volume_db": 0.0,
+		"image": "res://imgs/enemies/moon.png",
+		"battle_background": "res://imgs/backgrounds/classroom_dark_sea_02.png",
+		"battle_background_alpha": 0.3,
+		"enemy_size": [
+			718,
+			750
+		],
+		"enemy_position": [
+			600,
+			-55
+		],
+		"can_escape": false,
+		"encounter_text": "달의 신이 당신의 부름에 응답하였다.",
+		"observe_text": "달은 하늘에 있고, 사람이 이길 수 없다.",
+		"weakness_text": "신에게 약점 따윈 없다.",
+		"patterns": [
+			{
+				"id": "basic_attack_01",
+				"weight": 40,
+				"warning_text": "달빛이 중앙으로 쏟아진다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "slash_excalibur",
+						"start": [
+							550,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_excalibur",
+						"start": [
+							950,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_slow",
+						"start": [
+							850,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_excalibur",
+						"start": [
+							550,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.8,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_excalibur",
+						"start": [
+							950,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.8,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_slow",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 1.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_slow",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 1.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_excalibur",
+						"start": [
+							550,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 1.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_excalibur",
+						"start": [
+							950,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 1.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_slow",
+						"start": [
+							750,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 1.8,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_slow",
+						"start": [
+							850,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 1.8,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_slow",
+						"start": [
+							950,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 1.8,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "basic_attack_02",
+				"weight": 40,
+				"warning_text": "오른쪽에서 파도가 휘갈긴다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "pierce",
+						"start": [
+							1300,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "pierce",
+						"start": [
+							1250,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 1.1,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "pierce",
+						"start": [
+							1200,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 1.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "pierce",
+						"start": [
+							1000,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 2.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "pierce",
+						"start": [
+							950,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 2.1,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "pierce",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 2.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "pierce",
+						"start": [
+							700,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 3.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "pierce",
+						"start": [
+							650,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 3.1,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "pierce",
+						"start": [
+							600,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 3.2,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "basic_attack_03",
+				"weight": 40,
+				"warning_text": "달의 심판",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "slash_excalibur_slow",
+						"start": [
+							550,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_excalibur_slow",
+						"start": [
+							950,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							860,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.1
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							940,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.1
+					},
+					{
+						"projectile": "slash_excalibur_slow",
+						"start": [
+							550,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.5,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_excalibur_slow",
+						"start": [
+							950,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.5,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							860,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.2
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							940,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.2
+					},
+					{
+						"projectile": "slash_excalibur_slow",
+						"start": [
+							550,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_excalibur_slow",
+						"start": [
+							950,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_excalibur_slow",
+						"start": [
+							550,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.5,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_excalibur_slow",
+						"start": [
+							950,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.5,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "basic_attack_04",
+				"weight": 40,
+				"warning_text": "왼쪽에서 번개가 떨어진다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							600,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							650,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 1.1,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							700,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 1.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 2.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							950,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 2.1,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							1000,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 2.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							1200,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 3.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							1250,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 3.1,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							1300,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 3.2,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "basic_attack_05",
+				"weight": 10,
+				"warning_text": "달은 당신을 내려보면서 웃고 있다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": []
+			}
+		],
+		"hitbox_base_size": [
+			1023,
+			1537
+		],
+		"hitboxes": [
+			{
+				"id": "head",
+				"name": "달",
+				"rect": [
+					161,
+					243,
+					704,
+					910
+				],
+				"damage_multiplier": 0.0
+			}
+		],
+		"drops": [
+			{
+				"item": "unknown_coin",
+				"chance": 100,
+				"min": 50,
+				"max": 100
+			},
+			{
+				"item": "holy_grail_relic",
+				"chance": 100,
+				"min": 1,
+				"max": 1
+			}
+		],
+		"defeat_flags": [
+			"defeated_moon"
 		]
 	}
 }

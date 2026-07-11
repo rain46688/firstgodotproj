@@ -1515,25 +1515,15 @@
 				"wait": true
 			},
 			{
-				"type": "stop_bgm"
-			},
-			{
-				"type": "fade"
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
 			},
 			{
 				"type": "change_room",
 				"room": "school_hallway_08"
-			},
-			{
-				"type": "bgm",
-				"path": "res://sounds/bgm2.mp3",
-				"volume_db": -5,
-				"loop": true
-			},
-			{
-				"type": "camera_reset",
-				"duration": 0.5,
-				"wait": true
 			},
 			{
 				"type": "flag",
@@ -2374,25 +2364,15 @@
 				"text": "나는 떨리는 손을 꽉 쥐었다."
 			},
 			{
-				"type": "stop_bgm"
-			},
-			{
-				"type": "bgm",
-				"path": "res://sounds/bgm2.mp3",
-				"volume_db": -5,
-				"loop": true
-			},
-			{
-				"type": "camera_reset",
-				"duration": 0.5,
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
 				"wait": true
 			},
 			{
 				"type": "flag",
 				"flag": "story_first_enter_classroom_08_02_done"
-			},
-			{
-				"type": "fade"
 			},
 			{
 				"type": "change_room",
@@ -4006,12 +3986,6 @@
 			{
 				"type": "flag",
 				"flag": "room_enter_story_done_defeated_tutorial_candle_student"
-			},
-			{
-				"type": "auto_save",
-				"slot": 1,
-				"show_message": false,
-				"play_sound": true
 			}
 		]
 	},
@@ -4039,7 +4013,7 @@
 			},
 			{
 				"type": "camera_zoom",
-				"x": 600,
+				"x": 800,
 				"y": 200,
 				"zoom": 1.5,
 				"duration": 1.0,
@@ -4047,13 +4021,14 @@
 			},
 			{
 				"type": "camera_pan",
-				"x": 800,
-				"y": 350,
+				"x": 1000,
+				"y": 200,
 				"duration": 200.0,
 				"wait": false
 			},
 			{
 				"type": "sound",
+				"id": "ocean_wave_short_01",
 				"path": "res://sounds/ocean_wave_short.mp3",
 				"volume_db": -5,
 				"wait": false
@@ -4073,6 +4048,7 @@
 			},
 			{
 				"type": "sound",
+				"id": "crow_cry_01",
 				"path": "res://sounds/crow.mp3",
 				"volume_db": -5,
 				"wait": false
@@ -4144,6 +4120,7 @@
 			},
 			{
 				"type": "sound",
+				"id": "crow_cry_02",
 				"path": "res://sounds/crow.mp3",
 				"volume_db": 5,
 				"wait": false
@@ -4189,6 +4166,7 @@
 			},
 			{
 				"type": "sound",
+				"id": "crow_cry_03",
 				"path": "res://sounds/crow.mp3",
 				"volume_db": 5,
 				"wait": false
@@ -4218,6 +4196,11 @@
 			},
 			{
 				"type": "stop_bgm"
+			},
+			{
+				"type": "stop_sound",
+				"all": true,
+				"fade_time": 1.0
 			},
 			{
 				"type": "fade"
@@ -6491,14 +6474,9 @@
 				"flag": "story_first_enter_school_hallway_29_done"
 			},
 			{
-				"type": "screen_color_clear",
-				"duration": 0.1,
-				"wait": true
-			},
-			{
 				"type": "start_battle",
 				"enemy": "combined_candle_students_phase_01",
-				"first_turn": "player"
+				"first_turn": "enemy"
 			}
 		]
 	},
@@ -7005,7 +6983,7 @@
 			{
 				"type": "sound",
 				"path": "res://sounds/liquied_pouring.mp3",
-				"volume_db": 0,
+				"volume_db": -5,
 				"wait": true
 			},
 			{
@@ -7767,13 +7745,11 @@
 				"wait": true
 			},
 			{
-				"type": "stop_bgm"
-			},
-			{
-				"type": "bgm",
-				"path": "res://sounds/bgm2.mp3",
-				"volume_db": -5,
-				"loop": true
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
 			},
 			{
 				"type": "flag",
@@ -7781,7 +7757,115 @@
 			},
 			{
 				"type": "start_battle",
-				"enemy": "monitor_mimic_school",
+				"enemy": "monitor_mimic_pride",
+				"first_turn": "enemy"
+			}
+		]
+	},
+	"first_praise_moon": {
+		"start_flag": "story_first_praise_moon_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/heartbeats.mp3",
+				"volume_db": 0,
+				"loop": true
+			},
+			{
+				"type": "sound",
+				"id": "baby_cry_01",
+				"path": "res://sounds/cry_baby.mp3",
+				"volume_db": 3,
+				"wait": false
+			},
+			{
+				"type": "screen_color",
+				"color": "#002060",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/classroom_dark_sea_01.png"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "\"오 모든 것을 바라보는 달이여. 별빛으로 치장한 불멸의 지배자여.\""
+			},
+			{
+				"type": "screen_color",
+				"color": "#002060",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "\"무릎을 굽히며. 길을 인도하는 달에게 찬양을 드리리라.\""
+			},
+			{
+				"type": "sound",
+				"id": "baby_cry_02",
+				"path": "res://sounds/cry_baby.mp3",
+				"volume_db": 5,
+				"wait": false
+			},
+			{
+				"type": "screen_color",
+				"color": "#002060",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/classroom_dark_sea_02.png"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "..."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "stop_sound",
+				"all": true,
+				"fade_time": 1.0
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_praise_moon_done"
+			},
+			{
+				"type": "start_battle",
+				"enemy": "moon",
 				"first_turn": "enemy"
 			}
 		]

@@ -88,7 +88,7 @@
 		"attack_angle_max": 45,
 		"defense_base_rotation": 0,
 		"defense_move_speed": 400,
-		"parry_window": 0.1,
+		"parry_window": 0.18,
 		"piercing": false,
 		"defense_start_offset": [
 			0,
@@ -132,7 +132,7 @@
 		"attack_angle_max": 30,
 		"defense_base_rotation": 0,
 		"defense_move_speed": 550,
-		"parry_window": 0.25,
+		"parry_window": 0.20,
 		"piercing": false,
 		"defense_start_offset": [
 			0,
@@ -176,7 +176,7 @@
 		"attack_angle_max": 45,
 		"defense_base_rotation": 90,
 		"defense_move_speed": 500,
-		"parry_window": 0.05,
+		"parry_window": 0.08,
 		"piercing": true,
 		"defense_start_offset": [
 			0,
@@ -220,7 +220,7 @@
 		"attack_angle_max": 45,
 		"defense_base_rotation": 0,
 		"defense_move_speed": 500,
-		"parry_window": 0.15,
+		"parry_window": 0.10,
 		"piercing": false,
 		"defense_start_offset": [
 			0,
@@ -241,6 +241,50 @@
 			],
 			"size": [
 				100,
+				100
+			]
+		}
+	},
+	"iron_skewer": {
+		"name": "쇠 꼬챙이",
+		"description": "부러진 파이프이다 그 끝이 날카롭다, 적의 여러 부위를 꿰뚫을 수 있는 무기다.",
+		"image": "res://imgs/items/iron_skewer180x720.png",
+		"width": 1,
+		"height": 4,
+		"type": "weapon",
+		"stackable": true,
+		"max_stack": 1,
+		"attack_min": 4,
+		"attack_max": 6,
+		"critical_chance": 0.1,
+		"critical_multiplier": 2.0,
+		"consumed_on_use": false,
+		"attack_base_rotation": 0,
+		"attack_angle_min": -45,
+		"attack_angle_max": 45,
+		"defense_base_rotation": 90,
+		"defense_move_speed": 450,
+		"parry_window": 0.06,
+		"piercing": true,
+		"defense_start_offset": [
+			0,
+			90
+		],
+		"battle_sprite_size": [
+			300,
+			300
+		],
+		"attack_move_range": 460,
+		"attack_swing_speed": 2.5,
+		"weapon_angle_step": 5,
+		"attack_projectile": "pierce",
+		"defense_hitbox": {
+			"offset": [
+				-300,
+				100
+			],
+			"size": [
+				300,
 				100
 			]
 		}
