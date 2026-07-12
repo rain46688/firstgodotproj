@@ -88,7 +88,7 @@
 		"attack_angle_max": 45,
 		"defense_base_rotation": 0,
 		"defense_move_speed": 400,
-		"parry_window": 0.18,
+		"parry_window": 0.06,
 		"piercing": false,
 		"defense_start_offset": [
 			0,
@@ -132,7 +132,7 @@
 		"attack_angle_max": 30,
 		"defense_base_rotation": 0,
 		"defense_move_speed": 550,
-		"parry_window": 0.20,
+		"parry_window": 0.15,
 		"piercing": false,
 		"defense_start_offset": [
 			0,
@@ -176,7 +176,7 @@
 		"attack_angle_max": 45,
 		"defense_base_rotation": 90,
 		"defense_move_speed": 500,
-		"parry_window": 0.08,
+		"parry_window": 0.06,
 		"piercing": true,
 		"defense_start_offset": [
 			0,
@@ -220,7 +220,7 @@
 		"attack_angle_max": 45,
 		"defense_base_rotation": 0,
 		"defense_move_speed": 500,
-		"parry_window": 0.10,
+		"parry_window": 0.07,
 		"piercing": false,
 		"defense_start_offset": [
 			0,

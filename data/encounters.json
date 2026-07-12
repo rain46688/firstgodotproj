@@ -39,8 +39,8 @@
 		},
 		{
 			"enemy": "wax_slime",
-			"weight": 40,
-			"required_flag": "opened_school_stairs_hall_03",
+			"weight": 30,
+			"required_flag": "opened_school_stairs_hall_02",
 			"missing_flag": "",
 			"first_turn": ""
 		},
@@ -62,21 +62,21 @@
 		},
 		{
 			"enemy": "wax_slime",
-			"weight": 40,
+			"weight": 20,
 			"required_flag": "opened_school_stairs_hall_03",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "wax_slime_phalanx",
-			"weight": 40,
+			"weight": 30,
 			"required_flag": "opened_school_stairs_hall_03",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "combined_candle_students_charger",
-			"weight": 20,
+			"weight": 30,
 			"required_flag": [
 				"defeated_combined_candle_students",
 				"opened_school_stairs_hall_03"
@@ -95,7 +95,7 @@
 	"school_hallway_04": [
 		{
 			"enemy": "wax_slime",
-			"weight": 20,
+			"weight": 10,
 			"required_flag": "opened_school_stairs_hall_03",
 			"missing_flag": "",
 			"first_turn": ""
@@ -109,7 +109,7 @@
 		},
 		{
 			"enemy": "combined_candle_students_charger",
-			"weight": 50,
+			"weight": 40,
 			"required_flag": [
 				"opened_school_stairs_hall_04"
 			],
@@ -118,7 +118,7 @@
 		},
 		{
 			"enemy": "combined_candle_students_butcher",
-			"weight": 50,
+			"weight": 40,
 			"required_flag": [
 				"opened_school_stairs_hall_04"
 			],

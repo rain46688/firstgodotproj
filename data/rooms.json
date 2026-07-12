@@ -1774,7 +1774,6 @@
 					544
 				],
 				"hide_if_flag": "opened_school_stairs_hall_04",
-				"required_flag_missing": "story_first_enter_classroom_09_done",
 				"events": [
 					{
 						"type": "text",
@@ -4391,7 +4390,8 @@
 				"required_flag": "praise_moon",
 				"required_flag_missing": [
 					"fail_answer_moon",
-					"story_first_praise_moon_done"
+					"story_first_praise_moon_done",
+					"defeated_moon"
 				]
 			}
 		],
@@ -5896,7 +5896,7 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "아무것도 없는 바닥이다."
+						"text": "교실 안쪽에 기분 나쁜 무언가가 있다."
 					}
 				]
 			},
@@ -7115,7 +7115,7 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "아무것도 없는 바닥이다."
+						"text": "교실 안쪽에 기분 나쁜 무언가가 있다."
 					}
 				]
 			},
@@ -7408,7 +7408,7 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "아무것도 없는 바닥이다."
+						"text": "교실 안쪽에 기분 나쁜 무언가가 있다."
 					}
 				]
 			},
@@ -12974,7 +12974,7 @@
 		},
 		"ambient_sound": {
 			"path": "res://sounds/water_drops.mp3",
-			"volume_db": 5.0,
+			"volume_db": 0.0,
 			"loop": true
 		},
 		"footstep_sound": {

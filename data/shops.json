@@ -22,30 +22,12 @@
 				"page": 0
 			},
 			{
-				"product_id": "razor",
-				"item": "razor",
-				"count": 1,
-				"price": 40,
-				"stock": 1,
-				"slot": 2,
-				"page": 0
-			},
-			{
-				"product_id": "cutter_knife",
-				"item": "cutter_knife",
-				"count": 1,
-				"price": 50,
-				"stock": 1,
-				"slot": 3,
-				"page": 0
-			},
-			{
 				"product_id": "tranquilizer_b",
 				"item": "tranquilizer_b",
 				"count": 1,
 				"price": 10,
-				"stock": 5,
-				"slot": 1,
+				"stock": 6,
+				"slot": 2,
 				"page": 0
 			},
 			{
@@ -54,8 +36,26 @@
 				"count": 1,
 				"price": 10,
 				"stock": 5,
-				"slot": 1,
+				"slot": 3,
 				"page": 0
+			},
+			{
+				"product_id": "razor",
+				"item": "razor",
+				"count": 1,
+				"price": 40,
+				"stock": 1,
+				"slot": 0,
+				"page": 1
+			},
+			{
+				"product_id": "cutter_knife",
+				"item": "cutter_knife",
+				"count": 1,
+				"price": 50,
+				"stock": 1,
+				"slot": 1,
+				"page": 1
 			},
 			{
 				"product_id": "old_water_ball",
@@ -64,7 +64,7 @@
 				"price": 50,
 				"stock": 1,
 				"slot": 0,
-				"page": 1
+				"page": 2
 			},
 			{
 				"product_id": "old_abacus",
@@ -73,7 +73,7 @@
 				"price": 50,
 				"stock": 1,
 				"slot": 1,
-				"page": 1
+				"page": 2
 			},
 			{
 				"product_id": "cube_relic",
@@ -82,7 +82,7 @@
 				"price": 55,
 				"stock": 1,
 				"slot": 2,
-				"page": 1
+				"page": 2
 			},
 			{
 				"product_id": "torn_eyepatch",
@@ -91,7 +91,7 @@
 				"price": 60,
 				"stock": 1,
 				"slot": 3,
-				"page": 1
+				"page": 2
 			},
 			{
 				"product_id": "dice_relic",
@@ -100,7 +100,7 @@
 				"price": 60,
 				"stock": 1,
 				"slot": 4,
-				"page": 1
+				"page": 2
 			},
 			{
 				"product_id": "music_box_relic",
@@ -109,7 +109,7 @@
 				"price": 80,
 				"stock": 1,
 				"slot": 5,
-				"page": 1
+				"page": 2
 			},
 			{
 				"product_id": "broken_headset_relic",
@@ -118,7 +118,7 @@
 				"price": 80,
 				"stock": 1,
 				"slot": 6,
-				"page": 1
+				"page": 2
 			},
 			{
 				"product_id": "teddy_bear_relic",
@@ -127,7 +127,7 @@
 				"price": 90,
 				"stock": 1,
 				"slot": 7,
-				"page": 1
+				"page": 2
 			},
 			{
 				"product_id": "character_figure_relic",
@@ -136,7 +136,7 @@
 				"price": 90,
 				"stock": 1,
 				"slot": 8,
-				"page": 1
+				"page": 2
 			},
 			{
 				"product_id": "cross_relic",
@@ -145,7 +145,7 @@
 				"price": 100,
 				"stock": 1,
 				"slot": 9,
-				"page": 1
+				"page": 2
 			},
 			{
 				"product_id": "holy_grail_relic",
@@ -154,7 +154,7 @@
 				"price": 100,
 				"stock": 1,
 				"slot": 10,
-				"page": 1
+				"page": 2
 			},
 			{
 				"product_id": "bible_fetish",
@@ -163,7 +163,7 @@
 				"price": 80,
 				"stock": 1,
 				"slot": 0,
-				"page": 2
+				"page": 3
 			},
 			{
 				"product_id": "metal_syringe",
@@ -172,7 +172,7 @@
 				"price": 80,
 				"stock": 1,
 				"slot": 1,
-				"page": 2
+				"page": 3
 			},
 			{
 				"product_id": "rosary_fetish",
@@ -181,7 +181,7 @@
 				"price": 80,
 				"stock": 1,
 				"slot": 2,
-				"page": 2
+				"page": 3
 			},
 			{
 				"product_id": "sneakers_fetish",
@@ -190,7 +190,7 @@
 				"price": 70,
 				"stock": 1,
 				"slot": 3,
-				"page": 2
+				"page": 3
 			},
 			{
 				"product_id": "dumbbell_fetish",
@@ -199,7 +199,7 @@
 				"price": 70,
 				"stock": 1,
 				"slot": 4,
-				"page": 2
+				"page": 3
 			},
 			{
 				"product_id": "sandbag_fetish",
@@ -208,7 +208,7 @@
 				"price": 80,
 				"stock": 1,
 				"slot": 5,
-				"page": 2
+				"page": 3
 			},
 			{
 				"product_id": "lung_model_fetish",
@@ -217,7 +217,7 @@
 				"price": 90,
 				"stock": 1,
 				"slot": 6,
-				"page": 2
+				"page": 3
 			},
 			{
 				"product_id": "first_aid_box_fetish",
@@ -226,7 +226,7 @@
 				"price": 90,
 				"stock": 1,
 				"slot": 7,
-				"page": 2
+				"page": 3
 			},
 			{
 				"product_id": "classic_camera_fetish",
@@ -235,7 +235,7 @@
 				"price": 100,
 				"stock": 1,
 				"slot": 8,
-				"page": 2
+				"page": 3
 			},
 			{
 				"product_id": "hourglass_fetish",
@@ -244,7 +244,7 @@
 				"price": 100,
 				"stock": 1,
 				"slot": 9,
-				"page": 2
+				"page": 3
 			},
 			{
 				"product_id": "hand_bone_fetish",
@@ -253,7 +253,7 @@
 				"price": 120,
 				"stock": 1,
 				"slot": 10,
-				"page": 2
+				"page": 3
 			},
 			{
 				"product_id": "skull_model_fetish",
@@ -262,7 +262,7 @@
 				"price": 120,
 				"stock": 1,
 				"slot": 11,
-				"page": 2
+				"page": 3
 			},
 			{
 				"product_id": "small_frame_fetish",
@@ -271,7 +271,7 @@
 				"price": 100,
 				"stock": 1,
 				"slot": 12,
-				"page": 2
+				"page": 3
 			},
 			{
 				"product_id": "hand_candlestick_fetish",
@@ -280,7 +280,7 @@
 				"price": 150,
 				"stock": 1,
 				"slot": 13,
-				"page": 2
+				"page": 3
 			},
 			{
 				"product_id": "brain_model_fetish",
@@ -289,7 +289,7 @@
 				"price": 150,
 				"stock": 1,
 				"slot": 14,
-				"page": 2
+				"page": 3
 			},
 			{
 				"product_id": "heart_model_fetish",
@@ -298,7 +298,7 @@
 				"price": 200,
 				"stock": 1,
 				"slot": 15,
-				"page": 2
+				"page": 3
 			}
 		]
 	}

@@ -88,7 +88,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 7,
+						"damage": 10,
 						"delay": 0.0
 					},
 					{
@@ -98,7 +98,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 7,
+						"damage": 10,
 						"delay": 0.4
 					}
 				]
@@ -117,7 +117,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 8,
 						"delay": 0.0
 					},
 					{
@@ -127,7 +127,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 8,
 						"delay": 0.2
 					},
 					{
@@ -137,7 +137,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 8,
 						"delay": 0.4
 					},
 					{
@@ -147,7 +147,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 8,
+						"damage": 10,
 						"delay": 0.8
 					}
 				]
@@ -195,11 +195,11 @@
 				"item": "unknown_coin",
 				"chance": 50,
 				"min": 1,
-				"max": 3
+				"max": 2
 			},
 			{
 				"item": "beverage_a",
-				"chance": 30,
+				"chance": 10,
 				"min": 1,
 				"max": 1
 			},
@@ -217,7 +217,7 @@
 	"combined_candle_students_phase_01": {
 		"name": "합쳐진 밀랍 학생들",
 		"phase": 1,
-		"max_hp": 150,
+		"max_hp": 200,
 		"battle_bgm": "res://sounds/bgm16.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -265,7 +265,7 @@
 					100,
 					230
 				],
-				"damage_multiplier": 2.0
+				"damage_multiplier": 3.0
 			},
 			{
 				"id": "left_body",
@@ -437,7 +437,7 @@
 		"name": "합쳐진 밀랍 학생들",
 		"phase": 2,
 		"max_hp": 150,
-		"battle_bgm": "res://sounds/bgm16.mp3",
+		"battle_bgm": "res://sounds/bgm19.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
 		"battle_bgm_fade_in": true,
@@ -475,7 +475,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 20,
 						"delay": 0.0,
 						"danger_type": "parry_only"
 					},
@@ -486,7 +486,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 20,
 						"delay": 0.0,
 						"danger_type": "parry_only"
 					},
@@ -497,7 +497,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 0.6,
 						"danger_type": "parry_only"
 					},
@@ -508,7 +508,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 0.6,
 						"danger_type": "parry_only"
 					},
@@ -519,7 +519,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 1.1,
 						"danger_type": "parry_only"
 					},
@@ -530,7 +530,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 1.1,
 						"danger_type": "parry_only"
 					}
@@ -590,7 +590,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 0.0
 					},
 					{
@@ -600,7 +600,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 0.0
 					},
 					{
@@ -610,7 +610,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 0.6
 					},
 					{
@@ -620,7 +620,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 0.6
 					},
 					{
@@ -630,7 +630,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 1.1,
 						"danger_type": "parry_only"
 					},
@@ -641,7 +641,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 1.1,
 						"danger_type": "parry_only"
 					}
@@ -649,7 +649,7 @@
 			},
 			{
 				"id": "basic_attack_03",
-				"weight": 30,
+				"weight": 40,
 				"warning_text": "알수없는 말을 중얼거린다.",
 				"fire_mode": "parallel",
 				"projectiles": [
@@ -752,7 +752,7 @@
 					100,
 					230
 				],
-				"damage_multiplier": 2.0
+				"damage_multiplier": 4.0
 			},
 			{
 				"id": "left_body",
@@ -779,7 +779,7 @@
 			{
 				"item": "unknown_coin",
 				"chance": 100,
-				"min": 25,
+				"min": 20,
 				"max": 30
 			},
 			{
@@ -796,7 +796,7 @@
 	"candle_student_tutorial": {
 		"name": "밀랍을 뒤집어쓴 학생",
 		"skip_if_flag": "defeated_tutorial_enemy",
-		"max_hp": 80,
+		"max_hp": 90,
 		"battle_bgm": "res://sounds/bgm13.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -822,7 +822,7 @@
 		"patterns": [
 			{
 				"id": "basic_attack_01",
-				"weight": 100,
+				"weight": 50,
 				"warning_text": "머릿 속에서 무언가가 떠오르고 있다.\n\"적의 공격을 막아야한다.\"",
 				"fire_mode": "sequential",
 				"counter_hitbox_id": "head",
@@ -871,7 +871,7 @@
 			},
 			{
 				"id": "basic_attack_02",
-				"weight": 100,
+				"weight": 50,
 				"warning_text": "머릿 속에서 무언가가 속삭이고 있다.\n\"적의 공격을 정확하게 받아쳐라.\"",
 				"fire_mode": "parallel",
 				"counter_hitbox_id": "head",
@@ -883,7 +883,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 5,
+						"damage": 10,
 						"delay": 0.0
 					},
 					{
@@ -893,7 +893,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 5,
+						"damage": 10,
 						"delay": 0.4
 					}
 				]
@@ -1188,7 +1188,7 @@
 		"patterns": [
 			{
 				"id": "basic_attack_01",
-				"weight": 40,
+				"weight": 50,
 				"warning_text": "오른손의 칼을 짧게 휘두른다.",
 				"fire_mode": "parallel",
 				"counter_hitbox_id": "head",
@@ -1322,7 +1322,7 @@
 					92,
 					178
 				],
-				"damage_multiplier": 3.0
+				"damage_multiplier": 4.0
 			},
 			{
 				"id": "body",
@@ -1349,8 +1349,8 @@
 			{
 				"item": "unknown_coin",
 				"chance": 50,
-				"min": 3,
-				"max": 5
+				"min": 2,
+				"max": 3
 			},
 			{
 				"item": "beverage_a",
@@ -1388,7 +1388,7 @@
 		"image": "res://imgs/enemies/ghost.png",
 		"battle_background": "",
 		"battle_background_alpha": 0.2,
-		"escape_after_player_turns": 6,
+		"escape_after_player_turns": 5,
 		"escape_text": "작은 유령은 장난치며 어둠 속으로 사라졌다.",
 		"enemy_size": [
 			150,
@@ -1405,8 +1405,8 @@
 		"patterns": [
 			{
 				"id": "basic_attack_01",
-				"weight": 90,
-				"warning_text": "작은 유령은 놀아 달라고 조르고 있다.",
+				"weight": 45,
+				"warning_text": "작은 유령은 가운데 앉아서 놀아 달라고 조르고 있다.",
 				"fire_mode": "parallel",
 				"counter_hitbox_id": "body",
 				"projectiles": [
@@ -1479,9 +1479,73 @@
 				]
 			},
 			{
+				"id": "basic_attack_02",
+				"weight": 45,
+				"warning_text": "작은 유령은 가운데 앉아서 놀아 달라고 뒹굴고 있다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "body",
+				"projectiles": [
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.8,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
 				"id": "rest",
 				"weight": 10,
-				"warning_text": "작은 유령은 놀다가 넘어졌다.",
+				"warning_text": "작은 유령은 혼자 놀다가 넘어졌다.",
 				"fire_mode": "parallel",
 				"projectiles": []
 			}
@@ -1809,7 +1873,7 @@
 			{
 				"id": "basic_attack_02",
 				"weight": 50,
-				"warning_text": "거대한 몸둥이가 앞으로 돌진한다.",
+				"warning_text": "거대한 몸둥이가 중앙으로 돌진한다.",
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
@@ -2008,7 +2072,7 @@
 			{
 				"id": "basic_attack_01",
 				"weight": 50,
-				"warning_text": "몸을 길쭉하게 늘려서 꽃혀있던 파이프를 이쪽으로 날린다.",
+				"warning_text": "몸을 길쭉하게 늘려서 꽃혀있던 파이프를 왼쪽으로 날린다.",
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
@@ -2058,7 +2122,7 @@
 			{
 				"id": "basic_attack_02",
 				"weight": 50,
-				"warning_text": "안에서 뜨겁고 기분 나쁜 액체를 내뿜는다.",
+				"warning_text": "안에서 뜨겁고 기분 나쁜 액체를 오른쪽으로 내뿜는다.",
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
@@ -2118,7 +2182,7 @@
 					413,
 					312
 				],
-				"damage_multiplier": 4.0
+				"damage_multiplier": 3.0
 			},
 			{
 				"id": "left_hand",
@@ -2156,19 +2220,13 @@
 				"item": "unknown_coin",
 				"chance": 50,
 				"min": 1,
-				"max": 5
+				"max": 4
 			},
 			{
 				"item": "beverage_a",
-				"chance": 30,
+				"chance": 10,
 				"min": 1,
 				"max": 3
-			},
-			{
-				"item": "tranquilizer_a",
-				"chance": 20,
-				"min": 1,
-				"max": 1
 			}
 		],
 		"defeat_flags": [
@@ -2204,7 +2262,7 @@
 			{
 				"id": "basic_attack_01",
 				"weight": 40,
-				"warning_text": "몸을 길쭉하게 늘려서 꽃혀있던 파이프를 이쪽으로 날린다.",
+				"warning_text": "몸을 길쭉하게 늘려서 꽃혀있던 파이프를 왼쪽으로 날린다.",
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
@@ -2254,7 +2312,7 @@
 			{
 				"id": "basic_attack_02",
 				"weight": 40,
-				"warning_text": "안에서 뜨겁고 기분 나쁜 액체를 내뿜는다.",
+				"warning_text": "안에서 뜨겁고 기분 나쁜 액체를 오른쪽으로 내뿜는다.",
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
@@ -2302,7 +2360,7 @@
 			{
 				"id": "basic_attack_03",
 				"weight": 30,
-				"warning_text": "몸을 앞쪽으로 늘어트리면서 앞으로 튀어오른다.",
+				"warning_text": "몸을 앞쪽으로 늘어트리면서 중앙으로 튀어오른다.",
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
@@ -2406,7 +2464,7 @@
 					323,
 					108
 				],
-				"damage_multiplier": 4.0
+				"damage_multiplier": 2.0
 			},
 			{
 				"id": "body_02",
@@ -2417,7 +2475,7 @@
 					216,
 					173
 				],
-				"damage_multiplier": 4.0
+				"damage_multiplier": 2.0
 			},
 			{
 				"id": "left_hand",
@@ -2460,13 +2518,13 @@
 			},
 			{
 				"item": "beverage_a",
-				"chance": 30,
+				"chance": 10,
 				"min": 1,
 				"max": 3
 			},
 			{
 				"item": "tranquilizer_a",
-				"chance": 20,
+				"chance": 10,
 				"min": 1,
 				"max": 1
 			}
@@ -2612,7 +2670,7 @@
 			{
 				"id": "basic_attack_02",
 				"weight": 80,
-				"warning_text": "날카로운 발톱을 휘갈긴다.",
+				"warning_text": "날카로운 발톱을 중앙으로 휘갈긴다.",
 				"fire_mode": "parallel",
 				"counter_hitbox_id": "head",
 				"projectiles": [
@@ -2858,7 +2916,7 @@
 					231,
 					294
 				],
-				"damage_multiplier": 10.0
+				"damage_multiplier": 6.0
 			}
 		],
 		"drops": [
@@ -2965,7 +3023,7 @@
 	},
 	"combined_candle_students_butcher": {
 		"name": "합쳐진 밀랍 도살자",
-		"max_hp": 500,
+		"max_hp": 600,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -3111,7 +3169,7 @@
 			{
 				"id": "basic_attack_02",
 				"weight": 50,
-				"warning_text": "거대한 몸둥이가 앞으로 돌진한다.",
+				"warning_text": "거대한 몸둥이가 중앙으로 돌진한다.",
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
@@ -3975,11 +4033,11 @@
 				"item": "unknown_coin",
 				"chance": 100,
 				"min": 50,
-				"max": 100
+				"max": 60
 			},
 			{
 				"item": "holy_grail_relic",
-				"chance": 100,
+				"chance": 80,
 				"min": 1,
 				"max": 1
 			}

@@ -128,7 +128,7 @@
 				"y": 350,
 				"zoom": 1.5,
 				"duration": 1.0,
-				"wait": false
+				"wait": true
 			},
 			{
 				"type": "camera_pan",
@@ -902,7 +902,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "나를 해치려는 사람의 반응이라기보다, 너무 오래 겁에 질려 있던 사람의 반응 같았다."
+				"text": "나를 해치려는 사람의 반응이라기보다, 겁에 질려 있는 사람의 반응 같았다."
 			},
 			{
 				"type": "story_dialogue",
@@ -1912,7 +1912,7 @@
 			{
 				"type": "camera_zoom",
 				"x": 760,
-				"y": 350,
+				"y": 100,
 				"zoom": 2.0,
 				"duration": 1.0,
 				"wait": true
@@ -1920,7 +1920,7 @@
 			{
 				"type": "camera_pan",
 				"x": 1000,
-				"y": 350,
+				"y": 100,
 				"duration": 200.0,
 				"wait": false
 			},
@@ -2417,7 +2417,7 @@
 			{
 				"type": "camera_zoom",
 				"x": 760,
-				"y": 350,
+				"y": 100,
 				"zoom": 2.0,
 				"duration": 1.0,
 				"wait": true
@@ -2425,7 +2425,7 @@
 			{
 				"type": "camera_pan",
 				"x": 1000,
-				"y": 350,
+				"y": 100,
 				"duration": 200.0,
 				"wait": false
 			},
@@ -3675,7 +3675,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "나는 한동안 그 교실을 떠나지 못했다. 문밖으로 한 걸음 나가는 일조차, 생각보다 큰 용기가 필요했다."
+				"text": "나는 그 이후로 한동안 이 교실을 떠나지 못했다. 문밖으로 한 걸음 나가는 일조차, 생각보다 큰 용기가 필요했다."
 			},
 			{
 				"type": "story_dialogue",
@@ -3712,6 +3712,10 @@
 			{
 				"type": "story_dialogue",
 				"text": "몸은 분명 살아 있는데, 살아 있는 몸이라면 당연히 느껴야 할 감각들이 하나씩 빠져나간 기분이었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "내가 올라온 구멍과 사다리는 감쪽같이 사라져있었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -3919,7 +3923,7 @@
 			},
 			{
 				"type": "change_room",
-				"room": "classroom_11"
+				"room": "school_hallway_11"
 			},
 			{
 				"type": "show_game_ui"
@@ -5085,6 +5089,12 @@
 				"text": "잠깐만요. 당신...더 이상 가까이 오지 마세요."
 			},
 			{
+				"type": "sound",
+				"path": "res://sounds/slash.mp3",
+				"volume_db": 0,
+				"wait": false
+			},
+			{
 				"type": "story_dialogue",
 				"text": "그녀는 주머니에서 커터칼을 꺼내 들었다. 움직임은 익숙했지만, 손끝은 조금 떨리고 있었다."
 			},
@@ -5155,7 +5165,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그녀의 눈빛이 잠깐 흔들렸다. 아래층이라는 말이 무엇인가를 건드린 모양이었다."
+				"text": "그녀의 눈빛이 잠깐 흔들렸다."
 			},
 			{
 				"type": "story_dialogue",
@@ -5187,7 +5197,7 @@
 			{
 				"type": "sound",
 				"path": "res://sounds/break_wood.mp3",
-				"volume_db": -5,
+				"volume_db": -10,
 				"wait": false
 			},
 			{
@@ -5364,7 +5374,7 @@
 				"type": "bgm",
 				"path": "res://sounds/bgm17.mp3",
 				"volume_db": -20,
-				"loop": true
+				"loop": false
 			},
 			{
 				"type": "screen_color_clear",
@@ -5852,9 +5862,6 @@
 				"text": "나는 그렇게, 가장 중요한 말을 다시 한 번 삼켰다."
 			},
 			{
-				"type": "stop_bgm"
-			},
-			{
 				"type": "screen_color",
 				"color": "#000000",
 				"alpha": 1.0,
@@ -5862,7 +5869,13 @@
 				"wait": true
 			},
 			{
-				"type": "fade"
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm2.mp3",
+				"volume_db": -5,
+				"loop": true
 			},
 			{
 				"type": "standing_clear"
@@ -5873,16 +5886,7 @@
 				"wait": true
 			},
 			{
-				"type": "change_room",
-				"room": "broadcasting_room_01"
-			},
-			{
 				"type": "show_game_ui"
-			},
-			{
-				"type": "camera_reset",
-				"duration": 0.5,
-				"wait": true
 			},
 			{
 				"type": "flag",
@@ -6157,9 +6161,6 @@
 				"text": "그래 따라와."
 			},
 			{
-				"type": "stop_bgm"
-			},
-			{
 				"type": "screen_color",
 				"color": "#000000",
 				"alpha": 1.0,
@@ -6167,7 +6168,13 @@
 				"wait": true
 			},
 			{
-				"type": "fade"
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm2.mp3",
+				"volume_db": -5,
+				"loop": true
 			},
 			{
 				"type": "standing_clear"
@@ -6178,13 +6185,7 @@
 				"wait": true
 			},
 			{
-				"type": "change_room",
-				"room": "broadcasting_room_02"
-			},
-			{
-				"type": "camera_reset",
-				"duration": 0.5,
-				"wait": true
+				"type": "show_game_ui"
 			},
 			{
 				"type": "flag",
@@ -6197,9 +6198,6 @@
 			{
 				"type": "flag",
 				"flag": "opened_classroom_08_03"
-			},
-			{
-				"type": "show_game_ui"
 			}
 		]
 	},
@@ -6451,9 +6449,6 @@
 				"path": "res://sounds/jump_scare.mp3",
 				"volume_db": 5,
 				"wait": false
-			},
-			{
-				"type": "stop_bgm"
 			},
 			{
 				"type": "screen_color",
@@ -6757,22 +6752,14 @@
 				"text": "그 바람 소리는 마치 우리를 안쪽으로 이끌려는 듯했다."
 			},
 			{
-				"type": "stop_bgm"
-			},
-			{
-				"type": "fade"
-			},
-			{
-				"type": "standing_clear"
-			},
-			{
-				"type": "screen_color_clear",
-				"duration": 0.5,
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
 				"wait": true
 			},
 			{
-				"type": "change_room",
-				"room": "school_hallway_29_02"
+				"type": "stop_bgm"
 			},
 			{
 				"type": "bgm",
@@ -6781,16 +6768,23 @@
 				"loop": true
 			},
 			{
-				"type": "camera_reset",
+				"type": "standing_clear"
+			},
+			{
+				"type": "change_room",
+				"room": "school_hallway_29_02"
+			},
+			{
+				"type": "screen_color_clear",
 				"duration": 0.5,
 				"wait": true
 			},
 			{
-				"type": "flag",
-				"flag": "story_defeated_combined_candle_students_done"
+				"type": "show_game_ui"
 			},
 			{
-				"type": "show_game_ui"
+				"type": "flag",
+				"flag": "story_defeated_combined_candle_students_done"
 			}
 		]
 	},
@@ -6802,6 +6796,13 @@
 			},
 			{
 				"type": "stop_bgm"
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
 			},
 			{
 				"type": "background",
@@ -6820,6 +6821,17 @@
 			{
 				"type": "story_dialogue",
 				"text": "낡은 복도와 콘크리트 벽은 사라지고, 차갑고 매끈한 대리석 바닥이 이어져 있었다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/footsteps.mp3",
+				"volume_db": 20,
+				"wait": false
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 1.5,
+				"wait": true
 			},
 			{
 				"type": "story_dialogue",
@@ -6900,9 +6912,6 @@
 				"text": "한동안 아무 말도 잇지 못했다."
 			},
 			{
-				"type": "stop_bgm"
-			},
-			{
 				"type": "screen_color",
 				"color": "#000000",
 				"alpha": 1.0,
@@ -6910,7 +6919,7 @@
 				"wait": true
 			},
 			{
-				"type": "fade"
+				"type": "stop_bgm"
 			},
 			{
 				"type": "standing_clear"
@@ -6921,16 +6930,7 @@
 				"wait": true
 			},
 			{
-				"type": "change_room",
-				"room": "unknown_hall_01"
-			},
-			{
 				"type": "show_game_ui"
-			},
-			{
-				"type": "camera_reset",
-				"duration": 0.5,
-				"wait": true
 			},
 			{
 				"type": "flag",
@@ -7136,9 +7136,6 @@
 				"wait": true
 			},
 			{
-				"type": "fade"
-			},
-			{
 				"type": "standing_clear"
 			},
 			{
@@ -7147,16 +7144,7 @@
 				"wait": true
 			},
 			{
-				"type": "change_room",
-				"room": "unknown_hall_04"
-			},
-			{
 				"type": "show_game_ui"
-			},
-			{
-				"type": "camera_reset",
-				"duration": 0.5,
-				"wait": true
 			},
 			{
 				"type": "flag",
@@ -7580,6 +7568,13 @@
 				"text": "마치 우리가 결국 이 거래를 받아들일 거라고 처음부터 알고 있었다는 듯이."
 			},
 			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
 				"type": "stop_bgm"
 			},
 			{
@@ -7589,17 +7584,11 @@
 				"loop": true
 			},
 			{
-				"type": "screen_color",
-				"color": "#000000",
-				"alpha": 1.0,
-				"duration": 0.1,
-				"wait": true
-			},
-			{
-				"type": "fade"
-			},
-			{
 				"type": "standing_clear"
+			},
+			{
+				"type": "change_room",
+				"room": "albus_room_01"
 			},
 			{
 				"type": "screen_color_clear",
@@ -7607,16 +7596,7 @@
 				"wait": true
 			},
 			{
-				"type": "change_room",
-				"room": "albus_room_01"
-			},
-			{
 				"type": "show_game_ui"
-			},
-			{
-				"type": "camera_reset",
-				"duration": 0.5,
-				"wait": true
 			},
 			{
 				"type": "flag",
