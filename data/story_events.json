@@ -4122,7 +4122,7 @@
 				"type": "sound",
 				"id": "crow_cry_02",
 				"path": "res://sounds/crow.mp3",
-				"volume_db": 5,
+				"volume_db": 0,
 				"wait": false
 			},
 			{
@@ -4168,7 +4168,7 @@
 				"type": "sound",
 				"id": "crow_cry_03",
 				"path": "res://sounds/crow.mp3",
-				"volume_db": 5,
+				"volume_db": 0,
 				"wait": false
 			},
 			{

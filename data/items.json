@@ -246,7 +246,7 @@
 		}
 	},
 	"iron_skewer": {
-		"name": "쇠 꼬챙이",
+		"name": "쇠 파이프",
 		"description": "부러진 파이프이다 그 끝이 날카롭다, 적의 여러 부위를 꿰뚫을 수 있는 무기다.",
 		"image": "res://imgs/items/iron_skewer180x720.png",
 		"width": 1,
@@ -303,7 +303,7 @@
 	},
 	"tranquilizer_a": {
 		"name": "진정제A",
-		"description": "미지근 하다 마시면 마음이 안정될 것 같다.",
+		"description": "미지근 하다 마시면 두려운 마음이 안정될 것 같다.",
 		"image": "res://imgs/items/tranquilizer180x180.png",
 		"width": 1,
 		"height": 1,
@@ -317,13 +317,41 @@
 	},
 	"tranquilizer_b": {
 		"name": "진정제B",
-		"description": "미지근 하다 마시면 마음이 안정될 것 같다.",
+		"description": "미지근 하다 마시면 지친 마음이 안정될 것 같다.",
 		"image": "res://imgs/items/tranquilizer180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "consumable",
 		"stackable": true,
 		"max_stack": 3,
+		"clear_status_effects": [
+			"lethargy"
+		],
+		"consumed_on_use": true
+	},
+	"tranquilizer_c": {
+		"name": "진정제C",
+		"description": "미지근 하다 마시면 꺽인 마음이 안정될 것 같다.",
+		"image": "res://imgs/items/tranquilizer180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "consumable",
+		"stackable": true,
+		"max_stack": 3,
+		"clear_status_effects": [
+			"despair"
+		],
+		"consumed_on_use": true
+	},
+	"tranquilizer_All": {
+		"name": "복합 진정제",
+		"description": "미지근 하다 마시면 모든 상태이상이 안정될 것 같다.",
+		"image": "res://imgs/items/tranquilizer180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "consumable",
+		"stackable": true,
+		"max_stack": 5,
 		"clear_status_effects": [
 			"fear",
 			"lethargy",

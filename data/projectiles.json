@@ -226,5 +226,33 @@
 				180
 			]
 		}
+	},
+	"despair_slash": {
+		"name": "절망 참격",
+		"frames_path": "res://imgs/effects/slash/slash_",
+		"frame_count": 9,
+		"frame_time": 0.04,
+		"size": [
+			1,
+			1
+		],
+		"speed": 1500,
+		"life_time": 0.9,
+		"max_distance": 1000,
+		"base_direction": "up",
+		"sound": "",
+		"status_effects": [
+			"despair"
+		],
+		"hitbox": {
+			"offset": [
+				55,
+				5
+			],
+			"size": [
+				90,
+				90
+			]
+		}
 	}
 }

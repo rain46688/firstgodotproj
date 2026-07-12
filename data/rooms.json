@@ -75,7 +75,7 @@
 					125,
 					45
 				],
-				"hide_if_flag": "got_cutter_knife_prologue",
+				"hide_if_flag": "search_box_01_02_prologue",
 				"events": [
 					{
 						"type": "text",
@@ -94,11 +94,11 @@
 									},
 									{
 										"type": "item",
-										"item": "cutter_knife"
+										"item": "dice_relic"
 									},
 									{
 										"type": "flag",
-										"flag": "got_cutter_knife_prologue"
+										"flag": "search_box_01_02_prologue"
 									}
 								],
 								"events": [
@@ -194,11 +194,11 @@
 								]
 							},
 							{
-								"text": "비상용 도구",
+								"text": "비상용 칼",
 								"events": [
 									{
 										"type": "item",
-										"item": "razor",
+										"item": "cutter_knife",
 										"count": 1
 									},
 									{
@@ -4183,7 +4183,7 @@
 		},
 		"ambient_sound": {
 			"path": "res://sounds/ocean_wave.mp3",
-			"volume_db": -5.0,
+			"volume_db": -10.0,
 			"loop": true
 		},
 		"enter_stories": [
@@ -4222,7 +4222,7 @@
 					{
 						"type": "sound",
 						"path": "res://sounds/crow.mp3",
-						"volume_db": 5,
+						"volume_db": 0,
 						"wait": false
 					},
 					{
@@ -4275,7 +4275,7 @@
 					{
 						"type": "sound",
 						"path": "res://sounds/crow.mp3",
-						"volume_db": 5,
+						"volume_db": 0,
 						"wait": false
 					},
 					{
@@ -4305,7 +4305,7 @@
 					{
 						"type": "sound",
 						"path": "res://sounds/crow.mp3",
-						"volume_db": 5,
+						"volume_db": 0,
 						"wait": false
 					},
 					{
@@ -4350,7 +4350,7 @@
 					{
 						"type": "sound",
 						"path": "res://sounds/crow.mp3",
-						"volume_db": 5,
+						"volume_db": 0,
 						"wait": false
 					},
 					{
@@ -4373,7 +4373,7 @@
 		},
 		"ambient_sound": {
 			"path": "res://sounds/ocean_wave.mp3",
-			"volume_db": 0.0,
+			"volume_db": -5.0,
 			"loop": true
 		},
 		"exits": {

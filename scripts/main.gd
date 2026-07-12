@@ -3902,17 +3902,49 @@ func run_single_event(event):
 		])
 
 		var has_reward = false
+		var duplicate_blocked = false
 
 		for reward_result in reward_results:
-			if int(reward_result.get("added", 0)) > 0 or int(reward_result.get("remaining", 0)) > 0:
+			if (
+				int(reward_result.get("added", 0)) > 0
+				or int(reward_result.get("remaining", 0)) > 0
+			):
 				has_reward = true
 
+			if bool(reward_result.get("duplicate_blocked", false)):
+				duplicate_blocked = true
+
+		# 정상 획득 또는 가방 공간 부족으로 정리 화면에 보낸 경우
 		if has_reward:
 			play_battle_result_sound()
+
 			if count > 1:
-				await show_dialogue(get_item_name(item_id) + " " + str(count) + "개" + MSG_ITEM_GAINED_SUFFIX)
+				await show_dialogue(
+					get_item_name(item_id)
+					+ " "
+					+ str(count)
+					+ "개"
+					+ MSG_ITEM_GAINED_SUFFIX
+				)
 			else:
-				await show_dialogue(get_item_name(item_id) + MSG_ITEM_GAINED_SUFFIX)
+				await show_dialogue(
+					get_item_name(item_id)
+					+ MSG_ITEM_GAINED_SUFFIX
+				)
+
+		# 이미 소지한 비중첩 아이템이라 획득하지 못한 경우
+		elif duplicate_blocked:
+			var duplicate_text = str(
+				event.get("duplicate_text", "")
+			)
+
+			if duplicate_text == "":
+				duplicate_text = (
+					get_item_name(item_id)
+					+ " 은(는) 더 이상 획득할 수 없습니다."
+				)
+
+			await show_dialogue(duplicate_text)
 
 		await open_inventory_arrange_if_pending_loot("loot")
 
@@ -10389,7 +10421,10 @@ func give_item_with_pending_loot(item_id, count = 1):
 		"item": item_id,
 		"requested": int(count),
 		"added": 0,
-		"remaining": 0
+		"remaining": 0,
+
+		# 이미 소지한 비중첩 아이템이라 획득하지 못했는지 여부
+		"duplicate_blocked": false
 	}
 
 	if item_id == "":
@@ -10416,8 +10451,18 @@ func give_item_with_pending_loot(item_id, count = 1):
 	var remaining_count = requested_count - added_count
 
 	# 비중첩 아이템은 현재 구조상 중복 소지 불가.
-	# 이미 가지고 있는 아이템 때문에 못 들어간 경우는 pending_loot로 보내지 않음.
-	if not is_stackable and after_count > 0:
+	#
+	# 요청한 수량보다 실제 추가된 수량이 적고,
+	# 획득 처리 후 해당 아이템을 이미 소지하고 있다면
+	# 중복 제한으로 차단된 것으로 처리한다.
+	var duplicate_blocked = (
+		not is_stackable
+		and added_count < requested_count
+		and after_count > 0
+	)
+
+	# 중복 불가 아이템은 인벤토리 정리 화면으로 보내지 않는다.
+	if duplicate_blocked:
 		remaining_count = 0
 
 	if remaining_count > 0:
@@ -10425,6 +10470,7 @@ func give_item_with_pending_loot(item_id, count = 1):
 
 	result["added"] = added_count
 	result["remaining"] = remaining_count
+	result["duplicate_blocked"] = duplicate_blocked
 
 	return result
 # 여러 보상 아이템을 가방에 넣고, 못 넣은 수량은 pending_loot에 저장하는 함수

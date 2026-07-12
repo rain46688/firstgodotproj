@@ -185,6 +185,15 @@ var battle_difficulty = "normal"
 # 특정 적이 일정 턴 후 도망가는 기능에 사용
 var player_turn_count = 0
 
+# 전투 화면 마우스 자동 숨김
+var mouse_idle_time = 0.0
+var is_battle_mouse_hidden = false
+
+# 마우스를 사용하지 않았을 때 숨기기까지의 시간
+const BATTLE_MOUSE_HIDE_DELAY = 5.0
+
+# 직전에 사용한 적 패턴 식별값
+var last_enemy_pattern_key = ""
 
 # 상수 변수 모음
 # 현재 없음
@@ -193,8 +202,38 @@ var player_turn_count = 0
 # 게임 시작 관련 함수 모음
 # ============================================================
 
+# 전투 화면에서 마우스가 움직였을 때 호출
+func reset_battle_mouse_idle():
+	mouse_idle_time = 0.0
+
+	if is_battle_mouse_hidden:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		is_battle_mouse_hidden = false
+# 전투 화면에서 일정 시간 마우스를 움직이지 않으면 숨김
+func update_battle_mouse_idle(delta):
+	if is_battle_mouse_hidden:
+		return
+
+	mouse_idle_time += delta
+
+	if mouse_idle_time < BATTLE_MOUSE_HIDE_DELAY:
+		return
+
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	is_battle_mouse_hidden = true
+# 전투 종료 또는 전투 씬 제거 시 마우스 복구
+func restore_battle_mouse():
+	mouse_idle_time = 0.0
+
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	is_battle_mouse_hidden = false
 # F7 적 본체 hitbox rect 제작 디버그 입력 처리 함수
 func _input(event):
+	# 마우스가 실제로 움직였다면 즉시 다시 표시
+	if event is InputEventMouseMotion:
+		if event.relative.length_squared() > 0.0:
+			reset_battle_mouse_idle()
+
 	handle_enemy_hitbox_rect_debug_input(event)
 # F7 적 본체 hitbox rect 제작 디버그 입력 처리 함수
 func handle_enemy_hitbox_rect_debug_input(event):
@@ -464,6 +503,9 @@ func update_normal_player_turn_input():
 		update_action_button_keyboard_input()
 # 프레임 마다 실행 함수
 func _process(delta):
+	# 전투 화면에서 마우스 자동 숨김 시간 갱신
+	update_battle_mouse_idle(delta)
+
 	update_debug_toggle_input()
 
 	var priority_input_handled = await update_priority_battle_input(delta)
@@ -472,8 +514,12 @@ func _process(delta):
 		return
 
 	update_normal_player_turn_input()
+# 전투 씬이 제거될 때 탐색 화면에서 마우스가 계속 숨겨지지 않도록 복구
+func _exit_tree():
+	restore_battle_mouse()
 # 처음에 한번 실행 함수
 func _ready():
+	restore_battle_mouse()
 	attack_button.focus_mode = Control.FOCUS_NONE
 	observe_button.focus_mode = Control.FOCUS_NONE
 	item_button.focus_mode = Control.FOCUS_NONE
@@ -576,7 +622,7 @@ func _ready():
 	]
 
 	update_action_button_focus()
-# 전투 시작 시 상태 변수 초기화 함수
+# 전투 시작 시 상태 변수 초기화 함수 - 전투 상태 초기화 함수
 func reset_battle_runtime_state():
 	battle_ended = false
 	is_player_turn = false
@@ -590,6 +636,7 @@ func reset_battle_runtime_state():
 	game_over_started = false
 	# 전투마다 플레이어 턴 카운트 초기화
 	player_turn_count = 0
+	last_enemy_pattern_key = ""
 # 전투 시작 시 플레이어 UI 초기화 함수
 func setup_battle_player_ui():
 	player_status_effects.clear()
@@ -3197,14 +3244,51 @@ func make_enemy_pattern_candidates():
 	add_part_pattern_candidates(candidates)
 
 	return candidates
+# 패턴을 고유하게 구분하기 위한 키 생성
+func get_enemy_pattern_key(pattern):
+	if pattern == null:
+		return ""
+
+	if typeof(pattern) != TYPE_DICTIONARY:
+		return ""
+
+	return (
+		str(pattern.get("owner_type", "body"))
+		+ ":"
+		+ str(pattern.get("owner_id", ""))
+		+ ":"
+		+ str(pattern.get("id", ""))
+	)
 # 적 패턴 선택 함수
+# 후보가 2개 이상이면 직전에 사용한 패턴을 한 번 제외한다.
 func choose_enemy_pattern():
 	var candidates = make_enemy_pattern_candidates()
 
 	if candidates.size() == 0:
 		return {}
 
-	return pick_weighted_pattern(candidates)
+	var filtered_candidates = []
+
+	# 후보가 하나뿐이라면 반복할 수밖에 없으므로 그대로 사용한다.
+	if candidates.size() > 1 and last_enemy_pattern_key != "":
+		for pattern in candidates:
+			if get_enemy_pattern_key(pattern) == last_enemy_pattern_key:
+				continue
+
+			filtered_candidates.append(pattern)
+
+	# 제외 결과가 비어 있으면 원래 후보 사용
+	if filtered_candidates.is_empty():
+		filtered_candidates = candidates
+
+	var selected_pattern = pick_weighted_pattern(filtered_candidates)
+
+	if not selected_pattern.is_empty():
+		last_enemy_pattern_key = get_enemy_pattern_key(
+			selected_pattern
+		)
+
+	return selected_pattern
 # 적 패턴 리스트 취합 함수
 func add_pattern_candidates(candidates, patterns, owner_type, owner_id):
 	if typeof(patterns) != TYPE_ARRAY:
@@ -4552,11 +4636,11 @@ func make_player_attack_body_hit_text(hitbox_name, damage, is_weak, is_critical,
 		text += make_critical_prefix_text(is_critical)
 
 	if is_no_damage:
-		text += str(hitbox_name) + "에 맞았지만 피해가 들어가지 않았다.\n"
+		text += str(hitbox_name) + " 에 맞았지만 피해가 들어가지 않았다.\n"
 	elif is_weak:
 		text += str(hitbox_name) + " 약점을 공격했다!\n"
 	else:
-		text += str(hitbox_name) + "에 맞았다.\n"
+		text += str(hitbox_name) + " 에 맞았다.\n"
 
 	text += str(int(damage)) + " 의 피해를 주었다."
 

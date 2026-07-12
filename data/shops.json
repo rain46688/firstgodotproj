@@ -17,7 +17,7 @@
 				"item": "tranquilizer_a",
 				"count": 1,
 				"price": 10,
-				"stock": 3,
+				"stock": 5,
 				"slot": 1,
 				"page": 0
 			},
@@ -37,6 +37,24 @@
 				"price": 50,
 				"stock": 1,
 				"slot": 3,
+				"page": 0
+			},
+			{
+				"product_id": "tranquilizer_b",
+				"item": "tranquilizer_b",
+				"count": 1,
+				"price": 10,
+				"stock": 5,
+				"slot": 1,
+				"page": 0
+			},
+			{
+				"product_id": "tranquilizer_c",
+				"item": "tranquilizer_c",
+				"count": 1,
+				"price": 10,
+				"stock": 5,
+				"slot": 1,
 				"page": 0
 			},
 			{
