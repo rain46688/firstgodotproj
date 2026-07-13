@@ -244,7 +244,7 @@
 		"phase_transition_text": "합쳐진 중앙 부분이 녹아내리듯 뒤틀리기 시작한다.",
 		"patterns": [
 			{
-				"id": "basic_attack_00",
+				"id": "basic_attack_01",
 				"weight": 5,
 				"warning_text": "아무런 행동을 하지 않고 있다.",
 				"fire_mode": "sequential",
@@ -293,9 +293,9 @@
 				"id": "left_arm",
 				"name": "구겨진 파이프를 들고있는 오른팔",
 				"max_hp": 200,
-				"z_index": 6,
+				"z_index": 10,
 				"image": "res://imgs/enemies/combined_candle_students_left.png",
-				"observe_text": "팔 부위를 먼저 노리는게 좋을거같다.",
+				"observe_text": "이 부위를 먼저 노리는게 좋을거같다.",
 				"size": [
 					296,
 					795
@@ -318,7 +318,7 @@
 				},
 				"patterns": [
 					{
-						"id": "basic_attack_01",
+						"id": "basic_attack_02",
 						"weight": 55,
 						"warning_text": "구겨진 파이프를 휘두른다.",
 						"fire_mode": "sequential",
@@ -327,7 +327,7 @@
 							{
 								"projectile": "fear_slash",
 								"start": [
-									700,
+									450,
 									0
 								],
 								"rotation": 180,
@@ -365,9 +365,9 @@
 				"id": "right_arm",
 				"name": "망가진 의자를 들고있는 왼팔",
 				"max_hp": 250,
-				"z_index": 6,
+				"z_index": 10,
 				"image": "res://imgs/enemies/combined_candle_students_right.png",
-				"observe_text": "팔 부위를 먼저 노리는게 좋을거같다.",
+				"observe_text": "",
 				"size": [
 					324,
 					830
@@ -377,7 +377,7 @@
 					0
 				],
 				"destroyable": true,
-				"destroy_text": "망가진 의자를 들고있는 왼팔이 뜯겨져 나갔다.",
+				"destroy_text": "망가진 의자를 들고있는 왼팔이 떨어져 나갔다.",
 				"hitbox": {
 					"id": "right_arm",
 					"name": "망가진 의자를 들고있는 왼팔",
@@ -390,7 +390,7 @@
 				},
 				"patterns": [
 					{
-						"id": "basic_attack_02",
+						"id": "basic_attack_03",
 						"weight": 40,
 						"warning_text": "망가진 의자를 휘두른다.",
 						"fire_mode": "sequential",
@@ -399,11 +399,11 @@
 							{
 								"projectile": "impact_basic",
 								"start": [
-									700,
+									500,
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 20,
 								"delay": 0.0
 							},
 							{
@@ -436,7 +436,7 @@
 	"combined_candle_students_phase_02": {
 		"name": "합쳐진 밀랍 학생들",
 		"phase": 2,
-		"max_hp": 150,
+		"max_hp": 180,
 		"battle_bgm": "res://sounds/bgm19.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -968,7 +968,7 @@
 		"weakness_text": "머리가 약점인 거 같다.",
 		"patterns": [
 			{
-				"id": "basic_attack_00",
+				"id": "basic_attack_01",
 				"weight": 5,
 				"warning_text": "아무런 행동을 하지 않고 있다.",
 				"fire_mode": "sequential",
@@ -1017,9 +1017,9 @@
 				"id": "left_arm",
 				"name": "구겨진 파이프를 들고있는 오른팔",
 				"max_hp": 200,
-				"z_index": 6,
+				"z_index": 10,
 				"image": "res://imgs/enemies/combined_candle_students_left.png",
-				"observe_text": "팔 부위를 먼저 노리는게 좋을거같다.",
+				"observe_text": "이 부위를 먼저 노리는게 좋을거같다.",
 				"size": [
 					296,
 					795
@@ -1042,7 +1042,7 @@
 				},
 				"patterns": [
 					{
-						"id": "basic_attack_01",
+						"id": "basic_attack_02",
 						"weight": 55,
 						"warning_text": "구겨진 파이프를 휘두른다.",
 						"fire_mode": "sequential",
@@ -1089,9 +1089,9 @@
 				"id": "right_arm",
 				"name": "망가진 의자를 들고있는 왼팔",
 				"max_hp": 250,
-				"z_index": 6,
+				"z_index": 10,
 				"image": "res://imgs/enemies/combined_candle_students_right.png",
-				"observe_text": "팔 부위를 먼저 노리는게 좋을거같다.",
+				"observe_text": "",
 				"size": [
 					324,
 					830
@@ -1101,7 +1101,7 @@
 					0
 				],
 				"destroyable": true,
-				"destroy_text": "망가진 의자를 들고있는 왼팔이 뜯겨져 나갔다.",
+				"destroy_text": "망가진 의자를 들고있는 왼팔이 떨어져 나갔다.",
 				"hitbox": {
 					"id": "right_arm",
 					"name": "망가진 의자를 들고있는 왼팔",
@@ -1114,7 +1114,7 @@
 				},
 				"patterns": [
 					{
-						"id": "basic_attack_02",
+						"id": "basic_attack_03",
 						"weight": 40,
 						"warning_text": "망가진 의자를 휘두른다.",
 						"fire_mode": "sequential",
@@ -1188,124 +1188,10 @@
 		"patterns": [
 			{
 				"id": "basic_attack_01",
-				"weight": 50,
-				"warning_text": "오른손의 칼을 짧게 휘두른다.",
-				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
-				"projectiles": [
-					{
-						"projectile": "slash_basic",
-						"start": [
-							740,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 0.0
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 0.25
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							1060,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 0.5
-					}
-				]
-			},
-			{
-				"id": "basic_attack_02",
-				"weight": 25,
-				"warning_text": "왼손에 끌고 있던 의자를 크게 휘두른다.",
-				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
-				"projectiles": [
-					{
-						"projectile": "impact_basic",
-						"start": [
-							780,
-							0
-						],
-						"rotation": 180,
-						"damage": 8,
-						"delay": 0.15
-					},
-					{
-						"projectile": "impact_basic",
-						"start": [
-							1020,
-							0
-						],
-						"rotation": 180,
-						"damage": 8,
-						"delay": 0.55
-					}
-				]
-			},
-			{
-				"id": "basic_attack_03",
-				"weight": 25,
-				"warning_text": "굳어붙은 밀랍이 갈라지며 사방으로 날카롭게 튄다.",
-				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
-				"projectiles": [
-					{
-						"projectile": "slash_basic",
-						"start": [
-							700,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 0.0,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "impact_basic",
-						"start": [
-							840,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 0.4,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							980,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 0.8,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "impact_basic",
-						"start": [
-							1120,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 1.2,
-						"danger_type": "parry_only"
-					}
-				]
+				"weight": 5,
+				"warning_text": "아무런 행동을 하지 않고 있다.",
+				"fire_mode": "sequential",
+				"projectiles": []
 			}
 		],
 		"hitbox_base_size": [
@@ -1328,20 +1214,193 @@
 				"id": "body",
 				"name": "몸통",
 				"rect": [
-					185,
-					189,
-					112,
-					422
+					199,
+					320,
+					89,
+					284
+				]
+			}
+		],
+		"parts": [
+			{
+				"id": "left_arm",
+				"name": "날카로운 커터칼을 들고있는 오른팔",
+				"max_hp": 100,
+				"z_index": 10,
+				"image": "res://imgs/enemies/candle_student_woman_left.png",
+				"observe_text": "이 부위를 먼저 노리는게 좋을거같다.",
+				"size": [
+					193,
+					306
+				],
+				"position": [
+					50,
+					332
+				],
+				"destroyable": true,
+				"destroy_text": "날카로운 커터칼을 들고있는 오른팔이 떨어져 나갔다.",
+				"hitbox": {
+					"id": "left_arm",
+					"name": "날카로운 커터칼을 들고있는 오른팔",
+					"rect": [
+						122,
+						367,
+						64,
+						226
+					]
+				},
+				"patterns": [
+					{
+						"id": "basic_attack_02",
+						"weight": 50,
+						"warning_text": "커터칼을 짧게 휘두른다.",
+						"fire_mode": "parallel",
+						"counter_hitbox_id": "head",
+						"projectiles": [
+							{
+								"projectile": "slash_basic",
+								"start": [
+									740,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 0.0
+							},
+							{
+								"projectile": "slash_basic",
+								"start": [
+									900,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 0.25
+							},
+							{
+								"projectile": "slash_basic",
+								"start": [
+									1060,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 0.5
+							}
+						]
+					},
+					{
+						"id": "basic_attack_03",
+						"weight": 25,
+						"warning_text": "커터칼을 사정없이 휘두른다.",
+						"fire_mode": "parallel",
+						"counter_hitbox_id": "head",
+						"projectiles": [
+							{
+								"projectile": "slash_basic",
+								"start": [
+									700,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									840,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 0.4,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "slash_basic",
+								"start": [
+									980,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 0.8,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									1120,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 1.2,
+								"danger_type": "parry_only"
+							}
+						]
+					}
 				]
 			},
 			{
 				"id": "right_arm",
-				"name": "오른쪽 팔",
-				"rect": [
-					293,
-					181,
-					37,
-					410
+				"name": "망가진 의자를 들고있는 왼팔",
+				"max_hp": 100,
+				"z_index": 10,
+				"image": "res://imgs/enemies/candle_student_woman_right.png",
+				"observe_text": "",
+				"size": [
+					317,
+					552
+				],
+				"position": [
+					220,
+					330
+				],
+				"destroyable": true,
+				"destroy_text": "망가진 의자를 들고있는 왼팔이 떨어져 나갔다.",
+				"hitbox": {
+					"id": "right_arm",
+					"name": "망가진 의자를 들고있는 왼팔",
+					"rect": [
+						288,
+						218,
+						86,
+						306
+					]
+				},
+				"patterns": [
+					{
+						"id": "basic_attack_04",
+						"weight": 25,
+						"warning_text": "왼손에 끌고 있던 망가진 의자를 크게 휘두른다.",
+						"fire_mode": "parallel",
+						"counter_hitbox_id": "head",
+						"projectiles": [
+							{
+								"projectile": "impact_basic",
+								"start": [
+									780,
+									0
+								],
+								"rotation": 180,
+								"damage": 8,
+								"delay": 0.15
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									1020,
+									0
+								],
+								"rotation": 180,
+								"damage": 8,
+								"delay": 0.55
+							}
+						]
+					}
 				]
 			}
 		],
@@ -1388,7 +1447,7 @@
 		"image": "res://imgs/enemies/ghost.png",
 		"battle_background": "",
 		"battle_background_alpha": 0.2,
-		"escape_after_player_turns": 5,
+		"escape_after_player_turns": 4,
 		"escape_text": "작은 유령은 장난치며 어둠 속으로 사라졌다.",
 		"enemy_size": [
 			150,
@@ -1564,17 +1623,6 @@
 					20,
 					10
 				],
-				"damage_multiplier": 3.0
-			},
-			{
-				"id": "body",
-				"name": "몸통",
-				"rect": [
-					250,
-					250,
-					20,
-					20
-				],
 				"damage_multiplier": 2.0
 			}
 		],
@@ -1583,7 +1631,7 @@
 				"item": "unknown_coin",
 				"chance": 100,
 				"min": 5,
-				"max": 50
+				"max": 20
 			},
 			{
 				"item": "old_water_ball",
@@ -3023,7 +3071,7 @@
 	},
 	"combined_candle_students_butcher": {
 		"name": "합쳐진 밀랍 도살자",
-		"max_hp": 600,
+		"max_hp": 500,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -3031,7 +3079,7 @@
 		"battle_bgm_fade_time": 3.0,
 		"encounter_sound": "res://sounds/enemy_encounter2.mp3",
 		"encounter_sound_volume_db": -5.0,
-		"image": "res://imgs/enemies/combined_candle_students_butcher.png",
+		"image": "res://imgs/enemies/combined_candle_students_charger.png",
 		"battle_background": "",
 		"battle_background_alpha": 0.2,
 		"enemy_size": [
@@ -3277,87 +3325,6 @@
 						"delay": 4.2
 					}
 				]
-			},
-			{
-				"id": "basic_attack_03",
-				"weight": 30,
-				"warning_text": "구겨진 파이프를 휘두른다.",
-				"fire_mode": "sequential",
-				"counter_hitbox_id": "left_arm",
-				"projectiles": [
-					{
-						"projectile": "fear_slash",
-						"start": [
-							450,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 0.0,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 0.3,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							1100,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 0.3,
-						"danger_type": "parry_only"
-					}
-				]
-			},
-			{
-				"id": "basic_attack_04",
-				"weight": 30,
-				"warning_text": "망가진 의자를 휘두른다.",
-				"fire_mode": "sequential",
-				"counter_hitbox_id": "right_arm",
-				"projectiles": [
-					{
-						"projectile": "impact_basic",
-						"start": [
-							500,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 0.0
-					},
-					{
-						"projectile": "impact_basic",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 0.3
-					},
-					{
-						"projectile": "impact_basic",
-						"start": [
-							1300,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 0.3
-					}
-				]
 			}
 		],
 		"hitbox_base_size": [
@@ -3393,6 +3360,149 @@
 					412,
 					179,
 					441
+				]
+			}
+		],
+		"parts": [
+			{
+				"id": "left_arm",
+				"name": "구겨진 파이프를 들고있는 오른팔",
+				"max_hp": 200,
+				"z_index": 10,
+				"image": "res://imgs/enemies/combined_candle_students_left.png",
+				"observe_text": "이 부위를 먼저 노리는게 좋을거같다.",
+				"size": [
+					296,
+					795
+				],
+				"position": [
+					80,
+					0
+				],
+				"destroyable": true,
+				"destroy_text": "구겨진 파이프를 들고있는 오른팔이 떨어져 나갔다.",
+				"hitbox": {
+					"id": "left_arm",
+					"name": "구겨진 파이프를 들고있는 오른팔",
+					"rect": [
+						120,
+						220,
+						160,
+						550
+					]
+				},
+				"patterns": [
+					{
+						"id": "basic_attack_03",
+						"weight": 30,
+						"warning_text": "구겨진 파이프를 휘두른다.",
+						"fire_mode": "sequential",
+						"counter_hitbox_id": "left_arm",
+						"projectiles": [
+							{
+								"projectile": "fear_slash",
+								"start": [
+									450,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "fear_slash",
+								"start": [
+									900,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "fear_slash",
+								"start": [
+									1100,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							}
+						]
+					}
+				]
+			},
+			{
+				"id": "right_arm",
+				"name": "망가진 의자를 들고있는 왼팔",
+				"max_hp": 250,
+				"z_index": 10,
+				"image": "res://imgs/enemies/combined_candle_students_right.png",
+				"observe_text": "",
+				"size": [
+					324,
+					830
+				],
+				"position": [
+					620,
+					0
+				],
+				"destroyable": true,
+				"destroy_text": "망가진 의자를 들고있는 왼팔이 떨어져 나갔다.",
+				"hitbox": {
+					"id": "right_arm",
+					"name": "망가진 의자를 들고있는 왼팔",
+					"rect": [
+						720,
+						220,
+						160,
+						550
+					]
+				},
+				"patterns": [
+					{
+						"id": "basic_attack_04",
+						"weight": 30,
+						"warning_text": "망가진 의자를 휘두른다.",
+						"fire_mode": "sequential",
+						"counter_hitbox_id": "right_arm",
+						"projectiles": [
+							{
+								"projectile": "impact_basic",
+								"start": [
+									500,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.0
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									900,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.3
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									1300,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.3
+							}
+						]
+					}
 				]
 			}
 		],

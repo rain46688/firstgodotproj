@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://p4lp1psrykq8"
-path="res://.godot/imported/candle_student_woman.png-40b10c030172511df4fe5f1c1382f92f.ctex"
+uid="uid://cxq3q6lgfwlik"
+path="res://.godot/imported/school_document_06.png-fe41a4bf8f2e53ab44112a29e523585e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/enemies/candle_student_woman.png"
-dest_files=["res://.godot/imported/candle_student_woman.png-40b10c030172511df4fe5f1c1382f92f.ctex"]
+source_file="res://imgs/documents/school_document_06.png"
+dest_files=["res://.godot/imported/school_document_06.png-fe41a4bf8f2e53ab44112a29e523585e.ctex"]
 
 [params]
 

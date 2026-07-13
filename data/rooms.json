@@ -8,6 +8,11 @@
 			"amplitude_y": 1.0,
 			"speed": 0.3
 		},
+		"bgm": {
+			"path": "res://sounds/bgm4.mp3",
+			"volume_db": -5,
+			"loop": true
+		},
 		"enter_stories": [
 			{
 				"event": "prologue_part_02",
@@ -359,15 +364,23 @@
 						"document_events": [
 							{
 								"type": "text",
-								"text": "어떤 소녀의 수기 1"
+								"text": "어떤 소녀의 수기 01"
 							},
 							{
 								"type": "text",
-								"text": "복도를 아무리 걸어도 끝이 안 나. 왜 계속 똑같은 교실만 나오는 건데."
+								"text": "여긴 우리 학교 같아."
+							},
+							{
+								"type": "text",
+								"text": "근데 복도를 아무리 걸어도 끝이 안 나. 왜 계속 똑같은 교실만 나오는 건데."
 							},
 							{
 								"type": "text",
 								"text": "창밖은 그냥 새까만 벽이야. 아무것도 안 보여. 아까 복도 끝에서 이상한 발소리를 들었어... 너무 무서워서 여기 교실 교탁 밑에 숨어 있어."
+							},
+							{
+								"type": "text",
+								"text": "그 애들이 나를 죽이러 오는 거 같아."
 							},
 							{
 								"type": "text",
@@ -2428,19 +2441,19 @@
 						"document_events": [
 							{
 								"type": "text",
-								"text": "어떤 소녀의 수기 3"
+								"text": "어떤 소녀의 수기 03"
 							},
 							{
 								"type": "text",
-								"text": "그 괴물과 마주쳤을 때 몸이 먼저 반응했어."
+								"text": "그 녀석들과 마주쳤을 때 몸이 먼저 반응했어."
 							},
 							{
 								"type": "text",
-								"text": "괴물이 왼손을 뻗을 걸 미리 알고 막았으니까."
+								"text": "왼손을 뻗을 걸 미리 알고 막았으니까."
 							},
 							{
 								"type": "text",
-								"text": "내 머리는 기억하지 못하는데, 내 몸이 그 괴물의 움직임을 기억하고 있어."
+								"text": "내 머리는 기억하지 못하는데, 내 몸이 움직임을 기억하고 있어."
 							},
 							{
 								"type": "text",
@@ -7694,7 +7707,15 @@
 						"document_events": [
 							{
 								"type": "text",
-								"text": "어떤 소녀의 수기 2"
+								"text": "어떤 소녀의 수기 02"
+							},
+							{
+								"type": "text",
+								"text": "미안해... 난 네가 정말 싫어서 그런 게 아니야 용서해 줘."
+							},
+							{
+								"type": "text",
+								"text": "다 애들이 시켜서 그렇게 한 거야."
 							},
 							{
 								"type": "text",
@@ -7702,7 +7723,7 @@
 							},
 							{
 								"type": "text",
-								"text": "그 괴물한테 들켜서 목이 꺾여 죽는 꿈이었어."
+								"text": "또 그 녀석들한테 들켜서 목이 꺾여 죽는 꿈이었어."
 							},
 							{
 								"type": "text",
@@ -9043,7 +9064,7 @@
 						"document_events": [
 							{
 								"type": "text",
-								"text": "어떤 소녀의 수기 4"
+								"text": "어떤 소녀의 수기 04"
 							},
 							{
 								"type": "text",
@@ -9067,6 +9088,18 @@
 							},
 							{
 								"type": "text",
+								"text": "정말 미안해 네가 이렇게 힘들어하는 줄 몰랐어."
+							},
+							{
+								"type": "text",
+								"text": "우린 그저 같이 놀고 있다고 생각했었어."
+							},
+							{
+								"type": "text",
+								"text": "난 네가 아파하는 모습을 보면서 같이 웃기만 했어."
+							},
+							{
+								"type": "text",
 								"text": "내 손을 봐."
 							},
 							{
@@ -9075,7 +9108,11 @@
 							},
 							{
 								"type": "text",
-								"text": "기억이 돌아올수록, 내 몸은 무너지고 있어. 억울해. 여길 나가고 싶었을 뿐인데."
+								"text": "기억이 돌아올수록, 내 몸은 무너져서 녹아내리고 있어."
+							},
+							{
+								"type": "text",
+								"text": "나도 억울해. 여길 나가고 싶었을 뿐인데."
 							}
 						]
 					},
@@ -9519,6 +9556,11 @@
 			"alpha": 0.35
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/bgm17.mp3",
 			"volume_db": -10.0,
 			"loop": true
@@ -9639,6 +9681,11 @@
 			"alpha": 0.35
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/bgm17.mp3",
 			"volume_db": -10.0,
 			"loop": true
@@ -9777,6 +9824,11 @@
 			"alpha": 0.35
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/bgm17.mp3",
 			"volume_db": -10.0,
 			"loop": true
@@ -9874,9 +9926,9 @@
 			"fps": 6.0,
 			"alpha": 0.35
 		},
-		"ambient_sound": {
+		"bgm": {
 			"path": "res://sounds/bgm18.mp3",
-			"volume_db": -15.0,
+			"volume_db": -10.0,
 			"loop": true
 		},
 		"exits": {
@@ -10757,7 +10809,7 @@
 						"document_events": [
 							{
 								"type": "text",
-								"text": "어떤 소녀의 수기 5"
+								"text": "어떤 소녀의 수기 05"
 							},
 							{
 								"type": "text",
@@ -10777,11 +10829,11 @@
 							},
 							{
 								"type": "text",
-								"text": "나를 마중하러 온 친구들이야."
+								"text": "나를 맞이하러 온 친구들이야."
 							},
 							{
 								"type": "text",
-								"text": "나와 하나가 되자. "
+								"text": "나와 하나가 되자."
 							},
 							{
 								"type": "text",
@@ -11025,7 +11077,7 @@
 			"amplitude_y": 1.0,
 			"speed": 0.3
 		},
-		"ambient_sound": {
+		"bgm": {
 			"path": "res://sounds/unknown_hall.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -11139,9 +11191,9 @@
 			"amplitude_y": 1.0,
 			"speed": 0.3
 		},
-		"ambient_sound": {
+		"bgm": {
 			"path": "res://sounds/unknown_hall.mp3",
-			"volume_db": -5.0,
+			"volume_db": 0.0,
 			"loop": true
 		},
 		"enter_stories": [
@@ -11242,9 +11294,9 @@
 			"amplitude_y": 1.0,
 			"speed": 0.3
 		},
-		"ambient_sound": {
+		"bgm": {
 			"path": "res://sounds/unknown_hall.mp3",
-			"volume_db": -5.0,
+			"volume_db": 0.0,
 			"loop": true
 		},
 		"enter_stories": [],
@@ -11312,9 +11364,9 @@
 			"amplitude_y": 1.0,
 			"speed": 0.3
 		},
-		"ambient_sound": {
+		"bgm": {
 			"path": "res://sounds/unknown_hall.mp3",
-			"volume_db": -5.0,
+			"volume_db": 0.0,
 			"loop": true
 		},
 		"enter_stories": [],
@@ -11378,9 +11430,9 @@
 			"amplitude_y": 1.0,
 			"speed": 0.3
 		},
-		"ambient_sound": {
+		"bgm": {
 			"path": "res://sounds/unknown_hall.mp3",
-			"volume_db": -5.0,
+			"volume_db": 0.0,
 			"loop": true
 		},
 		"enter_stories": [],
@@ -11448,9 +11500,9 @@
 			"amplitude_y": 1.0,
 			"speed": 0.3
 		},
-		"ambient_sound": {
+		"bgm": {
 			"path": "res://sounds/unknown_hall.mp3",
-			"volume_db": -5.0,
+			"volume_db": 0.0,
 			"loop": true
 		},
 		"enter_stories": [],
@@ -11510,6 +11562,11 @@
 			"alpha": 0.55
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -11555,6 +11612,11 @@
 			"speed": 0.3
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -11645,6 +11707,11 @@
 			"speed": 0.3
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -11768,6 +11835,11 @@
 			"alpha": 0.55
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -11817,6 +11889,11 @@
 			"speed": 0.3
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -11907,6 +11984,11 @@
 			"speed": 0.3
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -12009,6 +12091,11 @@
 			"alpha": 0.55
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -12096,6 +12183,11 @@
 			"speed": 0.3
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -12194,6 +12286,11 @@
 			"speed": 0.3
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -12292,6 +12389,11 @@
 			"alpha": 0.55
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -12341,6 +12443,11 @@
 			"speed": 0.3
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -12431,6 +12538,11 @@
 			"speed": 0.3
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -12532,8 +12644,13 @@
 			"alpha": 0.55
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
-			"volume_db": 5.0,
+			"volume_db": 0.0,
 			"loop": true
 		},
 		"enter_stories": [],
@@ -12590,6 +12707,11 @@
 			"alpha": 0.55
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -12634,6 +12756,11 @@
 			"alpha": 0.55
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -12681,6 +12808,11 @@
 			"speed": 0.3
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -12771,6 +12903,11 @@
 			"speed": 0.3
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -12816,6 +12953,11 @@
 			"alpha": 0.55
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -12874,6 +13016,11 @@
 			"speed": 0.3
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -12973,6 +13120,11 @@
 			"speed": 0.3
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -13169,6 +13321,11 @@
 			"alpha": 0.55
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -13218,6 +13375,11 @@
 			"speed": 0.3
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -13308,6 +13470,11 @@
 			"speed": 0.3
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -13432,6 +13599,11 @@
 			"alpha": 0.55
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -13512,6 +13684,11 @@
 		},
 		"ambient_sound": {
 			"path": "res://sounds/monitor_buzz.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
 		},
@@ -13603,6 +13780,11 @@
 		"ambient_sound": {
 			"path": "res://sounds/monitor_buzz.mp3",
 			"volume_db": 5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
 			"loop": true
 		},
 		"footstep_sound": {
@@ -13705,6 +13887,11 @@
 			"alpha": 0.55
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -13768,6 +13955,11 @@
 			"speed": 0.3
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -13872,6 +14064,11 @@
 			"speed": 0.3
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -14058,6 +14255,11 @@
 			"alpha": 0.55
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -14108,14 +14310,28 @@
 			"speed": 0.3
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/water_drops.mp3",
-			"volume_db": 5.0,
+			"volume_db": 0.0,
 			"loop": true
 		},
 		"footstep_sound": {
 			"path": "res://sounds/footsteps_water.mp3",
 			"volume_db": 5.0
 		},
+		"enter_stories": [
+			{
+				"event": "feed_wrong_thing_classroom_40",
+				"required_flag": "opened_swimming_pool",
+				"required_flag_missing": [
+					"story_feed_wrong_thing_classroom_40_done"
+				]
+			}
+		],
 		"exits": {
 			"down": {
 				"target": "classroom_40",
@@ -14158,129 +14374,138 @@
 					},
 					{
 						"type": "text",
-						"text": "분명 살아있다 가까이 가면 안 될 거 같다."
-					}
-				]
-			},
-			"fish_feed_01": {
-				"click_rect": [
-					148,
-					664,
-					955,
-					412
-				],
-				"required_flag": [
-					"got_craw_classroom_39_02"
-				],
-				"required_flag_missing": [
-					"opened_swimming_pool"
-				],
-				"events": [
-					{
-						"type": "text",
-						"text": "거대한 생명체의 머리가 수면 위로 올라와 있다."
+						"text": "눈 앞의 생명체는 살아있다, 조심해야 될 거 같다."
 					},
 					{
-						"type": "text",
-						"text": "분명 살아있다 가까이 가면 안 될 거 같다."
-					},
-					{
-						"type": "text",
-						"text": "이 생명체에게 줄 먹이가 있다."
-					},
-					{
-						"type": "item_payment",
-						"item": "craw_body",
-						"count": 1,
-						"success_text": "까마귀의 시체를 거대한 생명체의 입안에 넣었다.",
-						"fail_text": "...",
-						"success_events": [
+						"type": "choices",
+						"choices": [
 							{
-								"type": "sound",
-								"path": "res://sounds/squeeze_sound_02.mp3",
-								"volume_db": 10,
-								"wait": true
+								"text": "까마귀의 시체를 입에 넣는다.",
+								"required_flag": [
+									"got_craw_classroom_33_02"
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/squeeze_sound_02.mp3",
+										"volume_db": 10,
+										"wait": true
+									},
+									{
+										"type": "text",
+										"text": "우드득... 우드득..."
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/splash.mp3",
+										"volume_db": 10,
+										"wait": true
+									},
+									{
+										"type": "text",
+										"text": "거대한 생명체는 물속으로 사라졌다."
+									},
+									{
+										"type": "flag",
+										"flag": "opened_swimming_pool"
+									}
+								]
 							},
 							{
-								"type": "text",
-								"text": "우드득... 우드득..."
+								"text": "까마귀의 시체를 입에 넣는다.",
+								"required_flag": [
+									"got_craw_classroom_39_02"
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/squeeze_sound_02.mp3",
+										"volume_db": 10,
+										"wait": true
+									},
+									{
+										"type": "text",
+										"text": "우드득... 우드득..."
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/splash.mp3",
+										"volume_db": 10,
+										"wait": true
+									},
+									{
+										"type": "text",
+										"text": "거대한 생명체는 물속으로 사라졌다."
+									},
+									{
+										"type": "flag",
+										"flag": "opened_swimming_pool"
+									}
+								]
 							},
 							{
-								"type": "sound",
-								"path": "res://sounds/splash.mp3",
-								"volume_db": 10,
-								"wait": true
+								"text": "입속을 들여다본다.",
+								"events": [
+									{
+										"type": "flag",
+										"flag": "opened_swimming_pool"
+									}
+								]
 							},
 							{
-								"type": "text",
-								"text": "거대한 생명체는 물속으로 사라졌다."
-							},
-							{
-								"type": "flag",
-								"flag": "opened_swimming_pool"
+								"text": "그만둔다",
+								"events": []
 							}
 						]
 					}
 				]
 			},
-			"fish_feed_02": {
+			"document": {
 				"click_rect": [
-					148,
-					664,
-					955,
-					412
-				],
-				"required_flag": [
-					"got_craw_classroom_33_02"
-				],
-				"required_flag_missing": [
-					"opened_swimming_pool"
+					881,
+					456,
+					80,
+					54
 				],
 				"events": [
 					{
 						"type": "text",
-						"text": "거대한 생명체의 머리가 수면 위로 올라와 있다."
+						"text": "누군가의 쪽지가 붙여있다."
 					},
 					{
-						"type": "text",
-						"text": "분명 살아있다 가까이 가면 안 될 거 같다."
-					},
-					{
-						"type": "text",
-						"text": "이 생명체에게 줄 먹이가 있다."
-					},
-					{
-						"type": "item_payment",
-						"item": "craw_body",
-						"count": 1,
-						"success_text": "까마귀의 시체를 거대한 생명체의 입안에 넣었다.",
-						"fail_text": "...",
-						"success_events": [
+						"type": "document_dialogue",
+						"path": "res://imgs/documents/document_01.png",
+						"start_page": 1,
+						"sound": "res://sounds/paper.mp3",
+						"sound_volume_db": 10,
+						"document_events": [
 							{
-								"type": "sound",
-								"path": "res://sounds/squeeze_sound_02.mp3",
-								"volume_db": 10,
-								"wait": true
+								"type": "text",
+								"text": "누군가의 쪽지 01"
 							},
 							{
 								"type": "text",
-								"text": "우드득... 우드득..."
-							},
-							{
-								"type": "sound",
-								"path": "res://sounds/splash.mp3",
-								"volume_db": 10,
-								"wait": true
+								"text": "나는 헤엄치고 또 헤엄쳤다."
 							},
 							{
 								"type": "text",
-								"text": "거대한 생명체는 물속으로 사라졌다."
+								"text": "겨우 구멍을 통해서 올라올 수 있었다."
 							},
 							{
-								"type": "flag",
-								"flag": "opened_swimming_pool"
+								"type": "text",
+								"text": "그 끔찍한 곳에서 드디어 벗어났다."
+							},
+							{
+								"type": "text",
+								"text": "이걸 보는 자는 아래로 내려갈 생각하지 말아줘."
 							}
 						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/paper.mp3",
+						"volume_db": 10,
+						"wait": false
 					}
 				]
 			}

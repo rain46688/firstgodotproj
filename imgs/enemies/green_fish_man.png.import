@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bd0637yfpx3pw"
-path="res://.godot/imported/combined_candle_students_butcher.png-d733414de764f78a97e06774efecb0d6.ctex"
+uid="uid://dt0plf16arcot"
+path="res://.godot/imported/green_fish_man.png-d7e60bf65dce226b5b325d664fd798e5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/enemies/combined_candle_students_butcher.png"
-dest_files=["res://.godot/imported/combined_candle_students_butcher.png-d733414de764f78a97e06774efecb0d6.ctex"]
+source_file="res://imgs/enemies/green_fish_man.png"
+dest_files=["res://.godot/imported/green_fish_man.png-d7e60bf65dce226b5b325d664fd798e5.ctex"]
 
 [params]
 

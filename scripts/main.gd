@@ -301,6 +301,9 @@ var click_rect_debug_preview = null
 # value : 생성된 AudioStreamPlayer
 var active_story_sounds = {}
 
+# 현재 BGMPlayer에 들어 있는 실제 BGM 경로
+var current_bgm_path = ""
+
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
 const MSG_NO_BACK = "더 이상 뒤로 갈 수 없다..."
@@ -342,6 +345,10 @@ const MOVE_ARROW_HITBOX_PADDING = 8
 const SHOP_PURCHASE_SOUND_PATH = "res://sounds/coin.mp3"
 
 const SHOP_PURCHASE_FAIL_SOUND_PATH = "res://sounds/fail.mp3"
+
+# 탐색 화면 기본 BGM
+const DEFAULT_ROOM_BGM_PATH = "res://sounds/bgm2.mp3"
+const DEFAULT_ROOM_BGM_VOLUME_DB = -5.0
 
 # ============================================================
 # 게임 시작 관련 함수 모음
@@ -608,8 +615,12 @@ func setup_initial_ui_helpers():
 	bag_button.focus_mode = Control.FOCUS_NONE
 # 처음에 한번 실행 함수
 func _ready():
-	# 시작시 기본 브금 실행
-	play_bgm("res://sounds/bgm2.mp3")
+	# 시작 시 기본 탐색 BGM 실행
+	play_bgm(
+		DEFAULT_ROOM_BGM_PATH,
+		DEFAULT_ROOM_BGM_VOLUME_DB,
+		true
+	)
 
 	# 게임 시작 시 UI의 기본 표시 상태를 초기화하는 함수
 	setup_initial_ui_state()
@@ -893,10 +904,7 @@ func end_battle(result_data):
 
 	# 인게임 화면 복귀
 	is_story_playing = false
-	show_game_ui()
-
-	# 기존 탐색 BGM 재생
-	bgm_player.play()
+	await show_game_ui()
 
 	# 보상 아이템 지급 및 인벤토리 정리 화면 처리
 	await give_items_with_pending_loot(battle_rewards)
@@ -1001,10 +1009,7 @@ func handle_story_battle_lose_result(result_data):
 		return
 
 	# lose_story가 없으면 일반 탐색으로 복귀
-	show_game_ui()
-
-	if bgm_player != null and not bgm_player.playing:
-		bgm_player.play()
+	await show_game_ui()
 
 # =================================s===========================
 # 디버그 관련 함수 모음
@@ -2478,6 +2483,127 @@ func update_room_move_arrows(room):
 				exit_data["position"][1]
 			)
 			arrow_base_positions[direction] = arrow.position
+# 현재 방에서 사용할 BGM 설정 반환
+#
+# bgm이 없으면 기본 탐색 BGM을 사용한다.
+# "stop": true이면 해당 방에서는 BGM을 재생하지 않는다.
+func get_room_bgm_data(room):
+	var result = {
+		"path": DEFAULT_ROOM_BGM_PATH,
+		"volume_db": DEFAULT_ROOM_BGM_VOLUME_DB,
+		"loop": true,
+		"stop": false
+	}
+
+	if room.is_empty():
+		return result
+
+	if not room.has("bgm"):
+		return result
+
+	var bgm_data = room["bgm"]
+
+	# 간단히 문자열 경로만 지정하는 방식도 지원
+	#
+	# "bgm": "res://sounds/bgm17.mp3"
+	if typeof(bgm_data) == TYPE_STRING:
+		var simple_path = str(bgm_data).strip_edges()
+
+		if simple_path != "":
+			result["path"] = simple_path
+
+		return result
+
+	if typeof(bgm_data) != TYPE_DICTIONARY:
+		push_warning(
+			"room의 bgm 값이 Dictionary 또는 String이 아님: "
+			+ current_room
+		)
+		return result
+
+	if bool(bgm_data.get("stop", false)):
+		result["stop"] = true
+		result["path"] = ""
+		return result
+
+	var bgm_path = str(
+		bgm_data.get(
+			"path",
+			DEFAULT_ROOM_BGM_PATH
+		)
+	).strip_edges()
+
+	if bgm_path == "":
+		bgm_path = DEFAULT_ROOM_BGM_PATH
+
+	result["path"] = bgm_path
+	result["volume_db"] = float(
+		bgm_data.get(
+			"volume_db",
+			DEFAULT_ROOM_BGM_VOLUME_DB
+		)
+	)
+	result["loop"] = bool(bgm_data.get("loop", true))
+
+	return result
+
+
+# 현재 방 데이터에 맞게 탐색 BGM 갱신
+func update_room_bgm(room):
+	if room.is_empty():
+		return
+
+	# 스토리 진행 중에는 story_events.json의 bgm 연출을 우선한다.
+	# 스토리가 끝나고 update_room()이 다시 호출되면 방 BGM으로 복구된다.
+	if is_story_playing:
+		return
+
+	# 전투 중에는 battle_scene의 전투 BGM을 사용한다.
+	if battle_scene != null:
+		return
+
+	var bgm_data = get_room_bgm_data(room)
+
+	# BGM이 없는 무음 방
+	if bool(bgm_data.get("stop", false)):
+		if bgm_player != null and bgm_player.playing:
+			bgm_player.stop()
+
+		current_bgm_path = ""
+		return
+
+	var target_path = str(bgm_data.get("path", "")).strip_edges()
+	var target_volume_db = float(
+		bgm_data.get(
+			"volume_db",
+			DEFAULT_ROOM_BGM_VOLUME_DB
+		)
+	)
+	var target_loop = bool(bgm_data.get("loop", true))
+
+	if target_path == "":
+		return
+
+	# 같은 음악을 사용하는 방끼리 이동할 때는
+	# 음악을 처음부터 다시 시작하지 않고 볼륨만 갱신한다.
+	if (
+		current_bgm_path == target_path
+		and bgm_player.stream != null
+	):
+		current_bgm_base_volume_db = target_volume_db
+		apply_bgm_volume()
+
+		if not bgm_player.playing:
+			bgm_player.play()
+
+		return
+
+	# 다른 BGM으로 변경
+	play_bgm(
+		target_path,
+		target_volume_db,
+		target_loop
+	)
 # 현재 방 UI 갱신 함수
 func update_room():
 	var room = get_current_room_data()
@@ -2486,12 +2612,15 @@ func update_room():
 		return
 
 	update_room_background(room)
+
+	# 방별 탐색 BGM 갱신
+	update_room_bgm(room)
+
 	update_room_ambient_overlay(room)
 	update_room_ambient_sound(room)
 	update_room_idle_motion_setting(room)
 	update_room_move_arrows(room)
 
-	# 현재 방의 interactions 데이터를 기준으로 클릭 버튼 자동 생성
 	create_interaction_buttons(room)
 	create_exit_buttons(room)
 # 현재 방 idle motion 설정 갱신 함수
@@ -4110,6 +4239,51 @@ func is_valid_choice_data(choice):
 		return false
 
 	return true
+# 선택지가 현재 플래그 조건에서 표시 가능한지 확인
+#
+# required_flag:
+# - 등록된 플래그를 모두 가지고 있어야 표시
+#
+# required_flag_missing:
+# - 등록된 플래그를 모두 가지고 있지 않아야 표시
+#
+# 조건이 없으면 기존처럼 항상 표시한다.
+func can_show_choice_data(choice):
+	if not is_valid_choice_data(choice):
+		return false
+
+	# required_flag는 전부 있어야 한다.
+	#
+	# 문자열 하나:
+	# "required_flag": "got_key"
+	#
+	# 배열:
+	# "required_flag": ["got_key", "met_npc"]
+	for flag_id in get_conditional_event_flags(
+		choice,
+		"required_flag"
+	):
+		if not has_flag(flag_id):
+			return false
+
+	# required_flag_missing은 전부 없어야 한다.
+	#
+	# 문자열 하나:
+	# "required_flag_missing": "already_received"
+	#
+	# 배열:
+	# "required_flag_missing": [
+	#     "already_received",
+	#     "quest_failed"
+	# ]
+	for flag_id in get_conditional_event_flags(
+		choice,
+		"required_flag_missing"
+	):
+		if has_flag(flag_id):
+			return false
+
+	return true
 # 일반 이벤트 선택지 실행 함수
 func run_event_choices(choices):
 	if typeof(choices) != TYPE_ARRAY:
@@ -4119,7 +4293,7 @@ func run_event_choices(choices):
 	var valid_choices = []
 
 	for choice in choices:
-		if is_valid_choice_data(choice):
+		if can_show_choice_data(choice):
 			valid_choices.append(choice)
 
 	if valid_choices.size() == 0:
@@ -4585,7 +4759,7 @@ func run_story_choices(choices):
 	var valid_choices = []
 
 	for choice in choices:
-		if is_valid_choice_data(choice):
+		if can_show_choice_data(choice):
 			valid_choices.append(choice)
 
 	if valid_choices.size() == 0:
@@ -6656,20 +6830,33 @@ func play_move_footstep_sound(footstep_data):
 		footstep_sound.play()
 # BGM 재생 함수
 func play_bgm(path, volume_db = -5.0, loop = true):
-	if path == "":
+	var bgm_path = str(path).strip_edges()
+
+	if bgm_path == "":
 		return
 
-	var stream = load(path)
+	if not ResourceLoader.exists(bgm_path):
+		push_warning("BGM 파일이 없음: " + bgm_path)
+		return
 
-	# 반복 재생 설정
+	var stream = load(bgm_path)
+
+	if stream == null:
+		push_warning("BGM 로드 실패: " + bgm_path)
+		return
+
+	# 다른 곳에서 동일한 AudioStream 리소스를 사용할 수 있으므로
+	# 복사본에만 loop 설정을 적용한다.
+	stream = stream.duplicate()
+
 	if stream is AudioStreamMP3:
-		stream.loop = loop
-	elif stream is AudioStreamOggVorbis:
-		stream.loop = loop
+		stream.loop = bool(loop)
 
-	# 이 BGM의 기본 볼륨을 저장한다.
-	# 설정 슬라이더는 이 기본 볼륨에 추가로 적용된다.
-	current_bgm_base_volume_db = volume_db
+	elif stream is AudioStreamOggVorbis:
+		stream.loop = bool(loop)
+
+	current_bgm_path = bgm_path
+	current_bgm_base_volume_db = float(volume_db)
 
 	bgm_player.stream = stream
 	apply_bgm_volume()

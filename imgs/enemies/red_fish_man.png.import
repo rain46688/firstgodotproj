@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://p4lp1psrykq8"
-path="res://.godot/imported/candle_student_woman.png-40b10c030172511df4fe5f1c1382f92f.ctex"
+uid="uid://b3y2w1hsnr6m1"
+path="res://.godot/imported/red_fish_man.png-0bfe4f2f059c2c08ed17c37ca1942f61.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/enemies/candle_student_woman.png"
-dest_files=["res://.godot/imported/candle_student_woman.png-40b10c030172511df4fe5f1c1382f92f.ctex"]
+source_file="res://imgs/enemies/red_fish_man.png"
+dest_files=["res://.godot/imported/red_fish_man.png-0bfe4f2f059c2c08ed17c37ca1942f61.ctex"]
 
 [params]
 
