@@ -83,5 +83,90 @@
 				}
 			]
 		}
+	},
+	"swimming_pool": {
+		"start_texts": [
+			"복도 끝에서 무언가 내 쪽으로 다가오고 있는 게 느껴진다.",
+			"저 멀리서 소리가 들려온다.",
+			"이쪽으로 오고있는 기척이 느껴진다.",
+			"무언가 이쪽으로 오고있다.",
+			"반대편에 실루엣이 보인다 이쪽으로 오고 있다."
+		],
+		"choice_pools": {
+			"escape": [
+				{
+					"text": "잠깐 아무 교실로 숨어 시간을 보낸다.",
+					"result_text": "알 수 없는 인기척은 빠르게 사라졌다.",
+					"result": "escape"
+				},
+				{
+					"text": "빠르게 반대쪽으로 도망간다.",
+					"result_text": "알 수 없는 무언가가 쫒아오는듯 했으나 길을 잃고 돌아갔다.",
+					"result": "escape"
+				},
+				{
+					"text": "천천히 상황을 살피면서 반대쪽으로 도망간다.",
+					"result_text": "알 수 없는 인기척은 사라졌다.",
+					"result": "escape"
+				},
+				{
+					"text": "주위의 아무 물건을 집어서 반대쪽으로 던진다.",
+					"result_text": "알 수 없는 인기척은 사라졌다.",
+					"result": "escape"
+				}
+			],
+			"player_first": [
+				{
+					"text": "숨어서 지나가는 걸 습격하자.",
+					"result_text": "먼저 상대방의 뒤를 잡았다.",
+					"result": "battle",
+					"first_turn": "player"
+				},
+				{
+					"text": "바로 뒤돌아서 돌진한다.",
+					"result_text": "먼저 상대방의 뒤를 잡았다.",
+					"result": "battle",
+					"first_turn": "player"
+				},
+				{
+					"text": "조심스럽게 교실 안에 들어가서 기회를 노린다.",
+					"result_text": "먼저 상대방의 뒤를 잡았다.",
+					"result": "battle",
+					"first_turn": "player"
+				},
+				{
+					"text": "조심스럽게 다가가서 기회를 노린다.",
+					"result_text": "먼저 상대방의 뒤를 잡았다.",
+					"result": "battle",
+					"first_turn": "player"
+				}
+			],
+			"enemy_first": [
+				{
+					"text": "빠르게 도망친다.",
+					"result_text": "알 수 없는 존재에게 들켜서 뒤를 잡혔다.",
+					"result": "battle",
+					"first_turn": "enemy"
+				},
+				{
+					"text": "바로 옆 사물함 뒤에 숨어있는다.",
+					"result_text": "알 수 없는 존재에게 들켜서 뒤를 잡혔다.",
+					"result": "battle",
+					"first_turn": "enemy"
+				},
+				{
+					"text": "기척을 따라 살금살금 다가간다.",
+					"result_text": "알 수 없는 존재에게 들켜서 뒤를 잡혔다.",
+					"result": "battle",
+					"first_turn": "enemy"
+				},
+				{
+					"text": "빠르게 뛰어서 교실 안쪽으로 도망친다.",
+					"result_text": "알 수 없는 존재에게 들켜서 뒤를 잡혔다.",
+					"result": "battle",
+					"first_turn": "enemy"
+				}
+			]
+		}
 	}
 }

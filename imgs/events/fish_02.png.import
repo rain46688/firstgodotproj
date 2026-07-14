@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://t1p6c6te8djd"
-path="res://.godot/imported/classroom_ladder_02.png-2820b7e41ac9d6a3a776a5bbd39b8764.ctex"
+uid="uid://daucf7mgnhmun"
+path="res://.godot/imported/fish_02.png-f68d7858350d31d6b20588dd17d4726c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/backgrounds/classroom_ladder_02.png"
-dest_files=["res://.godot/imported/classroom_ladder_02.png-2820b7e41ac9d6a3a776a5bbd39b8764.ctex"]
+source_file="res://imgs/events/fish_02.png"
+dest_files=["res://.godot/imported/fish_02.png-f68d7858350d31d6b20588dd17d4726c.ctex"]
 
 [params]
 

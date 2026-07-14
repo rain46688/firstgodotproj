@@ -376,7 +376,7 @@
 							},
 							{
 								"type": "text",
-								"text": "창밖은 그냥 새까만 벽이야. 아무것도 안 보여. 아까 복도 끝에서 이상한 발소리를 들었어... 너무 무서워서 여기 교실 교탁 밑에 숨어 있어."
+								"text": "창밖은 그냥 새까만 벽이야. 아무것도 안 보여. 아까 복도 끝에서 이상한 발소리를 들었어... 너무 무서워서 교탁 밑에 숨어 있어."
 							},
 							{
 								"type": "text",
@@ -384,7 +384,7 @@
 							},
 							{
 								"type": "text",
-								"text": "엄마, 아빠... 나 집에 가고 싶어. 누군가 이 글을 본다면 제발 나 좀 여기서 꺼내줘."
+								"text": "엄마, 아빠... 나 집에 가고 싶어. 누군가 이 글을 본다면 제발 나 좀 여기서 꺼내주세요."
 							}
 						]
 					},
@@ -1572,10 +1572,6 @@
 										"text": "무언가 있다."
 									},
 									{
-										"type": "text",
-										"text": "깊숙이 손을 넣고 더 뒤져보았다."
-									},
-									{
 										"type": "item",
 										"item": "beverage_a",
 										"count": 3
@@ -2053,10 +2049,6 @@
 									{
 										"type": "text",
 										"text": "무언가 있다."
-									},
-									{
-										"type": "text",
-										"text": "깊숙이 손을 넣고 더 뒤져보았다."
 									},
 									{
 										"type": "item",
@@ -3804,7 +3796,7 @@
 							},
 							{
 								"text": "두 번째 사물함을 연다",
-								"flag": "got_classroom_key_a_classroom_07_02",
+								"flag": "got_classroom_key_a_classroom_10_02",
 								"already_events": [
 									{
 										"type": "sound",
@@ -3829,16 +3821,12 @@
 										"text": "무언가 있다."
 									},
 									{
-										"type": "text",
-										"text": "자세히 들여다보면서 더 뒤져보았다."
-									},
-									{
 										"type": "item",
 										"item": "classroom_key_a"
 									},
 									{
 										"type": "flag",
-										"flag": "got_classroom_key_a_classroom_07_02"
+										"flag": "got_classroom_key_a_classroom_10_02"
 									}
 								]
 							},
@@ -4154,6 +4142,11 @@
 			"volume_db": -10.0,
 			"loop": true
 		},
+		"bgm": {
+			"path": "res://sounds/ocean_wave.mp3",
+			"volume_db": -20.0,
+			"loop": true
+		},
 		"exits": {
 			"up": {
 				"target": "school_hallway_13",
@@ -4193,7 +4186,7 @@
 			"amplitude_y": 1.0,
 			"speed": 0.3
 		},
-		"ambient_sound": {
+		"bgm": {
 			"path": "res://sounds/ocean_wave.mp3",
 			"volume_db": -10.0,
 			"loop": true
@@ -4383,7 +4376,7 @@
 			"amplitude_y": 1.0,
 			"speed": 0.3
 		},
-		"ambient_sound": {
+		"bgm": {
 			"path": "res://sounds/ocean_wave.mp3",
 			"volume_db": -5.0,
 			"loop": true
@@ -9697,6 +9690,13 @@
 				"required_flag_missing": [
 					"story_first_enter_broadcasting_room_02_done"
 				]
+			},
+			{
+				"event": "enter_broadcasting_room_02_after_grail_filled_unknown_hall_02",
+				"required_flag": "started_episode_02",
+				"required_flag_missing": [
+					"story_enter_broadcasting_room_02_after_grail_filled_unknown_hall_02_done"
+				]
 			}
 		],
 		"exits": {
@@ -9772,14 +9772,45 @@
 				],
 				"events": [
 					{
-						"type": "sound",
-						"path": "res://sounds/save_ui_open.mp3",
-						"volume_db": -5,
-						"wait": false
-					},
-					{
-						"type": "text",
-						"text": "모니터 화면에서는 여러 장소의 CCTV 화면이 비치고 있다."
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag": [
+									"story_first_grail_filled_unknown_hall_02_done"
+								],
+								"required_flag_missing": [
+									"started_episode_02"
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/save_ui_open.mp3",
+										"volume_db": -5,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "모니터 화면에서는 여러 장소의 CCTV 화면이 비치고 있다."
+									},
+									{
+										"type": "flag",
+										"flag": "started_episode_02"
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "sound",
+								"path": "res://sounds/save_ui_open.mp3",
+								"volume_db": -5,
+								"wait": false
+							},
+							{
+								"type": "text",
+								"text": "모니터 화면에서는 여러 장소의 CCTV 화면이 비치고 있다."
+							}
+						]
 					}
 				]
 			},
@@ -11018,6 +11049,11 @@
 			"alpha": 0.35
 		},
 		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
 			"path": "res://sounds/wind_sound.mp3",
 			"volume_db": 0.0,
 			"loop": true
@@ -11407,7 +11443,7 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "..."
+						"text": "거대한 문은 여전히 닫혀 있다..."
 					}
 				]
 			}
@@ -14325,16 +14361,16 @@
 		},
 		"enter_stories": [
 			{
-				"event": "feed_wrong_thing_classroom_40",
-				"required_flag": "opened_swimming_pool",
+				"event": "looked_into_fishs_mouth_classroom_40",
+				"required_flag": "select_wrong_classroom_40",
 				"required_flag_missing": [
-					"story_feed_wrong_thing_classroom_40_done"
+					"story_looked_into_fishs_mouth_classroom_40_done"
 				]
 			}
 		],
 		"exits": {
 			"down": {
-				"target": "classroom_40",
+				"target": "swimming_pool_hallway_01",
 				"position": [
 					550,
 					750
@@ -14448,7 +14484,7 @@
 								"events": [
 									{
 										"type": "flag",
-										"flag": "opened_swimming_pool"
+										"flag": "select_wrong_classroom_40"
 									}
 								]
 							},
@@ -14474,7 +14510,7 @@
 					},
 					{
 						"type": "document_dialogue",
-						"path": "res://imgs/documents/document_01.png",
+						"path": "res://imgs/documents/school_document_06.png",
 						"start_page": 1,
 						"sound": "res://sounds/paper.mp3",
 						"sound_volume_db": 10,
@@ -14509,6 +14545,71 @@
 					}
 				]
 			}
+		}
+	},
+	"swimming_pool_hallway_01": {
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"enter_stories": [
+			{
+				"event": "first_enter_swimming_pool_hallway_01",
+				"required_flag_missing": [
+					"story_first_enter_swimming_pool_hallway_01_done"
+				]
+			}
+		],
+		"exits": {
+			"up": {
+				"target": "swimming_pool_hallway_02",
+				"position": [
+					750,
+					30
+				]
+			},
+			"down": {
+				"target": "swimming_pool_hallway_09",
+				"position": [
+					750,
+					950
+				]
+			},
+			"right": {
+				"target": "swimming_pool_room_01",
+				"position": [
+					1390,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "swimming_pool_01",
+			"event_table": "swimming_pool",
+			"chance": 40
 		}
 	}
 }

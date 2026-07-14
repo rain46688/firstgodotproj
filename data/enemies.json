@@ -1418,12 +1418,6 @@
 				"max": 2
 			},
 			{
-				"item": "tranquilizer_a",
-				"chance": 10,
-				"min": 1,
-				"max": 1
-			},
-			{
 				"item": "cutter_knife",
 				"chance": 5,
 				"min": 1,
@@ -2076,15 +2070,15 @@
 			},
 			{
 				"item": "beverage_a",
-				"chance": 40,
-				"min": 2,
+				"chance": 30,
+				"min": 1,
 				"max": 4
 			},
 			{
 				"item": "tranquilizer_a",
-				"chance": 30,
+				"chance": 10,
 				"min": 1,
-				"max": 2
+				"max": 1
 			}
 		],
 		"defeat_flags": [
@@ -2124,7 +2118,7 @@
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_basic",
 						"start": [
 							300,
 							0
@@ -2174,7 +2168,7 @@
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_basic",
 						"start": [
 							1300,
 							0
@@ -2314,7 +2308,7 @@
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_basic",
 						"start": [
 							300,
 							0
@@ -2324,7 +2318,7 @@
 						"delay": 1.0
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_basic",
 						"start": [
 							300,
 							0
@@ -2335,7 +2329,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_basic",
 						"start": [
 							300,
 							0
@@ -2345,7 +2339,7 @@
 						"delay": 1.6
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_basic",
 						"start": [
 							300,
 							0
@@ -2364,7 +2358,7 @@
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_basic",
 						"start": [
 							1300,
 							0
@@ -2374,7 +2368,7 @@
 						"delay": 1.0
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_basic",
 						"start": [
 							1300,
 							0
@@ -2384,7 +2378,7 @@
 						"delay": 1.3
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_basic",
 						"start": [
 							1300,
 							0
@@ -2394,7 +2388,7 @@
 						"delay": 1.6
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_basic",
 						"start": [
 							1300,
 							0
@@ -3511,19 +3505,19 @@
 				"item": "unknown_coin",
 				"chance": 80,
 				"min": 5,
-				"max": 15
+				"max": 10
 			},
 			{
 				"item": "beverage_a",
-				"chance": 40,
-				"min": 2,
+				"chance": 30,
+				"min": 1,
 				"max": 4
 			},
 			{
 				"item": "tranquilizer_a",
 				"chance": 30,
 				"min": 1,
-				"max": 2
+				"max": 1
 			},
 			{
 				"item": "iron_skewer",

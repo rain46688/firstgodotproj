@@ -1,7 +1,7 @@
 {
 	"classroom_key_a": {
 		"name": "교실키A",
-		"description": "어딘가의 교실 문을 열 수 있는 열쇠다.",
+		"description": "어딘가의 교실 문을 열 수 있는 열쇠인 것 같다.",
 		"image": "res://imgs/items/classroom_key180x180.png",
 		"width": 1,
 		"height": 1,
@@ -11,7 +11,7 @@
 	},
 	"classroom_key_b": {
 		"name": "교실키B",
-		"description": "어딘가의 교실 문을 열 수 있는 열쇠다.",
+		"description": "어딘가의 교실 문을 열 수 있는 열쇠인 것 같다.",
 		"image": "res://imgs/items/classroom_key180x180.png",
 		"width": 1,
 		"height": 1,
@@ -21,7 +21,7 @@
 	},
 	"classroom_key_c": {
 		"name": "교실키C",
-		"description": "어딘가의 교실 문을 열 수 있는 열쇠다.",
+		"description": "어딘가의 교실 문을 열 수 있는 열쇠인 것 같다.",
 		"image": "res://imgs/items/classroom_key180x180.png",
 		"width": 1,
 		"height": 1,
@@ -31,7 +31,7 @@
 	},
 	"classroom_key_d": {
 		"name": "교실키D",
-		"description": "어딘가의 교실 문을 열 수 있는 열쇠다.",
+		"description": "어딘가의 교실 문을 열 수 있는 열쇠인 것 같다.",
 		"image": "res://imgs/items/classroom_key180x180.png",
 		"width": 1,
 		"height": 1,
@@ -41,7 +41,7 @@
 	},
 	"master_key": {
 		"name": "만능키",
-		"description": "이걸로 웬만한 문을 열 수 있을 거 같다.",
+		"description": "대부분의 문을 열 수 있는 열쇠인 것 같다.",
 		"image": "res://imgs/items/master_key180x180.png",
 		"width": 1,
 		"height": 1,
@@ -51,7 +51,7 @@
 	},
 	"schoolhall_key_a": {
 		"name": "철제키A",
-		"description": "이걸로 학교 중앙홀 철제 문을 열 수 있을 거 같다.",
+		"description": "학교 중앙홀 철제 문을 열 수 있는 열쇠인 것 같다.",
 		"image": "res://imgs/items/metal_key180x180.png",
 		"width": 1,
 		"height": 1,
@@ -61,7 +61,7 @@
 	},
 	"schoolhall_key_b": {
 		"name": "철제키B",
-		"description": "이걸로 학교 중앙홀 철제 문을 열 수 있을 거 같다.",
+		"description": "학교 중앙홀 철제 문을 열 수 있는 열쇠인 것 같다.",
 		"image": "res://imgs/items/metal_key180x180.png",
 		"width": 1,
 		"height": 1,
@@ -79,7 +79,7 @@
 		"stackable": true,
 		"max_stack": 1,
 		"attack_min": 2,
-		"attack_max": 5,
+		"attack_max": 4,
 		"critical_chance": 0.25,
 		"critical_multiplier": 2.0,
 		"consumed_on_use": false,
@@ -98,7 +98,7 @@
 			220,
 			220
 		],
-		"attack_move_range": 460,
+		"attack_move_range": 420,
 		"attack_swing_speed": 2.5,
 		"weapon_angle_step": 5,
 		"attack_projectile": "slash_basic",
@@ -115,14 +115,14 @@
 	},
 	"fist": {
 		"name": "맨주먹",
-		"description": "아무것도 쥐고 있지 않은 상태다.",
+		"description": "아무것도 쥐고 있지 않은 상태이다.",
 		"image": "res://imgs/items/fist180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "weapon",
 		"stackable": false,
 		"attack_min": 1,
-		"attack_max": 6,
+		"attack_max": 5,
 		"critical_chance": 0.15,
 		"critical_multiplier": 1.5,
 		"consumed_on_use": false,
@@ -142,7 +142,7 @@
 			140,
 			140
 		],
-		"attack_move_range": 400,
+		"attack_move_range": 450,
 		"attack_swing_speed": 2.5,
 		"weapon_angle_step": 5,
 		"attack_projectile": "impact_basic",
@@ -159,7 +159,7 @@
 	},
 	"holy_sword": {
 		"name": "성검",
-		"description": "적의 여러 부위를 꿰뚫을 수 있는 희귀한 무기다.",
+		"description": "적의 여러 부위를 꿰뚫을 수 있는 희귀한 무기이다.",
 		"image": "res://imgs/items/excalibur180x720.png",
 		"width": 1,
 		"height": 4,
@@ -186,8 +186,8 @@
 			300,
 			300
 		],
-		"attack_move_range": 460,
-		"attack_swing_speed": 2.5,
+		"attack_move_range": 400,
+		"attack_swing_speed": 2.0,
 		"weapon_angle_step": 5,
 		"attack_projectile": "slash_excalibur",
 		"defense_hitbox": {
@@ -203,15 +203,15 @@
 	},
 	"razor": {
 		"name": "면도칼",
-		"description": "작고 오래된 면도칼이다 공격 수단으로 사용할 수 있을까?",
+		"description": "작고 오래된 면도칼이다 이걸 공격 수단으로 사용할 수 있을까?",
 		"image": "res://imgs/items/razor180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "weapon",
 		"stackable": true,
 		"max_stack": 1,
-		"attack_min": 3,
-		"attack_max": 3,
+		"attack_min": 2,
+		"attack_max": 2,
 		"critical_chance": 0.1,
 		"critical_multiplier": 2.2,
 		"consumed_on_use": false,
@@ -230,7 +230,7 @@
 			140,
 			140
 		],
-		"attack_move_range": 460,
+		"attack_move_range": 450,
 		"attack_swing_speed": 3.0,
 		"weapon_angle_step": 5,
 		"attack_projectile": "slash_basic",
@@ -254,8 +254,8 @@
 		"type": "weapon",
 		"stackable": true,
 		"max_stack": 1,
-		"attack_min": 4,
-		"attack_max": 6,
+		"attack_min": 3,
+		"attack_max": 5,
 		"critical_chance": 0.1,
 		"critical_multiplier": 2.0,
 		"consumed_on_use": false,
@@ -274,8 +274,8 @@
 			300,
 			300
 		],
-		"attack_move_range": 460,
-		"attack_swing_speed": 2.5,
+		"attack_move_range": 400,
+		"attack_swing_speed": 2.0,
 		"weapon_angle_step": 5,
 		"attack_projectile": "pierce",
 		"defense_hitbox": {
@@ -299,6 +299,18 @@
 		"stackable": true,
 		"max_stack": 5,
 		"heal": 25,
+		"consumed_on_use": true
+	},
+	"chocolate_bar_a": {
+		"name": "초콜릿 바A",
+		"description": "맛있어 보인다 먹으면 에너지가 회복될 것 같다.",
+		"image": "res://imgs/items/chocolate_bar180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "consumable",
+		"stackable": true,
+		"max_stack": 3,
+		"heal": 40,
 		"consumed_on_use": true
 	},
 	"tranquilizer_a": {

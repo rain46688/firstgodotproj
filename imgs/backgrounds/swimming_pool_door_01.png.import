@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://t1p6c6te8djd"
-path="res://.godot/imported/classroom_ladder_02.png-2820b7e41ac9d6a3a776a5bbd39b8764.ctex"
+uid="uid://n33wukwwti1p"
+path="res://.godot/imported/swimming_pool_door_01.png-2d0184bba1862685f8b8f32c3b1f8797.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/backgrounds/classroom_ladder_02.png"
-dest_files=["res://.godot/imported/classroom_ladder_02.png-2820b7e41ac9d6a3a776a5bbd39b8764.ctex"]
+source_file="res://imgs/backgrounds/swimming_pool_door_01.png"
+dest_files=["res://.godot/imported/swimming_pool_door_01.png-2d0184bba1862685f8b8f32c3b1f8797.ctex"]
 
 [params]
 
