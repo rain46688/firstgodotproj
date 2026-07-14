@@ -195,6 +195,36 @@ const BATTLE_MOUSE_HIDE_DELAY = 5.0
 # 직전에 사용한 적 패턴 식별값
 var last_enemy_pattern_key = ""
 
+# 현재 페이즈에서 적이 실제 행동한 턴 수
+# 첫 번째 적 행동은 1턴으로 계산한다.
+var enemy_phase_turn_count = 0
+
+# 현재 페이즈의 패턴별 사용 횟수
+var enemy_pattern_use_counts = {}
+
+# 본체/파츠별 직접 공격 피해 반사 상태
+var enemy_damage_reflect_states = {}
+
+# 현재 플레이어 턴 종료 시 되돌려 줄 반사 피해
+var pending_reflected_damage = 0
+var pending_reflection_trigger_effect = {}
+
+# 적 턴 라이프 드레인 결과 누적값
+var enemy_turn_total_heal = 0
+var enemy_turn_life_drain_sound_played = false
+
+# 전투 중 사용하는 텍스처 캐시
+#
+# key   : 이미지 경로
+# value : Texture2D
+var battle_texture_cache = {}
+
+# 현재 전투에서 사용할 계산 완료 무기 데이터 캐시
+var cached_current_weapon_data = {}
+var cached_current_weapon_id = ""
+
+var battle_popup_font = null
+
 # 상수 변수 모음
 # 현재 없음
 
@@ -477,11 +507,11 @@ func unlock_battle_input_process():
 # 우선 처리 입력 모드 갱신 함수
 func update_priority_battle_input(delta):
 	if is_observing:
-		update_observe_mode_input()
+		await update_observe_mode_input()
 		return true
 
 	if is_item_selecting:
-		update_battle_item_select_input()
+		await update_battle_item_select_input()
 		return true
 
 	if waiting_enemy_attack:
@@ -519,6 +549,9 @@ func _exit_tree():
 	restore_battle_mouse()
 # 처음에 한번 실행 함수
 func _ready():
+	battle_popup_font = load(
+		"res://fonts/x12y12pxMaruMinyaHangul.ttf"
+	)
 	restore_battle_mouse()
 	attack_button.focus_mode = Control.FOCUS_NONE
 	observe_button.focus_mode = Control.FOCUS_NONE
@@ -624,6 +657,8 @@ func _ready():
 	update_action_button_focus()
 # 전투 시작 시 상태 변수 초기화 함수 - 전투 상태 초기화 함수
 func reset_battle_runtime_state():
+	clear_current_weapon_data_cache()
+	
 	battle_ended = false
 	is_player_turn = false
 	is_attack_mode = false
@@ -636,7 +671,9 @@ func reset_battle_runtime_state():
 	game_over_started = false
 	# 전투마다 플레이어 턴 카운트 초기화
 	player_turn_count = 0
-	last_enemy_pattern_key = ""
+
+	# 적 특수 패턴 런타임 상태 초기화
+	reset_enemy_special_pattern_runtime_state()
 # 전투 시작 시 플레이어 UI 초기화 함수
 func setup_battle_player_ui():
 	player_status_effects.clear()
@@ -662,6 +699,99 @@ func load_texture_by_path(texture_path, error_context = ""):
 		return null
 
 	return texture
+# 전투 텍스처 캐시에서 이미지 가져오기 함수
+#
+# 같은 경로의 이미지는 처음 한 번만 load하고,
+# 이후에는 Dictionary에 저장된 Texture2D를 재사용한다.
+func get_cached_battle_texture(
+	texture_path,
+	error_context = ""
+):
+	var path_text = str(texture_path).strip_edges()
+
+	if path_text == "":
+		return null
+
+	# 이미 로드한 이미지면 바로 반환
+	if battle_texture_cache.has(path_text):
+		return battle_texture_cache[path_text]
+
+	if not ResourceLoader.exists(path_text):
+		push_error(
+			"전투 이미지 리소스가 없음: "
+			+ path_text
+			+ " / "
+			+ str(error_context)
+		)
+		return null
+
+	var texture = load(path_text)
+
+	if texture == null:
+		push_error(
+			"전투 이미지 로드 실패: "
+			+ path_text
+			+ " / "
+			+ str(error_context)
+		)
+		return null
+
+	# 처음 로드한 이미지를 캐시에 보관
+	battle_texture_cache[path_text] = texture
+
+	return texture
+# 지정한 프레임 경로 목록을 전투 텍스처 캐시에 미리 등록
+func preload_battle_frame_paths(
+	frame_paths,
+	error_context = ""
+):
+	if typeof(frame_paths) != TYPE_ARRAY:
+		return
+
+	for frame_path in frame_paths:
+		get_cached_battle_texture(
+			frame_path,
+			error_context
+		)
+# projectile 데이터 하나의 애니메이션 프레임 미리 로드
+func preload_projectile_data_textures(
+	projectile_id,
+	projectile_data
+):
+	if projectile_data == null:
+		return
+
+	if typeof(projectile_data) != TYPE_DICTIONARY:
+		return
+
+	var frame_paths = get_projectile_frames_from_data(
+		projectile_data
+	)
+
+	preload_battle_frame_paths(
+		frame_paths,
+		"projectile preload / " + str(projectile_id)
+	)
+# 이번 전투에서 사용하는 전체 투사체 프레임 미리 로드
+func preload_all_battle_projectile_textures():
+	for projectile_id in projectiles.keys():
+		var projectile_data = projectiles[projectile_id]
+
+		preload_projectile_data_textures(
+			projectile_id,
+			projectile_data
+		)
+
+	# 피격 및 패링 이펙트도 함께 준비
+	preload_battle_frame_paths(
+		hit_frames,
+		"hit effect preload"
+	)
+
+	preload_battle_frame_paths(
+		parry_frames,
+		"parry effect preload"
+	)
 # 현재 적 이미지 경로 가져오기 함수
 func get_current_enemy_image_path():
 	if enemy_data.is_empty():
@@ -777,6 +907,10 @@ func setup_battle(data):
 	items = get_setup_dictionary(data, "items")
 	projectiles = get_setup_dictionary(data, "projectiles")
 	enemies = get_setup_dictionary(data, "enemies")
+	
+	# 전투 도중 처음 이미지를 불러오며 끊기지 않도록
+	# 탄막과 공통 이펙트 프레임을 미리 캐싱한다.
+	preload_all_battle_projectile_textures()
 
 	# 현재 전투 적 데이터
 	enemy_id = get_setup_string(data, "enemy_id", "")
@@ -802,6 +936,8 @@ func setup_battle(data):
 
 	# 성물/주물 적용 능력치
 	player_effective_stats = get_setup_dictionary(data, "player_effective_stats")
+
+	clear_current_weapon_data_cache()
 
 	# 플레이어 체력
 	player_hp = get_setup_int(data, "player_hp", 100)
@@ -1076,7 +1212,7 @@ func _on_end_turn_button_pressed():
 
 	await show_battle_text_for_seconds("턴을 종료했다.", 0.7)
 
-	start_enemy_turn()
+	await finish_player_turn_and_start_enemy_turn()
 # 도망 버튼 클릭 함수
 func _on_run_button_pressed():
 	if not can_player_choose_action():
@@ -1108,7 +1244,7 @@ func process_battle_escape_failed():
 
 	await show_battle_text_for_seconds("당신은 도망칠 수 없다...", 3.0)
 
-	start_enemy_turn()
+	await finish_player_turn_and_start_enemy_turn()
 # 도주 가능 여부 확인 함수
 func can_escape_from_current_enemy():
 	return bool(enemy_data.get("can_escape", true))
@@ -1258,10 +1394,14 @@ func start_player_turn():
 		return
 
 	show_player_action_menu()
+# 현재 페이즈 적 행동 턴 수 증가 함수
+func advance_enemy_phase_turn_count():
+	enemy_phase_turn_count += 1
 # 적 턴 시작 함수
 func start_enemy_turn():
 	print("start_enemy_turn")
-	
+
+	advance_enemy_phase_turn_count()
 	prepare_enemy_turn_state()
 
 	set_action_buttons_disabled(true)
@@ -1490,7 +1630,7 @@ func update_observe_mode_input():
 
 	if Input.is_action_just_pressed("ui_accept"):
 		end_observe_mode()
-		start_enemy_turn()
+		await finish_player_turn_and_start_enemy_turn()
 # 관찰 대상 리스트 생성 함수
 func make_observe_targets():
 	var targets = []
@@ -1816,7 +1956,7 @@ func use_selected_battle_item():
 
 	await show_battle_item_used_text(item_id)
 
-	start_enemy_turn()
+	await finish_player_turn_and_start_enemy_turn()
 # 전투 드랍 아이템 계산 함수
 func calculate_enemy_drops():
 	var rewards = []
@@ -1914,7 +2054,7 @@ func update_battle_item_select_input():
 		move_battle_item_selection(-1)
 
 	if Input.is_action_just_pressed("ui_accept"):
-		use_selected_battle_item()
+		await use_selected_battle_item()
 
 	if Input.is_action_just_pressed("esc"):
 		cancel_battle_item_select_mode()
@@ -2231,12 +2371,11 @@ func update_hitbox_debug():
 	update_part_hitbox_debug(get_enemy_hitbox_base_size(), enemy_rect)
 	update_debug_hp_labels()
 # 디버그 박스 갱신 함수
-func update_defense_hitbox_debug(projectile, projectile_data):
+func update_defense_hitbox_debug(
+	projectile,
+	projectile_data
+):
 	if not debug_mode:
-		defense_weapon_hitbox_debug.visible = false
-		enemy_projectile_hitbox_debug.visible = false
-		parry_hitbox_debug.visible = false
-		clear_enemy_projectile_debug_boxes()
 		return
 
 	var weapon_rect = get_weapon_defense_hit_rect()
@@ -2452,6 +2591,7 @@ func update_enemy_hp_ui():
 # 적 공격 실행 시작 준비 함수
 func prepare_enemy_attack_execution():
 	clear_battle_text()
+	register_current_enemy_pattern_use()
 # 적 공격 후 전투 흐름 중단 여부 확인 함수
 func should_stop_after_enemy_attack():
 	if game_over_started:
@@ -2482,6 +2622,11 @@ func return_to_player_turn_after_enemy_attack():
 # 적 공격 함수
 func execute_enemy_attack():
 	prepare_enemy_attack_execution()
+
+	await apply_current_enemy_pattern_start_effects()
+
+	if should_stop_after_enemy_attack():
+		return
 
 	await fire_enemy_projectiles()
 
@@ -2988,6 +3133,8 @@ func has_current_enemy_pattern_projectiles():
 func reset_enemy_projectile_turn_results():
 	parry_count = 0
 	enemy_turn_total_damage = 0
+	enemy_turn_total_heal = 0
+	enemy_turn_life_drain_sound_played = false
 	enemy_turn_applied_status_effects.clear()
 # 적 탄막 방어 모드 시작 함수
 func start_enemy_projectile_defense_phase():
@@ -3203,6 +3350,243 @@ func get_enemy_part_patterns_by_id(part_id):
 		return []
 
 	return patterns
+# 적 패턴 턴 조건 만족 여부 확인 함수
+func is_enemy_pattern_turn_condition_met(pattern):
+	var condition = pattern.get("turn_condition", {})
+
+	if typeof(condition) != TYPE_DICTIONARY or condition.is_empty():
+		return true
+
+	var mode = str(condition.get("mode", "exact"))
+
+	if mode == "exact":
+		var target_turn = int(condition.get("turn", 0))
+		return target_turn > 0 and enemy_phase_turn_count == target_turn
+
+	if mode == "interval":
+		var every = int(condition.get("every", 0))
+
+		if every <= 0:
+			return false
+
+		var start_turn = int(condition.get("start_turn", every))
+
+		if start_turn <= 0:
+			start_turn = every
+
+		if enemy_phase_turn_count < start_turn:
+			return false
+
+		return (enemy_phase_turn_count - start_turn) % every == 0
+
+	return false
+# 적 대상 현재/최대 HP 데이터 생성 함수
+func make_enemy_target_hp_data(target_type, target_id = ""):
+	if target_type == "body":
+		return {
+			"current_hp": enemy_hp,
+			"max_hp": enemy_max_hp
+		}
+
+	if target_type == "part":
+		if target_id == "":
+			return {}
+
+		if not enemy_part_hp.has(target_id):
+			return {}
+
+		var part = get_enemy_part_data_by_id(target_id)
+
+		if part.is_empty():
+			return {}
+
+		return {
+			"current_hp": int(enemy_part_hp[target_id]),
+			"max_hp": get_enemy_part_max_hp_from_data(part)
+		}
+
+	return {}
+# 패턴/효과의 owner 기준 실제 대상 타입과 ID 계산 함수
+func resolve_enemy_target_data(target, owner_type, owner_id, part_id = ""):
+	var target_type = str(target)
+	var target_id = str(part_id)
+
+	if target_type == "owner":
+		target_type = str(owner_type)
+		target_id = str(owner_id)
+	elif target_type == "body":
+		target_id = ""
+	elif target_type == "part":
+		target_id = str(part_id)
+	else:
+		return {}
+
+	if target_type == "part" and target_id == "":
+		return {}
+
+	return {
+		"target_type": target_type,
+		"target_id": target_id
+	}
+# 적 패턴 HP 조건 만족 여부 확인 함수
+func is_enemy_pattern_hp_condition_met(pattern):
+	var condition = pattern.get("hp_condition", {})
+
+	if typeof(condition) != TYPE_DICTIONARY or condition.is_empty():
+		return true
+
+	var target_data = resolve_enemy_target_data(
+		condition.get("target", "owner"),
+		pattern.get("owner_type", "body"),
+		pattern.get("owner_id", ""),
+		condition.get("part_id", "")
+	)
+
+	if target_data.is_empty():
+		return false
+
+	var hp_data = make_enemy_target_hp_data(
+		target_data.get("target_type", ""),
+		target_data.get("target_id", "")
+	)
+
+	if hp_data.is_empty():
+		return false
+
+	var max_hp = float(hp_data.get("max_hp", 0))
+
+	if max_hp <= 0.0:
+		return false
+
+	var hp_percent = float(hp_data.get("current_hp", 0)) / max_hp * 100.0
+
+	if condition.has("lte_percent"):
+		if hp_percent > float(condition.get("lte_percent", 100.0)):
+			return false
+
+	return true
+# 적 패턴 사용 횟수 가져오기 함수
+func get_enemy_pattern_use_count(pattern):
+	var pattern_key = get_enemy_pattern_key(pattern)
+
+	if pattern_key == "":
+		return 0
+
+	return int(enemy_pattern_use_counts.get(pattern_key, 0))
+# 적 패턴 사용 횟수 제한 만족 여부 확인 함수
+func is_enemy_pattern_use_limit_met(pattern):
+	var max_uses = int(pattern.get("max_uses", 0))
+
+	if max_uses <= 0:
+		return true
+
+	return get_enemy_pattern_use_count(pattern) < max_uses
+# 적 효과 대상이 현재 살아있는지 확인하는 함수
+func is_enemy_effect_target_active(target_data):
+	if target_data.is_empty():
+		return false
+
+	var target_type = str(target_data.get("target_type", ""))
+	var target_id = str(target_data.get("target_id", ""))
+
+	if target_type == "body":
+		return enemy_hp > 0
+
+	if target_type == "part":
+		return (
+			enemy_part_hp.has(target_id)
+			and not destroyed_parts.has(target_id)
+			and int(enemy_part_hp[target_id]) > 0
+		)
+
+	return false
+# 적 회복 효과 대상이 실제로 회복 가능한지 확인하는 함수
+func can_heal_enemy_effect_target(effect, pattern):
+	if effect.has("amount") and int(effect.get("amount", 0)) <= 0:
+		return false
+
+	if not effect.has("amount") and float(effect.get("hp_percent", 0.0)) <= 0.0:
+		return false
+
+	var target_data = resolve_enemy_target_data(
+		effect.get("target", "owner"),
+		pattern.get("owner_type", "body"),
+		pattern.get("owner_id", ""),
+		effect.get("part_id", "")
+	)
+
+	if not is_enemy_effect_target_active(target_data):
+		return false
+
+	var hp_data = make_enemy_target_hp_data(
+		target_data.get("target_type", ""),
+		target_data.get("target_id", "")
+	)
+
+	if hp_data.is_empty():
+		return false
+
+	return int(hp_data.get("current_hp", 0)) < int(hp_data.get("max_hp", 0))
+# 패턴 시작 효과의 현재 사용 가능 여부 확인 함수
+func is_enemy_pattern_start_effect_available(effect, pattern):
+	if effect == null or typeof(effect) != TYPE_DICTIONARY:
+		return true
+
+	var effect_type = str(effect.get("type", ""))
+
+	if effect_type == "revive_part":
+		var revive_part_id = str(effect.get("part_id", ""))
+		return enemy_parts.has(revive_part_id) and destroyed_parts.has(revive_part_id)
+
+	if effect_type == "remove_part":
+		var remove_part_id = str(effect.get("part_id", ""))
+		return (
+			enemy_parts.has(remove_part_id)
+			and enemy_part_hp.has(remove_part_id)
+			and not destroyed_parts.has(remove_part_id)
+			and int(enemy_part_hp[remove_part_id]) > 0
+		)
+
+	if effect_type == "heal":
+		return can_heal_enemy_effect_target(effect, pattern)
+
+	if effect_type == "reflect_damage":
+		var reflect_target = resolve_enemy_target_data(
+			effect.get("target", "owner"),
+			pattern.get("owner_type", "body"),
+			pattern.get("owner_id", ""),
+			effect.get("part_id", "")
+		)
+		return is_enemy_effect_target_active(reflect_target)
+
+	return true
+# 패턴 시작 효과 전체가 현재 사용 가능한지 확인하는 함수
+func are_enemy_pattern_start_effects_available(pattern):
+	var effects = pattern.get("start_effects", [])
+
+	if typeof(effects) != TYPE_ARRAY:
+		return true
+
+	for effect in effects:
+		if not is_enemy_pattern_start_effect_available(effect, pattern):
+			return false
+
+	return true
+# 적 패턴이 현재 후보에 들어갈 수 있는지 확인하는 함수
+func can_use_enemy_pattern(pattern):
+	if not is_enemy_pattern_turn_condition_met(pattern):
+		return false
+
+	if not is_enemy_pattern_hp_condition_met(pattern):
+		return false
+
+	if not is_enemy_pattern_use_limit_met(pattern):
+		return false
+
+	if not are_enemy_pattern_start_effects_available(pattern):
+		return false
+
+	return true
 # 적 패턴 후보 데이터 생성 함수
 func make_enemy_pattern_candidate(pattern, owner_type, owner_id):
 	if pattern == null:
@@ -3217,6 +3601,9 @@ func make_enemy_pattern_candidate(pattern, owner_type, owner_id):
 	var copied_pattern = pattern.duplicate(true)
 	copied_pattern["owner_type"] = owner_type
 	copied_pattern["owner_id"] = owner_id
+
+	if not can_use_enemy_pattern(copied_pattern):
+		return {}
 
 	return copied_pattern
 # 적 본체 패턴 후보 추가 함수
@@ -3253,12 +3640,37 @@ func get_enemy_pattern_key(pattern):
 		return ""
 
 	return (
-		str(pattern.get("owner_type", "body"))
+		str(enemy_id)
+		+ ":"
+		+ str(pattern.get("owner_type", "body"))
 		+ ":"
 		+ str(pattern.get("owner_id", ""))
 		+ ":"
 		+ str(pattern.get("id", ""))
 	)
+# 적 패턴 우선순위 가져오기 함수
+func get_enemy_pattern_priority(pattern):
+	if pattern == null or typeof(pattern) != TYPE_DICTIONARY:
+		return 0
+
+	return int(pattern.get("priority", 0))
+# 가장 높은 우선순위의 적 패턴 후보만 남기는 함수
+func filter_enemy_patterns_by_highest_priority(patterns):
+	if patterns.size() <= 1:
+		return patterns
+
+	var highest_priority = get_enemy_pattern_priority(patterns[0])
+
+	for pattern in patterns:
+		highest_priority = max(highest_priority, get_enemy_pattern_priority(pattern))
+
+	var filtered = []
+
+	for pattern in patterns:
+		if get_enemy_pattern_priority(pattern) == highest_priority:
+			filtered.append(pattern)
+
+	return filtered
 # 적 패턴 선택 함수
 # 후보가 2개 이상이면 직전에 사용한 패턴을 한 번 제외한다.
 func choose_enemy_pattern():
@@ -3266,6 +3678,9 @@ func choose_enemy_pattern():
 
 	if candidates.size() == 0:
 		return {}
+
+	# 조건을 만족한 후보 중 가장 높은 priority 그룹만 추첨한다.
+	candidates = filter_enemy_patterns_by_highest_priority(candidates)
 
 	var filtered_candidates = []
 
@@ -3395,35 +3810,46 @@ func set_enemy_visual_offset(offset):
 
 		if part_sprite != null and is_instance_valid(part_sprite):
 			part_sprite.position = enemy_part_base_positions[part_id] + offset
-# 적 피격시 데미지 팝업 함수 
-func show_damage_popup(damage, is_weak):
+# 적 숫자 팝업 공통 함수
+func show_enemy_value_popup(value, hitbox, popup_type = "damage", is_weak = false):
+	if hitbox == null or typeof(hitbox) != TYPE_DICTIONARY or hitbox.is_empty():
+		return
+
 	var label = Label.new()
-	var font = load("res://fonts/x12y12pxMaruMinyaHangul.ttf")
-	label.add_theme_font_override("font", font)
-	if is_weak:
-		label.text = "WEAK!\n" + str(int(damage))
+	if battle_popup_font != null:
+		label.add_theme_font_override(
+			"font",
+			battle_popup_font
+		)
+
+	if popup_type == "heal":
+		label.text = str(int(value))
+	elif is_weak:
+		label.text = "WEAK!\n" + str(int(value))
 	else:
-		label.text = str(int(damage))
+		label.text = str(int(value))
+
 	label.z_index = 60
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.size = Vector2(260, 120)
-
-	# 폰트 크기 키우기
 	label.add_theme_font_size_override("font_size", 48)
+	label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+	label.add_theme_constant_override("outline_size", 8)
 
-	if is_weak:
+	if popup_type == "heal":
+		label.add_theme_color_override("font_color", Color(0.2, 1.0, 0.3, 1))
+	elif is_weak:
 		label.add_theme_color_override("font_color", Color(1, 0.1, 0.1, 1))
-		label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
-		label.add_theme_constant_override("outline_size", 8)
 	else:
 		label.add_theme_color_override("font_color", Color(1, 1, 1, 1))
-		label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
-		label.add_theme_constant_override("outline_size", 8)
 
-	var hit_position = get_last_hitbox_center_position_for_battle_scene()
+	var hit_position = get_hitbox_center_position_for_battle_scene(hitbox)
+
+	if popup_type == "heal":
+		hit_position += Vector2(randf_range(-18.0, 18.0), randf_range(-8.0, 8.0))
+
 	label.position = hit_position - Vector2(130, 60)
-
 	add_child(label)
 
 	var tween = create_tween()
@@ -3431,16 +3857,38 @@ func show_damage_popup(damage, is_weak):
 	tween.parallel().tween_property(label, "modulate:a", 0.0, 1.0)
 
 	await tween.finished
-	label.queue_free()
-# 적 피격 데미지 팝업 전용 위치 함수
-func get_last_hitbox_center_position_for_battle_scene():
+
+	if label != null and is_instance_valid(label):
+		label.queue_free()
+# 적 피격시 데미지 팝업 함수
+func show_damage_popup(damage, is_weak):
+	show_enemy_value_popup(damage, last_hitbox_data, "damage", is_weak)
+# 적 회복 팝업 대상 hitbox 가져오기 함수
+func get_enemy_target_popup_hitbox(target_type, target_id = ""):
+	if target_type == "part":
+		return get_part_hitbox_by_id(target_id)
+
+	return get_body_hitbox_by_id("")
+# 적 회복 팝업 함수
+func show_enemy_heal_popup(heal_amount, target_type, target_id = ""):
+	if heal_amount <= 0:
+		return
+
+	var hitbox = get_enemy_target_popup_hitbox(target_type, target_id)
+
+	if hitbox.is_empty():
+		return
+
+	show_enemy_value_popup(heal_amount, hitbox, "heal", false)
+# 적 hitbox 기준 팝업 위치 함수
+func get_hitbox_center_position_for_battle_scene(hitbox):
 	var base_size = enemy_data.get("hitbox_base_size", [667, 1000])
 	var enemy_rect = enemy_sprite.get_global_rect()
 
 	var scale_x = enemy_rect.size.x / float(base_size[0])
 	var scale_y = enemy_rect.size.y / float(base_size[1])
 
-	var rect_data = last_hitbox_data.get("rect", [0, 0, 100, 100])
+	var rect_data = hitbox.get("rect", [0, 0, 100, 100])
 
 	var center_global = Vector2(
 		enemy_rect.position.x + (rect_data[0] + rect_data[2] / 2.0) * scale_x,
@@ -3450,6 +3898,9 @@ func get_last_hitbox_center_position_for_battle_scene():
 	var battle_scene_global = get_global_rect().position
 
 	return center_global - battle_scene_global
+# 적 피격 데미지 팝업 전용 위치 함수
+func get_last_hitbox_center_position_for_battle_scene():
+	return get_hitbox_center_position_for_battle_scene(last_hitbox_data)
 # 적 히트박스 이펙트 위치 조정 함수
 func get_last_hitbox_center_position():
 	var base_size = enemy_data.get("hitbox_base_size", [667, 1000])
@@ -3902,7 +4353,8 @@ func apply_player_attack_part_hit(hitbox):
 	var is_no_damage = is_player_attack_result_no_damage(damage_result)
 
 	play_player_attack_hit_sound(is_weak, is_critical, is_no_damage)
-	apply_player_attack_damage_to_part(part_id, damage)
+	var actual_damage = apply_player_attack_damage_to_part(part_id, damage)
+	record_pending_reflected_damage("part", part_id, actual_damage)
 
 	play_player_attack_hit_feedback(
 		damage,
@@ -3938,22 +4390,30 @@ func spawn_hit_effect(effect_position):
 
 	play_spawned_hit_effect(effect)
 # 적 생성된 타격 이펙트 프레임 재생 함수
-func play_spawned_hit_effect(effect):   
+func play_spawned_hit_effect(effect):
 	for path in hit_frames:
 		if effect == null or not is_instance_valid(effect):
 			return
 
-		effect.texture = load(path)
+		effect.texture = get_cached_battle_texture(
+			path,
+			"hit effect"
+		)
+
 		await get_tree().create_timer(0.05).timeout
 
 	if effect != null and is_instance_valid(effect):
 		effect.queue_free()
 # 적 파츠 파괴 함수
-func destroy_enemy_part(part_id):
+func destroy_enemy_part(part_id, custom_text = ""):
 	if destroyed_parts.has(part_id):
 		return
 
+	if enemy_part_hp.has(part_id):
+		enemy_part_hp[part_id] = 0
+
 	destroyed_parts.append(part_id)
+	enemy_damage_reflect_states.erase(get_enemy_reflect_target_key("part", part_id))
 
 	if enemy_part_sprites.has(part_id):
 		var sprite = enemy_part_sprites[part_id]
@@ -3961,8 +4421,11 @@ func destroy_enemy_part(part_id):
 		if sprite != null and is_instance_valid(sprite):
 			sprite.visible = false
 
-	set_battle_text(get_enemy_part_destroy_text(part_id))
-	
+	if custom_text != "":
+		set_battle_text(custom_text)
+	else:
+		set_battle_text(get_enemy_part_destroy_text(part_id))
+
 	update_hitbox_debug()
 	update_debug_hp_labels()
 # 적 체력 0 이하 처리 함수
@@ -4014,6 +4477,9 @@ func change_enemy_phase():
 	# 4. 페이즈2 적 데이터로 교체
 	enemy_id = next_enemy_id
 	enemy_data = next_enemy_data
+
+	# 새 페이즈에서는 턴 조건/사용 횟수/반사 상태를 새로 계산한다.
+	reset_enemy_special_pattern_runtime_state()
 
 	# 페이즈2 적 체력에도 현재 난이도 배율을 적용한다.
 	enemy_max_hp = get_adjusted_enemy_max_hp(enemy_data)
@@ -4144,6 +4610,7 @@ func apply_phase_start_pattern_owner_data(pattern):
 	return copied_pattern
 # 페이즈 시작 강제 패턴 적 턴 상태 준비 함수
 func prepare_phase_start_forced_enemy_turn():
+	advance_enemy_phase_turn_count()
 	is_player_turn = false
 	start_enemy_attack_wait()
 	set_action_buttons_disabled(true)
@@ -4186,8 +4653,474 @@ func clamp_enemy_part_hp(part_id):
 	if not enemy_part_hp.has(part_id):
 		return
 
-	if enemy_part_hp[part_id] < 0:
-		enemy_part_hp[part_id] = 0
+	var part = get_enemy_part_data_by_id(part_id)
+	var part_max_hp = get_enemy_part_max_hp_from_data(part)
+
+	enemy_part_hp[part_id] = clamp(
+		int(enemy_part_hp[part_id]),
+		0,
+		part_max_hp
+	)
+# 적 특수 패턴 런타임 상태 초기화 함수
+func reset_enemy_special_pattern_runtime_state():
+	enemy_phase_turn_count = 0
+	enemy_pattern_use_counts.clear()
+	enemy_damage_reflect_states.clear()
+	pending_reflected_damage = 0
+	pending_reflection_trigger_effect.clear()
+	enemy_turn_total_heal = 0
+	enemy_turn_life_drain_sound_played = false
+	last_enemy_pattern_key = ""
+# 현재 패턴 사용 횟수 기록 함수
+func register_current_enemy_pattern_use():
+	if not has_current_enemy_pattern():
+		return
+
+	var pattern_key = get_enemy_pattern_key(current_enemy_pattern)
+
+	if pattern_key == "":
+		return
+
+	enemy_pattern_use_counts[pattern_key] = int(
+		enemy_pattern_use_counts.get(pattern_key, 0)
+	) + 1
+# 현재 패턴 시작 효과 배열 가져오기 함수
+func get_current_enemy_pattern_start_effects():
+	if not has_current_enemy_pattern():
+		return []
+
+	var effects = current_enemy_pattern.get("start_effects", [])
+
+	if typeof(effects) != TYPE_ARRAY:
+		return []
+
+	return effects
+# 현재 패턴 플레이어 적중 효과 배열 가져오기 함수
+func get_current_enemy_pattern_player_hit_effects():
+	if not has_current_enemy_pattern():
+		return []
+
+	var effects = current_enemy_pattern.get("on_player_hit_effects", [])
+
+	if typeof(effects) != TYPE_ARRAY:
+		return []
+
+	return effects
+# 적 패턴 효과음 재생 함수
+func play_enemy_pattern_effect_sound(effect, use_trigger_sound = false):
+	if effect == null or typeof(effect) != TYPE_DICTIONARY:
+		return null
+
+	var path_key = "trigger_sound" if use_trigger_sound else "sound"
+	var volume_key = "trigger_sound_volume_db" if use_trigger_sound else "sound_volume_db"
+	var sound_path = str(effect.get(path_key, ""))
+
+	if sound_path == "":
+		return null
+
+	if not ResourceLoader.exists(sound_path):
+		push_warning("적 패턴 효과음 리소스가 없음: " + sound_path)
+		return null
+
+	var stream = load(sound_path)
+
+	if stream == null:
+		push_warning("적 패턴 효과음 로드 실패: " + sound_path)
+		return null
+
+	var sound = AudioStreamPlayer.new()
+	sound.stream = stream
+	sound.volume_db = float(effect.get(volume_key, effect.get("sound_volume_db", 0.0)))
+	sound.set_meta("base_volume_db", sound.volume_db)
+	apply_sfx_volume_to_player(sound)
+	add_child(sound)
+	sound.finished.connect(Callable(sound, "queue_free"))
+	sound.play()
+
+	return sound
+# 적 패턴 효과음 대기 옵션 처리 함수
+func wait_enemy_pattern_effect_sound_if_needed(effect, sound):
+	if sound == null or not is_instance_valid(sound):
+		return
+
+	if not bool(effect.get("sound_wait", false)):
+		return
+
+	await sound.finished
+# 적 패턴 효과 텍스트 표시 함수
+func show_enemy_pattern_effect_text(effect, fallback_text = ""):
+	var effect_text = str(effect.get("text", fallback_text))
+
+	if effect_text == "":
+		return
+
+	await show_battle_text_for_seconds(
+		effect_text,
+		float(effect.get("text_duration", 0.9))
+	)
+# 적 파츠 재생 함수
+func revive_enemy_part(part_id, effect):
+	if not enemy_parts.has(part_id):
+		return false
+
+	if not destroyed_parts.has(part_id):
+		return false
+
+	var part = get_enemy_part_data_by_id(part_id)
+	var part_max_hp = get_enemy_part_max_hp_from_data(part)
+	var revive_hp = int(effect.get("hp", 0))
+
+	if revive_hp <= 0:
+		var hp_percent = float(effect.get("hp_percent", 100.0))
+		revive_hp = int(round(float(part_max_hp) * hp_percent / 100.0))
+
+	revive_hp = clamp(revive_hp, 1, part_max_hp)
+	enemy_part_hp[part_id] = revive_hp
+	destroyed_parts.erase(part_id)
+
+	if enemy_part_sprites.has(part_id):
+		var sprite = enemy_part_sprites[part_id]
+
+		if sprite != null and is_instance_valid(sprite):
+			sprite.visible = true
+			sprite.modulate.a = 0.0
+
+			var duration = max(0.0, float(effect.get("effect_duration", 0.6)))
+
+			if duration > 0.0:
+				var tween = create_tween()
+				tween.tween_property(sprite, "modulate:a", 1.0, duration)
+				await tween.finished
+			else:
+				sprite.modulate.a = 1.0
+
+	update_hitbox_debug()
+	update_debug_hp_labels()
+	return true
+# 적 파츠 제거 패턴 연출 함수
+func remove_enemy_part_by_pattern(part_id, effect):
+	if not enemy_part_hp.has(part_id):
+		return false
+
+	if destroyed_parts.has(part_id):
+		return false
+
+	if enemy_part_sprites.has(part_id):
+		var sprite = enemy_part_sprites[part_id]
+
+		if sprite != null and is_instance_valid(sprite):
+			var duration = max(0.0, float(effect.get("effect_duration", 0.45)))
+
+			if duration > 0.0:
+				var tween = create_tween()
+				tween.tween_property(sprite, "modulate:a", 0.0, duration)
+				await tween.finished
+
+	destroy_enemy_part(part_id, str(effect.get("text", "")))
+
+	var text_duration = max(0.0, float(effect.get("text_duration", 0.9)))
+
+	if text_duration > 0.0:
+		await get_tree().create_timer(text_duration).timeout
+
+	return true
+# 적 본체 회복 함수
+func heal_enemy_body(amount):
+	if amount <= 0 or enemy_hp <= 0:
+		return 0
+
+	var before_hp = enemy_hp
+	enemy_hp += amount
+	clamp_enemy_body_hp()
+	update_enemy_hp_ui()
+
+	return max(0, enemy_hp - before_hp)
+# 적 파츠 회복 함수
+func heal_enemy_part(part_id, amount):
+	if amount <= 0:
+		return 0
+
+	if not enemy_part_hp.has(part_id) or destroyed_parts.has(part_id):
+		return 0
+
+	var before_hp = int(enemy_part_hp[part_id])
+	enemy_part_hp[part_id] = before_hp + amount
+	clamp_enemy_part_hp(part_id)
+	update_debug_hp_labels()
+
+	return max(0, int(enemy_part_hp[part_id]) - before_hp)
+# 적 회복 효과의 요청 회복량 계산 함수
+func get_enemy_heal_effect_amount(effect, target_data):
+	var hp_data = make_enemy_target_hp_data(
+		target_data.get("target_type", ""),
+		target_data.get("target_id", "")
+	)
+
+	if hp_data.is_empty():
+		return 0
+
+	if effect.has("amount"):
+		return max(0, int(effect.get("amount", 0)))
+
+	var hp_percent = float(effect.get("hp_percent", 0.0))
+
+	if hp_percent <= 0.0:
+		return 0
+
+	return max(0, int(round(float(hp_data.get("max_hp", 0)) * hp_percent / 100.0)))
+# 적 대상 회복 적용 함수
+func heal_enemy_target(target_data, amount):
+	var target_type = str(target_data.get("target_type", ""))
+	var target_id = str(target_data.get("target_id", ""))
+
+	if target_type == "body":
+		return heal_enemy_body(amount)
+
+	if target_type == "part":
+		return heal_enemy_part(target_id, amount)
+
+	return 0
+# 적 회복 효과 적용 함수
+func apply_enemy_heal_effect(effect):
+	var target_data = resolve_enemy_target_data(
+		effect.get("target", "owner"),
+		current_enemy_pattern.get("owner_type", "body"),
+		current_enemy_pattern.get("owner_id", ""),
+		effect.get("part_id", "")
+	)
+
+	if not is_enemy_effect_target_active(target_data):
+		return 0
+
+	var heal_amount = get_enemy_heal_effect_amount(effect, target_data)
+	var actual_heal = heal_enemy_target(target_data, heal_amount)
+
+	if actual_heal > 0:
+		show_enemy_heal_popup(
+			actual_heal,
+			target_data.get("target_type", ""),
+			target_data.get("target_id", "")
+		)
+
+	return actual_heal
+# 적 반사 대상 키 생성 함수
+func get_enemy_reflect_target_key(target_type, target_id = ""):
+	if target_type == "part":
+		return "part:" + str(target_id)
+
+	return "body"
+# 적 피해 반사 상태 등록 함수
+func apply_enemy_reflect_effect(effect):
+	var target_data = resolve_enemy_target_data(
+		effect.get("target", "owner"),
+		current_enemy_pattern.get("owner_type", "body"),
+		current_enemy_pattern.get("owner_id", ""),
+		effect.get("part_id", "")
+	)
+
+	if not is_enemy_effect_target_active(target_data):
+		return false
+
+	var turns = max(1, int(effect.get("turns", 1)))
+	var state = effect.duplicate(true)
+	state["remaining_turns"] = turns
+	state["damage_ratio"] = max(0.0, float(effect.get("damage_ratio", 1.0)))
+	state["target_type"] = target_data.get("target_type", "")
+	state["target_id"] = target_data.get("target_id", "")
+
+	var target_key = get_enemy_reflect_target_key(
+		target_data.get("target_type", ""),
+		target_data.get("target_id", "")
+	)
+	enemy_damage_reflect_states[target_key] = state
+	return true
+# 적 패턴 시작 효과 1개 적용 함수
+func apply_enemy_pattern_start_effect(effect):
+	if effect == null or typeof(effect) != TYPE_DICTIONARY:
+		return
+
+	var effect_type = str(effect.get("type", ""))
+	var sound = play_enemy_pattern_effect_sound(effect)
+	var effect_applied = false
+
+	if effect_type == "revive_part":
+		effect_applied = await revive_enemy_part(str(effect.get("part_id", "")), effect)
+	elif effect_type == "remove_part":
+		effect_applied = await remove_enemy_part_by_pattern(str(effect.get("part_id", "")), effect)
+	elif effect_type == "heal":
+		effect_applied = apply_enemy_heal_effect(effect) > 0
+	elif effect_type == "reflect_damage":
+		effect_applied = apply_enemy_reflect_effect(effect)
+
+	await wait_enemy_pattern_effect_sound_if_needed(effect, sound)
+
+	if effect_applied and effect_type != "remove_part":
+		var fallback_text = ""
+
+		if effect_type == "revive_part":
+			var part = get_enemy_part_data_by_id(str(effect.get("part_id", "")))
+			fallback_text = get_enemy_part_name_from_data(part) + "이(가) 다시 자라났다."
+		elif effect_type == "heal":
+			fallback_text = "괴물의 상처가 회복되었다."
+		elif effect_type == "reflect_damage":
+			fallback_text = "괴물이 받은 피해를 되돌리는 상태가 되었다."
+
+		await show_enemy_pattern_effect_text(effect, fallback_text)
+	elif not effect_applied and sound != null and is_instance_valid(sound):
+		sound.stop()
+		sound.queue_free()
+# 현재 적 패턴 시작 효과 전체 적용 함수
+func apply_current_enemy_pattern_start_effects():
+	for effect in get_current_enemy_pattern_start_effects():
+		if should_stop_after_enemy_attack():
+			return
+
+		await apply_enemy_pattern_start_effect(effect)
+# 라이프 드레인 적중 효과 1개 적용 함수
+func apply_enemy_life_drain_effect(effect, actual_player_damage):
+	if actual_player_damage <= 0:
+		return
+
+	var target_data = resolve_enemy_target_data(
+		effect.get("target", "owner"),
+		current_enemy_pattern.get("owner_type", "body"),
+		current_enemy_pattern.get("owner_id", ""),
+		effect.get("part_id", "")
+	)
+
+	if not is_enemy_effect_target_active(target_data):
+		return
+
+	var damage_ratio = max(0.0, float(effect.get("damage_ratio", 1.0)))
+	var requested_heal = int(round(float(actual_player_damage) * damage_ratio))
+	var actual_heal = heal_enemy_target(target_data, requested_heal)
+
+	if actual_heal <= 0:
+		return
+
+	enemy_turn_total_heal += actual_heal
+	show_enemy_heal_popup(
+		actual_heal,
+		target_data.get("target_type", ""),
+		target_data.get("target_id", "")
+	)
+
+	if not enemy_turn_life_drain_sound_played:
+		play_enemy_pattern_effect_sound(effect)
+		enemy_turn_life_drain_sound_played = true
+# 현재 패턴의 플레이어 적중 효과 적용 함수
+func apply_current_enemy_pattern_player_hit_effects(actual_player_damage):
+	if actual_player_damage <= 0:
+		return
+
+	for effect in get_current_enemy_pattern_player_hit_effects():
+		if effect == null or typeof(effect) != TYPE_DICTIONARY:
+			continue
+
+		if str(effect.get("type", "")) == "life_drain":
+			apply_enemy_life_drain_effect(effect, actual_player_damage)
+# 직접 공격 피해 반사 예약 함수
+func record_pending_reflected_damage(target_type, target_id, damage):
+	if damage <= 0:
+		return
+
+	var target_key = get_enemy_reflect_target_key(target_type, target_id)
+
+	if not enemy_damage_reflect_states.has(target_key):
+		return
+
+	var state = enemy_damage_reflect_states[target_key]
+	var ratio = max(0.0, float(state.get("damage_ratio", 1.0)))
+	var reflected_damage = int(round(float(damage) * ratio))
+
+	if reflected_damage <= 0:
+		return
+
+	pending_reflected_damage += reflected_damage
+
+	var saved_trigger_sound = str(
+		pending_reflection_trigger_effect.get("trigger_sound", "")
+	)
+	var state_trigger_sound = str(state.get("trigger_sound", ""))
+
+	if pending_reflection_trigger_effect.is_empty() or (
+		saved_trigger_sound == "" and state_trigger_sound != ""
+	):
+		pending_reflection_trigger_effect = state.duplicate(true)
+# 플레이어에게 반사 피해 적용 함수
+func apply_reflected_damage_to_player(damage):
+	if damage <= 0:
+		return 0
+
+	var before_hp = player_hp
+	player_hp -= damage
+
+	if bool(player_effective_stats.get("cannot_die", false)) and before_hp >= 1 and player_hp < 1:
+		player_hp = 1
+
+	clamp_battle_player_hp()
+	var actual_damage = max(0, before_hp - player_hp)
+
+	play_player_hit_flash()
+	play_overlap_sound_from_player(hit_normal_sound)
+	update_player_hp_ui()
+
+	return actual_damage
+# 플레이어 턴 종료 시 예약된 반사 피해 처리 함수
+func apply_pending_reflected_damage():
+	var reflected_damage = pending_reflected_damage
+	var trigger_effect = pending_reflection_trigger_effect.duplicate(true)
+
+	pending_reflected_damage = 0
+	pending_reflection_trigger_effect.clear()
+
+	if reflected_damage <= 0:
+		return true
+
+	play_enemy_pattern_effect_sound(trigger_effect, true)
+	var actual_damage = apply_reflected_damage_to_player(reflected_damage)
+
+	if actual_damage > 0:
+		await show_battle_text_for_seconds(
+			"반사된 피해로 " + str(actual_damage) + " 의 피해를 입었다.",
+			0.9
+		)
+	else:
+		await show_battle_text_for_seconds("반사된 피해를 견뎌냈다.", 0.9)
+
+	if player_hp <= 0:
+		await start_game_over_flow()
+		return false
+
+	return true
+# 플레이어 턴 종료 시 반사 상태 지속 턴 감소 함수
+func decrease_enemy_reflect_turns():
+	var expired_keys = []
+
+	for target_key in enemy_damage_reflect_states.keys():
+		var state = enemy_damage_reflect_states[target_key]
+		state["remaining_turns"] = int(state.get("remaining_turns", 1)) - 1
+		enemy_damage_reflect_states[target_key] = state
+
+		if int(state.get("remaining_turns", 0)) <= 0:
+			expired_keys.append(target_key)
+
+	for target_key in expired_keys:
+		enemy_damage_reflect_states.erase(target_key)
+# 플레이어 턴 종료 특수 효과 전체 처리 함수
+func finish_player_turn_special_effects():
+	# 반사 처리 대기 중 플레이어가 다른 행동을 고르지 못하게 턴을 먼저 닫는다.
+	is_player_turn = false
+
+	var can_continue = await apply_pending_reflected_damage()
+	decrease_enemy_reflect_turns()
+	return can_continue
+# 플레이어 턴 종료 후 적 턴 시작 공통 함수
+func finish_player_turn_and_start_enemy_turn():
+	if not await finish_player_turn_special_effects():
+		return
+
+	start_enemy_turn()
 # 적 본체 처치 여부 확인 함수
 func is_enemy_body_defeated():
 	return enemy_hp <= 0
@@ -4418,17 +5351,29 @@ func play_spawned_parry_effect(effect):
 		if effect == null or not is_instance_valid(effect):
 			return
 
-		effect.texture = load(path)
+		effect.texture = get_cached_battle_texture(
+			path,
+			"parry effect"
+		)
+
 		await get_tree().create_timer(0.04).timeout
 
 	if effect != null and is_instance_valid(effect):
 		effect.queue_free()
 # 플레이어 이펙트 재생 함수
-func play_effect_frames(effect_node, frame_paths, frame_time = 0.05):
+func play_effect_frames(
+	effect_node,
+	frame_paths,
+	frame_time = 0.05
+):
 	effect_node.visible = true
 
 	for path in frame_paths:
-		effect_node.texture = load(path)
+		effect_node.texture = get_cached_battle_texture(
+			path,
+			"battle effect"
+		)
+
 		await get_tree().create_timer(frame_time).timeout
 
 	effect_node.visible = false
@@ -4455,32 +5400,125 @@ func get_current_weapon_id():
 		return weapon_id
 
 	return "fist"
-# 플레이어 무기 현재 데이터 가져오는 함수
+# 플레이어 현재 무기 데이터 가져오기
+#
+# 매 호출마다 duplicate하지 않고, 현재 무기 기준으로
+# 한 번 계산한 결과를 전투 동안 재사용한다.
 func get_current_weapon_data():
 	var weapon_id = get_current_weapon_id()
-	var base_weapon_data = get_item_data_by_id(weapon_id, false)
+
+	if (
+		cached_current_weapon_id == weapon_id
+		and not cached_current_weapon_data.is_empty()
+	):
+		return cached_current_weapon_data
+
+	var base_weapon_data = get_item_data_by_id(
+		weapon_id,
+		false
+	)
 
 	if base_weapon_data.is_empty() and weapon_id != "fist":
-		base_weapon_data = get_item_data_by_id("fist", false)
+		weapon_id = "fist"
+		base_weapon_data = get_item_data_by_id(
+			"fist",
+			false
+		)
 
 	if base_weapon_data.is_empty():
+		clear_current_weapon_data_cache()
 		return {}
 
 	var weapon_data = base_weapon_data.duplicate(true)
 
-	# 원본 items[weapon_id]를 직접 수정하지 않고, 복사본에만 적용 능력치를 덮어씌우는 구조
 	if player_effective_stats.size() > 0:
-		weapon_data["attack_min"] = int(player_effective_stats.get("attack_min", weapon_data.get("attack_min", weapon_data.get("attack", 1))))
-		weapon_data["attack_max"] = int(player_effective_stats.get("attack_max", weapon_data.get("attack_max", weapon_data.get("attack", weapon_data["attack_min"]))))
-		weapon_data["critical_chance"] = float(player_effective_stats.get("critical_chance", weapon_data.get("critical_chance", 0.01)))
-		weapon_data["critical_multiplier"] = float(player_effective_stats.get("critical_multiplier", weapon_data.get("critical_multiplier", 2.0)))
-		weapon_data["parry_window"] = float(player_effective_stats.get("parry_window", weapon_data.get("parry_window", 0.1)))
-		weapon_data["attack_swing_speed"] = float(player_effective_stats.get("attack_swing_speed", weapon_data.get("attack_swing_speed", 3.0)))
-		weapon_data["defense_move_speed"] = float(player_effective_stats.get("defense_move_speed", weapon_data.get("defense_move_speed", 500.0)))
-		# player_effective_stats의 piercing은 main.gd에서 기본 무기 piercing 값을 포함해서 계산되어야 함
-		weapon_data["piercing"] = bool(player_effective_stats.get("piercing", weapon_data.get("piercing", false)))
+		weapon_data["attack_min"] = int(
+			player_effective_stats.get(
+				"attack_min",
+				weapon_data.get(
+					"attack_min",
+					weapon_data.get("attack", 1)
+				)
+			)
+		)
 
-	return weapon_data
+		weapon_data["attack_max"] = int(
+			player_effective_stats.get(
+				"attack_max",
+				weapon_data.get(
+					"attack_max",
+					weapon_data.get(
+						"attack",
+						weapon_data["attack_min"]
+					)
+				)
+			)
+		)
+
+		weapon_data["critical_chance"] = float(
+			player_effective_stats.get(
+				"critical_chance",
+				weapon_data.get(
+					"critical_chance",
+					0.01
+				)
+			)
+		)
+
+		weapon_data["critical_multiplier"] = float(
+			player_effective_stats.get(
+				"critical_multiplier",
+				weapon_data.get(
+					"critical_multiplier",
+					2.0
+				)
+			)
+		)
+
+		weapon_data["parry_window"] = float(
+			player_effective_stats.get(
+				"parry_window",
+				weapon_data.get(
+					"parry_window",
+					0.1
+				)
+			)
+		)
+
+		weapon_data["attack_swing_speed"] = float(
+			player_effective_stats.get(
+				"attack_swing_speed",
+				weapon_data.get(
+					"attack_swing_speed",
+					3.0
+				)
+			)
+		)
+
+		weapon_data["defense_move_speed"] = float(
+			player_effective_stats.get(
+				"defense_move_speed",
+				weapon_data.get(
+					"defense_move_speed",
+					500.0
+				)
+			)
+		)
+
+		weapon_data["piercing"] = bool(
+			player_effective_stats.get(
+				"piercing",
+				weapon_data.get(
+					"piercing",
+					false
+				)
+			)
+		)
+
+	cached_current_weapon_id = weapon_id
+	cached_current_weapon_data = weapon_data
+
+	return cached_current_weapon_data
 # 플레이어 현재 공격 투사체 ID 가져오기 함수
 func get_current_attack_projectile_id():
 	var weapon_data = get_current_weapon_data()
@@ -4758,17 +5796,23 @@ func play_player_attack_hit_sound(is_weak, is_critical, is_no_damage = false):
 			hit_normal_sound.play()
 # 적 본체에 플레이어 공격 피해 적용 함수
 func apply_player_attack_damage_to_body(damage):
+	var before_hp = enemy_hp
 	enemy_hp -= damage
 	clamp_enemy_body_hp()
 	update_enemy_hp_ui()
+
+	return max(0, before_hp - enemy_hp)
 # 적 파츠에 플레이어 공격 피해 적용 함수
 func apply_player_attack_damage_to_part(part_id, damage):
 	if not enemy_part_hp.has(part_id):
-		return
+		return 0
 
+	var before_hp = int(enemy_part_hp[part_id])
 	enemy_part_hp[part_id] -= damage
 	clamp_enemy_part_hp(part_id)
 	update_debug_hp_labels()
+
+	return max(0, before_hp - int(enemy_part_hp[part_id]))
 # 플레이어 공격 피격 연출 실행 함수
 func play_player_attack_hit_feedback(damage, is_special_hit):
 	hit_effect.position = get_last_hitbox_center_position()
@@ -4827,7 +5871,8 @@ func apply_player_attack_hit(hitbox):
 	var is_no_damage = is_player_attack_result_no_damage(damage_result)
 
 	play_player_attack_hit_sound(is_weak, is_critical, is_no_damage)
-	apply_player_attack_damage_to_body(damage)
+	var actual_damage = apply_player_attack_damage_to_body(damage)
+	record_pending_reflected_damage("body", "", actual_damage)
 
 	play_player_attack_hit_feedback(
 		damage,
@@ -4865,6 +5910,10 @@ func finish_player_attack_flow():
 	process_player_attack_miss_result()
 
 	await wait_after_player_attack_result()
+
+	# 결정타로 적/파츠가 파괴되어도 이미 예약된 반사 피해는 먼저 적용한다.
+	if not await finish_player_turn_special_effects():
+		return
 
 	if await check_enemy_defeated_after_player_attack():
 		return
@@ -5000,15 +6049,22 @@ func get_frame_path_by_index(frame_paths, frame_index):
 
 	return str(frame_paths[frame_index])
 # 플레이어 공격 투사체 프레임 텍스처 가져오기 함수
-func get_player_attack_projectile_frame_texture(frame_paths, frame_index):
-	var frame_path = get_frame_path_by_index(frame_paths, frame_index)
+func get_player_attack_projectile_frame_texture(
+	frame_paths,
+	frame_index
+):
+	var frame_path = get_frame_path_by_index(
+		frame_paths,
+		frame_index
+	)
 
 	if frame_path == "":
 		return null
 
-	return load_texture_by_path(
+	return get_cached_battle_texture(
 		frame_path,
-		"player attack projectile frame / " + str(get_current_attack_projectile_id())
+		"player attack projectile frame / "
+		+ str(get_current_attack_projectile_id())
 	)
 # 투사체 데이터에서 프레임 개수 가져오기 함수
 func get_projectile_frame_count_from_data(projectile_data):
@@ -5039,15 +6095,23 @@ func get_projectile_frames_from_data(projectile_data):
 
 	return make_effect_frames(frames_path, frame_count)
 # 적 탄막 프레임 텍스처 가져오기 함수
-func get_enemy_projectile_frame_texture(frame_paths, frame_index, projectile_id = ""):
-	var frame_path = get_frame_path_by_index(frame_paths, frame_index)
+func get_enemy_projectile_frame_texture(
+	frame_paths,
+	frame_index,
+	projectile_id = ""
+):
+	var frame_path = get_frame_path_by_index(
+		frame_paths,
+		frame_index
+	)
 
 	if frame_path == "":
 		return null
 
-	return load_texture_by_path(
+	return get_cached_battle_texture(
 		frame_path,
-		"enemy projectile frame / " + str(projectile_id)
+		"enemy projectile frame / "
+		+ str(projectile_id)
 	)
 # 현재 플레이어 공격 투사체 사운드 재생 함수
 func play_current_attack_projectile_sound():
@@ -5819,6 +6883,12 @@ func make_enemy_turn_damage_text():
 		return ""
 
 	return str(int(enemy_turn_total_damage)) + " 의 피해를 입었다."
+# 적 턴 라이프 드레인 회복 텍스트 생성 함수
+func make_enemy_turn_life_drain_text():
+	if enemy_turn_total_heal <= 0:
+		return ""
+
+	return "괴물이 빼앗은 생명력으로 체력을 " + str(int(enemy_turn_total_heal)) + " 회복했다."
 # 적 턴 상태이상 적용 텍스트 생성 함수
 func make_enemy_turn_status_effect_text():
 	if enemy_turn_applied_status_effects.size() == 0:
@@ -5833,6 +6903,11 @@ func make_enemy_turn_player_result_text():
 
 	if damage_text != "":
 		lines.append(damage_text)
+
+	var life_drain_text = make_enemy_turn_life_drain_text()
+
+	if life_drain_text != "":
+		lines.append(life_drain_text)
 
 	var status_text = make_enemy_turn_status_effect_text()
 
@@ -5862,7 +6937,7 @@ func apply_enemy_projectile_damage_to_player(damage):
 	var before_hp = player_hp
 
 	player_hp -= damage
-	
+
 	# 주물 심장 모형 처리 로직
 	if bool(player_effective_stats.get("cannot_die", false)) and before_hp >= 1 and player_hp < 1:
 		player_hp = 1
@@ -5870,9 +6945,10 @@ func apply_enemy_projectile_damage_to_player(damage):
 	if player_hp < 0:
 		player_hp = 0
 
-	enemy_turn_total_damage += damage
+	var actual_damage = max(0, before_hp - player_hp)
+	enemy_turn_total_damage += actual_damage
 
-	return before_hp
+	return actual_damage
 # 플레이어 탄막 피격 사운드 재생 함수
 func play_player_projectile_hit_sound(danger_type):
 	if danger_type == "parry_only":
@@ -5895,15 +6971,17 @@ func check_player_death_after_projectile_hit():
 func apply_projectile_hit_to_player(projectile_info, projectile_data, danger_type):
 	var base_damage = get_enemy_projectile_base_damage(projectile_info)
 	var damage = get_player_received_damage(base_damage)
-
-	apply_enemy_projectile_damage_to_player(damage)
+	var actual_damage = apply_enemy_projectile_damage_to_player(damage)
 
 	play_player_hit_flash()
 	apply_enemy_projectile_status_effects_to_player(projectile_info, projectile_data)
 	play_player_projectile_hit_sound(danger_type)
+	apply_current_enemy_pattern_player_hit_effects(actual_damage)
 
 	update_player_hp_ui()
 	check_player_death_after_projectile_hit()
+
+	return actual_damage
 # 플레이어 받는 데미지 계산 함수
 func get_player_received_damage(base_damage):
 	var damage = float(base_damage)
@@ -6407,6 +7485,10 @@ func apply_player_turn_start_relic_effects():
 		await get_tree().create_timer(0.45).timeout
 
 	return true
+# 현재 무기 데이터 캐시 초기화
+func clear_current_weapon_data_cache():
+	cached_current_weapon_data.clear()
+	cached_current_weapon_id = ""
 
 # ============================================================
 # 전투 오디오 설정 관련 함수 모음

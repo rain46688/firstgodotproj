@@ -603,16 +603,30 @@
 						"text": "교실 문이 닫혀있다. 문을 열을까?"
 					},
 					{
-						"type": "unlock_exit",
-						"direction": "right",
-						"required_item": "classroom_key_a",
-						"master_key": "master_key",
-						"consume_required_key": true,
-						"consume_master_key": true,
-						"success_effect": "fade",
-						"required_key_success_text": "{item_name}로 문을 열었다.",
-						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-						"fail_text": "자물쇠로 잠겨있어서 열 수 없다."
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "right",
+										"required_item": "classroom_key_a",
+										"master_key": "master_key",
+										"consume_required_key": true,
+										"consume_master_key": true,
+										"success_effect": "fade",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "자물쇠로 잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
 					}
 				]
 			}
@@ -1762,16 +1776,30 @@
 						"text": "철문으로 굳게 닫혀있다. 문을 열을까?"
 					},
 					{
-						"type": "unlock_exit",
-						"direction": "right",
-						"required_item": "",
-						"master_key": "master_key",
-						"consume_required_key": true,
-						"consume_master_key": true,
-						"success_effect": "fade",
-						"required_key_success_text": "{item_name}로 문을 열었다.",
-						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-						"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "right",
+										"required_item": "",
+										"master_key": "master_key",
+										"consume_required_key": true,
+										"consume_master_key": true,
+										"success_effect": "fade",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
 					}
 				]
 			},
@@ -1789,16 +1817,30 @@
 						"text": "철문으로 굳게 닫혀있다. 문을 열을까?"
 					},
 					{
-						"type": "unlock_exit",
-						"direction": "left",
-						"required_item": "schoolhall_key_b",
-						"master_key": "master_key",
-						"consume_required_key": true,
-						"consume_master_key": true,
-						"success_effect": "fade",
-						"required_key_success_text": "{item_name}로 문을 열었다.",
-						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-						"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "left",
+										"required_item": "schoolhall_key_b",
+										"master_key": "master_key",
+										"consume_required_key": true,
+										"consume_master_key": true,
+										"success_effect": "fade",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
 					}
 				]
 			}
@@ -3241,16 +3283,30 @@
 						"text": "교실 문이 닫혀있다. 문을 열을까?"
 					},
 					{
-						"type": "unlock_exit",
-						"direction": "right",
-						"required_item": "classroom_key_b",
-						"master_key": "master_key",
-						"consume_required_key": true,
-						"consume_master_key": true,
-						"success_effect": "fade",
-						"required_key_success_text": "{item_name}로 문을 열었다.",
-						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-						"fail_text": "자물쇠로 잠겨있어서 열 수 없다."
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "right",
+										"required_item": "classroom_key_b",
+										"master_key": "master_key",
+										"consume_required_key": true,
+										"consume_master_key": true,
+										"success_effect": "fade",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "자물쇠로 잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
 					}
 				]
 			}
@@ -4249,20 +4305,34 @@
 						"text": "놓고 가면 보물 주겠다."
 					},
 					{
-						"type": "item_payment",
-						"item": "unknown_coin",
-						"count": 30,
-						"success_text": "금화 30개를 바쳤다.",
-						"fail_text": "금화가 부족하다. (알수없는 코인 30개 필요)",
-						"success_events": [
+						"type": "choices",
+						"choices": [
 							{
-								"type": "item",
-								"item": "old_water_ball",
-								"count": 1
+								"text": "금화를 내려놓는다.",
+								"events": [
+									{
+										"type": "item_payment",
+										"item": "unknown_coin",
+										"count": 30,
+										"success_text": "금화 30개를 바쳤다.",
+										"fail_text": "금화가 부족하다. (알수없는 코인 30개 필요)",
+										"success_events": [
+											{
+												"type": "item",
+												"item": "old_water_ball",
+												"count": 1
+											},
+											{
+												"type": "flag",
+												"flag": "classroom_12_coin_payment_01_done"
+											}
+										]
+									}
+								]
 							},
 							{
-								"type": "flag",
-								"flag": "classroom_12_coin_payment_01_done"
+								"text": "그만둔다.",
+								"events": []
 							}
 						]
 					}
@@ -4324,20 +4394,34 @@
 						"text": "이번엔 두배 더 줘라."
 					},
 					{
-						"type": "item_payment",
-						"item": "unknown_coin",
-						"count": 60,
-						"success_text": "금화 60개를 바쳤다.",
-						"fail_text": "금화가 부족하다. (알수없는 코인 60개 필요)",
-						"success_events": [
+						"type": "choices",
+						"choices": [
 							{
-								"type": "item",
-								"item": "cube_relic",
-								"count": 1
+								"text": "금화를 내려놓는다.",
+								"events": [
+									{
+										"type": "item_payment",
+										"item": "unknown_coin",
+										"count": 60,
+										"success_text": "금화 60개를 바쳤다.",
+										"fail_text": "금화가 부족하다. (알수없는 코인 60개 필요)",
+										"success_events": [
+											{
+												"type": "item",
+												"item": "cube_relic",
+												"count": 1
+											},
+											{
+												"type": "flag",
+												"flag": "classroom_12_coin_payment_02_done"
+											}
+										]
+									}
+								]
 							},
 							{
-								"type": "flag",
-								"flag": "classroom_12_coin_payment_02_done"
+								"text": "그만둔다.",
+								"events": []
 							}
 						]
 					}
@@ -6434,16 +6518,30 @@
 						"text": "철문으로 굳게 닫혀있다. 문을 열을까?"
 					},
 					{
-						"type": "unlock_exit",
-						"direction": "right",
-						"required_item": "schoolhall_key_a",
-						"master_key": "master_key",
-						"consume_required_key": true,
-						"consume_master_key": true,
-						"success_effect": "fade",
-						"required_key_success_text": "{item_name}로 문을 열었다.",
-						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-						"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "right",
+										"required_item": "schoolhall_key_a",
+										"master_key": "master_key",
+										"consume_required_key": true,
+										"consume_master_key": true,
+										"success_effect": "fade",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
 					}
 				]
 			},
@@ -6461,16 +6559,30 @@
 						"text": "철문으로 굳게 닫혀있다. 문을 열을까?"
 					},
 					{
-						"type": "unlock_exit",
-						"direction": "left",
-						"required_item": "",
-						"master_key": "master_key",
-						"consume_required_key": true,
-						"consume_master_key": true,
-						"success_effect": "fade",
-						"required_key_success_text": "{item_name}로 문을 열었다.",
-						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-						"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "left",
+										"required_item": "",
+										"master_key": "master_key",
+										"consume_required_key": true,
+										"consume_master_key": true,
+										"success_effect": "fade",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
 					}
 				]
 			}
@@ -9432,16 +9544,30 @@
 						"text": "철문으로 굳게 닫혀있다. 문을 열을까?"
 					},
 					{
-						"type": "unlock_exit",
-						"direction": "right",
-						"required_item": "",
-						"master_key": "",
-						"consume_required_key": true,
-						"consume_master_key": true,
-						"success_effect": "fade",
-						"required_key_success_text": "{item_name}로 문을 열었다.",
-						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-						"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "right",
+										"required_item": "",
+										"master_key": "",
+										"consume_required_key": true,
+										"consume_master_key": true,
+										"success_effect": "fade",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
 					}
 				]
 			},
@@ -9459,16 +9585,30 @@
 						"text": "철문으로 굳게 닫혀있다. 문을 열을까?"
 					},
 					{
-						"type": "unlock_exit",
-						"direction": "left",
-						"required_item": "",
-						"master_key": "master_key",
-						"consume_required_key": true,
-						"consume_master_key": true,
-						"success_effect": "fade",
-						"required_key_success_text": "{item_name}로 문을 열었다.",
-						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-						"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "left",
+										"required_item": "",
+										"master_key": "master_key",
+										"consume_required_key": true,
+										"consume_master_key": true,
+										"success_effect": "fade",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
 					}
 				]
 			}
@@ -9908,16 +10048,30 @@
 						"text": "굳게 닫혀있다. 문을 열을까?"
 					},
 					{
-						"type": "unlock_exit",
-						"direction": "left",
-						"required_item": "",
-						"master_key": "",
-						"consume_required_key": true,
-						"consume_master_key": true,
-						"success_effect": "fade",
-						"required_key_success_text": "{item_name}로 문을 열었다.",
-						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-						"fail_text": "잠겨있어서 열 수 없다."
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "left",
+										"required_item": "",
+										"master_key": "",
+										"consume_required_key": true,
+										"consume_master_key": true,
+										"success_effect": "fade",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
 					}
 				]
 			},
@@ -12181,16 +12335,30 @@
 						"text": "교실 문이 닫혀있다. 문을 열을까?"
 					},
 					{
-						"type": "unlock_exit",
-						"direction": "right",
-						"required_item": "classroom_key_d",
-						"master_key": "master_key",
-						"consume_required_key": true,
-						"consume_master_key": true,
-						"success_effect": "fade",
-						"required_key_success_text": "{item_name}로 문을 열었다.",
-						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-						"fail_text": "자물쇠로 잠겨있어서 열 수 없다."
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "right",
+										"required_item": "classroom_key_d",
+										"master_key": "master_key",
+										"consume_required_key": true,
+										"consume_master_key": true,
+										"success_effect": "fade",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "자물쇠로 잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
 					}
 				]
 			}
@@ -13689,16 +13857,30 @@
 						"text": "교실 문이 닫혀있다. 문을 열을까?"
 					},
 					{
-						"type": "unlock_exit",
-						"direction": "right",
-						"required_item": "classroom_key_c",
-						"master_key": "master_key",
-						"consume_required_key": true,
-						"consume_master_key": true,
-						"success_effect": "fade",
-						"required_key_success_text": "{item_name}로 문을 열었다.",
-						"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-						"fail_text": "자물쇠로 잠겨있어서 열 수 없다."
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "right",
+										"required_item": "classroom_key_c",
+										"master_key": "master_key",
+										"consume_required_key": true,
+										"consume_master_key": true,
+										"success_effect": "fade",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "자물쇠로 잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
 					}
 				]
 			}
