@@ -97,10 +97,18 @@ var is_choosing = false
 var choice_index = 0
 var current_choices = []
 var is_interacting = false
+
+# 빠른 연타로 오래된 상호작용 버튼이 다시 실행되는 것을 막기 위한 실행 번호
+var interaction_run_serial = 0
+var active_interaction_id = ""
+
 var is_dialogue_showing = false
 var dialogue_finished = false
 var is_typing = false
 var typing_finished = false
+
+# 대사 함수가 동시에 두 개 이상 실행되지 않도록 직렬화할 때 사용
+var dialogue_run_serial = 0
 var inventory = []
 var flags = {}
 var arrow_base_positions = {}
@@ -3129,7 +3137,18 @@ func try_move_to_exit(direction):
 	await move_to_room(target_room, use_shake, direction)
 # 현재 방에 생성된 상호작용 버튼들을 전부 제거
 func clear_interaction_buttons():
+	# queue_free()만 호출하면 노드는 현재 프레임이 끝날 때까지 트리에 남아 있다.
+	# 그 사이 update_room() 뒤에서 버튼이 다시 활성화되면,
+	# 이미 사라져야 할 상호작용이 빠른 연타로 한 번 더 실행될 수 있다.
 	for child in interaction_buttons.get_children():
+		if child is BaseButton:
+			child.disabled = true
+
+		if child is Control:
+			child.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+		# 트리에서 즉시 분리해 같은 프레임의 추가 GUI 입력도 받지 못하게 한다.
+		interaction_buttons.remove_child(child)
 		child.queue_free()
 # 방 데이터에서 interactions Dictionary 가져오기 함수
 func get_interactions_from_room(room, show_error = false):
@@ -3360,6 +3379,18 @@ func show_dialogue(text, mode = "normal"):
 	# - 출력 중 입력하면 전체 문장 즉시 표시
 	# - 출력 완료 후 입력하면 대사창 종료
 	
+	# 빠른 연타나 잘못 겹친 이벤트가 show_dialogue()를 동시에 호출하더라도
+	# 공유 변수(is_dialogue_showing/dialogue_finished)가 서로 덮어쓰이지 않게
+	# 앞의 대사가 완전히 끝날 때까지 다음 대사를 대기시킨다.
+	while is_dialogue_showing:
+		if not is_inside_tree() or is_quitting_to_title:
+			return
+
+		await get_tree().process_frame
+
+	dialogue_run_serial += 1
+	var current_dialogue_run_serial = dialogue_run_serial
+
 	# 대화창 레이아웃 변경
 	set_dialogue_layout(mode)
 
@@ -3403,7 +3434,15 @@ func show_dialogue(text, mode = "normal"):
 		if not is_inside_tree() or is_quitting_to_title:
 			return
 
+		# 다른 코드가 현재 대사 세션을 강제로 교체한 경우
+		# 이전 세션이 공용 상태를 정리하지 않게 한다.
+		if current_dialogue_run_serial != dialogue_run_serial:
+			return
+
 		await get_tree().process_frame
+
+	if current_dialogue_run_serial != dialogue_run_serial:
+		return
 
 	$DialogueBox.visible = false
 	is_dialogue_showing = false
@@ -3461,7 +3500,19 @@ func get_choice_text(index):
 	return "  " + choice_text
 # 상호작용 실행 함수
 func run_interaction(interaction_id):
-	if is_interacting:
+	# 같은 프레임의 중복 클릭뿐 아니라 대사/이동/스토리 중 남아 있는
+	# 오래된 투명 버튼의 입력도 모두 차단한다.
+	if (
+		is_interacting
+		or is_dialogue_showing
+		or is_choosing
+		or is_moving
+		or is_story_playing
+		or is_inventory_open
+		or is_inventory_arrange_open
+		or is_document_popup_open
+		or is_input_prompt_open
+	):
 		return
 
 	var room = get_current_room_data()
@@ -3478,6 +3529,15 @@ func run_interaction(interaction_id):
 	if interaction.is_empty():
 		return
 
+	# 버튼이 생성된 뒤 flag가 바뀌었을 수 있으므로 실행 직전에도 조건을 재검사한다.
+	# hide_if_flag가 이미 켜진 일회성 사물함 같은 상호작용의 재실행을 막는다.
+	if not should_show_interaction(interaction):
+		return
+
+	interaction_run_serial += 1
+	var current_interaction_run_serial = interaction_run_serial
+
+	active_interaction_id = str(interaction_id)
 	is_interacting = true
 	set_interaction_buttons_disabled(true)
 
@@ -3485,23 +3545,36 @@ func run_interaction(interaction_id):
 		await run_events(interaction["events"])
 	else:
 		push_error("events가 없는 interaction: " + str(interaction_id))
-		
-	# 상호작용 결과로 flag가 바뀌었을 수 있으므로
-	# 현재 방 UI/상호작용 버튼을 다시 생성한다.
-	if is_inside_tree():
-		update_room()
 
-	set_interaction_buttons_disabled(false)
+	# 이후 다른 상호작용 실행으로 교체된 경우 이전 실행이 잠금을 풀지 않게 한다.
+	if current_interaction_run_serial != interaction_run_serial:
+		return
+
+	if not is_inside_tree() or is_quitting_to_title:
+		return
+
+	# 먼저 실행 잠금을 해제한 뒤 방 UI를 새로 만든다.
+	# 새로 생성된 버튼은 기본 enabled 상태이며,
+	# 제거 예약된 옛 버튼을 다시 활성화하는 과정이 생기지 않는다.
 	is_interacting = false
+	active_interaction_id = ""
+
+	update_room()
+	set_interaction_buttons_disabled(false)
 
 	# 상호작용 결과로 flag가 켜졌을 수 있으므로,
 	# 현재 room의 enter_stories 조건을 다시 검사한다.
 	await check_room_enter_story()
 # 상호작용 중 버튼 클릭 안되게 막는 함수
 func set_interaction_buttons_disabled(disabled):
-	
 	for child in interaction_buttons.get_children():
-		if child is Button:
+		if not is_instance_valid(child):
+			continue
+
+		if child.is_queued_for_deletion():
+			continue
+
+		if child is BaseButton:
 			child.disabled = disabled
 # 플래그 보유 여부 확인 함수
 func has_flag(flag_id):

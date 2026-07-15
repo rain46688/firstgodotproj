@@ -132,7 +132,7 @@
 		"attack_angle_max": 30,
 		"defense_base_rotation": 0,
 		"defense_move_speed": 550,
-		"parry_window": 0.15,
+		"parry_window": 0.10,
 		"piercing": false,
 		"defense_start_offset": [
 			0,

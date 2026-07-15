@@ -1733,6 +1733,16 @@
 			"volume_db": -10.0,
 			"loop": true
 		},
+		"enter_stories": [
+			{
+				"event": "first_opened_school_stairs_hall_02_before_classroom_09_event",
+				"required_flag": "opened_school_stairs_hall_02",
+				"required_flag_missing": [
+					"story_first_enter_classroom_09_done",
+					"story_first_opened_school_stairs_hall_02_before_classroom_09_event_done"
+				]
+			}
+		],
 		"exits": {
 			"right": {
 				"target": "school_stairs_hall_02",
@@ -2921,10 +2931,10 @@
 				"required_flag_missing": "story_first_enter_classroom_08_02_done"
 			},
 			{
-				"event": "first_enter_classroom_08_02_02",
+				"event": "first_enter_classroom_08_02_before_first_enter_classroom_09",
 				"required_flag": "opened_classroom_08_ladder",
 				"required_flag_missing": [
-					"story_first_enter_classroom_08_02_02_done",
+					"story_first_enter_classroom_08_02_before_first_enter_classroom_09_done",
 					"story_first_enter_classroom_09_done"
 				]
 			},
@@ -6394,11 +6404,11 @@
 		},
 		"enter_stories": [
 			{
-				"event": "first_enter_school_stairs_hall_02",
+				"event": "first_enter_school_stairs_hall_02_before_classroom_09_event",
 				"required_flag": "opened_school_stairs_hall_02",
 				"required_flag_missing": [
 					"story_first_enter_classroom_11_done",
-					"story_first_enter_school_stairs_hall_02_done"
+					"story_first_enter_school_stairs_hall_02_before_classroom_09_event_done"
 				]
 			}
 		],
@@ -9503,15 +9513,6 @@
 			"loop": true
 		},
 		"exits": {
-			"right": {
-				"target": "school_stairs_hall_04",
-				"position": [
-					1300,
-					500
-				],
-				"locked": true,
-				"open_flag": "opened_school_stairs_hall_05"
-			},
 			"left": {
 				"target": "school_stairs_hall_02",
 				"position": [
@@ -9530,47 +9531,6 @@
 			}
 		},
 		"interactions": {
-			"school_stairs_hall_04_door": {
-				"click_rect": [
-					1036,
-					219,
-					324,
-					544
-				],
-				"hide_if_flag": "opened_school_stairs_hall_05",
-				"events": [
-					{
-						"type": "text",
-						"text": "철문으로 굳게 닫혀있다. 문을 열을까?"
-					},
-					{
-						"type": "choices",
-						"choices": [
-							{
-								"text": "문을 연다.",
-								"events": [
-									{
-										"type": "unlock_exit",
-										"direction": "right",
-										"required_item": "",
-										"master_key": "",
-										"consume_required_key": true,
-										"consume_master_key": true,
-										"success_effect": "fade",
-										"required_key_success_text": "{item_name}로 문을 열었다.",
-										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-										"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
-									}
-								]
-							},
-							{
-								"text": "그만둔다.",
-								"events": []
-							}
-						]
-					}
-				]
-			},
 			"school_stairs_hall_03_door": {
 				"click_rect": [
 					564,
@@ -9832,10 +9792,10 @@
 				]
 			},
 			{
-				"event": "enter_broadcasting_room_02_after_grail_filled_unknown_hall_02",
+				"event": "first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_02",
 				"required_flag": "started_episode_02",
 				"required_flag_missing": [
-					"story_enter_broadcasting_room_02_after_grail_filled_unknown_hall_02_done"
+					"story_first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_02_done"
 				]
 			}
 		],
@@ -9919,7 +9879,8 @@
 									"story_first_grail_filled_unknown_hall_02_done"
 								],
 								"required_flag_missing": [
-									"started_episode_02"
+									"started_episode_02",
+									"opened_swimming_pool"
 								],
 								"events": [
 									{
@@ -14583,7 +14544,8 @@
 					412
 				],
 				"required_flag_missing": [
-					"opened_swimming_pool"
+					"opened_swimming_pool",
+					"story_first_enter_broadcasting_room_01_done"
 				],
 				"events": [
 					{
@@ -14675,6 +14637,30 @@
 								"events": []
 							}
 						]
+					}
+				]
+			},
+			"fish_02": {
+				"click_rect": [
+					148,
+					664,
+					955,
+					412
+				],
+				"required_flag": [
+					"story_first_enter_broadcasting_room_01_done"
+				],
+				"required_flag_missing": [
+					"opened_swimming_pool"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "거대한 생명체의 머리가 수면 위로 올라와 있다."
+					},
+					{
+						"type": "text",
+						"text": "눈 앞의 생명체는 살아있다, 조심해야 될 거 같다."
 					}
 				]
 			},

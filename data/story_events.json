@@ -1355,7 +1355,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "머리처럼 보이는 부분은 있었지만, 어둠 탓에 얼굴은 제대로 보이지 않았다. 나는 오히려 그게 다행이라고 생각했다."
+				"text": "머리처럼 보이는 부분은 있었지만, 얼굴은 제대로 보이지 않았다."
 			},
 			{
 				"type": "story_dialogue",
@@ -1570,6 +1570,236 @@
 			{
 				"type": "flag",
 				"flag": "story_first_enter_school_hallway_08_after_classroom_09_event_done"
+			},
+			{
+				"type": "start_battle",
+				"enemy": "candle_student_tutorial",
+				"first_turn": "enemy"
+			}
+		]
+	},
+	"first_opened_school_stairs_hall_02_before_classroom_09_event": {
+		"start_flag": "story_first_opened_school_stairs_hall_02_before_classroom_09_event_done",
+		"events": [
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm2.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/school_stairs_hall_01.png"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "찰칵."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 열쇠를 구멍에 넣고 돌렸다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "처음에는 모양이 다른 이 열쇠가 구멍에 맞을까 의심해 봤지만 이상하게도 구멍에 넣는 순간 완벽하게 맞아들어갔다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "마치 구멍에 맞춰서 열쇠가 변형되는 듯한 기분이 들었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "문을 열자 묵직한 마찰음이 복도에 울려 퍼졌다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 철문은 마치 무언가에 걸린 듯 제대로 열리지 않고 도중에 멈췄다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 순간 처음에는 아무것도 보이지 않았지만, 귀를 기울이자 낮고 불규칙한 발소리가 들렸다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/school_hallway_01.png"
+			},
+			{
+				"type": "camera_zoom",
+				"x": 550,
+				"y": 350,
+				"zoom": 1.5,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "camera_pan",
+				"x": 1000,
+				"y": 350,
+				"duration": 200.0,
+				"wait": false
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm9.mp3",
+				"volume_db": 0,
+				"loop": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 숨을 죽이고 발소리가 들리는 쪽을 살폈다. 복도 너머에서 바닥을 끌고 오는 듯한 낮은 소리가 이어졌다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "계속 철문을 열려고 시도해 봤지만 어째서인지 문이 열리지 않았다. 손바닥에 땀이 차서 손가락이 미끄러질 것 같았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "우선은 벽을 따라 조심스럽게 구석으로 움직였다. 나를 피해서 그것이 조용히 저 복도 너머로 지나가주길 바랐다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 정체를 알 수 없는 것은 빠른 속도로 내게 다가오고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그것이 가까워질수록, 공기 속의 먼지까지 움직임을 멈춘 것처럼 느껴졌다."
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/school_stairs_hall_01.png"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그것은 사람의 형태를 하고 있으면서도, 사람이라고 부르기에는 어딘가가 어긋나 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "머리처럼 보이는 부분은 있었지만, 얼굴은 제대로 보이지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 괴물은 열리다 만 철문을 잠시 바라보다가 고개를 이쪽으로 돌린 뒤, 망설임 없이 내 쪽으로 방향을 틀었다."
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/heartbeats.mp3",
+				"volume_db": 5,
+				"loop": true
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "젠장..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "더 이상 도망칠 곳이 없었다. 심장이 너무 크게 뛰어서, 그 소리마저 들킬 것 같았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "심장이 터질 것 같다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "도망칠 곳이 없다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 공포를 억지로 삼키고 손에 힘을 줬다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "어쩔 수 없다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "싸워야 한다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_opened_school_stairs_hall_02_before_classroom_09_event_done"
 			},
 			{
 				"type": "start_battle",
@@ -2446,8 +2676,8 @@
 			}
 		]
 	},
-	"first_enter_classroom_08_02_02": {
-		"start_flag": "story_first_enter_classroom_08_02_02_done",
+	"first_enter_classroom_08_02_before_first_enter_classroom_09": {
+		"start_flag": "story_first_enter_classroom_08_02_before_first_enter_classroom_09_done",
 		"events": [
 			{
 				"type": "screen_color",
@@ -2995,7 +3225,7 @@
 			},
 			{
 				"type": "flag",
-				"flag": "story_first_enter_classroom_08_02_02_done"
+				"flag": "story_first_enter_classroom_08_02_before_first_enter_classroom_09_done"
 			}
 		]
 	},
@@ -3796,7 +4026,11 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "하지만 결국 움직이지 못했다. 이 공간이 끝을 허락하지 않는다면, 무모한 선택도 출구가 되지 않을 것 같았다."
+				"text": "하지만 결국 움직이지 못했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나에게 그럴 용기가 없었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -3809,10 +4043,6 @@
 			{
 				"type": "story_dialogue",
 				"text": "몸은 분명 살아 있는데, 살아 있는 몸이라면 당연히 느껴야 할 감각들이 하나씩 빠져나간 기분이었다."
-			},
-			{
-				"type": "story_dialogue",
-				"text": "내가 올라온 구멍과 사다리는 감쪽같이 사라져있었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -3853,7 +4083,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그래서인지 그날의 기억은 더 선명하게 남아 있었다. 잊고 싶어도, 이곳은 잊을 틈을 주지 않았다."
+				"text": "그래서인지 그날의 기억은 더 선명하게 남아 있었다. 잊고 싶어도, 잊을 수 없었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -4403,8 +4633,8 @@
 			}
 		]
 	},
-	"first_enter_school_stairs_hall_02": {
-		"start_flag": "story_first_enter_school_stairs_hall_02_done",
+	"first_enter_school_stairs_hall_02_before_classroom_09_event": {
+		"start_flag": "story_first_enter_school_stairs_hall_02_before_classroom_09_event_done",
 		"events": [
 			{
 				"type": "screen_color",
@@ -4455,7 +4685,11 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "나는 한동안 이 알 수 없는 공간을 떠돌았다. 어느 방이 안전한지, 어느 복도가 위험한지 조금씩 외워 가면서."
+				"text": "나는 다음 층으로 올라와서 한동안 이 알 수 없는 공간을 떠돌았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "복도를 배회하는 괴물들을 피해서, 어느 방이 안전한지, 어느 복도가 위험한지 조금씩 외워 가면서."
 			},
 			{
 				"type": "story_dialogue",
@@ -4471,11 +4705,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "복도에는 사람이 아닌 것들이 돌아다녔다. 익숙해지려 해도, 그 기척을 들을 때마다 숨부터 멎었다."
-			},
-			{
-				"type": "story_dialogue",
-				"text": "며칠 전 아래층에서 누군가의 시체를 보았다."
+				"text": "며칠 전 어떤 교실에서 한 시체를 보았다."
 			},
 			{
 				"type": "story_dialogue",
@@ -4483,19 +4713,19 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "하지만 나는 어째서인지 그 사람이 낯설지 않다는 걸 알았다."
+				"text": "하지만 나는 어째서인지 그 사람이 낯설지 않게 느껴졌다."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "확실하지는 않았지만, 나와 같은 곳에서 끌려온 사람이었을 것이다. 나는 아무것도 해주지 못했다."
+				"text": "확실하지는 않았지만, 나와 같이 이곳에 끌려온 사람이었을 것이다. 나는 아무것도 해주지 못했다."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그 뒤로 누군갈르 구하지 못했다는 죄책감은 복도 끝의 그림자처럼 계속 따라다녔다."
+				"text": "그 뒤로 누군가를 구하지 못했다는 죄책감은 복도 끝의 그림자처럼 계속 따라다녔다."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그런데 다시 그 교실에 갔을 때는, 놀랍도록 깨끗이 정돈된 책상과 의자만이 나를 맞았다."
+				"text": "그런데 다시 그 교실에 돌아 갔을 때는, 놀랍도록 깨끗이 정돈된 책상과 의자만이 나를 맞았다."
 			},
 			{
 				"type": "story_dialogue",
@@ -4507,7 +4737,11 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "하지만 결국 움직이지 못했다. 이 공간이 끝을 허락하지 않는다면, 무모한 선택도 출구가 되지 않을 것 같았다."
+				"text": "하지만 결국 움직이지 못했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나에게 그럴 용기가 없었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -4557,14 +4791,6 @@
 			{
 				"type": "story_dialogue",
 				"text": "그리고 계속 움직이게 만든다."
-			},
-			{
-				"type": "story_dialogue",
-				"text": "이곳은 아래층과 공기부터 달랐다. 같은 학교 안인데도..."
-			},
-			{
-				"type": "story_dialogue",
-				"text": "더 조심해야 할 것 같다."
 			},
 			{
 				"type": "story_dialogue",
@@ -4725,7 +4951,7 @@
 			},
 			{
 				"type": "flag",
-				"flag": "story_first_enter_school_stairs_hall_02_done"
+				"flag": "story_first_enter_school_stairs_hall_02_before_classroom_09_event_done"
 			},
 			{
 				"type": "flag",
@@ -6092,11 +6318,6 @@
 				"type": "story_dialogue",
 				"name": "클레어",
 				"text": "여기 있는 장비들은 이상해요. 채널을 돌리면 여기가 아닌 다른 장소가 가끔씩 보여요."
-			},
-			{
-				"type": "story_dialogue",
-				"name": "나",
-				"text": "다른 장소요?"
 			},
 			{
 				"type": "standing",
@@ -8183,8 +8404,8 @@
 			}
 		]
 	},
-	"enter_broadcasting_room_02_after_grail_filled_unknown_hall_02": {
-		"start_flag": "story_enter_broadcasting_room_02_after_grail_filled_unknown_hall_02_done",
+	"first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_02": {
+		"start_flag": "story_first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_02_done",
 		"events": [
 			{
 				"type": "screen_color",
@@ -8540,7 +8761,7 @@
 			},
 			{
 				"type": "flag",
-				"flag": "story_enter_broadcasting_room_02_after_grail_filled_unknown_hall_02_done"
+				"flag": "story_first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_02_done"
 			}
 		]
 	},
@@ -8714,7 +8935,11 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "후아아..."
+				"text": "하아아... 하아아..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "수면 위로 올라온 나는 거친 숨을 몰아쉬었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -8738,7 +8963,19 @@
 				"text": "천천히 숨을 고른 후 나는 움직이기 시작했다."
 			},
 			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
 				"type": "show_game_ui"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
 			},
 			{
 				"type": "flag",
@@ -8758,7 +8995,55 @@
 			},
 			{
 				"type": "flag",
-				"flag": "story_enter_broadcasting_room_02_after_grail_filled_unknown_hall_02_done"
+				"flag": "opened_classroom_08_ladder"
+			},
+			{
+				"type": "flag",
+				"flag": "opened_classroom_09"
+			},
+			{
+				"type": "flag",
+				"flag": "opened_school_stairs_hall_02"
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_classroom_09_done"
+			},
+			{
+				"type": "flag",
+				"flag": "room_enter_story_done_first_enter_classroom_09"
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_school_hallway_08_after_classroom_09_event_done"
+			},
+			{
+				"type": "flag",
+				"flag": "room_enter_story_done_first_enter_school_hallway_08_after_classroom_09_event"
+			},
+			{
+				"type": "flag",
+				"flag": "defeated_candle_student_tutorial"
+			},
+			{
+				"type": "flag",
+				"flag": "room_enter_story_done_defeated_tutorial_candle_student"
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_classroom_08_02_done"
+			},
+			{
+				"type": "flag",
+				"flag": "room_enter_story_done_first_enter_classroom_08_02"
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_classroom_11_done"
+			},
+			{
+				"type": "flag",
+				"flag": "room_enter_story_done_first_enter_classroom_11"
 			}
 		]
 	}

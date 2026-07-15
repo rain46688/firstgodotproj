@@ -178,7 +178,7 @@ var enemy_sprite_default_position = Vector2.ZERO
 var battle_difficulty = "normal"
 
 # 패링 판정 처리 부분
-# parry_input_buffer_time 0.05
+# parry_input_buffer_time 0.045
 # parry_height 6
 
 # 플레이어 턴이 몇 번 시작됐는지 세는 변수
@@ -447,7 +447,7 @@ func update_defense_mode_input(delta):
 	
 	# 패링 판정 처리 부분 1
 	if Input.is_action_just_pressed("ui_accept"):
-		parry_input_buffer_time = 0.05
+		parry_input_buffer_time = 0.045
 
 	if parry_input_buffer_time > 0:
 		parry_input_buffer_time -= delta
