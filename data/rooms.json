@@ -11390,15 +11390,29 @@
 						"text": "금속 재질의 커다란 잔이다."
 					},
 					{
-						"type": "item_payment",
-						"item": "wax_heart",
-						"count": 1,
-						"success_text": "심장을 잔 안에 올려놓았다.",
-						"fail_text": "안은 비어있다.",
-						"success_events": [
+						"type": "choices",
+						"choices": [
 							{
-								"type": "flag",
-								"flag": "grail_filled_unknown_hall_02_done"
+								"text": "심장을 잔 위에 올려놓는다.",
+								"events": [
+									{
+										"type": "item_payment",
+										"item": "wax_heart",
+										"count": 1,
+										"success_text": "심장을 잔 안에 올려놓았다.",
+										"fail_text": "아무런 일도 일어나지 않았다.",
+										"success_events": [
+											{
+												"type": "flag",
+												"flag": "grail_filled_unknown_hall_02_done"
+											}
+										]
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
 							}
 						]
 					}
@@ -14733,7 +14747,7 @@
 		},
 		"ambient_sound": {
 			"path": "res://sounds/light_buzz.mp3",
-			"volume_db": -5.0,
+			"volume_db": -10.0,
 			"loop": true
 		},
 		"bgm": {

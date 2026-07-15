@@ -25,7 +25,7 @@
 				"product_id": "tranquilizer_b",
 				"item": "tranquilizer_b",
 				"count": 1,
-				"price": 10,
+				"price": 20,
 				"stock": 6,
 				"slot": 2,
 				"page": 0
@@ -34,7 +34,7 @@
 				"product_id": "tranquilizer_c",
 				"item": "tranquilizer_c",
 				"count": 1,
-				"price": 10,
+				"price": 20,
 				"stock": 5,
 				"slot": 3,
 				"page": 0
@@ -43,7 +43,7 @@
 				"product_id": "razor",
 				"item": "razor",
 				"count": 1,
-				"price": 40,
+				"price": 50,
 				"stock": 1,
 				"slot": 0,
 				"page": 1
@@ -52,7 +52,7 @@
 				"product_id": "cutter_knife",
 				"item": "cutter_knife",
 				"count": 1,
-				"price": 50,
+				"price": 80,
 				"stock": 1,
 				"slot": 1,
 				"page": 1
@@ -76,39 +76,30 @@
 				"page": 2
 			},
 			{
+				"product_id": "dice_relic",
+				"item": "dice_relic",
+				"count": 1,
+				"price": 60,
+				"stock": 1,
+				"slot": 2,
+				"page": 2
+			},
+			{
 				"product_id": "cube_relic",
 				"item": "cube_relic",
 				"count": 1,
-				"price": 55,
+				"price": 80,
 				"stock": 1,
-				"slot": 2,
+				"slot": 3,
 				"page": 2
 			},
 			{
 				"product_id": "torn_eyepatch",
 				"item": "torn_eyepatch",
 				"count": 1,
-				"price": 60,
-				"stock": 1,
-				"slot": 3,
-				"page": 2
-			},
-			{
-				"product_id": "dice_relic",
-				"item": "dice_relic",
-				"count": 1,
-				"price": 60,
-				"stock": 1,
-				"slot": 4,
-				"page": 2
-			},
-			{
-				"product_id": "music_box_relic",
-				"item": "music_box_relic",
-				"count": 1,
 				"price": 80,
 				"stock": 1,
-				"slot": 5,
+				"slot": 4,
 				"page": 2
 			},
 			{
@@ -117,6 +108,15 @@
 				"count": 1,
 				"price": 80,
 				"stock": 1,
+				"slot": 5,
+				"page": 2
+			},
+			{
+				"product_id": "music_box_relic",
+				"item": "music_box_relic",
+				"count": 1,
+				"price": 100,
+				"stock": 1,
 				"slot": 6,
 				"page": 2
 			},
@@ -124,7 +124,7 @@
 				"product_id": "teddy_bear_relic",
 				"item": "teddy_bear_relic",
 				"count": 1,
-				"price": 90,
+				"price": 100,
 				"stock": 1,
 				"slot": 7,
 				"page": 2
@@ -133,7 +133,7 @@
 				"product_id": "character_figure_relic",
 				"item": "character_figure_relic",
 				"count": 1,
-				"price": 90,
+				"price": 100,
 				"stock": 1,
 				"slot": 8,
 				"page": 2
@@ -142,7 +142,7 @@
 				"product_id": "cross_relic",
 				"item": "cross_relic",
 				"count": 1,
-				"price": 100,
+				"price": 150,
 				"stock": 1,
 				"slot": 9,
 				"page": 2
@@ -151,14 +151,14 @@
 				"product_id": "holy_grail_relic",
 				"item": "holy_grail_relic",
 				"count": 1,
-				"price": 100,
+				"price": 200,
 				"stock": 1,
 				"slot": 10,
 				"page": 2
 			},
 			{
-				"product_id": "bible_fetish",
-				"item": "bible_fetish",
+				"product_id": "sneakers_fetish",
+				"item": "sneakers_fetish",
 				"count": 1,
 				"price": 80,
 				"stock": 1,
@@ -166,39 +166,12 @@
 				"page": 3
 			},
 			{
-				"product_id": "metal_syringe",
-				"item": "metal_syringe",
+				"product_id": "dumbbell_fetish",
+				"item": "dumbbell_fetish",
 				"count": 1,
 				"price": 80,
 				"stock": 1,
 				"slot": 1,
-				"page": 3
-			},
-			{
-				"product_id": "rosary_fetish",
-				"item": "rosary_fetish",
-				"count": 1,
-				"price": 80,
-				"stock": 1,
-				"slot": 2,
-				"page": 3
-			},
-			{
-				"product_id": "sneakers_fetish",
-				"item": "sneakers_fetish",
-				"count": 1,
-				"price": 70,
-				"stock": 1,
-				"slot": 3,
-				"page": 3
-			},
-			{
-				"product_id": "dumbbell_fetish",
-				"item": "dumbbell_fetish",
-				"count": 1,
-				"price": 70,
-				"stock": 1,
-				"slot": 4,
 				"page": 3
 			},
 			{
@@ -207,6 +180,33 @@
 				"count": 1,
 				"price": 80,
 				"stock": 1,
+				"slot": 2,
+				"page": 3
+			},
+			{
+				"product_id": "bible_fetish",
+				"item": "bible_fetish",
+				"count": 1,
+				"price": 150,
+				"stock": 1,
+				"slot": 3,
+				"page": 3
+			},
+			{
+				"product_id": "metal_syringe",
+				"item": "metal_syringe",
+				"count": 1,
+				"price": 150,
+				"stock": 1,
+				"slot": 4,
+				"page": 3
+			},
+			{
+				"product_id": "rosary_fetish",
+				"item": "rosary_fetish",
+				"count": 1,
+				"price": 150,
+				"stock": 1,
 				"slot": 5,
 				"page": 3
 			},
@@ -214,7 +214,7 @@
 				"product_id": "lung_model_fetish",
 				"item": "lung_model_fetish",
 				"count": 1,
-				"price": 90,
+				"price": 200,
 				"stock": 1,
 				"slot": 6,
 				"page": 3
@@ -223,7 +223,7 @@
 				"product_id": "first_aid_box_fetish",
 				"item": "first_aid_box_fetish",
 				"count": 1,
-				"price": 90,
+				"price": 200,
 				"stock": 1,
 				"slot": 7,
 				"page": 3
@@ -232,7 +232,7 @@
 				"product_id": "classic_camera_fetish",
 				"item": "classic_camera_fetish",
 				"count": 1,
-				"price": 100,
+				"price": 200,
 				"stock": 1,
 				"slot": 8,
 				"page": 3
@@ -241,7 +241,7 @@
 				"product_id": "hourglass_fetish",
 				"item": "hourglass_fetish",
 				"count": 1,
-				"price": 100,
+				"price": 300,
 				"stock": 1,
 				"slot": 9,
 				"page": 3
@@ -250,7 +250,7 @@
 				"product_id": "hand_bone_fetish",
 				"item": "hand_bone_fetish",
 				"count": 1,
-				"price": 120,
+				"price": 300,
 				"stock": 1,
 				"slot": 10,
 				"page": 3
@@ -259,7 +259,7 @@
 				"product_id": "skull_model_fetish",
 				"item": "skull_model_fetish",
 				"count": 1,
-				"price": 120,
+				"price": 300,
 				"stock": 1,
 				"slot": 11,
 				"page": 3
@@ -268,7 +268,7 @@
 				"product_id": "small_frame_fetish",
 				"item": "small_frame_fetish",
 				"count": 1,
-				"price": 100,
+				"price": 300,
 				"stock": 1,
 				"slot": 12,
 				"page": 3
@@ -277,7 +277,7 @@
 				"product_id": "hand_candlestick_fetish",
 				"item": "hand_candlestick_fetish",
 				"count": 1,
-				"price": 150,
+				"price": 350,
 				"stock": 1,
 				"slot": 13,
 				"page": 3
@@ -286,7 +286,7 @@
 				"product_id": "brain_model_fetish",
 				"item": "brain_model_fetish",
 				"count": 1,
-				"price": 150,
+				"price": 400,
 				"stock": 1,
 				"slot": 14,
 				"page": 3
@@ -295,7 +295,7 @@
 				"product_id": "heart_model_fetish",
 				"item": "heart_model_fetish",
 				"count": 1,
-				"price": 200,
+				"price": 500,
 				"stock": 1,
 				"slot": 15,
 				"page": 3

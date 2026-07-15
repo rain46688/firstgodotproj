@@ -219,7 +219,7 @@
 		"phase": 1,
 		"max_hp": 200,
 		"battle_bgm": "res://sounds/bgm16.mp3",
-		"battle_bgm_volume_db": -5.0,
+		"battle_bgm_volume_db": -8.0,
 		"battle_bgm_loop": true,
 		"battle_bgm_fade_in": true,
 		"battle_bgm_fade_time": 3.0,
@@ -2227,7 +2227,7 @@
 					413,
 					312
 				],
-				"damage_multiplier": 6.0
+				"damage_multiplier": 10.0
 			},
 			{
 				"id": "left_hand",
@@ -2509,7 +2509,7 @@
 					323,
 					108
 				],
-				"damage_multiplier": 3.0
+				"damage_multiplier": 5.0
 			},
 			{
 				"id": "body_02",
@@ -2520,7 +2520,7 @@
 					216,
 					173
 				],
-				"damage_multiplier": 3.0
+				"damage_multiplier": 5.0
 			},
 			{
 				"id": "left_hand",
@@ -3624,7 +3624,7 @@
 					{
 						"projectile": "slash_slow",
 						"start": [
-							800,
+							850,
 							0
 						],
 						"rotation": 180,

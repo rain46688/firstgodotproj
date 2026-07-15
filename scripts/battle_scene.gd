@@ -75,6 +75,10 @@ var waiting_enemy_attack = false
 # 이전 Space 입력이 완전히 해제됐는지 확인한다.
 var enemy_attack_confirm_ready = false
 
+# 플레이어 행동 메뉴가 열린 직후,
+# 조우 문구나 직전 결과를 넘긴 Space가 공격 확정으로 이어지지 않게 한다.
+var player_action_confirm_ready = false
+
 var current_enemy_pattern = {}
 var slash_frames = []
 var parry_frames = []
@@ -178,8 +182,8 @@ var enemy_sprite_default_position = Vector2.ZERO
 var battle_difficulty = "normal"
 
 # 패링 판정 처리 부분
-# parry_input_buffer_time 0.045
-# parry_height 6
+# parry_input_buffer_time
+# parry_height
 
 # 플레이어 턴이 몇 번 시작됐는지 세는 변수
 # 특정 적이 일정 턴 후 도망가는 기능에 사용
@@ -447,7 +451,7 @@ func update_defense_mode_input(delta):
 	
 	# 패링 판정 처리 부분 1
 	if Input.is_action_just_pressed("ui_accept"):
-		parry_input_buffer_time = 0.045
+		parry_input_buffer_time = 0.05
 
 	if parry_input_buffer_time > 0:
 		parry_input_buffer_time -= delta
@@ -667,6 +671,7 @@ func reset_battle_runtime_state():
 	is_item_selecting = false
 	waiting_enemy_attack = false
 	enemy_attack_confirm_ready = false
+	player_action_confirm_ready = false
 	is_processing_battle_input = false
 	game_over_started = false
 	# 전투마다 플레이어 턴 카운트 초기화
@@ -1183,6 +1188,8 @@ func get_item_name_by_id(item_id):
 
 # 공격 버튼 클릭 함수
 func _on_attack_button_pressed():
+	player_action_confirm_ready = false
+
 	if not can_player_choose_action():
 		return
 	
@@ -1190,6 +1197,8 @@ func _on_attack_button_pressed():
 	start_attack_mode()
 # 관찰 버튼 클릭 함수
 func _on_observe_button_pressed():
+	player_action_confirm_ready = false
+
 	if not can_player_choose_action():
 		return
 
@@ -1197,6 +1206,8 @@ func _on_observe_button_pressed():
 	start_observe_mode()
 # 아이템 버튼 클릭 함수
 func _on_item_button_pressed():
+	player_action_confirm_ready = false
+
 	if not can_player_choose_action():
 		return
 
@@ -1204,6 +1215,8 @@ func _on_item_button_pressed():
 	open_battle_item_list()
 # 턴종료 버튼 클릭 함수
 func _on_end_turn_button_pressed():
+	player_action_confirm_ready = false
+
 	if not can_player_choose_action():
 		return
 
@@ -1215,6 +1228,8 @@ func _on_end_turn_button_pressed():
 	await finish_player_turn_and_start_enemy_turn()
 # 도망 버튼 클릭 함수
 func _on_run_button_pressed():
+	player_action_confirm_ready = false
+
 	if not can_player_choose_action():
 		return
 
@@ -1301,10 +1316,16 @@ func show_player_turn_start_text():
 # 플레이어 행동 메뉴 표시 함수
 func show_player_action_menu():
 	show_player_turn_start_text()
+
+	# 메뉴가 열린 시점에 누르고 있던 Space를 한 번 놓아야
+	# 공격/관찰/아이템/턴 종료/도망 중 하나를 새로 확정할 수 있다.
+	player_action_confirm_ready = false
+
 	set_action_buttons_disabled(false)
 	update_action_button_focus()
 # 플레이어 행동 메뉴 숨김 함수
 func hide_player_action_menu():
+	player_action_confirm_ready = false
 	set_action_buttons_disabled(true)
 	update_action_button_focus()
 # 전투 무기 액션 표시 초기화 함수
@@ -4392,7 +4413,14 @@ func spawn_hit_effect(effect_position):
 # 적 생성된 타격 이펙트 프레임 재생 함수
 func play_spawned_hit_effect(effect):
 	for path in hit_frames:
+		# 전투 씬이나 이펙트가 제거됐다면 즉시 종료
+		if not is_inside_tree():
+			return
+
 		if effect == null or not is_instance_valid(effect):
+			return
+
+		if not effect.is_inside_tree():
 			return
 
 		effect.texture = get_cached_battle_texture(
@@ -4400,7 +4428,12 @@ func play_spawned_hit_effect(effect):
 			"hit effect"
 		)
 
-		await get_tree().create_timer(0.05).timeout
+		var tree = get_tree()
+
+		if tree == null:
+			return
+
+		await tree.create_timer(0.05).timeout
 
 	if effect != null and is_instance_valid(effect):
 		effect.queue_free()
@@ -5190,18 +5223,52 @@ func get_parry_hit_rect():
 	var weapon_rect = get_weapon_defense_hit_rect()
 	var weapon_data = get_current_weapon_data()
 
-	var parry_window = weapon_data.get("parry_window", 0.1)
+	var parry_window = float(
+		weapon_data.get("parry_window", 0.1)
+	)
 
-	# 패링 판정 처리 부분 2
 	var parry_height = weapon_rect.size.y * parry_window
-	if parry_height < 6:
-		parry_height = 6
+	parry_height = max(parry_height, 3.0)
 
-	var center_y = weapon_rect.position.y + weapon_rect.size.y / 2.0
+	var parry_hitbox_data = weapon_data.get(
+		"parry_hitbox",
+		{}
+	)
+
+	var parry_width = float(
+		parry_hitbox_data.get(
+			"width",
+			weapon_rect.size.x
+		)
+	)
+
+	if parry_hitbox_data.has("height"):
+		parry_height = float(
+			parry_hitbox_data.get(
+				"height",
+				parry_height
+			)
+		)
+
+	var center_x = (
+		weapon_rect.position.x
+		+ weapon_rect.size.x / 2.0
+	)
+
+	var center_y = (
+		weapon_rect.position.y
+		+ weapon_rect.size.y / 2.0
+	)
 
 	return Rect2(
-		Vector2(weapon_rect.position.x, center_y - parry_height / 2.0),
-		Vector2(weapon_rect.size.x, parry_height)
+		Vector2(
+			center_x - parry_width / 2.0,
+			center_y - parry_height / 2.0
+		),
+		Vector2(
+			parry_width,
+			parry_height
+		)
 	)
 # 플레이어 탄막 위치 기준 패링 이펙트 위치 함수
 func get_parry_effect_position_for_projectile(projectile, projectile_data):
@@ -5348,7 +5415,14 @@ func spawn_parry_effect(effect_position):
 # 생성된 패링 이펙트 프레임 재생 함수
 func play_spawned_parry_effect(effect):
 	for path in parry_frames:
+		# 전투 씬이나 이펙트가 제거됐다면 즉시 종료
+		if not is_inside_tree():
+			return
+
 		if effect == null or not is_instance_valid(effect):
+			return
+
+		if not effect.is_inside_tree():
 			return
 
 		effect.texture = get_cached_battle_texture(
@@ -5356,7 +5430,13 @@ func play_spawned_parry_effect(effect):
 			"parry effect"
 		)
 
-		await get_tree().create_timer(0.04).timeout
+		# get_tree()를 바로 연속 호출하지 않고 안전하게 저장
+		var tree = get_tree()
+
+		if tree == null:
+			return
+
+		await tree.create_timer(0.04).timeout
 
 	if effect != null and is_instance_valid(effect):
 		effect.queue_free()
@@ -6811,6 +6891,14 @@ func update_action_button_direction_input():
 		move_action_button_focus(-1)
 # 플레이어 행동 버튼 확정 입력 처리 함수
 func update_action_button_confirm_input():
+	# 조우 문구나 직전 결과를 넘긴 Space가 그대로 공격 확정으로
+	# 이어지지 않도록, 먼저 Space가 완전히 해제됐는지 확인한다.
+	if not player_action_confirm_ready:
+		if not Input.is_action_pressed("ui_accept"):
+			player_action_confirm_ready = true
+
+		return
+
 	if not Input.is_action_just_pressed("ui_accept"):
 		return
 
@@ -6822,6 +6910,7 @@ func update_action_button_confirm_input():
 	if selected_button.disabled:
 		return
 
+	player_action_confirm_ready = false
 	selected_button.emit_signal("pressed")
 # 플레이어 전투 메뉴 키보드 입력 함수
 func update_action_button_keyboard_input():

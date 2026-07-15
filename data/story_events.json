@@ -1635,7 +1635,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그 순간 처음에는 아무것도 보이지 않았지만, 귀를 기울이자 낮고 불규칙한 발소리가 들렸다."
+				"text": "그 순간 처음에는 아무것도 들리지 않았지만, 귀를 기울이자 복도 저편에서 낮고 불규칙한 발소리가 들렸다."
 			},
 			{
 				"type": "screen_color",
@@ -1796,6 +1796,15 @@
 				"alpha": 1.0,
 				"duration": 0.1,
 				"wait": true
+			},
+			{
+				"type": "camera_reset",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "change_room",
+				"room": "school_stairs_hall_02"
 			},
 			{
 				"type": "flag",
@@ -4239,6 +4248,12 @@
 				"text": "미안..."
 			},
 			{
+				"type": "sound",
+				"path": "res://sounds/footsteps.mp3",
+				"volume_db": 20,
+				"wait": false
+			},
+			{
 				"type": "story_dialogue",
 				"text": "나는 누구에게 하는 말인지 모를 사과를 남기고 문을 열었다. 이번에는 도망치지 않겠다고, 스스로에게도 약속하면서."
 			},
@@ -4685,11 +4700,11 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "나는 다음 층으로 올라와서 한동안 이 알 수 없는 공간을 떠돌았다."
+				"text": "그날 나는 눈앞의 괴물을 처치하고 겨우 철문을 열어서 위 층으로 올라올 수 있었다."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "복도를 배회하는 괴물들을 피해서, 어느 방이 안전한지, 어느 복도가 위험한지 조금씩 외워 가면서."
+				"text": "그리고 한동안 이 알 수 없는 공간을 떠돌았다. 복도를 배회하는 괴물들을 피해서, 어느 방이 안전한지, 어느 복도가 위험한지 조금씩 외워 가면서."
 			},
 			{
 				"type": "story_dialogue",
@@ -4761,6 +4776,13 @@
 				"text": "여긴 진짜 현실이 아닌 건가..."
 			},
 			{
+				"type": "fade"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/classroom_04.png"
+			},
+			{
 				"type": "story_dialogue",
 				"text": "나는 몸에 남아 있던 상처를 확인해 보았다."
 			},
@@ -4812,11 +4834,7 @@
 				"text": "치지직... 들립니... 치지직... 까?"
 			},
 			{
-				"type": "screen_color",
-				"color": "#000000",
-				"alpha": 1.0,
-				"duration": 0.1,
-				"wait": true
+				"type": "fade"
 			},
 			{
 				"type": "camera_zoom",
@@ -4824,11 +4842,6 @@
 				"y": 5,
 				"zoom": 2.5,
 				"duration": 0.1,
-				"wait": true
-			},
-			{
-				"type": "screen_color_clear",
-				"duration": 0.5,
 				"wait": true
 			},
 			{
@@ -4922,6 +4935,12 @@
 				"text": "그 사실 하나만으로도 멈춰 있던 마음이 아주 조금 움직이기 시작하는 것 같았다."
 			},
 			{
+				"type": "sound",
+				"path": "res://sounds/footsteps.mp3",
+				"volume_db": 20,
+				"wait": false
+			},
+			{
 				"type": "story_dialogue",
 				"text": "나는 끝없는 복도 너머 어둠 속으로 발을 옮겼다."
 			},
@@ -4942,7 +4961,7 @@
 			},
 			{
 				"type": "change_room",
-				"room": "school_stairs_hall_02"
+				"room": "school_hallway_11"
 			},
 			{
 				"type": "screen_color_clear",
@@ -8582,7 +8601,7 @@
 				"type": "camera_zoom",
 				"x": 850,
 				"y": 200,
-				"zoom": 1.2,
+				"zoom": 1.5,
 				"duration": 0.5,
 				"wait": true
 			},
@@ -8622,7 +8641,19 @@
 				"type": "camera_zoom",
 				"x": 850,
 				"y": 200,
-				"zoom": 1.5,
+				"zoom": 1.6,
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "screen_color",
+				"color": "#002060",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
 				"duration": 0.5,
 				"wait": true
 			},
@@ -8645,7 +8676,19 @@
 				"type": "camera_zoom",
 				"x": 850,
 				"y": 200,
-				"zoom": 1.8,
+				"zoom": 1.7,
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "screen_color",
+				"color": "#002060",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
 				"duration": 0.5,
 				"wait": true
 			},
@@ -8681,7 +8724,19 @@
 				"type": "camera_zoom",
 				"x": 850,
 				"y": 200,
-				"zoom": 2.0,
+				"zoom": 1.8,
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "screen_color",
+				"color": "#002060",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
 				"duration": 0.5,
 				"wait": true
 			},
@@ -8721,6 +8776,18 @@
 			{
 				"type": "story_dialogue",
 				"text": "아니, 애초에 힘으로 어떻게 되는 게 아니다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#002060",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
 			},
 			{
 				"type": "screen_color",
@@ -8784,7 +8851,7 @@
 			{
 				"type": "bgm",
 				"path": "res://sounds/under_water.mp3",
-				"volume_db": 0,
+				"volume_db": -5,
 				"loop": true
 			},
 			{
@@ -8869,7 +8936,7 @@
 			{
 				"type": "sound",
 				"path": "res://sounds/whale_sound_01.mp3",
-				"volume_db": 0,
+				"volume_db": 10,
 				"wait": true
 			},
 			{
@@ -8900,8 +8967,8 @@
 			{
 				"type": "sound",
 				"path": "res://sounds/whale_sound_02.mp3",
-				"volume_db": 0,
-				"wait": true
+				"volume_db": 3,
+				"wait": false
 			},
 			{
 				"type": "story_dialogue",
@@ -8928,9 +8995,24 @@
 				"path": "res://imgs/backgrounds/swimming_pool_hallway_01.png"
 			},
 			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/water_drops.mp3",
+				"volume_db": 0,
+				"loop": true
+			},
+			{
 				"type": "screen_color_clear",
 				"duration": 0.5,
 				"wait": true
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/splash_02.mp3",
+				"volume_db": 5,
+				"wait": false
 			},
 			{
 				"type": "story_dialogue",

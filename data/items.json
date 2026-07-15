@@ -111,6 +111,10 @@
 				210,
 				45
 			]
+		},
+		"parry_hitbox": {
+			"width": 150,
+			"height": 3
 		}
 	},
 	"fist": {
@@ -155,6 +159,10 @@
 				140,
 				70
 			]
+		},
+		"parry_hitbox": {
+			"width": 140,
+			"height": 8
 		}
 	},
 	"holy_sword": {
@@ -199,6 +207,10 @@
 				300,
 				100
 			]
+		},
+		"parry_hitbox": {
+			"width": 200,
+			"height": 6
 		}
 	},
 	"razor": {
@@ -243,6 +255,10 @@
 				100,
 				100
 			]
+		},
+		"parry_hitbox": {
+			"width": 140,
+			"height": 6
 		}
 	},
 	"iron_skewer": {
@@ -287,6 +303,10 @@
 				300,
 				100
 			]
+		},
+		"parry_hitbox": {
+			"width": 200,
+			"height": 3
 		}
 	},
 	"beverage_a": {

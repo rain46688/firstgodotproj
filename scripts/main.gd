@@ -217,7 +217,7 @@ var shop_states = {}
 var current_shop_id = ""
 
 # 인벤토리 정리 UI 좌표 설정
-var arrange_left_grid_position = Vector2(55, 60)
+var arrange_left_grid_position = Vector2(63, 60)
 var arrange_right_grid_position = Vector2(1200, 190)
 var arrange_slot_size = 150
 var arrange_left_cols = 3
@@ -2614,6 +2614,14 @@ func update_room_bgm(room):
 	)
 # 현재 방 UI 갱신 함수
 func update_room():
+	# 전투 씬은 main 씬 위에 자식으로 추가된다.
+	# 상호작용/스토리의 바깥쪽 await가 전투 시작 후 다시 이어져
+	# update_room()을 호출하더라도 탐색 화살표와 투명 버튼을 재생성하지 않는다.
+	if battle_scene != null:
+		hide_all_move_arrows()
+		set_interaction_buttons_disabled(true)
+		return
+
 	var room = get_current_room_data()
 
 	if room.is_empty():
@@ -3551,6 +3559,14 @@ func run_interaction(interaction_id):
 		return
 
 	if not is_inside_tree() or is_quitting_to_title:
+		return
+
+	# unlock_exit 같은 일반 상호작용 안에서 enter_story가 실행되고,
+	# 그 스토리가 전투를 시작하면 await가 끝난 뒤 이 함수로 다시 돌아온다.
+	# 이때 update_room()을 호출하면 전투 위에 탐색 화살표가 다시 표시된다.
+	if battle_scene != null or is_story_playing:
+		is_interacting = false
+		active_interaction_id = ""
 		return
 
 	# 먼저 실행 잠금을 해제한 뒤 방 UI를 새로 만든다.
@@ -4630,6 +4646,12 @@ func hide_game_ui():
 	set_interaction_buttons_disabled(true)
 # 스토리 이벤트 종료 후 게임 UI 복구 함수 
 func show_game_ui():
+	# 전투 중에는 탐색 UI를 절대 복구하지 않는다.
+	# 정상적인 전투 종료 흐름에서는 battle_scene을 null로 만든 뒤 호출된다.
+	if battle_scene != null:
+		hide_game_ui()
+		return
+
 	await hide_story_standing()
 
 	$BagButton.visible = true
