@@ -298,7 +298,7 @@
 			}
 		},
 		"random_encounter": {
-			"enemy_table": "school_hallway",
+			"enemy_table": "school_hallway_01",
 			"event_table": "school_hallway",
 			"chance": 40
 		}
@@ -632,7 +632,7 @@
 			}
 		},
 		"random_encounter": {
-			"enemy_table": "school_hallway",
+			"enemy_table": "school_hallway_01",
 			"event_table": "school_hallway",
 			"chance": 40
 		}
@@ -1000,7 +1000,7 @@
 			}
 		},
 		"random_encounter": {
-			"enemy_table": "school_hallway",
+			"enemy_table": "school_hallway_01",
 			"event_table": "school_hallway",
 			"chance": 40
 		}
@@ -1396,7 +1396,7 @@
 			}
 		},
 		"random_encounter": {
-			"enemy_table": "school_hallway",
+			"enemy_table": "school_hallway_01",
 			"event_table": "school_hallway",
 			"chance": 40
 		}
@@ -1898,7 +1898,7 @@
 			}
 		},
 		"random_encounter": {
-			"enemy_table": "school_hallway",
+			"enemy_table": "school_hallway_01",
 			"event_table": "school_hallway",
 			"chance": 40
 		}
@@ -2164,7 +2164,7 @@
 			}
 		},
 		"random_encounter": {
-			"enemy_table": "school_hallway",
+			"enemy_table": "school_hallway_01",
 			"event_table": "school_hallway",
 			"chance": 40
 		}
@@ -2418,14 +2418,31 @@
 				"open_flag": "story_first_enter_classroom_08_02_done"
 			}
 		},
+		"interactions": {
+			"classroom_02_door": {
+				"click_rect": [
+					1390,
+					270,
+					300,
+					560
+				],
+				"required_flag_missing": "story_first_enter_classroom_08_02_done",
+				"events": [
+					{
+						"type": "text",
+						"text": "교실이 문이 기묘한 형태로 막혀있다."
+					}
+				]
+			}
+		},
 		"random_encounter": {
-			"enemy_table": "school_hallway",
+			"enemy_table": "school_hallway_01",
 			"event_table": "school_hallway",
 			"chance": 40
 		}
 	},
 	"classroom_07": {
-		"background": "res://imgs/backgrounds/classroom_01.png",
+		"background": "res://imgs/backgrounds/classroom_12.png",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -2758,7 +2775,7 @@
 			}
 		},
 		"random_encounter": {
-			"enemy_table": "school_hallway",
+			"enemy_table": "school_hallway_01",
 			"event_table": "school_hallway",
 			"chance": 40
 		}
@@ -3066,7 +3083,11 @@
 					},
 					{
 						"type": "text",
-						"text": "컴퓨터에 현재 상태를 저장하시겠습니까?"
+						"text": "컴퓨터가 교탁 위에 있다."
+					},
+					{
+						"type": "text",
+						"text": "현재 상태를 저장하시겠습니까?"
 					},
 					{
 						"type": "choices",
@@ -3318,7 +3339,7 @@
 			}
 		},
 		"random_encounter": {
-			"enemy_table": "school_hallway",
+			"enemy_table": "school_hallway_01",
 			"event_table": "school_hallway",
 			"chance": 40
 		}
@@ -3689,7 +3710,7 @@
 			}
 		},
 		"random_encounter": {
-			"enemy_table": "school_hallway",
+			"enemy_table": "school_hallway_01",
 			"event_table": "school_hallway",
 			"chance": 40
 		}
@@ -5850,7 +5871,11 @@
 					},
 					{
 						"type": "text",
-						"text": "컴퓨터에 현재 상태를 저장하시겠습니까?"
+						"text": "컴퓨터가 교탁 위에 있다."
+					},
+					{
+						"type": "text",
+						"text": "현재 상태를 저장하시겠습니까?"
 					},
 					{
 						"type": "choices",
@@ -5993,6 +6018,41 @@
 					{
 						"type": "text",
 						"text": "교실 안쪽에 기분 나쁜 무언가가 있다."
+					},
+					{
+						"type": "text",
+						"text": "자세히 살펴보니 바닥 위에는 구겨져있는 종이가 놓여 있었다."
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/documents/document_01.png",
+						"start_page": 1,
+						"sound": "res://sounds/paper.mp3",
+						"sound_volume_db": 10,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "누군가의 수기 02"
+							},
+							{
+								"type": "text",
+								"text": "거짓의 유혹에도 아랑곳하지 않고. 전진하다 보면."
+							},
+							{
+								"type": "text",
+								"text": "진실을 향한 문이 열릴 것이다."
+							},
+							{
+								"type": "text",
+								"text": "그리고 모든 석상들은 안식에 들것이다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/paper.mp3",
+						"volume_db": 10,
+						"wait": false
 					}
 				]
 			},
@@ -9822,7 +9882,11 @@
 					},
 					{
 						"type": "text",
-						"text": "컴퓨터에 현재 상태를 저장하시겠습니까?"
+						"text": "컴퓨터가 교탁 위에 있다."
+					},
+					{
+						"type": "text",
+						"text": "현재 상태를 저장하시겠습니까?"
 					},
 					{
 						"type": "choices",
@@ -11399,26 +11463,9 @@
 										"fail_text": "밀랍 심장이 없습니다.",
 										"success_events": [
 											{
-												"type": "sound",
-												"path": "res://sounds/result.mp3",
-												"volume_db": -10,
-												"wait": false
-											},
-											{
 												"type": "increase_max_hp",
 												"amount": 25,
-												"heal_to_full": true,
-												"text": "\"신전의 제단이 활성화되었습니다.\""
-											},
-											{
-												"type": "sound",
-												"path": "res://sounds/result.mp3",
-												"volume_db": -10,
-												"wait": false
-											},
-											{
-												"type": "text",
-												"text": "\"플레이어의 최대 체력 25 증가되었습니다.\""
+												"heal_to_full": true
 											},
 											{
 												"type": "flag",
@@ -12937,7 +12984,14 @@
 	},
 	"school_hallway_35": {
 		"background": "res://imgs/backgrounds/submerged_school_hallway_05.png",
-		"opened_background": "res://imgs/backgrounds/submerged_school_hallway_01.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"story_first_enter_swimming_pool_hallway_01_done"
+				],
+				"path": "res://imgs/backgrounds/submerged_school_hallway_01.png"
+			}
+		],
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -12988,7 +13042,23 @@
 				"open_flag": "opened_classroom_35"
 			}
 		},
-		"interactions": {},
+		"interactions": {
+			"classroom_02_door": {
+				"click_rect": [
+					1390,
+					270,
+					300,
+					560
+				],
+				"required_flag_missing": "story_first_enter_swimming_pool_hallway_01_done",
+				"events": [
+					{
+						"type": "text",
+						"text": "교실이 문이 기묘한 형태로 막혀있다."
+					}
+				]
+			}
+		},
 		"random_encounter": {
 			"enemy_table": "school_hallway_04",
 			"event_table": "school_hallway",
@@ -13392,7 +13462,11 @@
 					},
 					{
 						"type": "text",
-						"text": "컴퓨터에 현재 상태를 저장하시겠습니까...?"
+						"text": "컴퓨터가 교탁 위에 있다."
+					},
+					{
+						"type": "text",
+						"text": "현재 상태를 저장하시겠습니까?"
 					},
 					{
 						"type": "choices",
@@ -14042,7 +14116,11 @@
 					},
 					{
 						"type": "text",
-						"text": "컴퓨터에 현재 상태를 저장하시겠습니까?"
+						"text": "컴퓨터가 교탁 위에 있다."
+					},
+					{
+						"type": "text",
+						"text": "현재 상태를 저장하시겠습니까?"
 					},
 					{
 						"type": "choices",
@@ -14717,7 +14795,7 @@
 						"document_events": [
 							{
 								"type": "text",
-								"text": "누군가의 쪽지 01"
+								"text": "누군가의 수기 01"
 							},
 							{
 								"type": "text",
@@ -14785,22 +14863,22 @@
 			"up": {
 				"target": "swimming_pool_hallway_02",
 				"position": [
-					750,
+					850,
 					30
 				]
 			},
 			"down": {
-				"target": "swimming_pool_hallway_09",
+				"target": "swimming_pool_hallway_10",
 				"position": [
-					750,
+					850,
 					950
 				]
 			},
 			"right": {
 				"target": "swimming_pool_room_01",
 				"position": [
-					1390,
-					540
+					1283,
+					433
 				],
 				"move_effect": "enter"
 			}
@@ -14810,6 +14888,206 @@
 			"enemy_table": "swimming_pool_01",
 			"event_table": "swimming_pool",
 			"chance": 40
+		}
+	},
+	"swimming_pool_room_01": {
+		"background": "res://imgs/backgrounds/swimming_pool_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "swimming_pool_hallway_10",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {}
+	},
+	"swimming_pool_hallway_10": {
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"up": {
+				"target": "swimming_pool_hallway_01",
+				"position": [
+					850,
+					30
+				]
+			},
+			"down": {
+				"target": "swimming_pool_hallway_09",
+				"position": [
+					850,
+					950
+				]
+			},
+			"right": {
+				"target": "swimming_pool_room_10",
+				"position": [
+					1283,
+					433
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "swimming_pool_01",
+			"event_table": "swimming_pool",
+			"chance": 40
+		}
+	},
+	"swimming_pool_room_10": {
+		"background": "res://imgs/backgrounds/swimming_pool_room_02.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"enter_stories": [
+			{
+				"event": "first_enter_swimming_pool_room_10",
+				"required_flag": [
+					"story_first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_02_done"
+				],
+				"required_flag_missing": [
+					"story_first_enter_swimming_pool_room_10_done"
+				]
+			}
+		],
+		"exits": {
+			"down": {
+				"target": "swimming_pool_hallway_10",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"monitor": {
+				"click_rect": [
+					860,
+					729,
+					169,
+					104
+				],
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/save_ui_open.mp3",
+						"volume_db": -5,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "컴퓨터가 물 위를 둥둥 떠다니고 있다."
+					},
+					{
+						"type": "text",
+						"text": "현재 상태를 저장하시겠습니까?"
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "예",
+								"events": [
+									{
+										"type": "save_to_slot",
+										"slot": 1,
+										"success_text": "저장 완료.",
+										"fail_text": "저장에 실패했다.",
+										"success_sound": "res://sounds/save_complete.mp3",
+										"sound_volume_db": -5
+									}
+								]
+							},
+							{
+								"text": "아니오",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/save_ui_close.mp3",
+										"volume_db": -5,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "저장을 취소했다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
 		}
 	}
 }

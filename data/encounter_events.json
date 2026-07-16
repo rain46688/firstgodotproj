@@ -85,18 +85,20 @@
 		}
 	},
 	"swimming_pool": {
-		"escape_choice_chance": 40,
+		"escape_choice_chance": 35,
 		"start_texts": [
 			"복도 끝에서 무언가 내 쪽으로 다가오고 있는 게 느껴진다.",
 			"저 멀리서 소리가 들려온다.",
 			"이쪽으로 오고있는 기척이 느껴진다.",
 			"무언가 이쪽으로 오고있다.",
-			"반대편에 실루엣이 보인다 이쪽으로 오고 있다."
+			"반대편에 실루엣이 보인다 이쪽으로 오고 있다.",
+			"물속에서 기척이 느껴진다.",
+			"천장에서 무언가 내려온다."
 		],
 		"choice_pools": {
 			"escape": [
 				{
-					"text": "잠깐 아무 교실로 숨어 시간을 보낸다.",
+					"text": "빠르게 다음 공간으로 이동한다.",
 					"result_text": "알 수 없는 인기척은 빠르게 사라졌다.",
 					"result": "escape"
 				},
@@ -118,7 +120,7 @@
 			],
 			"player_first": [
 				{
-					"text": "숨어서 지나가는 걸 습격하자.",
+					"text": "모퉁이에 숨어서 지나가는 걸 습격한다.",
 					"result_text": "먼저 상대방의 뒤를 잡았다.",
 					"result": "battle",
 					"first_turn": "player"
@@ -130,7 +132,7 @@
 					"first_turn": "player"
 				},
 				{
-					"text": "조심스럽게 교실 안에 들어가서 기회를 노린다.",
+					"text": "천천히 벽 쪽으로 다가가 기회를 노린다.",
 					"result_text": "먼저 상대방의 뒤를 잡았다.",
 					"result": "battle",
 					"first_turn": "player"
@@ -144,13 +146,13 @@
 			],
 			"enemy_first": [
 				{
-					"text": "빠르게 도망친다.",
+					"text": "빠르게 옆 공간으로 도망친다.",
 					"result_text": "알 수 없는 존재에게 들켜서 뒤를 잡혔다.",
 					"result": "battle",
 					"first_turn": "enemy"
 				},
 				{
-					"text": "바로 옆 사물함 뒤에 숨어있는다.",
+					"text": "빠르게 뛰어서 근처 모퉁이에 몸을 숨긴다.",
 					"result_text": "알 수 없는 존재에게 들켜서 뒤를 잡혔다.",
 					"result": "battle",
 					"first_turn": "enemy"
@@ -162,7 +164,7 @@
 					"first_turn": "enemy"
 				},
 				{
-					"text": "빠르게 뛰어서 교실 안쪽으로 도망친다.",
+					"text": "빠르게 뛰어서 앞쪽으로 도망간다.",
 					"result_text": "알 수 없는 존재에게 들켜서 뒤를 잡혔다.",
 					"result": "battle",
 					"first_turn": "enemy"

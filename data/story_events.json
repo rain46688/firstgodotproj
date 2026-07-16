@@ -7573,6 +7573,39 @@
 				"wait": true
 			},
 			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/unknown_grail_02.png"
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/result.mp3",
+				"volume_db": -10,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "\"신전의 제단이 활성화되었습니다.\""
+			},
+			{
+				"type": "story_dialogue",
+				"text": "\"플레이어의 최대 체력 25 증가되었습니다.\""
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
 				"type": "show_game_ui"
 			},
 			{
@@ -8937,17 +8970,17 @@
 				"type": "sound",
 				"path": "res://sounds/whale_sound_01.mp3",
 				"volume_db": 10,
+				"wait": false
+			},
+			{
+				"type": "camera_reset",
+				"duration": 0.5,
 				"wait": true
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
 				"text": "읍읍읍...!?"
-			},
-			{
-				"type": "camera_reset",
-				"duration": 0.5,
-				"wait": true
 			},
 			{
 				"type": "story_dialogue",
@@ -9126,6 +9159,335 @@
 			{
 				"type": "flag",
 				"flag": "room_enter_story_done_first_enter_classroom_11"
+			}
+		]
+	},
+	"first_enter_swimming_pool_room_10": {
+		"start_flag": "story_first_enter_swimming_pool_room_10_done",
+		"events": [
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/water_drops.mp3",
+				"volume_db": 0,
+				"loop": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/swimming_pool_room_02.png"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "천장에서는 물방울이 일정한 간격으로 떨어지고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "똑."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "똑..."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/radio_sound.mp3",
+				"volume_db": 5,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "치직... 치지직..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "갑자기 천장에 붙어 있는 낡은 스피커에서 잡음이 흘러나왔다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "???",
+				"text": "치지직... 들립니까?"
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "normal",
+				"text": "레인씨, 제 목소리 들려요?"
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "normal",
+				"text": "연결된 거야?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "잡음 사이로 클레어 씨와 아이작의 익숙한 목소리가 들려왔다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "두 사람의 목소리는 넓은 수영장 전체로 퍼져 나가며 여러 겹으로 울렸다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "타일과 콘크리트로 둘러싸인 이 공간에는 소리를 흡수할 만한 물건이 거의 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "스피커에서 나온 목소리는 단단한 벽과 천장에 부딪힐 때마다 메아리가 되어 되돌아왔다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "클레어 씨?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 천장에 달린 CCTV 카메라를 향해 다급하게 소리쳤다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "내 목소리도 크게 울려 퍼졌다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 스피커 너머에서는 아무런 대답도 들려오지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "...안 들리는 건가?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "천장의 장치는 방송실에서 보내는 소리를 이쪽 스피커로 내보낼 뿐이었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "CCTV 카메라에는 음성을 돌려보낼 수 있는 마이크가 없거나, 적어도 지금은 작동하지 않는 것 같았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 두 사람의 목소리를 들을 수 있지만, 두 사람은 내 모습을 화면으로 보는 것밖에 할 수 없었다."
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "normal",
+				"text": "야 괜찮냐?"
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "normal",
+				"text": "들리는 거면 뭐라도 표시해 봐!"
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "normal",
+				"text": "그쪽 소리는 이쪽으로 전달이 안돼요."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "normal",
+				"text": "그래도 CCTV 영상은 보이고 있어요. 저희 목소리가 제대로 들리면 카메라 쪽을 봐주세요."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 고개를 들어 천장 구석에 설치된 CCTV 카메라를 바라보았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "붉은 표시등이 희미하게 깜빡이고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 괜찮다는 뜻으로 두 팔을 크게 들어 머리 위로 동그라미를 그렸다."
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "normal",
+				"text": "움직였다. 제대로 들리는 게 맞아."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "normal",
+				"text": "다행이에요..."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "normal",
+				"text": "당신이 화면 안으로 사라진 뒤에 모니터가 완전히 꺼졌어요."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "normal",
+				"text": "저희가 계속 채널과 주파수를 바꿔봤고, 지금 겨우 영상과 스피커를 연결한 거예요."
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "normal",
+				"text": "우리도 어떻게든 그쪽으로 가는 방법을 찾을 테니깐."
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "normal",
+				"text": "그때까지 죽지 말고 있으라고."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 잠시 주변을 둘러보았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "어두운 수영장 안에는 숨을 만한 장소도, 안전하다고 확신할 만한 장소도 보이지 않았다."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "pain",
+				"text": "그리고 그곳은..."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "pain",
+				"text": "화면에서 계속 무언가가 움직이던 장소예요."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "pain",
+				"text": "부디 조심... 치직... 하세요."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/radio_sound.mp3",
+				"volume_db": 5,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "치직... 치지직..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "스피커에서는 더 이상 두 사람의 목소리가 들리지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "다시 물방울이 떨어지는 소리만이 넓은 공간을 채웠다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "똑."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "똑..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "적어도 두 사람은 내가 살아 있다는 사실을 알고 있다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그리고 나도 완전히 혼자가 아니라는 사실을 확인했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "언제 다시 연결될지는 알 수 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "마냥 이곳에 서서 기다릴 수도 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "좋아..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 떨리는 숨을 천천히 내쉬며 무기를 고쳐 잡았다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "일단 여기가 어디인지부터 알아보자."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그때 수영장 안쪽 어딘가에서 물이 크게 출렁였다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/splash.mp3",
+				"volume_db": -10,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "철퍽..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "바람은 불지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그런데도 검게 고인 수면 위로 잔잔한 파문이 번지고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "마치 방금 전까지 무언가가 물속에서 나를 올려다보고 있었던 것처럼."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "show_game_ui"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_swimming_pool_room_10_done"
 			}
 		]
 	}

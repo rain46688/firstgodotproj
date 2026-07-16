@@ -1,5 +1,5 @@
 {
-	"school_hallway": [
+	"school_hallway_01": [
 		{
 			"enemy": "candle_student",
 			"weight": 40,
@@ -129,6 +129,15 @@
 			"enemy": "ghost",
 			"weight": 5,
 			"required_flag": "opened_school_stairs_hall_04",
+			"missing_flag": "",
+			"first_turn": ""
+		}
+	],
+	"swimming_pool_01": [
+		{
+			"enemy": "ghost",
+			"weight": 5,
+			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		}

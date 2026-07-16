@@ -436,7 +436,7 @@
 	"combined_candle_students_phase_02": {
 		"name": "합쳐진 밀랍 학생들",
 		"phase": 2,
-		"max_hp": 180,
+		"max_hp": 250,
 		"battle_bgm": "res://sounds/bgm19.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -1433,7 +1433,7 @@
 	},
 	"ghost": {
 		"name": "유령",
-		"max_hp": 100,
+		"max_hp": 120,
 		"battle_bgm": "res://sounds/bgm19.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -1620,7 +1620,7 @@
 					20,
 					10
 				],
-				"damage_multiplier": 2.0
+				"damage_multiplier": 4.0
 			}
 		],
 		"drops": [
