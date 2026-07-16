@@ -125,6 +125,10 @@ var default_enemy_encounter_stream = null
 var default_enemy_encounter_volume_db = 0.0
 var player_status_effects = {}
 var player_portrait_paths = {}
+
+# 같은 상태 초상화를 탄막 피격마다 다시 할당하지 않기 위한 현재 키
+var current_player_portrait_key = ""
+
 var battle_result_messages = []
 var battle_result_index = 0
 var player_hit_flash_tween = null
@@ -674,6 +678,7 @@ func reset_battle_runtime_state():
 	player_action_confirm_ready = false
 	is_processing_battle_input = false
 	game_over_started = false
+	current_player_portrait_key = ""
 	# 전투마다 플레이어 턴 카운트 초기화
 	player_turn_count = 0
 
@@ -797,6 +802,18 @@ func preload_all_battle_projectile_textures():
 		parry_frames,
 		"parry effect preload"
 	)
+# 플레이어 상태 초상화 텍스처 미리 로드 함수
+func preload_player_portrait_textures():
+	for portrait_key in player_portrait_paths.keys():
+		var portrait_path = str(player_portrait_paths[portrait_key])
+
+		if portrait_path == "":
+			continue
+
+		get_cached_battle_texture(
+			portrait_path,
+			"player portrait preload / " + str(portrait_key)
+		)
 # 현재 적 이미지 경로 가져오기 함수
 func get_current_enemy_image_path():
 	if enemy_data.is_empty():
@@ -973,6 +990,10 @@ func setup_battle(data):
 
 	if data.has("player_portrait"):
 		player_portrait_paths["normal"] = data["player_portrait"]
+
+	# 피격 순간에 초상화 리소스를 처음 불러오며 끊기지 않도록
+	# 전투 시작 시 모든 상태 초상화를 미리 캐싱한다.
+	preload_player_portrait_textures()
 
 	# 플레이어 전투 초기 UI
 	setup_battle_player_ui()
@@ -1729,9 +1750,22 @@ func make_body_observe_text(target_name):
 	if weakness_text != "":
 		text += weakness_text + "\n"
 
-	text += "\n남은 체력 : " + str(int(enemy_hp)) + " / " + str(int(enemy_max_hp))
+	text += (
+		"\n남은 체력 : "
+		+ str(int(enemy_hp))
+		+ " / "
+		+ str(int(enemy_max_hp))
+	)
 
-	return text	
+	var reflect_text = get_enemy_reflect_observe_text(
+		"body",
+		""
+	)
+
+	if reflect_text != "":
+		text += "\n" + reflect_text
+
+	return text
 # 적 파츠 관찰 텍스트 생성 함수
 func make_part_observe_text(target_id, target_name):
 	var part = get_enemy_part_data_by_id(target_id)
@@ -1752,9 +1786,22 @@ func make_part_observe_text(target_id, target_name):
 	var hp = int(enemy_part_hp.get(target_id, 0))
 	var max_hp = get_enemy_part_max_hp_from_data(part)
 
-	text += "\n남은 체력 : " + str(hp) + " / " + str(max_hp)
+	text += (
+		"\n남은 체력 : "
+		+ str(hp)
+		+ " / "
+		+ str(max_hp)
+	)
 
-	return text	
+	var reflect_text = get_enemy_reflect_observe_text(
+		"part",
+		target_id
+	)
+
+	if reflect_text != "":
+		text += "\n" + reflect_text
+
+	return text
 # 관찰 조작 안내 텍스트 생성 함수
 func make_observe_control_text():
 	var text = ""
@@ -3922,24 +3969,76 @@ func get_hitbox_center_position_for_battle_scene(hitbox):
 # 적 피격 데미지 팝업 전용 위치 함수
 func get_last_hitbox_center_position_for_battle_scene():
 	return get_hitbox_center_position_for_battle_scene(last_hitbox_data)
-# 적 히트박스 이펙트 위치 조정 함수
+# 마지막 공격 히트박스 기준 hit 이펙트 위치 함수
 func get_last_hitbox_center_position():
-	var base_size = enemy_data.get("hitbox_base_size", [667, 1000])
-	var enemy_rect = enemy_sprite.get_global_rect()
+	return get_hitbox_center_position_for_hit_effect(
+		last_hitbox_data
+	)
+# 지정한 적 히트박스 기준으로 hit 이펙트 위치 계산 함수
+func get_hitbox_center_position_for_hit_effect(hitbox):
+	if hitbox == null:
+		return Vector2.ZERO
 
-	var scale_x = enemy_rect.size.x / float(base_size[0])
-	var scale_y = enemy_rect.size.y / float(base_size[1])
+	if typeof(hitbox) != TYPE_DICTIONARY:
+		return Vector2.ZERO
 
-	var rect_data = last_hitbox_data.get("rect", [0, 0, 100, 100])
+	if hitbox.is_empty():
+		return Vector2.ZERO
 
-	var center_global = Vector2(
-		enemy_rect.position.x + (rect_data[0] + rect_data[2] / 2.0) * scale_x,
-		enemy_rect.position.y + (rect_data[1] + rect_data[3] / 2.0) * scale_y
+	var base_size = enemy_data.get(
+		"hitbox_base_size",
+		[667, 1000]
 	)
 
-	var effect_parent_global = hit_effect.get_parent().get_global_rect().position
+	var enemy_rect = enemy_sprite.get_global_rect()
 
-	return center_global - effect_parent_global - hit_effect.size / 2
+	var scale_x = (
+		enemy_rect.size.x
+		/ float(base_size[0])
+	)
+
+	var scale_y = (
+		enemy_rect.size.y
+		/ float(base_size[1])
+	)
+
+	var rect_data = hitbox.get(
+		"rect",
+		[0, 0, 100, 100]
+	)
+
+	if typeof(rect_data) != TYPE_ARRAY:
+		return Vector2.ZERO
+
+	if rect_data.size() < 4:
+		return Vector2.ZERO
+
+	var center_global = Vector2(
+		enemy_rect.position.x
+		+ (
+			float(rect_data[0])
+			+ float(rect_data[2]) / 2.0
+		) * scale_x,
+
+		enemy_rect.position.y
+		+ (
+			float(rect_data[1])
+			+ float(rect_data[3]) / 2.0
+		) * scale_y
+	)
+
+	var effect_parent_global = (
+		hit_effect
+			.get_parent()
+			.get_global_rect()
+			.position
+	)
+
+	return (
+		center_global
+		- effect_parent_global
+		- hit_effect.size / 2.0
+	)
 # 적 패링 반격 데미지 피격 연출 함수
 func set_top_hitbox_as_last_hitbox():
 	var hitboxes = get_current_enemy_body_hitboxes()
@@ -4396,6 +4495,39 @@ func start_enemy_hit_feedback():
 	var hit_position = get_last_hitbox_center_position()
 	spawn_hit_effect(hit_position)
 	play_enemy_hit_shake()
+# 지정한 적 히트박스 위치에 hit 이펙트 생성 함수
+func spawn_hit_effect_for_hitbox(hitbox):
+	if hitbox == null:
+		return
+
+	if typeof(hitbox) != TYPE_DICTIONARY:
+		return
+
+	if hitbox.is_empty():
+		return
+
+	# 이미 파괴된 파츠에는 이펙트를 만들지 않는다.
+	if str(hitbox.get("target_type", "body")) == "part":
+		var part_id = str(
+			hitbox.get(
+				"part_id",
+				""
+			)
+		)
+
+		if part_id == "":
+			return
+
+		if destroyed_parts.has(part_id):
+			return
+
+	var effect_position = (
+		get_hitbox_center_position_for_hit_effect(
+			hitbox
+		)
+	)
+
+	spawn_hit_effect(effect_position)
 # 적 타격 이펙트 노드 생성 함수
 func spawn_hit_effect(effect_position):
 	var effect = TextureRect.new()
@@ -4942,6 +5074,46 @@ func get_enemy_reflect_target_key(target_type, target_id = ""):
 		return "part:" + str(target_id)
 
 	return "body"
+# 관찰 대상의 피해 반사 상태 문구 생성 함수
+func get_enemy_reflect_observe_text(
+	target_type,
+	target_id = ""
+):
+	var target_key = get_enemy_reflect_target_key(
+		target_type,
+		target_id
+	)
+
+	if not enemy_damage_reflect_states.has(target_key):
+		return ""
+
+	var state = enemy_damage_reflect_states[target_key]
+
+	if typeof(state) != TYPE_DICTIONARY:
+		return ""
+
+	var current_remaining_turns = max(
+		int(state.get("remaining_turns", 0)),
+		0
+	)
+
+	if current_remaining_turns <= 0:
+		return ""
+
+	# 관찰은 행동을 소모한다.
+	# 관찰 종료 후 decrease_enemy_reflect_turns()가 실행되므로,
+	# 플레이어가 다음 턴부터 실제로 상대해야 하는 남은 턴을 표시한다.
+	var attackable_remaining_turns = max(
+		current_remaining_turns - 1,
+		0
+	)
+
+	if attackable_remaining_turns <= 0:
+		return "피해 반사 : 활성화 (이번 턴 종료 후 해제)"
+
+	return (
+		"피해 반사 : 활성화" + " (" + str(attackable_remaining_turns) + " 턴 종료 후 해제)"
+	)
 # 적 피해 반사 상태 등록 함수
 func apply_enemy_reflect_effect(effect):
 	var target_data = resolve_enemy_target_data(
@@ -5088,9 +5260,8 @@ func apply_reflected_damage_to_player(damage):
 	var before_hp = player_hp
 	player_hp -= damage
 
-	if bool(player_effective_stats.get("cannot_die", false)) and before_hp >= 1 and player_hp < 1:
-		player_hp = 1
-
+	# 반사 피해에는 심장 모형의 cannot_die를 적용하지 않는다.
+	# 직접 공격을 선택한 대가로 받은 반사 피해는 0 HP까지 내려갈 수 있다.
 	clamp_battle_player_hp()
 	var actual_damage = max(0, before_hp - player_hp)
 
@@ -5243,11 +5414,35 @@ func get_parry_hit_rect():
 	)
 
 	if parry_hitbox_data.has("height"):
-		parry_height = float(
+		var base_parry_height = float(
 			parry_hitbox_data.get(
 				"height",
 				parry_height
 			)
+		)
+
+		# parry_hitbox.height를 직접 쓰더라도 주사위/작은 액자처럼
+		# parry_window를 배율로 바꾸는 성물 효과가 사라지지 않게 한다.
+		var base_weapon_data = get_item_data_by_id(
+			get_current_weapon_id(),
+			false
+		)
+		var base_parry_window = float(
+			base_weapon_data.get(
+				"parry_window",
+				parry_window
+			)
+		)
+		var parry_window_multiplier = 1.0
+
+		if base_parry_window > 0.0:
+			parry_window_multiplier = (
+				parry_window / base_parry_window
+			)
+
+		parry_height = max(
+			base_parry_height * parry_window_multiplier,
+			1.0
 		)
 
 	var center_x = (
@@ -6924,6 +7119,11 @@ func apply_player_status_effects(effect_ids):
 	var added_new_status = false
 	var added_effects = []
 
+	# 상태이상이 없는 일반 탄막 피격에서는 초상화/행동 UI를
+	# 다시 계산하지 않는다. 다량 탄막 피격 시 불필요한 작업 방지.
+	if typeof(effect_ids) != TYPE_ARRAY or effect_ids.size() == 0:
+		return added_effects
+
 	for effect_id in effect_ids:
 		if effect_id == "":
 			continue
@@ -6934,9 +7134,11 @@ func apply_player_status_effects(effect_ids):
 
 		player_status_effects[effect_id] = true
 
-	if added_new_status:
-		play_status_effect_flash()
+	# 이미 보유한 상태가 다시 들어온 경우에도 UI를 재구성하지 않는다.
+	if not added_new_status:
+		return added_effects
 
+	play_status_effect_flash()
 	update_player_portrait_by_status()
 	update_player_action_text_by_status()
 
@@ -7048,9 +7250,15 @@ func play_player_projectile_hit_sound(danger_type):
 			hit_normal_sound.play()
 # 플레이어 탄막 상태이상 적용 함수
 func apply_enemy_projectile_status_effects_to_player(projectile_info, projectile_data):
-	var status_effects = get_projectile_status_effects(projectile_info, projectile_data)
-	var added_effects = apply_player_status_effects(status_effects)
+	var status_effects = get_projectile_status_effects(
+		projectile_info,
+		projectile_data
+	)
 
+	if typeof(status_effects) != TYPE_ARRAY or status_effects.size() == 0:
+		return
+
+	var added_effects = apply_player_status_effects(status_effects)
 	add_enemy_turn_status_effects(added_effects)
 # 플레이어 탄막 피격 후 사망 처리 함수
 func check_player_death_after_projectile_hit():
@@ -7111,10 +7319,32 @@ func update_player_portrait_by_status():
 	elif has_player_status_effect("lethargy"):
 		portrait_key = "lethargy"
 
-	if player_portrait_paths.has(portrait_key):
-		player_portrait.texture = load(player_portrait_paths[portrait_key])
-	elif player_portrait_paths.has("normal"):
-		player_portrait.texture = load(player_portrait_paths["normal"])
+	var resolved_key = portrait_key
+
+	if not player_portrait_paths.has(resolved_key):
+		resolved_key = "normal"
+
+	if not player_portrait_paths.has(resolved_key):
+		return
+
+	# 이미 같은 초상화를 표시 중이면 다시 texture를 할당하지 않는다.
+	if (
+		current_player_portrait_key == resolved_key
+		and player_portrait.texture != null
+	):
+		return
+
+	var portrait_path = str(player_portrait_paths[resolved_key])
+	var portrait_texture = get_cached_battle_texture(
+		portrait_path,
+		"player portrait / " + resolved_key
+	)
+
+	if portrait_texture == null:
+		return
+
+	player_portrait.texture = portrait_texture
+	current_player_portrait_key = resolved_key
 # 플레이어 상태이상 이름 가져오기 함수
 func get_status_effect_name(effect_id):
 	match effect_id:
@@ -7454,8 +7684,36 @@ func apply_turn_start_enemy_damage_to_body(enemy_damage):
 	if enemy_hp <= 0:
 		return false
 
+	var before_hp = enemy_hp
+
 	enemy_hp -= enemy_damage
 	clamp_enemy_body_hp()
+
+	# 체력이 10보다 적었을 때 10으로 표시되지 않도록
+	# 실제로 감소한 체력만 계산한다.
+	var actual_damage = max(
+		int(before_hp - enemy_hp),
+		0
+	)
+
+	if actual_damage <= 0:
+		return false
+
+	# 본체 위치에 데미지 팝업 표시
+	var body_hitbox = get_body_hitbox_by_id("")
+
+	if not body_hitbox.is_empty():
+		show_enemy_value_popup(
+			actual_damage,
+			body_hitbox,
+			"damage",
+			false
+		)
+
+		# 본체 피격 위치에 개별 hit 이펙트 생성
+		spawn_hit_effect_for_hitbox(
+			body_hitbox
+		)
 
 	return true
 # 턴 시작 적 파츠 피해 적용 함수
@@ -7469,22 +7727,73 @@ func apply_turn_start_enemy_damage_to_parts(enemy_damage):
 		if destroyed_parts.has(part_id):
 			continue
 
+		var before_hp = int(
+			enemy_part_hp.get(
+				part_id,
+				0
+			)
+		)
+
+		if before_hp <= 0:
+			continue
+
 		enemy_part_hp[part_id] -= enemy_damage
 		clamp_enemy_part_hp(part_id)
 
+		var after_hp = int(
+			enemy_part_hp.get(
+				part_id,
+				0
+			)
+		)
+
+		# 해당 파츠가 실제로 받은 피해량
+		var actual_damage = max(
+			before_hp - after_hp,
+			0
+		)
+
+		if actual_damage <= 0:
+			continue
+
 		damaged_enemy = true
 
+		# 각 파츠의 고유 히트박스 위치에 데미지 팝업 표시
+		var part_hitbox = get_part_hitbox_by_id(
+			part_id
+		)
+
+		if not part_hitbox.is_empty():
+			show_enemy_value_popup(
+				actual_damage,
+				part_hitbox,
+				"damage",
+				false
+			)
+
+			# 파츠가 파괴 처리되기 전에 해당 위치에 이펙트를 생성한다.
+			# 아직 destroyed_parts에 들어가기 전이므로
+			# 이번 피해로 파괴되는 파츠에도 정상 표시된다.
+			spawn_hit_effect_for_hitbox(
+				part_hitbox
+			)
+
+		# 팝업 생성 요청 후 파츠 파괴 처리
+		# 이펙트 생성 요청이 끝난 다음 파괴
 		if is_enemy_part_defeated(part_id):
 			destroy_enemy_part(part_id)
 
 	return damaged_enemy
-# 턴 시작 적 피해 연출 함수
-func play_turn_start_enemy_damage_feedback(enemy_damage):
-	play_overlap_sound_from_player(hit_normal_sound)
+# 턴 시작 적 피해 공통 연출 함수
+func play_turn_start_enemy_damage_feedback(_enemy_damage):
+	# 효과음과 전체 적 흔들림은 한 번만 실행한다.
+	play_overlap_sound_from_player(
+		hit_normal_sound
+	)
 
-	set_top_hitbox_as_last_hitbox()
-	show_damage_popup(enemy_damage, false)
-	start_enemy_hit_feedback()
+	# hit 이펙트는 본체와 각 살아 있는 파츠의
+	# 피해 처리 함수에서 개별적으로 생성한다.
+	play_enemy_hit_shake()
 # 턴 시작 적 피해 전체 처리 함수
 func apply_turn_start_enemy_damage_effect(enemy_damage):
 	if enemy_damage <= 0:

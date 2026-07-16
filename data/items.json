@@ -88,7 +88,7 @@
 		"attack_angle_max": 45,
 		"defense_base_rotation": 0,
 		"defense_move_speed": 400,
-		"parry_window": 0.06,
+		"parry_window": 0.1,
 		"piercing": false,
 		"defense_start_offset": [
 			0,
@@ -136,11 +136,11 @@
 		"attack_angle_max": 30,
 		"defense_base_rotation": 0,
 		"defense_move_speed": 550,
-		"parry_window": 0.10,
+		"parry_window": 0.1,
 		"piercing": false,
 		"defense_start_offset": [
 			0,
-			100
+			90
 		],
 		"battle_sprite_size": [
 			140,
@@ -162,7 +162,7 @@
 		},
 		"parry_hitbox": {
 			"width": 140,
-			"height": 8
+			"height": 6
 		}
 	},
 	"holy_sword": {
@@ -183,8 +183,8 @@
 		"attack_angle_min": -45,
 		"attack_angle_max": 45,
 		"defense_base_rotation": 90,
-		"defense_move_speed": 500,
-		"parry_window": 0.06,
+		"defense_move_speed": 450,
+		"parry_window": 0.1,
 		"piercing": true,
 		"defense_start_offset": [
 			0,
@@ -232,7 +232,7 @@
 		"attack_angle_max": 45,
 		"defense_base_rotation": 0,
 		"defense_move_speed": 500,
-		"parry_window": 0.07,
+		"parry_window": 0.1,
 		"piercing": false,
 		"defense_start_offset": [
 			0,
@@ -279,8 +279,8 @@
 		"attack_angle_min": -45,
 		"attack_angle_max": 45,
 		"defense_base_rotation": 90,
-		"defense_move_speed": 450,
-		"parry_window": 0.06,
+		"defense_move_speed": 400,
+		"parry_window": 0.1,
 		"piercing": true,
 		"defense_start_offset": [
 			0,

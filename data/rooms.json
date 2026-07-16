@@ -2644,7 +2644,16 @@
 									},
 									{
 										"type": "text",
-										"text": "비어 있다."
+										"text": "무언가 있다."
+									},
+									{
+										"type": "item",
+										"item": "schoolhall_key_b",
+										"count": 1
+									},
+									{
+										"type": "flag",
+										"flag": "got_schoolhall_key_b_classroom_07_02"
 									}
 								]
 							},
@@ -2680,21 +2689,8 @@
 										"count": 3
 									},
 									{
-										"type": "text",
-										"text": "깊숙이 손을 넣고 더 뒤져보았다."
-									},
-									{
-										"type": "item",
-										"item": "schoolhall_key_b",
-										"count": 1
-									},
-									{
 										"type": "flag",
 										"flag": "got_beverage_a_classroom_07_02"
-									},
-									{
-										"type": "flag",
-										"flag": "got_schoolhall_key_b_classroom_07_02"
 									}
 								]
 							}
@@ -11393,15 +11389,37 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "심장을 잔 위에 올려놓는다.",
+								"text": "심장을 잔 안에 올려놓는다.",
 								"events": [
 									{
 										"type": "item_payment",
 										"item": "wax_heart",
 										"count": 1,
-										"success_text": "심장을 잔 안에 올려놓았다.",
-										"fail_text": "아무런 일도 일어나지 않았다.",
+										"success_text": "밀랍 심장을 잔 안에 올려놓았다.",
+										"fail_text": "밀랍 심장이 없습니다.",
 										"success_events": [
+											{
+												"type": "sound",
+												"path": "res://sounds/result.mp3",
+												"volume_db": -10,
+												"wait": false
+											},
+											{
+												"type": "increase_max_hp",
+												"amount": 25,
+												"heal_to_full": true,
+												"text": "\"신전의 제단이 활성화되었습니다.\""
+											},
+											{
+												"type": "sound",
+												"path": "res://sounds/result.mp3",
+												"volume_db": -10,
+												"wait": false
+											},
+											{
+												"type": "text",
+												"text": "\"플레이어의 최대 체력 25 증가되었습니다.\""
+											},
 											{
 												"type": "flag",
 												"flag": "grail_filled_unknown_hall_02_done"
@@ -14581,7 +14599,7 @@
 								"events": [
 									{
 										"type": "sound",
-										"path": "res://sounds/squeeze_sound_02.mp3",
+										"path": "res://sounds/squeeze_sound.mp3",
 										"volume_db": 10,
 										"wait": true
 									},
@@ -14613,7 +14631,7 @@
 								"events": [
 									{
 										"type": "sound",
-										"path": "res://sounds/squeeze_sound_02.mp3",
+										"path": "res://sounds/squeeze_sound.mp3",
 										"volume_db": 10,
 										"wait": true
 									},

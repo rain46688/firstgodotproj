@@ -358,6 +358,13 @@ const SHOP_PURCHASE_FAIL_SOUND_PATH = "res://sounds/fail.mp3"
 const DEFAULT_ROOM_BGM_PATH = "res://sounds/bgm2.mp3"
 const DEFAULT_ROOM_BGM_VOLUME_DB = -5.0
 
+# 랜덤 인카운터 선택지에서 도주 선택지가 등장할 기본 확률
+# encounter_events.json의 각 테이블에 escape_choice_chance를 넣으면 개별 조정 가능
+const RANDOM_ENCOUNTER_ESCAPE_CHOICE_CHANCE = 40.0
+
+# 인카운터 도주 또는 전투 종료 뒤 보장되는 안전 이동 횟수
+const RANDOM_ENCOUNTER_COOLDOWN_STEPS = 2
+
 # ============================================================
 # 게임 시작 관련 함수 모음
 # ============================================================
@@ -894,6 +901,13 @@ func end_battle(result_data):
 
 		return
 
+	# 승리/도주 직후 다음 방에서 바로 다시 랜덤 인카운터가
+	# 발생하지 않도록 안전 이동 횟수를 부여한다.
+	if result_type == "win" or result_type == "escaped":
+		set_random_encounter_cooldown(
+			RANDOM_ENCOUNTER_COOLDOWN_STEPS
+		)
+
 	# 승리 보상 플래그 적용
 	for flag_id in result_data.get("reward_flags", []):
 		set_flag(flag_id)
@@ -1370,8 +1384,31 @@ func get_player_effective_stats():
 	#print("관통 여부: ", stats.get("piercing"))
 	#print("최대 체력: ", stats.get("max_hp"))
 	#print("장착 무기 주변 슬롯: ", get_equipped_weapon_adjacent_slots())
+	
+	# 모든 성물/주물 계산이 끝난 뒤,
+	# 심장 모형이 적용 중이고 최종 최대 체력이 30 이하인지 검사한다.
+	#
+	# 이렇게 해야 심장 모형보다 뒤에서 모래주머니, 손 뼈 모형,
+	# 해골 모형 등이 최대 체력을 낮춰도 죽지 않음 효과가 정상 발동한다.
+	apply_heart_model_cannot_die_condition(stats)
 
 	return clamp_player_effective_stats(stats)
+# 심장 모형 죽지 않음 조건 최종 계산 함수
+func apply_heart_model_cannot_die_condition(stats):
+	var applied_relic_ids = stats.get(
+		"applied_relic_ids",
+		[]
+	)
+
+	if not applied_relic_ids.has("heart_model_fetish"):
+		stats["cannot_die"] = false
+		return
+
+	var final_max_hp = int(
+		stats.get("max_hp", player_max_hp)
+	)
+
+	stats["cannot_die"] = final_max_hp <= 30
 # 성물/주물 효과 적용 함수
 func apply_relic_and_fetish_effects(stats):
 	for inventory_item in inventory:
@@ -1518,12 +1555,12 @@ func apply_relic_and_fetish_effects(stats):
 				if is_inventory_full():
 					stats["attack_max"] = int(stats.get("attack_max", 1)) + 10
 					add_applied_relic_to_stats(stats, item_id)
-			# 심장 모형 : 최대 체력 -30, 효과 적용 후 최대 체력이 30 이하라면 죽지 않음 효과 부여
+			# 심장 모형 : 최대 체력 -30
+			# 죽지 않음 조건은 모든 성물/주물 계산이 끝난 뒤 최종 최대 체력으로 검사한다.
 			"heart_model_fetish":
-				stats["max_hp"] = int(stats.get("max_hp", player_max_hp)) - 30
-
-				if int(stats.get("max_hp", player_max_hp)) <= 30:
-					stats["cannot_die"] = true
+				stats["max_hp"] = int(
+					stats.get("max_hp", player_max_hp)
+				) - 30
 
 				add_applied_relic_to_stats(stats, item_id)
 			_:
@@ -1767,14 +1804,34 @@ func get_equipped_weapon_inventory_item():
 	if equipped_weapon == null:
 		return null
 
-	var equipped_weapon_id = equipped_weapon.get("id", "")
+	if typeof(equipped_weapon) != TYPE_DICTIONARY:
+		return null
+
+	var equipped_weapon_id = str(equipped_weapon.get("id", ""))
+	var equipped_weapon_slot = int(equipped_weapon.get("slot", -1))
 
 	if equipped_weapon_id == "":
 		return null
 
+	# 런타임에서는 equipped_weapon이 실제 인벤토리 Dictionary를 가리킨다.
+	# 같은 ID 무기가 여러 개 있어도 해당 객체를 우선 사용한다.
 	for inventory_item in inventory:
-		if inventory_item.get("id", "") == equipped_weapon_id:
+		if inventory_item == equipped_weapon:
 			return inventory_item
+
+	# 세이브 복구나 외부 데이터 갱신으로 참조가 달라진 경우에는
+	# ID뿐 아니라 슬롯까지 함께 일치하는 무기를 찾는다.
+	for inventory_item in inventory:
+		if typeof(inventory_item) != TYPE_DICTIONARY:
+			continue
+
+		if str(inventory_item.get("id", "")) != equipped_weapon_id:
+			continue
+
+		if int(inventory_item.get("slot", -1)) != equipped_weapon_slot:
+			continue
+
+		return inventory_item
 
 	return null
 # 장착 무기 주변 1칸 슬롯 목록 반환 함수
@@ -3044,6 +3101,16 @@ func apply_room_change(target_room):
 # 방 이동 후 방 진입 스토리 이벤트를 처리하는 함수
 func handle_room_enter_story_after_move():
 	await check_room_enter_story()
+# 랜덤 인카운터 안전 이동 횟수 설정 함수
+# 기존 쿨다운보다 작은 값으로 덮어쓰지 않는다.
+func set_random_encounter_cooldown(steps):
+	var safe_steps = max(int(steps), 0)
+
+	random_encounter_cooldown_steps = max(
+		random_encounter_cooldown_steps,
+		safe_steps
+	)
+
 # 방 이동 후 랜덤 인카운터를 처리하는 함수
 # 랜덤 인카운터가 시작되면 true 반환
 func handle_random_encounter_after_move():
@@ -4107,6 +4174,9 @@ func run_single_event(event):
 		
 	elif event_type == "heal_player":
 		await run_player_heal_event(event)
+
+	elif event_type == "increase_max_hp":
+		await run_increase_player_max_hp_event(event)
 		
 	elif event_type == "item":
 		var item_id = event.get("item", "")
@@ -4776,6 +4846,9 @@ func run_single_story_event(event):
 		
 	elif event_type == "heal_player":
 		await run_player_heal_event(event)
+
+	elif event_type == "increase_max_hp":
+		await run_increase_player_max_hp_event(event)
 			
 	elif event_type == "stop_bgm":
 		stop_bgm()
@@ -5507,6 +5580,52 @@ func run_player_heal_event(event):
 			healing_sound.play()
 
 	if bool(event.get("flash", true)):
+		await run_screen_flash(
+			str(event.get("color", "#66ff99")),
+			float(event.get("alpha", 0.22)),
+			float(event.get("fade_in", 0.25)),
+			float(event.get("hold", 0.12)),
+			float(event.get("fade_out", 0.6)),
+			bool(event.get("wait", true))
+		)
+# 플레이어 기본 최대 체력 영구 증가 이벤트
+# player_max_hp는 세이브 데이터에 이미 포함되므로 저장/불러오기에도 유지된다.
+func run_increase_player_max_hp_event(event):
+	var amount = int(event.get("amount", 0))
+
+	if amount <= 0:
+		return
+
+	var before_max_hp = int(player_max_hp)
+	player_max_hp += amount
+
+	# 필요할 때만 현재 체력도 함께 회복할 수 있다.
+	# 기본값은 최대 체력만 증가하고 현재 체력은 그대로 유지한다.
+	if bool(event.get("heal_to_full", false)):
+		player_hp = get_current_player_max_hp()
+	else:
+		var heal_amount = max(int(event.get("heal_amount", 0)), 0)
+
+		if heal_amount > 0:
+			player_hp += heal_amount
+
+	clamp_player_hp_to_current_max()
+	update_player_status_ui()
+	update_equipped_weapon_ui()
+
+	print(
+		"플레이어 기본 최대 체력 영구 증가: ",
+		before_max_hp,
+		" -> ",
+		player_max_hp
+	)
+
+	var result_text = str(event.get("text", ""))
+
+	if result_text != "":
+		await show_dialogue(result_text)
+
+	if bool(event.get("flash", false)):
 		await run_screen_flash(
 			str(event.get("color", "#66ff99")),
 			float(event.get("alpha", 0.22)),
@@ -7153,9 +7272,9 @@ func finish_inventory_drag_state():
 
 	slot_highlight.visible = false
 
-	# 드래그 후 선택 포커스가 남지 않게 정리
-	selected_inventory_item = null
-	clear_selected_item_info()
+	# 기존에 선택한 아이템은 유지한다.
+	# 성물/주물을 이동한 뒤에도 선택 중인 장착 무기의 설명을
+	# 변경된 배치 기준으로 다시 표시하기 위해 필요하다.
 
 	set_mouse_cursor(MOUSE_CURSOR_BASIC)
 # 인벤토리 상호작용 함수
@@ -7454,7 +7573,11 @@ func stop_drag_item():
 
 	# 선택 포커스/하이라이트까지 확실히 지우기 위해 항상 UI 갱신
 	update_inventory_ui()
+
+	# 장착 무기 아래 적용 효과 목록 갱신
 	update_equipped_weapon_ui()
+
+	# 최대 체력 변화 즉시 반영
 	update_player_status_ui()
 # 인벤토리 아이템이 1x1 크기인지 확인하는 함수
 func is_inventory_item_1x1(inventory_item):
@@ -7505,10 +7628,16 @@ func can_swap_inventory_1x1_items(source_item, target_slot):
 	return true
 # 기존 인벤토리에서 1x1 아이템끼리 자리 교환 실행 함수
 func try_swap_inventory_1x1_items(source_item, target_slot):
-	if not can_swap_inventory_1x1_items(source_item, target_slot):
+	if not can_swap_inventory_1x1_items(
+		source_item,
+		target_slot
+	):
 		return false
 
-	var target_index = find_inventory_item_index_at_slot(target_slot, source_item)
+	var target_index = find_inventory_item_index_at_slot(
+		target_slot,
+		source_item
+	)
 
 	if target_index < 0:
 		return false
@@ -7516,14 +7645,27 @@ func try_swap_inventory_1x1_items(source_item, target_slot):
 	if target_index >= inventory.size():
 		return false
 
-	if inventory[target_index] == null:
+	var target_item = inventory[target_index]
+
+	if target_item == null:
 		return false
 
-	if typeof(inventory[target_index]) != TYPE_DICTIONARY:
+	if typeof(target_item) != TYPE_DICTIONARY:
 		return false
 
-	var source_slot = int(source_item.get("slot", -1))
-	var target_item_slot = int(inventory[target_index].get("slot", -1))
+	var source_slot = int(
+		source_item.get(
+			"slot",
+			-1
+		)
+	)
+
+	var target_item_slot = int(
+		target_item.get(
+			"slot",
+			-1
+		)
+	)
 
 	if source_slot < 0:
 		return false
@@ -7531,11 +7673,13 @@ func try_swap_inventory_1x1_items(source_item, target_slot):
 	if target_item_slot < 0:
 		return false
 
+	# 실제 슬롯을 서로 교환한다.
 	source_item["slot"] = target_item_slot
-	inventory[target_index]["slot"] = source_slot
+	target_item["slot"] = source_slot
 
-	selected_inventory_item = source_item
-	show_selected_item_info(source_item)
+	# selected_inventory_item은 변경하지 않는다.
+	# 기존에 선택해 둔 장착 무기의 설명을 계속 유지하면서
+	# 성물/주물 위치 변경 결과만 실시간으로 다시 계산하기 위함이다.
 
 	return true
 # 기존 인벤토리에서 스택 합치기 가능 여부 확인 함수
@@ -7896,14 +8040,21 @@ func make_changed_value_text(base_value, effective_value, suffix = "", digit_cou
 
 	return make_colored_text(value_text, STAT_BAD_COLOR)
 # 패링 범위 등급 텍스트
-func make_parry_window_grade_text(parry_window):
-	var value = float(parry_window)
+# 실제 패링 판정 높이인 parry_hitbox.height 기준으로 표시
+func make_parry_hitbox_height_grade_text(parry_height):
+	var value = float(parry_height)
 
-	if value <= 0.1:
-		return make_colored_text("낮음", STAT_BAD_COLOR)
+	if value <= 3.0:
+		return make_colored_text(
+			"낮음",
+			STAT_BAD_COLOR
+		)
 
-	if value >= 0.3:
-		return make_colored_text("넓음", STAT_GOOD_COLOR)
+	if value >= 6.0:
+		return make_colored_text(
+			"넓음",
+			STAT_GOOD_COLOR
+		)
 
 	return "보통"
 # 스윙 속도 등급 텍스트
@@ -7913,7 +8064,7 @@ func make_attack_swing_speed_grade_text(attack_swing_speed):
 	if value <= 2.0:
 		return make_colored_text("느림", STAT_BAD_COLOR)
 
-	if value >= 3.0:
+	if value >= 4.0:
 		return make_colored_text("빠름", STAT_GOOD_COLOR)
 
 	return "보통"
@@ -7921,10 +8072,10 @@ func make_attack_swing_speed_grade_text(attack_swing_speed):
 func make_defense_move_speed_grade_text(defense_move_speed):
 	var value = float(defense_move_speed)
 
-	if value <= 200.0:
+	if value <= 400.0:
 		return make_colored_text("느림", STAT_BAD_COLOR)
 
-	if value >= 400.0:
+	if value >= 500.0:
 		return make_colored_text("빠름", STAT_GOOD_COLOR)
 
 	return "보통"
@@ -10338,7 +10489,9 @@ func make_item_info_text(inventory_item):
 	var effective_stats = {}
 
 	if is_weapon:
-		is_current_equipped_weapon = is_selected_item_current_equipped_weapon(item_id)
+		is_current_equipped_weapon = is_selected_item_current_equipped_weapon(
+			inventory_item
+		)
 
 		var attack_min_base = int(item_data.get("attack_min", item_data.get("attack", 1)))
 		var attack_max_base = int(item_data.get("attack_max", item_data.get("attack", attack_min_base)))
@@ -10424,9 +10577,49 @@ func make_item_info_text(inventory_item):
 		else:
 			critical_multiplier_text = format_stat_float(critical_multiplier, 2) + "x"
 
+		# ------------------------------------------------------------
+		# 실제 패링 판정 높이 계산
+		# ------------------------------------------------------------
+
+		# items.json에 설정된 실제 기본 패링 판정 높이
+		var parry_hitbox_data = item_data.get(
+			"parry_hitbox",
+			{}
+		)
+
+		var parry_height_base = float(
+			parry_hitbox_data.get(
+				"height",
+				3.0
+			)
+		)
+
+		var parry_height = parry_height_base
+
+		# 현재 장착 무기라면 주사위나 작은 액자의
+		# parry_window 증가 배율을 실제 패링 높이에도 적용한다.
+		if (
+			is_current_equipped_weapon
+			and parry_window_base > 0.0
+		):
+			var parry_multiplier = (
+				parry_window
+				/ parry_window_base
+			)
+
+			parry_height = (
+				parry_height_base
+				* parry_multiplier
+			)
+
 		text_lines.append("치명타 확률 : " + critical_chance_text)
 		text_lines.append("치명타 배율 : " + critical_multiplier_text)
-		text_lines.append("패링 범위 : " + make_parry_window_grade_text(parry_window))
+		text_lines.append(
+			"패링 범위 : "
+			+ make_parry_hitbox_height_grade_text(
+				parry_height
+			)
+		)
 		text_lines.append("스윙 속도 : " + make_attack_swing_speed_grade_text(attack_swing_speed))
 		text_lines.append("방어 이동 속도 : " + make_defense_move_speed_grade_text(defense_move_speed))
 		
@@ -10437,24 +10630,37 @@ func make_item_info_text(inventory_item):
 			is_current_equipped_weapon,
 			effective_stats
 		):
-			text_lines.append("관통 효과")
+			text_lines.append(make_colored_text("관통 효과", STAT_GOOD_COLOR))
+			
 
 	if description != "":
 		text_lines.append("")
 		text_lines.append(escape_rich_text(description))
 
 	return "\n".join(text_lines)
-# 현재 선택한 아이템이 장착 중인 무기인지 확인하는 함수
-func is_selected_item_current_equipped_weapon(item_id):
-	if item_id == "":
+# 현재 선택한 인벤토리 아이템이 정확히 장착 중인 무기인지 확인하는 함수
+func is_selected_item_current_equipped_weapon(inventory_item):
+	if inventory_item == null:
 		return false
 
-	var current_weapon_id = "fist"
+	if typeof(inventory_item) != TYPE_DICTIONARY:
+		return false
 
-	if equipped_weapon != null:
-		current_weapon_id = equipped_weapon.get("id", "fist")
+	if equipped_weapon == null:
+		return false
 
-	return item_id == current_weapon_id
+	if typeof(equipped_weapon) != TYPE_DICTIONARY:
+		return false
+
+	if inventory_item == equipped_weapon:
+		return true
+
+	return (
+		str(inventory_item.get("id", ""))
+		== str(equipped_weapon.get("id", ""))
+		and int(inventory_item.get("slot", -1))
+		== int(equipped_weapon.get("slot", -1))
+	)
 # 소수 표시 정리 함수
 func format_stat_float(value, digit_count = 2):
 	var format_text = "%." + str(digit_count) + "f"
@@ -10498,8 +10704,8 @@ func make_stat_compare_line(label_text, base_value, effective_value, suffix = ""
 
 	return label_text + " : " + base_text + " → " + make_colored_text(change_text, color)
 # 현재 장착 무기 기준 적용 능력치 설명 생성 함수
-func make_current_weapon_effective_stat_text(item_id, item_data):
-	if not is_selected_item_current_equipped_weapon(item_id):
+func make_current_weapon_effective_stat_text(inventory_item, item_data):
+	if not is_selected_item_current_equipped_weapon(inventory_item):
 		return []
 
 	var effective_stats = get_player_effective_stats()
@@ -10797,6 +11003,21 @@ func show_selected_item_info(inventory_item):
 		selected_item_image,
 		selected_item_description
 	)
+
+# 인벤토리 배치 변경 후 오른쪽 상세 설명을 현재 선택 상태에 맞게 다시 계산하는 함수
+#
+# 성물/주물의 위치가 바뀌면 장착 무기의 적용 능력치도 즉시 달라질 수 있다.
+# 기존에는 EquippedWeaponText만 갱신되고, 이미 선택해 둔 무기 설명은
+# 다시 클릭하기 전까지 이전 계산값이 남아 있었다.
+func refresh_inventory_selected_item_info():
+	if selected_inventory_item != null:
+		if inventory.has(selected_inventory_item):
+			show_selected_item_info(selected_inventory_item)
+			return
+
+		selected_inventory_item = null
+
+	show_equipped_weapon_info()
 # 아이템이 들어갈 수 있는 빈 슬롯 찾기 함수
 func find_empty_slot(item_id):
 	var item_size = get_item_grid_size_by_id(item_id)
@@ -11086,13 +11307,52 @@ func _on_equip_button_pressed():
 	equip_item(context_menu_item)
 # 장착 무기 UI 갱신 함수
 func update_equipped_weapon_ui():
+	# 장착 무기 이름과 적용 효과 목록을 먼저 갱신한다.
 	show_equipped_weapon_info()
+
+	# 이미 선택한 아이템이 있다면 장착 무기 기본 설명으로
+	# 덮어쓰지 않고 현재 선택 아이템 설명을 다시 표시한다.
+	if selected_inventory_item == null:
+		return
+
+	if not inventory.has(selected_inventory_item):
+		selected_inventory_item = null
+		return
+
+	show_selected_item_info(
+		selected_inventory_item
+	)
 # 현재 장착 무기 정보 표시 함수
 func show_equipped_weapon_info():
 	var item_id = "fist"
+	var info_inventory_item = null
 
 	if equipped_weapon != null:
-		item_id = equipped_weapon.get("id", "fist")
+		item_id = str(
+			equipped_weapon.get(
+				"id",
+				"fist"
+			)
+		)
+
+		# 같은 ID의 무기가 여러 개 있을 수 있으므로
+		# 실제 장착 중인 인벤토리 Dictionary를 가져온다.
+		info_inventory_item = get_equipped_weapon_inventory_item()
+
+		# 참조 복구에 실패했더라도 equipped_weapon 자체가
+		# Dictionary라면 그 데이터를 예비로 사용한다.
+		if (
+			info_inventory_item == null
+			and typeof(equipped_weapon) == TYPE_DICTIONARY
+		):
+			info_inventory_item = equipped_weapon
+
+	else:
+		# 맨주먹은 인벤토리 아이템이 아니므로 표시용 데이터를 만든다.
+		info_inventory_item = {
+			"id": "fist",
+			"count": 1
+		}
 
 	if get_item_data_by_id(item_id).is_empty():
 		selected_item_image.texture = null
@@ -11107,33 +11367,31 @@ func show_equipped_weapon_info():
 		equipped_weapon_text.text = "무기 없음"
 		return
 
-	var fake_inventory_item = {
-		"id": item_id,
-		"count": 1
-	}
-
 	var effective_stats = get_player_effective_stats()
-	var applied_relic_names = effective_stats.get("applied_relic_names", [])
+	var applied_relic_names = effective_stats.get(
+		"applied_relic_names",
+		[]
+	)
 
-	if item_id == "fist":
-		equipped_weapon_text.text = get_item_name(item_id)
-	else:
-		equipped_weapon_text.text = get_item_name(item_id)
+	equipped_weapon_text.text = get_item_name(item_id)
 
 	if applied_relic_names.size() > 0:
 		equipped_weapon_text.text += "\n\n적용 효과:"
 
 		for relic_name in applied_relic_names:
-			equipped_weapon_text.text += "\n- " + str(relic_name)
+			equipped_weapon_text.text += (
+				"\n- "
+				+ str(relic_name)
+			)
 	else:
 		equipped_weapon_text.text += "\n\n적용 효과 없음"
 
 	show_item_info_ui(
-		fake_inventory_item,
+		info_inventory_item,
 		selected_item_image,
 		selected_item_description
 	)
-	
+
 	if equipped_weapon_text_scroll != null:
 		equipped_weapon_text_scroll.scroll_vertical = 0
 # 아이템 사용 함수
@@ -11539,7 +11797,9 @@ func check_random_encounter():
 
 	if encounter_result.get("result", "battle") == "escape":
 		# 도주 후 여유 시간 부여
-		random_encounter_cooldown_steps = 2
+		set_random_encounter_cooldown(
+			RANDOM_ENCOUNTER_COOLDOWN_STEPS
+		)
 		return false
 
 	start_battle(
@@ -11742,9 +12002,92 @@ func get_random_encounter_start_text(event_table_id):
 		return ""
 
 	return str(start_texts.pick_random())
+# 인카운터 선택지 풀 가져오기 함수
+func get_random_encounter_choice_pool(choice_pools, pool_id):
+	if typeof(choice_pools) != TYPE_DICTIONARY:
+		return []
+
+	var pool = choice_pools.get(pool_id, [])
+
+	if typeof(pool) != TYPE_ARRAY:
+		return []
+
+	return pool
+# 인카운터 선택지 중복 확인용 키 생성 함수
+func get_random_encounter_choice_unique_key(choice):
+	if choice == null or typeof(choice) != TYPE_DICTIONARY:
+		return ""
+
+	return (
+		str(choice.get("text", ""))
+		+ "|"
+		+ str(choice.get("result", "battle"))
+		+ "|"
+		+ str(choice.get("first_turn", ""))
+	)
+# 제외 목록을 적용해 선택지 풀에서 하나 뽑는 함수
+func pick_random_encounter_choice_from_pool(pool, excluded_keys = []):
+	var candidates = []
+
+	if typeof(pool) != TYPE_ARRAY:
+		return {}
+
+	for choice in pool:
+		if choice == null or typeof(choice) != TYPE_DICTIONARY:
+			continue
+
+		var choice_key = get_random_encounter_choice_unique_key(choice)
+
+		if choice_key == "":
+			continue
+
+		if excluded_keys.has(choice_key):
+			continue
+
+		candidates.append(choice)
+
+	if candidates.size() == 0:
+		return {}
+
+	return candidates.pick_random().duplicate(true)
+# 도주가 나오지 않았을 때 사용할 추가 비도주 선택지 후보 생성
+func make_random_encounter_non_escape_candidates(choice_pools, excluded_keys):
+	var candidates = []
+
+	# no_escape 풀은 선택 사항이다.
+	# 없으면 player_first/enemy_first의 아직 뽑히지 않은 대사를 사용한다.
+	for pool_id in ["no_escape", "player_first", "enemy_first"]:
+		var pool = get_random_encounter_choice_pool(
+			choice_pools,
+			pool_id
+		)
+
+		for choice in pool:
+			if choice == null or typeof(choice) != TYPE_DICTIONARY:
+				continue
+
+			var choice_key = get_random_encounter_choice_unique_key(choice)
+
+			if choice_key == "" or excluded_keys.has(choice_key):
+				continue
+
+			candidates.append(choice)
+
+	return candidates
+# 인카운터 이벤트별 도주 선택지 등장 확률 가져오기
+func get_random_encounter_escape_choice_chance(event_data):
+	return clamp(
+		float(event_data.get(
+			"escape_choice_chance",
+			RANDOM_ENCOUNTER_ESCAPE_CHOICE_CHANCE
+		)),
+		0.0,
+		100.0
+	)
 # 인카운터 선택지 생성 함수
 func make_random_encounter_choices(event_table_id):
 	var result_choices = []
+	var selected_keys = []
 	var event_data = get_encounter_event_data_by_id(event_table_id)
 
 	if event_data.is_empty():
@@ -11755,27 +12098,51 @@ func make_random_encounter_choices(event_table_id):
 	if typeof(choice_pools) != TYPE_DICTIONARY:
 		return result_choices
 
-	var pool_order = ["escape", "player_first", "enemy_first"]
+	# 선공/후공 선택지는 항상 하나씩 먼저 확보한다.
+	for pool_id in ["player_first", "enemy_first"]:
+		var picked_choice = pick_random_encounter_choice_from_pool(
+			get_random_encounter_choice_pool(choice_pools, pool_id),
+			selected_keys
+		)
 
-	for pool_id in pool_order:
-		var pool = choice_pools.get(pool_id, [])
-
-		if typeof(pool) != TYPE_ARRAY:
+		if picked_choice.is_empty():
 			continue
 
-		if pool.size() == 0:
-			continue
+		result_choices.append(picked_choice)
+		selected_keys.append(
+			get_random_encounter_choice_unique_key(picked_choice)
+		)
 
-		var picked_choice = pool.pick_random()
+	var third_choice = {}
+	var escape_chance = get_random_encounter_escape_choice_chance(
+		event_data
+	)
 
-		if picked_choice == null:
-			continue
+	# 확률에 성공했을 때만 세 번째 칸에 도주 선택지를 넣는다.
+	if randf() * 100.0 < escape_chance:
+		third_choice = pick_random_encounter_choice_from_pool(
+			get_random_encounter_choice_pool(choice_pools, "escape"),
+			selected_keys
+		)
+	else:
+		var non_escape_candidates = make_random_encounter_non_escape_candidates(
+			choice_pools,
+			selected_keys
+		)
 
-		if typeof(picked_choice) != TYPE_DICTIONARY:
-			continue
+		if non_escape_candidates.size() > 0:
+			third_choice = non_escape_candidates.pick_random().duplicate(true)
 
-		var choice = picked_choice.duplicate(true)
-		result_choices.append(choice)
+	# 비도주 대사가 부족한 오래된 데이터에서는 선택지 수가 2개로
+	# 줄지 않도록 마지막 안전장치로 escape 풀을 사용한다.
+	if third_choice.is_empty():
+		third_choice = pick_random_encounter_choice_from_pool(
+			get_random_encounter_choice_pool(choice_pools, "escape"),
+			selected_keys
+		)
+
+	if not third_choice.is_empty():
+		result_choices.append(third_choice)
 
 	result_choices.shuffle()
 	return result_choices

@@ -5446,7 +5446,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "천천히 이쪽으로 고개를 돌렸다. 눈빛에는 낯섦과 경계만이 있었다."
+				"text": "천천히 이쪽으로 고개를 돌렸다."
 			},
 			{
 				"type": "standing",
@@ -8331,7 +8331,7 @@
 			},
 			{
 				"type": "sound",
-				"path": "res://sounds/squeeze_sound_02.mp3",
+				"path": "res://sounds/squeeze_sound.mp3",
 				"volume_db": 10,
 				"wait": false
 			},

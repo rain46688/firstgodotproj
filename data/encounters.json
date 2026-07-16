@@ -27,6 +27,13 @@
 			"required_flag": "opened_school_stairs_hall_02",
 			"missing_flag": "",
 			"first_turn": ""
+		},
+		{
+			"enemy": "test_monster",
+			"weight": 0,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
 		}
 	],
 	"school_hallway_02": [
