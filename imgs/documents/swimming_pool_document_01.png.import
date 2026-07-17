@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bwq241ecgvwcr"
-path="res://.godot/imported/swimming_pool_hallway_02.png-4b16c834551a019a43b804d713c161ef.ctex"
+uid="uid://cgx0kdou4spdo"
+path="res://.godot/imported/swimming_pool_document_01.png-9fd4dc25d205613c5c99456536dc833c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/backgrounds/swimming_pool_hallway_02.png"
-dest_files=["res://.godot/imported/swimming_pool_hallway_02.png-4b16c834551a019a43b804d713c161ef.ctex"]
+source_file="res://imgs/documents/swimming_pool_document_01.png"
+dest_files=["res://.godot/imported/swimming_pool_document_01.png-9fd4dc25d205613c5c99456536dc833c.ctex"]
 
 [params]
 

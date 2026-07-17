@@ -135,8 +135,21 @@
 	],
 	"swimming_pool_01": [
 		{
+			"enemy": "human_flog",
+			"weight": 40,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},	{
+			"enemy": "sea_anemone_woman",
+			"weight": 0,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
 			"enemy": "ghost",
-			"weight": 5,
+			"weight": 0,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""

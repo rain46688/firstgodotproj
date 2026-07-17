@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bdgt551h4lxab"
-path="res://.godot/imported/sea ​_anemone_woman.png-98fd1b0ade34457fe8d552c0b738f796.ctex"
+uid="uid://dt63hclkhufaj"
+path="res://.godot/imported/locker_02.png-7144777fc81bd4fdfd14cf7e862861f0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/enemies/sea ​_anemone_woman.png"
-dest_files=["res://.godot/imported/sea ​_anemone_woman.png-98fd1b0ade34457fe8d552c0b738f796.ctex"]
+source_file="res://imgs/events/locker_02.png"
+dest_files=["res://.godot/imported/locker_02.png-7144777fc81bd4fdfd14cf7e862861f0.ctex"]
 
 [params]
 
