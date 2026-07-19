@@ -142,14 +142,14 @@
 			"first_turn": ""
 		},	{
 			"enemy": "sea_anemone_woman",
-			"weight": 0,
+			"weight": 40,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "ghost",
-			"weight": 0,
+			"weight": 5,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""

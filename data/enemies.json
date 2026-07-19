@@ -3509,7 +3509,7 @@
 			},
 			{
 				"item": "tranquilizer_a",
-				"chance": 30,
+				"chance": 10,
 				"min": 1,
 				"max": 1
 			},
@@ -4740,7 +4740,7 @@
 			50
 		],
 		"can_escape": true,
-		"encounter_text": "물속에서 무언가 튀어 올라왔다.",
+		"encounter_text": "물속에서 개구리로 보이는 무언가 튀어 올라왔다.",
 		"observe_text": "가운데 사람의 얼굴의 형태를 한 무언가가 있어서 기괴하다.",
 		"weakness_text": "얼굴이 약점인 것 같다.",
 		"patterns": [
@@ -4828,7 +4828,7 @@
 						],
 						"rotation": 180,
 						"damage": 20,
-						"delay": 0.0
+						"delay": 1.0
 					},
 					{
 						"projectile": "impact_basic",
@@ -4838,7 +4838,7 @@
 						],
 						"rotation": 180,
 						"damage": 5,
-						"delay": 0.1
+						"delay": 1.1
 					},
 					{
 						"projectile": "impact_basic",
@@ -4848,7 +4848,7 @@
 						],
 						"rotation": 180,
 						"damage": 5,
-						"delay": 0.2
+						"delay": 1.2
 					},
 					{
 						"projectile": "impact_basic",
@@ -4858,7 +4858,7 @@
 						],
 						"rotation": 180,
 						"damage": 5,
-						"delay": 0.3
+						"delay": 1.3
 					},
 					{
 						"projectile": "impact_basic",
@@ -4868,7 +4868,7 @@
 						],
 						"rotation": 180,
 						"damage": 5,
-						"delay": 0.4
+						"delay": 1.4
 					},
 					{
 						"projectile": "impact_basic",
@@ -4878,7 +4878,7 @@
 						],
 						"rotation": 180,
 						"damage": 5,
-						"delay": 0.5
+						"delay": 1.5
 					}
 				]
 			},
@@ -4897,7 +4897,7 @@
 						],
 						"rotation": 180,
 						"damage": 20,
-						"delay": 0.0
+						"delay": 1.0
 					},
 					{
 						"projectile": "impact_basic",
@@ -4907,7 +4907,7 @@
 						],
 						"rotation": 180,
 						"damage": 5,
-						"delay": 0.1
+						"delay": 1.1
 					},
 					{
 						"projectile": "impact_basic",
@@ -4917,7 +4917,7 @@
 						],
 						"rotation": 180,
 						"damage": 5,
-						"delay": 0.2
+						"delay": 1.2
 					},
 					{
 						"projectile": "impact_basic",
@@ -4927,7 +4927,7 @@
 						],
 						"rotation": 180,
 						"damage": 5,
-						"delay": 0.3
+						"delay": 1.3
 					},
 					{
 						"projectile": "impact_basic",
@@ -4937,7 +4937,7 @@
 						],
 						"rotation": 180,
 						"damage": 5,
-						"delay": 0.4
+						"delay": 1.4
 					},
 					{
 						"projectile": "impact_basic",
@@ -4947,25 +4947,25 @@
 						],
 						"rotation": 180,
 						"damage": 5,
-						"delay": 0.5
+						"delay": 1.5
 					}
 				]
 			},
 			{
 				"id": "emergency_heal",
 				"weight": 100,
-				"warning_text": "회복 패턴.",
+				"warning_text": "인간 개구리의 몸속에서 무언가 꿈틀거린다.",
 				"priority": 3,
 				"max_uses": 1,
 				"hp_condition": {
 					"target": "owner",
-					"lte_percent": 30
+					"lte_percent": 20
 				},
 				"start_effects": [
 					{
 						"type": "heal",
 						"target": "owner",
-						"hp_percent": 30,
+						"hp_percent": 40,
 						"text": "인간 개구리의 상처가 빠르게 재생되었다.",
 						"sound": "res://sounds/squeeze_sound.mp3",
 						"sound_volume_db": 0.0
@@ -5015,7 +5015,7 @@
 				"item": "unknown_coin",
 				"chance": 50,
 				"min": 5,
-				"max": 10
+				"max": 8
 			},
 			{
 				"item": "chocolate_bar_a",
@@ -5030,7 +5030,7 @@
 	},
 	"sea_anemone_woman": {
 		"name": "말미잘 머리의 여성",
-		"max_hp": 250,
+		"max_hp": 300,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -5052,7 +5052,7 @@
 		"can_escape": false,
 		"encounter_text": "아름다운 형체의 무언가가 다가왔다.",
 		"observe_text": "여성의 머리에 아름다운 형체의 무언가가 자라나있다.",
-		"weakness_text": "",
+		"weakness_text": "머리가 약점인 거 같다.",
 		"patterns": [
 			{
 				"id": "basic_attack_01",
@@ -5268,10 +5268,10 @@
 					900
 				],
 				"destroyable": true,
-				"destroy_text": "말미잘이 부서져서 녹아 없어졌다.",
+				"destroy_text": "아름다운 무언가가 부서져서 녹아 없어졌다.",
 				"hitbox": {
 					"id": "right_sea_anemone_01",
-					"name": "말미잘",
+					"name": "아름다운 무언가",
 					"rect": [
 						533,
 						1097,
@@ -5359,7 +5359,7 @@
 			},
 			{
 				"id": "right_sea_anemone_02",
-				"name": "말미잘",
+				"name": "아름다운 무언가",
 				"max_hp": 10,
 				"z_index": 10,
 				"image": "res://imgs/enemies/sea_anemone_02.png",
@@ -5373,10 +5373,10 @@
 					800
 				],
 				"destroyable": true,
-				"destroy_text": "말미잘이 부서져서 녹아 없어졌다.",
+				"destroy_text": "아름다운 무언가가 부서져서 녹아 없어졌다.",
 				"hitbox": {
 					"id": "right_sea_anemone_02",
-					"name": "말미잘",
+					"name": "아름다운 무언가",
 					"rect": [
 						704,
 						995,
@@ -5464,7 +5464,7 @@
 			},
 			{
 				"id": "left_sea_anemone_01",
-				"name": "말미잘",
+				"name": "아름다운 무언가",
 				"max_hp": 10,
 				"z_index": 10,
 				"image": "res://imgs/enemies/sea_anemone_01.png",
@@ -5478,10 +5478,10 @@
 					800
 				],
 				"destroyable": true,
-				"destroy_text": "말미잘이 부서져서 녹아 없어졌다.",
+				"destroy_text": "아름다운 무언가가 부서져서 녹아 없어졌다.",
 				"hitbox": {
 					"id": "left_sea_anemone_01",
-					"name": "말미잘",
+					"name": "아름다운 무언가",
 					"rect": [
 						178,
 						979,
@@ -5569,7 +5569,7 @@
 			},
 			{
 				"id": "left_sea_anemone_02",
-				"name": "말미잘",
+				"name": "아름다운 무언가",
 				"max_hp": 10,
 				"z_index": 11,
 				"image": "res://imgs/enemies/sea_anemone_02.png",
@@ -5583,10 +5583,10 @@
 					910
 				],
 				"destroyable": true,
-				"destroy_text": "말미잘이 부서져서 녹아 없어졌다.",
+				"destroy_text": "아름다운 무언가가 부서져서 녹아 없어졌다.",
 				"hitbox": {
 					"id": "left_sea_anemone_02",
-					"name": "말미잘",
+					"name": "아름다운 무언가",
 					"rect": [
 						335,
 						1112,
