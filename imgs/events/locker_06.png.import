@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c2vr6qx1bi3ei"
-path="res://.godot/imported/swimming_pool_locker_01.png-e1d1bbba0c1558f008231ea17be08d50.ctex"
+uid="uid://dblpou4uiyspi"
+path="res://.godot/imported/locker_06.png-57e6f47496408fa04533e2818d8436c4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/backgrounds/swimming_pool_locker_01.png"
-dest_files=["res://.godot/imported/swimming_pool_locker_01.png-e1d1bbba0c1558f008231ea17be08d50.ctex"]
+source_file="res://imgs/events/locker_06.png"
+dest_files=["res://.godot/imported/locker_06.png-57e6f47496408fa04533e2818d8436c4.ctex"]
 
 [params]
 

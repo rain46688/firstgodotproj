@@ -5942,6 +5942,26 @@
 			},
 			"right": {
 				"target": "classroom_14",
+				"random_targets": [
+					{
+						"target": "classroom_17",
+						"weight": 20,
+						"required_flag_missing": [
+							"kill_statue_classroom_statue_classroom_17_02"
+						]
+					},
+					{
+						"target": "classroom_18",
+						"weight": 20,
+						"required_flag_missing": [
+							"kill_statue_classroom_statue_classroom_18_02"
+						]
+					},
+					{
+						"target": "classroom_17",
+						"weight": 60
+					}
+				],
 				"position": [
 					1390,
 					540
@@ -6118,7 +6138,6 @@
 				"event": "true_kill_statue_classroom_statue_classroom",
 				"required_flag": "kill_statue_classroom_statue_classroom_14_02",
 				"required_flag_missing": [
-					"story_true_kill_statue_classroom_statue_classroom_done",
 					"got_schoolhall_key_a_classroom_14_02"
 				]
 			}
@@ -15171,7 +15190,7 @@
 					},
 					{
 						"type": "document_dialogue",
-						"path": "res://imgs/events/locker_02.png",
+						"path": "res://imgs/events/locker_04.png",
 						"start_page": 1,
 						"sound": "res://sounds/locker_open.mp3",
 						"sound_volume_db": 15,
@@ -15182,7 +15201,7 @@
 							},
 							{
 								"type": "text",
-								"text": "비어 있다."
+								"text": "무언가 적혀 있다."
 							}
 						]
 					},
@@ -15404,7 +15423,7 @@
 					},
 					{
 						"type": "text",
-						"text": "너무 깊어서 아래가 보이지 않는다."
+						"text": "새 모양의 튜브들이 수면 위에 떠있다."
 					}
 				]
 			},
@@ -15840,6 +15859,17 @@
 			"volume_db": 0.0,
 			"loop": true
 		},
+		"enter_stories": [
+			{
+				"event": "false_answer_rubber_duck_swimming_pool_room_03",
+				"required_flag": [
+					"select_wrong_swimming_pool_room_03"
+				],
+				"required_flag_missing": [
+					"opened_swimming_pool_hallway_11"
+				]
+			}
+		],
 		"exits": {
 			"down": {
 				"target": "swimming_pool_hallway_03",
@@ -15850,21 +15880,92 @@
 			}
 		},
 		"interactions": {
-			"pool": {
+			"rubber_duck": {
 				"click_rect": [
-					732,
-					586,
-					470,
-					388
+					721,
+					139,
+					464,
+					598
 				],
+				"required_flag_missing": "opened_swimming_pool_hallway_11",
 				"events": [
 					{
 						"type": "text",
-						"text": "거대한 수영장이다."
+						"name": "???",
+						"text": "암호를 말해라."
 					},
 					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "암호를 말한다.",
+								"events": [
+									{
+										"type": "input_prompt",
+										"message": "...",
+										"placeholder": "0000",
+										"allow_letters": false,
+										"allow_numbers": true,
+										"min_length": 4,
+										"max_length": 4,
+										"answer": "8960",
+										"success_events": [
+											{
+												"type": "text",
+												"name": "???",
+												"text": "정답이다."
+											},
+											{
+												"type": "flag",
+												"flag": "opened_swimming_pool_hallway_11"
+											},
+											{
+												"type": "sound",
+												"path": "res://sounds/locker_open.mp3",
+												"volume_db": 10,
+												"wait": false
+											},
+											{
+												"type": "text",
+												"text": "어디선가 문이 열리는 소리가 났다."
+											}
+										],
+										"fail_events": [
+											{
+												"type": "sound",
+												"path": "res://sounds/save_ui_close.mp3",
+												"volume_db": -5,
+												"wait": false
+											},
+											{
+												"type": "flag",
+												"flag": "select_wrong_swimming_pool_room_03"
+											}
+										]
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"rubber_duck_after_opened_swimming_pool_hallway_11": {
+				"click_rect": [
+					721,
+					139,
+					464,
+					598
+				],
+				"required_flag": "opened_swimming_pool_hallway_11",
+				"events": [
+					{
 						"type": "text",
-						"text": "너무 깊어서 아래가 보이지 않는다."
+						"name": "???",
+						"text": "..."
 					}
 				]
 			},
@@ -16050,7 +16151,7 @@
 					},
 					{
 						"type": "document_dialogue",
-						"path": "res://imgs/events/locker_02.png",
+						"path": "res://imgs/events/locker_06.png",
 						"start_page": 1,
 						"sound": "res://sounds/locker_open.mp3",
 						"sound_volume_db": 15,
@@ -16061,7 +16162,15 @@
 							},
 							{
 								"type": "text",
-								"text": "비어 있다."
+								"text": "무언가 있다."
+							},
+							{
+								"type": "document_popup",
+								"path": "res://imgs/documents/swimming_pool_document_01.png",
+								"start_page": 1,
+								"sound": "res://sounds/paper.mp3",
+								"sound_volume_db": 10,
+								"close_on_last_page": true
 							}
 						]
 					},
@@ -16335,6 +16444,55 @@
 					121,
 					283
 				],
+				"required_flag_missing": "select_wrong_swimming_pool_room_04",
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_05.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "sound",
+								"path": "res://sounds/jump_scare.mp3",
+								"volume_db": 15,
+								"wait": false
+							},
+							{
+								"type": "flag",
+								"flag": "select_wrong_swimming_pool_room_04"
+							},
+							{
+								"type": "text",
+								"text": "..."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_01_02": {
+				"click_rect": [
+					140,
+					343,
+					121,
+					283
+				],
+				"required_flag": "select_wrong_swimming_pool_room_04",
 				"events": [
 					{
 						"type": "document_popup",
@@ -17516,7 +17674,7 @@
 					},
 					{
 						"type": "text",
-						"text": "너무 깊어서 아래가 보이지 않는다."
+						"text": "여러 색의 튜브들이 수면 위에 떠있다."
 					}
 				]
 			},
@@ -18121,7 +18279,7 @@
 					},
 					{
 						"type": "document_dialogue",
-						"path": "res://imgs/events/locker_02.png",
+						"path": "res://imgs/events/locker_03.png",
 						"start_page": 1,
 						"sound": "res://sounds/locker_open.mp3",
 						"sound_volume_db": 15,
@@ -18132,7 +18290,7 @@
 							},
 							{
 								"type": "text",
-								"text": "비어 있다."
+								"text": "무언가 적혀 있다."
 							}
 						]
 					},
@@ -18432,11 +18590,11 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "거대한 수영장이다."
+						"text": "의자와 파라솔이다."
 					},
 					{
 						"type": "text",
-						"text": "너무 깊어서 아래가 보이지 않는다."
+						"text": "편의점 앞에 있을 거 같은 물건들이 수영장 가운데 놓여있다."
 					}
 				]
 			},

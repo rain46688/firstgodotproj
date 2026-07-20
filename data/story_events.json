@@ -9490,5 +9490,62 @@
 				"flag": "story_first_enter_swimming_pool_room_10_done"
 			}
 		]
+	},
+	"false_answer_rubber_duck_swimming_pool_room_03": {
+		"start_flag": "story_false_answer_rubber_duck_swimming_pool_room_03_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm15.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/events/rubber_duck_01.png"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "???",
+				"text": "오답이다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/jump_scare.mp3",
+				"volume_db": 15,
+				"wait": false
+			},
+			{
+				"type": "camera_zoom",
+				"x": 760,
+				"y": 340,
+				"zoom": 2.0,
+				"duration": 0.1,
+				"wait": false
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "wait",
+				"time": 2.5
+			},
+			{
+				"type": "game_over"
+			}
+		]
 	}
 }
