@@ -108,7 +108,7 @@
 				85
 			],
 			"size": [
-				210,
+				220,
 				45
 			]
 		},
@@ -176,7 +176,7 @@
 		"max_stack": 1,
 		"attack_min": 5,
 		"attack_max": 10,
-		"critical_chance": 0.1,
+		"critical_chance": 0.10,
 		"critical_multiplier": 2.0,
 		"consumed_on_use": false,
 		"attack_base_rotation": 0,
@@ -224,8 +224,8 @@
 		"max_stack": 1,
 		"attack_min": 2,
 		"attack_max": 2,
-		"critical_chance": 0.1,
-		"critical_multiplier": 2.2,
+		"critical_chance": 0.30,
+		"critical_multiplier": 2.5,
 		"consumed_on_use": false,
 		"attack_base_rotation": 90,
 		"attack_angle_min": -45,
@@ -272,7 +272,7 @@
 		"max_stack": 1,
 		"attack_min": 3,
 		"attack_max": 5,
-		"critical_chance": 0.1,
+		"critical_chance": 0.10,
 		"critical_multiplier": 2.0,
 		"consumed_on_use": false,
 		"attack_base_rotation": 0,
@@ -306,6 +306,53 @@
 		},
 		"parry_hitbox": {
 			"width": 200,
+			"height": 3
+		}
+	},
+	"knife": {
+		"name": "나이프",
+		"description": "전투용 단검이다, 날카롭게 날이 서있다.",
+		"image": "res://imgs/items/knife180x540.png",
+		"width": 1,
+		"height": 3,
+		"type": "weapon",
+		"stackable": true,
+		"max_stack": 1,
+		"attack_min": 4,
+		"attack_max": 6,
+		"critical_chance": 0.35,
+		"critical_multiplier": 3.0,
+		"consumed_on_use": false,
+		"attack_base_rotation": 0,
+		"attack_angle_min": -45,
+		"attack_angle_max": 45,
+		"defense_base_rotation": 90,
+		"defense_move_speed": 450,
+		"parry_window": 0.1,
+		"defense_start_offset": [
+			0,
+			90
+		],
+		"battle_sprite_size": [
+			250,
+			250
+		],
+		"attack_move_range": 450,
+		"attack_swing_speed": 2.0,
+		"weapon_angle_step": 5,
+		"attack_projectile": "slash_basic",
+		"defense_hitbox": {
+			"offset": [
+				-260,
+				100
+			],
+			"size": [
+				250,
+				50
+			]
+		},
+		"parry_hitbox": {
+			"width": 180,
 			"height": 3
 		}
 	},

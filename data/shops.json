@@ -16,28 +16,40 @@
 				"product_id": "tranquilizer_a",
 				"item": "tranquilizer_a",
 				"count": 1,
-				"price": 10,
+				"price": 5,
 				"stock": 5,
 				"slot": 1,
 				"page": 0
 			},
 			{
+				"product_id": "chocolate_bar_a",
+				"item": "chocolate_bar_a",
+				"count": 1,
+				"price": 10,
+				"stock": 10,
+				"slot": 2,
+				"page": 0,
+				"required_flag": "story_first_enter_swimming_pool_hallway_01_done"
+			},
+			{
 				"product_id": "tranquilizer_b",
 				"item": "tranquilizer_b",
 				"count": 1,
-				"price": 20,
+				"price": 10,
 				"stock": 6,
-				"slot": 2,
-				"page": 0
+				"slot": 3,
+				"page": 0,
+				"required_flag": "story_first_enter_swimming_pool_hallway_01_done"
 			},
 			{
 				"product_id": "tranquilizer_c",
 				"item": "tranquilizer_c",
 				"count": 1,
-				"price": 20,
-				"stock": 5,
-				"slot": 3,
-				"page": 0
+				"price": 10,
+				"stock": 4,
+				"slot": 4,
+				"page": 0,
+				"required_flag": "story_first_enter_swimming_pool_hallway_01_done"
 			},
 			{
 				"product_id": "razor",
@@ -56,6 +68,16 @@
 				"stock": 1,
 				"slot": 1,
 				"page": 1
+			},
+			{
+				"product_id": "knife",
+				"item": "knife",
+				"count": 1,
+				"price": 150,
+				"stock": 1,
+				"slot": 3,
+				"page": 1,
+				"required_flag": "story_first_enter_swimming_pool_hallway_01_done"
 			},
 			{
 				"product_id": "old_water_ball",

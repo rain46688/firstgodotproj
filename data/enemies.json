@@ -4718,7 +4718,7 @@
 	},
 	"human_flog": {
 		"name": "인간 개구리",
-		"max_hp": 300,
+		"max_hp": 400,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -5399,7 +5399,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 0.0,
 								"danger_type": "parry_only"
 							},
@@ -5410,7 +5410,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 0.2,
 								"danger_type": "parry_only"
 							},
@@ -5421,7 +5421,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 0.4,
 								"danger_type": "parry_only"
 							},
@@ -5432,7 +5432,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 0.6,
 								"danger_type": "parry_only"
 							},
@@ -5443,7 +5443,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 0.8,
 								"danger_type": "parry_only"
 							},
@@ -5454,7 +5454,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 1.0,
 								"danger_type": "parry_only"
 							}
@@ -5504,7 +5504,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 0.0,
 								"danger_type": "parry_only"
 							},
@@ -5515,7 +5515,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 0.2,
 								"danger_type": "parry_only"
 							},
@@ -5526,7 +5526,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 0.4,
 								"danger_type": "parry_only"
 							},
@@ -5537,7 +5537,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 0.6,
 								"danger_type": "parry_only"
 							},
@@ -5548,7 +5548,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 0.8,
 								"danger_type": "parry_only"
 							},
@@ -5559,7 +5559,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 1.0,
 								"danger_type": "parry_only"
 							}
@@ -5689,6 +5689,414 @@
 		],
 		"defeat_flags": [
 			"defeated_sea​_anemone_woman"
+		]
+	},
+	"green_fish_man": {
+		"name": "초록 물고기 남자",
+		"max_hp": 500,
+		"battle_bgm": "res://sounds/bgm15.mp3",
+		"battle_bgm_volume_db": -5.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/enemy_encounter2.mp3",
+		"encounter_sound_volume_db": 10.0,
+		"image": "res://imgs/enemies/green_fish_man.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.2,
+		"enemy_size": [
+			550,
+			660
+		],
+		"enemy_position": [
+			650,
+			0
+		],
+		"can_escape": false,
+		"encounter_text": "가면을 쓴 남자가 다가왔다.",
+		"observe_text": "물고기...? 몸체는 공격을 적게 받는듯하다.",
+		"weakness_text": "",
+		"patterns": [
+			{
+				"id": "basic_attack_01",
+				"weight": 100,
+				"warning_text": "주먹을 양쪽으로 휘두른다.",
+				"fire_mode": "parallel",
+				"projectiles": [
+					{
+						"projectile": "impact_basic",
+						"start": [
+							600,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.0
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							680,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.0
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							600,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							680,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							1200,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 3.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							1280,
+							0
+						],
+						"rotation": 180,
+						"damage": 20,
+						"delay": 3.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							1200,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 3.4
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							1280,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 3.4
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 15,
+						"delay": 4.2
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							880,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 4.2,
+						"danger_type": "parry_only"
+					}
+				]
+			}
+		],
+		"hitbox_base_size": [
+			1024,
+			1536
+		],
+		"hitboxes": [
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					449,
+					49,
+					133,
+					173
+				]
+			},
+			{
+				"id": "body",
+				"name": "몸통",
+				"rect": [
+					474,
+					260,
+					226,
+					466
+				],
+				"damage_multiplier": 0.8
+			}
+		],
+		"parts": [
+			{
+				"id": "left_arm",
+				"name": "날카로운 나이프를 들고 있는 왼쪽 팔",
+				"max_hp": 300,
+				"z_index": 10,
+				"image": "res://imgs/enemies/fish_man_left.png",
+				"observe_text": "이 부위를 먼저 노리는게 좋을거같다.",
+				"size": [
+					297,
+					436
+				],
+				"position": [
+					285,
+					150
+				],
+				"destroyable": true,
+				"destroy_text": "날카로운 나이프를 들고 있는 왼쪽 팔이 떨어져 나갔다.",
+				"hitbox": {
+					"id": "left_arm",
+					"name": "날카로운 나이프를 들고 있는 왼쪽 팔",
+					"rect": [
+						338,
+						222,
+						133,
+						325
+					]
+				},
+				"patterns": [
+					{
+						"id": "basic_attack_02",
+						"weight": 40,
+						"priority": 1,
+						"warning_text": "나이프를 중앙으로 짧게 휘두른다.",
+						"fire_mode": "parallel",
+						"projectiles": [
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.2
+							},
+							{
+								"projectile": "slash_basic",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.4,
+								"danger_type": "parry_only"
+							}
+						]
+					},
+					{
+						"id": "basic_attack_03",
+						"weight": 20,
+						"priority": 1,
+						"warning_text": "나이프를 중앙으로 빠르게 휘두른다.",
+						"fire_mode": "parallel",
+						"projectiles": [
+							{
+								"projectile": "slash_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.3
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.5
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.1,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.2,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.6
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.8
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.9
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.1
+							}
+						]
+					},
+					{
+						"id": "basic_attack_04",
+						"weight": 40,
+						"priority": 1,
+						"warning_text": "나이프를 왼쪽으로 짧게 휘두른다.",
+						"fire_mode": "parallel",
+						"projectiles": [
+							{
+								"projectile": "pierce",
+								"start": [
+									450,
+									0
+								],
+								"rotation": 180,
+								"damage": 8,
+								"delay": 1.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									450,
+									0
+								],
+								"rotation": 180,
+								"damage": 8,
+								"delay": 1.1,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									450,
+									0
+								],
+								"rotation": 180,
+								"damage": 8,
+								"delay": 1.2,
+								"danger_type": "parry_only"
+							}
+						]
+					}
+				]
+			}
+		],
+		"drops": [
+			{
+				"item": "unknown_coin",
+				"chance": 50,
+				"min": 5,
+				"max": 10
+			},
+			{
+				"item": "chocolate_bar_a",
+				"chance": 10,
+				"min": 1,
+				"max": 2
+			},
+			{
+				"item": "knife",
+				"chance": 5,
+				"min": 1,
+				"max": 1
+			}
+		],
+		"defeat_flags": [
+			"defeated_green_fish_man"
 		]
 	}
 }

@@ -69,7 +69,7 @@
 	"school_hallway_03": [
 		{
 			"enemy": "candle_student_woman",
-			"weight": 40,
+			"weight": 35,
 			"required_flag": "opened_school_stairs_hall_03",
 			"missing_flag": "",
 			"first_turn": ""
@@ -86,7 +86,7 @@
 		},
 		{
 			"enemy": "wax_slime",
-			"weight": 10,
+			"weight": 15,
 			"required_flag": "opened_school_stairs_hall_03",
 			"missing_flag": "",
 			"first_turn": ""
@@ -140,9 +140,17 @@
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
-		},	{
+		},
+		{
 			"enemy": "sea_anemone_woman",
-			"weight": 40,
+			"weight": 30,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "green_fish_man",
+			"weight": 30,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
