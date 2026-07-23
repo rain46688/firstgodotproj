@@ -239,7 +239,7 @@
 		"can_escape": false,
 		"encounter_text": "합쳐진 생명체 덩어리가 둔탁한 발소리를 내며 몸을 다가온다.",
 		"observe_text": "사람의 형체가 뭉쳐져서 만들어진것 같다.",
-		"weakness_text": "중앙의 얼굴이 약점인 거 같다.",
+		"weakness_text": "중앙의 얼굴이 약점인 것 같다.",
 		"next_phase_enemy_id": "combined_candle_students_phase_02",
 		"phase_transition_text": "합쳐진 중앙 부분이 녹아내리듯 뒤틀리기 시작한다.",
 		"patterns": [
@@ -265,7 +265,7 @@
 					100,
 					230
 				],
-				"damage_multiplier": 5.0
+				"damage_multiplier": 2.0
 			},
 			{
 				"id": "left_body",
@@ -499,7 +499,7 @@
 		"can_escape": false,
 		"encounter_text": "뜯겨나간 팔 너머로, 두 개의 몸이 하나처럼 뒤틀리기 시작한다.",
 		"observe_text": "꺼져있던 양초에 불이 붙고 중앙의 얼굴에서는 소름끼치는 살기가 뿜어져나오고있다.",
-		"weakness_text": "중앙의 얼굴이 약점인 거 같다.",
+		"weakness_text": "중앙의 얼굴이 약점인 것 같다.",
 		"phase_start_pattern_id": "phase2_start",
 		"patterns": [
 			{
@@ -516,7 +516,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 20,
+						"damage": 10,
 						"delay": 0.0,
 						"danger_type": "parry_only"
 					},
@@ -527,7 +527,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 20,
+						"damage": 10,
 						"delay": 0.0,
 						"danger_type": "parry_only"
 					},
@@ -604,7 +604,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 20,
+						"damage": 10,
 						"delay": 1.0,
 						"danger_type": "parry_only"
 					},
@@ -615,7 +615,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 20,
+						"damage": 10,
 						"delay": 1.0,
 						"danger_type": "parry_only"
 					}
@@ -625,12 +625,12 @@
 				"id": "basic_attack_01",
 				"weight": 30,
 				"warning_text": "중앙의 얼굴에서 알수없는 말을 중얼거린다.",
-				"fire_mode": "parallel",
+				"fire_mode": "sequential",
 				"projectiles": [
 					{
 						"projectile": "fear_slash",
 						"start": [
-							760,
+							500,
 							0
 						],
 						"rotation": 180,
@@ -641,23 +641,23 @@
 					{
 						"projectile": "fear_slash",
 						"start": [
-							860,
+							900,
 							0
 						],
 						"rotation": 180,
 						"damage": 10,
-						"delay": 0.7,
+						"delay": 0.3,
 						"danger_type": "parry_only"
 					},
 					{
 						"projectile": "fear_slash",
 						"start": [
-							960,
+							1100,
 							0
 						],
 						"rotation": 180,
 						"damage": 10,
-						"delay": 1.2,
+						"delay": 0.3,
 						"danger_type": "parry_only"
 					}
 				]
@@ -819,6 +819,28 @@
 						"rotation": 180,
 						"damage": 6,
 						"delay": 3.6
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 4.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							880,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 4.6,
+						"danger_type": "parry_only"
 					}
 				]
 			}
@@ -872,6 +894,12 @@
 			{
 				"item": "wax_heart",
 				"chance": 100,
+				"min": 1,
+				"max": 1
+			},
+			{
+				"item": "iron_skewer",
+				"chance": 5,
 				"min": 1,
 				"max": 1
 			}
@@ -1124,7 +1152,7 @@
 		"can_escape": false,
 		"encounter_text": "알 수 없는 거대한 생명체가 둔탁한 발소리를 내며 다가온다.",
 		"observe_text": "사람의 형체가 밀랍과 뭉쳐져서 만들어진 것 같다.",
-		"weakness_text": "머리가 약점인 거 같다.",
+		"weakness_text": "머리가 약점인 것 같다.",
 		"patterns": [
 			{
 				"id": "basic_attack_01",
@@ -1627,8 +1655,8 @@
 		]
 	},
 	"ghost": {
-		"name": "유령",
-		"max_hp": 120,
+		"name": "작은 유령",
+		"max_hp": 150,
 		"battle_bgm": "res://sounds/bgm19.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -1656,7 +1684,7 @@
 		"patterns": [
 			{
 				"id": "basic_attack_01",
-				"weight": 45,
+				"weight": 50,
 				"warning_text": "작은 유령은 중앙에서 앉아서 놀아 달라고 조르고 있다.",
 				"fire_mode": "parallel",
 				"counter_hitbox_id": "head",
@@ -1795,7 +1823,7 @@
 			},
 			{
 				"id": "basic_attack_03",
-				"weight": 10,
+				"weight": 5,
 				"warning_text": "작은 유령은 혼자 놀다가 넘어졌다.",
 				"fire_mode": "parallel",
 				"projectiles": []
@@ -2320,7 +2348,7 @@
 					{
 						"projectile": "slash_basic",
 						"start": [
-							300,
+							350,
 							0
 						],
 						"rotation": 180,
@@ -2330,7 +2358,7 @@
 					{
 						"projectile": "slash_basic",
 						"start": [
-							300,
+							350,
 							0
 						],
 						"rotation": 180,
@@ -2341,7 +2369,7 @@
 					{
 						"projectile": "slash_basic",
 						"start": [
-							300,
+							350,
 							0
 						],
 						"rotation": 180,
@@ -2351,7 +2379,7 @@
 					{
 						"projectile": "slash_basic",
 						"start": [
-							300,
+							350,
 							0
 						],
 						"rotation": 180,
@@ -2466,7 +2494,7 @@
 			},
 			{
 				"item": "beverage_a",
-				"chance": 10,
+				"chance": 20,
 				"min": 1,
 				"max": 3
 			}
@@ -2510,7 +2538,7 @@
 					{
 						"projectile": "slash_basic",
 						"start": [
-							300,
+							350,
 							0
 						],
 						"rotation": 180,
@@ -2520,7 +2548,7 @@
 					{
 						"projectile": "slash_basic",
 						"start": [
-							300,
+							350,
 							0
 						],
 						"rotation": 180,
@@ -2531,7 +2559,7 @@
 					{
 						"projectile": "slash_basic",
 						"start": [
-							300,
+							350,
 							0
 						],
 						"rotation": 180,
@@ -2541,7 +2569,7 @@
 					{
 						"projectile": "slash_basic",
 						"start": [
-							300,
+							350,
 							0
 						],
 						"rotation": 180,
@@ -2760,7 +2788,7 @@
 			},
 			{
 				"item": "beverage_a",
-				"chance": 10,
+				"chance": 20,
 				"min": 1,
 				"max": 3
 			},
@@ -2799,7 +2827,7 @@
 		"can_escape": false,
 		"encounter_text": "모니터 내부가 갈라지면서 무수한 액체가 쏟아져 나와 끔찍한 형체를 띄었다.",
 		"observe_text": "...",
-		"weakness_text": "전선이 약점인 거 같다.",
+		"weakness_text": "전선이 약점인 것 같다.",
 		"patterns": [
 			{
 				"id": "basic_attack_01",
@@ -2923,7 +2951,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 5,
+						"damage": 10,
 						"delay": 0.0
 					},
 					{
@@ -2933,7 +2961,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 3,
+						"damage": 5,
 						"delay": 0.2,
 						"danger_type": "parry_only"
 					},
@@ -2944,7 +2972,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 3,
+						"damage": 5,
 						"delay": 0.4,
 						"danger_type": "parry_only"
 					},
@@ -2955,7 +2983,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 5,
+						"damage": 10,
 						"delay": 1.3
 					},
 					{
@@ -2965,7 +2993,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 3,
+						"damage": 5,
 						"delay": 1.5,
 						"danger_type": "parry_only"
 					},
@@ -2976,7 +3004,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 3,
+						"damage": 5,
 						"delay": 1.7,
 						"danger_type": "parry_only"
 					},
@@ -2987,7 +3015,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 5,
+						"damage": 10,
 						"delay": 2.6,
 						"danger_type": "parry_only"
 					},
@@ -2998,7 +3026,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 3,
+						"damage": 5,
 						"delay": 2.8,
 						"danger_type": "parry_only"
 					},
@@ -3009,7 +3037,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 3,
+						"damage": 5,
 						"delay": 3.0,
 						"danger_type": "parry_only"
 					}
@@ -3029,7 +3057,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 20,
 						"delay": 1.0,
 						"danger_type": "parry_only"
 					},
@@ -3051,7 +3079,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 20,
 						"delay": 2.5,
 						"danger_type": "parry_only"
 					},
@@ -3073,7 +3101,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 20,
 						"delay": 4.5,
 						"danger_type": "parry_only"
 					},
@@ -3095,7 +3123,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 4,
+						"damage": 6,
 						"delay": 6.0,
 						"danger_type": "parry_only"
 					},
@@ -3106,7 +3134,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 4,
+						"damage": 6,
 						"delay": 6.0,
 						"danger_type": "parry_only"
 					},
@@ -3137,7 +3165,8 @@
 					269,
 					210,
 					192
-				]
+				],
+				"damage_multiplier": 0.5
 			},
 			{
 				"id": "body",
@@ -3147,7 +3176,8 @@
 					461,
 					261,
 					228
-				]
+				],
+				"damage_multiplier": 0.5
 			},
 			{
 				"id": "line",
@@ -3165,8 +3195,8 @@
 			{
 				"item": "unknown_coin",
 				"chance": 100,
-				"min": 40,
-				"max": 50
+				"min": 30,
+				"max": 40
 			},
 			{
 				"item": "cross_relic",
@@ -4378,7 +4408,7 @@
 				"item": "unknown_coin",
 				"chance": 100,
 				"min": 50,
-				"max": 60
+				"max": 100
 			},
 			{
 				"item": "holy_grail_relic",
@@ -4989,7 +5019,7 @@
 		"can_escape": true,
 		"encounter_text": "물속에서 개구리로 보이는 무언가 튀어 올라왔다.",
 		"observe_text": "가운데 사람의 얼굴의 형태를 한 무언가가 있어서 기괴하다.",
-		"weakness_text": "얼굴이 약점인 것 같다.",
+		"weakness_text": "중앙의 얼굴이 약점인 것 같다.",
 		"patterns": [
 			{
 				"id": "basic_attack_01",
@@ -5206,7 +5236,7 @@
 				"max_uses": 1,
 				"hp_condition": {
 					"target": "owner",
-					"lte_percent": 20
+					"lte_percent": 10
 				},
 				"start_effects": [
 					{
@@ -5244,7 +5274,8 @@
 					805,
 					330,
 					325
-				]
+				],
+				"damage_multiplier": 0.5
 			},
 			{
 				"id": "right_arm",
@@ -5254,7 +5285,8 @@
 					782,
 					340,
 					340
-				]
+				],
+				"damage_multiplier": 0.5
 			}
 		],
 		"drops": [
@@ -5262,7 +5294,13 @@
 				"item": "unknown_coin",
 				"chance": 50,
 				"min": 5,
-				"max": 8
+				"max": 10
+			},
+			{
+				"item": "beverage_a",
+				"chance": 30,
+				"min": 1,
+				"max": 5
 			},
 			{
 				"item": "chocolate_bar_a",
@@ -5277,7 +5315,7 @@
 	},
 	"sea_anemone_woman": {
 		"name": "말미잘 머리의 여성",
-		"max_hp": 300,
+		"max_hp": 350,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -5299,7 +5337,7 @@
 		"can_escape": false,
 		"encounter_text": "아름다운 형체의 무언가가 다가왔다.",
 		"observe_text": "여성의 머리에 아름다운 형체의 무언가가 자라나있다.",
-		"weakness_text": "머리가 약점인 거 같다.",
+		"weakness_text": "머리가 약점인 것 같다.",
 		"patterns": [
 			{
 				"id": "basic_attack_01",
@@ -5490,10 +5528,10 @@
 				"id": "head",
 				"name": "머리",
 				"rect": [
-					360,
-					69,
-					285,
-					235
+					417,
+					103,
+					179,
+					134
 				],
 				"damage_multiplier": 10.0
 			}
@@ -5534,17 +5572,6 @@
 						"warning_text": "중앙의 아름다운 무언가가 독침을 쏜다.",
 						"fire_mode": "parallel",
 						"projectiles": [
-							{
-								"projectile": "fear_slash",
-								"start": [
-									1000,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 0.0,
-								"danger_type": "parry_only"
-							},
 							{
 								"projectile": "fear_slash",
 								"start": [
@@ -5693,17 +5720,6 @@
 								"damage": 5,
 								"delay": 0.8,
 								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "fear_slash",
-								"start": [
-									1100,
-									0
-								],
-								"rotation": 180,
-								"damage": 5,
-								"delay": 1.0,
-								"danger_type": "parry_only"
 							}
 						]
 					}
@@ -5797,17 +5813,6 @@
 								"rotation": 180,
 								"damage": 5,
 								"delay": 0.8,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "fear_slash",
-								"start": [
-									800,
-									0
-								],
-								"rotation": 180,
-								"damage": 5,
-								"delay": 1.0,
 								"danger_type": "parry_only"
 							}
 						]
@@ -5928,6 +5933,12 @@
 				"max": 10
 			},
 			{
+				"item": "beverage_a",
+				"chance": 30,
+				"min": 1,
+				"max": 5
+			},
+			{
 				"item": "chocolate_bar_a",
 				"chance": 10,
 				"min": 1,
@@ -5961,7 +5972,7 @@
 		],
 		"can_escape": false,
 		"encounter_text": "가면을 쓴 남자가 다가왔다.",
-		"observe_text": "물고기...? 몸체는 공격을 적게 받는듯하다.",
+		"observe_text": "물고기...?",
 		"weakness_text": "",
 		"patterns": [
 			{
@@ -5977,7 +5988,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 15,
 						"delay": 1.0
 					},
 					{
@@ -5987,7 +5998,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 15,
 						"delay": 1.0
 					},
 					{
@@ -6030,7 +6041,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 20,
+						"damage": 10,
 						"delay": 3.0,
 						"danger_type": "parry_only"
 					},
@@ -6071,7 +6082,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 15,
 						"delay": 4.2,
 						"danger_type": "parry_only"
 					}
@@ -6148,7 +6159,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 20,
 								"delay": 0.0,
 								"danger_type": "parry_only"
 							},
@@ -6169,7 +6180,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 20,
+								"damage": 10,
 								"delay": 0.4,
 								"danger_type": "parry_only"
 							}
@@ -6231,7 +6242,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 20,
+								"damage": 10,
 								"delay": 0.2,
 								"danger_type": "parry_only"
 							},
@@ -6291,7 +6302,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 8,
+								"damage": 20,
 								"delay": 1.0,
 								"danger_type": "parry_only"
 							},
@@ -6302,7 +6313,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 8,
+								"damage": 10,
 								"delay": 1.1,
 								"danger_type": "parry_only"
 							},
@@ -6313,7 +6324,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 8,
+								"damage": 10,
 								"delay": 1.2,
 								"danger_type": "parry_only"
 							}
@@ -6330,10 +6341,16 @@
 				"max": 10
 			},
 			{
+				"item": "beverage_a",
+				"chance": 30,
+				"min": 1,
+				"max": 5
+			},
+			{
 				"item": "chocolate_bar_a",
 				"chance": 10,
 				"min": 1,
-				"max": 2
+				"max": 3
 			},
 			{
 				"item": "knife",

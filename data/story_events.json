@@ -5788,7 +5788,7 @@
 			{
 				"type": "bgm",
 				"path": "res://sounds/bgm17.mp3",
-				"volume_db": -20,
+				"volume_db": -15,
 				"loop": false
 			},
 			{
@@ -7893,7 +7893,7 @@
 				"type": "portrait",
 				"character": "claire",
 				"emotion": "embarrassed",
-				"text": "말을... 해?"
+				"text": "말하는 독수리...?"
 			},
 			{
 				"type": "story_dialogue",
@@ -7909,6 +7909,11 @@
 				"type": "story_dialogue",
 				"name": "알버스",
 				"text": "내 이름은 알버스다. 기억해라."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "알버스",
+				"text": "그리고 까마귀다."
 			},
 			{
 				"type": "portrait",

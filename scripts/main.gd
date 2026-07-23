@@ -8081,13 +8081,13 @@ func make_changed_value_text(base_value, effective_value, suffix = "", digit_cou
 func make_parry_hitbox_height_grade_text(parry_height):
 	var value = float(parry_height)
 
-	if value <= 2.0:
+	if value <= 1.5:
 		return make_colored_text(
 			"낮음",
 			STAT_BAD_COLOR
 		)
 
-	if value >= 4.5:
+	if value >= 4.0:
 		return make_colored_text(
 			"넓음",
 			STAT_GOOD_COLOR

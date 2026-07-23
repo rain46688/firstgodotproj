@@ -222,7 +222,7 @@
 									{
 										"type": "item",
 										"item": "unknown_coin",
-										"count": 20
+										"count": 30
 									},
 									{
 										"type": "flag",
@@ -1778,7 +1778,11 @@
 					500
 				],
 				"locked": true,
-				"open_flag": "opened_school_stairs_hall_04"
+				"open_flag": "opened_school_stairs_hall_04",
+				"footstep_sound": {
+					"path": "res://sounds/footsteps_water.mp3",
+					"volume_db": 5.0
+				}
 			},
 			"down": {
 				"target": "school_stairs_hall_01",
@@ -4353,9 +4357,9 @@
 									{
 										"type": "item_payment",
 										"item": "unknown_coin",
-										"count": 30,
-										"success_text": "금화 30개를 바쳤다.",
-										"fail_text": "금화가 부족하다. (알수없는 코인 30개 필요)",
+										"count": 40,
+										"success_text": "금화 40개를 바쳤다.",
+										"fail_text": "금화가 부족하다. (알수없는 코인 40개 필요)",
 										"success_events": [
 											{
 												"type": "item",
@@ -4442,9 +4446,9 @@
 									{
 										"type": "item_payment",
 										"item": "unknown_coin",
-										"count": 60,
-										"success_text": "금화 60개를 바쳤다.",
-										"fail_text": "금화가 부족하다. (알수없는 코인 60개 필요)",
+										"count": 80,
+										"success_text": "금화 80개를 바쳤다.",
+										"fail_text": "금화가 부족하다. (알수없는 코인 80개 필요)",
 										"success_events": [
 											{
 												"type": "item",
@@ -5963,14 +5967,14 @@
 				"random_targets": [
 					{
 						"target": "classroom_17",
-						"weight": 20,
+						"weight": 30,
 						"required_flag_missing": [
 							"kill_statue_classroom_statue_classroom_17_02"
 						]
 					},
 					{
 						"target": "classroom_18",
-						"weight": 20,
+						"weight": 30,
 						"required_flag_missing": [
 							"kill_statue_classroom_statue_classroom_18_02"
 						]
@@ -9963,7 +9967,8 @@
 						"branches": [
 							{
 								"required_flag": [
-									"story_first_grail_filled_unknown_hall_02_done"
+									"story_first_grail_filled_unknown_hall_02_done",
+									"story_first_enter_broadcasting_room_03_after_defeated_combined_candle_students_done"
 								],
 								"required_flag_missing": [
 									"started_episode_02",
@@ -10805,7 +10810,7 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway_03",
 			"event_table": "school_hallway",
-			"chance": 40
+			"chance": 20
 		}
 	},
 	"classroom_28": {
@@ -15908,7 +15913,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "암호를 말한다.",
+								"text": "말한다.",
 								"events": [
 									{
 										"type": "input_prompt",

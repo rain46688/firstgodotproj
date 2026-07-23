@@ -114,7 +114,7 @@
 		},
 		"parry_hitbox": {
 			"width": 140,
-			"height": 4.5
+			"height": 4
 		}
 	},
 	"razor": {
@@ -162,7 +162,7 @@
 		},
 		"parry_hitbox": {
 			"width": 140,
-			"height": 4
+			"height": 3
 		}
 	},
 	"cutter_knife": {
@@ -257,7 +257,7 @@
 		},
 		"parry_hitbox": {
 			"width": 180,
-			"height": 1.5
+			"height": 1.2
 		}
 	},
 	"iron_skewer": {

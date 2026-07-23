@@ -17,7 +17,7 @@
 				"item": "tranquilizer_a",
 				"count": 1,
 				"price": 5,
-				"stock": 5,
+				"stock": 10,
 				"slot": 1,
 				"page": 0
 			},
@@ -26,7 +26,7 @@
 				"item": "chocolate_bar_a",
 				"count": 1,
 				"price": 10,
-				"stock": 10,
+				"stock": 20,
 				"slot": 2,
 				"page": 0,
 				"required_flag": "story_first_enter_swimming_pool_hallway_01_done"
@@ -36,7 +36,7 @@
 				"item": "tranquilizer_b",
 				"count": 1,
 				"price": 10,
-				"stock": 6,
+				"stock": 10,
 				"slot": 3,
 				"page": 0,
 				"required_flag": "story_first_enter_swimming_pool_hallway_01_done"
@@ -46,7 +46,7 @@
 				"item": "tranquilizer_c",
 				"count": 1,
 				"price": 10,
-				"stock": 4,
+				"stock": 10,
 				"slot": 4,
 				"page": 0,
 				"required_flag": "story_first_enter_swimming_pool_hallway_01_done"
@@ -110,7 +110,7 @@
 				"product_id": "cube_relic",
 				"item": "cube_relic",
 				"count": 1,
-				"price": 80,
+				"price": 60,
 				"stock": 1,
 				"slot": 3,
 				"page": 2
