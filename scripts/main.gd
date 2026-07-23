@@ -312,6 +312,9 @@ var active_story_sounds = {}
 # 현재 BGMPlayer에 들어 있는 실제 BGM 경로
 var current_bgm_path = ""
 
+# 현재 화면에 표시할 첫 번째 선택지 인덱스
+var choice_scroll_start = 0
+
 # 상수 변수 모음
 const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
 const MSG_NO_BACK = "더 이상 뒤로 갈 수 없다..."
@@ -364,6 +367,9 @@ const RANDOM_ENCOUNTER_ESCAPE_CHOICE_CHANCE = 40.0
 
 # 인카운터 도주 또는 전투 종료 뒤 보장되는 안전 이동 횟수
 const RANDOM_ENCOUNTER_COOLDOWN_STEPS = 2
+
+# 한 화면에 표시할 선택지 수
+const CHOICE_VISIBLE_COUNT = 4
 
 # ============================================================
 # 게임 시작 관련 함수 모음
@@ -3522,20 +3528,42 @@ func show_dialogue(text, mode = "normal"):
 	$DialogueBox.visible = false
 	is_dialogue_showing = false
 	dialogue_finished = false
+# 현재 선택된 항목이 화면에 보이도록 시작 위치 조절
+func update_choice_scroll():
+	if choice_index < choice_scroll_start:
+		choice_scroll_start = choice_index
+
+	if choice_index >= choice_scroll_start + CHOICE_VISIBLE_COUNT:
+		choice_scroll_start = (
+			choice_index
+			- CHOICE_VISIBLE_COUNT
+			+ 1
+		)
+
+	var max_scroll_start = max(
+		current_choices.size() - CHOICE_VISIBLE_COUNT,
+		0
+	)
+
+	choice_scroll_start = clamp(
+		choice_scroll_start,
+		0,
+		max_scroll_start
+	)
 # 선택지 함수
 func show_choices(choices):
-	
 	set_dialogue_layout("choice")
-	
+
 	is_choosing = true
 	choice_index = 0
+	choice_scroll_start = 0
 	current_choices = choices
-	
+
 	$DialogueBox.visible = true
 	choice_box.visible = true
-	
+
 	update_choice_ui()
-	
+
 	while is_choosing:
 		if not is_inside_tree() or is_quitting_to_title:
 			return -1
@@ -3548,13 +3576,22 @@ func show_choices(choices):
 	return choice_index
 # 선택지 목록 표시 갱신 함수
 func update_choice_ui():
-	
-	for i in choice_labels.size():
-		if i < current_choices.size():
-			choice_labels[i].visible = true
-			choice_labels[i].text = get_choice_text(i)
+	update_choice_scroll()
+
+	for label_index in choice_labels.size():
+		var choice_data_index = (
+			choice_scroll_start
+			+ label_index
+		)
+
+		if choice_data_index < current_choices.size():
+			choice_labels[label_index].visible = true
+			choice_labels[label_index].text = get_choice_text(
+				choice_data_index
+			)
 		else:
-			choice_labels[i].visible = false
+			choice_labels[label_index].visible = false
+			choice_labels[label_index].text = ""
 # 현재 선택된 선택지 앞에 화살표를 붙이는 함수
 func get_choice_text(index):
 	if index < 0:
@@ -8044,13 +8081,13 @@ func make_changed_value_text(base_value, effective_value, suffix = "", digit_cou
 func make_parry_hitbox_height_grade_text(parry_height):
 	var value = float(parry_height)
 
-	if value <= 3.0:
+	if value <= 2.0:
 		return make_colored_text(
 			"낮음",
 			STAT_BAD_COLOR
 		)
 
-	if value >= 6.0:
+	if value >= 4.5:
 		return make_colored_text(
 			"넓음",
 			STAT_GOOD_COLOR

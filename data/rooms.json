@@ -182,6 +182,10 @@
 						"text": "무언가 주머니에 넣을까?"
 					},
 					{
+						"type": "text",
+						"text": "하나만 고르자."
+					},
+					{
 						"type": "choices",
 						"choices": [
 							{
@@ -213,12 +217,12 @@
 								]
 							},
 							{
-								"text": "무언가 들어있는 주머니",
+								"text": "묵직한 주머니",
 								"events": [
 									{
 										"type": "item",
 										"item": "unknown_coin",
-										"count": 10
+										"count": 20
 									},
 									{
 										"type": "flag",
@@ -227,7 +231,21 @@
 								]
 							},
 							{
-								"text": "그만둔다.",
+								"text": "비상용 식품",
+								"events": [
+									{
+										"type": "item",
+										"item": "chocolate_bar_a",
+										"count": 5
+									},
+									{
+										"type": "flag",
+										"flag": "search_box_02_prologue"
+									}
+								]
+							},
+							{
+								"text": "아무것도 고르지 않는다.",
 								"events": [
 									{
 										"type": "flag",
@@ -3973,7 +3991,7 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway_02",
 			"event_table": "school_hallway",
-			"chance": 40
+			"chance": 20
 		}
 	},
 	"classroom_11": {
@@ -4252,7 +4270,7 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway_02",
 			"event_table": "school_hallway",
-			"chance": 40
+			"chance": 20
 		}
 	},
 	"classroom_12": {
@@ -5958,7 +5976,7 @@
 						]
 					},
 					{
-						"target": "classroom_17",
+						"target": "classroom_14",
 						"weight": 60
 					}
 				],
@@ -5981,7 +5999,8 @@
 			{
 				"flags": [
 					"kill_statue_classroom_statue_classroom_17_02",
-					"kill_statue_classroom_statue_classroom_18_02"
+					"kill_statue_classroom_statue_classroom_18_02",
+					"got_schoolhall_key_a_classroom_14_02"
 				],
 				"path": "res://imgs/backgrounds/classroom_07.png"
 			}
@@ -6046,15 +6065,15 @@
 							},
 							{
 								"type": "text",
-								"text": "거짓의 유혹에도 아랑곳하지 않고. 전진하다 보면."
+								"text": "진실된 석상이 다음 층으로 올라가는 열쇠를 갖고 있다."
 							},
 							{
 								"type": "text",
-								"text": "진실을 향한 문이 열릴 것이다."
+								"text": "공간에 속지 말고 석상의 말에 귀를 기울여라."
 							},
 							{
 								"type": "text",
-								"text": "그리고 모든 석상들은 안식에 들것이다."
+								"text": "거짓된 석상은 진실을 말할 수 없다."
 							}
 						]
 					},
@@ -6116,7 +6135,8 @@
 			{
 				"flags": [
 					"kill_statue_classroom_statue_classroom_17_02",
-					"kill_statue_classroom_statue_classroom_18_02"
+					"kill_statue_classroom_statue_classroom_18_02",
+					"got_schoolhall_key_a_classroom_14_02"
 				],
 				"path": "res://imgs/backgrounds/classroom_statue_03.png"
 			}
@@ -6187,16 +6207,24 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "..."
+						"name": "진실의 석상",
+						"text": "헤헤."
 					},
 					{
 						"type": "text",
-						"text": "잔해 속을 뒤져보았다."
+						"name": "진실의 석상",
+						"text": "정답이다."
 					},
 					{
 						"type": "item",
 						"item": "schoolhall_key_a",
 						"count": 1
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/break_wall.mp3",
+						"volume_db": -5,
+						"wait": false
 					},
 					{
 						"type": "flag",
@@ -6223,11 +6251,6 @@
 					"kill_statue_classroom_statue_classroom_18_02"
 				],
 				"events": [
-					{
-						"type": "text",
-						"name": "의문의 석상",
-						"text": "헤헤.."
-					},
 					{
 						"type": "text",
 						"text": "\"거짓된 석상을 모두 부숴라.\""
@@ -6296,11 +6319,6 @@
 					"kill_statue_classroom_statue_classroom_17_02"
 				],
 				"events": [
-					{
-						"type": "text",
-						"name": "의문의 석상",
-						"text": "헤헤.."
-					},
 					{
 						"type": "text",
 						"text": "\"거짓된 석상을 모두 부숴라.\""

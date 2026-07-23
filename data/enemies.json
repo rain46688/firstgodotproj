@@ -239,7 +239,7 @@
 		"can_escape": false,
 		"encounter_text": "합쳐진 생명체 덩어리가 둔탁한 발소리를 내며 몸을 다가온다.",
 		"observe_text": "사람의 형체가 뭉쳐져서 만들어진것 같다.",
-		"weakness_text": "머리가 약점인 거 같다.",
+		"weakness_text": "중앙의 얼굴이 약점인 거 같다.",
 		"next_phase_enemy_id": "combined_candle_students_phase_02",
 		"phase_transition_text": "합쳐진 중앙 부분이 녹아내리듯 뒤틀리기 시작한다.",
 		"patterns": [
@@ -265,7 +265,7 @@
 					100,
 					230
 				],
-				"damage_multiplier": 3.0
+				"damage_multiplier": 5.0
 			},
 			{
 				"id": "left_body",
@@ -275,7 +275,8 @@
 					400,
 					160,
 					420
-				]
+				],
+				"damage_multiplier": 0.5
 			},
 			{
 				"id": "right_body",
@@ -285,7 +286,8 @@
 					400,
 					160,
 					420
-				]
+				],
+				"damage_multiplier": 0.5
 			}
 		],
 		"parts": [
@@ -318,7 +320,7 @@
 				},
 				"patterns": [
 					{
-						"id": "basic_attack_03",
+						"id": "basic_attack_04",
 						"weight": 40,
 						"warning_text": "망가진 의자를 왼쪽으로 휘두른다.",
 						"fire_mode": "sequential",
@@ -388,17 +390,17 @@
 					{
 						"id": "basic_attack_02",
 						"weight": 55,
-						"warning_text": "구겨진 파이프를 왼쪽으로 휘두른다.",
+						"warning_text": "구겨진 파이프를 중앙으로 휘두른다.",
 						"fire_mode": "sequential",
 						"projectiles": [
 							{
 								"projectile": "fear_slash",
 								"start": [
-									450,
+									700,
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 20,
 								"delay": 0.0,
 								"danger_type": "parry_only"
 							},
@@ -409,7 +411,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 20,
 								"delay": 0.3,
 								"danger_type": "parry_only"
 							},
@@ -420,7 +422,48 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 20,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							}
+						]
+					},
+					{
+						"id": "basic_attack_03",
+						"weight": 55,
+						"warning_text": "구겨진 파이프를 왼쪽으로 휘두른다.",
+						"fire_mode": "sequential",
+						"projectiles": [
+							{
+								"projectile": "fear_slash",
+								"start": [
+									450,
+									0
+								],
+								"rotation": 180,
+								"damage": 30,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "fear_slash",
+								"start": [
+									900,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "fear_slash",
+								"start": [
+									1100,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
 								"delay": 0.3,
 								"danger_type": "parry_only"
 							}
@@ -434,7 +477,7 @@
 	"combined_candle_students_phase_02": {
 		"name": "합쳐진 밀랍 학생들",
 		"phase": 2,
-		"max_hp": 250,
+		"max_hp": 300,
 		"battle_bgm": "res://sounds/bgm19.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -456,7 +499,7 @@
 		"can_escape": false,
 		"encounter_text": "뜯겨나간 팔 너머로, 두 개의 몸이 하나처럼 뒤틀리기 시작한다.",
 		"observe_text": "꺼져있던 양초에 불이 붙고 중앙의 얼굴에서는 소름끼치는 살기가 뿜어져나오고있다.",
-		"weakness_text": "머리가 약점인 거 같다.",
+		"weakness_text": "중앙의 얼굴이 약점인 거 같다.",
 		"phase_start_pattern_id": "phase2_start",
 		"patterns": [
 			{
@@ -496,6 +539,50 @@
 						],
 						"rotation": 180,
 						"damage": 10,
+						"delay": 0.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
 						"delay": 0.6,
 						"danger_type": "parry_only"
 					},
@@ -517,8 +604,8 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
-						"delay": 1.1,
+						"damage": 20,
+						"delay": 1.0,
 						"danger_type": "parry_only"
 					},
 					{
@@ -528,8 +615,8 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
-						"delay": 1.1,
+						"damage": 20,
+						"delay": 1.0,
 						"danger_type": "parry_only"
 					}
 				]
@@ -750,7 +837,7 @@
 					100,
 					230
 				],
-				"damage_multiplier": 4.0
+				"damage_multiplier": 3.0
 			},
 			{
 				"id": "left_body",
@@ -760,7 +847,8 @@
 					400,
 					160,
 					420
-				]
+				],
+				"damage_multiplier": 0.5
 			},
 			{
 				"id": "right_body",
@@ -770,7 +858,8 @@
 					400,
 					160,
 					420
-				]
+				],
+				"damage_multiplier": 0.5
 			}
 		],
 		"drops": [
@@ -794,7 +883,7 @@
 	"candle_student_tutorial": {
 		"name": "밀랍을 뒤집어쓴 학생",
 		"skip_if_flag": "defeated_tutorial_enemy",
-		"max_hp": 90,
+		"max_hp": 100,
 		"battle_bgm": "res://sounds/bgm13.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -814,14 +903,14 @@
 			0
 		],
 		"can_escape": false,
-		"encounter_text": "머릿 속에서 무언가가 외치고있다.\n\"정확하게 적을 조준해서 공격하라.\"",
-		"observe_text": "머릿 속에서 무언가가 되뇌고 있다.\n\"적의 공격에 맞춰서 반격하라.\"",
-		"weakness_text": "양초를 들고있는 손이 약점인 것 같다.\n\"적의 약점은 적에게 강한 피해를 입힌다.\"",
+		"encounter_text": "머릿속에서 무언가가 외치고 있다.\n\"정확하게 적을 조준해서 공격하라.\"",
+		"observe_text": "머릿속에서 무언가가 되뇌고 있다.\n\"적의 공격에 맞춰서 반격하라.\"",
+		"weakness_text": "양초를 들고 있는 손이 약점인 것 같다.\n\"적의 약점은 적에게 강한 피해를 입힌다.\"",
 		"patterns": [
 			{
 				"id": "basic_attack_01",
 				"weight": 50,
-				"warning_text": "머릿 속에서 무언가가 떠오르고 있다.\n\"적의 공격을 막아야한다.\"\n양초를 든 팔을 중앙으로 휘두른다.",
+				"warning_text": "머릿속에서 무언가가 떠오르고 있다.\n\"적의 공격을 막아야 한다.\"\n 양초를 든 팔을 중앙으로 휘두른다.",
 				"fire_mode": "sequential",
 				"counter_hitbox_id": "head",
 				"projectiles": [
@@ -870,7 +959,7 @@
 			{
 				"id": "basic_attack_02",
 				"weight": 50,
-				"warning_text": "머릿 속에서 무언가가 속삭이고 있다.\n\"적의 공격을 정확하게 받아쳐라.\"\n양팔을 중앙으로 휘두른다.",
+				"warning_text": "머릿속에서 무언가가 속삭이고 있다.\n\"적의 공격을 정확하게 받아쳐라.\"\n 양팔을 중앙으로 휘두른다.",
 				"fire_mode": "parallel",
 				"counter_hitbox_id": "head",
 				"projectiles": [
@@ -893,6 +982,78 @@
 						"rotation": 180,
 						"damage": 10,
 						"delay": 0.4
+					}
+				]
+			},
+			{
+				"id": "basic_attack_03",
+				"weight": 50,
+				"priority": 1,
+				"warning_text": "머릿속에서 무언가가 기억나고 있다.\n\"좌우 끝에서 반대쪽으로 무기를 옮길 수 있다.\"\n 양팔을 양쪽으로 휘두른다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"turn_condition": {
+					"mode": "interval",
+					"every": 5,
+					"start_turn": 5
+				},
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1400,
+							0
+						],
+						"rotation": 180,
+						"damage": 20,
+						"delay": 1.0
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							350,
+							0
+						],
+						"rotation": 180,
+						"damage": 20,
+						"delay": 2.0
+					}
+				]
+			},
+			{
+				"id": "basic_attack_04",
+				"weight": 50,
+				"priority": 1,
+				"warning_text": "머릿속에서 무언가가 보이고 있다.\n\"붉은 공격은 정확하게 받아쳐야만 한다.\"\n 양팔을 모은 뒤 중앙으로 세게 휘두른다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"turn_condition": {
+					"mode": "interval",
+					"every": 5,
+					"start_turn": 6
+				},
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							850,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							850,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.2,
+						"danger_type": "parry_only"
 					}
 				]
 			}
@@ -1040,7 +1201,7 @@
 				},
 				"patterns": [
 					{
-						"id": "basic_attack_03",
+						"id": "basic_attack_04",
 						"weight": 40,
 						"warning_text": "망가진 의자를 중앙으로 휘두른다.",
 						"fire_mode": "sequential",
@@ -1143,6 +1304,47 @@
 								],
 								"rotation": 180,
 								"damage": 10,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							}
+						]
+					},
+					{
+						"id": "basic_attack_03",
+						"weight": 30,
+						"warning_text": "구겨진 파이프를 왼쪽으로 휘두른다.",
+						"fire_mode": "sequential",
+						"projectiles": [
+							{
+								"projectile": "fear_slash",
+								"start": [
+									450,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "fear_slash",
+								"start": [
+									900,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "fear_slash",
+								"start": [
+									1100,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
 								"delay": 0.3,
 								"danger_type": "parry_only"
 							}
@@ -2044,7 +2246,8 @@
 					419,
 					153,
 					420
-				]
+				],
+				"damage_multiplier": 0.5
 			},
 			{
 				"id": "right_body",
@@ -2054,7 +2257,8 @@
 					412,
 					179,
 					441
-				]
+				],
+				"damage_multiplier": 0.5
 			}
 		],
 		"drops": [
@@ -3340,7 +3544,8 @@
 					419,
 					153,
 					420
-				]
+				],
+				"damage_multiplier": 0.5
 			},
 			{
 				"id": "right_body",
@@ -3350,7 +3555,8 @@
 					412,
 					179,
 					441
-				]
+				],
+				"damage_multiplier": 0.5
 			}
 		],
 		"parts": [
@@ -3383,7 +3589,7 @@
 				},
 				"patterns": [
 					{
-						"id": "basic_attack_04",
+						"id": "basic_attack_05",
 						"weight": 30,
 						"warning_text": "망가진 의자를 왼쪽으로 휘두른다.",
 						"fire_mode": "sequential",
@@ -3452,6 +3658,47 @@
 				"patterns": [
 					{
 						"id": "basic_attack_03",
+						"weight": 55,
+						"warning_text": "구겨진 파이프를 중앙으로 휘두른다.",
+						"fire_mode": "sequential",
+						"projectiles": [
+							{
+								"projectile": "fear_slash",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "fear_slash",
+								"start": [
+									900,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "fear_slash",
+								"start": [
+									1100,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							}
+						]
+					},
+					{
+						"id": "basic_attack_04",
 						"weight": 30,
 						"warning_text": "구겨진 파이프를 왼쪽으로 휘두른다.",
 						"fire_mode": "sequential",
@@ -3548,7 +3795,7 @@
 		"can_escape": false,
 		"encounter_text": "달의 신이 당신의 부름에 응답하였다.",
 		"observe_text": "달은 하늘에 있고, 사람이 이길 수 없다.",
-		"weakness_text": "신에게 약점 따윈 없다.",
+		"weakness_text": "",
 		"patterns": [
 			{
 				"id": "basic_attack_01",
@@ -3719,7 +3966,7 @@
 						],
 						"rotation": 180,
 						"damage": 6,
-						"delay": 2.6,
+						"delay": 2.7,
 						"danger_type": "parry_only"
 					},
 					{
@@ -3730,7 +3977,7 @@
 						],
 						"rotation": 180,
 						"damage": 6,
-						"delay": 2.6,
+						"delay": 2.7,
 						"danger_type": "parry_only"
 					}
 				]
