@@ -265,7 +265,7 @@
 					100,
 					230
 				],
-				"damage_multiplier": 2.0
+				"damage_multiplier": 3.0
 			},
 			{
 				"id": "left_body",
@@ -2216,7 +2216,7 @@
 						],
 						"rotation": 180,
 						"damage": 6,
-						"delay": 3.6
+						"delay": 4.6
 					},
 					{
 						"projectile": "impact_basic",
@@ -2226,7 +2226,7 @@
 						],
 						"rotation": 180,
 						"damage": 6,
-						"delay": 3.6
+						"delay": 4.6
 					},
 					{
 						"projectile": "impact_basic",
@@ -2236,7 +2236,7 @@
 						],
 						"rotation": 180,
 						"damage": 10,
-						"delay": 4.2
+						"delay": 5.2
 					},
 					{
 						"projectile": "impact_basic",
@@ -2246,7 +2246,7 @@
 						],
 						"rotation": 180,
 						"damage": 10,
-						"delay": 4.2
+						"delay": 5.2
 					}
 				]
 			}
@@ -3516,7 +3516,7 @@
 						],
 						"rotation": 180,
 						"damage": 6,
-						"delay": 3.6
+						"delay": 4.6
 					},
 					{
 						"projectile": "impact_basic",
@@ -3526,7 +3526,7 @@
 						],
 						"rotation": 180,
 						"damage": 6,
-						"delay": 3.6
+						"delay": 4.6
 					},
 					{
 						"projectile": "impact_basic",
@@ -3536,7 +3536,7 @@
 						],
 						"rotation": 180,
 						"damage": 10,
-						"delay": 4.2
+						"delay": 5.2
 					},
 					{
 						"projectile": "impact_basic",
@@ -3546,7 +3546,7 @@
 						],
 						"rotation": 180,
 						"damage": 10,
-						"delay": 4.2
+						"delay": 5.2
 					}
 				]
 			}
@@ -6361,6 +6361,345 @@
 		],
 		"defeat_flags": [
 			"defeated_green_fish_man"
+		]
+	},
+	"ghost_02": {
+		"name": "작은 유령",
+		"max_hp": 220,
+		"battle_bgm": "res://sounds/bgm19.mp3",
+		"battle_bgm_volume_db": -5.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/ghost.mp3",
+		"encounter_sound_volume_db": 10.0,
+		"image": "res://imgs/enemies/ghost.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.2,
+		"escape_after_player_turns": 4,
+		"escape_text": "작은 유령은 장난치며 어둠 속으로 사라졌다.",
+		"enemy_size": [
+			150,
+			300
+		],
+		"enemy_position": [
+			900,
+			200
+		],
+		"can_escape": true,
+		"encounter_text": "작은 유령이 나타났다.",
+		"observe_text": "작은 유령은 돌아다니며 놀고있다, 그 형체는 희미하게 비쳐서 곧 사라질 것만 같다.",
+		"weakness_text": "",
+		"patterns": [
+			{
+				"id": "basic_attack_01",
+				"weight": 50,
+				"warning_text": "작은 유령은 중앙에서 앉아서 놀아 달라고 조르고 있다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.8,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 1.0,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "basic_attack_02",
+				"weight": 45,
+				"warning_text": "작은 유령은 중앙에서 앉아서 놀아 달라고 뒹굴고 있다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.8,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "basic_attack_03",
+				"weight": 5,
+				"warning_text": "작은 유령은 혼자 놀다가 넘어졌다.",
+				"fire_mode": "parallel",
+				"projectiles": []
+			}
+		],
+		"hitbox_base_size": [
+			375,
+			500
+		],
+		"hitboxes": [
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					186,
+					129,
+					1,
+					105
+				],
+				"damage_multiplier": 5.0
+			}
+		],
+		"drops": [
+			{
+				"item": "unknown_coin",
+				"chance": 100,
+				"min": 5,
+				"max": 30
+			},
+			{
+				"item": "old_water_ball",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "old_abacus",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "cube_relic",
+				"chance": 4,
+				"count": 1
+			},
+			{
+				"item": "torn_eyepatch",
+				"chance": 3,
+				"count": 1
+			},
+			{
+				"item": "dice_relic",
+				"chance": 3,
+				"count": 1
+			},
+			{
+				"item": "music_box_relic",
+				"chance": 3,
+				"count": 1
+			},
+			{
+				"item": "broken_headset_relic",
+				"chance": 3,
+				"count": 1
+			},
+			{
+				"item": "teddy_bear_relic",
+				"chance": 2,
+				"count": 1
+			},
+			{
+				"item": "character_figure_relic",
+				"chance": 2,
+				"count": 1
+			},
+			{
+				"item": "cross_relic",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "holy_grail_relic",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "bible_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "metal_syringe",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "rosary_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "sneakers_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "dumbbell_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "sandbag_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "lung_model_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "first_aid_box_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "classic_camera_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "hourglass_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "hand_bone_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "skull_model_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "small_frame_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "hand_candlestick_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "brain_model_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "heart_model_fetish",
+				"chance": 1,
+				"count": 1
+			}
+		],
+		"defeat_flags": [
+			"defeated_ghost_02"
 		]
 	}
 }

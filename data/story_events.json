@@ -7862,11 +7862,11 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "거대한 흰 까마귀가 앉아 있었다. 깃털은 눈처럼 희었지만, 눈빛은 이곳의 어둠보다 깊었다."
+				"text": "거대한 존재가 앉아 있었다. 깃털은 눈처럼 희었지만, 눈빛은 이곳의 어둠보다 깊었다."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그 까마귀는 우리를 내려다보고 있었다. 마치 우리가 올 것을 이미 알고 있었다는 듯이."
+				"text": "그 존재는 우리를 내려다보고 있었다. 마치 우리가 올 것을 이미 알고 있었다는 듯이."
 			},
 			{
 				"type": "story_dialogue",
@@ -7924,7 +7924,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "알버스",
-				"text": "싸움에는 이제 관심 없다. 피곤하고, 시끄럽고, 남는 것도 없지."
+				"text": "싸움에는 이제 더 이상 관심 없다."
 			},
 			{
 				"type": "portrait",
@@ -8029,7 +8029,7 @@
 				"type": "portrait",
 				"character": "isaac",
 				"emotion": "expressionless",
-				"text": "자자, 일단 싸우지 않는 게 좋겠어."
+				"text": "일단 싸우지 않는 게 좋겠어."
 			},
 			{
 				"type": "story_dialogue",
@@ -8045,7 +8045,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "알버스",
-				"text": "자 어서 가서 반짝이는 것을 찾아와라."
+				"text": "계약 성립이다, 자 어서 가서 반짝이는 것을 찾아와라."
 			},
 			{
 				"type": "story_dialogue",

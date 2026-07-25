@@ -126,7 +126,7 @@
 			"first_turn": ""
 		},
 		{
-			"enemy": "ghost",
+			"enemy": "ghost_02",
 			"weight": 5,
 			"required_flag": "opened_school_stairs_hall_04",
 			"missing_flag": "",
@@ -156,8 +156,38 @@
 			"first_turn": ""
 		},
 		{
-			"enemy": "ghost",
+			"enemy": "ghost_02",
 			"weight": 5,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		}
+	],
+	"swimming_pool_02": [
+		{
+			"enemy": "human_flog",
+			"weight": 0,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "sea_anemone_woman",
+			"weight": 0,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "green_fish_man",
+			"weight": 0,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "ghost_02",
+			"weight": 0,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
