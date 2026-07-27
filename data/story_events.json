@@ -9109,7 +9109,7 @@
 			},
 			{
 				"type": "flag",
-				"flag": "opened_swimming_pool"
+				"flag": "opened_swimming_pool_hallway_01"
 			},
 			{
 				"type": "flag",
@@ -9170,6 +9170,10 @@
 			{
 				"type": "flag",
 				"flag": "room_enter_story_done_first_enter_classroom_11"
+			},
+			{
+				"type": "flag",
+				"flag": "opened_school_stairs_hall_04"
 			}
 		]
 	},

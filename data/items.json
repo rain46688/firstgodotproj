@@ -11,7 +11,7 @@
 	},
 	"classroom_key_b": {
 		"name": "교실키B",
-		"description": "어딘가의 교실 문을 열 수 있는 열쇠인 것 같다.",
+		"description": "교실 어딘가의 문을 열 수 있는 열쇠인 것 같다.",
 		"image": "res://imgs/items/classroom_key180x180.png",
 		"width": 1,
 		"height": 1,
@@ -21,7 +21,7 @@
 	},
 	"classroom_key_c": {
 		"name": "교실키C",
-		"description": "어딘가의 교실 문을 열 수 있는 열쇠인 것 같다.",
+		"description": "교실 어딘가의 문을 열 수 있는 열쇠인 것 같다.",
 		"image": "res://imgs/items/classroom_key180x180.png",
 		"width": 1,
 		"height": 1,
@@ -31,7 +31,7 @@
 	},
 	"classroom_key_d": {
 		"name": "교실키D",
-		"description": "어딘가의 교실 문을 열 수 있는 열쇠인 것 같다.",
+		"description": "교실 어딘가의 문을 열 수 있는 열쇠인 것 같다.",
 		"image": "res://imgs/items/classroom_key180x180.png",
 		"width": 1,
 		"height": 1,
@@ -51,7 +51,7 @@
 	},
 	"schoolhall_key_a": {
 		"name": "철제키A",
-		"description": "학교 중앙홀 철제 문을 열 수 있는 열쇠인 것 같다.",
+		"description": "중앙홀 철제 문을 열 수 있는 열쇠인 것 같다.",
 		"image": "res://imgs/items/metal_key180x180.png",
 		"width": 1,
 		"height": 1,
@@ -61,8 +61,18 @@
 	},
 	"schoolhall_key_b": {
 		"name": "철제키B",
-		"description": "학교 중앙홀 철제 문을 열 수 있는 열쇠인 것 같다.",
+		"description": "중앙홀 철제 문을 열 수 있는 열쇠인 것 같다.",
 		"image": "res://imgs/items/metal_key180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "key",
+		"stackable": false,
+		"consumed_on_use": true
+	},
+	"swimming_room_key_a": {
+		"name": "수영장키A",
+		"description": "수영장 어딘가의 문을 열 수 있는 열쇠인 것 같다.",
+		"image": "res://imgs/items/swimming_room_key180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "key",

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c4sdhuroegv7f"
-path="res://.godot/imported/swimming_pool_document_01.png-9fd4dc25d205613c5c99456536dc833c.ctex"
+uid="uid://bmgdmdtr1k4hh"
+path="res://.godot/imported/swimming_pool_angel_hall_02.png-38421fefb065755bbb52a238540b1de2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/documents/swimming_pool_document_01.png"
-dest_files=["res://.godot/imported/swimming_pool_document_01.png-9fd4dc25d205613c5c99456536dc833c.ctex"]
+source_file="res://imgs/backgrounds/swimming_pool_angel_hall_02.png"
+dest_files=["res://.godot/imported/swimming_pool_angel_hall_02.png-38421fefb065755bbb52a238540b1de2.ctex"]
 
 [params]
 

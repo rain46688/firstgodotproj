@@ -23,6 +23,7 @@
 [ext_resource type="AudioStream" uid="uid://dcvrjg58exxw0" path="res://sounds/save_complete.mp3" id="18_bb450"]
 [ext_resource type="AudioStream" uid="uid://b4idj20vru21j" path="res://sounds/heartbeats.mp3" id="18_nfivy"]
 [ext_resource type="AudioStream" uid="uid://b3onferv05h72" path="res://sounds/result.mp3" id="20_1nqs0"]
+[ext_resource type="AudioStream" uid="uid://cfy0iquuvfhgu" path="res://sounds/click_02.mp3" id="24_y6deb"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bjd11"]
 bg_color = Color(0, 0, 0, 0)
@@ -204,6 +205,7 @@ offset_bottom = 1030.0
 color = Color(0, 0, 0, 0.78431374)
 
 [node name="DialogueText" type="Label" parent="DialogueBox" unique_id=1625493669]
+custom_minimum_size = Vector2(1600, 120)
 layout_mode = 0
 offset_left = 50.0
 offset_top = 40.0
@@ -297,6 +299,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="SelectedItemDescription" type="Label" parent="InventoryUI" unique_id=357045251]
+custom_minimum_size = Vector2(400, 360)
 layout_mode = 0
 offset_left = 640.0
 offset_top = 620.0
@@ -551,6 +554,10 @@ volume_db = 6.0
 [node name="ResultSound" type="AudioStreamPlayer" parent="." unique_id=1583150485]
 stream = ExtResource("20_1nqs0")
 volume_db = -10.0
+
+[node name="ClickSound" type="AudioStreamPlayer" parent="." unique_id=1772120888]
+stream = ExtResource("24_y6deb")
+volume_db = -5.0
 
 [connection signal="pressed" from="BagButton" to="." method="_on_bag_button_pressed"]
 [connection signal="pressed" from="InventoryUI/InventoryContextMenu/MenuTexts/UseButton" to="." method="_on_use_button_pressed"]

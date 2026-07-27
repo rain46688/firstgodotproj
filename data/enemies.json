@@ -5590,7 +5590,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 0.4,
 								"danger_type": "parry_only"
 							},
@@ -5601,7 +5601,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 0.6,
 								"danger_type": "parry_only"
 							},
@@ -5612,7 +5612,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 0.8,
 								"danger_type": "parry_only"
 							},
@@ -5623,7 +5623,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 1.0,
 								"danger_type": "parry_only"
 							}
@@ -5717,7 +5717,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 5,
+								"damage": 10,
 								"delay": 0.8,
 								"danger_type": "parry_only"
 							}
@@ -5811,7 +5811,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 5,
+								"damage": 10,
 								"delay": 0.8,
 								"danger_type": "parry_only"
 							}
@@ -5872,7 +5872,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 0.2,
 								"danger_type": "parry_only"
 							},
@@ -5883,7 +5883,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 0.4,
 								"danger_type": "parry_only"
 							},
@@ -5894,7 +5894,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 0.6,
 								"danger_type": "parry_only"
 							},
@@ -5905,19 +5905,8 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 5,
 								"delay": 0.8,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "fear_slash",
-								"start": [
-									900,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 1.0,
 								"danger_type": "parry_only"
 							}
 						]
@@ -5988,7 +5977,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 15,
+						"damage": 20,
 						"delay": 1.0
 					},
 					{
@@ -5998,7 +5987,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 15,
+						"damage": 20,
 						"delay": 1.0
 					},
 					{
@@ -6052,7 +6041,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 20,
 						"delay": 3.4
 					},
 					{
@@ -6062,7 +6051,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 20,
 						"delay": 3.4
 					},
 					{
@@ -6072,7 +6061,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 15,
+						"damage": 20,
 						"delay": 4.2
 					},
 					{
@@ -6082,7 +6071,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 15,
+						"damage": 10,
 						"delay": 4.2,
 						"danger_type": "parry_only"
 					}

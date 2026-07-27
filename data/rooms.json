@@ -614,7 +614,7 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "교실 문이 닫혀있다. 문을 열을까?"
+						"text": "문이 닫혀있다. 문을 열을까?"
 					},
 					{
 						"type": "choices",
@@ -3320,7 +3320,7 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "교실 문이 닫혀있다. 문을 열을까?"
+						"text": "문이 닫혀있다. 문을 열을까?"
 					},
 					{
 						"type": "choices",
@@ -9952,7 +9952,7 @@
 								],
 								"required_flag_missing": [
 									"started_episode_02",
-									"opened_swimming_pool"
+									"opened_swimming_pool_hallway_01"
 								],
 								"events": [
 									{
@@ -12692,7 +12692,7 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "교실 문이 닫혀있다. 문을 열을까?"
+						"text": "문이 닫혀있다. 문을 열을까?"
 					},
 					{
 						"type": "choices",
@@ -13382,11 +13382,11 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway_04",
 			"event_table": "school_hallway",
-			"chance": 60
+			"chance": 40
 		}
 	},
 	"classroom_35": {
-		"background": "res://imgs/backgrounds/submerged_classroom_01.png",
+		"background": "res://imgs/backgrounds/submerged_classroom_06.png",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -13416,6 +13416,20 @@
 					30
 				]
 			},
+			"down": {
+				"target": "swimming_pool_angel_hall_02",
+				"position": [
+					550,
+					780
+				],
+				"move_effect": "enter",
+				"locked": true,
+				"open_flag": "opened_classroom_35",
+				"footstep_sound": {
+					"path": "res://sounds/ladder_step.mp3",
+					"volume_db": 0.0
+				}
+			},
 			"right": {
 				"target": "school_hallway_35",
 				"position": [
@@ -13437,6 +13451,10 @@
 					{
 						"type": "text",
 						"text": "바닥이 물로 잠겨있다."
+					},
+					{
+						"type": "text",
+						"text": "구멍 아래쪽으로 사다리가 이어져있다."
 					}
 				]
 			},
@@ -13581,7 +13599,7 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway_04",
 			"event_table": "school_hallway",
-			"chance": 60
+			"chance": 30
 		}
 	},
 	"classroom_36": {
@@ -13953,7 +13971,7 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway_04",
 			"event_table": "school_hallway",
-			"chance": 60
+			"chance": 30
 		}
 	},
 	"classroom_37": {
@@ -14241,7 +14259,7 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "교실 문이 닫혀있다. 문을 열을까?"
+						"text": "문이 닫혀있다. 문을 열을까?"
 					},
 					{
 						"type": "choices",
@@ -14546,7 +14564,7 @@
 			},
 			{
 				"flags": [
-					"opened_swimming_pool"
+					"opened_swimming_pool_hallway_01"
 				],
 				"path": "res://imgs/backgrounds/submerged_classroom_01.png"
 			}
@@ -14655,7 +14673,7 @@
 			},
 			{
 				"flags": [
-					"opened_swimming_pool"
+					"opened_swimming_pool_hallway_01"
 				],
 				"path": "res://imgs/backgrounds/submerged_classroom_black_board_01.png"
 			}
@@ -14702,7 +14720,7 @@
 				"required_flag_missing": [
 					"got_craw_classroom_39_02",
 					"got_craw_classroom_33_02",
-					"opened_swimming_pool"
+					"opened_swimming_pool_hallway_01"
 				],
 				"events": [
 					{
@@ -14788,7 +14806,7 @@
 				],
 				"required_flag_missing": [
 					"got_craw_classroom_39_02",
-					"opened_swimming_pool"
+					"opened_swimming_pool_hallway_01"
 				],
 				"events": [
 					{
@@ -14818,7 +14836,7 @@
 					148
 				],
 				"required_flag": [
-					"opened_swimming_pool"
+					"opened_swimming_pool_hallway_01"
 				],
 				"required_flag_missing": [
 					"got_craw_classroom_39_02",
@@ -14901,7 +14919,7 @@
 		"background_by_flags": [
 			{
 				"flags": [
-					"opened_swimming_pool"
+					"opened_swimming_pool_hallway_01"
 				],
 				"path": "res://imgs/backgrounds/submerged_classroom_03.png"
 			}
@@ -14945,7 +14963,7 @@
 				],
 				"move_effect": "enter",
 				"locked": true,
-				"open_flag": "opened_swimming_pool",
+				"open_flag": "opened_swimming_pool_hallway_01",
 				"footstep_sound": {
 					"path": "res://sounds/splash.mp3",
 					"volume_db": 0.0
@@ -14969,7 +14987,7 @@
 					412
 				],
 				"required_flag_missing": [
-					"opened_swimming_pool",
+					"opened_swimming_pool_hallway_01",
 					"story_first_enter_broadcasting_room_01_done"
 				],
 				"events": [
@@ -15012,7 +15030,7 @@
 									},
 									{
 										"type": "flag",
-										"flag": "opened_swimming_pool"
+										"flag": "opened_swimming_pool_hallway_01"
 									}
 								]
 							},
@@ -15044,7 +15062,7 @@
 									},
 									{
 										"type": "flag",
-										"flag": "opened_swimming_pool"
+										"flag": "opened_swimming_pool_hallway_01"
 									}
 								]
 							},
@@ -15076,7 +15094,7 @@
 					"story_first_enter_broadcasting_room_01_done"
 				],
 				"required_flag_missing": [
-					"opened_swimming_pool"
+					"opened_swimming_pool_hallway_01"
 				],
 				"events": [
 					{
@@ -16980,7 +16998,7 @@
 							{
 								"type": "item",
 								"item": "chocolate_bar_a",
-								"count": 3
+								"count": 5
 							},
 							{
 								"type": "flag",
@@ -17191,7 +17209,7 @@
 		},
 		"exits": {
 			"up": {
-				"target": "swimming_pool_fountain_hall_01",
+				"target": "swimming_pool_angel_hall_01",
 				"position": [
 					850,
 					30
@@ -17274,22 +17292,26 @@
 			"loop": true
 		},
 		"exits": {
-			"left": {
-				"target": "swimming_pool_hallway_11",
-				"position": [
-					950,
-					540
-				],
-				"locked": true,
-				"open_flag": "opened_swimming_pool_hallway_11",
-				"move_effect": "enter"
-			},
 			"down": {
 				"target": "swimming_pool_hallway_05",
 				"position": [
 					900,
 					950
 				]
+			},
+			"left": {
+				"target": "swimming_pool_hallway_11",
+				"position": [
+					900,
+					540
+				],
+				"locked": true,
+				"open_flag": "opened_swimming_pool_hallway_11",
+				"move_effect": "enter",
+				"footstep_sound": {
+					"path": "res://sounds/footsteps_water.mp3",
+					"volume_db": 5.0
+				}
 			}
 		},
 		"interactions": {
@@ -17300,6 +17322,7 @@
 					244,
 					431
 				],
+				"required_flag_missing": "opened_swimming_pool_hallway_11",
 				"events": [
 					{
 						"type": "text",
@@ -17335,8 +17358,8 @@
 			}
 		}
 	},
-	"swimming_pool_fountain_hall_01": {
-		"background": "res://imgs/backgrounds/swimming_pool_fountain_hall_01.png",
+	"swimming_pool_angel_hall_01": {
+		"background": "res://imgs/backgrounds/swimming_pool_angel_hall_01.png",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -17381,10 +17404,10 @@
 		"interactions": {
 			"angel_statue": {
 				"click_rect": [
-					782,
-					118,
-					342,
-					599
+					721,
+					61,
+					465,
+					564
 				],
 				"events": [
 					{
@@ -17432,6 +17455,57 @@
 						"text": "유리 바깥에서 강하게 조명이 비치고 있다."
 					}
 				]
+			},
+			"angel_hall_button_01": {
+				"click_rect": [
+					915,
+					632,
+					35,
+					21
+				],
+				"required_flag_missing": "opened_classroom_35_02",
+				"events": [
+					{
+						"type": "text",
+						"text": "천사 조각상이다."
+					},
+					{
+						"type": "text",
+						"text": "얼굴이 없다."
+					},
+					{
+						"type": "text",
+						"text": "자세히 살펴보니 발바닥에 누를 수 있는 버튼이 존재한다 누를까?"
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "누른다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/click_02.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "flag",
+										"flag": "opened_classroom_35_02"
+									},
+									{
+										"type": "text",
+										"text": "아무 일도 일어나지 않았다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
 			}
 		}
 	},
@@ -17470,7 +17544,7 @@
 				]
 			},
 			"down": {
-				"target": "swimming_pool_fountain_hall_01",
+				"target": "swimming_pool_angel_hall_01",
 				"position": [
 					850,
 					950
@@ -19481,7 +19555,7 @@
 							{
 								"type": "item",
 								"item": "chocolate_bar_a",
-								"count": 3
+								"count": 5
 							},
 							{
 								"type": "flag",
@@ -19826,6 +19900,668 @@
 					}
 				]
 			}
+		}
+	},
+	"swimming_pool_hallway_11": {
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_06.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_water.mp3",
+			"volume_db": 5.0
+		},
+		"exits": {
+			"up": {
+				"target": "swimming_pool_hallway_12",
+				"position": [
+					850,
+					30
+				]
+			},
+			"down": {
+				"target": "swimming_pool_angel_hall_02",
+				"position": [
+					850,
+					950
+				]
+			},
+			"right": {
+				"target": "swimming_pool_door_01",
+				"position": [
+					1330,
+					664
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"hole": {
+				"click_rect": [
+					0,
+					538,
+					724,
+					514
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "거대한 터널이다."
+					}
+				]
+			}
+		}
+	},
+	"swimming_pool_angel_hall_02": {
+		"background": "res://imgs/backgrounds/swimming_pool_angel_hall_01.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"opened_classroom_35"
+				],
+				"path": "res://imgs/backgrounds/swimming_pool_angel_hall_02.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"enter_stories": [],
+		"exits": {
+			"up": {
+				"target": "classroom_35",
+				"position": [
+					900,
+					30
+				],
+				"footstep_sound": {
+					"path": "res://sounds/ladder_step.mp3",
+					"volume_db": 0.0
+				},
+				"locked": true,
+				"open_flag": "opened_classroom_35"
+			},
+			"down": {
+				"target": "swimming_pool_hallway_11",
+				"position": [
+					900,
+					950
+				],
+				"footstep_sound": {
+					"path": "res://sounds/footsteps_water.mp3",
+					"volume_db": 5.0
+				}
+			},
+			"left": {
+				"target": "swimming_pool_stadium_01",
+				"position": [
+					60,
+					540
+				]
+			},
+			"right": {
+				"target": "swimming_pool_door_02",
+				"position": [
+					1830,
+					540
+				]
+			}
+		},
+		"interactions": {
+			"angel_statue": {
+				"click_rect": [
+					721,
+					61,
+					465,
+					564
+				],
+				"required_flag_missing": "opened_classroom_35",
+				"events": [
+					{
+						"type": "text",
+						"text": "천사 조각상이다."
+					},
+					{
+						"type": "text",
+						"text": "얼굴이 없다."
+					}
+				]
+			},
+			"angel_statue_ladder": {
+				"click_rect": [
+					721,
+					61,
+					465,
+					564
+				],
+				"required_flag": "opened_classroom_35",
+				"events": [
+					{
+						"type": "text",
+						"text": "천장에서 사다리가 내려와 있다."
+					}
+				]
+			},
+			"windows_left": {
+				"click_rect": [
+					499,
+					170,
+					184,
+					418
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "앞이 보이지 않는다."
+					},
+					{
+						"type": "text",
+						"text": "유리 바깥에서 강하게 조명이 비치고 있다."
+					}
+				]
+			},
+			"windows_right": {
+				"click_rect": [
+					1227,
+					193,
+					188,
+					410
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "앞이 보이지 않는다."
+					},
+					{
+						"type": "text",
+						"text": "유리 바깥에서 강하게 조명이 비치고 있다."
+					}
+				]
+			},
+			"angel_hall_button_01": {
+				"click_rect": [
+					915,
+					632,
+					35,
+					21
+				],
+				"rquired_flag": "opened_classroom_35_02",
+				"required_flag_missing": "opened_classroom_35",
+				"events": [
+					{
+						"type": "text",
+						"text": "천사 조각상이다."
+					},
+					{
+						"type": "text",
+						"text": "얼굴이 없다."
+					},
+					{
+						"type": "text",
+						"text": "자세히 살펴보니 발바닥에 누를 수 있는 버튼이 존재한다 누를까?"
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "누른다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/ladder_down.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "flag",
+										"flag": "opened_classroom_35"
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"angel_hall_button_02": {
+				"click_rect": [
+					915,
+					632,
+					35,
+					21
+				],
+				"required_flag_missing": [
+					"opened_classroom_35",
+					"opened_classroom_35_02"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "천사 조각상이다."
+					},
+					{
+						"type": "text",
+						"text": "얼굴이 없다."
+					},
+					{
+						"type": "text",
+						"text": "자세히 살펴보니 발바닥에 누를 수 있는 버튼이 존재한다 누를까?"
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "누른다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/click_02.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무 일도 일어나지 않았다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"swimming_pool_door_02": {
+		"background": "res://imgs/backgrounds/swimming_pool_door_01.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"opened_swimming_pool_hallway_21"
+				],
+				"path": "res://imgs/backgrounds/swimming_pool_door_02.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "swimming_pool_angel_hall_02",
+				"position": [
+					900,
+					950
+				]
+			},
+			"left": {
+				"target": "swimming_pool_hallway_21",
+				"position": [
+					900,
+					540
+				],
+				"locked": true,
+				"open_flag": "opened_swimming_pool_hallway_21",
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"door": {
+				"click_rect": [
+					834,
+					366,
+					244,
+					431
+				],
+				"required_flag_missing": "opened_swimming_pool_hallway_21",
+				"events": [
+					{
+						"type": "text",
+						"text": "굳게 닫혀있다. 문을 열을까?"
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "left",
+										"required_item": "",
+										"master_key": "",
+										"consume_required_key": false,
+										"consume_master_key": false,
+										"success_effect": "fade",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"swimming_pool_stadium_01": {
+		"background": "res://imgs/backgrounds/swimming_pool_stadium_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "swimming_pool_stadium_02",
+				"position": [
+					900,
+					950
+				],
+				"move_effect": "enter"
+			},
+			"right": {
+				"target": "swimming_pool_angel_hall_02",
+				"position": [
+					1830,
+					540
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"pool": {
+				"click_rect": [
+					732,
+					586,
+					470,
+					388
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
+					}
+				]
+			}
+		}
+	},
+	"swimming_pool_stadium_02": {
+		"background": "res://imgs/backgrounds/swimming_pool_stadium_02.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"opened_swimming_pool_stadium_02"
+				],
+				"path": "res://imgs/backgrounds/swimming_pool_stadium_03.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "swimming_pool_stadium_01",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"pool": {
+				"click_rect": [
+					732,
+					586,
+					470,
+					388
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "..."
+					}
+				]
+			}
+		}
+	},
+	"swimming_pool_hallway_12": {
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_07.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"opened_swimming_pool_room_12"
+				],
+				"path": "res://imgs/backgrounds/swimming_pool_hallway_06.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_water.mp3",
+			"volume_db": 5.0
+		},
+		"exits": {
+			"up": {
+				"target": "swimming_pool_hallway_13",
+				"position": [
+					850,
+					30
+				]
+			},
+			"down": {
+				"target": "swimming_pool_hallway_11",
+				"position": [
+					850,
+					950
+				]
+			},
+			"right": {
+				"target": "swimming_pool_room_12",
+				"position": [
+					1283,
+					433
+				],
+				"move_effect": "enter",
+				"locked": true,
+				"open_flag": "opened_swimming_pool_room_11"
+			}
+		},
+		"interactions": {
+			"hole": {
+				"click_rect": [
+					0,
+					538,
+					724,
+					514
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "거대한 터널이다."
+					}
+				]
+			},
+			"swimming_pool_room_11_door": {
+				"click_rect": [
+					1390,
+					270,
+					300,
+					560
+				],
+				"hide_if_flag": "opened_swimming_pool_room_12",
+				"events": [
+					{
+						"type": "text",
+						"text": "문이 닫혀있다. 문을 열을까?"
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "right",
+										"required_item": "swimming_room_key_a",
+										"master_key": "master_key",
+										"consume_required_key": true,
+										"consume_master_key": true,
+										"success_effect": "fade",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "자물쇠로 잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "swimming_pool_02",
+			"event_table": "swimming_pool",
+			"chance": 0
 		}
 	}
 }

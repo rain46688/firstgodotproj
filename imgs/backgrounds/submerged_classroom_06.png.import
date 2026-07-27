@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c4sdhuroegv7f"
-path="res://.godot/imported/swimming_pool_document_01.png-9fd4dc25d205613c5c99456536dc833c.ctex"
+uid="uid://bypngb5uo21sa"
+path="res://.godot/imported/submerged_classroom_06.png-79f48102577e1c1747975f24575f7cc6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/documents/swimming_pool_document_01.png"
-dest_files=["res://.godot/imported/swimming_pool_document_01.png-9fd4dc25d205613c5c99456536dc833c.ctex"]
+source_file="res://imgs/backgrounds/submerged_classroom_06.png"
+dest_files=["res://.godot/imported/submerged_classroom_06.png-79f48102577e1c1747975f24575f7cc6.ctex"]
 
 [params]
 

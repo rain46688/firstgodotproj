@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c4sdhuroegv7f"
-path="res://.godot/imported/swimming_pool_document_01.png-9fd4dc25d205613c5c99456536dc833c.ctex"
+uid="uid://cxsy7vcmbhqcb"
+path="res://.godot/imported/swimming_room_key180x180.png-64e48c04e3ceb32f79c4bc07414abe91.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/documents/swimming_pool_document_01.png"
-dest_files=["res://.godot/imported/swimming_pool_document_01.png-9fd4dc25d205613c5c99456536dc833c.ctex"]
+source_file="res://imgs/items/swimming_room_key180x180.png"
+dest_files=["res://.godot/imported/swimming_room_key180x180.png-64e48c04e3ceb32f79c4bc07414abe91.ctex"]
 
 [params]
 
