@@ -358,7 +358,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "클레어: 당신은 우리 공많갤의 보배인데쑤."
+				"text": "클레어: 당신은 우리 공많갤의 보배에요!"
 			},
 			{
 				"type": "story_dialogue",
@@ -5477,7 +5477,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "당신은 누구세요? 그리고... 저를 아시나요?"
+				"text": "누구세요? 그리고... 저를 아시나요?"
 			},
 			{
 				"type": "story_dialogue",
@@ -5943,7 +5943,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "그것보다, 당신은 어떻게 저를 아세요?"
+				"text": "그것보다, 저를 아세요?"
 			},
 			{
 				"type": "story_dialogue",
@@ -5971,7 +5971,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그런데 당신은 그걸 모른다."
+				"text": "그런데 그녀는 그걸 모른다."
 			},
 			{
 				"type": "story_dialogue",
@@ -9560,6 +9560,135 @@
 			},
 			{
 				"type": "game_over"
+			}
+		]
+	},
+	"false_answer_swimming_pool_stadium_02": {
+		"start_flag": "story_false_answer_swimming_pool_stadium_02_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm15.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/events/swimming_pool_stadium_01.png"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "???",
+				"text": "오답이다."
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/events/swimming_pool_stadium_02.png"
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/laugh_01.mp3",
+				"volume_db": 10,
+				"wait": true
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/jump_scare.mp3",
+				"volume_db": 15,
+				"wait": false
+			},
+			{
+				"type": "camera_zoom",
+				"x": 760,
+				"y": 340,
+				"zoom": 2.0,
+				"duration": 0.1,
+				"wait": false
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "wait",
+				"time": 2.5
+			},
+			{
+				"type": "game_over"
+			}
+		]
+	},
+	"true_answer_swimming_pool_stadium_02": {
+		"start_flag": "story_true_answer_swimming_pool_stadium_02_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm15.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/events/swimming_pool_stadium_01.png"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "???",
+				"text": "정답이다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/unlockeddoor.mp3",
+				"volume_db": 10,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "어디선가 문이 열리는 소리가 났다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "show_game_ui"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "flag",
+				"flag": "opened_swimming_pool_hallway_21"
+			},
+			{
+				"type": "flag",
+				"flag": "story_true_answer_swimming_pool_stadium_02_done"
 			}
 		]
 	}

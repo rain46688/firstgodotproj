@@ -109,7 +109,7 @@
 								"events": [
 									{
 										"type": "text",
-										"text": "뭐 딱히 없다."
+										"text": "특별한 건 없다."
 									},
 									{
 										"type": "flag",
@@ -9818,11 +9818,34 @@
 					200,
 					138
 				],
-				"required_flag": "story_first_enter_broadcasting_room_01_done",
+				"required_flag_missing": "grail_filled_unknown_hall_03_done",
 				"events": [
 					{
 						"type": "text",
 						"text": "잡동사니를 넣을 수 있는 박스다."
+					},
+					{
+						"type": "text",
+						"text": "특별한 건 없다."
+					}
+				]
+			},
+			"box_02": {
+				"click_rect": [
+					1066,
+					577,
+					200,
+					138
+				],
+				"required_flag": "grail_filled_unknown_hall_03_done",
+				"events": [
+					{
+						"type": "text",
+						"text": "잡동사니를 넣을 수 있는 박스다."
+					},
+					{
+						"type": "open_storage",
+						"storage_id": "broadcasting_room_01_box_01"
 					}
 				]
 			}
@@ -11836,7 +11859,7 @@
 		"background_by_flags": [
 			{
 				"flags": [
-					"filled_unknown_grail_02"
+					"grail_filled_unknown_hall_03_done"
 				],
 				"path": "res://imgs/backgrounds/unknown_grail_02.png"
 			}
@@ -11972,7 +11995,7 @@
 		"background_by_flags": [
 			{
 				"flags": [
-					"filled_unknown_grail_03"
+					"grail_filled_unknown_hall_04_done"
 				],
 				"path": "res://imgs/backgrounds/unknown_grail_02.png"
 			}
@@ -12042,7 +12065,7 @@
 		"background_by_flags": [
 			{
 				"flags": [
-					"filled_unknown_grail_04"
+					"grail_filled_unknown_hall_05_done"
 				],
 				"path": "res://imgs/backgrounds/unknown_grail_02.png"
 			}
@@ -13390,7 +13413,7 @@
 		}
 	},
 	"classroom_35": {
-		"background": "res://imgs/backgrounds/submerged_classroom_06.png",
+		"background": "res://imgs/backgrounds/submerged_classroom_07.png",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -13503,7 +13526,7 @@
 		}
 	},
 	"classroom_35_02": {
-		"background": "res://imgs/backgrounds/submerged_classroom_black_board_01.png",
+		"background": "res://imgs/backgrounds/submerged_classroom_black_board_05.png",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -13534,7 +13557,166 @@
 				]
 			}
 		},
-		"interactions": {}
+		"interactions": {
+			"book": {
+				"click_rect": [
+					803,
+					511,
+					263,
+					67
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "책이 펼쳐져 있다."
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/paper.mp3",
+						"volume_db": 10,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "특정 문구에 밑줄이 쳐져 있다."
+					},
+					{
+						"type": "text",
+						"text": "모든 것을 바라보는 달이여."
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/paper.mp3",
+						"volume_db": 10,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "다른 페이지는 전부 비어있다."
+					}
+				]
+			},
+			"locker": {
+				"click_rect": [
+					244,
+					573,
+					1417,
+					257
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "교탁과 사물함이 붙어있어 기묘한 위화감을 자아낸다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "첫 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "세 번째 사물함을 연다",
+								"flag": "opened_swimming_pool_hallway_21",
+								"already_events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "무언가 있다."
+									},
+									{
+										"type": "document_dialogue",
+										"path": "res://imgs/documents/document_01.png",
+										"start_page": 1,
+										"sound": "res://sounds/paper.mp3",
+										"sound_volume_db": 10,
+										"document_events": [
+											{
+												"type": "text",
+												"text": "수영부 개인 25M 평균 기록"
+											},
+											{
+												"type": "text",
+												"text": "이름 : A 시간 : 14초"
+											},
+											{
+												"type": "text",
+												"text": "이름 : B 시간 : 18초"
+											},
+											{
+												"type": "text",
+												"text": "이름 : C 시간 : 13초"
+											},
+											{
+												"type": "text",
+												"text": "이름 : D 시간 : 22초"
+											},
+											{
+												"type": "text",
+												"text": "이름 : E 시간 : 16초"
+											},
+											{
+												"type": "text",
+												"text": "이름 : F 시간 : 17초"
+											}
+										]
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/paper.mp3",
+										"volume_db": 10,
+										"wait": false
+									}
+								]
+							},
+							{
+								"text": "열 번째 사물함을 연다",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
 	},
 	"school_hallway_36": {
 		"background": "res://imgs/backgrounds/submerged_school_hallway_04.png",
@@ -13882,8 +14064,9 @@
 								]
 							},
 							{
-								"text": "네 번째 사물함을 연다",
-								"events": [
+								"text": "두 번째 사물함을 연다",
+								"flag": "got_chocolate_bar_a_classroom_36_02",
+								"already_events": [
 									{
 										"type": "sound",
 										"path": "res://sounds/locker_open.mp3",
@@ -13894,10 +14077,31 @@
 										"type": "text",
 										"text": "비어 있다."
 									}
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "무언가 있다."
+									},
+									{
+										"type": "item",
+										"item": "chocolate_bar_a",
+										"count": 3
+									},
+									{
+										"type": "flag",
+										"flag": "got_chocolate_bar_a_classroom_36_02"
+									}
 								]
 							},
 							{
-								"text": "열 번째 사물함을 연다",
+								"text": "일곱 번째 사물함을 연다",
 								"events": [
 									{
 										"type": "sound",
@@ -14724,7 +14928,8 @@
 				"required_flag_missing": [
 					"got_craw_classroom_39_02",
 					"got_craw_classroom_33_02",
-					"opened_swimming_pool_hallway_01"
+					"opened_swimming_pool_hallway_01",
+					"healed_crow_classroom_39_02"
 				],
 				"events": [
 					{
@@ -14746,7 +14951,7 @@
 					},
 					{
 						"type": "text",
-						"text": "죽어가고 있는 까마귀의 시체이다, 어떻게 할까?"
+						"text": "죽어가고 있는 까마귀다 어떻게 할까?"
 					},
 					{
 						"type": "choices",
@@ -14782,6 +14987,27 @@
 									{
 										"type": "flag",
 										"flag": "got_craw_classroom_39_02"
+									}
+								]
+							},
+							{
+								"text": "도와준다.",
+								"events": [
+									{
+										"type": "text",
+										"text": "까악. 까악."
+									},
+									{
+										"type": "text",
+										"text": "몸의 물기를 옷으로 닦아주었다."
+									},
+									{
+										"type": "text",
+										"text": "까마귀를 안아서 체온을 나눠주었다."
+									},
+									{
+										"type": "flag",
+										"flag": "healed_crow_classroom_39_02"
 									}
 								]
 							},
@@ -14840,11 +15066,13 @@
 					148
 				],
 				"required_flag": [
-					"opened_swimming_pool_hallway_01"
+					"opened_swimming_pool_hallway_01",
+					"healed_crow_classroom_39_02"
 				],
 				"required_flag_missing": [
 					"got_craw_classroom_39_02",
-					"got_unknown_coin_classroom_39_02"
+					"got_unknown_coin_classroom_39_02",
+					"story_first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_02_done"
 				],
 				"events": [
 					{
@@ -14854,7 +15082,7 @@
 					{
 						"type": "item",
 						"item": "unknown_coin",
-						"count": 10
+						"count": 30
 					},
 					{
 						"type": "flag",
@@ -16242,7 +16470,7 @@
 											},
 											{
 												"type": "sound",
-												"path": "res://sounds/locker_open.mp3",
+												"path": "res://sounds/unlockeddoor.mp3",
 												"volume_db": 10,
 												"wait": false
 											},
@@ -16252,12 +16480,6 @@
 											}
 										],
 										"fail_events": [
-											{
-												"type": "sound",
-												"path": "res://sounds/save_ui_close.mp3",
-												"volume_db": -5,
-												"wait": false
-											},
 											{
 												"type": "flag",
 												"flag": "select_wrong_swimming_pool_room_03"
@@ -20322,6 +20544,7 @@
 	},
 	"swimming_pool_stadium_01": {
 		"background": "res://imgs/backgrounds/swimming_pool_stadium_01.png",
+		"display_name": "수영장 2층 · 수영 경기장",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -20400,27 +20623,27 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "1 번 레인 \n이름 : A 성별 : 남자 키 : 178cm 나이 : 18세"
+						"text": "1 번 레인 \n이름 : A 성별 : 남 \n키 : 178cm 나이 : 18세"
 					},
 					{
 						"type": "text",
-						"text": "2 번 레인 \n이름 : B 성별 : 여자 키 : 165cm 나이 : 17세"
+						"text": "2 번 레인 \n이름 : B 성별 : 여 \n키 : 165cm 나이 : 17세"
 					},
 					{
 						"type": "text",
-						"text": "3 번 레인 \n이름 : C 성별 : 남자 키 : 182cm 나이 : 18세"
+						"text": "3 번 레인 \n이름 : C 성별 : 남 \n키 : 182cm 나이 : 18세"
 					},
 					{
 						"type": "text",
-						"text": "4 번 레인 \n이름 : D 성별 : 남자 키 : 185cm 나이 : 17세"
+						"text": "4 번 레인 \n이름 : D 성별 : 남 \n키 : 185cm 나이 : 17세"
 					},
 					{
 						"type": "text",
-						"text": "5 번 레인 \n이름 : E 성별 : 여자 키 : 162cm 나이 : 16세"
+						"text": "5 번 레인 \n이름 : E 성별 : 여 \n키 : 162cm 나이 : 16세"
 					},
 					{
 						"type": "text",
-						"text": "6 번 레인 \n이름 : F 성별 : 여자 키 : 170cm 나이 : 17세"
+						"text": "6 번 레인 \n이름 : F 성별 : 여 \n키 : 170cm 나이 : 17세"
 					}
 				]
 			}
@@ -20452,6 +20675,22 @@
 			"volume_db": 0.0,
 			"loop": true
 		},
+		"enter_stories": [
+			{
+				"event": "false_answer_swimming_pool_stadium_02",
+				"required_flag": "select_wrong_swimming_pool_stadium_02",
+				"required_flag_missing": [
+					"story_false_answer_swimming_pool_stadium_02_done"
+				]
+			},
+			{
+				"event": "true_answer_swimming_pool_stadium_02",
+				"required_flag": "opened_swimming_pool_hallway_21",
+				"required_flag_missing": [
+					"story_true_answer_swimming_pool_stadium_02_done"
+				]
+			}
+		],
 		"exits": {
 			"down": {
 				"target": "swimming_pool_stadium_01",
@@ -20493,32 +20732,11 @@
 										"answer": "DFEBCA",
 										"success_events": [
 											{
-												"type": "text",
-												"name": "???",
-												"text": "정답이다."
-											},
-											{
 												"type": "flag",
 												"flag": "opened_swimming_pool_hallway_21"
-											},
-											{
-												"type": "sound",
-												"path": "res://sounds/locker_open.mp3",
-												"volume_db": 10,
-												"wait": false
-											},
-											{
-												"type": "text",
-												"text": "어디선가 문이 열리는 소리가 났다."
 											}
 										],
 										"fail_events": [
-											{
-												"type": "sound",
-												"path": "res://sounds/save_ui_close.mp3",
-												"volume_db": -5,
-												"wait": false
-											},
 											{
 												"type": "flag",
 												"flag": "select_wrong_swimming_pool_stadium_02"
@@ -20546,22 +20764,22 @@
 				"events": [
 					{
 						"type": "text",
-						"name": "???",
+						"name": "관객1",
 						"text": "수영장의 길이는 50M야."
 					},
 					{
 						"type": "text",
-						"name": "???",
+						"name": "관객1",
 						"text": "중앙선은 25M 지점에 있고."
 					},
 					{
 						"type": "text",
-						"name": "???",
+						"name": "관객1",
 						"text": "첫 번째 깃발은 20M 지점에 있어."
 					},
 					{
 						"type": "text",
-						"name": "???",
+						"name": "관객1",
 						"text": "A ~ F 선수들은 모두 동시에 출발했어."
 					}
 				]
@@ -20577,7 +20795,7 @@
 				"events": [
 					{
 						"type": "text",
-						"name": "???",
+						"name": "관객2",
 						"text": "6번 레인이 가장 먼저 몸을 돌렸어. 첫 번째 깃발 아래에서 돌아서 출발대로 되돌아왔지."
 					}
 				]
@@ -20593,7 +20811,7 @@
 				"events": [
 					{
 						"type": "text",
-						"name": "???",
+						"name": "관객3",
 						"text": "4번 레인은 중앙선에 도착하자마자 물 밖으로 나왔어. 그 아이는 한 번도 몸을 돌리지 않았지."
 					}
 				]
@@ -20609,7 +20827,7 @@
 				"events": [
 					{
 						"type": "text",
-						"name": "???",
+						"name": "관객4",
 						"text": "5번 레인은 중앙선에서 몸을 돌려 출발대로 돌아왔어. 6번 레인보다는 늦었지만, 반대편 벽에서 멈춘 아이보다는 빨랐지."
 					}
 				]
@@ -20625,17 +20843,17 @@
 				"events": [
 					{
 						"type": "text",
-						"name": "???",
+						"name": "관객5",
 						"text": "B와 C는 둘 다 반대편 벽을 짚었어."
 					},
 					{
 						"type": "text",
-						"name": "???",
+						"name": "관객6",
 						"text": "맞아맞아. C가 먼저 벽을 짚었지만, 물 밖으로 먼저 나온 건 B였지."
 					},
 					{
 						"type": "text",
-						"name": "???",
+						"name": "관객5",
 						"text": "B는 벽에서 멈췄고, C는 중앙선까지 되돌아왔어."
 					}
 				]
@@ -20651,7 +20869,7 @@
 				"events": [
 					{
 						"type": "text",
-						"name": "???",
+						"name": "관객7",
 						"text": "1번 레인은 반대편 벽을 찍고 출발한 자리까지 되돌아왔어. 가장 빠른 선수였지만, 마지막까지 물속에 남아 있었지."
 					}
 				]

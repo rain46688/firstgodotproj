@@ -1827,6 +1827,86 @@
 				"warning_text": "작은 유령은 혼자 놀다가 넘어졌다.",
 				"fire_mode": "parallel",
 				"projectiles": []
+			},
+			{
+				"id": "basic_attack_04",
+				"weight": 50,
+				"priority": 1,
+				"warning_text": "작은 유령은 도망갈 준비를 하고 있다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"turn_condition": {
+					"mode": "exact",
+					"turn": 4
+				},
+				"projectiles": [
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.8,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 1.0,
+						"danger_type": "parry_only"
+					}
+				]
 			}
 		],
 		"hitbox_base_size": [
@@ -5248,6 +5328,80 @@
 						"sound_volume_db": 0.0
 					}
 				]
+			},
+			{
+				"id": "basic_attack_04",
+				"weight": 45,
+				"priority": 1,
+				"warning_text": "인간 개구리는 도망갈 준비를 하고 있다",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"turn_condition": {
+					"mode": "exact",
+					"turn": 9
+				},
+				"projectiles": [
+					{
+						"projectile": "impact_basic",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 20,
+						"delay": 0.0
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.1
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.2
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.3
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.4
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.5
+					}
+				]
 			}
 		],
 		"hitbox_base_size": [
@@ -5591,8 +5745,7 @@
 								],
 								"rotation": 180,
 								"damage": 5,
-								"delay": 0.4,
-								"danger_type": "parry_only"
+								"delay": 0.4
 							},
 							{
 								"projectile": "fear_slash",
@@ -5613,8 +5766,7 @@
 								],
 								"rotation": 180,
 								"damage": 5,
-								"delay": 0.8,
-								"danger_type": "parry_only"
+								"delay": 0.8
 							},
 							{
 								"projectile": "fear_slash",
@@ -5707,8 +5859,7 @@
 								],
 								"rotation": 180,
 								"damage": 5,
-								"delay": 0.6,
-								"danger_type": "parry_only"
+								"delay": 0.6
 							},
 							{
 								"projectile": "fear_slash",
@@ -5718,8 +5869,7 @@
 								],
 								"rotation": 180,
 								"damage": 10,
-								"delay": 0.8,
-								"danger_type": "parry_only"
+								"delay": 0.8
 							}
 						]
 					}
@@ -5768,8 +5918,7 @@
 								],
 								"rotation": 180,
 								"damage": 5,
-								"delay": 0.0,
-								"danger_type": "parry_only"
+								"delay": 0.0
 							},
 							{
 								"projectile": "fear_slash",
@@ -5779,8 +5928,7 @@
 								],
 								"rotation": 180,
 								"damage": 5,
-								"delay": 0.2,
-								"danger_type": "parry_only"
+								"delay": 0.2
 							},
 							{
 								"projectile": "fear_slash",
@@ -5790,8 +5938,7 @@
 								],
 								"rotation": 180,
 								"damage": 5,
-								"delay": 0.4,
-								"danger_type": "parry_only"
+								"delay": 0.4
 							},
 							{
 								"projectile": "fear_slash",
@@ -5801,8 +5948,7 @@
 								],
 								"rotation": 180,
 								"damage": 5,
-								"delay": 0.6,
-								"danger_type": "parry_only"
+								"delay": 0.6
 							},
 							{
 								"projectile": "fear_slash",
@@ -5812,8 +5958,7 @@
 								],
 								"rotation": 180,
 								"damage": 10,
-								"delay": 0.8,
-								"danger_type": "parry_only"
+								"delay": 0.8
 							}
 						]
 					}
@@ -6405,7 +6550,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 2,
+						"damage": 3,
 						"delay": 0.2,
 						"danger_type": "parry_only"
 					},
@@ -6416,7 +6561,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 2,
+						"damage": 3,
 						"delay": 0.4,
 						"danger_type": "parry_only"
 					},
@@ -6427,7 +6572,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 2,
+						"damage": 3,
 						"delay": 0.6,
 						"danger_type": "parry_only"
 					},
@@ -6438,7 +6583,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 2,
+						"damage": 3,
 						"delay": 0.8,
 						"danger_type": "parry_only"
 					},
@@ -6480,7 +6625,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 2,
+						"damage": 3,
 						"delay": 0.2,
 						"danger_type": "parry_only"
 					},
@@ -6491,7 +6636,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 2,
+						"damage": 3,
 						"delay": 0.4,
 						"danger_type": "parry_only"
 					},
@@ -6502,7 +6647,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 2,
+						"damage": 3,
 						"delay": 0.6,
 						"danger_type": "parry_only"
 					},
@@ -6513,7 +6658,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 2,
+						"damage": 3,
 						"delay": 0.8,
 						"danger_type": "parry_only"
 					}
@@ -6525,6 +6670,86 @@
 				"warning_text": "작은 유령은 혼자 놀다가 넘어졌다.",
 				"fire_mode": "parallel",
 				"projectiles": []
+			},
+			{
+				"id": "basic_attack_04",
+				"weight": 50,
+				"priority": 1,
+				"warning_text": "작은 유령은 도망갈 준비를 하고 있다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"turn_condition": {
+					"mode": "exact",
+					"turn": 4
+				},
+				"projectiles": [
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.8,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 1.0,
+						"danger_type": "parry_only"
+					}
+				]
 			}
 		],
 		"hitbox_base_size": [

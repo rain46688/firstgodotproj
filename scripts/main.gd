@@ -93,6 +93,17 @@ var is_moving = false
 var current_room = "classroom_01"
 var current_difficulty = "normal"
 var rooms = {}
+
+# 방 이름 표시 UI
+var room_name_panel = null
+var room_name_label = null
+
+# 현재 재생 중인 방 이름 Tween
+var room_name_tween = null
+
+# 이전 연출이 늦게 끝나 새 연출을 숨기는 문제 방지용 번호
+var room_name_show_serial = 0
+
 var is_choosing = false
 var choice_index = 0
 var current_choices = []
@@ -277,6 +288,18 @@ var mouse_cursor_textures = {}
 
 # 현재 적용 중인 마우스 포인터 타입
 var current_mouse_cursor_type = ""
+
+# ============================================================
+# 방 이름 표시 연출 설정
+# ============================================================
+
+# 방 이름에 사용할 폰트
+const ROOM_NAME_FONT_PATH = "res://fonts/SB 어그로 L.ttf"
+
+# 방 이름 연출 시간
+const ROOM_NAME_FADE_IN_TIME = 0.25
+const ROOM_NAME_HOLD_TIME = 1.60
+const ROOM_NAME_FADE_OUT_TIME = 0.40
 
 # 디버그 관련 상수 변수 모음
 # false
@@ -607,10 +630,239 @@ func setup_initial_z_index():
 
 	# Fade는 최상단
 	fade.z_index = 4096
+
+# ============================================================
+# 방 이름 표시 연출
+# ============================================================
+
+# 방 데이터에서 표시할 이름 가져오기 함수
+func get_room_display_name(room):
+	if room == null:
+		return ""
+
+	if typeof(room) != TYPE_DICTIONARY:
+		return ""
+
+	var display_name = str(
+		room.get(
+			"display_name",
+			""
+		)
+	).strip_edges()
+
+	return display_name
+# 현재 방 이름 연출을 실행할 수 있는 상태인지 확인
+func can_show_room_name():
+	if not is_inside_tree():
+		return false
+
+	if room_name_panel == null:
+		return false
+
+	if room_name_label == null:
+		return false
+
+	# 스토리 진행 중에는 표시하지 않음
+	if is_story_playing:
+		return false
+
+	# 전투 중에는 표시하지 않음
+	if battle_scene != null:
+		return false
+
+	# 인벤토리나 정리 화면 위에는 표시하지 않음
+	if is_inventory_open:
+		return false
+
+	return true
+# 화면 중앙에 방 이름을 잠시 표시하는 함수
+func show_room_name(room):
+	if not can_show_room_name():
+		return false
+
+	if room == null:
+		return false
+
+	if typeof(room) != TYPE_DICTIONARY:
+		return false
+
+	var display_name = get_room_display_name(room)
+
+	# display_name이 없는 방은 표시하지 않음
+	if display_name == "":
+		return false
+
+	# JSON에서 개별적으로 비활성화할 수도 있음
+	if not bool(room.get("show_display_name", true)):
+		return false
+
+	# 이전 Tween이 남아 있다면 중단
+	if room_name_tween != null:
+		if room_name_tween.is_valid():
+			room_name_tween.kill()
+
+	room_name_show_serial += 1
+	var current_serial = room_name_show_serial
+
+	room_name_label.text = display_name
+
+	room_name_panel.visible = true
+	room_name_panel.modulate.a = 0.0
+
+	room_name_tween = create_tween()
+
+	# 나타남
+	room_name_tween.tween_property(
+		room_name_panel,
+		"modulate:a",
+		1.0,
+		ROOM_NAME_FADE_IN_TIME
+	)
+
+	# 잠시 유지
+	room_name_tween.tween_interval(
+		ROOM_NAME_HOLD_TIME
+	)
+
+	# 사라짐
+	room_name_tween.tween_property(
+		room_name_panel,
+		"modulate:a",
+		0.0,
+		ROOM_NAME_FADE_OUT_TIME
+	)
+
+	await room_name_tween.finished
+
+	# 연출 도중 다른 방 이름 표시가 시작되었다면
+	# 이전 연출이 새 패널을 숨기지 않게 한다.
+	if current_serial != room_name_show_serial:
+		return true
+
+	if room_name_panel != null:
+		if is_instance_valid(room_name_panel):
+			room_name_panel.visible = false
+
+	return true
+# 현재 방 이름 연출 즉시 종료
+func hide_room_name_immediately():
+	room_name_show_serial += 1
+
+	if room_name_tween != null:
+		if room_name_tween.is_valid():
+			room_name_tween.kill()
+
+	room_name_tween = null
+
+	if room_name_panel == null:
+		return
+
+	if not is_instance_valid(room_name_panel):
+		return
+
+	room_name_panel.modulate.a = 0.0
+	room_name_panel.visible = false
+
+# 방 이름 표시 UI 생성 함수
+func setup_room_name_ui():
+	# 중복 생성 방지
+	if room_name_panel != null:
+		if is_instance_valid(room_name_panel):
+			return
+
+	# 검은색 배경
+	room_name_panel = ColorRect.new()
+	room_name_panel.name = "RoomNamePanel"
+
+	# 화면 중앙 기준 배치
+	room_name_panel.set_anchors_preset(
+		Control.PRESET_CENTER
+	)
+
+	# 1920×1080 기준
+	room_name_panel.offset_left = -380.0
+	room_name_panel.offset_top = -160.0
+	room_name_panel.offset_right = 380.0
+	room_name_panel.offset_bottom = -50.0
+
+	# 약간 투명한 검은 배경
+	room_name_panel.color = Color(
+		0.0,
+		0.0,
+		0.0,
+		0.88
+	)
+
+	# 마우스 입력을 막지 않음
+	room_name_panel.mouse_filter = (
+		Control.MOUSE_FILTER_IGNORE
+	)
+
+	# 일반 탐색 UI보다는 위,
+	# 화면 전체 Fade보다는 아래
+	room_name_panel.z_index = 1000
+
+	# 처음에는 숨김
+	room_name_panel.visible = false
+	room_name_panel.modulate.a = 0.0
+
+	add_child(room_name_panel)
+
+	# 흰색 방 이름 라벨
+	room_name_label = Label.new()
+	room_name_label.name = "RoomNameLabel"
+
+	room_name_label.set_anchors_and_offsets_preset(
+		Control.PRESET_FULL_RECT
+	)
+
+	room_name_label.horizontal_alignment = (
+		HORIZONTAL_ALIGNMENT_CENTER
+	)
+
+	room_name_label.vertical_alignment = (
+		VERTICAL_ALIGNMENT_CENTER
+	)
+
+	room_name_label.add_theme_color_override(
+		"font_color",
+		Color.WHITE
+	)
+
+	room_name_label.add_theme_font_size_override(
+		"font_size",
+		38
+	)
+
+	# 폰트 파일이 존재할 때만 적용
+	if ResourceLoader.exists(ROOM_NAME_FONT_PATH):
+		var room_name_font = load(
+			ROOM_NAME_FONT_PATH
+		)
+
+		if room_name_font != null:
+			room_name_label.add_theme_font_override(
+				"font",
+				room_name_font
+			)
+	else:
+		push_warning(
+			"방 이름 폰트 파일 없음: "
+			+ ROOM_NAME_FONT_PATH
+		)
+
+	room_name_label.mouse_filter = (
+		Control.MOUSE_FILTER_IGNORE
+	)
+
+	room_name_panel.add_child(room_name_label)
 # 게임 시작 시 UI 보조 기능과 버튼 연결을 초기화하는 함수pp
 func setup_initial_ui_helpers():
 	setup_equipped_weapon_text_scroll()
 	setup_selected_item_description_scrolls()
+	
+	# 방 이름 표시 UI 생성
+	setup_room_name_ui()
 
 	# 스토리 연출용 단일색 화면 오버레이 생성
 	setup_story_color_overlay()
@@ -837,6 +1089,8 @@ func start_battle(enemy_id, first_turn = "", battle_context = {}):
 		print("이미 처치한 적이라 전투 스킵: " + enemy_id)
 		return
 	
+	hide_room_name_immediately()
+		
 	stop_room_idle_motion(true)
 	clear_room_ambient_overlay()
 	stop_room_ambient_sound()
@@ -3105,8 +3359,13 @@ func apply_room_change(target_room):
 	current_room = target_room
 	update_room()
 # 방 이동 후 방 진입 스토리 이벤트를 처리하는 함수
+#
+# 실제 진입 스토리가 하나라도 실행되었다면 true,
+# 실행되지 않았다면 false를 반환한다.
 func handle_room_enter_story_after_move():
-	await check_room_enter_story()
+	var ran_enter_story = await check_room_enter_story()
+
+	return bool(ran_enter_story)
 # 랜덤 인카운터 안전 이동 횟수 설정 함수
 # 기존 쿨다운보다 작은 값으로 덮어쓰지 않는다.
 func set_random_encounter_cooldown(steps):
@@ -3134,11 +3393,21 @@ func handle_random_encounter_after_move():
 
 	return false
 # 방 이동 후 이동 입력 잠금을 해제하는 함수
-func finish_room_move_input_lock():
+func finish_room_move_input_lock(
+	wait_time = 1.5
+):
 	if not is_inside_tree():
 		return
 
-	await get_tree().create_timer(1.5).timeout
+	var safe_wait_time = max(
+		float(wait_time),
+		0.0
+	)
+
+	if safe_wait_time > 0.0:
+		await get_tree().create_timer(
+			safe_wait_time
+		).timeout
 
 	if not is_inside_tree():
 		return
@@ -3162,9 +3431,25 @@ func move_to_room(target_room, use_shake, direction):
 	
 	# 실제 방 변경 및 UI 갱신
 	apply_room_change(target_room)
-	
+
 	# 방 진입 시 스토리 이벤트 확인
-	await handle_room_enter_story_after_move()
+	#
+	# 실제 스토리가 실행되었는지를 받아서,
+	# 스토리가 실행되지 않은 방에서만 이름을 표시한다.
+	var ran_enter_story = (
+		await handle_room_enter_story_after_move()
+	)
+
+	# 방 진입 스토리가 실행되지 않았을 때만
+	# 현재 방 이름을 화면 중앙에 표시한다.
+	var showed_room_name = false
+
+	if not ran_enter_story:
+		var entered_room = get_current_room_data()
+
+		showed_room_name = await show_room_name(
+			entered_room
+		)
 	
 	# 방 진입 스토리 도중 게임오버/전투/씬 전환이 발생했으면
 	# 이후 방 이동 후처리를 진행하지 않는다.
@@ -3186,8 +3471,11 @@ func move_to_room(target_room, use_shake, direction):
 		is_moving = false
 		return
 	
-	# 새 방이 보인 뒤 바로 이동하지 못하게 잠깐 대기
-	await finish_room_move_input_lock()
+	# 방 이름 연출을 이미 기다렸다면 추가 잠금은 짧게 한다.
+	if showed_room_name:
+		await finish_room_move_input_lock(0.2)
+	else:
+		await finish_room_move_input_lock(1.5)
 # 방향키 입력을 받아 exits 데이터 기준으로 방 이동하는 함수
 func try_move_to_exit(direction):
 	var room = get_current_room_data()
@@ -4788,6 +5076,8 @@ func run_story_event(event_id, auto_check_next_story = true):
 	if typeof(events) != TYPE_ARRAY:
 		push_error("스토리 이벤트 events가 Array가 아님: " + str(event_id))
 		return
+		
+	hide_room_name_immediately()
 
 	stop_room_idle_motion(true)
 	clear_room_ambient_overlay()
@@ -6699,7 +6989,7 @@ func effect(sound_effect, shake_effect, fade_effect, direction, footstep_data = 
 			fade,
 			"color:a",
 			0.0,
-			2.3
+			2.5
 		)
 	
 	await get_tree().create_timer(0.3).timeout
