@@ -9691,5 +9691,415 @@
 				"flag": "story_true_answer_swimming_pool_stadium_02_done"
 			}
 		]
+	},
+	"first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10": {
+		"start_flag": "story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done",
+		"events": [
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/water_drops.mp3",
+				"volume_db": 0,
+				"loop": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/submerged_school_hallway_01.png"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "똑."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "똑.."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "천장에서 떨어지는 물방울 소리만이 넓은 공간을 채우고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이곳은 수영장의 복도와 연결된 학교로 보였다, 어쩌면 방송실까지 갈 수 있을 거 같았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 내가 알고 있던 학교의 교실과는 전혀 달랐다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "복도와 교실에는 발목까지 물이 차있었고 젖어서 녹이 슬어있는 물건들이 곳곳에 보였다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/footsteps_water.mp3",
+				"volume_db": 0,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "내 발소리 사이사이 느껴지는 기척과 물의 파장."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이곳엔 지금 나 이외에도 다른 존재들이 존재한다는 명백한 신호이다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 둘과 연락이 닿았던 것도 한참 전이었다, 그 이후에도 다시 연결되기를 기다려봤지만 스피커에서는 잡음조차 들리지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "두 사람은 내가 살아 있다는 것을 확인했다, 나도 두 사람이 여전히 학교의 방송실에 있다는 것을 알았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그때 였다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/heartbeats.mp3",
+				"volume_db": 5,
+				"loop": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/submerged_school_hallway_06.png"
+			},
+			{
+				"type": "camera_zoom",
+				"x": 500,
+				"y": 150,
+				"zoom": 1.5,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "camera_pan",
+				"x": 800,
+				"y": 150,
+				"duration": 300.0,
+				"wait": false
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "문 너머 웅성거리는 소리가 들렸다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 곧바로 소리를 죽이고 복도 벽에 등을 기대어 귀를 기울였다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "???",
+				"text": "한 번 더 민다..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "???"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "익숙한 목소리였다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "뒤이어 여자의 목소리가 들려왔다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "???",
+				"text": "잠깐만요, 뭔가 걸린 것 같아요..."
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "normal",
+				"text": "비켜!"
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/water_drops.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "camera_reset",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "쾅!"
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "pain",
+				"text": "으윽... 좀 옆으로 가봐요."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/footsteps_water.mp3",
+				"volume_db": -3,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "저기요...?"
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"text": "깜짝이야!"
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"text": "레인씨???"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "지금 뭐하고 계시는지..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그들은 문 앞에 거대한 밀랍 덩어리에 엉켜서 넘어져 있었다."
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "embarrassed",
+				"text": "깜짝이야, 괴물인줄 알았잖아."
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "angry",
+				"text": "것보다 지켜보지 말고 도와줘라."
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "angry",
+				"text": "으윽... 뭐야 이 밀랍 덩어리들은."
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "angry",
+				"text": "이것 때문에 문이 열리다 말았었군."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "두 사람..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 두 사람을 일으켜 세웠고 우린 그제야 서로의 얼굴을 바라보았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "우린 한동안 아무 말도 할 수 없었다."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "normal",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "다친 곳은요?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "괜찮아요."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "피가 묻어 있는데요?"
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "normal",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "저 녀석 피는 아닌 것처럼 보이는데."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "그건 그것대로 무섭거든요?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "둘은 안심한 듯하다가도 다시 불안한 얼굴로 나를 바라보았다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "절말 괜찮아? 어디 물린 곳이나 이상한 상처는 없지?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "없어요, 그것보다 무슨 감염자 취급하지 말아요 좀비 영화도 아니고..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "그냥 조금 물에 젖었을 뿐이에요."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "조금? 거의 물에 절여진 것 같은데."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "그건 님들도 똑같거든요."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "joy",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "그야 사방이 물 천지니깐 어쩔 수 없죠."
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "joy",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "그렇긴해."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "우린 서로의 모습을 보면서 웃었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "말대꾸하는 걸 보니 멀쩡하긴 하군."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "아이작 씨는 내 어깨를 손바닥으로 세게 두드렸다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "아악! 아파요!"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "확실히 살아 있네."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "확인 방법이 너무 거친 거 아닙니까???"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "멀쩡한지 봐준 거다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그제야 긴장이 조금 풀렸다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 나도 모르게 웃음을 흘렸다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이 공간에 떨어진 뒤 처음으로 제대로 숨을 쉬는 것 같았다."
+			},
+			{
+				"type": "show_game_ui"
+			},
+			{
+				"type": "camera_reset",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done"
+			}
+		]
 	}
 }

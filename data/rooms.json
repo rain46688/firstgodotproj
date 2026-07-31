@@ -504,7 +504,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -519,7 +519,7 @@
 								]
 							},
 							{
-								"text": "여섯 번째 사물함을 연다",
+								"text": "여섯 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -534,7 +534,7 @@
 								]
 							},
 							{
-								"text": "열 번째 사물함을 연다",
+								"text": "열 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -838,7 +838,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -853,7 +853,7 @@
 								]
 							},
 							{
-								"text": "세 번째 사물함을 연다",
+								"text": "세 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -868,7 +868,7 @@
 								]
 							},
 							{
-								"text": "여덟 번째 사물함을 연다",
+								"text": "여덟 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -1223,7 +1223,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -1238,7 +1238,7 @@
 								]
 							},
 							{
-								"text": "세 번째 사물함을 연다",
+								"text": "세 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -1253,7 +1253,7 @@
 								]
 							},
 							{
-								"text": "여덟 번째 사물함을 연다",
+								"text": "여덟 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -1559,7 +1559,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -1574,7 +1574,7 @@
 								]
 							},
 							{
-								"text": "두 번째 사물함을 연다",
+								"text": "두 번째 사물함을 연다.",
 								"flag": "got_beverage_a_classroom_04_02",
 								"already_events": [
 									{
@@ -1611,7 +1611,7 @@
 								]
 							},
 							{
-								"text": "여덟 번째 사물함을 연다",
+								"text": "여덟 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -1633,6 +1633,7 @@
 	},
 	"school_stairs_hall_01": {
 		"background": "res://imgs/backgrounds/school_stairs_hall_01.png",
+		"display_name": "학교 1층 · 중앙홀",
 		"background_by_flags": [
 			{
 				"flags": [
@@ -2065,7 +2066,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -2080,7 +2081,7 @@
 								]
 							},
 							{
-								"text": "두 번째 사물함을 연다",
+								"text": "두 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -2095,7 +2096,7 @@
 								]
 							},
 							{
-								"text": "여덟 번째 사물함을 연다",
+								"text": "여덟 번째 사물함을 연다.",
 								"flag": "got_classroom_key_b_classroom_05_02",
 								"already_events": [
 									{
@@ -2331,7 +2332,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -2346,7 +2347,7 @@
 								]
 							},
 							{
-								"text": "두 번째 사물함을 연다",
+								"text": "두 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -2361,7 +2362,7 @@
 								]
 							},
 							{
-								"text": "여덟 번째 사물함을 연다",
+								"text": "여덟 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -2654,7 +2655,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -2669,7 +2670,21 @@
 								]
 							},
 							{
-								"text": "두 번째 사물함을 연다",
+								"text": "두 번째 사물함을 연다.",
+								"flag": "got_schoolhall_key_b_classroom_07_02",
+								"required_flag_missing": "story_first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_02_done",
+								"already_events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								],
 								"events": [
 									{
 										"type": "sound",
@@ -2693,7 +2708,23 @@
 								]
 							},
 							{
-								"text": "여덟 번째 사물함을 연다",
+								"text": "세 번째 사물함을 연다.",
+								"required_flag": "story_first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_02_done",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "여덟 번째 사물함을 연다.",
 								"flag": "got_beverage_a_classroom_07_02",
 								"already_events": [
 									{
@@ -3558,7 +3589,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "두 번째 사물함을 연다",
+								"text": "두 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -3573,7 +3604,7 @@
 								]
 							},
 							{
-								"text": "다섯 번째 사물함을 연다",
+								"text": "다섯 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -3588,7 +3619,7 @@
 								]
 							},
 							{
-								"text": "아홉 번째 사물함을 연다",
+								"text": "아홉 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -3880,7 +3911,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -3895,7 +3926,7 @@
 								]
 							},
 							{
-								"text": "두 번째 사물함을 연다",
+								"text": "두 번째 사물함을 연다.",
 								"flag": "got_classroom_key_a_classroom_10_02",
 								"already_events": [
 									{
@@ -3931,7 +3962,7 @@
 								]
 							},
 							{
-								"text": "여덟 번째 사물함을 연다",
+								"text": "여덟 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -4149,7 +4180,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -4164,7 +4195,7 @@
 								]
 							},
 							{
-								"text": "두 번째 사물함을 연다",
+								"text": "두 번째 사물함을 연다.",
 								"flag": "got_beverage_a_classroom_11_02",
 								"already_events": [
 									{
@@ -4201,7 +4232,7 @@
 								]
 							},
 							{
-								"text": "여덟 번째 사물함을 연다",
+								"text": "여덟 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -4279,6 +4310,7 @@
 	},
 	"classroom_12": {
 		"background": "res://imgs/backgrounds/classroom_05.png",
+		"display_name": "학교 2층 · 달이 보이는 방",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -6453,6 +6485,7 @@
 	},
 	"school_stairs_hall_02": {
 		"background": "res://imgs/backgrounds/school_stairs_hall_01.png",
+		"display_name": "학교 2층 · 중앙홀",
 		"background_by_flags": [
 			{
 				"flags": [
@@ -6880,7 +6913,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -6895,7 +6928,7 @@
 								]
 							},
 							{
-								"text": "두 번째 사물함을 연다",
+								"text": "두 번째 사물함을 연다.",
 								"flag": "got_beverage_a_classroom_15_02",
 								"already_events": [
 									{
@@ -6932,7 +6965,7 @@
 								]
 							},
 							{
-								"text": "여덟 번째 사물함을 연다",
+								"text": "여덟 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -7147,7 +7180,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -7162,7 +7195,7 @@
 								]
 							},
 							{
-								"text": "두 번째 사물함을 연다",
+								"text": "두 번째 사물함을 연다.",
 								"flag": "got_tranquilizer_a_classroom_16_02",
 								"already_events": [
 									{
@@ -7199,7 +7232,7 @@
 								]
 							},
 							{
-								"text": "여덟 번째 사물함을 연다",
+								"text": "여덟 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -8043,7 +8076,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "세 번째 사물함을 연다",
+								"text": "세 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -8058,7 +8091,7 @@
 								]
 							},
 							{
-								"text": "네 번째 사물함을 연다",
+								"text": "네 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -8073,7 +8106,7 @@
 								]
 							},
 							{
-								"text": "여섯 번째 사물함을 연다",
+								"text": "여섯 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -8281,7 +8314,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -8296,7 +8329,7 @@
 								]
 							},
 							{
-								"text": "다섯 번째 사물함을 연다",
+								"text": "다섯 번째 사물함을 연다.",
 								"flag": "got_tranquilizer_a_classroom_20_02",
 								"already_events": [
 									{
@@ -8333,7 +8366,7 @@
 								]
 							},
 							{
-								"text": "여덟 번째 사물함을 연다",
+								"text": "여덟 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -8544,7 +8577,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다.",
 								"flag": "got_beverage_a_classroom_21_02",
 								"already_events": [
 									{
@@ -8581,7 +8614,7 @@
 								]
 							},
 							{
-								"text": "네 번째 사물함을 연다",
+								"text": "네 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -8596,7 +8629,7 @@
 								]
 							},
 							{
-								"text": "여덟 번째 사물함을 연다",
+								"text": "여덟 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -8811,7 +8844,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "두 번째 사물함을 연다",
+								"text": "두 번째 사물함을 연다.",
 								"flag": "got_classroom_key_c_classroom_22_02",
 								"already_events": [
 									{
@@ -8848,7 +8881,7 @@
 								]
 							},
 							{
-								"text": "여덟 번째 사물함을 연다",
+								"text": "여덟 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -8863,7 +8896,7 @@
 								]
 							},
 							{
-								"text": "열 번째 사물함을 연다",
+								"text": "열 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -9078,7 +9111,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "두 번째 사물함을 연다",
+								"text": "두 번째 사물함을 연다.",
 								"flag": "got_tranquilizer_a_classroom_23_02",
 								"already_events": [
 									{
@@ -9115,7 +9148,7 @@
 								]
 							},
 							{
-								"text": "여덟 번째 사물함을 연다",
+								"text": "여덟 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -9130,7 +9163,7 @@
 								]
 							},
 							{
-								"text": "열 번째 사물함을 연다",
+								"text": "열 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -9408,7 +9441,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "두 번째 사물함을 연다",
+								"text": "두 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -9423,7 +9456,7 @@
 								]
 							},
 							{
-								"text": "여덟 번째 사물함을 연다",
+								"text": "여덟 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -9438,7 +9471,7 @@
 								]
 							},
 							{
-								"text": "열 번째 사물함을 연다",
+								"text": "열 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -9460,6 +9493,7 @@
 	},
 	"school_stairs_hall_03": {
 		"background": "res://imgs/backgrounds/school_stairs_hall_01.png",
+		"display_name": "학교 3층 · 중앙홀",
 		"background_by_flags": [
 			{
 				"flags": [
@@ -9705,6 +9739,7 @@
 	},
 	"broadcasting_room_01": {
 		"background": "res://imgs/backgrounds/broadcasting_room_01.png",
+		"display_name": "학교 3층 · 방송실",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -10159,6 +10194,7 @@
 	},
 	"albus_room_01": {
 		"background": "res://imgs/backgrounds/albus_room_01.png",
+		"display_name": "학교 3층 · 알버스의 방",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -10784,7 +10820,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "두 번째 사물함을 연다",
+								"text": "두 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -10799,7 +10835,7 @@
 								]
 							},
 							{
-								"text": "다섯 번째 사물함을 연다",
+								"text": "다섯 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -10814,7 +10850,7 @@
 								]
 							},
 							{
-								"text": "일곱 번째 사물함을 연다",
+								"text": "일곱 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -11030,7 +11066,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "두 번째 사물함을 연다",
+								"text": "두 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -11045,7 +11081,7 @@
 								]
 							},
 							{
-								"text": "다섯 번째 사물함을 연다",
+								"text": "다섯 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -11060,7 +11096,7 @@
 								]
 							},
 							{
-								"text": "일곱 번째 사물함을 연다",
+								"text": "일곱 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -11305,11 +11341,6 @@
 				],
 				"move_effect": "enter"
 			}
-		},
-		"random_encounter": {
-			"enemy_table": "school_hallway_03",
-			"event_table": "school_hallway",
-			"chance": 30
 		}
 	},
 	"classroom_29": {
@@ -11504,7 +11535,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -11519,7 +11550,7 @@
 								]
 							},
 							{
-								"text": "다섯 번째 사물함을 연다",
+								"text": "다섯 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -11534,7 +11565,7 @@
 								]
 							},
 							{
-								"text": "열 번째 사물함을 연다",
+								"text": "열 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -11620,6 +11651,7 @@
 	},
 	"unknown_hall_01": {
 		"background": "res://imgs/backgrounds/unknown_hall_01.png",
+		"display_name": "??? · 거대한 문 앞",
 		"background_by_flags": [
 			{
 				"flags": [
@@ -12323,7 +12355,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "세 번째 사물함을 연다",
+								"text": "세 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -12338,7 +12370,7 @@
 								]
 							},
 							{
-								"text": "다섯 번째 사물함을 연다",
+								"text": "다섯 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -12353,7 +12385,7 @@
 								]
 							},
 							{
-								"text": "일곱 번째 사물함을 연다",
+								"text": "일곱 번째 사물함을 연다.",
 								"flag": "got_beverage_a_classroom_31_02",
 								"already_events": [
 									{
@@ -12600,7 +12632,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -12615,7 +12647,7 @@
 								]
 							},
 							{
-								"text": "세 번째 사물함을 연다",
+								"text": "세 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -12630,7 +12662,7 @@
 								]
 							},
 							{
-								"text": "여덟 번째 사물함을 연다",
+								"text": "여덟 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -13168,7 +13200,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "세 번째 사물함을 연다",
+								"text": "세 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -13183,7 +13215,7 @@
 								]
 							},
 							{
-								"text": "네 번째 사물함을 연다",
+								"text": "네 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -13198,7 +13230,7 @@
 								]
 							},
 							{
-								"text": "아홉 번째 사물함을 연다",
+								"text": "아홉 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -13220,6 +13252,7 @@
 	},
 	"school_stairs_hall_04": {
 		"background": "res://imgs/backgrounds/submerged_school_stairs_hall_01.png",
+		"display_name": "학교 ???층 · 중앙홀",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -13244,7 +13277,6 @@
 			"volume_db": 0.0,
 			"loop": true
 		},
-		"enter_stories": [],
 		"footstep_sound": {
 			"path": "res://sounds/footsteps_water.mp3",
 			"volume_db": 5.0
@@ -13582,7 +13614,7 @@
 					},
 					{
 						"type": "text",
-						"text": "모든 것을 바라보는 달이여."
+						"text": "\"모든 것을 바라보는 달이여.\""
 					},
 					{
 						"type": "sound",
@@ -13612,7 +13644,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -13627,7 +13659,7 @@
 								]
 							},
 							{
-								"text": "세 번째 사물함을 연다",
+								"text": "세 번째 사물함을 연다.",
 								"flag": "opened_swimming_pool_hallway_21",
 								"already_events": [
 									{
@@ -13698,7 +13730,7 @@
 								]
 							},
 							{
-								"text": "열 번째 사물함을 연다",
+								"text": "열 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -13796,7 +13828,7 @@
 					"defeated_monitor_mimic_pride",
 					"story_fight_mimic_classroom_36_02_done"
 				],
-				"path": "res://imgs/backgrounds/submerged_classroom_01.png"
+				"path": "res://imgs/backgrounds/submerged_classroom_08.png"
 			}
 		],
 		"idle_motion": {
@@ -13900,7 +13932,7 @@
 					"defeated_monitor_mimic_pride",
 					"story_fight_mimic_classroom_36_02_done"
 				],
-				"path": "res://imgs/backgrounds/submerged_classroom_black_board_01.png"
+				"path": "res://imgs/backgrounds/submerged_classroom_black_board_06.png"
 			}
 		],
 		"idle_motion": {
@@ -13950,10 +13982,6 @@
 					1,
 					128,
 					451
-				],
-				"required_flag_missing": [
-					"defeated_monitor_mimic_pride",
-					"story_fight_mimic_classroom_36_02_done"
 				],
 				"events": [
 					{
@@ -14049,7 +14077,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다",
+								"text": "첫 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -14064,7 +14092,7 @@
 								]
 							},
 							{
-								"text": "두 번째 사물함을 연다",
+								"text": "두 번째 사물함을 연다.",
 								"flag": "got_chocolate_bar_a_classroom_36_02",
 								"already_events": [
 									{
@@ -14101,7 +14129,7 @@
 								]
 							},
 							{
-								"text": "일곱 번째 사물함을 연다",
+								"text": "일곱 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -14147,6 +14175,15 @@
 			"volume_db": 0.0,
 			"loop": true
 		},
+		"enter_stories": [
+			{
+				"event": "first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10",
+				"required_flag": "story_first_enter_swimming_pool_hallway_01_done",
+				"required_flag_missing": [
+					"story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done"
+				]
+			}
+		],
 		"footstep_sound": {
 			"path": "res://sounds/footsteps_water.mp3",
 			"volume_db": 5.0
@@ -14174,12 +14211,6 @@
 				],
 				"move_effect": "enter"
 			}
-		},
-		"interactions": {},
-		"random_encounter": {
-			"enemy_table": "school_hallway_04",
-			"event_table": "school_hallway",
-			"chance": 30
 		}
 	},
 	"classroom_37": {
@@ -14326,7 +14357,7 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "세 번째 사물함을 연다",
+								"text": "세 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -14341,7 +14372,7 @@
 								]
 							},
 							{
-								"text": "다섯 번째 사물함을 연다",
+								"text": "다섯 번째 사물함을 연다.",
 								"events": [
 									{
 										"type": "sound",
@@ -14356,7 +14387,7 @@
 								]
 							},
 							{
-								"text": "열 번째 사물함을 연다",
+								"text": "열 번째 사물함을 연다.",
 								"flag": "got_classroom_key_d_classroom_37_02",
 								"already_events": [
 									{
@@ -17586,6 +17617,7 @@
 	},
 	"swimming_pool_angel_hall_01": {
 		"background": "res://imgs/backgrounds/swimming_pool_angel_hall_01.png",
+		"display_name": "수영장 1층 · 천사 석상",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -20201,6 +20233,7 @@
 	},
 	"swimming_pool_angel_hall_02": {
 		"background": "res://imgs/backgrounds/swimming_pool_angel_hall_01.png",
+		"display_name": "수영장 2층 · 천사 석상",
 		"background_by_flags": [
 			{
 				"flags": [
@@ -20784,6 +20817,44 @@
 					}
 				]
 			},
+			"audience_02_02": {
+				"click_rect": [
+					268,
+					550,
+					114,
+					102
+				],
+				"required_flag": "story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done",
+				"required_flag_missing": "opened_swimming_pool_hallway_21",
+				"events": [
+					{
+						"type": "text",
+						"name": "관객1",
+						"text": "수영장의 길이는 50M야."
+					},
+					{
+						"type": "text",
+						"name": "관객1",
+						"text": "중앙선은 25M 지점에 있었고."
+					},
+					{
+						"type": "text",
+						"name": "관객1",
+						"text": "첫 번째 깃발은 20M 지점에 있었어."
+					},
+					{
+						"type": "text",
+						"name": "관객1",
+						"text": "A ~ F 선수들은 모두 동시에 출발했어."
+					},
+					{
+						"type": "portrait",
+						"character": "claire",
+						"emotion": "normal",
+						"text": "각 선수들이 동시에 출발했지만 같은 거리를 이동한 건 아닌 것 같아."
+					}
+				]
+			},
 			"audience_03": {
 				"click_rect": [
 					345,
@@ -20800,6 +20871,40 @@
 					}
 				]
 			},
+			"audience_03_02": {
+				"click_rect": [
+					345,
+					356,
+					120,
+					103
+				],
+				"required_flag": "story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done",
+				"required_flag_missing": "opened_swimming_pool_hallway_21",
+				"events": [
+					{
+						"type": "text",
+						"name": "관객2",
+						"text": "6번 레인이 가장 먼저 몸을 돌렸어. 깃발 아래에서 돌아서 출발대로 되돌아왔지."
+					},
+					{
+						"type": "portrait",
+						"character": "isaac",
+						"emotion": "normal",
+						"text": "6번 레인이면... 누구더라?"
+					},
+					{
+						"type": "text",
+						"name": "나",
+						"text": "선수 F에요."
+					},
+					{
+						"type": "portrait",
+						"character": "claire",
+						"emotion": "normal",
+						"text": "깃발이라면 20M 부근에서 제일 먼저 되돌아서 출발 지점으로 돌아왔다는 거네요."
+					}
+				]
+			},
 			"audience_04": {
 				"click_rect": [
 					436,
@@ -20813,6 +20918,29 @@
 						"type": "text",
 						"name": "관객3",
 						"text": "4번 레인은 중앙선에 도착하자마자 물 밖으로 나왔어. 그 아이는 한 번도 몸을 돌리지 않았지."
+					}
+				]
+			},
+			"audience_04_02": {
+				"click_rect": [
+					436,
+					477,
+					108,
+					95
+				],
+				"required_flag": "story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done",
+				"required_flag_missing": "opened_swimming_pool_hallway_21",
+				"events": [
+					{
+						"type": "text",
+						"name": "관객3",
+						"text": "4번 레인은 중앙선에 도착하자마자 물 밖으로 나왔어. 그 아이는 한 번도 몸을 돌리지 않았지."
+					},
+					{
+						"type": "portrait",
+						"character": "isaac",
+						"emotion": "normal",
+						"text": "그러면 그 선수는 그대로 수영을 마쳤다는 의미가 되나?"
 					}
 				]
 			},
@@ -20871,6 +20999,34 @@
 						"type": "text",
 						"name": "관객7",
 						"text": "1번 레인은 반대편 벽을 찍고 출발한 자리까지 되돌아왔어. 가장 빠른 선수였지만, 마지막까지 물속에 남아 있었지."
+					}
+				]
+			},
+			"audience_07_02": {
+				"click_rect": [
+					1496,
+					520,
+					152,
+					158
+				],
+				"required_flag": "story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done",
+				"required_flag_missing": "opened_swimming_pool_hallway_21",
+				"events": [
+					{
+						"type": "text",
+						"name": "관객7",
+						"text": "1번 레인은 반대편 벽을 찍고 출발한 자리까지 되돌아왔어. 가장 빠른 선수였지만, 마지막까지 물속에 남아 있었지."
+					},
+					{
+						"type": "portrait",
+						"character": "claire",
+						"emotion": "normal",
+						"text": "선수 A가 가장 늦게 수영을 마친 걸로 이해하면 되겠죠?"
+					},
+					{
+						"type": "text",
+						"name": "나",
+						"text": "네 아마 그런 거 같아요."
 					}
 				]
 			}
@@ -21044,7 +21200,7 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "의자와 테이블이다."
+						"text": "테이블 위에 모니터가 놓여있다."
 					},
 					{
 						"type": "text",
@@ -21544,6 +21700,3310 @@
 					211,
 					91,
 					415
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			}
+		}
+	},
+	"swimming_pool_hallway_14": {
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_06.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_water.mp3",
+			"volume_db": 5.0
+		},
+		"exits": {
+			"up": {
+				"target": "swimming_pool_hall_01",
+				"position": [
+					850,
+					30
+				]
+			},
+			"down": {
+				"target": "swimming_pool_hallway_13",
+				"position": [
+					850,
+					950
+				]
+			},
+			"right": {
+				"target": "swimming_pool_room_14",
+				"position": [
+					1330,
+					664
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"tunnel": {
+				"click_rect": [
+					292,
+					484,
+					557,
+					325
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "거대한 터널이다."
+					}
+				]
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "swimming_pool_02",
+			"event_table": "swimming_pool",
+			"chance": 40
+		}
+	},
+	"swimming_pool_room_14": {
+		"background": "res://imgs/backgrounds/swimming_pool_room_08.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "swimming_pool_hallway_14",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"pool": {
+				"click_rect": [
+					507,
+					633,
+					984,
+					326
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "의자와 테이블이다."
+					},
+					{
+						"type": "text",
+						"text": "편의점 앞에 있을 거 같은 물건들이 수영장 가운데 놓여있다."
+					}
+				]
+			},
+			"left_locker_01": {
+				"click_rect": [
+					77,
+					158,
+					135,
+					503
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_02": {
+				"click_rect": [
+					247,
+					185,
+					102,
+					431
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_01": {
+				"click_rect": [
+					1717,
+					178,
+					132,
+					523
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_02": {
+				"click_rect": [
+					1588,
+					211,
+					91,
+					415
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			}
+		}
+	},
+	"swimming_pool_hall_01": {
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_08.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"enter_stories": [],
+		"exits": {
+			"down": {
+				"target": "swimming_pool_hallway_14",
+				"position": [
+					850,
+					950
+				]
+			},
+			"left": {
+				"target": "swimming_pool_hallway_18",
+				"position": [
+					60,
+					540
+				]
+			},
+			"right": {
+				"target": "swimming_pool_hallway_17",
+				"position": [
+					1830,
+					540
+				]
+			}
+		},
+		"interactions": {}
+	},
+	"swimming_pool_hall_02": {
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_08.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"enter_stories": [],
+		"exits": {
+			"left": {
+				"target": "swimming_pool_hallway_15",
+				"position": [
+					60,
+					540
+				]
+			},
+			"right": {
+				"target": "swimming_pool_hallway_20",
+				"position": [
+					1830,
+					540
+				]
+			}
+		},
+		"interactions": {}
+	},
+	"swimming_pool_hallway_15": {
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_03.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"up": {
+				"target": "swimming_pool_hallway_16",
+				"position": [
+					850,
+					30
+				]
+			},
+			"down": {
+				"target": "swimming_pool_hall_02",
+				"position": [
+					850,
+					950
+				]
+			},
+			"right": {
+				"target": "swimming_pool_room_15",
+				"position": [
+					1283,
+					433
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"pool": {
+				"click_rect": [
+					0,
+					538,
+					724,
+					514
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "엄청난 양의 물이다."
+					},
+					{
+						"type": "text",
+						"text": "얼마나 깊은지 감도 안 잡힌다."
+					}
+				]
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "swimming_pool_02",
+			"event_table": "swimming_pool",
+			"chance": 40
+		}
+	},
+	"swimming_pool_room_15": {
+		"background": "res://imgs/backgrounds/swimming_pool_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "swimming_pool_hallway_06",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"pool": {
+				"click_rect": [
+					732,
+					586,
+					470,
+					388
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "거대한 수영장이다."
+					},
+					{
+						"type": "text",
+						"text": "너무 깊어서 아래가 보이지 않는다."
+					}
+				]
+			},
+			"left_locker_01": {
+				"click_rect": [
+					140,
+					343,
+					121,
+					283
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_02": {
+				"click_rect": [
+					355,
+					380,
+					92,
+					219
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_03": {
+				"click_rect": [
+					487,
+					402,
+					67,
+					165
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_04": {
+				"click_rect": [
+					577,
+					415,
+					46,
+					136
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_01": {
+				"click_rect": [
+					1648,
+					361,
+					109,
+					259
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_02": {
+				"click_rect": [
+					1465,
+					384,
+					91,
+					209
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_03": {
+				"click_rect": [
+					1368,
+					406,
+					62,
+					160
+				],
+				"required_flag_missing": "got_chocolate_bar_a_swimming_pool_room_15",
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "무언가 있다."
+							},
+							{
+								"type": "item",
+								"item": "chocolate_bar_a",
+								"count": 5
+							},
+							{
+								"type": "flag",
+								"flag": "got_chocolate_bar_a_swimming_pool_room_15"
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_03_02": {
+				"click_rect": [
+					1368,
+					406,
+					62,
+					160
+				],
+				"required_flag": "got_chocolate_bar_a_swimming_pool_room_15",
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_04": {
+				"click_rect": [
+					1296,
+					416,
+					50,
+					132
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			}
+		}
+	},
+	"swimming_pool_hallway_16": {
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"up": {
+				"target": "swimming_pool_hallway_17",
+				"position": [
+					850,
+					30
+				]
+			},
+			"down": {
+				"target": "swimming_pool_hallway_15",
+				"position": [
+					850,
+					950
+				]
+			},
+			"right": {
+				"target": "swimming_pool_room_16",
+				"position": [
+					1283,
+					433
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"pool": {
+				"click_rect": [
+					0,
+					538,
+					724,
+					514
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "엄청난 양의 물이다."
+					},
+					{
+						"type": "text",
+						"text": "얼마나 깊은지 감도 안 잡힌다."
+					}
+				]
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "swimming_pool_02",
+			"event_table": "swimming_pool",
+			"chance": 40
+		}
+	},
+	"swimming_pool_room_16": {
+		"background": "res://imgs/backgrounds/swimming_pool_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "swimming_pool_hallway_16",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"pool": {
+				"click_rect": [
+					732,
+					586,
+					470,
+					388
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "거대한 수영장이다."
+					},
+					{
+						"type": "text",
+						"text": "너무 깊어서 아래가 보이지 않는다."
+					}
+				]
+			},
+			"left_locker_01": {
+				"click_rect": [
+					140,
+					343,
+					121,
+					283
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_02": {
+				"click_rect": [
+					355,
+					380,
+					92,
+					219
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_03": {
+				"click_rect": [
+					487,
+					402,
+					67,
+					165
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_04": {
+				"click_rect": [
+					577,
+					415,
+					46,
+					136
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_01": {
+				"click_rect": [
+					1648,
+					361,
+					109,
+					259
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_02": {
+				"click_rect": [
+					1465,
+					384,
+					91,
+					209
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_03": {
+				"click_rect": [
+					1368,
+					406,
+					62,
+					160
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_04": {
+				"click_rect": [
+					1296,
+					416,
+					50,
+					132
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			}
+		}
+	},
+	"swimming_pool_hallway_17": {
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_02.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"up": {
+				"target": "swimming_pool_hall_01",
+				"position": [
+					850,
+					30
+				]
+			},
+			"down": {
+				"target": "swimming_pool_hall_16",
+				"position": [
+					850,
+					950
+				]
+			},
+			"right": {
+				"target": "swimming_pool_room_17",
+				"position": [
+					1283,
+					433
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"pool": {
+				"click_rect": [
+					0,
+					538,
+					724,
+					514
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "엄청난 양의 물이다."
+					},
+					{
+						"type": "text",
+						"text": "얼마나 깊은지 감도 안 잡힌다."
+					}
+				]
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "swimming_pool_02",
+			"event_table": "swimming_pool",
+			"chance": 40
+		}
+	},
+	"swimming_pool_room_17": {
+		"background": "res://imgs/backgrounds/swimming_pool_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "swimming_pool_hallway_17",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"pool": {
+				"click_rect": [
+					732,
+					586,
+					470,
+					388
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "거대한 수영장이다."
+					},
+					{
+						"type": "text",
+						"text": "너무 깊어서 아래가 보이지 않는다."
+					}
+				]
+			},
+			"left_locker_01": {
+				"click_rect": [
+					140,
+					343,
+					121,
+					283
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_02": {
+				"click_rect": [
+					355,
+					380,
+					92,
+					219
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_03": {
+				"click_rect": [
+					487,
+					402,
+					67,
+					165
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_04": {
+				"click_rect": [
+					577,
+					415,
+					46,
+					136
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_06.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "무언가 있다."
+							},
+							{
+								"type": "sound",
+								"path": "res://sounds/paper.mp3",
+								"volume_db": 10,
+								"wait": false
+							},
+							{
+								"type": "text",
+								"text": "\"얼굴 없는 천사의 발을 닦아라.\""
+							},
+							{
+								"type": "sound",
+								"path": "res://sounds/paper.mp3",
+								"volume_db": 10,
+								"wait": false
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_01": {
+				"click_rect": [
+					1648,
+					361,
+					109,
+					259
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_02": {
+				"click_rect": [
+					1465,
+					384,
+					91,
+					209
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_03": {
+				"click_rect": [
+					1368,
+					406,
+					62,
+					160
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_04": {
+				"click_rect": [
+					1296,
+					416,
+					50,
+					132
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			}
+		}
+	},
+	"swimming_pool_hallway_18": {
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_03.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"up": {
+				"target": "swimming_pool_hallway_19",
+				"position": [
+					850,
+					30
+				]
+			},
+			"down": {
+				"target": "swimming_pool_hall_01",
+				"position": [
+					850,
+					950
+				]
+			},
+			"right": {
+				"target": "swimming_pool_room_18",
+				"position": [
+					1283,
+					433
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"pool": {
+				"click_rect": [
+					0,
+					538,
+					724,
+					514
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "엄청난 양의 물이다."
+					},
+					{
+						"type": "text",
+						"text": "얼마나 깊은지 감도 안 잡힌다."
+					}
+				]
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "swimming_pool_02",
+			"event_table": "swimming_pool",
+			"chance": 40
+		}
+	},
+	"swimming_pool_room_18": {
+		"background": "res://imgs/backgrounds/swimming_pool_room_02.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "swimming_pool_hallway_18",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"monitor": {
+				"click_rect": [
+					860,
+					729,
+					169,
+					104
+				],
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/save_ui_open.mp3",
+						"volume_db": -5,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "컴퓨터가 물 위를 둥둥 떠다니고 있다."
+					},
+					{
+						"type": "text",
+						"text": "현재 상태를 저장하시겠습니까?"
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "예",
+								"events": [
+									{
+										"type": "save_to_slot",
+										"slot": 1,
+										"success_text": "저장 완료.",
+										"fail_text": "저장에 실패했다.",
+										"success_sound": "res://sounds/save_complete.mp3",
+										"sound_volume_db": -5
+									}
+								]
+							},
+							{
+								"text": "아니오",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/save_ui_close.mp3",
+										"volume_db": -5,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "저장을 취소했다."
+									}
+								]
+							}
+						]
+					}
+				]
+			},
+			"left_locker_01": {
+				"click_rect": [
+					140,
+					343,
+					121,
+					283
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_02": {
+				"click_rect": [
+					355,
+					380,
+					92,
+					219
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_03": {
+				"click_rect": [
+					487,
+					402,
+					67,
+					165
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_04": {
+				"click_rect": [
+					577,
+					415,
+					46,
+					136
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_01": {
+				"click_rect": [
+					1648,
+					361,
+					109,
+					259
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_02": {
+				"click_rect": [
+					1465,
+					384,
+					91,
+					209
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_03": {
+				"click_rect": [
+					1368,
+					406,
+					62,
+					160
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_04": {
+				"click_rect": [
+					1296,
+					416,
+					50,
+					132
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			}
+		}
+	},
+	"swimming_pool_hallway_19": {
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"up": {
+				"target": "swimming_pool_hallway_20",
+				"position": [
+					850,
+					30
+				]
+			},
+			"down": {
+				"target": "swimming_pool_hallway_18",
+				"position": [
+					850,
+					950
+				]
+			},
+			"right": {
+				"target": "swimming_pool_room_19",
+				"position": [
+					1283,
+					433
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"pool": {
+				"click_rect": [
+					0,
+					538,
+					724,
+					514
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "엄청난 양의 물이다."
+					},
+					{
+						"type": "text",
+						"text": "얼마나 깊은지 감도 안 잡힌다."
+					}
+				]
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "swimming_pool_02",
+			"event_table": "swimming_pool",
+			"chance": 40
+		}
+	},
+	"swimming_pool_room_19": {
+		"background": "res://imgs/backgrounds/swimming_pool_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "swimming_pool_hallway_19",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"pool": {
+				"click_rect": [
+					732,
+					586,
+					470,
+					388
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "거대한 수영장이다."
+					},
+					{
+						"type": "text",
+						"text": "너무 깊어서 아래가 보이지 않는다."
+					}
+				]
+			},
+			"left_locker_01": {
+				"click_rect": [
+					140,
+					343,
+					121,
+					283
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_02": {
+				"click_rect": [
+					355,
+					380,
+					92,
+					219
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_03": {
+				"click_rect": [
+					487,
+					402,
+					67,
+					165
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_04": {
+				"click_rect": [
+					577,
+					415,
+					46,
+					136
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_01": {
+				"click_rect": [
+					1648,
+					361,
+					109,
+					259
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_02": {
+				"click_rect": [
+					1465,
+					384,
+					91,
+					209
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_03": {
+				"click_rect": [
+					1368,
+					406,
+					62,
+					160
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_04": {
+				"click_rect": [
+					1296,
+					416,
+					50,
+					132
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			}
+		}
+	},
+	"swimming_pool_hallway_20": {
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_02.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"up": {
+				"target": "swimming_pool_hall_02",
+				"position": [
+					850,
+					30
+				]
+			},
+			"down": {
+				"target": "swimming_pool_hall_19",
+				"position": [
+					850,
+					950
+				]
+			},
+			"right": {
+				"target": "swimming_pool_room_20",
+				"position": [
+					1283,
+					433
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"pool": {
+				"click_rect": [
+					0,
+					538,
+					724,
+					514
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "엄청난 양의 물이다."
+					},
+					{
+						"type": "text",
+						"text": "얼마나 깊은지 감도 안 잡힌다."
+					}
+				]
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "swimming_pool_02",
+			"event_table": "swimming_pool",
+			"chance": 40
+		}
+	},
+	"swimming_pool_room_20": {
+		"background": "res://imgs/backgrounds/swimming_pool_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/water_drops.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"exits": {
+			"down": {
+				"target": "swimming_pool_hallway_20",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"pool": {
+				"click_rect": [
+					732,
+					586,
+					470,
+					388
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "거대한 수영장이다."
+					},
+					{
+						"type": "text",
+						"text": "너무 깊어서 아래가 보이지 않는다."
+					}
+				]
+			},
+			"left_locker_01": {
+				"click_rect": [
+					140,
+					343,
+					121,
+					283
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_02": {
+				"click_rect": [
+					355,
+					380,
+					92,
+					219
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_03": {
+				"click_rect": [
+					487,
+					402,
+					67,
+					165
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"left_locker_04": {
+				"click_rect": [
+					577,
+					415,
+					46,
+					136
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_01": {
+				"click_rect": [
+					1648,
+					361,
+					109,
+					259
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_02": {
+				"click_rect": [
+					1465,
+					384,
+					91,
+					209
+				],
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_03": {
+				"click_rect": [
+					1368,
+					406,
+					62,
+					160
+				],
+				"required_flag_missing": "got_chocolate_bar_a_swimming_pool_room_20",
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "무언가 있다."
+							},
+							{
+								"type": "item",
+								"item": "chocolate_bar_a",
+								"count": 5
+							},
+							{
+								"type": "flag",
+								"flag": "got_chocolate_bar_a_swimming_pool_room_20"
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_03_02": {
+				"click_rect": [
+					1368,
+					406,
+					62,
+					160
+				],
+				"required_flag": "got_chocolate_bar_a_swimming_pool_room_20",
+				"events": [
+					{
+						"type": "document_popup",
+						"path": "res://imgs/events/locker_01.png",
+						"start_page": 1,
+						"sound": "",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/events/locker_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/locker_open.mp3",
+						"sound_volume_db": 15,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "문을 열었다."
+							},
+							{
+								"type": "text",
+								"text": "비어 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/locker_open.mp3",
+						"volume_db": 15,
+						"wait": true
+					}
+				]
+			},
+			"right_locker_04": {
+				"click_rect": [
+					1296,
+					416,
+					50,
+					132
 				],
 				"events": [
 					{

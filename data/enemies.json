@@ -2923,7 +2923,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 8,
 						"delay": 0.3,
 						"danger_type": "parry_only"
 					},
@@ -2934,7 +2934,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 8,
 						"delay": 0.3,
 						"danger_type": "parry_only"
 					},
@@ -3000,7 +3000,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 8,
 						"delay": 1.8,
 						"danger_type": "parry_only"
 					},
@@ -3011,7 +3011,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 8,
 						"delay": 1.8,
 						"danger_type": "parry_only"
 					}
@@ -3031,7 +3031,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 15,
 						"delay": 0.0
 					},
 					{
@@ -3041,7 +3041,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 5,
+						"damage": 10,
 						"delay": 0.2,
 						"danger_type": "parry_only"
 					},
@@ -3052,7 +3052,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 5,
+						"damage": 10,
 						"delay": 0.4,
 						"danger_type": "parry_only"
 					},
@@ -3063,7 +3063,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 15,
 						"delay": 1.3
 					},
 					{
@@ -3073,7 +3073,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 5,
+						"damage": 10,
 						"delay": 1.5,
 						"danger_type": "parry_only"
 					},
@@ -3084,7 +3084,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 5,
+						"damage": 10,
 						"delay": 1.7,
 						"danger_type": "parry_only"
 					},
@@ -3106,7 +3106,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 5,
+						"damage": 10,
 						"delay": 2.8,
 						"danger_type": "parry_only"
 					},
@@ -3117,7 +3117,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 5,
+						"damage": 10,
 						"delay": 3.0,
 						"danger_type": "parry_only"
 					}
@@ -3252,10 +3252,10 @@
 				"id": "body",
 				"name": "몸통",
 				"rect": [
-					206,
-					461,
-					261,
-					228
+					207,
+					260,
+					200,
+					200
 				],
 				"damage_multiplier": 0.5
 			},
