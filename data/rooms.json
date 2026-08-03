@@ -3057,10 +3057,6 @@
 						"text": "컴퓨터가 교탁 위에 있다."
 					},
 					{
-						"type": "text",
-						"text": "현재 상태를 저장하시겠습니까?"
-					},
-					{
 						"type": "input_prompt",
 						"message": "패스워드를 입력하시겠습니까?",
 						"placeholder": "0000",
@@ -9955,7 +9951,7 @@
 					},
 					{
 						"type": "text",
-						"text": "컴퓨터가 교탁 위에 있다."
+						"text": "컴퓨터가 책상 위에 있다."
 					},
 					{
 						"type": "text",
@@ -15210,10 +15206,10 @@
 		},
 		"enter_stories": [
 			{
-				"event": "looked_into_fishs_mouth_classroom_40",
+				"event": "false_looked_into_fishs_mouth_classroom_40",
 				"required_flag": "select_wrong_classroom_40",
 				"required_flag_missing": [
-					"story_looked_into_fishs_mouth_classroom_40_done"
+					"story_false_looked_into_fishs_mouth_classroom_40_done"
 				]
 			}
 		],
@@ -23133,7 +23129,7 @@
 				]
 			},
 			"down": {
-				"target": "swimming_pool_hall_16",
+				"target": "swimming_pool_hallway_16",
 				"position": [
 					850,
 					950
@@ -23652,6 +23648,14 @@
 	},
 	"swimming_pool_room_18": {
 		"background": "res://imgs/backgrounds/swimming_pool_room_02.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"story_false_mimic_monitor_swimming_pool_room_18_done"
+				],
+				"path": "res://imgs/backgrounds/swimming_pool_room_01.png"
+			}
+		],
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -23676,6 +23680,17 @@
 			"volume_db": 0.0,
 			"loop": true
 		},
+		"enter_stories": [
+			{
+				"event": "false_mimic_monitor_swimming_pool_room_18",
+				"required_flag": [
+					"touch_mimic_monitor_swimming_pool_room_18"
+				],
+				"required_flag_missing": [
+					"story_false_mimic_monitor_swimming_pool_room_18_done"
+				]
+			}
+		],
 		"exits": {
 			"down": {
 				"target": "swimming_pool_hallway_18",
@@ -23686,12 +23701,36 @@
 			}
 		},
 		"interactions": {
+			"pool": {
+				"click_rect": [
+					732,
+					586,
+					470,
+					388
+				],
+				"required_flag": [
+					"story_touch_mimic_monitor_swimming_pool_room_18_done"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "거대한 수영장이다."
+					},
+					{
+						"type": "text",
+						"text": "너무 깊어서 아래가 보이지 않는다."
+					}
+				]
+			},
 			"monitor": {
 				"click_rect": [
 					860,
 					729,
 					169,
 					104
+				],
+				"required_flag_missing": [
+					"story_touch_mimic_monitor_swimming_pool_room_18_done"
 				],
 				"events": [
 					{
@@ -23715,12 +23754,14 @@
 								"text": "예",
 								"events": [
 									{
-										"type": "save_to_slot",
-										"slot": 1,
-										"success_text": "저장 완료.",
-										"fail_text": "저장에 실패했다.",
-										"success_sound": "res://sounds/save_complete.mp3",
-										"sound_volume_db": -5
+										"type": "sound",
+										"path": "res://sounds/save_ui_close.mp3",
+										"volume_db": -5,
+										"wait": false
+									},
+									{
+										"type": "flag",
+										"flag": "touch_mimic_monitor_swimming_pool_room_18"
 									}
 								]
 							},
@@ -24568,7 +24609,7 @@
 				]
 			},
 			"down": {
-				"target": "swimming_pool_hall_19",
+				"target": "swimming_pool_hallway_19",
 				"position": [
 					850,
 					950

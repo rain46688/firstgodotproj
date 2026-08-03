@@ -8327,8 +8327,8 @@
 			}
 		]
 	},
-	"looked_into_fishs_mouth_classroom_40": {
-		"start_flag": "story_looked_into_fishs_mouth_classroom_40_done",
+	"false_looked_into_fishs_mouth_classroom_40": {
+		"start_flag": "story_false_looked_into_fishs_mouth_classroom_40_done",
 		"events": [
 			{
 				"type": "screen_color",
@@ -10099,6 +10099,136 @@
 			{
 				"type": "flag",
 				"flag": "story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done"
+			}
+		]
+	},
+	"false_mimic_monitor_swimming_pool_room_18": {
+		"start_flag": "story_false_mimic_monitor_swimming_pool_room_18_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/swimming_pool_room_02.png"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 모니터를 만지려고 손을 가까이 대었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 순간이었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "무언가가 빠르게 튀어 올라서 나의 후두부를 가격하였다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/impact.mp3",
+				"volume_db": 10,
+				"wait": true
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/splash.mp3",
+				"volume_db": 10,
+				"wait": false
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/under_water.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/events/fish_03.png"
+			},
+			{
+				"type": "screen_color",
+				"color": "#ff0000",
+				"alpha": 1.0,
+				"duration": 5.0,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "으윽..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "다량이 물이 기도 안으로 들어온다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "붉은색 무언가가 시야를 가린다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "머리가 깨질 듯이 아프다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/whale_sound_01.mp3",
+				"volume_db": 10,
+				"wait": false
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 5.0,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "눈앞에 무언가 있다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 찰나 눈앞의 거대한 포식자는 나를 집어삼켰다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/squeeze_sound.mp3",
+				"volume_db": 5,
+				"wait": false
+			},
+			{
+				"type": "camera_zoom",
+				"x": 760,
+				"y": 340,
+				"zoom": 2.0,
+				"duration": 0.1,
+				"wait": false
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "wait",
+				"time": 2.5
+			},
+			{
+				"type": "game_over"
 			}
 		]
 	}

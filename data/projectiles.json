@@ -254,5 +254,33 @@
 				90
 			]
 		}
+	},
+	"lethargy_slash": {
+		"name": "무기력 참격",
+		"frames_path": "res://imgs/effects/slash/slash_",
+		"frame_count": 9,
+		"frame_time": 0.04,
+		"size": [
+			200,
+			200
+		],
+		"speed": 1500,
+		"life_time": 0.9,
+		"max_distance": 1000,
+		"base_direction": "up",
+		"sound": "slash",
+		"status_effects": [
+			"lethargy"
+		],
+		"hitbox": {
+			"offset": [
+				55,
+				5
+			],
+			"size": [
+				90,
+				90
+			]
+		}
 	}
 }

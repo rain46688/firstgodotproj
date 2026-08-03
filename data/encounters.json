@@ -165,29 +165,29 @@
 	],
 	"swimming_pool_02": [
 		{
-			"enemy": "human_flog",
-			"weight": 0,
-			"required_flag": "",
-			"missing_flag": "",
-			"first_turn": ""
-		},
-		{
 			"enemy": "sea_anemone_woman",
-			"weight": 0,
+			"weight": 30,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "green_fish_man",
-			"weight": 0,
+			"weight": 30,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "clione_little_girl",
+			"weight": 40,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "ghost_02",
-			"weight": 0,
+			"weight": 5,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
