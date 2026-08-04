@@ -143,14 +143,14 @@
 		},
 		{
 			"enemy": "sea_anemone_woman",
-			"weight": 30,
+			"weight": 40,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "green_fish_man",
-			"weight": 30,
+			"weight": 20,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
@@ -166,14 +166,14 @@
 	"swimming_pool_02": [
 		{
 			"enemy": "sea_anemone_woman",
-			"weight": 30,
+			"weight": 40,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "green_fish_man",
-			"weight": 30,
+			"weight": 20,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""

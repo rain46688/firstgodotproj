@@ -6948,7 +6948,7 @@
 	},
 	"clione_little_girl": {
 		"name": "클리오네 소녀",
-		"max_hp": 600,
+		"max_hp": 500,
 		"battle_bgm": "res://sounds/bgm23.mp3",
 		"battle_bgm_volume_db": 0.0,
 		"battle_bgm_loop": true,
@@ -7162,7 +7162,7 @@
 			},
 			{
 				"id": "basic_attack_03",
-				"weight": 15,
+				"weight": 5,
 				"warning_text": "날개 끝에서 검은 무언가가 십자처럼 사방으로 찢어진다.",
 				"fire_mode": "parallel",
 				"counter_hitbox_id": "head",
@@ -7181,7 +7181,7 @@
 					{
 						"projectile": "lethargy_slash",
 						"start": [
-							1300,
+							1200,
 							0
 						],
 						"rotation": 180,
@@ -7196,7 +7196,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 20,
+						"damage": 10,
 						"delay": 2.5
 					},
 					{
@@ -7217,7 +7217,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 22,
+						"damage": 10,
 						"delay": 3.2
 					},
 					{
@@ -7235,7 +7235,7 @@
 			},
 			{
 				"id": "basic_attack_04",
-				"weight": 10,
+				"weight": 5,
 				"warning_text": "소녀의 입 안쪽의 어둠이 크게 사방으로 쏟아진다.",
 				"fire_mode": "parallel",
 				"counter_hitbox_id": "head",
@@ -7332,7 +7332,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 25,
+						"damage": 10,
 						"delay": 4.7,
 						"danger_type": "parry_only"
 					}

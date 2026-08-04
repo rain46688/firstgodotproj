@@ -248,7 +248,7 @@
 			90
 		],
 		"battle_sprite_size": [
-			250,
+			83,
 			250
 		],
 		"attack_move_range": 430,
@@ -258,7 +258,7 @@
 		"defense_hitbox": {
 			"offset": [
 				-260,
-				100
+				30
 			],
 			"size": [
 				250,
@@ -266,7 +266,7 @@
 			]
 		},
 		"parry_hitbox": {
-			"width": 180,
+			"width": 170,
 			"height": 1.2
 		}
 	},
