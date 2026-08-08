@@ -22138,7 +22138,11 @@
 				"position": [
 					850,
 					950
-				]
+				],
+				"footstep_sound": {
+					"path": "res://sounds/footsteps_water.mp3",
+					"volume_db": 5.0
+				}
 			},
 			"left": {
 				"target": "swimming_pool_hallway_18",
@@ -22158,7 +22162,7 @@
 		"interactions": {}
 	},
 	"swimming_pool_hall_02": {
-		"background": "res://imgs/backgrounds/swimming_pool_hallway_08.png",
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_10.png",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -22179,28 +22183,47 @@
 			"loop": true
 		},
 		"bgm": {
-			"path": "res://sounds/water_drops.mp3",
-			"volume_db": 0.0,
+			"path": "res://sounds/wind_sound.mp3",
+			"volume_db": -5.0,
 			"loop": true
 		},
 		"enter_stories": [],
 		"exits": {
 			"left": {
-				"target": "swimming_pool_hallway_15",
+				"target": "swimming_pool_hallway_20",
 				"position": [
 					60,
 					540
 				]
 			},
 			"right": {
-				"target": "swimming_pool_hallway_20",
+				"target": "swimming_pool_hallway_15",
 				"position": [
 					1830,
 					540
 				]
 			}
 		},
-		"interactions": {}
+		"interactions": {
+			"wall": {
+				"click_rect": [
+					576,
+					148,
+					766,
+					534
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "벽이 갈라져 있다."
+					},
+					{
+						"type": "text",
+						"text": "갈라진 틈에서 바람이 새어 나오고 있다."
+					}
+				]
+			}
+		}
 	},
 	"swimming_pool_hallway_15": {
 		"background": "res://imgs/backgrounds/swimming_pool_hallway_03.png",
@@ -22241,7 +22264,11 @@
 				"position": [
 					850,
 					950
-				]
+				],
+				"footstep_sound": {
+					"path": "res://sounds/footsteps_water.mp3",
+					"volume_db": 5.0
+				}
 			},
 			"right": {
 				"target": "swimming_pool_room_15",
@@ -22306,7 +22333,7 @@
 		},
 		"exits": {
 			"down": {
-				"target": "swimming_pool_hallway_06",
+				"target": "swimming_pool_hallway_15",
 				"position": [
 					900,
 					950
@@ -23202,7 +23229,11 @@
 				"position": [
 					850,
 					30
-				]
+				],
+				"footstep_sound": {
+					"path": "res://sounds/footsteps_water.mp3",
+					"volume_db": 5.0
+				}
 			},
 			"down": {
 				"target": "swimming_pool_hallway_16",
@@ -23647,7 +23678,7 @@
 		}
 	},
 	"swimming_pool_hallway_18": {
-		"background": "res://imgs/backgrounds/swimming_pool_hallway_03.png",
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_04.png",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -23685,7 +23716,11 @@
 				"position": [
 					850,
 					950
-				]
+				],
+				"footstep_sound": {
+					"path": "res://sounds/footsteps_water.mp3",
+					"volume_db": 5.0
+				}
 			},
 			"right": {
 				"target": "swimming_pool_room_18",
@@ -23765,6 +23800,15 @@
 				"required_flag_missing": [
 					"story_false_mimic_monitor_swimming_pool_room_18_done"
 				]
+			},
+			{
+				"event": "false_mimic_monitor_02_swimming_pool_room_18",
+				"required_flag": [
+					"touch_mimic_monitor_02_swimming_pool_room_18"
+				],
+				"required_flag_missing": [
+					"story_false_mimic_monitor_02_swimming_pool_room_18_done"
+				]
 			}
 		],
 		"exits": {
@@ -23785,7 +23829,7 @@
 					388
 				],
 				"required_flag": [
-					"story_touch_mimic_monitor_swimming_pool_room_18_done"
+					"story_false_mimic_monitor_swimming_pool_room_18_done"
 				],
 				"events": [
 					{
@@ -23798,6 +23842,31 @@
 					}
 				]
 			},
+			"pool_02": {
+				"click_rect": [
+					706,
+					574,
+					489,
+					138
+				],
+				"required_flag_missing": [
+					"story_false_mimic_monitor_swimming_pool_room_18_done"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "거대한 수영장이다."
+					},
+					{
+						"type": "text",
+						"text": "수면 아래에 거대한 검은 물체가 보이는 거 같다."
+					},
+					{
+						"type": "text",
+						"text": "가까이 가지 않는 게 좋을 거 같다."
+					}
+				]
+			},
 			"monitor": {
 				"click_rect": [
 					860,
@@ -23806,7 +23875,8 @@
 					104
 				],
 				"required_flag_missing": [
-					"story_touch_mimic_monitor_swimming_pool_room_18_done"
+					"story_false_mimic_monitor_swimming_pool_room_18_done",
+					"story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done"
 				],
 				"events": [
 					{
@@ -23838,6 +23908,87 @@
 									{
 										"type": "flag",
 										"flag": "touch_mimic_monitor_swimming_pool_room_18"
+									}
+								]
+							},
+							{
+								"text": "아니오",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/save_ui_close.mp3",
+										"volume_db": -5,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "저장을 취소했다."
+									}
+								]
+							}
+						]
+					}
+				]
+			},
+			"monitor_02": {
+				"click_rect": [
+					860,
+					729,
+					169,
+					104
+				],
+				"required_flag": "story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done",
+				"required_flag_missing": [
+					"story_false_mimic_monitor_02_swimming_pool_room_18_done"
+				],
+				"events": [
+					{
+						"type": "portrait",
+						"character": "isaac",
+						"emotion": "normal",
+						"text": "잠깐."
+					},
+					{
+						"type": "portrait",
+						"character": "isaac",
+						"emotion": "normal",
+						"text": "수면 아래에 무언가 있어 이건 건드리지 않는 게 좋을 거 같아."
+					},
+					{
+						"type": "portrait",
+						"character": "claire",
+						"emotion": "embarrassed",
+						"text": "히익!"
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/save_ui_open.mp3",
+						"volume_db": -5,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "컴퓨터가 물 위를 둥둥 떠다니고 있다."
+					},
+					{
+						"type": "text",
+						"text": "현재 상태를 저장하시겠습니까?"
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "예",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/save_ui_close.mp3",
+										"volume_db": -5,
+										"wait": false
+									},
+									{
+										"type": "flag",
+										"flag": "touch_mimic_monitor_02_swimming_pool_room_18"
 									}
 								]
 							},
@@ -24682,7 +24833,11 @@
 				"position": [
 					850,
 					30
-				]
+				],
+				"footstep_sound": {
+					"path": "res://sounds/footsteps_water.mp3",
+					"volume_db": 5.0
+				}
 			},
 			"down": {
 				"target": "swimming_pool_hallway_19",

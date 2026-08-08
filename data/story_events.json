@@ -10143,6 +10143,10 @@
 				"wait": false
 			},
 			{
+				"type": "story_dialogue",
+				"text": "나는 균형을 잃고 수영장 물속으로 빠졌다."
+			},
+			{
 				"type": "screen_color",
 				"color": "#000000",
 				"alpha": 1.0,
@@ -10225,10 +10229,237 @@
 			},
 			{
 				"type": "wait",
-				"time": 2.5
+				"time": 4.5
 			},
 			{
 				"type": "game_over"
+			}
+		]
+	},
+	"false_mimic_monitor_02_swimming_pool_room_18": {
+		"start_flag": "story_false_mimic_monitor_02_swimming_pool_room_18_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/swimming_pool_room_02.png"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 모니터를 만지려고 손을 가까이 대었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 순간이었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "무언가가 빠르게 튀어 올라서 나의 후두부를 가격하였다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/impact.mp3",
+				"volume_db": 10,
+				"wait": true
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/splash.mp3",
+				"volume_db": 10,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 균형을 잃고 수영장 물속으로 빠졌다."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"text": "레인 씨!"
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "normal",
+				"text": "비켜!"
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/splash.mp3",
+				"volume_db": 15,
+				"wait": false
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/under_water.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/events/fish_03.png"
+			},
+			{
+				"type": "screen_color",
+				"color": "#ff0000",
+				"alpha": 1.0,
+				"duration": 5.0,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "으윽..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "다량이 물이 기도 안으로 들어온다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "붉은색 무언가가 시야를 가린다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "머리가 깨질 듯이 아프다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/whale_sound_01.mp3",
+				"volume_db": 10,
+				"wait": false
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 5.0,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "눈앞에 무언가 있다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "거대한 포식자는 점점 다가오고 있다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 찰나 무언가가 나를 위쪽으로 끄집어 올렸다."
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/swimming_pool_room_01.png"
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/splash_02.mp3",
+				"volume_db": 5,
+				"wait": false
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/water_drops.mp3",
+				"volume_db": 0,
+				"loop": true
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "하아아... 하아아..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "수면 위로 올라온 나는 거친 숨을 몰아쉬었다."
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "pain",
+				"text": "하아아... 내가 만지지 말라고..."
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "pain",
+				"text": "하아아... 했지?... 하아아..."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"text": "둘다 괜찮아요?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "하아아... 죄송합..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "죄송합니다... 하아아..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "하아아... 감사합니다..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "아이작 씨가 구해주지 않았으면 나는 이미 저 녀석에게 먹혔을 것이다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이상한 함정들이 많으니깐 주의해야 된다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "만지면 안 된다고 머리로는 알고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 무언가에 이끌린 듯이..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "점점 더 내 안의 무언가가 어긋나고 있는 듯한 기분이 들었다..."
+			},
+			{
+				"type": "show_game_ui"
+			},
+			{
+				"type": "flag",
+				"flag": "touch_mimic_monitor_swimming_pool_room_18"
+			},
+			{
+				"type": "flag",
+				"flag": "story_false_mimic_monitor_swimming_pool_room_18_done"
+			},
+			{
+				"type": "flag",
+				"flag": "story_false_mimic_monitor_02_swimming_pool_room_18_done"
 			}
 		]
 	}
