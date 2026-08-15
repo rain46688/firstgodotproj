@@ -1266,10 +1266,24 @@ func _on_run_button_pressed():
 # 기타 함수 모음
 # ============================================================
 
+# 적 본체와 모든 파츠를 함께 숨기는 함수
+func hide_enemy_visuals():
+	# 적 본체 숨김
+	if enemy_sprite != null and is_instance_valid(enemy_sprite):
+		enemy_sprite.visible = false
+
+	# 적 파츠들도 모두 숨김
+	for part_id in enemy_part_sprites.keys():
+		var part_sprite = enemy_part_sprites[part_id]
+
+		if part_sprite != null and is_instance_valid(part_sprite):
+			part_sprite.visible = false
 # 도주 성공 처리 함수
 func process_battle_escape_success():
 	play_battle_result_sound()
-	enemy_sprite.visible = false
+
+	# 적 본체와 파츠를 모두 숨김
+	hide_enemy_visuals()
 
 	await show_battle_text_for_seconds("당신은 도망쳤다.", 4.0)
 
@@ -1311,11 +1325,15 @@ func should_enemy_escape_by_turn_limit():
 	return player_turn_count > escape_after_turns
 # 적 턴 제한 도망 텍스트 가져오기
 func get_enemy_turn_limit_escape_text():
-	enemy_sprite.visible = false
 	if enemy_data.is_empty():
 		return "적이 도망쳤다."
 
-	return str(enemy_data.get("escape_text", "적이 도망쳤다."))
+	return str(
+		enemy_data.get(
+			"escape_text",
+			"적이 도망쳤다."
+		)
+	)
 # 턴 제한으로 적이 도망가는 처리 함수
 func process_enemy_escape_by_turn_limit():
 	battle_ended = true
@@ -1326,6 +1344,9 @@ func process_enemy_escape_by_turn_limit():
 	reset_weapon_action_visual()
 
 	play_battle_result_sound()
+
+	# 적 본체와 파츠를 모두 숨김
+	hide_enemy_visuals()
 
 	var escape_text = get_enemy_turn_limit_escape_text()
 	await show_battle_text_for_seconds(escape_text, 4.0)

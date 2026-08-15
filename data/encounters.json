@@ -132,7 +132,7 @@
 			"missing_flag": "",
 			"first_turn": ""
 		}
-	],
+	]	,
 	"swimming_pool_01": [
 		{
 			"enemy": "human_flog",
@@ -181,6 +181,36 @@
 		{
 			"enemy": "clione_little_girl",
 			"weight": 40,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "ghost_02",
+			"weight": 5,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		}
+	],
+	"swimming_pool_03": [
+		{
+			"enemy": "green_fish_man",
+			"weight": 40,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "blue_fish_man",
+			"weight": 40,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "clione_little_girl",
+			"weight": 20,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
