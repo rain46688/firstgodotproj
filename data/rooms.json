@@ -26662,6 +26662,15 @@
 			"volume_db": 0.0,
 			"loop": true
 		},
+		"enter_stories": [
+			{
+				"event": "first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25",
+				"required_flag": "touch_monitor_swimming_pool_room_25",
+				"required_flag_missing": [
+					"story_first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25_done"
+				]
+			}
+		],
 		"exits": {
 			"down": {
 				"target": "swimming_pool_hallway_25",
@@ -26762,6 +26771,10 @@
 								]
 							}
 						]
+					},
+					{
+						"type": "flag",
+						"flag": "touch_monitor_swimming_pool_room_25"
 					}
 				]
 			},
@@ -26964,7 +26977,9 @@
 					900,
 					30
 				],
-				"move_effect": "enter"
+				"move_effect": "enter",
+				"locked": true,
+				"open_flag": "story_first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25_done"
 			},
 			"down": {
 				"target": "swimming_pool_hallway_25",
@@ -26987,10 +27002,56 @@
 					1910,
 					451
 				],
+				"required_flag_missing": "story_first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25_done",
 				"events": [
 					{
 						"type": "text",
 						"text": "계단 아래는 아무것도 보이지 않는다."
+					},
+					{
+						"type": "text",
+						"text": "저 너머에서 불길한 무언가가 있는 것 같다."
+					},
+					{
+						"type": "text",
+						"text": "조금만 더 다른 곳을 둘러보자."
+					}
+				]
+			},
+			"stairs_02": {
+				"click_rect": [
+					7,
+					628,
+					1910,
+					451
+				],
+				"required_flag": "story_first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25_done",
+				"events": [
+					{
+						"type": "text",
+						"text": "계단 아래는 아무것도 보이지 않는다."
+					},
+					{
+						"type": "text",
+						"text": "저 너머에서 불길한 무언가가 있는 것 같다."
+					},
+					{
+						"type": "portrait",
+						"character": "isaac",
+						"emotion": "expressionless",
+						"text": "뭐해 쫄은 거야?"
+					},
+					{
+						"type": "portrait",
+						"character": "claire",
+						"emotion": "normal",
+						"text": "저 너머에 무언가 기분 나쁜 게 있는 거 같지만."
+					},
+					{
+						"type": "portrait",
+						"character": "claire",
+						"emotion": "normal",
+						"text": "다 같이 있으면 괜찮을 거예요."
 					}
 				]
 			}
@@ -27023,6 +27084,22 @@
 			"volume_db": 0.0,
 			"loop": true
 		},
+		"enter_stories": [
+			{
+				"event": "first_swimming_pool_huge_hall_01",
+				"required_flag": "story_first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25_done",
+				"required_flag_missing": [
+					"story_first_swimming_pool_huge_hall_01_done"
+				]
+			},
+			{
+				"event": "first_swimming_pool_huge_hall_02",
+				"required_flag": "story_first_swimming_pool_huge_hall_01_done",
+				"required_flag_missing": [
+					"story_first_swimming_pool_huge_hall_02_done"
+				]
+			}
+		],
 		"exits": {
 			"up": {
 				"target": "swimming_pool_huge_hall_door_01",
@@ -27125,7 +27202,7 @@
 			"up": {
 				"target": "dark_forest_hallway_10",
 				"position": [
-					850,
+					900,
 					30
 				],
 				"locked": true,
@@ -27135,7 +27212,7 @@
 			"down": {
 				"target": "swimming_pool_huge_hall_01",
 				"position": [
-					850,
+					900,
 					950
 				]
 			}
