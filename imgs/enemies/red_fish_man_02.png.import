@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dydv3r7nhyjkk"
-path="res://.godot/imported/hammerhead_shark_man_right.png-9a346a8872aa48cd6544b73d1b207871.ctex"
+uid="uid://ehu66hasitxn"
+path="res://.godot/imported/red_fish_man_02.png-243f2650a12863b417be51a8f738995e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/enemies/hammerhead_shark_man_right.png"
-dest_files=["res://.godot/imported/hammerhead_shark_man_right.png-9a346a8872aa48cd6544b73d1b207871.ctex"]
+source_file="res://imgs/enemies/red_fish_man_02.png"
+dest_files=["res://.godot/imported/red_fish_man_02.png-243f2650a12863b417be51a8f738995e.ctex"]
 
 [params]
 

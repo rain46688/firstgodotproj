@@ -6350,7 +6350,7 @@
 								],
 								"rotation": 180,
 								"damage": 20,
-								"delay": 0.3
+								"delay": 0.6
 							},
 							{
 								"projectile": "slash_slow",
@@ -6360,7 +6360,7 @@
 								],
 								"rotation": 180,
 								"damage": 20,
-								"delay": 0.5
+								"delay": 0.8
 							},
 							{
 								"projectile": "pierce",
@@ -6403,26 +6403,6 @@
 								],
 								"rotation": 180,
 								"damage": 20,
-								"delay": 0.6
-							},
-							{
-								"projectile": "slash_slow",
-								"start": [
-									1000,
-									0
-								],
-								"rotation": 180,
-								"damage": 20,
-								"delay": 0.8
-							},
-							{
-								"projectile": "slash_slow",
-								"start": [
-									800,
-									0
-								],
-								"rotation": 180,
-								"damage": 20,
 								"delay": 0.9
 							},
 							{
@@ -6434,6 +6414,26 @@
 								"rotation": 180,
 								"damage": 20,
 								"delay": 1.1
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.2
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.4
 							}
 						]
 					},
@@ -7422,7 +7422,7 @@
 			650,
 			0
 		],
-		"can_escape": true,
+		"can_escape": false,
 		"encounter_text": "가면을 쓴 남자가 다가왔다.",
 		"observe_text": "물고기...?",
 		"weakness_text": "",
@@ -7654,59 +7654,6 @@
 								],
 								"rotation": 180,
 								"damage": 20,
-								"delay": 0.3
-							},
-							{
-								"projectile": "slash_slow",
-								"start": [
-									1000,
-									0
-								],
-								"rotation": 180,
-								"damage": 20,
-								"delay": 0.5
-							},
-							{
-								"projectile": "pierce",
-								"start": [
-									850,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 0.0,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "pierce",
-								"start": [
-									850,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 0.1,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "pierce",
-								"start": [
-									850,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 0.2,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "slash_slow",
-								"start": [
-									800,
-									0
-								],
-								"rotation": 180,
-								"damage": 20,
 								"delay": 0.6
 							},
 							{
@@ -7718,6 +7665,39 @@
 								"rotation": 180,
 								"damage": 20,
 								"delay": 0.8
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 15,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 15,
+								"delay": 0.1,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 15,
+								"delay": 0.2,
+								"danger_type": "parry_only"
 							},
 							{
 								"projectile": "slash_slow",
@@ -7738,6 +7718,26 @@
 								"rotation": 180,
 								"damage": 20,
 								"delay": 1.1
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.2
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.4
 							}
 						]
 					},
@@ -7829,6 +7829,609 @@
 		],
 		"defeat_flags": [
 			"defeated_green_fish_man"
+		]
+	},
+	"hammerhead_mansion_master_phase_01": {
+		"name": "저택의 주인",
+		"phase": 1,
+		"max_hp": 5,
+		"battle_bgm": "res://sounds/bgm8.mp3",
+		"battle_bgm_volume_db": 0.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/enemy_encounter.mp3",
+		"encounter_sound_volume_db": -5.0,
+		"image": "res://imgs/enemies/hammerhead_mansion_master_phase_01.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.5,
+		"enemy_size": [
+			1440,
+			810
+		],
+		"enemy_position": [
+			250,
+			-150
+		],
+		"can_escape": false,
+		"encounter_text": "저택의 주인이 손가락을 튕기자, 가면을 쓴 남성들이 다가왔다.",
+		"observe_text": "앞에 있는 가면들을 먼저 처리해야겠다.",
+		"weakness_text": "",
+		"next_phase_enemy_id": "hammerhead_mansion_master_phase_02",
+		"phase_transition_text": "저택의 주인이 손가락을 튕기자, 가면을 쓴 남성들이 모두 물러났다.",
+		"patterns": [
+			{
+				"id": "basic_attack_01",
+				"weight": 5,
+				"warning_text": "아무런 행동을 하지 않고 있다.",
+				"fire_mode": "sequential",
+				"projectiles": []
+			}
+		],
+		"hitbox_base_size": [
+			800,
+			800
+		],
+		"hitboxes": [
+			{
+				"id": "body",
+				"name": "저택의 주인",
+				"rect": [
+					324,
+					199,
+					148,
+					240
+				]
+			}
+		],
+		"parts": [
+			{
+				"id": "right_fish_man",
+				"name": "오른쪽 부하",
+				"max_hp": 30,
+				"z_index": 10,
+				"image": "res://imgs/enemies/red_fish_man_02.png",
+				"observe_text": "물고기...?",
+				"size": [
+					400,
+					560
+				],
+				"position": [
+					300,
+					250
+				],
+				"destroyable": true,
+				"destroy_text": "가면을 쓴 남자가 균형을 잃고 쓰러졌다.",
+				"hitbox": {
+					"id": "right_fish_man",
+					"name": "오른쪽 부하",
+					"rect": [
+						400,
+						254,
+						165,
+						300
+					]
+				},
+				"patterns": [
+					{
+						"id": "basic_attack_02",
+						"weight": 40,
+						"priority": 1,
+						"warning_text": "오른쪽 남성이 나이프를 중앙으로 빠르게 휘두른다.",
+						"fire_mode": "parallel",
+						"projectiles": [
+							{
+								"projectile": "slash_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.6
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.8
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.1,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 15,
+								"delay": 0.2,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 15,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.9
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.1
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.2
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.4
+							}
+						]
+					},
+					{
+						"id": "summon_fish_man_01",
+						"weight": 50,
+						"priority": 2,
+						"warning_text": "가면을 쓴 남자가 다가왔다.",
+						"fire_mode": "parallel",
+						"max_uses": 3,
+						"start_effects": [
+							{
+								"type": "revive_part",
+								"part_id": "left_fish_man",
+								"hp_percent": 100,
+								"text": "...",
+								"sound": "res://sounds/footsteps.mp3",
+								"sound_volume_db": 20.0,
+								"effect_duration": 0.8
+							}
+						]
+					}
+				]
+			},
+			{
+				"id": "left_fish_man",
+				"name": "왼쪽 부하",
+				"max_hp": 30,
+				"z_index": 10,
+				"image": "res://imgs/enemies/red_fish_man_02.png",
+				"observe_text": "물고기...?",
+				"size": [
+					450,
+					560
+				],
+				"position": [
+					50,
+					250
+				],
+				"destroyable": true,
+				"destroy_text": "가면을 쓴 남자가 균형을 잃고 쓰러졌다.",
+				"hitbox": {
+					"id": "left_fish_man",
+					"name": "왼쪽 부하",
+					"rect": [
+						224,
+						254,
+						172,
+						300
+					]
+				},
+				"patterns": [
+					{
+						"id": "basic_attack_03",
+						"weight": 40,
+						"priority": 1,
+						"warning_text": "왼쪽 남성이 나이프를 중앙으로 빠르게 휘두른다.",
+						"fire_mode": "parallel",
+						"projectiles": [
+							{
+								"projectile": "slash_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.6
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.8
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.1,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 15,
+								"delay": 0.2,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 15,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.9
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.1
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.2
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.4
+							}
+						]
+					},
+					{
+						"id": "summon_fish_man_02",
+						"weight": 50,
+						"priority": 2,
+						"warning_text": "가면을 쓴 남자가 다가왔다.",
+						"fire_mode": "parallel",
+						"max_uses": 3,
+						"start_effects": [
+							{
+								"type": "revive_part",
+								"part_id": "right_fish_man",
+								"hp_percent": 100,
+								"text": "...",
+								"sound": "res://sounds/footsteps.mp3",
+								"sound_volume_db": 20.0,
+								"effect_duration": 0.8
+							}
+						]
+					}
+				]
+			}
+		],
+		"drops": []
+	},
+	"hammerhead_mansion_master_phase_02": {
+		"name": "저택의 주인",
+		"phase": 2,
+		"max_hp": 1000,
+		"battle_bgm": "res://sounds/bgm24.mp3",
+		"battle_bgm_volume_db": 0.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/enemy_encounter.mp3",
+		"encounter_sound_volume_db": -5.0,
+		"image": "res://imgs/enemies/hammerhead_mansion_master_phase_02.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.2,
+		"enemy_size": [
+			650,
+			760
+		],
+		"enemy_position": [
+			635,
+			-40
+		],
+		"can_escape": false,
+		"encounter_text": ".",
+		"observe_text": ".",
+		"weakness_text": "얼굴이 약점인 것 같다.",
+		"patterns": [
+			{
+				"id": "basic_attack_01",
+				"weight": 5,
+				"warning_text": "아무런 행동을 하지 않고 있다.",
+				"fire_mode": "sequential",
+				"projectiles": []
+			}
+		],
+		"hitbox_base_size": [
+			1086,
+			1448
+		],
+		"hitboxes": [
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					356,
+					96,
+					390,
+					139
+				],
+				"damage_multiplier": 5.0
+			},
+			{
+				"id": "body",
+				"name": "몸통",
+				"rect": [
+					380,
+					285,
+					316,
+					464
+				],
+				"damage_multiplier": 0.0
+			}
+		],
+		"parts": [
+			{
+				"id": "right_arm",
+				"name": "오른쪽 팔",
+				"max_hp": 250,
+				"z_index": 10,
+				"image": "res://imgs/enemies/hammerhead_mansion_master_phase_02_right.png",
+				"observe_text": "",
+				"size": [
+					319,
+					1201
+				],
+				"position": [
+					720,
+					0
+				],
+				"destroyable": true,
+				"destroy_text": "오른쪽 팔이 떨어져 나갔다.",
+				"hitbox": {
+					"id": "right_arm",
+					"name": "오른쪽 팔",
+					"rect": [
+						690,
+						292,
+						267,
+						694
+					]
+				},
+				"patterns": [
+					{
+						"id": "basic_attack_04",
+						"weight": 40,
+						"warning_text": "망가진 의자를 왼쪽으로 휘두른다.",
+						"fire_mode": "sequential",
+						"projectiles": [
+							{
+								"projectile": "impact_basic",
+								"start": [
+									500,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.0
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									900,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.3
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									1200,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.3
+							}
+						]
+					}
+				]
+			},
+			{
+				"id": "left_arm",
+				"name": "왼쪽 팔",
+				"max_hp": 200,
+				"z_index": 10,
+				"image": "res://imgs/enemies/hammerhead_mansion_master_phase_02_left.png",
+				"observe_text": "이 부위를 먼저 노리는게 좋을거같다.",
+				"size": [
+					328,
+					1054
+				],
+				"position": [
+					50,
+					0
+				],
+				"destroyable": true,
+				"destroy_text": "왼쪽 팔이 떨어져 나갔다.",
+				"hitbox": {
+					"id": "left_arm",
+					"name": "왼쪽 팔",
+					"rect": [
+						138,
+						319,
+						233,
+						669
+					]
+				},
+				"patterns": [
+					{
+						"id": "basic_attack_02",
+						"weight": 55,
+						"warning_text": "구겨진 파이프를 중앙으로 휘두른다.",
+						"fire_mode": "sequential",
+						"projectiles": [
+							{
+								"projectile": "fear_slash",
+								"start": [
+									700,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "fear_slash",
+								"start": [
+									900,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "fear_slash",
+								"start": [
+									1100,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							}
+						]
+					}
+				]
+			}
+		],
+		"drops": [
+			{
+				"item": "unknown_coin",
+				"chance": 100,
+				"min": 30,
+				"max": 60
+			},
+			{
+				"item": "wax_heart",
+				"chance": 100,
+				"min": 1,
+				"max": 1
+			}
+		],
+		"defeat_flags": [
+			"defeated_hammerhead_mansion_master"
 		]
 	}
 }

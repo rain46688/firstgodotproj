@@ -210,7 +210,7 @@
 		},
 		{
 			"enemy": "clione_little_girl",
-			"weight": 20,
+			"weight": 30,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""

@@ -27058,7 +27058,15 @@
 		}
 	},
 	"swimming_pool_huge_hall_01": {
-		"background": "res://imgs/backgrounds/swimming_pool_huge_hall_01.png",
+		"background": "res://imgs/events/swimming_pool_huge_hall_event_01.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"defeated_hammerhead_mansion_master"
+				],
+				"path": "res://imgs/backgrounds/swimming_pool_huge_hall_01.png"
+			}
+		],
 		"display_name": "수영장 3층 · 거대한 홀",
 		"idle_motion": {
 			"enabled": true,
@@ -27094,9 +27102,20 @@
 			},
 			{
 				"event": "first_swimming_pool_huge_hall_02",
-				"required_flag": "story_first_swimming_pool_huge_hall_01_done",
+				"required_flag": [
+					"story_first_swimming_pool_huge_hall_01_done"
+				],
 				"required_flag_missing": [
 					"story_first_swimming_pool_huge_hall_02_done"
+				]
+			},
+			{
+				"event": "defeated_hammerhead_mansion_master",
+				"required_flag": [
+					"defeated_hammerhead_mansion_master"
+				],
+				"required_flag_missing": [
+					"story_defeated_hammerhead_mansion_master_done"
 				]
 			}
 		],
@@ -27107,7 +27126,9 @@
 					900,
 					30
 				],
-				"move_effect": "enter"
+				"move_effect": "enter",
+				"locked": true,
+				"open_flag": "defeated_hammerhead_mansion_master"
 			},
 			"down": {
 				"target": "swimming_pool_stairs_01",
@@ -27127,7 +27148,9 @@
 				"footstep_sound": {
 					"path": "res://sounds/footsteps_forest.mp3",
 					"volume_db": 5.0
-				}
+				},
+				"locked": true,
+				"open_flag": "defeated_hammerhead_mansion_master"
 			},
 			"right": {
 				"target": "dark_forest_river_01",
@@ -27139,7 +27162,9 @@
 				"footstep_sound": {
 					"path": "res://sounds/footsteps_forest.mp3",
 					"volume_db": 5.0
-				}
+				},
+				"locked": true,
+				"open_flag": "defeated_hammerhead_mansion_master"
 			}
 		},
 		"interactions": {
@@ -27150,6 +27175,7 @@
 					1492,
 					298
 				],
+				"required_flag": "defeated_hammerhead_mansion_master",
 				"events": [
 					{
 						"type": "text",
@@ -27158,6 +27184,26 @@
 					{
 						"type": "text",
 						"text": "오랫동안 사용한 흔적이 남아있다."
+					}
+				]
+			},
+			"desk_02": {
+				"click_rect": [
+					196,
+					199,
+					1507,
+					688
+				],
+				"required_flag_missing": "defeated_hammerhead_mansion_master",
+				"events": [
+					{
+						"type": "text",
+						"name": "저택의 주인",
+						"text": "마저 이야기를 해볼까?"
+					},
+					{
+						"type": "clear_flag",
+						"flag": "room_enter_story_done_first_swimming_pool_huge_hall_02"
 					}
 				]
 			}

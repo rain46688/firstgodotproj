@@ -11778,20 +11778,23 @@
 			{
 				"type": "story_dialogue",
 				"name": "저택의 주인",
+				"text": "정말 요즘 애들은 예의를 배우지 않는 모양이군..."
+			},
+			{
+				"type": "story_dialogue",
 				"text": "처음으로 그의 목소리에서 분노가 느껴졌다."
 			},
 			{
 				"type": "story_dialogue",
-				"name": "저택의 주인",
 				"text": "그러나 곧 그는 다시 여유로운 자세로 돌아갔다."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그가 손가락을 튕겼다."
+				"text": "딱!"
 			},
 			{
 				"type": "story_dialogue",
-				"text": "딱!"
+				"text": "그가 손가락을 튕겼다."
 			},
 			{
 				"type": "story_dialogue",
@@ -11805,7 +11808,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "아이작 씨가 우리보다 한 걸음 앞으로 나섰다."
+				"text": "아이작 씨가 무기를 들고 한 걸음 앞으로 나섰다."
 			},
 			{
 				"type": "story_dialogue",
@@ -11814,7 +11817,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "저택의 주인",
-				"text": "내 이름은 오래전에 버렸다."
+				"text": "나는 나 자신을 오래전에 버렸다."
 			},
 			{
 				"type": "story_dialogue",
@@ -11824,7 +11827,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "저택의 주인",
-				"text": "너희도 그렇게 부르도록 되겠지."
+				"text": "너희도 곧 그렇게 부르도록 되겠지."
 			},
 			{
 				"type": "portrait",

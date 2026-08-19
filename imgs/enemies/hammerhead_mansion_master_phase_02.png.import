@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bpvd55rs6lelc"
-path="res://.godot/imported/hammerhead_shark_man.png-09374b7467fa3e54e40c15c89cfad6c0.ctex"
+uid="uid://bxu4uq7oxbcks"
+path="res://.godot/imported/hammerhead_mansion_master_phase_02.png-a3e7c9f4e5acf9561a867febf5322ca3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/enemies/hammerhead_shark_man.png"
-dest_files=["res://.godot/imported/hammerhead_shark_man.png-09374b7467fa3e54e40c15c89cfad6c0.ctex"]
+source_file="res://imgs/enemies/hammerhead_mansion_master_phase_02.png"
+dest_files=["res://.godot/imported/hammerhead_mansion_master_phase_02.png-a3e7c9f4e5acf9561a867febf5322ca3.ctex"]
 
 [params]
 
