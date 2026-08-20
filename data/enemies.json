@@ -3943,7 +3943,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 8,
+						"damage": 15,
 						"delay": 0.6,
 						"danger_type": "parry_only"
 					},
@@ -3976,7 +3976,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 8,
+						"damage": 15,
 						"delay": 1.4,
 						"danger_type": "parry_only"
 					},
@@ -3987,7 +3987,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 8,
+						"damage": 10,
 						"delay": 1.4,
 						"danger_type": "parry_only"
 					},
@@ -4020,7 +4020,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 1.8,
 						"danger_type": "parry_only"
 					},
@@ -4031,7 +4031,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 1.8,
 						"danger_type": "parry_only"
 					},
@@ -4042,7 +4042,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 1.8,
 						"danger_type": "parry_only"
 					},
@@ -4053,7 +4053,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 2.2,
 						"danger_type": "parry_only"
 					},
@@ -4064,7 +4064,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 2.2,
 						"danger_type": "parry_only"
 					},
@@ -4075,7 +4075,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 2.7,
 						"danger_type": "parry_only"
 					},
@@ -4086,7 +4086,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 10,
 						"delay": 2.7,
 						"danger_type": "parry_only"
 					}
@@ -6948,7 +6948,7 @@
 	},
 	"clione_little_girl": {
 		"name": "클리오네 소녀",
-		"max_hp": 500,
+		"max_hp": 444,
 		"battle_bgm": "res://sounds/bgm23.mp3",
 		"battle_bgm_volume_db": 0.0,
 		"battle_bgm_loop": true,
@@ -6986,7 +6986,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 8,
 						"delay": 0.0,
 						"danger_type": "parry_only"
 					},
@@ -6997,7 +6997,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 8,
 						"delay": 0.2,
 						"danger_type": "parry_only"
 					},
@@ -7008,7 +7008,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 8,
 						"delay": 0.4,
 						"danger_type": "parry_only"
 					},
@@ -7019,7 +7019,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 20,
+						"damage": 10,
 						"delay": 1.3
 					},
 					{
@@ -7029,7 +7029,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 20,
+						"damage": 10,
 						"delay": 1.5
 					},
 					{
@@ -7039,7 +7039,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 20,
+						"damage": 10,
 						"delay": 1.7
 					},
 					{
@@ -7049,7 +7049,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 8,
 						"delay": 2.6
 					},
 					{
@@ -7059,7 +7059,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 8,
 						"delay": 2.8,
 						"danger_type": "parry_only"
 					},
@@ -7070,7 +7070,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 20,
+						"damage": 10,
 						"delay": 3.0,
 						"danger_type": "parry_only"
 					}
@@ -7110,7 +7110,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 8,
 						"delay": 1.4,
 						"danger_type": "parry_only"
 					},
@@ -7121,7 +7121,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 8,
 						"delay": 2.5,
 						"danger_type": "parry_only"
 					},
@@ -7132,7 +7132,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 8,
 						"delay": 2.9,
 						"danger_type": "parry_only"
 					},
@@ -7143,7 +7143,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 20,
+						"damage": 10,
 						"delay": 4.5,
 						"danger_type": "parry_only"
 					},
@@ -7154,7 +7154,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 8,
 						"delay": 4.9,
 						"danger_type": "parry_only"
 					}
@@ -7196,7 +7196,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 8,
 						"delay": 2.5
 					},
 					{
@@ -7206,7 +7206,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 8,
 						"delay": 2.8,
 						"danger_type": "parry_only"
 					},
@@ -7217,7 +7217,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 8,
 						"delay": 3.2
 					},
 					{
@@ -7227,7 +7227,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 8,
 						"delay": 3.4,
 						"danger_type": "parry_only"
 					}
@@ -7278,7 +7278,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 8,
 						"delay": 1.55,
 						"danger_type": "parry_only"
 					},
@@ -7289,7 +7289,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 8,
 						"delay": 1.75,
 						"danger_type": "parry_only"
 					},
@@ -7300,7 +7300,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 16,
+						"damage": 15,
 						"delay": 3.3
 					},
 					{
@@ -7310,7 +7310,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 12,
+						"damage": 8,
 						"delay": 3.8,
 						"danger_type": "parry_only"
 					},
@@ -7321,7 +7321,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 12,
+						"damage": 8,
 						"delay": 4.0,
 						"danger_type": "parry_only"
 					},
@@ -7332,7 +7332,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 8,
 						"delay": 4.7,
 						"danger_type": "parry_only"
 					}
@@ -7441,7 +7441,8 @@
 						],
 						"rotation": 180,
 						"damage": 10,
-						"delay": 1.0
+						"delay": 1.0,
+						"danger_type": "parry_only"
 					},
 					{
 						"projectile": "impact_basic",
@@ -7451,7 +7452,8 @@
 						],
 						"rotation": 180,
 						"damage": 10,
-						"delay": 1.0
+						"delay": 1.0,
+						"danger_type": "parry_only"
 					},
 					{
 						"projectile": "impact_basic",
@@ -7525,7 +7527,8 @@
 						],
 						"rotation": 180,
 						"damage": 10,
-						"delay": 4.2
+						"delay": 4.2,
+						"danger_type": "parry_only"
 					},
 					{
 						"projectile": "impact_basic",
@@ -7835,7 +7838,7 @@
 		"name": "저택의 주인",
 		"phase": 1,
 		"max_hp": 5,
-		"battle_bgm": "res://sounds/bgm8.mp3",
+		"battle_bgm": "res://sounds/bgm24.mp3",
 		"battle_bgm_volume_db": 0.0,
 		"battle_bgm_loop": true,
 		"battle_bgm_fade_in": true,
@@ -7906,9 +7909,9 @@
 					"id": "right_fish_man",
 					"name": "오른쪽 부하",
 					"rect": [
-						400,
+						425,
 						254,
-						165,
+						140,
 						300
 					]
 				},
@@ -8028,9 +8031,9 @@
 					},
 					{
 						"id": "summon_fish_man_01",
-						"weight": 50,
+						"weight": 100,
 						"priority": 2,
-						"warning_text": "가면을 쓴 남자가 다가왔다.",
+						"warning_text": "가면을 쓴 남자가 구석을 향해 손짓한다.",
 						"fire_mode": "parallel",
 						"max_uses": 3,
 						"start_effects": [
@@ -8038,10 +8041,129 @@
 								"type": "revive_part",
 								"part_id": "left_fish_man",
 								"hp_percent": 100,
-								"text": "...",
+								"text": "또 다른 가면을 쓴 남자가 다가왔다.",
 								"sound": "res://sounds/footsteps.mp3",
 								"sound_volume_db": 20.0,
 								"effect_duration": 0.8
+							}
+						]
+					},
+					{
+						"id": "basic_attack_04",
+						"weight": 40,
+						"priority": 1,
+						"warning_text": "오른쪽 남성이 주먹을 양쪽으로 휘두른다.",
+						"fire_mode": "parallel",
+						"projectiles": [
+							{
+								"projectile": "impact_basic",
+								"start": [
+									600,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 1.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									680,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 1.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									600,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 1.4,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									680,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 1.4,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									1200,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 3.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									1280,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 3.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									1200,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 3.4,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									1280,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 3.4,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 4.2,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									880,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 4.2,
+								"danger_type": "parry_only"
 							}
 						]
 					}
@@ -8070,7 +8192,7 @@
 					"rect": [
 						224,
 						254,
-						172,
+						150,
 						300
 					]
 				},
@@ -8192,7 +8314,7 @@
 						"id": "summon_fish_man_02",
 						"weight": 50,
 						"priority": 2,
-						"warning_text": "가면을 쓴 남자가 다가왔다.",
+						"warning_text": "가면을 쓴 남자가 구석을 향해 손짓한다.",
 						"fire_mode": "parallel",
 						"max_uses": 3,
 						"start_effects": [
@@ -8200,10 +8322,119 @@
 								"type": "revive_part",
 								"part_id": "right_fish_man",
 								"hp_percent": 100,
-								"text": "...",
+								"text": "또 다른 가면을 쓴 남자가 다가왔다.",
 								"sound": "res://sounds/footsteps.mp3",
 								"sound_volume_db": 20.0,
 								"effect_duration": 0.8
+							}
+						]
+					},
+					{
+						"id": "basic_attack_05",
+						"weight": 40,
+						"priority": 1,
+						"warning_text": "왼쪽 남성이 주먹을 양쪽으로 휘두른다.",
+						"fire_mode": "parallel",
+						"projectiles": [
+							{
+								"projectile": "impact_basic",
+								"start": [
+									600,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 1.0
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									680,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 1.0
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									600,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 1.4
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									680,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 1.4
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									1200,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 3.0
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									1280,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 3.0
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									1200,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 3.4
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									1280,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 3.4
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 4.2
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									880,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 4.2
 							}
 						]
 					}
@@ -8215,8 +8446,8 @@
 	"hammerhead_mansion_master_phase_02": {
 		"name": "저택의 주인",
 		"phase": 2,
-		"max_hp": 1000,
-		"battle_bgm": "res://sounds/bgm24.mp3",
+		"max_hp": 30,
+		"battle_bgm": "res://sounds/bgm25.mp3",
 		"battle_bgm_volume_db": 0.0,
 		"battle_bgm_loop": true,
 		"battle_bgm_fade_in": true,
@@ -8235,9 +8466,9 @@
 			-40
 		],
 		"can_escape": false,
-		"encounter_text": ".",
-		"observe_text": ".",
-		"weakness_text": "얼굴이 약점인 것 같다.",
+		"encounter_text": "저택의 주인이 자리에서 일어났다.",
+		"observe_text": "그가 일어나자 상상했던 것보다 거대해 보인다.",
+		"weakness_text": "머리가 약점인 것 같다.",
 		"patterns": [
 			{
 				"id": "basic_attack_01",
@@ -8256,12 +8487,12 @@
 				"id": "head",
 				"name": "머리",
 				"rect": [
-					356,
-					96,
-					390,
-					139
+					310,
+					82,
+					472,
+					159
 				],
-				"damage_multiplier": 5.0
+				"damage_multiplier": 10.0
 			},
 			{
 				"id": "body",
@@ -8278,8 +8509,8 @@
 		"parts": [
 			{
 				"id": "right_arm",
-				"name": "오른쪽 팔",
-				"max_hp": 250,
+				"name": "거대한 오른쪽 팔",
+				"max_hp": 10,
 				"z_index": 10,
 				"image": "res://imgs/enemies/hammerhead_mansion_master_phase_02_right.png",
 				"observe_text": "",
@@ -8292,10 +8523,10 @@
 					0
 				],
 				"destroyable": true,
-				"destroy_text": "오른쪽 팔이 떨어져 나갔다.",
+				"destroy_text": "거대한 오른쪽 팔이 떨어져 나갔다.",
 				"hitbox": {
 					"id": "right_arm",
-					"name": "오른쪽 팔",
+					"name": "거대한 오른쪽 팔",
 					"rect": [
 						690,
 						292,
@@ -8305,40 +8536,207 @@
 				},
 				"patterns": [
 					{
-						"id": "basic_attack_04",
-						"weight": 40,
-						"warning_text": "망가진 의자를 왼쪽으로 휘두른다.",
-						"fire_mode": "sequential",
+						"id": "basic_attack_03",
+						"weight": 30,
+						"priority": 1,
+						"warning_text": "거대한 오른쪽 주먹을 중앙으로 빠르게 휘두른다.",
+						"fire_mode": "parallel",
 						"projectiles": [
 							{
-								"projectile": "impact_basic",
+								"projectile": "punch_bullet_small",
 								"start": [
-									500,
+									800,
 									0
 								],
 								"rotation": 180,
-								"damage": 20,
-								"delay": 0.0
+								"damage": 8,
+								"delay": 0.3,
+								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "impact_basic",
+								"projectile": "punch_bullet_small",
 								"start": [
-									900,
+									860,
+									0
+								],
+								"rotation": 180,
+								"damage": 8,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_small",
+								"start": [
+									800,
 									0
 								],
 								"rotation": 180,
 								"damage": 10,
-								"delay": 0.3
+								"delay": 0.6,
+								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "impact_basic",
+								"projectile": "punch_bullet_small",
 								"start": [
-									1200,
+									860,
 									0
 								],
 								"rotation": 180,
 								"damage": 10,
-								"delay": 0.3
+								"delay": 0.6,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet",
+								"start": [
+									650,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.9,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet",
+								"start": [
+									650,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 1.2,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet",
+								"start": [
+									650,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 1.5,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet",
+								"start": [
+									650,
+									0
+								],
+								"rotation": 180,
+								"damage": 8,
+								"delay": 1.8,
+								"danger_type": "parry_only"
+							}
+						]
+					},
+					{
+						"id": "basic_attack_04",
+						"weight": 30,
+						"priority": 1,
+						"warning_text": "거대한 오른쪽 주먹을 오른쪽으로 휘두른다.",
+						"fire_mode": "parallel",
+						"projectiles": [
+							{
+								"projectile": "punch_bullet_small",
+								"start": [
+									1300,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 1.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_small",
+								"start": [
+									1250,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 1.1,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_small",
+								"start": [
+									1300,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 1.2,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_small",
+								"start": [
+									700,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 3.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_small",
+								"start": [
+									650,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 3.1,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_small",
+								"start": [
+									700,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 3.2,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_small",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 4.1,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_small",
+								"start": [
+									950,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 4.2,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_small",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 4.3,
+								"danger_type": "parry_only"
 							}
 						]
 					}
@@ -8346,11 +8744,11 @@
 			},
 			{
 				"id": "left_arm",
-				"name": "왼쪽 팔",
-				"max_hp": 200,
+				"name": "거대한 왼쪽 팔",
+				"max_hp": 10,
 				"z_index": 10,
 				"image": "res://imgs/enemies/hammerhead_mansion_master_phase_02_left.png",
-				"observe_text": "이 부위를 먼저 노리는게 좋을거같다.",
+				"observe_text": "",
 				"size": [
 					328,
 					1054
@@ -8360,10 +8758,10 @@
 					0
 				],
 				"destroyable": true,
-				"destroy_text": "왼쪽 팔이 떨어져 나갔다.",
+				"destroy_text": "거대한 왼쪽 팔이 떨어져 나갔다.",
 				"hitbox": {
 					"id": "left_arm",
-					"name": "왼쪽 팔",
+					"name": "거대한 왼쪽 팔",
 					"rect": [
 						138,
 						319,
@@ -8373,15 +8771,89 @@
 				},
 				"patterns": [
 					{
-						"id": "basic_attack_02",
-						"weight": 55,
-						"warning_text": "구겨진 파이프를 중앙으로 휘두른다.",
+						"id": "basic_attack_01",
+						"weight": 40,
+						"priority": 1,
+						"warning_text": "거대한 왼쪽 주먹을 양쪽으로 휘두른다.",
 						"fire_mode": "sequential",
 						"projectiles": [
 							{
-								"projectile": "fear_slash",
+								"projectile": "punch_bullet",
 								"start": [
-									700,
+									200,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet",
+								"start": [
+									1150,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.5
+							},
+							{
+								"projectile": "punch_bullet",
+								"start": [
+									200,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 2.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet",
+								"start": [
+									1150,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 2.5
+							},
+							{
+								"projectile": "punch_bullet",
+								"start": [
+									200,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 3.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet",
+								"start": [
+									1150,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 3.5,
+								"danger_type": "parry_only"
+							}
+						]
+					},
+					{
+						"id": "basic_attack_02",
+						"weight": 40,
+						"priority": 1,
+						"warning_text": "거대한 왼쪽 주먹을 중앙으로 강하게 휘두른다.",
+						"fire_mode": "sequential",
+						"projectiles": [
+							{
+								"projectile": "punch_bullet_slow",
+								"start": [
+									800,
 									0
 								],
 								"rotation": 180,
@@ -8390,25 +8862,80 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "punch_bullet_slow",
 								"start": [
-									900,
+									600,
 									0
 								],
 								"rotation": 180,
 								"damage": 20,
-								"delay": 0.3,
+								"delay": 0.1,
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "punch_bullet_slow",
 								"start": [
-									1100,
+									400,
 									0
 								],
 								"rotation": 180,
 								"damage": 20,
-								"delay": 0.3,
+								"delay": 0.2,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_slow",
+								"start": [
+									600,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.6,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.7,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_slow",
+								"start": [
+									600,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.8,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_slow",
+								"start": [
+									400,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_slow",
+								"start": [
+									600,
+									0
+								],
+								"rotation": 180,
+								"damage": 25,
+								"delay": 1.0,
 								"danger_type": "parry_only"
 							}
 						]
@@ -8424,7 +8951,7 @@
 				"max": 60
 			},
 			{
-				"item": "wax_heart",
+				"item": "scales_heart",
 				"chance": 100,
 				"min": 1,
 				"max": 1

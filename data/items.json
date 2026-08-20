@@ -460,8 +460,18 @@
 	},
 	"wax_heart": {
 		"name": "밀랍 심장",
-		"description": "밀랍으로 뒤덮여있는 관리자의 심장이다. 미세하게 뛰고 있다. 소녀는 결국 친구들과 하나가 되었다.",
+		"description": "밀랍으로 뒤덮여있는 심장이다. 미세하게 뛰고 있다. 소녀는 결국 그들과 하나가 되었다.",
 		"image": "res://imgs/items/wax_heart180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "etc",
+		"effect_scope": "inventory",
+		"stackable": false
+	},
+	"scales_heart": {
+		"name": "비늘 심장",
+		"description": "비늘로 뒤덮여있는 심장이다. 미세하게 뛰고 있다. 그도 결국은 살아남지 못했다.",
+		"image": "res://imgs/items/scales_heart180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "etc",

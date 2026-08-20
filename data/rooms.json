@@ -4314,6 +4314,11 @@
 			"amplitude_y": 1.0,
 			"speed": 0.3
 		},
+		"ambient_sound": {
+			"path": "res://sounds/crows.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
 		"bgm": {
 			"path": "res://sounds/ocean_wave.mp3",
 			"volume_db": -10.0,
@@ -4531,6 +4536,11 @@
 			"amplitude_x": 4.0,
 			"amplitude_y": 1.0,
 			"speed": 0.3
+		},
+		"ambient_sound": {
+			"path": "res://sounds/crows.mp3",
+			"volume_db": 0.0,
+			"loop": true
 		},
 		"bgm": {
 			"path": "res://sounds/ocean_wave.mp3",
@@ -26669,6 +26679,16 @@
 				"required_flag_missing": [
 					"story_first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25_done"
 				]
+			},
+			{
+				"event": "defeated_hammerhead_mansion_master",
+				"required_flag": [
+					"defeated_hammerhead_mansion_master",
+					"story_first_swimming_pool_huge_hall_02_done"
+				],
+				"required_flag_missing": [
+					"story_defeated_hammerhead_mansion_master_done"
+				]
 			}
 		],
 		"exits": {
@@ -27067,7 +27087,7 @@
 				"path": "res://imgs/backgrounds/swimming_pool_huge_hall_01.png"
 			}
 		],
-		"display_name": "수영장 3층 · 거대한 홀",
+		"display_name": "수영장 3층 · 저택 응접실",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -27107,15 +27127,6 @@
 				],
 				"required_flag_missing": [
 					"story_first_swimming_pool_huge_hall_02_done"
-				]
-			},
-			{
-				"event": "defeated_hammerhead_mansion_master",
-				"required_flag": [
-					"defeated_hammerhead_mansion_master"
-				],
-				"required_flag_missing": [
-					"story_defeated_hammerhead_mansion_master_done"
 				]
 			}
 		],
@@ -27275,7 +27286,7 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "문 너머에는 어두운 숲이 펼쳐져 있다."
+						"text": "어두운 숲이 문 너머에 펼쳐져 있다."
 					},
 					{
 						"type": "text",
@@ -27381,8 +27392,8 @@
 			"alpha": 0.55
 		},
 		"ambient_sound": {
-			"path": "res://sounds/river.mp3",
-			"volume_db": 15.0,
+			"path": "res://sounds/crows.mp3",
+			"volume_db": 0.0,
 			"loop": true
 		},
 		"bgm": {

@@ -30,8 +30,8 @@
 		"frame_count": 9,
 		"frame_time": 0.04,
 		"size": [
-			220,
-			220
+			200,
+			200
 		],
 		"speed": 1500,
 		"life_time": 0.9,
@@ -41,7 +41,7 @@
 		"hitbox": {
 			"offset": [
 				55,
-				10
+				5
 			],
 			"size": [
 				90,
@@ -272,6 +272,81 @@
 		"status_effects": [
 			"lethargy"
 		],
+		"hitbox": {
+			"offset": [
+				55,
+				5
+			],
+			"size": [
+				90,
+				90
+			]
+		}
+	},
+	"punch_bullet": {
+		"name": "주먹",
+		"frames_path": "res://imgs/effects/punching/punching_",
+		"frame_count": 9,
+		"frame_time": 0.04,
+		"size": [
+			600,
+			600
+		],
+		"speed": 1500,
+		"life_time": 0.9,
+		"max_distance": 1000,
+		"base_direction": "up",
+		"sound": "impact",
+		"hitbox": {
+			"offset": [
+				220,
+				0
+			],
+			"size": [
+				200,
+				400
+			]
+		}
+	},
+	"punch_bullet_slow": {
+		"name": "주먹",
+		"frames_path": "res://imgs/effects/punching/punching_",
+		"frame_count": 9,
+		"frame_time": 0.04,
+		"size": [
+			600,
+			600
+		],
+		"speed": 500,
+		"life_time": 0.9,
+		"max_distance": 1000,
+		"base_direction": "up",
+		"sound": "slash",
+		"hitbox": {
+			"offset": [
+				220,
+				0
+			],
+			"size": [
+				200,
+				400
+			]
+		}
+	},
+	"punch_bullet_small": {
+		"name": "주먹",
+		"frames_path": "res://imgs/effects/punching/punching_",
+		"frame_count": 9,
+		"frame_time": 0.04,
+		"size": [
+			200,
+			200
+		],
+		"speed": 1500,
+		"life_time": 0.9,
+		"max_distance": 1000,
+		"base_direction": "up",
+		"sound": "impact",
 		"hitbox": {
 			"offset": [
 				55,

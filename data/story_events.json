@@ -8498,11 +8498,15 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "클레어 씨는 CCTV를 보며 단서를 찾았고, 나와 아이작은 주변을 탐색했다."
+				"text": "클레어 씨는 방송장비를 체크하면서 단서를 찾았고, 나와 아이작은 주변을 탐색했다."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "우린 이곳에서 생활하면서 필사적으로 탈출할 방법을 찾고 있었다."
+				"text": "나는 아이작 씨의 지도하에 꾸준히 운동을 하면서 앞으로의 전투에 대비해서 몸을 기르고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "우리는 각자 이곳에서 생활하면서 필사적으로 탈출할 방법을 찾고 있었다."
 			},
 			{
 				"type": "fade"
@@ -9247,7 +9251,7 @@
 				"type": "portrait",
 				"character": "claire",
 				"emotion": "normal",
-				"text": "레인씨, 제 목소리 들려요?"
+				"text": "레인 씨, 제 목소리 들려요?"
 			},
 			{
 				"type": "portrait",
@@ -9907,7 +9911,7 @@
 				"type": "portrait",
 				"character": "claire",
 				"emotion": "embarrassed",
-				"text": "레인씨???"
+				"text": "레인 씨???"
 			},
 			{
 				"type": "story_dialogue",
@@ -10663,7 +10667,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "레인씨???"
+				"text": "레인 씨???"
 			},
 			{
 				"type": "story_dialogue",
@@ -11620,7 +11624,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그의 귀상어 가면이 우리 세 사람을 천천히 훑었다."
+				"text": "귀상어 가면의 남자는 우리 세 사람을 천천히 훑었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -11803,7 +11807,7 @@
 			{
 				"type": "portrait",
 				"character": "isaac",
-				"emotion": "angry",
+				"emotion": "normal",
 				"text": "지루한 설명은 끝났나?"
 			},
 			{
@@ -11839,7 +11843,7 @@
 				"type": "portrait",
 				"character": "claire",
 				"emotion": "embarrassed",
-				"text": "레인씨, 조심해요."
+				"text": "레인 씨, 조심해요."
 			},
 			{
 				"type": "story_dialogue",
@@ -11876,6 +11880,10 @@
 		"start_flag": "story_defeated_hammerhead_mansion_master_done",
 		"events": [
 			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/swimming_pool_huge_hall_01.png"
+			},
+			{
 				"type": "screen_color",
 				"color": "#000000",
 				"alpha": 1.0,
@@ -11893,10 +11901,6 @@
 				"path": "res://sounds/bgm11.mp3",
 				"volume_db": -5,
 				"loop": true
-			},
-			{
-				"type": "background",
-				"path": "res://imgs/backgrounds/swimming_pool_huge_hall_01.png"
 			},
 			{
 				"type": "screen_color_clear",
@@ -11927,6 +11931,10 @@
 			},
 			{
 				"type": "story_dialogue",
+				"text": "그들은 도망치듯이 어둠 속으로 몸을 감췄다."
+			},
+			{
+				"type": "story_dialogue",
 				"name": "저택의 주인",
 				"text": "이럴... 리가..."
 			},
@@ -11954,9 +11962,18 @@
 				"text": "이걸로 끝이다."
 			},
 			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm9.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
 				"type": "story_dialogue",
 				"name": "저택의 주인",
-				"text": "아니..."
+				"text": "아니... 하하하!"
 			},
 			{
 				"type": "story_dialogue",
@@ -11964,6 +11981,7 @@
 			},
 			{
 				"type": "story_dialogue",
+				"name": "저택의 주인",
 				"text": "이제 시작이지."
 			},
 			{
@@ -11985,7 +12003,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "네 그게 우리가 이곳에 온 목적입니다."
+				"text": "네, 그게 우리가 이곳에 온 목적입니다."
 			},
 			{
 				"type": "story_dialogue",
@@ -12087,6 +12105,12 @@
 				"text": "입 다물어."
 			},
 			{
+				"type": "sound",
+				"path": "res://sounds/fall_down.mp3",
+				"volume_db": 15,
+				"wait": true
+			},
+			{
 				"type": "story_dialogue",
 				"text": "아이작 씨가 저택의 주인의 멱살을 붙잡았다."
 			},
@@ -12098,7 +12122,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "저택의 주인",
-				"text": "처음에는 모두 같은 말을 한다."
+				"text": "으윽... 처음에는 모두 같은 말을 한다."
 			},
 			{
 				"type": "story_dialogue",
@@ -12147,7 +12171,10 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그 말을 마지막으로 저택의 주인의 몸이 앞으로 무너졌다."
+				"text": "그 말을 마지막으로 저택의 주인의 몸이 무너져내렸다."
+			},
+			{
+				"type": "stop_bgm"
 			},
 			{
 				"type": "story_dialogue",
@@ -12163,7 +12190,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "쿵."
+				"text": "쿵.."
 			},
 			{
 				"type": "story_dialogue",
@@ -12182,7 +12209,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "아이작",
-				"text": "심장이 있다."
+				"text": "두번째 심장..."
 			},
 			{
 				"type": "standing",
@@ -12193,7 +12220,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "다들 저 말을 믿을 건 아니죠?"
+				"text": "저기, 다들 저놈 말을 믿을 건 아니죠?"
 			},
 			{
 				"type": "story_dialogue",
@@ -12212,7 +12239,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "아이작",
-				"text": "우리는 다른 괴물들의 심장을 찾는다."
+				"text": "맞아, 우리는 다른 괴물들의 심장을 찾는다."
 			},
 			{
 				"type": "story_dialogue",
@@ -12246,7 +12273,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "말로 확인했지만 불쾌한 침묵은 사라지지 않았다."
+				"text": "우리는 서로 말로 확인했지만 불쾌한 침묵은 사라지지 않았다."
 			},
 			{
 				"type": "story_dialogue",
@@ -12289,6 +12316,24 @@
 				"text": "손끝을 통해 강한 박동이 전해졌다."
 			},
 			{
+				"type": "bgm",
+				"path": "res://sounds/heartbeats.mp3",
+				"volume_db": 5,
+				"loop": true
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
 				"type": "story_dialogue",
 				"name": "나",
 				"text": "으...윽..."
@@ -12302,6 +12347,18 @@
 				"text": "낯선 사람들의 얼굴."
 			},
 			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
 				"type": "story_dialogue",
 				"text": "물에 잠긴 복도."
 			},
@@ -12310,12 +12367,39 @@
 				"text": "서로를 끌어안으며 반드시 함께 돌아가겠다고 약속하는 사람들."
 			},
 			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
 				"type": "story_dialogue",
 				"text": "그리고 마지막에는 피로 젖은 손으로 심장을 들고 있는 누군가의 모습."
 			},
 			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 1.0,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
 				"type": "story_dialogue",
 				"text": "나는 반사적으로 손을 뗐다."
+			},
+			{
+				"type": "stop_bgm"
 			},
 			{
 				"type": "screen_color",
@@ -12377,7 +12461,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "레인씨."
+				"text": "레인 씨!"
 			},
 			{
 				"type": "story_dialogue",
@@ -12393,16 +12477,61 @@
 			{
 				"type": "story_dialogue",
 				"name": "아이작",
-				"text": "그 심장같이 들을까? 얼굴색이 너무 안 좋은데?"
+				"text": "괜찮아? 많이 다쳤어?"
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "아니에요, 제 가방에 넣을게요."
+				"text": "오랜만에 몸을 과하게 썼더니 좀 어지러워서 그래요."
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "joy",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "자식... 일어나 어서 안전한 장소로 이동하자."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "긴 전투 끝에 서로의 꼴이 말이 아니었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "여기가 현실이었다면 이미 죽었을 상태였다."
 			},
 			{
 				"type": "story_dialogue",
 				"text": "우리는 저택의 주인의 심장을 챙겼다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "털컥!"
+			},
+			{
+				"type": "sound",
+				"id": "wind_sound_hall",
+				"path": "res://sounds/wind_sound.mp3",
+				"volume_db": 5,
+				"wait": false
 			},
 			{
 				"type": "story_dialogue",
@@ -12414,7 +12543,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "우리는 열린 문을 향해 걸어갔다."
+				"text": "우리는 서로를 부축하며 앞으로 걸어갔다."
 			},
 			{
 				"type": "story_dialogue",
@@ -12430,6 +12559,10 @@
 			},
 			{
 				"type": "story_dialogue",
+				"text": "그건."
+			},
+			{
+				"type": "story_dialogue",
 				"text": "의심이었다."
 			},
 			{
@@ -12438,6 +12571,11 @@
 				"alpha": 1.0,
 				"duration": 0.1,
 				"wait": true
+			},
+			{
+				"type": "stop_sound",
+				"all": true,
+				"fade_time": 1.0
 			},
 			{
 				"type": "show_game_ui"
