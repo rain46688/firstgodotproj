@@ -7837,7 +7837,7 @@
 	"hammerhead_mansion_master_phase_01": {
 		"name": "저택의 주인",
 		"phase": 1,
-		"max_hp": 5,
+		"max_hp": 30,
 		"battle_bgm": "res://sounds/bgm24.mp3",
 		"battle_bgm_volume_db": 0.0,
 		"battle_bgm_loop": true,
@@ -7891,7 +7891,7 @@
 			{
 				"id": "right_fish_man",
 				"name": "오른쪽 부하",
-				"max_hp": 30,
+				"max_hp": 300,
 				"z_index": 10,
 				"image": "res://imgs/enemies/red_fish_man_02.png",
 				"observe_text": "물고기...?",
@@ -8172,7 +8172,7 @@
 			{
 				"id": "left_fish_man",
 				"name": "왼쪽 부하",
-				"max_hp": 30,
+				"max_hp": 300,
 				"z_index": 10,
 				"image": "res://imgs/enemies/red_fish_man_02.png",
 				"observe_text": "물고기...?",
@@ -8446,7 +8446,7 @@
 	"hammerhead_mansion_master_phase_02": {
 		"name": "저택의 주인",
 		"phase": 2,
-		"max_hp": 30,
+		"max_hp": 300,
 		"battle_bgm": "res://sounds/bgm25.mp3",
 		"battle_bgm_volume_db": 0.0,
 		"battle_bgm_loop": true,
@@ -8510,7 +8510,7 @@
 			{
 				"id": "right_arm",
 				"name": "거대한 오른쪽 팔",
-				"max_hp": 10,
+				"max_hp": 600,
 				"z_index": 10,
 				"image": "res://imgs/enemies/hammerhead_mansion_master_phase_02_right.png",
 				"observe_text": "",
@@ -8572,8 +8572,7 @@
 								],
 								"rotation": 180,
 								"damage": 10,
-								"delay": 0.6,
-								"danger_type": "parry_only"
+								"delay": 0.6
 							},
 							{
 								"projectile": "punch_bullet_small",
@@ -8583,8 +8582,7 @@
 								],
 								"rotation": 180,
 								"damage": 10,
-								"delay": 0.6,
-								"danger_type": "parry_only"
+								"delay": 0.6
 							},
 							{
 								"projectile": "punch_bullet",
@@ -8636,7 +8634,7 @@
 						"id": "basic_attack_04",
 						"weight": 30,
 						"priority": 1,
-						"warning_text": "거대한 오른쪽 주먹을 오른쪽으로 휘두른다.",
+						"warning_text": "거대한 오른쪽 주먹을 오른쪽 부터 사방으로 휘두른다.",
 						"fire_mode": "parallel",
 						"projectiles": [
 							{
@@ -8657,7 +8655,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 5,
+								"damage": 10,
 								"delay": 1.1,
 								"danger_type": "parry_only"
 							},
@@ -8668,7 +8666,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 5,
+								"damage": 10,
 								"delay": 1.2,
 								"danger_type": "parry_only"
 							},
@@ -8690,7 +8688,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 5,
+								"damage": 10,
 								"delay": 3.1,
 								"danger_type": "parry_only"
 							},
@@ -8701,7 +8699,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 5,
+								"damage": 10,
 								"delay": 3.2,
 								"danger_type": "parry_only"
 							},
@@ -8723,7 +8721,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 5,
+								"damage": 10,
 								"delay": 4.2,
 								"danger_type": "parry_only"
 							},
@@ -8734,7 +8732,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 5,
+								"damage": 10,
 								"delay": 4.3,
 								"danger_type": "parry_only"
 							}
@@ -8745,7 +8743,7 @@
 			{
 				"id": "left_arm",
 				"name": "거대한 왼쪽 팔",
-				"max_hp": 10,
+				"max_hp": 500,
 				"z_index": 10,
 				"image": "res://imgs/enemies/hammerhead_mansion_master_phase_02_left.png",
 				"observe_text": "",

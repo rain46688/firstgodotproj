@@ -12360,7 +12360,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "물에 잠긴 복도."
+				"text": "알 수 없는 공간."
 			},
 			{
 				"type": "story_dialogue",
@@ -12427,12 +12427,12 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "아니에요."
+				"text": "괜찮아요."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "갑자기 무언가가 보였어요..."
+				"text": "잠깐 현기증이..."
 			},
 			{
 				"type": "story_dialogue",
@@ -12448,7 +12448,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그것을 흡수하면 자신을 되찾을 수 있다."
+				"text": "그것을 흡수하면 무언가를 얻을 수 있다."
 			},
 			{
 				"type": "story_dialogue",
@@ -12460,13 +12460,18 @@
 			},
 			{
 				"type": "story_dialogue",
+				"name": "???",
+				"text": "...씨"
+			},
+			{
+				"type": "story_dialogue",
 				"name": "클레어",
 				"text": "레인 씨!"
 			},
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "괜찮은 거 맞아요?"
+				"text": "정말 괜찮은 거 맞아요?"
 			},
 			{
 				"type": "standing",
@@ -12477,12 +12482,12 @@
 			{
 				"type": "story_dialogue",
 				"name": "아이작",
-				"text": "괜찮아? 많이 다쳤어?"
+				"text": "어디 봐봐 많이 다쳤어?"
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "오랜만에 몸을 과하게 썼더니 좀 어지러워서 그래요."
+				"text": "아니에요, 걍 오랜만에 과하게 운동했더니 좀 어지러워서 그래요."
 			},
 			{
 				"type": "standing",
@@ -12493,7 +12498,12 @@
 			{
 				"type": "story_dialogue",
 				"name": "아이작",
-				"text": "자식... 일어나 어서 안전한 장소로 이동하자."
+				"text": "자식, 일어나 어서, 빨리 안전한 장소로 이동하자."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "여긴 위험해."
 			},
 			{
 				"type": "screen_color",
@@ -12512,7 +12522,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "긴 전투 끝에 서로의 꼴이 말이 아니었다."
+				"text": "우리는 서로를 바라보았다, 그 꼴이 말이 아니었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -12595,6 +12605,337 @@
 			{
 				"type": "flag",
 				"flag": "story_defeated_hammerhead_mansion_master_done"
+			}
+		]
+	},
+	"ride_motorboat_event_dark_forest_river_02": {
+		"start_flag": "story_ride_motorboat_event_dark_forest_river_02_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/forest.mp3",
+				"volume_db": 0,
+				"loop": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "모터보트에 올라타자 자동으로 시동이 걸리며 출발하기 시작했다."
+			},
+			{
+				"type": "sound",
+				"id": "motorboat",
+				"path": "res://sounds/motorboat_sound.mp3",
+				"volume_db": 5,
+				"wait": true
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "show_game_ui"
+			},
+			{
+				"type": "change_room",
+				"room": "classroom_12_02"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "clear_flag",
+				"flag": "touch_motorboat_dark_forest_river_02"
+			}
+		]
+	},
+	"ride_motorboat_event_classroom_12_02": {
+		"start_flag": "story_ride_motorboat_event_classroom_12_02_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/ocean_wave.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "모터보트에 올라타자 자동으로 시동이 걸리며 출발하기 시작했다."
+			},
+			{
+				"type": "sound",
+				"id": "motorboat",
+				"path": "res://sounds/motorboat_sound.mp3",
+				"volume_db": 5,
+				"wait": true
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "show_game_ui"
+			},
+			{
+				"type": "change_room",
+				"room": "dark_forest_river_02"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "clear_flag",
+				"flag": "touch_motorboat_classroom_12_02"
+			}
+		]
+	},
+	"first_grail_filled_unknown_hall_03": {
+		"start_flag": "story_first_grail_filled_unknown_hall_03_done",
+		"events": [
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/unknown_grail_01.png"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/unknown_hall.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 가방 속에 넣어둔 커다란 덩어리를 꺼내 보았다. 손에 올리는 순간, 가방 속에서 느껴지던 진동이 더 선명해졌다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그리고 가장 왼쪽 잔 위에 조심스럽게 올려놓았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "심장을 감싸고 있던 비닐이 천천히 떨어져 내리기 시작했다. 아무도 손을 대지 않았는데도, 스스로 반응하고 있었다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/liquied_pouring.mp3",
+				"volume_db": -10,
+				"wait": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/unknown_grail_02.png"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "녹아내린 심장은 잔 안쪽으로 흘러 들어갔고, 잔 바닥에는 석류빛처럼 짙은 붉은 빛이 고였다."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "annoyed",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "이걸로 두번째..."
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "normal",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "앞으로 두 번만 더 하면 돼."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "네, 우리가 잔들의 절반이나 채웠어요."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그러나 아무도 기뻐하지 못했다. 지금 보다 더 혹독한 고난이 앞으로 펼쳐질 것에 대한 공포 때문이었다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/unknown_hall_03.png"
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "거대한 문은 여전히 닫혀 있었다. 하지만 방금 전보다 아주 조금, 표면의 문양이 살아 있는 것처럼 보였다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "우린 다를 거예요."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "문은 여전히 굳게 닫혀 있었고, 그 좌우의 네 잔 중 절반의 잔에 붉은 빛이 깃들어 있었다."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "normal",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "네, 지금은 휴식을 취하고 다음 심장에 대한 단서를 찾아봐요."
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "normal",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "그게 좋겠어."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 문을 바라보았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "문 너머에서 무언가가 우리를 보고 있는 듯한 기분이 들었다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/unknown_grail_02.png"
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/result.mp3",
+				"volume_db": -10,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "\"신전의 제단이 활성화되었습니다.\""
+			},
+			{
+				"type": "story_dialogue",
+				"text": "\"플레이어의 최대 체력 25 증가되었습니다.\""
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "show_game_ui"
+			},
+			{
+				"type": "change_room",
+				"room": "unknown_hall_04"
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_grail_filled_unknown_hall_03_done"
 			}
 		]
 	}

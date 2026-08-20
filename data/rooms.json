@@ -4306,6 +4306,14 @@
 	},
 	"classroom_12": {
 		"background": "res://imgs/backgrounds/classroom_05.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"defeated_hammerhead_mansion_master"
+				],
+				"path": "res://imgs/backgrounds/classroom_13.png"
+			}
+		],
 		"display_name": "학교 2층 · 달이 보이는 교실",
 		"idle_motion": {
 			"enabled": true,
@@ -4327,7 +4335,10 @@
 		"enter_stories": [
 			{
 				"event": "first_enter_classroom_12",
-				"required_flag_missing": "story_first_enter_classroom_12_done"
+				"required_flag_missing": [
+					"story_first_enter_classroom_12_done",
+					"story_first_enter_broadcasting_room_01_done"
+				]
 			}
 		],
 		"exits": {
@@ -4530,6 +4541,14 @@
 	},
 	"classroom_12_02": {
 		"background": "res://imgs/backgrounds/classroom_dark_sea_01.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"defeated_hammerhead_mansion_master"
+				],
+				"path": "res://imgs/backgrounds/classroom_dark_sea_03.png"
+			}
+		],
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -4565,6 +4584,16 @@
 					"story_first_praise_moon_done",
 					"defeated_moon"
 				]
+			},
+			{
+				"event": "ride_motorboat_event_classroom_12_02",
+				"required_flag": [
+					"defeated_hammerhead_mansion_master",
+					"touch_motorboat_classroom_12_02"
+				],
+				"required_flag_missing": [
+					"story_ride_motorboat_event_classroom_12_02_done"
+				]
 			}
 		],
 		"interactions": {
@@ -4574,6 +4603,9 @@
 					415,
 					1500,
 					300
+				],
+				"required_flag_missing": [
+					"defeated_hammerhead_mansion_master"
 				],
 				"events": [
 					{
@@ -5717,6 +5749,45 @@
 												]
 											}
 										]
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"boat": {
+				"click_rect": [
+					185,
+					415,
+					1500,
+					300
+				],
+				"required_flag": [
+					"defeated_hammerhead_mansion_master"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 모터 보트다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "올라탄다.",
+								"events": [
+									{
+										"type": "flag",
+										"flag": "touch_motorboat_classroom_12_02"
+									},
+									{
+										"type": "clear_flag",
+										"flag": "room_enter_story_done_ride_motorboat_event_classroom_12_02"
 									}
 								]
 							},
@@ -9878,11 +9949,52 @@
 					200,
 					138
 				],
-				"required_flag": "grail_filled_unknown_hall_03_done",
+				"required_flag": [
+					"grail_filled_unknown_hall_03_done",
+					"open_storage_system"
+				],
 				"events": [
 					{
 						"type": "text",
 						"text": "잡동사니를 넣을 수 있는 박스다."
+					},
+					{
+						"type": "open_storage",
+						"storage_id": "broadcasting_room_01_box_01"
+					}
+				]
+			},
+			"box_03": {
+				"click_rect": [
+					1066,
+					577,
+					200,
+					138
+				],
+				"required_flag": [
+					"grail_filled_unknown_hall_03_done"
+				],
+				"required_flag_missing": "open_storage_system",
+				"events": [
+					{
+						"type": "text",
+						"text": "잡동사니를 넣을 수 있는 박스다."
+					},
+					{
+						"type": "portrait",
+						"character": "isaac",
+						"emotion": "expressionless",
+						"text": "그 상자 네가 사용해."
+					},
+					{
+						"type": "portrait",
+						"character": "isaac",
+						"emotion": "expressionless",
+						"text": "가방에 다 들고 다닐 수는 없으니깐 당장 필요 없는 건 거기에 넣어둬."
+					},
+					{
+						"type": "flag",
+						"flag": "open_storage_system"
 					},
 					{
 						"type": "open_storage",
@@ -10246,8 +10358,8 @@
 								"required_flag": [
 									"classroom_12_coin_payment_01_done",
 									"classroom_12_coin_payment_02_done",
-									"swimming_pool_10_coin_payment_01_done",
-									"swimming_pool_10_coin_payment_02_done"
+									"dark_forest_river_01_coin_payment_01_done",
+									"dark_forest_river_01_coin_payment_02_done"
 								],
 								"required_flag_missing": [
 									"got_holy_sword_albus_room_01"
@@ -11681,7 +11793,7 @@
 		"enter_stories": [
 			{
 				"event": "first_enter_unknown_hall_01",
-				"required_flag": "story_defeated_combined_candle_students_done",
+				"required_flag": "defeated_combined_candle_students",
 				"required_flag_missing": [
 					"story_first_enter_unknown_hall_01_done"
 				]
@@ -11827,7 +11939,7 @@
 					700,
 					636
 				],
-				"required_flag": "story_defeated_combined_candle_students_done",
+				"required_flag": "defeated_combined_candle_students",
 				"required_flag_missing": "grail_filled_unknown_hall_02_done",
 				"events": [
 					{
@@ -11876,7 +11988,7 @@
 					636
 				],
 				"required_flag": [
-					"story_defeated_combined_candle_students_done",
+					"defeated_combined_candle_students",
 					"grail_filled_unknown_hall_02_done"
 				],
 				"events": [
@@ -11914,7 +12026,15 @@
 			"volume_db": 0.0,
 			"loop": true
 		},
-		"enter_stories": [],
+		"enter_stories": [
+			{
+				"event": "first_grail_filled_unknown_hall_03",
+				"required_flag": "grail_filled_unknown_hall_03_done",
+				"required_flag_missing": [
+					"story_first_grail_filled_unknown_hall_03_done"
+				]
+			}
+		],
 		"exits": {
 			"down": {
 				"target": "unknown_hall_01",
@@ -11949,6 +12069,58 @@
 					700,
 					636
 				],
+				"required_flag": "defeated_hammerhead_mansion_master",
+				"required_flag_missing": "grail_filled_unknown_hall_03_done",
+				"events": [
+					{
+						"type": "text",
+						"text": "금속 재질의 커다란 잔이다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "심장을 잔 안에 올려놓는다.",
+								"events": [
+									{
+										"type": "item_payment",
+										"item": "scales_heart",
+										"count": 1,
+										"success_text": "비늘 심장을 잔 안에 올려놓았다.",
+										"fail_text": "비늘 심장이 없습니다.",
+										"success_events": [
+											{
+												"type": "increase_max_hp",
+												"amount": 25,
+												"heal_to_full": true
+											},
+											{
+												"type": "flag",
+												"flag": "grail_filled_unknown_hall_03_done"
+											}
+										]
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"grail_filled": {
+				"click_rect": [
+					620,
+					168,
+					700,
+					636
+				],
+				"required_flag": [
+					"defeated_hammerhead_mansion_master",
+					"grail_filled_unknown_hall_03_done"
+				],
 				"events": [
 					{
 						"type": "text",
@@ -11956,7 +12128,7 @@
 					},
 					{
 						"type": "text",
-						"text": "안은 비어있다."
+						"text": "안은 붉은 액체로 가득 차있다."
 					}
 				]
 			}
@@ -27022,7 +27194,10 @@
 					1910,
 					451
 				],
-				"required_flag_missing": "story_first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25_done",
+				"required_flag_missing": [
+					"story_first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25_done",
+					"defeated_hammerhead_mansion_master"
+				],
 				"events": [
 					{
 						"type": "text",
@@ -27046,6 +27221,9 @@
 					451
 				],
 				"required_flag": "story_first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25_done",
+				"required_flag_missing": [
+					"defeated_hammerhead_mansion_master"
+				],
 				"events": [
 					{
 						"type": "text",
@@ -27072,6 +27250,24 @@
 						"character": "claire",
 						"emotion": "normal",
 						"text": "다 같이 있으면 괜찮을 거예요."
+					}
+				]
+			},
+			"stairs_3": {
+				"click_rect": [
+					7,
+					628,
+					1910,
+					451
+				],
+				"required_flag": [
+					"story_first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25_done",
+					"defeated_hammerhead_mansion_master"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "계단 아래는 아무것도 보이지 않는다."
 					}
 				]
 			}
@@ -27348,6 +27544,18 @@
 			"volume_db": 0.0,
 			"loop": true
 		},
+		"enter_stories": [
+			{
+				"event": "ride_motorboat_event_dark_forest_river_02",
+				"required_flag": [
+					"defeated_hammerhead_mansion_master",
+					"touch_motorboat_dark_forest_river_02"
+				],
+				"required_flag_missing": [
+					"story_ride_motorboat_event_dark_forest_river_02_done"
+				]
+			}
+		],
 		"exits": {
 			"right": {
 				"target": "swimming_pool_huge_hall_01",
@@ -27370,6 +27578,28 @@
 					{
 						"type": "text",
 						"text": "낡은 모터 보트다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "올라탄다.",
+								"events": [
+									{
+										"type": "flag",
+										"flag": "touch_motorboat_dark_forest_river_02"
+									},
+									{
+										"type": "clear_flag",
+										"flag": "room_enter_story_done_ride_motorboat_event_dark_forest_river_02"
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
 					}
 				]
 			}
@@ -27412,17 +27642,180 @@
 			}
 		},
 		"interactions": {
-			"boat": {
+			"crow": {
 				"click_rect": [
 					976,
 					371,
 					886,
 					571
 				],
+				"required_flag_missing": "dark_forest_river_01_coin_payment_01_done",
 				"events": [
 					{
+						"type": "sound",
+						"path": "res://sounds/crow.mp3",
+						"volume_db": 0,
+						"wait": false
+					},
+					{
 						"type": "text",
-						"text": "넓은 강이다."
+						"text": "까악. 까악."
+					},
+					{
+						"type": "text",
+						"text": "까마귀 떼가 넓은 강 위를 날고 있다."
+					},
+					{
+						"type": "text",
+						"name": "의문의 까마귀",
+						"text": "너 거기 반짝이는거 많이 놓고 가라."
+					},
+					{
+						"type": "text",
+						"name": "의문의 까마귀",
+						"text": "놓고 가면 보물 주겠다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "금화를 내려놓는다.",
+								"events": [
+									{
+										"type": "item_payment",
+										"item": "unknown_coin",
+										"count": 100,
+										"success_text": "금화 100개를 바쳤다.",
+										"fail_text": "금화가 부족하다. (알수없는 코인 100개 필요)",
+										"success_events": [
+											{
+												"type": "item",
+												"item": "sneakers_fetish",
+												"count": 1
+											},
+											{
+												"type": "flag",
+												"flag": "dark_forest_river_01_coin_payment_01_done"
+											}
+										]
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"crow_after": {
+				"click_rect": [
+					976,
+					371,
+					886,
+					571
+				],
+				"required_flag": "dark_forest_river_01_coin_payment_01_done",
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/crow.mp3",
+						"volume_db": 0,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "까마귀 떼가 금화를 쪼아대며 물가 옆에서 시끄럽게 울고 있다."
+					},
+					{
+						"type": "text",
+						"name": "의문의 까마귀",
+						"text": "까악. 나중에 보자."
+					}
+				]
+			},
+			"crow_02": {
+				"click_rect": [
+					976,
+					371,
+					886,
+					571
+				],
+				"required_flag": [
+					"dark_forest_river_01_coin_payment_01_done"
+				],
+				"required_flag_missing": "dark_forest_river_01_coin_payment_02_done",
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/crow.mp3",
+						"volume_db": 0,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"name": "의문의 까마귀",
+						"text": "까악. 더 좋은 보물이 있다."
+					},
+					{
+						"type": "text",
+						"name": "의문의 까마귀",
+						"text": "이번엔 더 많이 줘라."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "금화를 내려놓는다.",
+								"events": [
+									{
+										"type": "item_payment",
+										"item": "unknown_coin",
+										"count": 150,
+										"success_text": "금화 150개를 바쳤다.",
+										"fail_text": "금화가 부족하다. (알수없는 코인 150개 필요)",
+										"success_events": [
+											{
+												"type": "item",
+												"item": "bible_fetish",
+												"count": 1
+											},
+											{
+												"type": "flag",
+												"flag": "dark_forest_river_01_coin_payment_02_done"
+											}
+										]
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"crow_done": {
+				"click_rect": [
+					976,
+					371,
+					886,
+					571
+				],
+				"required_flag": "dark_forest_river_01_coin_payment_02_done",
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/crow.mp3",
+						"volume_db": 0,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"name": "까마귀",
+						"text": "까악. 고맙다."
 					}
 				]
 			}

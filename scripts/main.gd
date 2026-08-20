@@ -5230,6 +5230,9 @@ func run_single_story_event(event):
 	elif event_type == "flag":
 		set_flag(event.get("flag", ""))
 
+	elif event_type == "clear_flag":
+		clear_flag(event.get("flag", ""))
+		
 	else:
 		push_error("알 수 없는 story event type: " + str(event_type))
 # 스토리 events 배열 실행 함수
