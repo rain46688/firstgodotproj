@@ -632,7 +632,7 @@
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-										"fail_text": "자물쇠로 잠겨있어서 열 수 없다."
+										"fail_text": "잠겨있어서 열 수 없다."
 									}
 								]
 							},
@@ -1820,7 +1820,7 @@
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-										"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+										"fail_text": "단단하게 잠겨있어서 열 수 없다."
 									}
 								]
 							},
@@ -1861,7 +1861,7 @@
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-										"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+										"fail_text": "단단하게 잠겨있어서 열 수 없다."
 									}
 								]
 							},
@@ -3369,7 +3369,7 @@
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-										"fail_text": "자물쇠로 잠겨있어서 열 수 없다."
+										"fail_text": "잠겨있어서 열 수 없다."
 									}
 								]
 							},
@@ -6744,7 +6744,7 @@
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-										"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+										"fail_text": "단단하게 잠겨있어서 열 수 없다."
 									}
 								]
 							},
@@ -6785,7 +6785,7 @@
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-										"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+										"fail_text": "단단하게 잠겨있어서 열 수 없다."
 									}
 								]
 							},
@@ -9742,7 +9742,7 @@
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-										"fail_text": "자물쇠로 단단하게 잠겨있어서 열 수 없다."
+										"fail_text": "단단하게 잠겨있어서 열 수 없다."
 									}
 								]
 							},
@@ -10467,7 +10467,7 @@
 																			{
 																				"type": "text",
 																				"name": "나",
-																				"text": "심장을 모으면 거대한 문을 열 수 있다던데 맞아?"
+																				"text": "심장을 모으면 거대한 문을 열 수 있다던데 맞나요?"
 																			},
 																			{
 																				"type": "portrait",
@@ -10485,18 +10485,18 @@
 																				"type": "portrait",
 																				"character": "albus",
 																				"emotion": "normal",
-																				"text": "이 공간에는 네 개의 시련이 존재한다."
+																				"text": "이 공간에는 네 개의 구역이 존재한다."
 																			},
 																			{
 																				"type": "portrait",
 																				"character": "albus",
 																				"emotion": "normal",
-																				"text": "각 시련의 끝에 있는 존재를 쓰러뜨리면 얻을 수 있지."
+																				"text": "각 구역의 끝에 있는 관리자를 쓰러뜨리면 얻을 수 있지."
 																			},
 																			{
 																				"type": "text",
 																				"name": "나",
-																				"text": "그러면 그 문으로 현실 세계로 돌아갈 수 있어?"
+																				"text": "그러면 그 문으로 현실 세계로 돌아갈 수 있어요?"
 																			},
 																			{
 																				"type": "portrait",
@@ -10596,7 +10596,7 @@
 																				"type": "portrait",
 																				"character": "isaac",
 																				"emotion": "normal",
-																				"text": "넌 이곳의 괴물들과는 다른 것 같은데."
+																				"text": "당신은 이곳의 괴물들과는 다른 것 같은데."
 																			},
 																			{
 																				"type": "portrait",
@@ -10637,7 +10637,7 @@
 																			{
 																				"type": "text",
 																				"name": "나",
-																				"text": "그러면 중요한 건 뭔데?"
+																				"text": "그러면 중요한 건 뭔데요?"
 																			},
 																			{
 																				"type": "portrait",
@@ -12001,6 +12001,28 @@
 						"text": "안은 붉은 액체로 가득 차있다."
 					}
 				]
+			},
+			"grail_normal": {
+				"click_rect": [
+					620,
+					168,
+					700,
+					636
+				],
+				"required_flag_missing": [
+					"grail_filled_unknown_hall_02_done",
+					"defeated_combined_candle_students"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "금속 재질의 커다란 잔이다."
+					},
+					{
+						"type": "text",
+						"text": "안은 비어있다."
+					}
+				]
 			}
 		}
 	},
@@ -12129,6 +12151,28 @@
 					{
 						"type": "text",
 						"text": "안은 붉은 액체로 가득 차있다."
+					}
+				]
+			},
+			"grail_normal": {
+				"click_rect": [
+					620,
+					168,
+					700,
+					636
+				],
+				"required_flag_missing": [
+					"grail_filled_unknown_hall_03_done",
+					"defeated_hammerhead_mansion_master"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "금속 재질의 커다란 잔이다."
+					},
+					{
+						"type": "text",
+						"text": "안은 비어있다."
 					}
 				]
 			}
@@ -12947,7 +12991,7 @@
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-										"fail_text": "자물쇠로 잠겨있어서 열 수 없다."
+										"fail_text": "잠겨있어서 열 수 없다."
 									}
 								]
 							},
@@ -13521,7 +13565,7 @@
 			"right": {
 				"target": "school_stairs_hall_01",
 				"position": [
-					1300,
+					1200,
 					500
 				]
 			},
@@ -13619,7 +13663,7 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway_04",
 			"event_table": "school_hallway",
-			"chance": 40
+			"chance": 30
 		}
 	},
 	"classroom_35": {
@@ -13994,7 +14038,7 @@
 		"random_encounter": {
 			"enemy_table": "school_hallway_04",
 			"event_table": "school_hallway",
-			"chance": 30
+			"chance": 20
 		}
 	},
 	"classroom_36": {
@@ -14325,7 +14369,11 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "교탁과 사물함이 붙어있어 기묘한 위화감을 자아낸다."
+						"text": "교탁 위에 검은 액체 같은 게 터져있다, 기분 나쁜 냄새가 난다."
+					},
+					{
+						"type": "text",
+						"text": "뒤에 있는 사물함을 열 수 있을 거 같다."
 					},
 					{
 						"type": "choices",
@@ -14770,7 +14818,7 @@
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-										"fail_text": "자물쇠로 잠겨있어서 열 수 없다."
+										"fail_text": "잠겨있어서 열 수 없다."
 									}
 								]
 							},
@@ -15645,11 +15693,11 @@
 						"document_events": [
 							{
 								"type": "text",
-								"text": "먹이를 주어라."
+								"text": "다음 심장으로 향한 길은."
 							},
 							{
 								"type": "text",
-								"text": "심연을 오랫동안 들여다보지 말아라."
+								"text": "구멍 안에 있다."
 							}
 						]
 					},
@@ -20906,6 +20954,20 @@
 				"required_flag_missing": "opened_swimming_pool_hallway_21",
 				"events": [
 					{
+						"type": "sound",
+						"path": "res://sounds/radio_sound.mp3",
+						"volume_db": 5,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "치직..."
+					},
+					{
+						"type": "text",
+						"text": "스피커에서 어떤 음성이 반복돼서 실행되고 있다."
+					},
+					{
 						"type": "text",
 						"text": "1 번 레인 \n이름 : A 성별 : 남 \n키 : 178cm 나이 : 18세"
 					},
@@ -21391,7 +21453,7 @@
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-										"fail_text": "자물쇠로 잠겨있어서 열 수 없다."
+										"fail_text": "잠겨있어서 열 수 없다."
 									}
 								]
 							},

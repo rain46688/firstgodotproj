@@ -8,14 +8,14 @@
 			"first_turn": ""
 		},
 		{
-			"enemy": "candle_student_woman",
-			"weight": 10,
+			"enemy": "wax_slime",
+			"weight": 30,
 			"required_flag": "opened_school_stairs_hall_02",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
-			"enemy": "wax_slime",
+			"enemy": "candle_student_woman",
 			"weight": 10,
 			"required_flag": "opened_school_stairs_hall_02",
 			"missing_flag": "",
@@ -25,13 +25,6 @@
 			"enemy": "ghost",
 			"weight": 1,
 			"required_flag": "opened_school_stairs_hall_02",
-			"missing_flag": "",
-			"first_turn": ""
-		},
-		{
-			"enemy": "test_monster",
-			"weight": 0,
-			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		}
@@ -46,7 +39,7 @@
 		},
 		{
 			"enemy": "wax_slime",
-			"weight": 40,
+			"weight": 30,
 			"required_flag": "opened_school_stairs_hall_02",
 			"missing_flag": "",
 			"first_turn": ""
@@ -68,13 +61,6 @@
 	],
 	"school_hallway_03": [
 		{
-			"enemy": "candle_student_woman",
-			"weight": 35,
-			"required_flag": "opened_school_stairs_hall_03",
-			"missing_flag": "",
-			"first_turn": ""
-		},
-		{
 			"enemy": "wax_slime_phalanx",
 			"weight": 40,
 			"required_flag": [
@@ -85,8 +71,22 @@
 			"first_turn": ""
 		},
 		{
+			"enemy": "candle_student_woman",
+			"weight": 30,
+			"required_flag": "opened_school_stairs_hall_03",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
 			"enemy": "wax_slime",
-			"weight": 15,
+			"weight": 20,
+			"required_flag": "opened_school_stairs_hall_03",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "candle_student",
+			"weight": 10,
 			"required_flag": "opened_school_stairs_hall_03",
 			"missing_flag": "",
 			"first_turn": ""
@@ -101,7 +101,7 @@
 	],
 	"school_hallway_04": [
 		{
-			"enemy": "combined_candle_students_charger",
+			"enemy": "combined_candle_students_butcher",
 			"weight": 40,
 			"required_flag": [
 				"opened_school_stairs_hall_04"
@@ -110,8 +110,8 @@
 			"first_turn": ""
 		},
 		{
-			"enemy": "combined_candle_students_butcher",
-			"weight": 40,
+			"enemy": "combined_candle_students_charger",
+			"weight": 20,
 			"required_flag": [
 				"opened_school_stairs_hall_04"
 			],
@@ -126,24 +126,31 @@
 			"first_turn": ""
 		},
 		{
+			"enemy": "wax_slime",
+			"weight": 10,
+			"required_flag": "opened_school_stairs_hall_04",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
 			"enemy": "ghost_02",
 			"weight": 5,
 			"required_flag": "opened_school_stairs_hall_04",
 			"missing_flag": "",
 			"first_turn": ""
 		}
-	]	,
+	],
 	"swimming_pool_01": [
 		{
 			"enemy": "human_flog",
-			"weight": 40,
+			"weight": 50,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "sea_anemone_woman",
-			"weight": 40,
+			"weight": 30,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
@@ -151,6 +158,13 @@
 		{
 			"enemy": "green_fish_man",
 			"weight": 20,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "clione_little_girl",
+			"weight": 5,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
@@ -165,22 +179,29 @@
 	],
 	"swimming_pool_02": [
 		{
-			"enemy": "sea_anemone_woman",
-			"weight": 40,
+			"enemy": "clione_little_girl",
+			"weight": 50,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "green_fish_man",
+			"weight": 30,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "sea_anemone_woman",
 			"weight": 20,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
-			"enemy": "clione_little_girl",
-			"weight": 40,
+			"enemy": "blue_fish_man",
+			"weight": 5,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
@@ -195,22 +216,36 @@
 	],
 	"swimming_pool_03": [
 		{
-			"enemy": "green_fish_man",
-			"weight": 40,
-			"required_flag": "",
-			"missing_flag": "",
-			"first_turn": ""
-		},
-		{
 			"enemy": "blue_fish_man",
-			"weight": 40,
+			"weight": 50,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "clione_little_girl",
+			"weight": 40,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "green_fish_man",
 			"weight": 30,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "sea_anemone_woman",
+			"weight": 10,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "human_flog",
+			"weight": 10,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""

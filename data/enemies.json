@@ -1,4 +1,643 @@
 {
+	"ghost": {
+		"name": "작은 유령",
+		"max_hp": 150,
+		"battle_bgm": "res://sounds/bgm19.mp3",
+		"battle_bgm_volume_db": -5.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/ghost.mp3",
+		"encounter_sound_volume_db": 10.0,
+		"image": "res://imgs/enemies/ghost.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.2,
+		"escape_after_player_turns": 4,
+		"escape_text": "작은 유령은 장난치며 어둠 속으로 사라졌다.",
+		"enemy_size": [
+			150,
+			300
+		],
+		"enemy_position": [
+			900,
+			200
+		],
+		"can_escape": true,
+		"encounter_text": "작은 유령이 나타났다.",
+		"observe_text": "작은 유령은 돌아다니며 놀고있다, 그 형체는 희미하게 비쳐서 곧 사라질 것만 같다.",
+		"weakness_text": "",
+		"patterns": [
+			{
+				"id": "basic_attack_01",
+				"weight": 50,
+				"warning_text": "작은 유령은 중앙에서 앉아서 놀아 달라고 조르고 있다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.8,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 1.0,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "basic_attack_02",
+				"weight": 45,
+				"warning_text": "작은 유령은 중앙에서 앉아서 놀아 달라고 뒹굴고 있다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.8,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "basic_attack_03",
+				"weight": 5,
+				"warning_text": "작은 유령은 혼자 놀다가 넘어졌다.",
+				"fire_mode": "parallel",
+				"projectiles": []
+			},
+			{
+				"id": "basic_attack_04",
+				"weight": 50,
+				"priority": 1,
+				"warning_text": "작은 유령은 도망갈 준비를 하고 있다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"turn_condition": {
+					"mode": "exact",
+					"turn": 4
+				},
+				"projectiles": [
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 2,
+						"delay": 0.8,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 1.0,
+						"danger_type": "parry_only"
+					}
+				]
+			}
+		],
+		"hitbox_base_size": [
+			375,
+			500
+		],
+		"hitboxes": [
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					186,
+					129,
+					1,
+					105
+				],
+				"damage_multiplier": 4.0
+			}
+		],
+		"drops": [
+			{
+				"item": "unknown_coin",
+				"chance": 100,
+				"min": 5,
+				"max": 20
+			},
+			{
+				"item": "old_water_ball",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "old_abacus",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "cube_relic",
+				"chance": 4,
+				"count": 1
+			},
+			{
+				"item": "torn_eyepatch",
+				"chance": 3,
+				"count": 1
+			},
+			{
+				"item": "dice_relic",
+				"chance": 3,
+				"count": 1
+			},
+			{
+				"item": "music_box_relic",
+				"chance": 3,
+				"count": 1
+			},
+			{
+				"item": "broken_headset_relic",
+				"chance": 3,
+				"count": 1
+			},
+			{
+				"item": "teddy_bear_relic",
+				"chance": 2,
+				"count": 1
+			},
+			{
+				"item": "character_figure_relic",
+				"chance": 2,
+				"count": 1
+			},
+			{
+				"item": "cross_relic",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "holy_grail_relic",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "bible_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "metal_syringe",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "rosary_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "sneakers_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "dumbbell_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "sandbag_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "lung_model_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "first_aid_box_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "classic_camera_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "hourglass_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "hand_bone_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "skull_model_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "small_frame_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "hand_candlestick_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "brain_model_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "heart_model_fetish",
+				"chance": 1,
+				"count": 1
+			}
+		],
+		"defeat_flags": [
+			"defeated_ghost"
+		]
+	},
+	"candle_student_tutorial": {
+		"name": "밀랍을 뒤집어쓴 학생",
+		"skip_if_flag": "defeated_tutorial_enemy",
+		"max_hp": 100,
+		"battle_bgm": "res://sounds/bgm13.mp3",
+		"battle_bgm_volume_db": -5.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/enemy_encounter.mp3",
+		"encounter_sound_volume_db": -5.0,
+		"image": "res://imgs/enemies/candle_student.png",
+		"battle_background": "res://imgs/backgrounds/school_stairs_hall_01.png",
+		"battle_background_alpha": 0.2,
+		"enemy_size": [
+			550,
+			660
+		],
+		"enemy_position": [
+			635,
+			0
+		],
+		"can_escape": false,
+		"encounter_text": "머릿속에서 무언가가 외치고 있다.\n\"정확하게 적을 조준해서 공격하라.\"",
+		"observe_text": "머릿속에서 무언가가 되뇌고 있다.\n\"적의 공격에 맞춰서 반격하라.\"",
+		"weakness_text": "양초를 들고 있는 손이 약점인 것 같다.\n\"적의 약점은 적에게 강한 피해를 입힌다.\"",
+		"patterns": [
+			{
+				"id": "basic_attack_01",
+				"weight": 50,
+				"warning_text": "머릿속에서 무언가가 떠오르고 있다.\n\"적의 공격을 막아야 한다.\"\n 양초를 든 팔을 중앙으로 휘두른다.",
+				"fire_mode": "sequential",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							700,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.0
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.3
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1100,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.6
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 1.0
+					}
+				]
+			},
+			{
+				"id": "basic_attack_02",
+				"weight": 50,
+				"warning_text": "머릿속에서 무언가가 속삭이고 있다.\n\"적의 공격을 정확하게 받아쳐라.\"\n 양팔을 중앙으로 휘두른다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							760,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.0
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.4
+					}
+				]
+			},
+			{
+				"id": "basic_attack_03",
+				"weight": 50,
+				"priority": 1,
+				"warning_text": "머릿속에서 무언가가 기억나고 있다.\n\"좌우 끝에서 반대쪽으로 무기를 옮길 수 있다.\"\n 양팔을 양쪽으로 휘두른다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"turn_condition": {
+					"mode": "interval",
+					"every": 5,
+					"start_turn": 5
+				},
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1400,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 1.0
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							350,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 2.0
+					}
+				]
+			},
+			{
+				"id": "basic_attack_04",
+				"weight": 50,
+				"priority": 1,
+				"warning_text": "머릿속에서 무언가가 보이고 있다.\n\"붉은 공격은 정확하게 받아쳐야만 한다.\"\n 양팔을 모은 뒤 중앙으로 강하게 휘두른다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"turn_condition": {
+					"mode": "interval",
+					"every": 5,
+					"start_turn": 6
+				},
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							850,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 1.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							850,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 1.2,
+						"danger_type": "parry_only"
+					}
+				]
+			}
+		],
+		"hitbox_base_size": [
+			667,
+			1000
+		],
+		"hitboxes": [
+			{
+				"id": "body",
+				"name": "몸통",
+				"rect": [
+					280,
+					200,
+					160,
+					420
+				]
+			},
+			{
+				"id": "right_arm",
+				"name": "오른쪽 팔",
+				"rect": [
+					450,
+					330,
+					120,
+					200
+				],
+				"damage_multiplier": 2.0
+			},
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					280,
+					40,
+					150,
+					150
+				]
+			}
+		],
+		"drops": [],
+		"defeat_flags": [
+			"defeated_candle_student_tutorial"
+		]
+	},
 	"candle_student": {
 		"name": "밀랍을 뒤집어쓴 학생",
 		"max_hp": 100,
@@ -39,7 +678,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 5,
+						"damage": 10,
 						"delay": 0.0
 					},
 					{
@@ -151,6 +790,78 @@
 						"delay": 0.8
 					}
 				]
+			},
+			{
+				"id": "basic_attack_04",
+				"weight": 5,
+				"priority": 1,
+				"warning_text": "양팔을 양쪽으로 휘두른다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"turn_condition": {
+					"mode": "interval",
+					"every": 5,
+					"start_turn": 5
+				},
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1400,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.0
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							350,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 2.0
+					}
+				]
+			},
+			{
+				"id": "basic_attack_05",
+				"weight": 5,
+				"priority": 1,
+				"warning_text": "양팔을 모은 뒤 중앙으로 강하게 휘두른다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"turn_condition": {
+					"mode": "interval",
+					"every": 5,
+					"start_turn": 6
+				},
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							850,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 1.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							850,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 1.2,
+						"danger_type": "parry_only"
+					}
+				]
 			}
 		],
 		"hitbox_base_size": [
@@ -212,6 +923,1034 @@
 		],
 		"defeat_flags": [
 			"defeated_candle_student"
+		]
+	},
+	"combined_candle_students_tutorial": {
+		"name": "합쳐진 밀랍 학생들",
+		"max_hp": 100,
+		"battle_bgm": "res://sounds/bgm13.mp3",
+		"battle_bgm_volume_db": -5.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/enemy_encounter.mp3",
+		"encounter_sound_volume_db": -5.0,
+		"image": "res://imgs/enemies/combined_candle_students_phase_01.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.2,
+		"enemy_size": [
+			650,
+			760
+		],
+		"enemy_position": [
+			635,
+			-40
+		],
+		"can_escape": false,
+		"encounter_text": "알 수 없는 거대한 생명체가 둔탁한 발소리를 내며 다가온다.",
+		"observe_text": "사람의 형체가 밀랍과 뭉쳐져서 만들어진 것 같다.",
+		"weakness_text": "머리가 약점인 것 같다.",
+		"patterns": [
+			{
+				"id": "basic_attack_01",
+				"weight": 5,
+				"warning_text": "아무런 행동을 하지 않고 있다.",
+				"fire_mode": "sequential",
+				"projectiles": []
+			}
+		],
+		"hitbox_base_size": [
+			1024,
+			1535
+		],
+		"hitboxes": [
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					445,
+					600,
+					100,
+					230
+				],
+				"damage_multiplier": 2.0
+			},
+			{
+				"id": "left_body",
+				"name": "왼쪽 몸통",
+				"rect": [
+					280,
+					400,
+					160,
+					420
+				]
+			},
+			{
+				"id": "right_body",
+				"name": "오른쪽 몸통",
+				"rect": [
+					550,
+					400,
+					160,
+					420
+				]
+			}
+		],
+		"parts": [
+			{
+				"id": "right_arm",
+				"name": "망가진 의자를 들고 있는 오른쪽 팔",
+				"max_hp": 250,
+				"z_index": 10,
+				"image": "res://imgs/enemies/combined_candle_students_right.png",
+				"observe_text": "",
+				"size": [
+					324,
+					830
+				],
+				"position": [
+					620,
+					0
+				],
+				"destroyable": true,
+				"destroy_text": "망가진 의자를 들고 있는 오른쪽 팔이 떨어져 나갔다.",
+				"hitbox": {
+					"id": "right_arm",
+					"name": "망가진 의자를 들고 있는 오른쪽 팔",
+					"rect": [
+						720,
+						220,
+						160,
+						550
+					]
+				},
+				"patterns": [
+					{
+						"id": "basic_attack_04",
+						"weight": 40,
+						"warning_text": "망가진 의자를 중앙으로 휘두른다.",
+						"fire_mode": "sequential",
+						"projectiles": [
+							{
+								"projectile": "impact_basic",
+								"start": [
+									700,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.0
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									900,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.3
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									1200,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.3
+							}
+						]
+					}
+				]
+			},
+			{
+				"id": "left_arm",
+				"name": "구겨진 파이프를 들고 있는 왼쪽 팔",
+				"max_hp": 200,
+				"z_index": 10,
+				"image": "res://imgs/enemies/combined_candle_students_left.png",
+				"observe_text": "이 부위를 먼저 노리는게 좋을거같다.",
+				"size": [
+					296,
+					795
+				],
+				"position": [
+					80,
+					0
+				],
+				"destroyable": true,
+				"destroy_text": "구겨진 파이프를 들고 있는 왼쪽 팔이 떨어져 나갔다.",
+				"hitbox": {
+					"id": "left_arm",
+					"name": "구겨진 파이프를 들고 있는 왼쪽 팔",
+					"rect": [
+						120,
+						220,
+						160,
+						550
+					]
+				},
+				"patterns": [
+					{
+						"id": "basic_attack_02",
+						"weight": 55,
+						"warning_text": "구겨진 파이프를 중앙으로 휘두른다.",
+						"fire_mode": "sequential",
+						"projectiles": [
+							{
+								"projectile": "fear_slash",
+								"start": [
+									700,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "fear_slash",
+								"start": [
+									900,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "fear_slash",
+								"start": [
+									1100,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							}
+						]
+					},
+					{
+						"id": "basic_attack_03",
+						"weight": 30,
+						"warning_text": "구겨진 파이프를 왼쪽으로 휘두른다.",
+						"fire_mode": "sequential",
+						"projectiles": [
+							{
+								"projectile": "fear_slash",
+								"start": [
+									450,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "fear_slash",
+								"start": [
+									900,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "fear_slash",
+								"start": [
+									1100,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							}
+						]
+					}
+				]
+			}
+		],
+		"drops": [],
+		"defeat_flags": [
+			"defeated_combined_candle_students_tutorial"
+		]
+	},
+	"candle_student_woman": {
+		"name": "밀랍을 뒤집어쓴 여학생",
+		"max_hp": 100,
+		"battle_bgm": "res://sounds/bgm15.mp3",
+		"battle_bgm_volume_db": -5.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/enemy_encounter2.mp3",
+		"encounter_sound_volume_db": 10.0,
+		"image": "res://imgs/enemies/candle_student_woman.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.2,
+		"enemy_size": [
+			550,
+			660
+		],
+		"enemy_position": [
+			635,
+			0
+		],
+		"can_escape": false,
+		"encounter_text": "머리에 알수없는걸 뒤집어쓴 여학생이 비틀거리며 다가온다.",
+		"observe_text": "굳어 붙은 밀랍이 들러붙어 있는 것 같다. 머리 위의 작은 양초가 희미하게 흔들린다.",
+		"weakness_text": "머리의 양초가 약점인 것 같다.",
+		"patterns": [
+			{
+				"id": "basic_attack_01",
+				"weight": 5,
+				"warning_text": "아무런 행동을 하지 않고 있다.",
+				"fire_mode": "sequential",
+				"projectiles": []
+			}
+		],
+		"hitbox_base_size": [
+			556,
+			1000
+		],
+		"hitboxes": [
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					197,
+					5,
+					92,
+					178
+				],
+				"damage_multiplier": 10.0
+			},
+			{
+				"id": "body",
+				"name": "몸통",
+				"rect": [
+					199,
+					320,
+					89,
+					284
+				]
+			}
+		],
+		"parts": [
+			{
+				"id": "right_arm",
+				"name": "망가진 의자를 들고 있는 오른쪽 팔",
+				"max_hp": 100,
+				"z_index": 10,
+				"image": "res://imgs/enemies/candle_student_woman_right.png",
+				"observe_text": "",
+				"size": [
+					317,
+					552
+				],
+				"position": [
+					220,
+					330
+				],
+				"destroyable": true,
+				"destroy_text": "망가진 의자를 들고 있는 오른쪽 팔이 떨어져 나갔다.",
+				"hitbox": {
+					"id": "right_arm",
+					"name": "망가진 의자를 들고 있는 오른쪽 팔",
+					"rect": [
+						288,
+						218,
+						86,
+						306
+					]
+				},
+				"patterns": [
+					{
+						"id": "basic_attack_04",
+						"weight": 25,
+						"priority": 1,
+						"warning_text": "망가진 의자를 중앙으로 크게 휘두른다.",
+						"fire_mode": "parallel",
+						"projectiles": [
+							{
+								"projectile": "impact_basic",
+								"start": [
+									780,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.15
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									1020,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.55
+							}
+						]
+					}
+				]
+			},
+			{
+				"id": "left_arm",
+				"name": "날카로운 커터 칼을 들고 있는 왼쪽 팔",
+				"max_hp": 100,
+				"z_index": 10,
+				"image": "res://imgs/enemies/candle_student_woman_left.png",
+				"observe_text": "이 부위를 먼저 노리는게 좋을거같다.",
+				"size": [
+					193,
+					306
+				],
+				"position": [
+					50,
+					332
+				],
+				"destroyable": true,
+				"destroy_text": "날카로운 커터 칼을 들고 있는 왼쪽 팔이 떨어져 나갔다.",
+				"hitbox": {
+					"id": "left_arm",
+					"name": "날카로운 커터 칼을 들고 있는 왼쪽 팔",
+					"rect": [
+						122,
+						367,
+						64,
+						226
+					]
+				},
+				"patterns": [
+					{
+						"id": "basic_attack_02",
+						"weight": 50,
+						"priority": 1,
+						"warning_text": "커터칼을 중앙으로 짧게 휘두른다.",
+						"fire_mode": "parallel",
+						"projectiles": [
+							{
+								"projectile": "slash_basic",
+								"start": [
+									740,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.0
+							},
+							{
+								"projectile": "slash_basic",
+								"start": [
+									900,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 0.25
+							},
+							{
+								"projectile": "slash_basic",
+								"start": [
+									1060,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 0.5
+							}
+						]
+					},
+					{
+						"id": "basic_attack_03",
+						"weight": 25,
+						"priority": 1,
+						"warning_text": "커터칼을 중앙으로 사정없이 휘두른다.",
+						"fire_mode": "parallel",
+						"projectiles": [
+							{
+								"projectile": "slash_basic",
+								"start": [
+									700,
+									0
+								],
+								"rotation": 180,
+								"damage": 8,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									840,
+									0
+								],
+								"rotation": 180,
+								"damage": 8,
+								"delay": 0.4,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "slash_basic",
+								"start": [
+									980,
+									0
+								],
+								"rotation": 180,
+								"damage": 8,
+								"delay": 0.8,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									1120,
+									0
+								],
+								"rotation": 180,
+								"damage": 8,
+								"delay": 1.2,
+								"danger_type": "parry_only"
+							}
+						]
+					}
+				]
+			}
+		],
+		"drops": [
+			{
+				"item": "unknown_coin",
+				"chance": 50,
+				"min": 1,
+				"max": 5
+			},
+			{
+				"item": "beverage_a",
+				"chance": 30,
+				"min": 1,
+				"max": 2
+			},
+			{
+				"item": "cutter_knife",
+				"chance": 5,
+				"min": 1,
+				"max": 1
+			}
+		],
+		"defeat_flags": [
+			"defeated_candle_student_woman"
+		]
+	},
+	"wax_slime": {
+		"name": "밀랍 액체 괴물",
+		"max_hp": 200,
+		"battle_bgm": "res://sounds/bgm15.mp3",
+		"battle_bgm_volume_db": -5.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/enemy_encounter2.mp3",
+		"encounter_sound_volume_db": -5.0,
+		"image": "res://imgs/enemies/wax_slime.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.2,
+		"enemy_size": [
+			650,
+			760
+		],
+		"enemy_position": [
+			635,
+			-40
+		],
+		"can_escape": true,
+		"encounter_text": "밀랍 덩어리가 이쪽으로 천천히 기어온다.",
+		"observe_text": "안에서 손의 형태가 튀어나와있다 하지만 사람의 손은 아닌 것 같다.",
+		"weakness_text": "몸체가 약점인 것 같다.",
+		"patterns": [
+			{
+				"id": "basic_attack_01",
+				"weight": 50,
+				"warning_text": "몸을 길쭉하게 늘려서 꽃혀있던 파이프를 왼쪽으로 날린다.",
+				"fire_mode": "parallel",
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							350,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.0
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							350,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.3,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							350,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.6
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							350,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.9,
+						"danger_type": "slash_basic"
+					}
+				]
+			},
+			{
+				"id": "basic_attack_02",
+				"weight": 50,
+				"warning_text": "안에서 뜨겁고 기분 나쁜 액체를 오른쪽으로 내뿜는다.",
+				"fire_mode": "parallel",
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1300,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.0
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1300,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.3
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1300,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.6
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1300,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.9
+					}
+				]
+			}
+		],
+		"hitbox_base_size": [
+			750,
+			500
+		],
+		"hitboxes": [
+			{
+				"id": "body",
+				"name": "몸통",
+				"rect": [
+					274,
+					179,
+					239,
+					94
+				],
+				"damage_multiplier": 10.0
+			},
+			{
+				"id": "left_arm",
+				"name": "왼쪽 팔",
+				"rect": [
+					22,
+					255,
+					210,
+					42
+				]
+			},
+			{
+				"id": "right_arm",
+				"name": "오른쪽 팔",
+				"rect": [
+					586,
+					227,
+					138,
+					93
+				]
+			},
+			{
+				"id": "middle_amr",
+				"name": "가운데 팔",
+				"rect": [
+					296,
+					300,
+					127,
+					53
+				]
+			}
+		],
+		"drops": [
+			{
+				"item": "unknown_coin",
+				"chance": 50,
+				"min": 1,
+				"max": 5
+			},
+			{
+				"item": "beverage_a",
+				"chance": 20,
+				"min": 1,
+				"max": 3
+			},
+			{
+				"item": "tranquilizer_a",
+				"chance": 10,
+				"min": 1,
+				"max": 1
+			}
+		],
+		"defeat_flags": [
+			"defeated_wax_slime"
+		]
+	},
+	"wax_slime_phalanx": {
+		"name": "밀랍 액체 괴물 방어병",
+		"max_hp": 250,
+		"battle_bgm": "res://sounds/bgm15.mp3",
+		"battle_bgm_volume_db": -5.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/enemy_encounter2.mp3",
+		"encounter_sound_volume_db": -5.0,
+		"image": "res://imgs/enemies/wax_slime_phalanx.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.2,
+		"enemy_size": [
+			650,
+			760
+		],
+		"enemy_position": [
+			635,
+			-40
+		],
+		"can_escape": true,
+		"encounter_text": "밀랍 덩어리가 이쪽으로 천천히 기어온다.",
+		"observe_text": "가운데 방패 부위는 외피가 두꺼운 것 같다.",
+		"weakness_text": "몸체가 약점인 것 같다.",
+		"patterns": [
+			{
+				"id": "basic_attack_01",
+				"weight": 40,
+				"warning_text": "몸을 길쭉하게 늘려서 꽃혀있던 파이프를 왼쪽으로 날린다.",
+				"fire_mode": "parallel",
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							350,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.0
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							350,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.3,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							350,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.6
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							350,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.9,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "basic_attack_02",
+				"weight": 40,
+				"warning_text": "안에서 뜨겁고 기분 나쁜 액체를 오른쪽으로 내뿜는다.",
+				"fire_mode": "parallel",
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1300,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.0
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1300,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.3
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1300,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.6
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1300,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.9
+					}
+				]
+			},
+			{
+				"id": "basic_attack_03",
+				"weight": 30,
+				"warning_text": "몸을 앞쪽으로 늘어트리면서 중앙으로 튀어오른다.",
+				"fire_mode": "parallel",
+				"projectiles": [
+					{
+						"projectile": "slash_basic",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							880,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.0
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1000,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.8
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1080,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 0.8,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1200,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 2.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							1280,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 2.0
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							300,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 3.6
+					},
+					{
+						"projectile": "slash_basic",
+						"start": [
+							380,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 3.6,
+						"danger_type": "parry_only"
+					}
+				]
+			}
+		],
+		"hitbox_base_size": [
+			750,
+			500
+		],
+		"hitboxes": [
+			{
+				"id": "body",
+				"name": "몸통",
+				"rect": [
+					307,
+					158,
+					209,
+					40
+				],
+				"damage_multiplier": 5.0
+			},
+			{
+				"id": "right_body",
+				"name": "오른쪽 몸통",
+				"rect": [
+					458,
+					198,
+					131,
+					53
+				],
+				"damage_multiplier": 5.0
+			},
+			{
+				"id": "left_arm",
+				"name": "왼쪽 팔",
+				"rect": [
+					75,
+					277,
+					152,
+					49
+				]
+			},
+			{
+				"id": "right_arm",
+				"name": "오른쪽 팔",
+				"rect": [
+					462,
+					253,
+					125,
+					83
+				]
+			},
+			{
+				"id": "middle_shield",
+				"name": "가운데 방패",
+				"rect": [
+					224,
+					202,
+					235,
+					87
+				],
+				"damage_multiplier": 0.0
+			}
+		],
+		"drops": [
+			{
+				"item": "unknown_coin",
+				"chance": 50,
+				"min": 1,
+				"max": 10
+			},
+			{
+				"item": "beverage_a",
+				"chance": 30,
+				"min": 1,
+				"max": 3
+			},
+			{
+				"item": "tranquilizer_a",
+				"chance": 10,
+				"min": 1,
+				"max": 1
+			},
+			{
+				"item": "iron_skewer",
+				"chance": 3,
+				"min": 1,
+				"max": 1
+			}
+		],
+		"defeat_flags": [
+			"defeated_wax_slime_phalanx"
 		]
 	},
 	"combined_candle_students_phase_01": {
@@ -294,7 +2033,7 @@
 			{
 				"id": "right_arm",
 				"name": "망가진 의자를 들고 있는 오른쪽 팔",
-				"max_hp": 250,
+				"max_hp": 300,
 				"z_index": 10,
 				"image": "res://imgs/enemies/combined_candle_students_right.png",
 				"observe_text": "",
@@ -362,7 +2101,7 @@
 			{
 				"id": "left_arm",
 				"name": "구겨진 파이프를 들고 있는 왼쪽 팔",
-				"max_hp": 200,
+				"max_hp": 250,
 				"z_index": 10,
 				"image": "res://imgs/enemies/combined_candle_students_left.png",
 				"observe_text": "이 부위를 먼저 노리는게 좋을거같다.",
@@ -908,1171 +2647,6 @@
 			"defeated_combined_candle_students"
 		]
 	},
-	"candle_student_tutorial": {
-		"name": "밀랍을 뒤집어쓴 학생",
-		"skip_if_flag": "defeated_tutorial_enemy",
-		"max_hp": 100,
-		"battle_bgm": "res://sounds/bgm13.mp3",
-		"battle_bgm_volume_db": -5.0,
-		"battle_bgm_loop": true,
-		"battle_bgm_fade_in": true,
-		"battle_bgm_fade_time": 3.0,
-		"encounter_sound": "res://sounds/enemy_encounter.mp3",
-		"encounter_sound_volume_db": -5.0,
-		"image": "res://imgs/enemies/candle_student.png",
-		"battle_background": "res://imgs/backgrounds/school_stairs_hall_01.png",
-		"battle_background_alpha": 0.2,
-		"enemy_size": [
-			550,
-			660
-		],
-		"enemy_position": [
-			635,
-			0
-		],
-		"can_escape": false,
-		"encounter_text": "머릿속에서 무언가가 외치고 있다.\n\"정확하게 적을 조준해서 공격하라.\"",
-		"observe_text": "머릿속에서 무언가가 되뇌고 있다.\n\"적의 공격에 맞춰서 반격하라.\"",
-		"weakness_text": "양초를 들고 있는 손이 약점인 것 같다.\n\"적의 약점은 적에게 강한 피해를 입힌다.\"",
-		"patterns": [
-			{
-				"id": "basic_attack_01",
-				"weight": 50,
-				"warning_text": "머릿속에서 무언가가 떠오르고 있다.\n\"적의 공격을 막아야 한다.\"\n 양초를 든 팔을 중앙으로 휘두른다.",
-				"fire_mode": "sequential",
-				"counter_hitbox_id": "head",
-				"projectiles": [
-					{
-						"projectile": "slash_basic",
-						"start": [
-							700,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 0.0
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 0.3
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							1100,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 0.6
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							800,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.0
-					}
-				]
-			},
-			{
-				"id": "basic_attack_02",
-				"weight": 50,
-				"warning_text": "머릿속에서 무언가가 속삭이고 있다.\n\"적의 공격을 정확하게 받아쳐라.\"\n 양팔을 중앙으로 휘두른다.",
-				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
-				"projectiles": [
-					{
-						"projectile": "slash_basic",
-						"start": [
-							760,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 0.0
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 0.4
-					}
-				]
-			},
-			{
-				"id": "basic_attack_03",
-				"weight": 50,
-				"priority": 1,
-				"warning_text": "머릿속에서 무언가가 기억나고 있다.\n\"좌우 끝에서 반대쪽으로 무기를 옮길 수 있다.\"\n 양팔을 양쪽으로 휘두른다.",
-				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
-				"turn_condition": {
-					"mode": "interval",
-					"every": 5,
-					"start_turn": 5
-				},
-				"projectiles": [
-					{
-						"projectile": "slash_basic",
-						"start": [
-							1400,
-							0
-						],
-						"rotation": 180,
-						"damage": 20,
-						"delay": 1.0
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							350,
-							0
-						],
-						"rotation": 180,
-						"damage": 20,
-						"delay": 2.0
-					}
-				]
-			},
-			{
-				"id": "basic_attack_04",
-				"weight": 50,
-				"priority": 1,
-				"warning_text": "머릿속에서 무언가가 보이고 있다.\n\"붉은 공격은 정확하게 받아쳐야만 한다.\"\n 양팔을 모은 뒤 중앙으로 세게 휘두른다.",
-				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
-				"turn_condition": {
-					"mode": "interval",
-					"every": 5,
-					"start_turn": 6
-				},
-				"projectiles": [
-					{
-						"projectile": "slash_basic",
-						"start": [
-							850,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.0,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							850,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.2,
-						"danger_type": "parry_only"
-					}
-				]
-			}
-		],
-		"hitbox_base_size": [
-			667,
-			1000
-		],
-		"hitboxes": [
-			{
-				"id": "body",
-				"name": "몸통",
-				"rect": [
-					280,
-					200,
-					160,
-					420
-				]
-			},
-			{
-				"id": "right_arm",
-				"name": "오른쪽 팔",
-				"rect": [
-					450,
-					330,
-					120,
-					200
-				],
-				"damage_multiplier": 2.0
-			},
-			{
-				"id": "head",
-				"name": "머리",
-				"rect": [
-					280,
-					40,
-					150,
-					150
-				]
-			}
-		],
-		"drops": [],
-		"defeat_flags": [
-			"defeated_candle_student_tutorial"
-		]
-	},
-	"combined_candle_students_tutorial": {
-		"name": "합쳐진 밀랍 학생들",
-		"max_hp": 100,
-		"battle_bgm": "res://sounds/bgm13.mp3",
-		"battle_bgm_volume_db": -5.0,
-		"battle_bgm_loop": true,
-		"battle_bgm_fade_in": true,
-		"battle_bgm_fade_time": 3.0,
-		"encounter_sound": "res://sounds/enemy_encounter.mp3",
-		"encounter_sound_volume_db": -5.0,
-		"image": "res://imgs/enemies/combined_candle_students_phase_01.png",
-		"battle_background": "",
-		"battle_background_alpha": 0.2,
-		"enemy_size": [
-			650,
-			760
-		],
-		"enemy_position": [
-			635,
-			-40
-		],
-		"can_escape": false,
-		"encounter_text": "알 수 없는 거대한 생명체가 둔탁한 발소리를 내며 다가온다.",
-		"observe_text": "사람의 형체가 밀랍과 뭉쳐져서 만들어진 것 같다.",
-		"weakness_text": "머리가 약점인 것 같다.",
-		"patterns": [
-			{
-				"id": "basic_attack_01",
-				"weight": 5,
-				"warning_text": "아무런 행동을 하지 않고 있다.",
-				"fire_mode": "sequential",
-				"projectiles": []
-			}
-		],
-		"hitbox_base_size": [
-			1024,
-			1535
-		],
-		"hitboxes": [
-			{
-				"id": "head",
-				"name": "머리",
-				"rect": [
-					445,
-					600,
-					100,
-					230
-				],
-				"damage_multiplier": 2.0
-			},
-			{
-				"id": "left_body",
-				"name": "왼쪽 몸통",
-				"rect": [
-					280,
-					400,
-					160,
-					420
-				]
-			},
-			{
-				"id": "right_body",
-				"name": "오른쪽 몸통",
-				"rect": [
-					550,
-					400,
-					160,
-					420
-				]
-			}
-		],
-		"parts": [
-			{
-				"id": "right_arm",
-				"name": "망가진 의자를 들고 있는 오른쪽 팔",
-				"max_hp": 250,
-				"z_index": 10,
-				"image": "res://imgs/enemies/combined_candle_students_right.png",
-				"observe_text": "",
-				"size": [
-					324,
-					830
-				],
-				"position": [
-					620,
-					0
-				],
-				"destroyable": true,
-				"destroy_text": "망가진 의자를 들고 있는 오른쪽 팔이 떨어져 나갔다.",
-				"hitbox": {
-					"id": "right_arm",
-					"name": "망가진 의자를 들고 있는 오른쪽 팔",
-					"rect": [
-						720,
-						220,
-						160,
-						550
-					]
-				},
-				"patterns": [
-					{
-						"id": "basic_attack_04",
-						"weight": 40,
-						"warning_text": "망가진 의자를 중앙으로 휘두른다.",
-						"fire_mode": "sequential",
-						"projectiles": [
-							{
-								"projectile": "impact_basic",
-								"start": [
-									700,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 0.0
-							},
-							{
-								"projectile": "impact_basic",
-								"start": [
-									900,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 0.3
-							},
-							{
-								"projectile": "impact_basic",
-								"start": [
-									1200,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 0.3
-							}
-						]
-					}
-				]
-			},
-			{
-				"id": "left_arm",
-				"name": "구겨진 파이프를 들고 있는 왼쪽 팔",
-				"max_hp": 200,
-				"z_index": 10,
-				"image": "res://imgs/enemies/combined_candle_students_left.png",
-				"observe_text": "이 부위를 먼저 노리는게 좋을거같다.",
-				"size": [
-					296,
-					795
-				],
-				"position": [
-					80,
-					0
-				],
-				"destroyable": true,
-				"destroy_text": "구겨진 파이프를 들고 있는 왼쪽 팔이 떨어져 나갔다.",
-				"hitbox": {
-					"id": "left_arm",
-					"name": "구겨진 파이프를 들고 있는 왼쪽 팔",
-					"rect": [
-						120,
-						220,
-						160,
-						550
-					]
-				},
-				"patterns": [
-					{
-						"id": "basic_attack_02",
-						"weight": 55,
-						"warning_text": "구겨진 파이프를 중앙으로 휘두른다.",
-						"fire_mode": "sequential",
-						"projectiles": [
-							{
-								"projectile": "fear_slash",
-								"start": [
-									700,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 0.0,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "fear_slash",
-								"start": [
-									900,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 0.3,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "fear_slash",
-								"start": [
-									1100,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 0.3,
-								"danger_type": "parry_only"
-							}
-						]
-					},
-					{
-						"id": "basic_attack_03",
-						"weight": 30,
-						"warning_text": "구겨진 파이프를 왼쪽으로 휘두른다.",
-						"fire_mode": "sequential",
-						"projectiles": [
-							{
-								"projectile": "fear_slash",
-								"start": [
-									450,
-									0
-								],
-								"rotation": 180,
-								"damage": 20,
-								"delay": 0.0,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "fear_slash",
-								"start": [
-									900,
-									0
-								],
-								"rotation": 180,
-								"damage": 20,
-								"delay": 0.3,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "fear_slash",
-								"start": [
-									1100,
-									0
-								],
-								"rotation": 180,
-								"damage": 20,
-								"delay": 0.3,
-								"danger_type": "parry_only"
-							}
-						]
-					}
-				]
-			}
-		],
-		"drops": [],
-		"defeat_flags": [
-			"defeated_combined_candle_students_tutorial"
-		]
-	},
-	"candle_student_woman": {
-		"name": "밀랍을 뒤집어쓴 여학생",
-		"max_hp": 100,
-		"battle_bgm": "res://sounds/bgm15.mp3",
-		"battle_bgm_volume_db": -5.0,
-		"battle_bgm_loop": true,
-		"battle_bgm_fade_in": true,
-		"battle_bgm_fade_time": 3.0,
-		"encounter_sound": "res://sounds/enemy_encounter2.mp3",
-		"encounter_sound_volume_db": 10.0,
-		"image": "res://imgs/enemies/candle_student_woman.png",
-		"battle_background": "",
-		"battle_background_alpha": 0.2,
-		"enemy_size": [
-			550,
-			660
-		],
-		"enemy_position": [
-			635,
-			0
-		],
-		"can_escape": false,
-		"encounter_text": "머리에 알수없는걸 뒤집어쓴 여학생이 비틀거리며 다가온다.",
-		"observe_text": "굳어 붙은 밀랍이 들러붙어 있는 것 같다. 머리 위의 작은 양초가 희미하게 흔들린다.",
-		"weakness_text": "머리의 양초가 약점인 것 같다.",
-		"patterns": [
-			{
-				"id": "basic_attack_01",
-				"weight": 5,
-				"warning_text": "아무런 행동을 하지 않고 있다.",
-				"fire_mode": "sequential",
-				"projectiles": []
-			}
-		],
-		"hitbox_base_size": [
-			556,
-			1000
-		],
-		"hitboxes": [
-			{
-				"id": "head",
-				"name": "머리",
-				"rect": [
-					197,
-					5,
-					92,
-					178
-				],
-				"damage_multiplier": 10.0
-			},
-			{
-				"id": "body",
-				"name": "몸통",
-				"rect": [
-					199,
-					320,
-					89,
-					284
-				]
-			}
-		],
-		"parts": [
-			{
-				"id": "right_arm",
-				"name": "망가진 의자를 들고 있는 오른쪽 팔",
-				"max_hp": 100,
-				"z_index": 10,
-				"image": "res://imgs/enemies/candle_student_woman_right.png",
-				"observe_text": "",
-				"size": [
-					317,
-					552
-				],
-				"position": [
-					220,
-					330
-				],
-				"destroyable": true,
-				"destroy_text": "망가진 의자를 들고 있는 오른쪽 팔이 떨어져 나갔다.",
-				"hitbox": {
-					"id": "right_arm",
-					"name": "망가진 의자를 들고 있는 오른쪽 팔",
-					"rect": [
-						288,
-						218,
-						86,
-						306
-					]
-				},
-				"patterns": [
-					{
-						"id": "basic_attack_04",
-						"weight": 25,
-						"priority": 1,
-						"warning_text": "망가진 의자를 중앙으로 크게 휘두른다.",
-						"fire_mode": "parallel",
-						"projectiles": [
-							{
-								"projectile": "impact_basic",
-								"start": [
-									780,
-									0
-								],
-								"rotation": 180,
-								"damage": 8,
-								"delay": 0.15
-							},
-							{
-								"projectile": "impact_basic",
-								"start": [
-									1020,
-									0
-								],
-								"rotation": 180,
-								"damage": 8,
-								"delay": 0.55
-							}
-						]
-					}
-				]
-			},
-			{
-				"id": "left_arm",
-				"name": "날카로운 커터 칼을 들고 있는 왼쪽 팔",
-				"max_hp": 100,
-				"z_index": 10,
-				"image": "res://imgs/enemies/candle_student_woman_left.png",
-				"observe_text": "이 부위를 먼저 노리는게 좋을거같다.",
-				"size": [
-					193,
-					306
-				],
-				"position": [
-					50,
-					332
-				],
-				"destroyable": true,
-				"destroy_text": "날카로운 커터 칼을 들고 있는 왼쪽 팔이 떨어져 나갔다.",
-				"hitbox": {
-					"id": "left_arm",
-					"name": "날카로운 커터 칼을 들고 있는 왼쪽 팔",
-					"rect": [
-						122,
-						367,
-						64,
-						226
-					]
-				},
-				"patterns": [
-					{
-						"id": "basic_attack_02",
-						"weight": 50,
-						"priority": 1,
-						"warning_text": "커터칼을 중앙으로 짧게 휘두른다.",
-						"fire_mode": "parallel",
-						"projectiles": [
-							{
-								"projectile": "slash_basic",
-								"start": [
-									740,
-									0
-								],
-								"rotation": 180,
-								"damage": 5,
-								"delay": 0.0
-							},
-							{
-								"projectile": "slash_basic",
-								"start": [
-									900,
-									0
-								],
-								"rotation": 180,
-								"damage": 5,
-								"delay": 0.25
-							},
-							{
-								"projectile": "slash_basic",
-								"start": [
-									1060,
-									0
-								],
-								"rotation": 180,
-								"damage": 5,
-								"delay": 0.5
-							}
-						]
-					},
-					{
-						"id": "basic_attack_03",
-						"weight": 25,
-						"priority": 1,
-						"warning_text": "커터칼을 중앙으로 사정없이 휘두른다.",
-						"fire_mode": "parallel",
-						"projectiles": [
-							{
-								"projectile": "slash_basic",
-								"start": [
-									700,
-									0
-								],
-								"rotation": 180,
-								"damage": 5,
-								"delay": 0.0,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "impact_basic",
-								"start": [
-									840,
-									0
-								],
-								"rotation": 180,
-								"damage": 5,
-								"delay": 0.4,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "slash_basic",
-								"start": [
-									980,
-									0
-								],
-								"rotation": 180,
-								"damage": 5,
-								"delay": 0.8,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "impact_basic",
-								"start": [
-									1120,
-									0
-								],
-								"rotation": 180,
-								"damage": 5,
-								"delay": 1.2,
-								"danger_type": "parry_only"
-							}
-						]
-					}
-				]
-			}
-		],
-		"drops": [
-			{
-				"item": "unknown_coin",
-				"chance": 50,
-				"min": 1,
-				"max": 5
-			},
-			{
-				"item": "beverage_a",
-				"chance": 30,
-				"min": 1,
-				"max": 2
-			},
-			{
-				"item": "cutter_knife",
-				"chance": 5,
-				"min": 1,
-				"max": 1
-			}
-		],
-		"defeat_flags": [
-			"defeated_candle_student_woman"
-		]
-	},
-	"ghost": {
-		"name": "작은 유령",
-		"max_hp": 150,
-		"battle_bgm": "res://sounds/bgm19.mp3",
-		"battle_bgm_volume_db": -5.0,
-		"battle_bgm_loop": true,
-		"battle_bgm_fade_in": true,
-		"battle_bgm_fade_time": 3.0,
-		"encounter_sound": "res://sounds/ghost.mp3",
-		"encounter_sound_volume_db": 10.0,
-		"image": "res://imgs/enemies/ghost.png",
-		"battle_background": "",
-		"battle_background_alpha": 0.2,
-		"escape_after_player_turns": 4,
-		"escape_text": "작은 유령은 장난치며 어둠 속으로 사라졌다.",
-		"enemy_size": [
-			150,
-			300
-		],
-		"enemy_position": [
-			900,
-			200
-		],
-		"can_escape": true,
-		"encounter_text": "작은 유령이 나타났다.",
-		"observe_text": "작은 유령은 돌아다니며 놀고있다, 그 형체는 희미하게 비쳐서 곧 사라질 것만 같다.",
-		"weakness_text": "",
-		"patterns": [
-			{
-				"id": "basic_attack_01",
-				"weight": 50,
-				"warning_text": "작은 유령은 중앙에서 앉아서 놀아 달라고 조르고 있다.",
-				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
-				"projectiles": [
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 0.0,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 2,
-						"delay": 0.2,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 2,
-						"delay": 0.4,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 2,
-						"delay": 0.6,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 2,
-						"delay": 0.8,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 1.0,
-						"danger_type": "parry_only"
-					}
-				]
-			},
-			{
-				"id": "basic_attack_02",
-				"weight": 45,
-				"warning_text": "작은 유령은 중앙에서 앉아서 놀아 달라고 뒹굴고 있다.",
-				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
-				"projectiles": [
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 0.0,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 2,
-						"delay": 0.2,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 2,
-						"delay": 0.4,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 2,
-						"delay": 0.6,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 2,
-						"delay": 0.8,
-						"danger_type": "parry_only"
-					}
-				]
-			},
-			{
-				"id": "basic_attack_03",
-				"weight": 5,
-				"warning_text": "작은 유령은 혼자 놀다가 넘어졌다.",
-				"fire_mode": "parallel",
-				"projectiles": []
-			},
-			{
-				"id": "basic_attack_04",
-				"weight": 50,
-				"priority": 1,
-				"warning_text": "작은 유령은 도망갈 준비를 하고 있다.",
-				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
-				"turn_condition": {
-					"mode": "exact",
-					"turn": 4
-				},
-				"projectiles": [
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 0.0,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 2,
-						"delay": 0.2,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 2,
-						"delay": 0.4,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 2,
-						"delay": 0.6,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 2,
-						"delay": 0.8,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 1.0,
-						"danger_type": "parry_only"
-					}
-				]
-			}
-		],
-		"hitbox_base_size": [
-			375,
-			500
-		],
-		"hitboxes": [
-			{
-				"id": "head",
-				"name": "머리",
-				"rect": [
-					186,
-					129,
-					1,
-					105
-				],
-				"damage_multiplier": 4.0
-			}
-		],
-		"drops": [
-			{
-				"item": "unknown_coin",
-				"chance": 100,
-				"min": 5,
-				"max": 20
-			},
-			{
-				"item": "old_water_ball",
-				"chance": 5,
-				"count": 1
-			},
-			{
-				"item": "old_abacus",
-				"chance": 5,
-				"count": 1
-			},
-			{
-				"item": "cube_relic",
-				"chance": 4,
-				"count": 1
-			},
-			{
-				"item": "torn_eyepatch",
-				"chance": 3,
-				"count": 1
-			},
-			{
-				"item": "dice_relic",
-				"chance": 3,
-				"count": 1
-			},
-			{
-				"item": "music_box_relic",
-				"chance": 3,
-				"count": 1
-			},
-			{
-				"item": "broken_headset_relic",
-				"chance": 3,
-				"count": 1
-			},
-			{
-				"item": "teddy_bear_relic",
-				"chance": 2,
-				"count": 1
-			},
-			{
-				"item": "character_figure_relic",
-				"chance": 2,
-				"count": 1
-			},
-			{
-				"item": "cross_relic",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "holy_grail_relic",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "bible_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "metal_syringe",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "rosary_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "sneakers_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "dumbbell_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "sandbag_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "lung_model_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "first_aid_box_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "classic_camera_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "hourglass_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "hand_bone_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "skull_model_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "small_frame_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "hand_candlestick_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "brain_model_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "heart_model_fetish",
-				"chance": 1,
-				"count": 1
-			}
-		],
-		"defeat_flags": [
-			"defeated_ghost"
-		]
-	},
 	"combined_candle_students_charger": {
 		"name": "합쳐진 밀랍 돌격병",
 		"max_hp": 500,
@@ -2380,997 +2954,17 @@
 				"item": "beverage_a",
 				"chance": 30,
 				"min": 1,
-				"max": 4
+				"max": 5
 			},
 			{
 				"item": "tranquilizer_a",
-				"chance": 10,
+				"chance": 20,
 				"min": 1,
 				"max": 1
 			}
 		],
 		"defeat_flags": [
 			"defeated_combined_candle_students_charger"
-		]
-	},
-	"wax_slime": {
-		"name": "밀랍 액체 괴물",
-		"max_hp": 200,
-		"battle_bgm": "res://sounds/bgm15.mp3",
-		"battle_bgm_volume_db": -5.0,
-		"battle_bgm_loop": true,
-		"battle_bgm_fade_in": true,
-		"battle_bgm_fade_time": 3.0,
-		"encounter_sound": "res://sounds/enemy_encounter2.mp3",
-		"encounter_sound_volume_db": -5.0,
-		"image": "res://imgs/enemies/wax_slime.png",
-		"battle_background": "",
-		"battle_background_alpha": 0.2,
-		"enemy_size": [
-			650,
-			760
-		],
-		"enemy_position": [
-			635,
-			-40
-		],
-		"can_escape": true,
-		"encounter_text": "밀랍 덩어리가 이쪽으로 천천히 기어온다.",
-		"observe_text": "안에서 손의 형태가 튀어나와있다 하지만 사람의 손은 아닌 것 같다.",
-		"weakness_text": "몸체가 약점인 것 같다.",
-		"patterns": [
-			{
-				"id": "basic_attack_01",
-				"weight": 50,
-				"warning_text": "몸을 길쭉하게 늘려서 꽃혀있던 파이프를 왼쪽으로 날린다.",
-				"fire_mode": "parallel",
-				"projectiles": [
-					{
-						"projectile": "slash_basic",
-						"start": [
-							350,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.0
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							350,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.3,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							350,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.6
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							350,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.9,
-						"danger_type": "slash_basic"
-					}
-				]
-			},
-			{
-				"id": "basic_attack_02",
-				"weight": 50,
-				"warning_text": "안에서 뜨겁고 기분 나쁜 액체를 오른쪽으로 내뿜는다.",
-				"fire_mode": "parallel",
-				"projectiles": [
-					{
-						"projectile": "slash_basic",
-						"start": [
-							1300,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.0
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							1300,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.3
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							1300,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.6
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							1300,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.9
-					}
-				]
-			}
-		],
-		"hitbox_base_size": [
-			750,
-			500
-		],
-		"hitboxes": [
-			{
-				"id": "body",
-				"name": "몸통",
-				"rect": [
-					274,
-					179,
-					239,
-					94
-				],
-				"damage_multiplier": 10.0
-			},
-			{
-				"id": "left_arm",
-				"name": "왼쪽 팔",
-				"rect": [
-					22,
-					255,
-					210,
-					42
-				]
-			},
-			{
-				"id": "right_arm",
-				"name": "오른쪽 팔",
-				"rect": [
-					586,
-					227,
-					138,
-					93
-				]
-			},
-			{
-				"id": "middle_amr",
-				"name": "가운데 팔",
-				"rect": [
-					296,
-					300,
-					127,
-					53
-				]
-			}
-		],
-		"drops": [
-			{
-				"item": "unknown_coin",
-				"chance": 50,
-				"min": 1,
-				"max": 5
-			},
-			{
-				"item": "beverage_a",
-				"chance": 20,
-				"min": 1,
-				"max": 3
-			}
-		],
-		"defeat_flags": [
-			"defeated_wax_slime"
-		]
-	},
-	"wax_slime_phalanx": {
-		"name": "밀랍 액체 괴물 방어병",
-		"max_hp": 250,
-		"battle_bgm": "res://sounds/bgm15.mp3",
-		"battle_bgm_volume_db": -5.0,
-		"battle_bgm_loop": true,
-		"battle_bgm_fade_in": true,
-		"battle_bgm_fade_time": 3.0,
-		"encounter_sound": "res://sounds/enemy_encounter2.mp3",
-		"encounter_sound_volume_db": -5.0,
-		"image": "res://imgs/enemies/wax_slime_phalanx.png",
-		"battle_background": "",
-		"battle_background_alpha": 0.2,
-		"enemy_size": [
-			650,
-			760
-		],
-		"enemy_position": [
-			635,
-			-40
-		],
-		"can_escape": true,
-		"encounter_text": "밀랍 덩어리가 이쪽으로 천천히 기어온다.",
-		"observe_text": "가운데 방패 부위는 외피가 두꺼운 것 같다.",
-		"weakness_text": "몸체가 약점인 것 같다.",
-		"patterns": [
-			{
-				"id": "basic_attack_01",
-				"weight": 40,
-				"warning_text": "몸을 길쭉하게 늘려서 꽃혀있던 파이프를 왼쪽으로 날린다.",
-				"fire_mode": "parallel",
-				"projectiles": [
-					{
-						"projectile": "slash_basic",
-						"start": [
-							350,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.0
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							350,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.3,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							350,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.6
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							350,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.9,
-						"danger_type": "parry_only"
-					}
-				]
-			},
-			{
-				"id": "basic_attack_02",
-				"weight": 40,
-				"warning_text": "안에서 뜨겁고 기분 나쁜 액체를 오른쪽으로 내뿜는다.",
-				"fire_mode": "parallel",
-				"projectiles": [
-					{
-						"projectile": "slash_basic",
-						"start": [
-							1300,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.0
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							1300,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.3
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							1300,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.6
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							1300,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.9
-					}
-				]
-			},
-			{
-				"id": "basic_attack_03",
-				"weight": 30,
-				"warning_text": "몸을 앞쪽으로 늘어트리면서 중앙으로 튀어오른다.",
-				"fire_mode": "parallel",
-				"projectiles": [
-					{
-						"projectile": "slash_basic",
-						"start": [
-							800,
-							0
-						],
-						"rotation": 180,
-						"damage": 6,
-						"delay": 0.0,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							880,
-							0
-						],
-						"rotation": 180,
-						"damage": 6,
-						"delay": 0.0
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							1000,
-							0
-						],
-						"rotation": 180,
-						"damage": 6,
-						"delay": 0.8
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							1080,
-							0
-						],
-						"rotation": 180,
-						"damage": 6,
-						"delay": 0.8,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							1200,
-							0
-						],
-						"rotation": 180,
-						"damage": 6,
-						"delay": 2.0,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							1280,
-							0
-						],
-						"rotation": 180,
-						"damage": 6,
-						"delay": 2.0
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							300,
-							0
-						],
-						"rotation": 180,
-						"damage": 6,
-						"delay": 3.6
-					},
-					{
-						"projectile": "slash_basic",
-						"start": [
-							380,
-							0
-						],
-						"rotation": 180,
-						"damage": 6,
-						"delay": 3.6,
-						"danger_type": "parry_only"
-					}
-				]
-			}
-		],
-		"hitbox_base_size": [
-			750,
-			500
-		],
-		"hitboxes": [
-			{
-				"id": "body",
-				"name": "몸통",
-				"rect": [
-					307,
-					158,
-					209,
-					40
-				],
-				"damage_multiplier": 5.0
-			},
-			{
-				"id": "right_body",
-				"name": "오른쪽 몸통",
-				"rect": [
-					458,
-					198,
-					131,
-					53
-				],
-				"damage_multiplier": 5.0
-			},
-			{
-				"id": "left_arm",
-				"name": "왼쪽 팔",
-				"rect": [
-					75,
-					277,
-					152,
-					49
-				]
-			},
-			{
-				"id": "right_arm",
-				"name": "오른쪽 팔",
-				"rect": [
-					462,
-					253,
-					125,
-					83
-				]
-			},
-			{
-				"id": "middle_shield",
-				"name": "가운데 방패",
-				"rect": [
-					224,
-					202,
-					235,
-					87
-				],
-				"damage_multiplier": 0.0
-			}
-		],
-		"drops": [
-			{
-				"item": "unknown_coin",
-				"chance": 50,
-				"min": 1,
-				"max": 10
-			},
-			{
-				"item": "beverage_a",
-				"chance": 20,
-				"min": 1,
-				"max": 3
-			},
-			{
-				"item": "tranquilizer_a",
-				"chance": 10,
-				"min": 1,
-				"max": 1
-			}
-		],
-		"defeat_flags": [
-			"defeated_wax_slime_phalanx"
-		]
-	},
-	"monitor_mimic_pride": {
-		"name": "교만의 모니터 모방자",
-		"max_hp": 999,
-		"battle_bgm": "res://sounds/bgm20.mp3",
-		"battle_bgm_volume_db": 0.0,
-		"battle_bgm_loop": true,
-		"battle_bgm_fade_in": true,
-		"battle_bgm_fade_time": 3.0,
-		"encounter_sound": "res://sounds/enemy_encounter.mp3",
-		"encounter_sound_volume_db": -5.0,
-		"image": "res://imgs/enemies/moniter_mimic.png",
-		"battle_background": "",
-		"battle_background_alpha": 0.2,
-		"enemy_size": [
-			534,
-			800
-		],
-		"enemy_position": [
-			650,
-			-50
-		],
-		"can_escape": false,
-		"encounter_text": "모니터 내부가 갈라지면서 무수한 액체가 쏟아져 나와 끔찍한 형체를 띄었다.",
-		"observe_text": "...",
-		"weakness_text": "전선이 약점인 것 같다.",
-		"patterns": [
-			{
-				"id": "basic_attack_01",
-				"weight": 40,
-				"warning_text": "전선이 중앙으로 솟구쳐 오른다.",
-				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
-				"projectiles": [
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							860,
-							0
-						],
-						"rotation": 180,
-						"damage": 8,
-						"delay": 0.3,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							940,
-							0
-						],
-						"rotation": 180,
-						"damage": 8,
-						"delay": 0.3,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 0.6,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 0.6,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 0.9,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.2,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.5,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							860,
-							0
-						],
-						"rotation": 180,
-						"damage": 8,
-						"delay": 1.8,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							940,
-							0
-						],
-						"rotation": 180,
-						"damage": 8,
-						"delay": 1.8,
-						"danger_type": "parry_only"
-					}
-				]
-			},
-			{
-				"id": "basic_attack_02",
-				"weight": 80,
-				"warning_text": "날카로운 발톱을 중앙으로 휘갈긴다.",
-				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
-				"projectiles": [
-					{
-						"projectile": "pierce",
-						"start": [
-							850,
-							0
-						],
-						"rotation": 180,
-						"damage": 15,
-						"delay": 0.0
-					},
-					{
-						"projectile": "pierce",
-						"start": [
-							850,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 0.2,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "pierce",
-						"start": [
-							850,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 0.4,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "pierce",
-						"start": [
-							850,
-							0
-						],
-						"rotation": 180,
-						"damage": 15,
-						"delay": 1.3
-					},
-					{
-						"projectile": "pierce",
-						"start": [
-							850,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.5,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "pierce",
-						"start": [
-							850,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.7,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "pierce",
-						"start": [
-							850,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 2.6,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "pierce",
-						"start": [
-							850,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 2.8,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "pierce",
-						"start": [
-							850,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 3.0,
-						"danger_type": "parry_only"
-					}
-				]
-			},
-			{
-				"id": "basic_attack_03",
-				"weight": 40,
-				"warning_text": "전선이 양쪽으로 솟구쳐 오른다.",
-				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
-				"projectiles": [
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							400,
-							0
-						],
-						"rotation": 180,
-						"damage": 20,
-						"delay": 1.0,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							400,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.4,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							1400,
-							0
-						],
-						"rotation": 180,
-						"damage": 20,
-						"delay": 2.5,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							1400,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 2.9,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							400,
-							0
-						],
-						"rotation": 180,
-						"damage": 20,
-						"delay": 4.5,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							400,
-							0
-						],
-						"rotation": 180,
-						"damage": 4,
-						"delay": 4.9,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							790,
-							0
-						],
-						"rotation": 180,
-						"damage": 6,
-						"delay": 6.0,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							860,
-							0
-						],
-						"rotation": 180,
-						"damage": 6,
-						"delay": 6.0,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "electric_bullet",
-						"start": [
-							940,
-							0
-						],
-						"rotation": 180,
-						"damage": 6,
-						"delay": 6.0,
-						"danger_type": "parry_only"
-					}
-				]
-			}
-		],
-		"hitbox_base_size": [
-			667,
-			1000
-		],
-		"hitboxes": [
-			{
-				"id": "head",
-				"name": "머리",
-				"rect": [
-					216,
-					269,
-					210,
-					192
-				],
-				"damage_multiplier": 0.5
-			},
-			{
-				"id": "body",
-				"name": "몸통",
-				"rect": [
-					207,
-					260,
-					200,
-					200
-				],
-				"damage_multiplier": 0.5
-			},
-			{
-				"id": "line",
-				"name": "전선",
-				"rect": [
-					290,
-					63,
-					114,
-					187
-				],
-				"damage_multiplier": 10.0
-			}
-		],
-		"drops": [
-			{
-				"item": "unknown_coin",
-				"chance": 100,
-				"min": 30,
-				"max": 40
-			},
-			{
-				"item": "cross_relic",
-				"chance": 2,
-				"count": 1
-			},
-			{
-				"item": "holy_grail_relic",
-				"chance": 2,
-				"count": 1
-			},
-			{
-				"item": "bible_fetish",
-				"chance": 2,
-				"count": 1
-			},
-			{
-				"item": "metal_syringe",
-				"chance": 2,
-				"count": 1
-			},
-			{
-				"item": "rosary_fetish",
-				"chance": 2,
-				"count": 1
-			},
-			{
-				"item": "sneakers_fetish",
-				"chance": 5,
-				"count": 1
-			},
-			{
-				"item": "dumbbell_fetish",
-				"chance": 5,
-				"count": 1
-			},
-			{
-				"item": "sandbag_fetish",
-				"chance": 5,
-				"count": 1
-			},
-			{
-				"item": "lung_model_fetish",
-				"chance": 2,
-				"count": 1
-			},
-			{
-				"item": "first_aid_box_fetish",
-				"chance": 2,
-				"count": 1
-			},
-			{
-				"item": "classic_camera_fetish",
-				"chance": 2,
-				"count": 1
-			},
-			{
-				"item": "hourglass_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "hand_bone_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "skull_model_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "small_frame_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "hand_candlestick_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "brain_model_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "heart_model_fetish",
-				"chance": 1,
-				"count": 1
-			}
-		],
-		"defeat_flags": [
-			"defeated_monitor_mimic_pride"
 		]
 	},
 	"combined_candle_students_butcher": {
@@ -3862,11 +3456,11 @@
 				"item": "beverage_a",
 				"chance": 30,
 				"min": 1,
-				"max": 4
+				"max": 5
 			},
 			{
 				"item": "tranquilizer_a",
-				"chance": 10,
+				"chance": 20,
 				"min": 1,
 				"max": 1
 			},
@@ -3881,9 +3475,499 @@
 			"defeated_combined_candle_students_butcher"
 		]
 	},
+	"monitor_mimic_pride": {
+		"name": "교만의 모니터 모방자",
+		"max_hp": 999,
+		"battle_bgm": "res://sounds/bgm20.mp3",
+		"battle_bgm_volume_db": 0.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/enemy_encounter.mp3",
+		"encounter_sound_volume_db": -5.0,
+		"image": "res://imgs/enemies/moniter_mimic.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.2,
+		"enemy_size": [
+			534,
+			800
+		],
+		"enemy_position": [
+			650,
+			-50
+		],
+		"can_escape": false,
+		"encounter_text": "모니터 내부가 갈라지면서 무수한 액체가 쏟아져 나와 끔찍한 형체를 띄었다.",
+		"observe_text": "...",
+		"weakness_text": "전선이 약점인 것 같다.",
+		"patterns": [
+			{
+				"id": "basic_attack_01",
+				"weight": 40,
+				"warning_text": "전선이 중앙으로 솟구쳐 오른다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							860,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 0.3,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							940,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 0.3,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.9,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.5,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							860,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 1.8,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							940,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 1.8,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "basic_attack_02",
+				"weight": 80,
+				"warning_text": "날카로운 발톱을 중앙으로 휘갈긴다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "pierce",
+						"start": [
+							850,
+							0
+						],
+						"rotation": 180,
+						"damage": 15,
+						"delay": 0.0
+					},
+					{
+						"projectile": "pierce",
+						"start": [
+							850,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "pierce",
+						"start": [
+							850,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 0.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "pierce",
+						"start": [
+							850,
+							0
+						],
+						"rotation": 180,
+						"damage": 15,
+						"delay": 1.3
+					},
+					{
+						"projectile": "pierce",
+						"start": [
+							850,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.5,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "pierce",
+						"start": [
+							850,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.7,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "pierce",
+						"start": [
+							850,
+							0
+						],
+						"rotation": 180,
+						"damage": 15,
+						"delay": 2.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "pierce",
+						"start": [
+							850,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 2.8,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "pierce",
+						"start": [
+							850,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 3.0,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "basic_attack_03",
+				"weight": 40,
+				"warning_text": "전선이 양쪽으로 솟구쳐 오른다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							400,
+							0
+						],
+						"rotation": 180,
+						"damage": 20,
+						"delay": 1.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							400,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							1400,
+							0
+						],
+						"rotation": 180,
+						"damage": 20,
+						"delay": 2.5,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							1400,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 2.9,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							400,
+							0
+						],
+						"rotation": 180,
+						"damage": 20,
+						"delay": 4.5,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							400,
+							0
+						],
+						"rotation": 180,
+						"damage": 4,
+						"delay": 4.9,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							790,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 6.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							860,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 6.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "electric_bullet",
+						"start": [
+							940,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
+						"delay": 6.0,
+						"danger_type": "parry_only"
+					}
+				]
+			}
+		],
+		"hitbox_base_size": [
+			667,
+			1000
+		],
+		"hitboxes": [
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					215,
+					270,
+					200,
+					190
+				],
+				"damage_multiplier": 0.5
+			},
+			{
+				"id": "body",
+				"name": "몸통",
+				"rect": [
+					207,
+					260,
+					200,
+					200
+				],
+				"damage_multiplier": 0.5
+			},
+			{
+				"id": "line",
+				"name": "전선",
+				"rect": [
+					290,
+					63,
+					114,
+					187
+				],
+				"damage_multiplier": 10.0
+			}
+		],
+		"drops": [
+			{
+				"item": "unknown_coin",
+				"chance": 100,
+				"min": 30,
+				"max": 50
+			},
+			{
+				"item": "cross_relic",
+				"chance": 2,
+				"count": 1
+			},
+			{
+				"item": "holy_grail_relic",
+				"chance": 2,
+				"count": 1
+			},
+			{
+				"item": "bible_fetish",
+				"chance": 2,
+				"count": 1
+			},
+			{
+				"item": "metal_syringe",
+				"chance": 2,
+				"count": 1
+			},
+			{
+				"item": "rosary_fetish",
+				"chance": 2,
+				"count": 1
+			},
+			{
+				"item": "sneakers_fetish",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "dumbbell_fetish",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "sandbag_fetish",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "lung_model_fetish",
+				"chance": 2,
+				"count": 1
+			},
+			{
+				"item": "first_aid_box_fetish",
+				"chance": 2,
+				"count": 1
+			},
+			{
+				"item": "classic_camera_fetish",
+				"chance": 2,
+				"count": 1
+			},
+			{
+				"item": "hourglass_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "hand_bone_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "skull_model_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "small_frame_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "hand_candlestick_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "brain_model_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "heart_model_fetish",
+				"chance": 1,
+				"count": 1
+			}
+		],
+		"defeat_flags": [
+			"defeated_monitor_mimic_pride"
+		]
+	},
 	"moon": {
 		"name": "달",
-		"max_hp": 2026,
+		"max_hp": 2000,
 		"battle_bgm": "res://sounds/bgm21.mp3",
 		"battle_bgm_volume_db": 0.0,
 		"battle_bgm_loop": true,
@@ -3903,7 +3987,7 @@
 			-55
 		],
 		"can_escape": false,
-		"encounter_text": "달의 신이 당신의 부름에 응답하였다.",
+		"encounter_text": "달이 당신의 기도에 응답하였다.",
 		"observe_text": "달은 하늘에 있고, 사람이 이길 수 없다.",
 		"weakness_text": "",
 		"patterns": [
@@ -4488,11 +4572,11 @@
 				"item": "unknown_coin",
 				"chance": 100,
 				"min": 50,
-				"max": 100
+				"max": 80
 			},
 			{
 				"item": "holy_grail_relic",
-				"chance": 80,
+				"chance": 90,
 				"min": 1,
 				"max": 1
 			}
@@ -5071,6 +5155,425 @@
 		],
 		"defeat_flags": [
 			"defeated_test_monster"
+		]
+	},
+	"ghost_02": {
+		"name": "작은 유령",
+		"max_hp": 220,
+		"battle_bgm": "res://sounds/bgm19.mp3",
+		"battle_bgm_volume_db": -5.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/ghost.mp3",
+		"encounter_sound_volume_db": 10.0,
+		"image": "res://imgs/enemies/ghost.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.2,
+		"escape_after_player_turns": 4,
+		"escape_text": "작은 유령은 장난치며 어둠 속으로 사라졌다.",
+		"enemy_size": [
+			150,
+			300
+		],
+		"enemy_position": [
+			900,
+			200
+		],
+		"can_escape": true,
+		"encounter_text": "작은 유령이 나타났다.",
+		"observe_text": "작은 유령은 돌아다니며 놀고있다, 그 형체는 희미하게 비쳐서 곧 사라질 것만 같다.",
+		"weakness_text": "",
+		"patterns": [
+			{
+				"id": "basic_attack_01",
+				"weight": 50,
+				"warning_text": "작은 유령은 중앙에서 앉아서 놀아 달라고 조르고 있다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.8,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 1.0,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "basic_attack_02",
+				"weight": 45,
+				"warning_text": "작은 유령은 중앙에서 앉아서 놀아 달라고 뒹굴고 있다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"projectiles": [
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.8,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "basic_attack_03",
+				"weight": 5,
+				"warning_text": "작은 유령은 혼자 놀다가 넘어졌다.",
+				"fire_mode": "parallel",
+				"projectiles": []
+			},
+			{
+				"id": "basic_attack_04",
+				"weight": 50,
+				"priority": 1,
+				"warning_text": "작은 유령은 도망갈 준비를 하고 있다.",
+				"fire_mode": "parallel",
+				"counter_hitbox_id": "head",
+				"turn_condition": {
+					"mode": "exact",
+					"turn": 4
+				},
+				"projectiles": [
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.6,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 3,
+						"delay": 0.8,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "fear_slash",
+						"start": [
+							900,
+							0
+						],
+						"rotation": 180,
+						"damage": 5,
+						"delay": 1.0,
+						"danger_type": "parry_only"
+					}
+				]
+			}
+		],
+		"hitbox_base_size": [
+			375,
+			500
+		],
+		"hitboxes": [
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					186,
+					129,
+					1,
+					105
+				],
+				"damage_multiplier": 5.0
+			}
+		],
+		"drops": [
+			{
+				"item": "unknown_coin",
+				"chance": 100,
+				"min": 5,
+				"max": 30
+			},
+			{
+				"item": "old_water_ball",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "old_abacus",
+				"chance": 5,
+				"count": 1
+			},
+			{
+				"item": "cube_relic",
+				"chance": 4,
+				"count": 1
+			},
+			{
+				"item": "torn_eyepatch",
+				"chance": 3,
+				"count": 1
+			},
+			{
+				"item": "dice_relic",
+				"chance": 3,
+				"count": 1
+			},
+			{
+				"item": "music_box_relic",
+				"chance": 3,
+				"count": 1
+			},
+			{
+				"item": "broken_headset_relic",
+				"chance": 3,
+				"count": 1
+			},
+			{
+				"item": "teddy_bear_relic",
+				"chance": 2,
+				"count": 1
+			},
+			{
+				"item": "character_figure_relic",
+				"chance": 2,
+				"count": 1
+			},
+			{
+				"item": "cross_relic",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "holy_grail_relic",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "bible_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "metal_syringe",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "rosary_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "sneakers_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "dumbbell_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "sandbag_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "lung_model_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "first_aid_box_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "classic_camera_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "hourglass_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "hand_bone_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "skull_model_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "small_frame_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "hand_candlestick_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "brain_model_fetish",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "heart_model_fetish",
+				"chance": 1,
+				"count": 1
+			}
+		],
+		"defeat_flags": [
+			"defeated_ghost_02"
 		]
 	},
 	"human_flog": {
@@ -6069,12 +6572,12 @@
 			{
 				"item": "beverage_a",
 				"chance": 30,
-				"min": 1,
+				"min": 3,
 				"max": 5
 			},
 			{
 				"item": "chocolate_bar_a",
-				"chance": 10,
+				"chance": 20,
 				"min": 1,
 				"max": 1
 			},
@@ -6098,857 +6601,9 @@
 			"defeated_sea​_anemone_woman"
 		]
 	},
-	"green_fish_man": {
-		"name": "초록 물고기 남자",
-		"max_hp": 500,
-		"battle_bgm": "res://sounds/bgm15.mp3",
-		"battle_bgm_volume_db": -5.0,
-		"battle_bgm_loop": true,
-		"battle_bgm_fade_in": true,
-		"battle_bgm_fade_time": 3.0,
-		"encounter_sound": "res://sounds/enemy_encounter2.mp3",
-		"encounter_sound_volume_db": 10.0,
-		"image": "res://imgs/enemies/green_fish_man.png",
-		"battle_background": "",
-		"battle_background_alpha": 0.2,
-		"enemy_size": [
-			550,
-			660
-		],
-		"enemy_position": [
-			650,
-			0
-		],
-		"can_escape": true,
-		"encounter_text": "가면을 쓴 남자가 다가왔다.",
-		"observe_text": "물고기...?",
-		"weakness_text": "",
-		"patterns": [
-			{
-				"id": "basic_attack_01",
-				"weight": 100,
-				"warning_text": "주먹을 양쪽으로 휘두른다.",
-				"fire_mode": "parallel",
-				"projectiles": [
-					{
-						"projectile": "impact_basic",
-						"start": [
-							600,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.0
-					},
-					{
-						"projectile": "impact_basic",
-						"start": [
-							680,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.0
-					},
-					{
-						"projectile": "impact_basic",
-						"start": [
-							600,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.4,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "impact_basic",
-						"start": [
-							680,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 1.4,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "impact_basic",
-						"start": [
-							1200,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 3.0,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "impact_basic",
-						"start": [
-							1280,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 3.0,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "impact_basic",
-						"start": [
-							1200,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 3.4
-					},
-					{
-						"projectile": "impact_basic",
-						"start": [
-							1280,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 3.4
-					},
-					{
-						"projectile": "impact_basic",
-						"start": [
-							800,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 4.2
-					},
-					{
-						"projectile": "impact_basic",
-						"start": [
-							880,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 4.2,
-						"danger_type": "parry_only"
-					}
-				]
-			}
-		],
-		"hitbox_base_size": [
-			1024,
-			1536
-		],
-		"hitboxes": [
-			{
-				"id": "head",
-				"name": "머리",
-				"rect": [
-					449,
-					49,
-					133,
-					173
-				]
-			},
-			{
-				"id": "body",
-				"name": "몸통",
-				"rect": [
-					474,
-					260,
-					226,
-					466
-				],
-				"damage_multiplier": 0.8
-			}
-		],
-		"parts": [
-			{
-				"id": "left_arm",
-				"name": "날카로운 나이프를 들고 있는 왼쪽 팔",
-				"max_hp": 300,
-				"z_index": 10,
-				"image": "res://imgs/enemies/fish_man_left.png",
-				"observe_text": "이 부위를 먼저 노리는게 좋을거같다.",
-				"size": [
-					297,
-					436
-				],
-				"position": [
-					285,
-					150
-				],
-				"destroyable": true,
-				"destroy_text": "날카로운 나이프를 들고 있는 왼쪽 팔이 떨어져 나갔다.",
-				"hitbox": {
-					"id": "left_arm",
-					"name": "날카로운 나이프를 들고 있는 왼쪽 팔",
-					"rect": [
-						338,
-						222,
-						133,
-						325
-					]
-				},
-				"patterns": [
-					{
-						"id": "basic_attack_02",
-						"weight": 40,
-						"priority": 1,
-						"warning_text": "나이프를 중앙으로 짧게 휘두른다.",
-						"fire_mode": "parallel",
-						"projectiles": [
-							{
-								"projectile": "pierce",
-								"start": [
-									850,
-									0
-								],
-								"rotation": 180,
-								"damage": 20,
-								"delay": 0.0,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "pierce",
-								"start": [
-									850,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 0.2
-							},
-							{
-								"projectile": "slash_basic",
-								"start": [
-									850,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 0.4,
-								"danger_type": "parry_only"
-							}
-						]
-					},
-					{
-						"id": "basic_attack_03",
-						"weight": 20,
-						"priority": 1,
-						"warning_text": "나이프를 중앙으로 빠르게 휘두른다.",
-						"fire_mode": "parallel",
-						"projectiles": [
-							{
-								"projectile": "slash_slow",
-								"start": [
-									800,
-									0
-								],
-								"rotation": 180,
-								"damage": 20,
-								"delay": 0.6
-							},
-							{
-								"projectile": "slash_slow",
-								"start": [
-									1000,
-									0
-								],
-								"rotation": 180,
-								"damage": 20,
-								"delay": 0.8
-							},
-							{
-								"projectile": "pierce",
-								"start": [
-									850,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 0.0,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "pierce",
-								"start": [
-									850,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 0.1,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "pierce",
-								"start": [
-									850,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 0.2,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "slash_slow",
-								"start": [
-									800,
-									0
-								],
-								"rotation": 180,
-								"damage": 20,
-								"delay": 0.9
-							},
-							{
-								"projectile": "slash_slow",
-								"start": [
-									1000,
-									0
-								],
-								"rotation": 180,
-								"damage": 20,
-								"delay": 1.1
-							},
-							{
-								"projectile": "slash_slow",
-								"start": [
-									800,
-									0
-								],
-								"rotation": 180,
-								"damage": 20,
-								"delay": 1.2
-							},
-							{
-								"projectile": "slash_slow",
-								"start": [
-									1000,
-									0
-								],
-								"rotation": 180,
-								"damage": 20,
-								"delay": 1.4
-							}
-						]
-					},
-					{
-						"id": "basic_attack_04",
-						"weight": 40,
-						"priority": 1,
-						"warning_text": "나이프를 왼쪽으로 짧게 휘두른다.",
-						"fire_mode": "parallel",
-						"projectiles": [
-							{
-								"projectile": "pierce",
-								"start": [
-									450,
-									0
-								],
-								"rotation": 180,
-								"damage": 20,
-								"delay": 1.0,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "pierce",
-								"start": [
-									450,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 1.1,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "pierce",
-								"start": [
-									450,
-									0
-								],
-								"rotation": 180,
-								"damage": 5,
-								"delay": 1.2,
-								"danger_type": "parry_only"
-							}
-						]
-					}
-				]
-			}
-		],
-		"drops": [
-			{
-				"item": "unknown_coin",
-				"chance": 50,
-				"min": 5,
-				"max": 20
-			},
-			{
-				"item": "beverage_a",
-				"chance": 30,
-				"min": 1,
-				"max": 5
-			},
-			{
-				"item": "chocolate_bar_a",
-				"chance": 10,
-				"min": 1,
-				"max": 3
-			},
-			{
-				"item": "knife",
-				"chance": 5,
-				"min": 1,
-				"max": 1
-			},
-			{
-				"item": "old_water_ball",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "old_abacus",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "cube_relic",
-				"chance": 1,
-				"count": 1
-			}
-		],
-		"defeat_flags": [
-			"defeated_green_fish_man"
-		]
-	},
-	"ghost_02": {
-		"name": "작은 유령",
-		"max_hp": 220,
-		"battle_bgm": "res://sounds/bgm19.mp3",
-		"battle_bgm_volume_db": -5.0,
-		"battle_bgm_loop": true,
-		"battle_bgm_fade_in": true,
-		"battle_bgm_fade_time": 3.0,
-		"encounter_sound": "res://sounds/ghost.mp3",
-		"encounter_sound_volume_db": 10.0,
-		"image": "res://imgs/enemies/ghost.png",
-		"battle_background": "",
-		"battle_background_alpha": 0.2,
-		"escape_after_player_turns": 4,
-		"escape_text": "작은 유령은 장난치며 어둠 속으로 사라졌다.",
-		"enemy_size": [
-			150,
-			300
-		],
-		"enemy_position": [
-			900,
-			200
-		],
-		"can_escape": true,
-		"encounter_text": "작은 유령이 나타났다.",
-		"observe_text": "작은 유령은 돌아다니며 놀고있다, 그 형체는 희미하게 비쳐서 곧 사라질 것만 같다.",
-		"weakness_text": "",
-		"patterns": [
-			{
-				"id": "basic_attack_01",
-				"weight": 50,
-				"warning_text": "작은 유령은 중앙에서 앉아서 놀아 달라고 조르고 있다.",
-				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
-				"projectiles": [
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 0.0,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 3,
-						"delay": 0.2,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 3,
-						"delay": 0.4,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 3,
-						"delay": 0.6,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 3,
-						"delay": 0.8,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 1.0,
-						"danger_type": "parry_only"
-					}
-				]
-			},
-			{
-				"id": "basic_attack_02",
-				"weight": 45,
-				"warning_text": "작은 유령은 중앙에서 앉아서 놀아 달라고 뒹굴고 있다.",
-				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
-				"projectiles": [
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 0.0,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 3,
-						"delay": 0.2,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 3,
-						"delay": 0.4,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 3,
-						"delay": 0.6,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 3,
-						"delay": 0.8,
-						"danger_type": "parry_only"
-					}
-				]
-			},
-			{
-				"id": "basic_attack_03",
-				"weight": 5,
-				"warning_text": "작은 유령은 혼자 놀다가 넘어졌다.",
-				"fire_mode": "parallel",
-				"projectiles": []
-			},
-			{
-				"id": "basic_attack_04",
-				"weight": 50,
-				"priority": 1,
-				"warning_text": "작은 유령은 도망갈 준비를 하고 있다.",
-				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
-				"turn_condition": {
-					"mode": "exact",
-					"turn": 4
-				},
-				"projectiles": [
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 0.0,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 3,
-						"delay": 0.2,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 3,
-						"delay": 0.4,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 3,
-						"delay": 0.6,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 3,
-						"delay": 0.8,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "fear_slash",
-						"start": [
-							900,
-							0
-						],
-						"rotation": 180,
-						"damage": 5,
-						"delay": 1.0,
-						"danger_type": "parry_only"
-					}
-				]
-			}
-		],
-		"hitbox_base_size": [
-			375,
-			500
-		],
-		"hitboxes": [
-			{
-				"id": "head",
-				"name": "머리",
-				"rect": [
-					186,
-					129,
-					1,
-					105
-				],
-				"damage_multiplier": 5.0
-			}
-		],
-		"drops": [
-			{
-				"item": "unknown_coin",
-				"chance": 100,
-				"min": 5,
-				"max": 30
-			},
-			{
-				"item": "old_water_ball",
-				"chance": 5,
-				"count": 1
-			},
-			{
-				"item": "old_abacus",
-				"chance": 5,
-				"count": 1
-			},
-			{
-				"item": "cube_relic",
-				"chance": 4,
-				"count": 1
-			},
-			{
-				"item": "torn_eyepatch",
-				"chance": 3,
-				"count": 1
-			},
-			{
-				"item": "dice_relic",
-				"chance": 3,
-				"count": 1
-			},
-			{
-				"item": "music_box_relic",
-				"chance": 3,
-				"count": 1
-			},
-			{
-				"item": "broken_headset_relic",
-				"chance": 3,
-				"count": 1
-			},
-			{
-				"item": "teddy_bear_relic",
-				"chance": 2,
-				"count": 1
-			},
-			{
-				"item": "character_figure_relic",
-				"chance": 2,
-				"count": 1
-			},
-			{
-				"item": "cross_relic",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "holy_grail_relic",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "bible_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "metal_syringe",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "rosary_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "sneakers_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "dumbbell_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "sandbag_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "lung_model_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "first_aid_box_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "classic_camera_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "hourglass_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "hand_bone_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "skull_model_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "small_frame_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "hand_candlestick_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "brain_model_fetish",
-				"chance": 1,
-				"count": 1
-			},
-			{
-				"item": "heart_model_fetish",
-				"chance": 1,
-				"count": 1
-			}
-		],
-		"defeat_flags": [
-			"defeated_ghost_02"
-		]
-	},
 	"clione_little_girl": {
 		"name": "클리오네 소녀",
-		"max_hp": 444,
+		"max_hp": 400,
 		"battle_bgm": "res://sounds/bgm23.mp3",
 		"battle_bgm_volume_db": 0.0,
 		"battle_bgm_loop": true,
@@ -6977,7 +6632,6 @@
 				"weight": 50,
 				"warning_text": "양쪽의 날개를 중앙으로 휘갈긴다.",
 				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
 				"projectiles": [
 					{
 						"projectile": "lethargy_slash",
@@ -7049,18 +6703,8 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 8,
-						"delay": 2.6
-					},
-					{
-						"projectile": "lethargy_slash",
-						"start": [
-							1050,
-							0
-						],
-						"rotation": 180,
-						"damage": 8,
-						"delay": 2.8,
+						"damage": 6,
+						"delay": 2.6,
 						"danger_type": "parry_only"
 					},
 					{
@@ -7070,7 +6714,17 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 6,
+						"delay": 2.8
+					},
+					{
+						"projectile": "lethargy_slash",
+						"start": [
+							1050,
+							0
+						],
+						"rotation": 180,
+						"damage": 6,
 						"delay": 3.0,
 						"danger_type": "parry_only"
 					}
@@ -7081,7 +6735,6 @@
 				"weight": 40,
 				"warning_text": "검은 무언가가 양쪽으로 솟구쳐 오른다.",
 				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
 				"on_player_hit_effects": [
 					{
 						"type": "life_drain",
@@ -7139,38 +6792,37 @@
 					{
 						"projectile": "pierce",
 						"start": [
-							800,
+							600,
 							0
 						],
 						"rotation": 180,
 						"damage": 10,
-						"delay": 4.5,
+						"delay": 4.6,
 						"danger_type": "parry_only"
 					},
 					{
 						"projectile": "pierce",
 						"start": [
-							800,
+							600,
 							0
 						],
 						"rotation": 180,
 						"damage": 8,
-						"delay": 4.9,
+						"delay": 5.0,
 						"danger_type": "parry_only"
 					}
 				]
 			},
 			{
 				"id": "basic_attack_03",
-				"weight": 5,
-				"warning_text": "날개 끝에서 검은 무언가가 십자처럼 사방으로 찢어진다.",
+				"weight": 10,
+				"warning_text": "검은 무언가가 십자처럼 사방으로 찢어진다.",
 				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
 				"projectiles": [
 					{
-						"projectile": "lethargy_slash",
+						"projectile": "slash_basic",
 						"start": [
-							600,
+							700,
 							0
 						],
 						"rotation": 180,
@@ -7179,7 +6831,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "lethargy_slash",
+						"projectile": "slash_basic",
 						"start": [
 							1200,
 							0
@@ -7190,7 +6842,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "lethargy_slash",
+						"projectile": "slash_basic",
 						"start": [
 							900,
 							0
@@ -7221,7 +6873,7 @@
 						"delay": 3.2
 					},
 					{
-						"projectile": "lethargy_slash",
+						"projectile": "slash_basic",
 						"start": [
 							900,
 							0
@@ -7236,9 +6888,8 @@
 			{
 				"id": "basic_attack_04",
 				"weight": 5,
-				"warning_text": "소녀의 입 안쪽의 어둠이 크게 사방으로 쏟아진다.",
+				"warning_text": "검은 무언가가 크게 사방으로 쏟아진다.",
 				"fire_mode": "parallel",
-				"counter_hitbox_id": "head",
 				"on_player_hit_effects": [
 					{
 						"type": "life_drain",
@@ -7274,12 +6925,12 @@
 					{
 						"projectile": "pierce",
 						"start": [
-							750,
+							800,
 							0
 						],
 						"rotation": 180,
 						"damage": 8,
-						"delay": 1.55,
+						"delay": 1.6,
 						"danger_type": "parry_only"
 					},
 					{
@@ -7294,7 +6945,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "lethargy_slash",
+						"projectile": "slash_basic",
 						"start": [
 							900,
 							0
@@ -7304,7 +6955,7 @@
 						"delay": 3.3
 					},
 					{
-						"projectile": "lethargy_slash",
+						"projectile": "slash_basic",
 						"start": [
 							820,
 							0
@@ -7315,7 +6966,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "lethargy_slash",
+						"projectile": "slash_basic",
 						"start": [
 							980,
 							0
@@ -7377,14 +7028,14 @@
 			{
 				"item": "beverage_a",
 				"chance": 30,
-				"min": 1,
+				"min": 3,
 				"max": 5
 			},
 			{
 				"item": "chocolate_bar_a",
-				"chance": 10,
+				"chance": 30,
 				"min": 1,
-				"max": 5
+				"max": 3
 			},
 			{
 				"item": "torn_eyepatch",
@@ -7401,9 +7052,436 @@
 			"defeated_clione_little_girl"
 		]
 	},
+	"green_fish_man": {
+		"name": "초록 물고기 남성",
+		"max_hp": 500,
+		"battle_bgm": "res://sounds/bgm15.mp3",
+		"battle_bgm_volume_db": -5.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/enemy_encounter2.mp3",
+		"encounter_sound_volume_db": 10.0,
+		"image": "res://imgs/enemies/green_fish_man.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.2,
+		"enemy_size": [
+			550,
+			660
+		],
+		"enemy_position": [
+			650,
+			0
+		],
+		"can_escape": true,
+		"encounter_text": "가면을 쓴 남성이 다가왔다.",
+		"observe_text": "물고기...?",
+		"weakness_text": "",
+		"patterns": [
+			{
+				"id": "basic_attack_01",
+				"weight": 100,
+				"warning_text": "주먹을 양쪽으로 휘두른다.",
+				"fire_mode": "parallel",
+				"projectiles": [
+					{
+						"projectile": "impact_basic",
+						"start": [
+							600,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.0
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							680,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.0
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							600,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 1.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							680,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 1.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							1200,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 3.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							1280,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 3.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							1200,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 3.4
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							1280,
+							0
+						],
+						"rotation": 180,
+						"damage": 8,
+						"delay": 3.4
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 15,
+						"delay": 4.2
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							880,
+							0
+						],
+						"rotation": 180,
+						"damage": 15,
+						"delay": 4.2,
+						"danger_type": "parry_only"
+					}
+				]
+			}
+		],
+		"hitbox_base_size": [
+			1024,
+			1536
+		],
+		"hitboxes": [
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					449,
+					49,
+					133,
+					173
+				]
+			},
+			{
+				"id": "body",
+				"name": "몸통",
+				"rect": [
+					474,
+					260,
+					226,
+					466
+				],
+				"damage_multiplier": 0.8
+			}
+		],
+		"parts": [
+			{
+				"id": "left_arm",
+				"name": "날카로운 나이프를 들고 있는 왼쪽 팔",
+				"max_hp": 300,
+				"z_index": 10,
+				"image": "res://imgs/enemies/fish_man_left.png",
+				"observe_text": "이 부위를 먼저 노리는게 좋을거같다.",
+				"size": [
+					297,
+					436
+				],
+				"position": [
+					285,
+					150
+				],
+				"destroyable": true,
+				"destroy_text": "날카로운 나이프를 들고 있는 왼쪽 팔이 떨어져 나갔다.",
+				"hitbox": {
+					"id": "left_arm",
+					"name": "날카로운 나이프를 들고 있는 왼쪽 팔",
+					"rect": [
+						338,
+						222,
+						133,
+						325
+					]
+				},
+				"patterns": [
+					{
+						"id": "basic_attack_02",
+						"weight": 40,
+						"priority": 1,
+						"warning_text": "나이프를 중앙으로 짧게 휘두른다.",
+						"fire_mode": "parallel",
+						"projectiles": [
+							{
+								"projectile": "slash_basic",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.2
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.4,
+								"danger_type": "parry_only"
+							}
+						]
+					},
+					{
+						"id": "basic_attack_03",
+						"weight": 20,
+						"priority": 1,
+						"warning_text": "나이프를 중앙으로 빠르게 휘두른다.",
+						"fire_mode": "parallel",
+						"projectiles": [
+							{
+								"projectile": "slash_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.6
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.8
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.1
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 0.2
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 0.9
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.1
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.2
+							},
+							{
+								"projectile": "slash_slow",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.4
+							}
+						]
+					},
+					{
+						"id": "basic_attack_04",
+						"weight": 40,
+						"priority": 1,
+						"warning_text": "나이프를 왼쪽으로 짧게 휘두른다.",
+						"fire_mode": "parallel",
+						"projectiles": [
+							{
+								"projectile": "pierce",
+								"start": [
+									450,
+									0
+								],
+								"rotation": 180,
+								"damage": 20,
+								"delay": 1.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									450,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 1.1,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									450,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 1.2,
+								"danger_type": "parry_only"
+							}
+						]
+					}
+				]
+			}
+		],
+		"drops": [
+			{
+				"item": "unknown_coin",
+				"chance": 50,
+				"min": 10,
+				"max": 20
+			},
+			{
+				"item": "beverage_a",
+				"chance": 30,
+				"min": 3,
+				"max": 5
+			},
+			{
+				"item": "chocolate_bar_a",
+				"chance": 20,
+				"min": 1,
+				"max": 3
+			},
+			{
+				"item": "knife",
+				"chance": 5,
+				"min": 1,
+				"max": 1
+			},
+			{
+				"item": "old_water_ball",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "old_abacus",
+				"chance": 1,
+				"count": 1
+			},
+			{
+				"item": "cube_relic",
+				"chance": 1,
+				"count": 1
+			}
+		],
+		"defeat_flags": [
+			"defeated_green_fish_man"
+		]
+	},
 	"blue_fish_man": {
-		"name": "파란 물고기 남자",
-		"max_hp": 700,
+		"name": "파란 물고기 남성",
+		"max_hp": 500,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
 		"battle_bgm_loop": true,
@@ -7423,7 +7501,7 @@
 			0
 		],
 		"can_escape": false,
-		"encounter_text": "가면을 쓴 남자가 다가왔다.",
+		"encounter_text": "가면을 쓴 남성이 다가왔다.",
 		"observe_text": "물고기...?",
 		"weakness_text": "",
 		"patterns": [
@@ -7507,7 +7585,8 @@
 						],
 						"rotation": 180,
 						"damage": 10,
-						"delay": 3.4
+						"delay": 3.4,
+						"danger_type": "parry_only"
 					},
 					{
 						"projectile": "impact_basic",
@@ -7517,7 +7596,8 @@
 						],
 						"rotation": 180,
 						"damage": 10,
-						"delay": 3.4
+						"delay": 3.4,
+						"danger_type": "parry_only"
 					},
 					{
 						"projectile": "impact_basic",
@@ -7575,7 +7655,7 @@
 			{
 				"id": "left_arm",
 				"name": "날카로운 나이프를 들고 있는 왼쪽 팔",
-				"max_hp": 300,
+				"max_hp": 500,
 				"z_index": 10,
 				"image": "res://imgs/enemies/fish_man_left.png",
 				"observe_text": "이 부위를 먼저 노리는게 좋을거같다.",
@@ -7638,6 +7718,17 @@
 								"rotation": 180,
 								"damage": 5,
 								"delay": 1.2,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									850,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 1.3,
 								"danger_type": "parry_only"
 							}
 						]
@@ -7783,6 +7874,17 @@
 								"damage": 5,
 								"delay": 1.2,
 								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "pierce",
+								"start": [
+									450,
+									0
+								],
+								"rotation": 180,
+								"damage": 5,
+								"delay": 1.3,
+								"danger_type": "parry_only"
 							}
 						]
 					}
@@ -7792,25 +7894,25 @@
 		"drops": [
 			{
 				"item": "unknown_coin",
-				"chance": 50,
+				"chance": 60,
 				"min": 10,
 				"max": 20
 			},
 			{
 				"item": "beverage_a",
-				"chance": 30,
-				"min": 1,
+				"chance": 40,
+				"min": 3,
 				"max": 5
 			},
 			{
 				"item": "chocolate_bar_a",
-				"chance": 10,
+				"chance": 30,
 				"min": 1,
 				"max": 3
 			},
 			{
 				"item": "knife",
-				"chance": 5,
+				"chance": 10,
 				"min": 1,
 				"max": 1
 			},
@@ -7831,13 +7933,13 @@
 			}
 		],
 		"defeat_flags": [
-			"defeated_green_fish_man"
+			"defeated_blue_fish_man"
 		]
 	},
 	"hammerhead_mansion_master_phase_01": {
 		"name": "저택의 주인",
 		"phase": 1,
-		"max_hp": 30,
+		"max_hp": 50,
 		"battle_bgm": "res://sounds/bgm24.mp3",
 		"battle_bgm_volume_db": 0.0,
 		"battle_bgm_loop": true,
@@ -7891,7 +7993,7 @@
 			{
 				"id": "right_fish_man",
 				"name": "오른쪽 부하",
-				"max_hp": 300,
+				"max_hp": 500,
 				"z_index": 10,
 				"image": "res://imgs/enemies/red_fish_man_02.png",
 				"observe_text": "물고기...?",
@@ -7904,7 +8006,7 @@
 					250
 				],
 				"destroyable": true,
-				"destroy_text": "가면을 쓴 남자가 균형을 잃고 쓰러졌다.",
+				"destroy_text": "가면을 쓴 남성이 균형을 잃고 쓰러졌다.",
 				"hitbox": {
 					"id": "right_fish_man",
 					"name": "오른쪽 부하",
@@ -7951,8 +8053,7 @@
 								],
 								"rotation": 180,
 								"damage": 20,
-								"delay": 0.0,
-								"danger_type": "parry_only"
+								"delay": 0.0
 							},
 							{
 								"projectile": "pierce",
@@ -7962,8 +8063,7 @@
 								],
 								"rotation": 180,
 								"damage": 20,
-								"delay": 0.1,
-								"danger_type": "parry_only"
+								"delay": 0.1
 							},
 							{
 								"projectile": "pierce",
@@ -7973,8 +8073,7 @@
 								],
 								"rotation": 180,
 								"damage": 15,
-								"delay": 0.2,
-								"danger_type": "parry_only"
+								"delay": 0.2
 							},
 							{
 								"projectile": "pierce",
@@ -7984,8 +8083,7 @@
 								],
 								"rotation": 180,
 								"damage": 15,
-								"delay": 0.3,
-								"danger_type": "parry_only"
+								"delay": 0.3
 							},
 							{
 								"projectile": "slash_slow",
@@ -8033,7 +8131,7 @@
 						"id": "summon_fish_man_01",
 						"weight": 100,
 						"priority": 2,
-						"warning_text": "가면을 쓴 남자가 구석을 향해 손짓한다.",
+						"warning_text": "가면을 쓴 남성이 구석을 향해 손짓한다.",
 						"fire_mode": "parallel",
 						"max_uses": 3,
 						"start_effects": [
@@ -8041,7 +8139,7 @@
 								"type": "revive_part",
 								"part_id": "left_fish_man",
 								"hp_percent": 100,
-								"text": "또 다른 가면을 쓴 남자가 다가왔다.",
+								"text": "또 다른 가면을 쓴 남성이 다가왔다.",
 								"sound": "res://sounds/footsteps.mp3",
 								"sound_volume_db": 20.0,
 								"effect_duration": 0.8
@@ -8172,7 +8270,7 @@
 			{
 				"id": "left_fish_man",
 				"name": "왼쪽 부하",
-				"max_hp": 300,
+				"max_hp": 500,
 				"z_index": 10,
 				"image": "res://imgs/enemies/red_fish_man_02.png",
 				"observe_text": "물고기...?",
@@ -8185,7 +8283,7 @@
 					250
 				],
 				"destroyable": true,
-				"destroy_text": "가면을 쓴 남자가 균형을 잃고 쓰러졌다.",
+				"destroy_text": "가면을 쓴 남성이 균형을 잃고 쓰러졌다.",
 				"hitbox": {
 					"id": "left_fish_man",
 					"name": "왼쪽 부하",
@@ -8314,7 +8412,7 @@
 						"id": "summon_fish_man_02",
 						"weight": 50,
 						"priority": 2,
-						"warning_text": "가면을 쓴 남자가 구석을 향해 손짓한다.",
+						"warning_text": "가면을 쓴 남성이 구석을 향해 손짓한다.",
 						"fire_mode": "parallel",
 						"max_uses": 3,
 						"start_effects": [
@@ -8322,7 +8420,7 @@
 								"type": "revive_part",
 								"part_id": "right_fish_man",
 								"hp_percent": 100,
-								"text": "또 다른 가면을 쓴 남자가 다가왔다.",
+								"text": "또 다른 가면을 쓴 남성이 다가왔다.",
 								"sound": "res://sounds/footsteps.mp3",
 								"sound_volume_db": 20.0,
 								"effect_duration": 0.8

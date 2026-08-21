@@ -922,7 +922,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "아무도 없는 낯선 공간에서 처음 보는 남자가 다가오면, 나라도 무서웠을 것이다."
+				"text": "아무도 없는 낯선 공간에서 처음 보는 남성이 다가오면, 나라도 무서웠을 것이다."
 			},
 			{
 				"type": "story_dialogue",
@@ -5641,7 +5641,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "덩치 큰 남자가 순식간에 내 앞까지 다가왔다. 나는 그가 움직이는 걸 보고서야 문 쪽의 그림자를 알아차렸다."
+				"text": "덩치 큰 남성이 순식간에 내 앞까지 다가왔다. 나는 그가 움직이는 걸 보고서야 문 쪽의 그림자를 알아차렸다."
 			},
 			{
 				"type": "story_dialogue",
@@ -5812,7 +5812,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그는 하얗게 염색한 머리카락에 나보다 한참 큰 키를 가진 남자였다."
+				"text": "그는 하얗게 염색한 머리카락에 나보다 한참 큰 키를 가진 남성이었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -8570,7 +8570,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "아이작",
-				"text": "목욕탕 같기도 하고 수영장 같기도 하고."
+				"text": "그런거 같기도 하고 수영장 같기도 하고."
 			},
 			{
 				"type": "story_dialogue",
@@ -8999,7 +8999,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "눈앞을 지나간 것은 수영장에 존재할 수 없는 잠수함만큼 거대한 생명체였다."
+				"text": "눈앞을 지나간 것은 잠수함만큼 거대한 생명체였다."
 			},
 			{
 				"type": "story_dialogue",
@@ -11081,7 +11081,7 @@
 				"type": "portrait",
 				"character": "claire",
 				"emotion": "normal",
-				"text": "당신이 이곳의 주인인가요?"
+				"text": "당신이 이곳의 관리자인가요?"
 			},
 			{
 				"type": "story_dialogue",
@@ -11107,7 +11107,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "남자가 손가락을 움직였다."
+				"text": "남성이 손가락을 움직였다."
 			},
 			{
 				"type": "story_dialogue",
@@ -11222,7 +11222,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "남자는 너무도 자연스럽게 대답했다."
+				"text": "남성은 너무도 자연스럽게 대답했다."
 			},
 			{
 				"type": "story_dialogue",
@@ -11432,7 +11432,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "남자는 자신의 가면을 손끝으로 두드렸다."
+				"text": "남성은 자신의 가면을 손끝으로 두드렸다."
 			},
 			{
 				"type": "story_dialogue",
@@ -11500,7 +11500,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "남자는 자신의 가슴을 손으로 두드렸다."
+				"text": "남성은 자신의 가슴을 손으로 두드렸다."
 			},
 			{
 				"type": "story_dialogue",
@@ -11624,7 +11624,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "귀상어 가면의 남자는 우리 세 사람을 천천히 훑었다."
+				"text": "귀상어 가면의 남성은 우리 세 사람을 천천히 훑었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -11718,7 +11718,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "귀상어 가면의 남자는 만족스럽게 말을 이어갔다."
+				"text": "귀상어 가면의 남성은 만족스럽게 말을 이어갔다."
 			},
 			{
 				"type": "story_dialogue",
@@ -11773,7 +11773,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "남자는 잠시 침묵했다."
+				"text": "남성은 잠시 침묵했다."
 			},
 			{
 				"type": "story_dialogue",
