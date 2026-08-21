@@ -9752,12 +9752,6 @@
 				"text": "복도와 교실에는 발목까지 물이 차있었고 젖어서 녹이 슬어있는 물건들이 곳곳에 보였다."
 			},
 			{
-				"type": "sound",
-				"path": "res://sounds/footsteps_water.mp3",
-				"volume_db": 0,
-				"wait": false
-			},
-			{
 				"type": "story_dialogue",
 				"text": "내 발소리 사이사이 느껴지는 기척과 물의 파장."
 			},
@@ -9889,12 +9883,6 @@
 				"character": "claire",
 				"emotion": "pain",
 				"text": "으윽... 좀 옆으로 가봐요."
-			},
-			{
-				"type": "sound",
-				"path": "res://sounds/footsteps_water.mp3",
-				"volume_db": -3,
-				"wait": false
 			},
 			{
 				"type": "story_dialogue",
@@ -10422,12 +10410,12 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "하아아... 죄송합..."
+				"text": "하아아... 죄송..."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "죄송합니다... 하아아..."
+				"text": "죄송해요... 하아아..."
 			},
 			{
 				"type": "story_dialogue",
@@ -10436,19 +10424,11 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "아이작 씨가 구해주지 않았으면 나는 이미 저 녀석에게 먹혔을 것이다."
+				"text": "아이작 씨가 구해주지 않았으면 나는 이미 물속의 괴물에게 먹혔을 것이다."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "이상한 함정들이 많으니깐 주의해야 된다."
-			},
-			{
-				"type": "story_dialogue",
-				"text": "만지면 안 된다고 머리로는 알고 있었다."
-			},
-			{
-				"type": "story_dialogue",
-				"text": "하지만 무언가에 이끌린 듯이..."
+				"text": "이번에도 무언가에 이끌린 듯이 모니터에 손을 댔다..."
 			},
 			{
 				"type": "story_dialogue",
@@ -11056,7 +11036,7 @@
 				"type": "portrait",
 				"character": "isaac",
 				"emotion": "normal",
-				"text": "너는 누구냐."
+				"text": "너희들은 누구냐?"
 			},
 			{
 				"type": "story_dialogue",
@@ -11121,7 +11101,11 @@
 				"type": "portrait",
 				"character": "isaac",
 				"emotion": "normal",
-				"text": "녀석들의 수가 생각보다 많아, 허튼짓하는 것보다는 말을 듣자."
+				"text": "녀석들의 수가 생각보다 많아, 일단은 말을 듣자..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "아이작 씨가 주변을 확인하고 나지막한 소리로 우리들에게 속삭였다."
 			},
 			{
 				"type": "story_dialogue",
@@ -11160,7 +11144,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "거대한 문을 알고 있나요?"
+				"text": "거대한 문과 제단에 대해 알고 있나요?"
 			},
 			{
 				"type": "story_dialogue",
@@ -11176,7 +11160,7 @@
 				"type": "portrait",
 				"character": "isaac",
 				"emotion": "normal",
-				"text": "그 문 너머에 무엇이 있어?"
+				"text": "그럼, 그 문 너머로 가면 원래 세계로 돌아갈 수 있나?"
 			},
 			{
 				"type": "story_dialogue",
@@ -11197,12 +11181,12 @@
 				"type": "portrait",
 				"character": "isaac",
 				"emotion": "normal",
-				"text": "알고 있다면 말해."
+				"text": "뭔가 알고 있다면 말해."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "저택의 주인",
-				"text": "명령하는 태도는 마음에 들지 않지만, 상관없다."
+				"text": "명령하는 태도는 마음에 들지 않지만, 뭐 상관없다."
 			},
 			{
 				"type": "story_dialogue",
@@ -11212,7 +11196,7 @@
 			{
 				"type": "portrait",
 				"character": "claire",
-				"emotion": "normal",
+				"emotion": "embarrassed",
 				"text": "우리를 죽일 생각인가요?"
 			},
 			{
@@ -11313,7 +11297,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "저택의 주인",
-				"text": "물론, 전부라고 말하지는 못하겠지만... 이곳에는 처음부터 존재했던 것들도 있었으니까."
+				"text": "물론 전부라고 말하지는 못하지, 이곳에는 처음부터 존재했던 것들도 있었으니까."
 			},
 			{
 				"type": "story_dialogue",
@@ -11375,6 +11359,10 @@
 			{
 				"type": "story_dialogue",
 				"text": "나는 그녀를 바라보았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "내 기억 속에서 그녀는 죽었었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -11807,7 +11795,7 @@
 			{
 				"type": "portrait",
 				"character": "isaac",
-				"emotion": "normal",
+				"emotion": "expressionless",
 				"text": "지루한 설명은 끝났나?"
 			},
 			{
