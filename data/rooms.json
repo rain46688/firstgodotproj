@@ -14484,7 +14484,10 @@
 		"enter_stories": [
 			{
 				"event": "first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10",
-				"required_flag": "story_first_enter_swimming_pool_hallway_01_done",
+				"required_flag": [
+					"story_first_enter_swimming_pool_hallway_01_done",
+					"story_first_enter_swimming_pool_room_10_done"
+				],
 				"required_flag_missing": [
 					"story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done"
 				]
@@ -15701,7 +15704,7 @@
 							},
 							{
 								"type": "text",
-								"text": "구멍 안에 있다."
+								"text": "구멍 아래에 있다."
 							}
 						]
 					},
@@ -26701,7 +26704,10 @@
 		"enter_stories": [
 			{
 				"event": "first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25",
-				"required_flag": "touch_monitor_swimming_pool_room_25",
+				"required_flag": [
+					"touch_monitor_swimming_pool_room_25",
+					"story_first_enter_swimming_pool_room_10_done"
+				],
 				"required_flag_missing": [
 					"story_first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25_done"
 				]
@@ -26991,7 +26997,15 @@
 		}
 	},
 	"swimming_pool_stairs_01": {
-		"background": "res://imgs/backgrounds/swimming_pool_stairs_01.png",
+		"background": "res://imgs/backgrounds/swimming_pool_stairs_02.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"opented_swimming_pool_stairs_01"
+				],
+				"path": "res://imgs/backgrounds/swimming_pool_stairs_01.png"
+			}
+		],
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -27055,15 +27069,39 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "계단 아래는 아무것도 보이지 않는다."
+						"text": "양쪽 구석에 각각 누를 수 있는 버튼이 존재한다."
 					},
 					{
-						"type": "text",
-						"text": "저 너머에서 불길한 무언가가 있는 것 같다."
-					},
-					{
-						"type": "text",
-						"text": "조금만 더 다른 곳을 둘러보자."
+						"type": "choices",
+						"choices": [
+							{
+								"text": "한쪽을 버튼을 누른다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/click_02.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "버튼은 눌렀지만 다시 곧 제자리로 돌아왔다."
+									},
+									{
+										"type": "text",
+										"text": "양쪽 버튼을 동시에 눌러야 되는 구조인 것 같다."
+									},
+									{
+										"type": "text",
+										"text": "혼자서는 누를 수 없을 거 같다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
 					}
 				]
 			},
@@ -27076,34 +27114,64 @@
 				],
 				"required_flag": "story_first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25_done",
 				"required_flag_missing": [
-					"defeated_hammerhead_mansion_master"
+					"defeated_hammerhead_mansion_master",
+					"opented_swimming_pool_stairs_01"
 				],
 				"events": [
 					{
 						"type": "text",
-						"text": "계단 아래는 아무것도 보이지 않는다."
+						"text": "양쪽 구석에 각각 누를 수 있는 버튼이 존재한다."
 					},
 					{
-						"type": "text",
-						"text": "저 너머에서 불길한 무언가가 있는 것 같다."
-					},
-					{
-						"type": "portrait",
-						"character": "isaac",
-						"emotion": "expressionless",
-						"text": "뭐해 쫄은 거야?"
-					},
-					{
-						"type": "portrait",
-						"character": "claire",
-						"emotion": "normal",
-						"text": "저 너머에 무언가 기분 나쁜 게 있는 거 같지만."
-					},
-					{
-						"type": "portrait",
-						"character": "claire",
-						"emotion": "normal",
-						"text": "다 같이 있으면 괜찮을 거예요."
+						"type": "choices",
+						"choices": [
+							{
+								"text": "버튼을 동시에 누른다.",
+								"events": [
+									{
+										"type": "text",
+										"name": "나",
+										"text": "이쪽 버튼을 누를게요."
+									},
+									{
+										"type": "portrait",
+										"character": "claire",
+										"emotion": "normal",
+										"text": "그럼, 제가 반대쪽을 누를게요."
+									},
+									{
+										"type": "portrait",
+										"character": "isaac",
+										"emotion": "normal",
+										"text": "다들 조심해 무슨 일이 일어날지 몰라."
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/click_02.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "버튼을 동시에 누르자 무언가 장치가 움직이는 소리가 들렸다."
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/sliding_rock.mp3",
+										"volume_db": 10,
+										"wait": true
+									},
+									{
+										"type": "flag",
+										"flag": "opented_swimming_pool_stairs_01"
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
 					}
 				]
 			},
@@ -27121,7 +27189,7 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "계단 아래는 아무것도 보이지 않는다."
+						"text": "계단 아래는 깊이를 가늘할 수 없는 물이 차있다."
 					}
 				]
 			}

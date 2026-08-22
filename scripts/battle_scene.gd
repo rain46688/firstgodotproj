@@ -98,6 +98,11 @@ var is_defense_mode = false
 var defense_area_rect = Rect2(350, 700, 1220, 360)
 var parry_input_buffer_time = 0.0
 var parry_count = 0
+
+# 현재 화면에서 움직이고 있는 적 탄막 개수
+# 병렬 패턴이 모든 탄막 처리를 끝냈는지 정확히 확인할 때 사용
+var active_enemy_projectile_count = 0
+
 var action_buttons = []
 var action_button_base_texts = []
 var action_button_index = 0
@@ -452,13 +457,20 @@ func update_debug_toggle_input():
 func update_defense_mode_input(delta):
 	update_defense_weapon_movement(delta)
 	check_defense_side_warp_input()
-	
-	# 패링 판정 처리 부분 1
+
+	# 기존 패링 입력 버퍼부터 감소시킨다.
+	# Space를 누른 바로 그 프레임에 새 버퍼가 delta만큼
+	# 즉시 깎이는 현상을 방지하기 위해 입력 판정보다 먼저 실행한다.
+	if parry_input_buffer_time > 0.0:
+		parry_input_buffer_time = max(
+			parry_input_buffer_time - delta,
+			0.0
+		)
+
+	# 이번 프레임에 새롭게 Space를 눌렀다면
+	# 온전한 0.05초 버퍼를 새로 부여한다.
 	if Input.is_action_just_pressed("ui_accept"):
 		parry_input_buffer_time = 0.05
-
-	if parry_input_buffer_time > 0:
-		parry_input_buffer_time -= delta
 # 공격 모드 입력 처리 함수
 func update_attack_mode_input(delta):
 	var weapon_data = get_current_weapon_data()
@@ -666,6 +678,9 @@ func _ready():
 # 전투 시작 시 상태 변수 초기화 함수 - 전투 상태 초기화 함수
 func reset_battle_runtime_state():
 	clear_current_weapon_data_cache()
+
+	active_enemy_projectile_count = 0
+	parry_input_buffer_time = 0.0
 	
 	battle_ended = false
 	is_player_turn = false
@@ -2824,15 +2839,60 @@ func should_stop_enemy_projectile_motion(projectile):
 		return true
 
 	return false
-# 적 탄막 1프레임 이동 함수
-func move_enemy_projectile_one_frame(projectile, direction, projectile_speed, projectile_frame_time):
-	projectile.position += direction * projectile_speed * projectile_frame_time
+# 적 탄막의 이전 위치와 현재 위치를 모두 포함하는 이동 판정 Rect 생성
+#
+# 순간적인 프레임 저하로 탄막이 한 프레임에 많이 이동하더라도
+# 이전 위치와 현재 위치 사이를 통과한 것으로 판정할 수 있게 한다.
+func make_enemy_projectile_swept_rect(previous_rect, current_rect):
+	var left = min(
+		previous_rect.position.x,
+		current_rect.position.x
+	)
+
+	var top = min(
+		previous_rect.position.y,
+		current_rect.position.y
+	)
+
+	var right = max(
+		previous_rect.position.x + previous_rect.size.x,
+		current_rect.position.x + current_rect.size.x
+	)
+
+	var bottom = max(
+		previous_rect.position.y + previous_rect.size.y,
+		current_rect.position.y + current_rect.size.y
+	)
+
+	return Rect2(
+		Vector2(left, top),
+		Vector2(
+			right - left,
+			bottom - top
+		)
+	)
+# 적 탄막 실제 경과 시간만큼 이동 함수
+func move_enemy_projectile_one_frame(
+	projectile,
+	direction,
+	projectile_speed,
+	delta
+):
+	projectile.position += (
+		direction
+		* projectile_speed
+		* delta
+	)
 # 적 탄막 패링 결과 확인 함수
-func get_enemy_projectile_parry_result(projectile, projectile_data):
-	if parry_input_buffer_time <= 0:
+func get_enemy_projectile_parry_result(
+	projectile,
+	projectile_data,
+	collision_rect
+):
+	if parry_input_buffer_time <= 0.0:
 		return {}
 
-	if not check_parry_hit(projectile, projectile_data):
+	if not check_parry_hit_rect(collision_rect):
 		return {}
 
 	parry_count += 1
@@ -2842,16 +2902,24 @@ func get_enemy_projectile_parry_result(projectile, projectile_data):
 		parry_sound.play()
 
 	spawn_parry_effect(
-		get_parry_effect_position_for_projectile(projectile, projectile_data)
+		get_parry_effect_position_for_projectile(
+			projectile,
+			projectile_data
+		)
 	)
 
 	return make_enemy_projectile_result("parried")
 # 적 탄막 방어 결과 확인 함수
-func get_enemy_projectile_block_result(projectile, projectile_data, danger_type):
+func get_enemy_projectile_block_result(
+	_projectile,
+	_projectile_data,
+	danger_type,
+	collision_rect
+):
 	if danger_type == "parry_only":
 		return {}
 
-	if not check_defense_hit(projectile, projectile_data):
+	if not check_defense_hit_rect(collision_rect):
 		return {}
 
 	if block_sound != null:
@@ -2865,8 +2933,35 @@ func get_enemy_projectile_player_hit_result(projectile, projectile_data):
 
 	return make_enemy_projectile_result("hit_player")
 # 적 탄막 충돌 결과 확인 함수
-func get_enemy_projectile_collision_result(projectile, projectile_data, danger_type):
-	var parry_result = get_enemy_projectile_parry_result(projectile, projectile_data)
+func get_enemy_projectile_collision_result(
+	projectile,
+	projectile_data,
+	danger_type,
+	previous_projectile_rect = Rect2()
+):
+	var current_projectile_rect = get_projectile_hit_rect(
+		projectile,
+		projectile_data
+	)
+
+	var collision_rect = current_projectile_rect
+
+	# 이전 위치가 전달됐다면 이전 위치 -> 현재 위치까지
+	# 탄막이 이동한 전체 영역을 판정에 사용한다.
+	if (
+		previous_projectile_rect.size.x > 0.0
+		and previous_projectile_rect.size.y > 0.0
+	):
+		collision_rect = make_enemy_projectile_swept_rect(
+			previous_projectile_rect,
+			current_projectile_rect
+		)
+
+	var parry_result = get_enemy_projectile_parry_result(
+		projectile,
+		projectile_data,
+		collision_rect
+	)
 
 	if not parry_result.is_empty():
 		return parry_result
@@ -2874,13 +2969,20 @@ func get_enemy_projectile_collision_result(projectile, projectile_data, danger_t
 	var block_result = get_enemy_projectile_block_result(
 		projectile,
 		projectile_data,
-		danger_type
+		danger_type,
+		collision_rect
 	)
 
 	if not block_result.is_empty():
 		return block_result
 
-	var hit_result = get_enemy_projectile_player_hit_result(projectile, projectile_data)
+	# 플레이어 피해 판정은 현재 위치를 사용한다.
+	# 탄막은 아래쪽으로만 진행하므로 피해선을 넘어가면
+	# 기존 함수에서 정상적으로 감지된다.
+	var hit_result = get_enemy_projectile_player_hit_result(
+		projectile,
+		projectile_data
+	)
 
 	if not hit_result.is_empty():
 		return hit_result
@@ -2903,15 +3005,75 @@ func run_enemy_projectile_motion(
 	projectile_speed,
 	projectile_life_time,
 	projectile_frame_time,
-	projectile_frames
+	projectile_frames,
+	initial_elapsed_time = 0.0
 ):
 	var direction = Vector2.DOWN
+
 	var elapsed_time = 0.0
+	var animation_elapsed_time = 0.0
 	var frame_index = 0
 
-	while elapsed_time < projectile_life_time:
-		if should_stop_enemy_projectile_motion(projectile):
-			return make_enemy_projectile_result("expired")
+	# ---------------------------------------------------------
+	# 병렬 발사 스케줄이 프레임 지연으로 늦게 실행됐다면
+	# 늦어진 시간만큼 탄막을 먼저 이동시킨다.
+	#
+	# 예:
+	# 원래 0.10초에 발사될 탄막이
+	# 실제로는 0.125초에 생성됐다면
+	# 0.025초만큼 진행된 위치에서 시작한다.
+	# ---------------------------------------------------------
+	var catch_up_time = clamp(
+		float(initial_elapsed_time),
+		0.0,
+		projectile_life_time
+	)
+
+	apply_enemy_projectile_frame(
+		projectile,
+		projectile_frames,
+		frame_index,
+		projectile_id
+	)
+
+	if catch_up_time > 0.0:
+		var previous_projectile_rect = get_projectile_hit_rect(
+			projectile,
+			projectile_data
+		)
+
+		move_enemy_projectile_one_frame(
+			projectile,
+			direction,
+			projectile_speed,
+			catch_up_time
+		)
+
+		elapsed_time += catch_up_time
+		animation_elapsed_time += catch_up_time
+
+		# 늦어진 시간만큼 애니메이션 프레임도 맞춘다.
+		if (
+			projectile_frame_time > 0.0
+			and projectile_frames.size() > 0
+		):
+			var skipped_frames = int(
+				floor(
+					animation_elapsed_time
+					/ projectile_frame_time
+				)
+			)
+
+			if skipped_frames > 0:
+				frame_index = (
+					frame_index
+					+ skipped_frames
+				) % projectile_frames.size()
+
+				animation_elapsed_time -= (
+					skipped_frames
+					* projectile_frame_time
+				)
 
 		apply_enemy_projectile_frame(
 			projectile,
@@ -2920,31 +3082,127 @@ func run_enemy_projectile_motion(
 			projectile_id
 		)
 
+		update_defense_hitbox_debug(
+			projectile,
+			projectile_data
+		)
+
+		var catch_up_collision_result = (
+			get_enemy_projectile_collision_result(
+				projectile,
+				projectile_data,
+				danger_type,
+				previous_projectile_rect
+			)
+		)
+
+		if not catch_up_collision_result.is_empty():
+			return catch_up_collision_result
+
+	# ---------------------------------------------------------
+	# 실제 탄막 이동 루프
+	#
+	# 기존:
+	#   이동
+	#   create_timer(frame_time)
+	#   이동
+	#
+	# 변경:
+	#   매 process frame마다 실제 delta만큼 이동
+	#
+	# frame_time은 이제 이동 간격이 아니라
+	# 탄막 이미지 애니메이션 속도로만 사용한다.
+	# ---------------------------------------------------------
+	while elapsed_time < projectile_life_time:
+		if should_stop_enemy_projectile_motion(projectile):
+			return make_enemy_projectile_result("expired")
+
+		var tree = get_tree()
+
+		if tree == null:
+			return make_enemy_projectile_result("expired")
+
+		await tree.process_frame
+
+		if should_stop_enemy_projectile_motion(projectile):
+			return make_enemy_projectile_result("expired")
+
+		# 실제 이번 렌더 프레임 경과 시간
+		var move_delta = get_process_delta_time()
+
+		if move_delta <= 0.0:
+			continue
+
+		# life_time을 넘어가는 마지막 프레임은 필요한 만큼만 이동
+		move_delta = min(
+			move_delta,
+			projectile_life_time - elapsed_time
+		)
+
+		var previous_projectile_rect = get_projectile_hit_rect(
+			projectile,
+			projectile_data
+		)
+
 		move_enemy_projectile_one_frame(
 			projectile,
 			direction,
 			projectile_speed,
-			projectile_frame_time
+			move_delta
 		)
-		
-		update_defense_hitbox_debug(projectile, projectile_data)
 
-		var collision_result = get_enemy_projectile_collision_result(
+		elapsed_time += move_delta
+		animation_elapsed_time += move_delta
+
+		# -----------------------------------------------------
+		# 이동은 매 프레임 실행하지만
+		# 이미지 애니메이션은 기존 JSON frame_time을 유지한다.
+		# -----------------------------------------------------
+		if (
+			projectile_frame_time > 0.0
+			and projectile_frames.size() > 0
+		):
+			var advance_frame_count = int(
+				floor(
+					animation_elapsed_time
+					/ projectile_frame_time
+				)
+			)
+
+			if advance_frame_count > 0:
+				frame_index = (
+					frame_index
+					+ advance_frame_count
+				) % projectile_frames.size()
+
+				animation_elapsed_time -= (
+					advance_frame_count
+					* projectile_frame_time
+				)
+
+				apply_enemy_projectile_frame(
+					projectile,
+					projectile_frames,
+					frame_index,
+					projectile_id
+				)
+
+		update_defense_hitbox_debug(
 			projectile,
-			projectile_data,
-			danger_type
+			projectile_data
+		)
+
+		var collision_result = (
+			get_enemy_projectile_collision_result(
+				projectile,
+				projectile_data,
+				danger_type,
+				previous_projectile_rect
+			)
 		)
 
 		if not collision_result.is_empty():
 			return collision_result
-
-		await get_tree().create_timer(projectile_frame_time).timeout
-
-		elapsed_time += projectile_frame_time
-		frame_index = get_next_enemy_projectile_frame_index(
-			frame_index,
-			projectile_frames
-		)
 
 	return make_enemy_projectile_result("expired")
 # 적 탄막 노드 정리 함수
@@ -2998,7 +3256,8 @@ func run_enemy_projectile_and_get_result(
 	projectile_data,
 	projectile_id,
 	danger_type,
-	runtime_data
+	runtime_data,
+	initial_elapsed_time = 0.0
 ):
 	return await run_enemy_projectile_motion(
 		projectile,
@@ -3008,7 +3267,8 @@ func run_enemy_projectile_and_get_result(
 		float(runtime_data.get("speed", 1200.0)),
 		float(runtime_data.get("life_time", 0.9)),
 		float(runtime_data.get("frame_time", 0.04)),
-		runtime_data.get("frames", [])
+		runtime_data.get("frames", []),
+		initial_elapsed_time
 	)
 # 적 탄막 결과 후처리 함수
 func apply_enemy_projectile_result_to_player(
@@ -3020,7 +3280,10 @@ func apply_enemy_projectile_result_to_player(
 	if should_enemy_projectile_damage_player(projectile_result):
 		apply_projectile_hit_to_player(projectile_info, projectile_data, danger_type)
 # 적의 탄막 발사 함수
-func fire_enemy_projectile(projectile_info):
+func fire_enemy_projectile(
+	projectile_info,
+	initial_elapsed_time = 0.0
+):
 	if should_stop_enemy_projectile_flow():
 		return
 
@@ -3045,6 +3308,7 @@ func fire_enemy_projectile(projectile_info):
 	)
 
 	add_enemy_projectile_node(projectile)
+	active_enemy_projectile_count += 1
 	play_enemy_projectile_sound(projectile_data)
 
 	var projectile_result = await run_enemy_projectile_and_get_result(
@@ -3052,10 +3316,16 @@ func fire_enemy_projectile(projectile_info):
 		projectile_data,
 		projectile_id,
 		danger_type,
-		runtime_data
+		runtime_data,
+		initial_elapsed_time
 	)
 
 	clear_enemy_projectile_node(projectile)
+	
+	active_enemy_projectile_count = max(
+		active_enemy_projectile_count - 1,
+		0
+	)
 
 	if should_stop_enemy_projectile_flow():
 		return
@@ -3387,23 +3657,114 @@ func wait_enemy_projectiles_parallel(projectile_list):
 	await get_tree().create_timer(max_wait_time).timeout
 # 적의 패턴에 동시 탄막 추가 함수
 func fire_enemy_projectiles_parallel(projectile_list):
-	start_enemy_projectile_parallel_tasks(projectile_list)
-
-	if should_stop_enemy_projectile_flow():
+	if projectile_list == null:
 		return
 
-	await wait_enemy_projectiles_parallel(projectile_list)
+	if projectile_list.size() <= 0:
+		return
+
+	# 각 탄막이 이미 발사됐는지 기록
+	var projectile_launched = []
+
+	projectile_launched.resize(
+		projectile_list.size()
+	)
+
+	projectile_launched.fill(false)
+
+	var launched_count = 0
+
+	# 모든 탄막의 delay 기준이 되는 공통 시작 시각
+	var pattern_start_time = (
+		float(Time.get_ticks_usec())
+		/ 1000000.0
+	)
+
+	while launched_count < projectile_list.size():
+		if should_stop_enemy_projectile_flow():
+			return
+
+		var current_time = (
+			float(Time.get_ticks_usec())
+			/ 1000000.0
+		)
+
+		var pattern_elapsed_time = max(
+			current_time - pattern_start_time,
+			0.0
+		)
+
+		for i in range(projectile_list.size()):
+			if projectile_launched[i]:
+				continue
+
+			var projectile_info = projectile_list[i]
+			var projectile_delay = get_enemy_projectile_delay(
+				projectile_info
+			)
+
+			if pattern_elapsed_time < projectile_delay:
+				continue
+
+			projectile_launched[i] = true
+			launched_count += 1
+
+			# -------------------------------------------------
+			# 예:
+			#
+			# 원래 발사:
+			# 0.10초
+			#
+			# 실제 현재:
+			# 0.125초
+			#
+			# → 0.025초 늦게 실행됐으므로
+			#   탄막을 0.025초 진행된 위치에서 생성한다.
+			# -------------------------------------------------
+			var late_time = max(
+				pattern_elapsed_time - projectile_delay,
+				0.0
+			)
+
+			fire_enemy_projectile_parallel_task(
+				projectile_info,
+				late_time
+			)
+
+		if launched_count < projectile_list.size():
+			var tree = get_tree()
+
+			if tree == null:
+				return
+
+			await tree.process_frame
+
+	# 모든 탄막이 실제로 화면에서 사라질 때까지 기다린다.
+	#
+	# 기존처럼 life_time + 0.2를 계산해서 대충 기다리지 않고
+	# 실제 실행 중인 탄막 개수를 확인한다.
+	while active_enemy_projectile_count > 0:
+		if should_stop_enemy_projectile_flow():
+			return
+
+		var tree = get_tree()
+
+		if tree == null:
+			return
+
+		await tree.process_frame
 # 적 동시 탄막 추가 함수
-func fire_enemy_projectile_parallel_task(projectile_info):
+func fire_enemy_projectile_parallel_task(
+	projectile_info,
+	initial_elapsed_time = 0.0
+):
 	if should_stop_enemy_projectile_flow():
 		return
 
-	await wait_enemy_projectile_delay(projectile_info)
-
-	if should_stop_enemy_projectile_flow():
-		return
-
-	await fire_enemy_projectile(projectile_info)
+	await fire_enemy_projectile(
+		projectile_info,
+		initial_elapsed_time
+	)
 # 현재 적 본체 패턴 목록 가져오기 함수
 func get_current_enemy_body_patterns():
 	if enemy_data.is_empty():
@@ -5515,24 +5876,38 @@ func get_parry_effect_position_for_projectile(projectile, projectile_data):
 	var effect_parent_global = parry_effect.get_parent().get_global_rect().position
 
 	return effect_global_position + extra_offset - effect_parent_global - parry_effect.size / 2
-# 플레이어 방어 무기 탄막 충돌 함수
-func check_defense_hit(projectile, projectile_data):
-
-	var projectile_rect = get_projectile_hit_rect(projectile, projectile_data)
+# 탄막 Rect 기준 방어 판정 함수
+func check_defense_hit_rect(projectile_rect):
 	var weapon_rect = get_weapon_defense_hit_rect()
 
-	var projectile_bottom = projectile_rect.position.y + projectile_rect.size.y
+	var projectile_bottom = (
+		projectile_rect.position.y
+		+ projectile_rect.size.y
+	)
+
 	var projectile_top = projectile_rect.position.y
 
-	var weapon_block_line_y = weapon_rect.position.y + weapon_rect.size.y
+	var weapon_block_line_y = (
+		weapon_rect.position.y
+		+ weapon_rect.size.y
+	)
 
 	var projectile_left = projectile_rect.position.x
-	var projectile_right = projectile_rect.position.x + projectile_rect.size.x
+	var projectile_right = (
+		projectile_rect.position.x
+		+ projectile_rect.size.x
+	)
 
 	var weapon_left = weapon_rect.position.x
-	var weapon_right = weapon_rect.position.x + weapon_rect.size.x
+	var weapon_right = (
+		weapon_rect.position.x
+		+ weapon_rect.size.x
+	)
 
-	var x_overlaps = projectile_right >= weapon_left and projectile_left <= weapon_right
+	var x_overlaps = (
+		projectile_right >= weapon_left
+		and projectile_left <= weapon_right
+	)
 
 	var crosses_block_line = (
 		projectile_bottom >= weapon_block_line_y
@@ -5540,12 +5915,27 @@ func check_defense_hit(projectile, projectile_data):
 	)
 
 	return x_overlaps and crosses_block_line
-# 플레이어 방어 무기 패링 판정 함수
-func check_parry_hit(projectile, projectile_data):
-	var projectile_rect = get_projectile_hit_rect(projectile, projectile_data)
+# 플레이어 방어 무기 탄막 충돌 함수
+func check_defense_hit(projectile, projectile_data):
+	var projectile_rect = get_projectile_hit_rect(
+		projectile,
+		projectile_data
+	)
+
+	return check_defense_hit_rect(projectile_rect)
+# 탄막 Rect 기준 패링 판정 함수
+func check_parry_hit_rect(projectile_rect):
 	var parry_rect = get_parry_hit_rect()
 
 	return projectile_rect.intersects(parry_rect)
+# 플레이어 방어 무기 패링 판정 함수
+func check_parry_hit(projectile, projectile_data):
+	var projectile_rect = get_projectile_hit_rect(
+		projectile,
+		projectile_data
+	)
+
+	return check_parry_hit_rect(projectile_rect)
 # 플레이어 공격 패링 반격 데미지 함수
 func get_parry_counter_damage_once():
 	var damage = get_player_attack_damage()
