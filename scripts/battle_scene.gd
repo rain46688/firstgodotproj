@@ -232,6 +232,35 @@ var enemy_turn_life_drain_sound_played = false
 # value : Texture2D
 var battle_texture_cache = {}
 
+# ------------------------------------------------------------
+# 적 탄막 최적화 캐시
+# ------------------------------------------------------------
+
+# projectile_id별 계산 완료 런타임 데이터
+#
+# 같은 종류 탄막을 발사할 때마다
+# speed / life_time / frame_time / frames를 다시 만들지 않는다.
+var enemy_projectile_runtime_cache = {}
+
+
+# 사용하지 않고 대기 중인 적 탄막 TextureRect
+var enemy_projectile_pool = []
+
+
+# 지금까지 만들어 놓은 적 탄막 노드 총 개수
+var enemy_projectile_pool_total_count = 0
+
+
+# 최소한 이 정도는 전투 시작 때 미리 만들어 둔다.
+const ENEMY_PROJECTILE_POOL_MIN_SIZE = 24
+
+# 해당 적의 가장 큰 병렬 패턴보다 여유 있게 추가
+const ENEMY_PROJECTILE_POOL_EXTRA_SIZE = 8
+
+# 실수로 지나치게 큰 패턴 때문에
+# 전투 시작 시 수백 개가 생성되는 것을 방지
+const ENEMY_PROJECTILE_POOL_MAX_PREWARM = 128
+
 # 현재 전투에서 사용할 계산 완료 무기 데이터 캐시
 var cached_current_weapon_data = {}
 var cached_current_weapon_id = ""
@@ -678,6 +707,7 @@ func _ready():
 # 전투 시작 시 상태 변수 초기화 함수 - 전투 상태 초기화 함수
 func reset_battle_runtime_state():
 	clear_current_weapon_data_cache()
+	clear_enemy_projectile_runtime_cache()
 
 	active_enemy_projectile_count = 0
 	parry_input_buffer_time = 0.0
@@ -948,6 +978,10 @@ func setup_battle(data):
 	# 전투 도중 처음 이미지를 불러오며 끊기지 않도록
 	# 탄막과 공통 이펙트 프레임을 미리 캐싱한다.
 	preload_all_battle_projectile_textures()
+	
+	# 탄막 프레임 경로/속도 데이터도 전투 시작 때 한 번만 계산
+	# 탄막별 계산 완료 런타임 데이터도 미리 준비
+	preload_all_enemy_projectile_runtime_data()
 
 	# 현재 전투 적 데이터
 	enemy_id = get_setup_string(data, "enemy_id", "")
@@ -960,6 +994,10 @@ func setup_battle(data):
 	if enemy_data.is_empty():
 		push_error("전투 enemy_data가 비어있음: " + str(enemy_id))
 		return
+	
+	# 현재 적 패턴 기준으로 필요한 탄막 TextureRect를
+	# 전투 시작 시 미리 생성한다.
+	prewarm_enemy_projectile_pool()
 
 	# main.gd에서 넘겨받은 현재 난이도
 	battle_difficulty = get_setup_string(data, "battle_difficulty", GameSession.DIFFICULTY_NORMAL)
@@ -2812,11 +2850,40 @@ func has_enemy_projectile_reached_damage_line(projectile, projectile_data):
 
 	return projectile_hit_rect.position.y + projectile_hit_rect.size.y >= damage_line_y
 # 적 탄막 현재 프레임 적용 함수
-func apply_enemy_projectile_frame(projectile, projectile_frames, frame_index, projectile_id):
-	var frame_texture = get_enemy_projectile_frame_texture(
-		projectile_frames,
-		frame_index,
-		projectile_id
+func apply_enemy_projectile_frame(
+	projectile,
+	projectile_frames,
+	frame_index,
+	projectile_id
+):
+	if projectile == null:
+		return
+
+	if projectile_frames.size() <= 0:
+		return
+
+	var safe_index = frame_index
+
+	if safe_index < 0:
+		safe_index = 0
+
+	if safe_index >= projectile_frames.size():
+		safe_index %= projectile_frames.size()
+
+	var frame_value = projectile_frames[safe_index]
+
+	# 새 방식:
+	# 런타임 캐시에 Texture2D가 직접 들어있다.
+	if frame_value is Texture2D:
+		projectile.texture = frame_value
+		return
+
+	# 혹시 다른 곳에서 기존 경로 배열을 넘겨도
+	# 작동하도록 기존 방식도 호환시킨다.
+	var frame_texture = get_cached_battle_texture(
+		str(frame_value),
+		"enemy projectile frame / "
+		+ str(projectile_id)
 	)
 
 	if frame_texture != null:
@@ -3209,8 +3276,14 @@ func run_enemy_projectile_motion(
 func clear_enemy_projectile_node(projectile):
 	remove_enemy_projectile_debug_box(projectile)
 
-	if projectile != null and is_instance_valid(projectile):
-		projectile.queue_free()
+	if projectile == null:
+		return
+
+	if not is_instance_valid(projectile):
+		return
+
+	# 삭제하지 않고 다음 탄막에서 재사용
+	release_enemy_projectile_node(projectile)
 # 적 탄막 정보 유효성 확인 함수
 func is_valid_enemy_projectile_info(projectile_info):
 	if projectile_info == null:
@@ -3226,20 +3299,175 @@ func get_safe_adjusted_enemy_projectile_info(projectile_info):
 		return {}
 
 	return get_adjusted_projectile_info(projectile_info)
-# 적 탄막 실행 데이터 생성 함수
-func make_enemy_projectile_runtime_data(projectile_data):
-	return {
-		"speed": get_enemy_projectile_speed(projectile_data),
-		"life_time": get_enemy_projectile_life_time(projectile_data),
-		"frame_time": get_enemy_projectile_frame_time(projectile_data),
-		"frames": get_projectile_frames_from_data(projectile_data)
+# 적 탄막 런타임 캐시 초기화 함수
+func clear_enemy_projectile_runtime_cache():
+	enemy_projectile_runtime_cache.clear()
+# 적 탄막 실행 데이터 생성 및 캐시 함수
+#
+# 같은 projectile_id는 전투 중 항상 같은 런타임 데이터를 사용한다.
+#
+# 특히 frames는 이미지 경로 문자열 배열이 아니라
+# 실제 Texture2D 배열로 미리 만들어 둔다.
+func make_enemy_projectile_runtime_data(
+	projectile_id,
+	projectile_data
+):
+	var cache_key = str(projectile_id)
+
+	# 이미 계산된 탄막이라면 그대로 재사용
+	if enemy_projectile_runtime_cache.has(cache_key):
+		return enemy_projectile_runtime_cache[cache_key]
+
+	var frame_paths = get_projectile_frames_from_data(
+		projectile_data
+	)
+
+	var frame_textures = []
+
+	for frame_path in frame_paths:
+		var texture = get_cached_battle_texture(
+			frame_path,
+			"enemy projectile runtime cache / "
+			+ cache_key
+		)
+
+		if texture != null:
+			frame_textures.append(texture)
+
+	var runtime_data = {
+		"speed": get_enemy_projectile_speed(
+			projectile_data
+		),
+
+		"life_time": get_enemy_projectile_life_time(
+			projectile_data
+		),
+
+		"frame_time": get_enemy_projectile_frame_time(
+			projectile_data
+		),
+
+		# 이제 이미지 경로가 아니라 Texture2D 배열
+		"frames": frame_textures
 	}
+
+	enemy_projectile_runtime_cache[cache_key] = runtime_data
+
+	return runtime_data
+# 현재 전투의 모든 적 탄막 런타임 데이터 미리 생성
+func preload_all_enemy_projectile_runtime_data():
+	enemy_projectile_runtime_cache.clear()
+
+	for projectile_id in projectiles.keys():
+		var projectile_data = projectiles[projectile_id]
+
+		if typeof(projectile_data) != TYPE_DICTIONARY:
+			continue
+
+		make_enemy_projectile_runtime_data(
+			projectile_id,
+			projectile_data
+		)
 # 적 탄막 노드 전투 화면 추가 함수
 func add_enemy_projectile_node(projectile):
 	if projectile == null:
 		return
 
-	enemy_projectile_container.add_child(projectile)
+	if not is_instance_valid(projectile):
+		return
+
+	# 풀에서 가져온 탄막은 이미 container의 자식이다.
+	if projectile.get_parent() == null:
+		enemy_projectile_container.add_child(
+			projectile
+		)
+
+	projectile.visible = true
+# 패턴 하나의 최대 동시 탄막 개수 계산
+func get_enemy_pattern_simultaneous_projectile_count(
+	pattern
+):
+	if pattern == null:
+		return 0
+
+	if typeof(pattern) != TYPE_DICTIONARY:
+		return 0
+
+	var projectile_list = pattern.get(
+		"projectiles",
+		[]
+	)
+
+	if typeof(projectile_list) != TYPE_ARRAY:
+		return 0
+
+	if projectile_list.size() <= 0:
+		return 0
+
+	var fire_mode = str(
+		pattern.get(
+			"fire_mode",
+			"sequential"
+		)
+	)
+
+	# sequential은 동시에 존재하는 탄막이
+	# 기본적으로 하나이므로 1개면 충분
+	if fire_mode != "parallel":
+		return 1
+
+	# parallel은 안전하게 전체 개수 기준
+	return projectile_list.size()
+# 현재 적에게 필요한 탄막 풀 크기 계산
+func get_enemy_projectile_pool_prewarm_count():
+	var largest_count = 0
+
+	# 본체 패턴
+	var body_patterns = enemy_data.get(
+		"patterns",
+		[]
+	)
+
+	if typeof(body_patterns) == TYPE_ARRAY:
+		for pattern in body_patterns:
+			largest_count = max(
+				largest_count,
+				get_enemy_pattern_simultaneous_projectile_count(
+					pattern
+				)
+			)
+
+	# 파츠별 패턴
+	for part in get_current_enemy_parts_data():
+		if typeof(part) != TYPE_DICTIONARY:
+			continue
+
+		var part_patterns = part.get(
+			"patterns",
+			[]
+		)
+
+		if typeof(part_patterns) != TYPE_ARRAY:
+			continue
+
+		for pattern in part_patterns:
+			largest_count = max(
+				largest_count,
+				get_enemy_pattern_simultaneous_projectile_count(
+					pattern
+				)
+			)
+
+	var target_count = max(
+		ENEMY_PROJECTILE_POOL_MIN_SIZE,
+		largest_count
+		+ ENEMY_PROJECTILE_POOL_EXTRA_SIZE
+	)
+
+	return min(
+		target_count,
+		ENEMY_PROJECTILE_POOL_MAX_PREWARM
+	)
 # 적 탄막 사운드 재생 함수
 func play_enemy_projectile_sound(projectile_data):
 	if projectile_data == null:
@@ -3279,6 +3507,29 @@ func apply_enemy_projectile_result_to_player(
 ):
 	if should_enemy_projectile_damage_player(projectile_result):
 		apply_projectile_hit_to_player(projectile_info, projectile_data, danger_type)
+# 전투 시작 시 적 탄막 풀 미리 생성
+func prewarm_enemy_projectile_pool():
+	var target_count = (
+		get_enemy_projectile_pool_prewarm_count()
+	)
+
+	while (
+		enemy_projectile_pool_total_count
+		< target_count
+	):
+		var projectile = (
+			create_enemy_projectile_pool_node()
+		)
+
+		enemy_projectile_pool.append(
+			projectile
+		)
+
+	print(
+		"적 탄막 풀 준비: "
+		+ str(enemy_projectile_pool_total_count)
+		+ "개"
+	)
 # 적의 탄막 발사 함수
 func fire_enemy_projectile(
 	projectile_info,
@@ -3299,7 +3550,10 @@ func fire_enemy_projectile(
 		return
 
 	var danger_type = get_enemy_projectile_danger_type(projectile_info)
-	var runtime_data = make_enemy_projectile_runtime_data(projectile_data)
+	var runtime_data = make_enemy_projectile_runtime_data(
+		projectile_id,
+		projectile_data
+	)
 
 	var projectile = create_enemy_projectile_node(
 		projectile_info,
@@ -3439,22 +3693,145 @@ func apply_enemy_projectile_danger_visual(projectile, danger_type):
 		projectile.modulate = Color(1, 0.15, 0.15, 1)
 	else:
 		projectile.modulate = Color(1, 1, 1, 1)
-# 적 탄막 TextureRect 생성 함수
-func create_enemy_projectile_node(projectile_info, projectile_data, danger_type):
+# 적 탄막 풀 전용 기본 TextureRect 생성 함수
+#
+# 여기서 만들어진 노드는 처음부터
+# EnemyProjectileContainer 아래에 붙여 놓는다.
+#
+# 따라서 실제 전투 중 탄막 발사 순간에는
+# TextureRect.new()와 add_child()가 필요하지 않다.
+func create_enemy_projectile_pool_node():
 	var projectile = TextureRect.new()
-	var projectile_size = get_enemy_projectile_size(projectile_data)
 
 	projectile.z_index = 0
-	projectile.size = projectile_size
-	projectile.pivot_offset = projectile.size / 2
 	projectile.ignore_texture_size = true
-	projectile.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	projectile.stretch_mode = (
+		TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	)
 	projectile.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-	projectile.position = get_enemy_projectile_start_position(projectile_info)
-	projectile.rotation_degrees = get_enemy_projectile_rotation(projectile_info)
+	projectile.visible = false
+	projectile.texture = null
 
-	apply_enemy_projectile_danger_visual(projectile, danger_type)
+	enemy_projectile_container.add_child(projectile)
+
+	projectile.set_meta(
+		"in_enemy_projectile_pool",
+		true
+	)
+
+	enemy_projectile_pool_total_count += 1
+
+	return projectile
+# 풀에서 사용할 적 탄막 노드 가져오기 함수
+func acquire_enemy_projectile_node():
+	var projectile = null
+
+	# 대기 중인 탄막이 있다면 재사용
+	if enemy_projectile_pool.size() > 0:
+		projectile = enemy_projectile_pool.pop_back()
+
+	# 예상보다 더 많은 탄막이 동시에 필요한 경우
+	# 그때만 새로 생성한다.
+	else:
+		projectile = create_enemy_projectile_pool_node()
+
+	if projectile == null:
+		return null
+
+	projectile.set_meta(
+		"in_enemy_projectile_pool",
+		false
+	)
+
+	projectile.visible = true
+
+	return projectile
+# 사용이 끝난 적 탄막을 풀에 반환
+func release_enemy_projectile_node(projectile):
+	if projectile == null:
+		return
+
+	if not is_instance_valid(projectile):
+		return
+
+	# 같은 노드를 두 번 반환하는 것 방지
+	if bool(
+		projectile.get_meta(
+			"in_enemy_projectile_pool",
+			false
+		)
+	):
+		return
+
+	# 다음 사용 전에 이전 탄막 상태 제거
+	projectile.visible = false
+	projectile.texture = null
+
+	projectile.position = Vector2.ZERO
+	projectile.rotation = 0.0
+	projectile.scale = Vector2.ONE
+	projectile.modulate = Color.WHITE
+
+	projectile.set_meta(
+		"in_enemy_projectile_pool",
+		true
+	)
+
+	enemy_projectile_pool.append(projectile)
+# 적 탄막 TextureRect 가져오기 및 설정 함수
+func create_enemy_projectile_node(
+	projectile_info,
+	projectile_data,
+	danger_type
+):
+	# 새로 생성하지 않고 풀에서 가져온다.
+	var projectile = acquire_enemy_projectile_node()
+
+	if projectile == null:
+		return null
+
+	var projectile_size = get_enemy_projectile_size(
+		projectile_data
+	)
+
+	projectile.z_index = 0
+
+	projectile.size = projectile_size
+	projectile.pivot_offset = (
+		projectile_size / 2.0
+	)
+
+	projectile.position = (
+		get_enemy_projectile_start_position(
+			projectile_info
+		)
+	)
+
+	projectile.rotation_degrees = (
+		get_enemy_projectile_rotation(
+			projectile_info
+		)
+	)
+
+	projectile.scale = Vector2.ONE
+
+	projectile.ignore_texture_size = true
+	projectile.stretch_mode = (
+		TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	)
+
+	projectile.mouse_filter = (
+		Control.MOUSE_FILTER_IGNORE
+	)
+
+	projectile.texture = null
+	projectile.visible = true
+
+	apply_enemy_projectile_danger_visual(
+		projectile,
+		danger_type
+	)
 
 	return projectile
 # 현재 적 패턴 투사체 목록 가져오기 함수
