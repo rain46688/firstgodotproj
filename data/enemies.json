@@ -2961,6 +2961,18 @@
 				"chance": 30,
 				"min": 1,
 				"max": 3
+			},
+			{
+				"item": "chocolate_bar_a",
+				"chance": 10,
+				"min": 1,
+				"max": 1
+			},
+			{
+				"item": "iron_skewer",
+				"chance": 5,
+				"min": 1,
+				"max": 1
 			}
 		],
 		"defeat_flags": [
@@ -3465,8 +3477,14 @@
 				"max": 3
 			},
 			{
+				"item": "chocolate_bar_a",
+				"chance": 10,
+				"min": 1,
+				"max": 1
+			},
+			{
 				"item": "iron_skewer",
-				"chance": 5,
+				"chance": 10,
 				"min": 1,
 				"max": 1
 			}
@@ -3499,7 +3517,7 @@
 		"can_escape": false,
 		"encounter_text": "모니터 내부가 갈라지면서 무수한 액체가 쏟아져 나와 끔찍한 형체를 띄었다.",
 		"observe_text": "...",
-		"weakness_text": "전선이 약점인 것 같다.",
+		"weakness_text": "머리 위의 전선이 약점인 것 같다.",
 		"patterns": [
 			{
 				"id": "basic_attack_01",
@@ -3603,7 +3621,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 8,
+						"damage": 15,
 						"delay": 1.8,
 						"danger_type": "parry_only"
 					}
@@ -3784,7 +3802,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 4,
+						"damage": 10,
 						"delay": 4.9,
 						"danger_type": "parry_only"
 					},
@@ -3795,7 +3813,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 8,
 						"delay": 6.0,
 						"danger_type": "parry_only"
 					},
@@ -3806,7 +3824,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 8,
 						"delay": 6.0,
 						"danger_type": "parry_only"
 					},
@@ -3817,7 +3835,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 6,
+						"damage": 8,
 						"delay": 6.0,
 						"danger_type": "parry_only"
 					}
@@ -5825,7 +5843,7 @@
 					{
 						"type": "heal",
 						"target": "owner",
-						"hp_percent": 40,
+						"hp_percent": 30,
 						"text": "인간 개구리의 상처가 빠르게 재생되었다.",
 						"sound": "res://sounds/squeeze_sound.mp3",
 						"sound_volume_db": 0.0
@@ -9144,3 +9162,4 @@
 		]
 	}
 }
+  

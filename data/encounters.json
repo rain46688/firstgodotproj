@@ -140,6 +140,15 @@
 			"first_turn": ""
 		}
 	],
+	"school_hallway_05": [		
+		{
+			"enemy": "ghost",
+			"weight": 100,
+			"required_flag": "",
+			"missing_flag": "defeated_ghost",
+			"first_turn": ""
+		}
+	],
 	"swimming_pool_01": [
 		{
 			"enemy": "human_flog",
@@ -255,6 +264,15 @@
 			"weight": 5,
 			"required_flag": "",
 			"missing_flag": "",
+			"first_turn": ""
+		}
+	],
+	"swimming_pool_04": [		
+		{
+			"enemy": "ghost_02",
+			"weight": 100,
+			"required_flag": "",
+			"missing_flag": "defeated_ghost_02",
 			"first_turn": ""
 		}
 	]

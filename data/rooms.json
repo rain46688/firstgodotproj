@@ -8602,6 +8602,11 @@
 					}
 				]
 			}
+		},
+		"random_encounter": {
+			"enemy_table": "school_hallway_05",
+			"event_table": "ghost_events",
+			"chance": 80
 		}
 	},
 	"classroom_21_02": {
@@ -10047,6 +10052,16 @@
 				"required_flag": "started_episode_02",
 				"required_flag_missing": [
 					"story_first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_02_done"
+				]
+			},
+			{
+				"event": "first_enter_broadcasting_room_02_after_swimming_pool_hallway_01",
+				"required_flag": [
+					"story_first_enter_swimming_pool_hallway_01_done",
+					"story_first_grail_filled_unknown_hall_02_done"
+				],
+				"required_flag_missing": [
+					"story_first_enter_broadcasting_room_02_after_swimming_pool_hallway_01_done"
 				]
 			}
 		],
@@ -15581,28 +15596,37 @@
 								],
 								"events": [
 									{
-										"type": "sound",
-										"path": "res://sounds/squeeze_sound.mp3",
-										"volume_db": 10,
-										"wait": true
-									},
-									{
-										"type": "text",
-										"text": "우드득... 우드득..."
-									},
-									{
-										"type": "sound",
-										"path": "res://sounds/splash.mp3",
-										"volume_db": 10,
-										"wait": true
-									},
-									{
-										"type": "text",
-										"text": "거대한 생명체는 물속으로 사라졌다."
-									},
-									{
-										"type": "flag",
-										"flag": "opened_swimming_pool_hallway_01"
+										"type": "item_payment",
+										"item": "craw_body",
+										"count": 1,
+										"success_text": "거대한 생명체의 입에 던져 넣었다.",
+										"fail_text": "아무 일도 일어나지 않았다.",
+										"success_events": [
+											{
+												"type": "sound",
+												"path": "res://sounds/squeeze_sound.mp3",
+												"volume_db": 10,
+												"wait": true
+											},
+											{
+												"type": "text",
+												"text": "우드득... 우드득..."
+											},
+											{
+												"type": "sound",
+												"path": "res://sounds/splash.mp3",
+												"volume_db": 10,
+												"wait": true
+											},
+											{
+												"type": "text",
+												"text": "거대한 생명체 만족한 듯 꿈틀거렸다."
+											},
+											{
+												"type": "flag",
+												"flag": "opened_swimming_pool_hallway_01"
+											}
+										]
 									}
 								]
 							},
@@ -15613,28 +15637,37 @@
 								],
 								"events": [
 									{
-										"type": "sound",
-										"path": "res://sounds/squeeze_sound.mp3",
-										"volume_db": 10,
-										"wait": true
-									},
-									{
-										"type": "text",
-										"text": "우드득... 우드득..."
-									},
-									{
-										"type": "sound",
-										"path": "res://sounds/splash.mp3",
-										"volume_db": 10,
-										"wait": true
-									},
-									{
-										"type": "text",
-										"text": "거대한 생명체는 물속으로 사라졌다."
-									},
-									{
-										"type": "flag",
-										"flag": "opened_swimming_pool_hallway_01"
+										"type": "item_payment",
+										"item": "craw_body",
+										"count": 1,
+										"success_text": "거대한 생명체의 입에 던져 넣었다.",
+										"fail_text": "아무 일도 일어나지 않았다.",
+										"success_events": [
+											{
+												"type": "sound",
+												"path": "res://sounds/squeeze_sound.mp3",
+												"volume_db": 10,
+												"wait": true
+											},
+											{
+												"type": "text",
+												"text": "우드득... 우드득..."
+											},
+											{
+												"type": "sound",
+												"path": "res://sounds/splash.mp3",
+												"volume_db": 10,
+												"wait": true
+											},
+											{
+												"type": "text",
+												"text": "거대한 생명체 만족한 듯 꿈틀거렸다."
+											},
+											{
+												"type": "flag",
+												"flag": "opened_swimming_pool_hallway_01"
+											}
+										]
 									}
 								]
 							},
@@ -16781,6 +16814,11 @@
 					{
 						"type": "text",
 						"name": "???",
+						"text": "이 수영장에 존재하는 색깔은 \"오직 노란색 하나\"."
+					},
+					{
+						"type": "text",
+						"name": "???",
 						"text": "암호를 말해라."
 					},
 					{
@@ -16848,7 +16886,12 @@
 					{
 						"type": "text",
 						"name": "???",
-						"text": "..."
+						"text": "다음 층으로 올라가라."
+					},
+					{
+						"type": "text",
+						"name": "???",
+						"text": "얼굴 없는 천사의 왼쪽 복도 문 너머로 가면 된다."
 					}
 				]
 			},
@@ -19579,6 +19622,32 @@
 					{
 						"type": "text",
 						"text": "편의점 앞에 있을 거 같은 물건들이 수영장 가운데 놓여있다."
+					}
+				]
+			},
+			"pool_02": {
+				"click_rect": [
+					827,
+					400,
+					271,
+					86
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "의자와 파라솔이다."
+					},
+					{
+						"type": "text",
+						"text": "편의점 앞에 있을 거 같은 물건들이 수영장 가운데 놓여있다."
+					},
+					{
+						"type": "text",
+						"text": "자세히 보니 파라솔 안쪽에 무언가 적혀있다."
+					},
+					{
+						"type": "text",
+						"text": "이 수영장에 존재하는 색깔은 \"오직 빨간색 여섯\"."
 					}
 				]
 			},
@@ -25077,6 +25146,11 @@
 					}
 				]
 			}
+		},
+		"random_encounter": {
+			"enemy_table": "swimming_pool_04",
+			"event_table": "ghost_events",
+			"chance": 80
 		}
 	},
 	"swimming_pool_hallway_20": {
@@ -27085,11 +27159,11 @@
 									},
 									{
 										"type": "text",
-										"text": "버튼은 눌렀지만 다시 곧 제자리로 돌아왔다."
+										"text": "버튼은 눌렸지만 다시 곧 제자리로 돌아왔다."
 									},
 									{
 										"type": "text",
-										"text": "양쪽 버튼을 동시에 눌러야 되는 구조인 것 같다."
+										"text": "아마도 양쪽 버튼을 동시에 눌러야 되는 구조인 것 같다."
 									},
 									{
 										"type": "text",
@@ -27189,7 +27263,7 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "계단 아래는 깊이를 가늘할 수 없는 물이 차있다."
+						"text": "계단 아래는 깊이를 가늘할 수 없는 물이 가득 차있다."
 					}
 				]
 			}

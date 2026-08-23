@@ -12926,5 +12926,147 @@
 				"flag": "story_first_grail_filled_unknown_hall_03_done"
 			}
 		]
+	},
+	"first_enter_broadcasting_room_02_after_swimming_pool_hallway_01": {
+		"start_flag": "story_first_enter_broadcasting_room_02_after_swimming_pool_hallway_01_done",
+		"events": [
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/broadcasting_room_02.png"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 내가 봤던 사방이 물로 가득 찬 공간에 대해 이야기하였다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "알 수 없는 장치들과 퍼즐 그리고 깊은 물 건너편 공간으로 통하는 문."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "normal",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "그러면 그곳에도 새로운 심장이 있겠네요?"
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "normal",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "우리도 수영장과 같은 장소는 가끔씩 방송 장비에서 발견되는 경우가 있어서 갈 수 있는 방법을 찾고 있었어."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "네, 이곳이랑은 다른 급의 괴물들이 배회하고 있어서 단단한 준비가 필요할 거 같아요."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "너 보기보다 강하구나."
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "joy",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "따라와 나랑 운동이나 같이하자."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "네? 갑자기요?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "그래요, 지금 당장 가기보다는 좀 휴식을 취한 다음에 가는 게 좋을 거 같아요."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "annoyed",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "그리고 아이작 씨 운동 지도는 진짜 빡세요..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "저도 첨에 몇 번 같이 했었는데, 무슨 PT 받는 거보다 더 빡셈..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "!?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "빨리와 임마."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그렇게 우리는 당분간 휴식을 취한 후에 다음 심장에 대한 단서가 있는 장소로 발을 옮기기로 결정했다."
+			},
+			{
+				"type": "show_game_ui"
+			},
+			{
+				"type": "camera_reset",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_swimming_pool_room_10_done"
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done"
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25_done"
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_broadcasting_room_02_after_swimming_pool_hallway_01_done"
+			}
+		]
 	}
 }
