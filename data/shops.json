@@ -45,7 +45,7 @@
 				"product_id": "tranquilizer_c",
 				"item": "tranquilizer_c",
 				"count": 1,
-				"price": 10,
+				"price": 20,
 				"stock": 10,
 				"slot": 4,
 				"page": 0,
@@ -55,7 +55,7 @@
 				"product_id": "razor",
 				"item": "razor",
 				"count": 1,
-				"price": 50,
+				"price": 45,
 				"stock": 1,
 				"slot": 0,
 				"page": 1
@@ -64,7 +64,7 @@
 				"product_id": "cutter_knife",
 				"item": "cutter_knife",
 				"count": 1,
-				"price": 80,
+				"price": 100,
 				"stock": 1,
 				"slot": 1,
 				"page": 1
@@ -73,7 +73,7 @@
 				"product_id": "knife",
 				"item": "knife",
 				"count": 1,
-				"price": 150,
+				"price": 130,
 				"stock": 1,
 				"slot": 3,
 				"page": 1,
@@ -173,7 +173,7 @@
 				"product_id": "holy_grail_relic",
 				"item": "holy_grail_relic",
 				"count": 1,
-				"price": 200,
+				"price": 180,
 				"stock": 1,
 				"slot": 10,
 				"page": 2
@@ -236,7 +236,7 @@
 				"product_id": "lung_model_fetish",
 				"item": "lung_model_fetish",
 				"count": 1,
-				"price": 200,
+				"price": 180,
 				"stock": 1,
 				"slot": 6,
 				"page": 3
@@ -245,7 +245,7 @@
 				"product_id": "first_aid_box_fetish",
 				"item": "first_aid_box_fetish",
 				"count": 1,
-				"price": 200,
+				"price": 180,
 				"stock": 1,
 				"slot": 7,
 				"page": 3
@@ -254,7 +254,7 @@
 				"product_id": "classic_camera_fetish",
 				"item": "classic_camera_fetish",
 				"count": 1,
-				"price": 200,
+				"price": 180,
 				"stock": 1,
 				"slot": 8,
 				"page": 3
@@ -263,7 +263,7 @@
 				"product_id": "hourglass_fetish",
 				"item": "hourglass_fetish",
 				"count": 1,
-				"price": 300,
+				"price": 250,
 				"stock": 1,
 				"slot": 9,
 				"page": 3
@@ -272,7 +272,7 @@
 				"product_id": "hand_bone_fetish",
 				"item": "hand_bone_fetish",
 				"count": 1,
-				"price": 300,
+				"price": 250,
 				"stock": 1,
 				"slot": 10,
 				"page": 3
@@ -281,7 +281,7 @@
 				"product_id": "skull_model_fetish",
 				"item": "skull_model_fetish",
 				"count": 1,
-				"price": 300,
+				"price": 250,
 				"stock": 1,
 				"slot": 11,
 				"page": 3
@@ -290,7 +290,7 @@
 				"product_id": "small_frame_fetish",
 				"item": "small_frame_fetish",
 				"count": 1,
-				"price": 300,
+				"price": 250,
 				"stock": 1,
 				"slot": 12,
 				"page": 3
@@ -299,7 +299,7 @@
 				"product_id": "hand_candlestick_fetish",
 				"item": "hand_candlestick_fetish",
 				"count": 1,
-				"price": 350,
+				"price": 300,
 				"stock": 1,
 				"slot": 13,
 				"page": 3
@@ -308,7 +308,7 @@
 				"product_id": "brain_model_fetish",
 				"item": "brain_model_fetish",
 				"count": 1,
-				"price": 400,
+				"price": 350,
 				"stock": 1,
 				"slot": 14,
 				"page": 3
@@ -317,7 +317,7 @@
 				"product_id": "heart_model_fetish",
 				"item": "heart_model_fetish",
 				"count": 1,
-				"price": 500,
+				"price": 400,
 				"stock": 1,
 				"slot": 15,
 				"page": 3

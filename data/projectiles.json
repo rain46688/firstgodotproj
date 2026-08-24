@@ -296,7 +296,7 @@
 		"life_time": 0.9,
 		"max_distance": 1000,
 		"base_direction": "up",
-		"sound": "impact",
+		"sound": "impact_02",
 		"hitbox": {
 			"offset": [
 				220,
@@ -321,7 +321,7 @@
 		"life_time": 0.9,
 		"max_distance": 1000,
 		"base_direction": "up",
-		"sound": "slash",
+		"sound": "impact_02",
 		"hitbox": {
 			"offset": [
 				220,

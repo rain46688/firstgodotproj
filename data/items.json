@@ -754,7 +754,7 @@
 	},
 	"holy_grail_relic": {
 		"name": "성배",
-		"description": "바닥이 보이지 않는 은빛 성배.인벤토리 내 소모품이 0개일 때 장착한 무기에 관통 효과를 부여한다.",
+		"description": "바닥이 보이지 않는 달빛 성배.인벤토리 내 소모품이 0개일 때 장착한 무기에 관통 효과를 부여한다.",
 		"image": "res://imgs/items/holy_grail_relic180x180.png",
 		"width": 1,
 		"height": 1,

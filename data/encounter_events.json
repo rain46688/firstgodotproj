@@ -1,5 +1,6 @@
 {
 	"school_hallway": {
+		"escape_choice_chance": 50,
 		"start_texts": [
 			"복도 끝에서 무언가 내 쪽으로 다가오고 있는 게 느껴진다.",
 			"저 멀리서 소리가 들려온다.",

@@ -33,6 +33,7 @@ signal battle_finished(result_data)
 @onready var hit_red_sound = $HitRedSound
 @onready var slash_sound = $SlashSound
 @onready var impact_sound = $ImpactSound
+@onready var impact_sound_02 = $ImpactSound_02
 @onready var shot_sound = $ShotSound
 @onready var click_sound = $ClickSound
 @onready var healing_sound = $HealingSound
@@ -267,6 +268,16 @@ var cached_current_weapon_id = ""
 
 var battle_popup_font = null
 
+# ------------------------------------------------------------
+# 방어 무기 히트박스 프레임 캐시
+# ------------------------------------------------------------
+
+var cached_weapon_defense_rect_frame = -1
+var cached_weapon_defense_rect = Rect2()
+
+var cached_parry_hit_rect_frame = -1
+var cached_parry_hit_rect = Rect2()
+
 # 상수 변수 모음
 # 현재 없음
 
@@ -486,6 +497,10 @@ func update_debug_toggle_input():
 func update_defense_mode_input(delta):
 	update_defense_weapon_movement(delta)
 	check_defense_side_warp_input()
+	
+	# 이번 프레임에 방어 무기의 위치가 변경될 수 있으므로
+	# 이전 Rect 캐시를 무효화한다.
+	invalidate_defense_rect_frame_cache()
 
 	# 기존 패링 입력 버퍼부터 감소시킨다.
 	# Space를 누른 바로 그 프레임에 새 버퍼가 delta만큼
@@ -504,40 +519,93 @@ func update_defense_mode_input(delta):
 func update_attack_mode_input(delta):
 	var weapon_data = get_current_weapon_data()
 
+	# ---------------------------------------------------------
+	# 무기 좌우 스윙 처리
+	# ---------------------------------------------------------
 	if weapon_swing_enabled:
 		weapon_move_time += delta
 
-		var swing_speed = get_attack_swing_speed_with_status(weapon_data)
-		var move_range = weapon_data.get("attack_move_range", 460)
+		var swing_speed = get_attack_swing_speed_with_status(
+			weapon_data
+		)
 
-		var offset_x = sin(weapon_move_time * swing_speed) * move_range
-		weapon_sprite.position = weapon_base_position + Vector2(offset_x, 0)
+		var move_range = weapon_data.get(
+			"attack_move_range",
+			460
+		)
 
-	var angle_min = weapon_data.get("attack_angle_min", -45)
-	var angle_max = weapon_data.get("attack_angle_max", 45)
-	var base_rotation = weapon_data.get("attack_base_rotation", 0)
+		var offset_x = (
+			sin(weapon_move_time * swing_speed)
+			* move_range
+		)
 
-	var angle_step = weapon_data.get("weapon_angle_step", 5)
+		weapon_sprite.position = (
+			weapon_base_position
+			+ Vector2(offset_x, 0)
+		)
+
+	# ---------------------------------------------------------
+	# 무기 각도 변경 처리
+	# ---------------------------------------------------------
+	var angle_min = weapon_data.get(
+		"attack_angle_min",
+		-45
+	)
+
+	var angle_max = weapon_data.get(
+		"attack_angle_max",
+		45
+	)
+
+	var angle_step = weapon_data.get(
+		"weapon_angle_step",
+		5
+	)
+
 	var old_angle = weapon_angle_offset
 
-	if Input.is_action_just_pressed("move_left") or Input.is_action_just_pressed("ui_left"):
+	if (
+		Input.is_action_just_pressed("move_left")
+		or Input.is_action_just_pressed("ui_left")
+	):
 		weapon_angle_offset -= angle_step
 
-	if Input.is_action_just_pressed("move_right") or Input.is_action_just_pressed("ui_right"):
+	if (
+		Input.is_action_just_pressed("move_right")
+		or Input.is_action_just_pressed("ui_right")
+	):
 		weapon_angle_offset += angle_step
-		
+
+	# clamp는 한 번만 실행
 	weapon_angle_offset = clamp(
 		weapon_angle_offset,
-		weapon_data.get("attack_angle_min", -45),
-		weapon_data.get("attack_angle_max", 45)
+		angle_min,
+		angle_max
 	)
-	
+
+	# ---------------------------------------------------------
+	# 실제 각도가 바뀐 경우에만
+	# 회전 Transform과 클릭 사운드를 갱신한다.
+	#
+	# 기존에는 각도를 변경하지 않아도 매 프레임
+	# rotation_degrees에 같은 값을 다시 넣고 있었다.
+	# ---------------------------------------------------------
 	if weapon_angle_offset != old_angle:
 		play_click_sound()
 
-	weapon_angle_offset = clamp(weapon_angle_offset, angle_min, angle_max)
-	weapon_sprite.rotation_degrees = base_rotation + weapon_angle_offset
+		var base_rotation = weapon_data.get(
+			"attack_base_rotation",
+			0
+		)
 
+		weapon_sprite.rotation_degrees = (
+			base_rotation
+			+ weapon_angle_offset
+		)
+
+	# ---------------------------------------------------------
+	# 공격 실행
+	# ---------------------------------------------------------
 	if Input.is_action_just_pressed("ui_accept"):
 		await execute_player_attack()
 # 전투 입력 비동기 처리 시작 가능 여부 확인 함수
@@ -2849,6 +2917,20 @@ func has_enemy_projectile_reached_damage_line(projectile, projectile_data):
 	var damage_line_y = defense_area_rect.position.y + defense_area_rect.size.y - 20
 
 	return projectile_hit_rect.position.y + projectile_hit_rect.size.y >= damage_line_y
+# 이미 계산된 탄막 Rect 기준으로
+# 플레이어 피해선에 도달했는지 확인하는 함수
+func has_enemy_projectile_rect_reached_damage_line(projectile_hit_rect):
+	var damage_line_y = (
+		defense_area_rect.position.y
+		+ defense_area_rect.size.y
+		- 20
+	)
+
+	return (
+		projectile_hit_rect.position.y
+		+ projectile_hit_rect.size.y
+		>= damage_line_y
+	)
 # 적 탄막 현재 프레임 적용 함수
 func apply_enemy_projectile_frame(
 	projectile,
@@ -2994,8 +3076,11 @@ func get_enemy_projectile_block_result(
 
 	return make_enemy_projectile_result("blocked")
 # 적 탄막 플레이어 피격 결과 확인 함수
-func get_enemy_projectile_player_hit_result(projectile, projectile_data):
-	if not has_enemy_projectile_reached_damage_line(projectile, projectile_data):
+# 이미 계산된 탄막 Rect로 플레이어 피격 확인
+func get_enemy_projectile_player_hit_result(projectile_rect):
+	if not has_enemy_projectile_rect_reached_damage_line(
+		projectile_rect
+	):
 		return {}
 
 	return make_enemy_projectile_result("hit_player")
@@ -3047,8 +3132,7 @@ func get_enemy_projectile_collision_result(
 	# 탄막은 아래쪽으로만 진행하므로 피해선을 넘어가면
 	# 기존 함수에서 정상적으로 감지된다.
 	var hit_result = get_enemy_projectile_player_hit_result(
-		projectile,
-		projectile_data
+		current_projectile_rect
 	)
 
 	if not hit_result.is_empty():
@@ -6132,24 +6216,67 @@ func get_critical_multiplier():
 	var weapon_data = get_current_weapon_data()
 
 	return weapon_data.get("critical_multiplier", 2.0)
+# 방어 무기 / 패링 Rect 프레임 캐시 초기화
+func invalidate_defense_rect_frame_cache():
+	cached_weapon_defense_rect_frame = -1
+	cached_parry_hit_rect_frame = -1
 # 플레이어 방어 무기 판정 함수
+# 플레이어 방어 무기 히트박스 가져오기
+#
+# 같은 process frame 안에서는 무기 위치가 동일하므로
+# 탄막마다 다시 계산하지 않고 캐시를 재사용한다.
 func get_weapon_defense_hit_rect():
+	var current_frame = Engine.get_process_frames()
+
+	if cached_weapon_defense_rect_frame == current_frame:
+		return cached_weapon_defense_rect
+
 	var weapon_rect = weapon_sprite.get_global_rect()
 	var weapon_data = get_current_weapon_data()
 
-	var hitbox_data = weapon_data.get("defense_hitbox", {})
-	var offset_data = hitbox_data.get("offset", [0, 0])
-	var size_data = hitbox_data.get("size", [weapon_sprite.size.x, weapon_sprite.size.y])
+	var hitbox_data = weapon_data.get(
+		"defense_hitbox",
+		{}
+	)
 
-	var offset = Vector2(offset_data[0], offset_data[1])
-	var hitbox_size = Vector2(size_data[0], size_data[1])
+	var offset_data = hitbox_data.get(
+		"offset",
+		[0, 0]
+	)
 
-	return Rect2(
+	var size_data = hitbox_data.get(
+		"size",
+		[
+			weapon_sprite.size.x,
+			weapon_sprite.size.y
+		]
+	)
+
+	var offset = Vector2(
+		offset_data[0],
+		offset_data[1]
+	)
+
+	var hitbox_size = Vector2(
+		size_data[0],
+		size_data[1]
+	)
+
+	cached_weapon_defense_rect = Rect2(
 		weapon_rect.position + offset,
 		hitbox_size
 	)
+
+	cached_weapon_defense_rect_frame = current_frame
+
+	return cached_weapon_defense_rect
 # 플레이어 방어 무기 패링 범위 확인 함수
 func get_parry_hit_rect():
+	var current_frame = Engine.get_process_frames()
+
+	if cached_parry_hit_rect_frame == current_frame:
+		return cached_parry_hit_rect
+
 	var weapon_rect = get_weapon_defense_hit_rect()
 	var weapon_data = get_current_weapon_data()
 
@@ -6214,7 +6341,7 @@ func get_parry_hit_rect():
 		+ weapon_rect.size.y / 2.0
 	)
 
-	return Rect2(
+	cached_parry_hit_rect = Rect2(
 		Vector2(
 			center_x - parry_width / 2.0,
 			center_y - parry_height / 2.0
@@ -6224,6 +6351,10 @@ func get_parry_hit_rect():
 			parry_height
 		)
 	)
+
+	cached_parry_hit_rect_frame = current_frame
+
+	return cached_parry_hit_rect
 # 플레이어 탄막 위치 기준 패링 이펙트 위치 함수
 func get_parry_effect_position_for_projectile(projectile, projectile_data):
 	var projectile_rect = get_projectile_hit_rect(projectile, projectile_data)
@@ -7049,6 +7180,11 @@ func play_projectile_sound(sound_id):
 		if electric_sound != null:
 			electric_sound.stop()
 			electric_sound.play()
+			
+	elif sound_id == "impact_02":
+		if impact_sound_02 != null:
+			impact_sound_02.stop()
+			impact_sound_02.play()
 # 현재 플레이어 공격 투사체 크기 가져오기 함수
 func get_current_attack_projectile_size():
 	var projectile_size = current_projectile_data.get("size", [200, 200])

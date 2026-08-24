@@ -838,8 +838,9 @@
 						"type": "choices",
 						"choices": [
 							{
-								"text": "첫 번째 사물함을 연다.",
-								"events": [
+								"text": "두 번째 사물함을 연다.",
+								"flag": "got_beverage_a_classroom_02_02",
+								"already_events": [
 									{
 										"type": "sound",
 										"path": "res://sounds/locker_open.mp3",
@@ -849,6 +850,27 @@
 									{
 										"type": "text",
 										"text": "비어 있다."
+									}
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "무언가 있다."
+									},
+									{
+										"type": "item",
+										"item": "beverage_a",
+										"count": 3
+									},
+									{
+										"type": "flag",
+										"flag": "got_beverage_a_classroom_02_02"
 									}
 								]
 							},
@@ -3344,7 +3366,7 @@
 			}
 		},
 		"interactions": {
-			"classroom_08_door": {
+			"classroom_09_door": {
 				"click_rect": [
 					1390,
 					270,
@@ -4625,6 +4647,9 @@
 					160,
 					100
 				],
+				"required_flag_missing": [
+					"defeated_moon"
+				],
 				"events": [
 					{
 						"type": "clear_flag",
@@ -5764,6 +5789,23 @@
 					}
 				]
 			},
+			"moon_02": {
+				"click_rect": [
+					870,
+					82,
+					160,
+					100
+				],
+				"required_flag": [
+					"defeated_moon"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "달빛은 잘게 부서지는 가루가 되어 검은 바다 표면 위에서 잔잔하게 일렁이고 있다."
+					}
+				]
+			},
 			"boat": {
 				"click_rect": [
 					185,
@@ -6784,7 +6826,7 @@
 										"direction": "left",
 										"required_item": "",
 										"master_key": "master_key",
-										"consume_required_key": true,
+										"consume_required_key": false,
 										"consume_master_key": true,
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
@@ -9746,7 +9788,7 @@
 										"direction": "left",
 										"required_item": "",
 										"master_key": "master_key",
-										"consume_required_key": true,
+										"consume_required_key": false,
 										"consume_master_key": true,
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
@@ -10044,7 +10086,8 @@
 				"event": "first_enter_broadcasting_room_02",
 				"required_flag": "story_first_enter_broadcasting_room_01_done",
 				"required_flag_missing": [
-					"story_first_enter_broadcasting_room_02_done"
+					"story_first_enter_broadcasting_room_02_done",
+					"defeated_combined_candle_students"
 				]
 			},
 			{
@@ -10061,7 +10104,8 @@
 					"story_first_grail_filled_unknown_hall_02_done"
 				],
 				"required_flag_missing": [
-					"story_first_enter_broadcasting_room_02_after_swimming_pool_hallway_01_done"
+					"story_first_enter_broadcasting_room_02_after_swimming_pool_hallway_01_done",
+					"defeated_hammerhead_mansion_master"
 				]
 			}
 		],
@@ -10291,8 +10335,8 @@
 										"type": "unlock_exit",
 										"direction": "left",
 										"required_item": "",
-										"master_key": "",
-										"consume_required_key": true,
+										"master_key": "master_key",
+										"consume_required_key": false,
 										"consume_master_key": true,
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
@@ -10690,6 +10734,255 @@
 																		]
 																	}
 																]
+															}
+														]
+													},
+													{
+														"required_flag": [
+															"story_first_grail_filled_unknown_hall_03_done"
+														],
+														"required_flag_missing": [
+															"story_first_grail_filled_unknown_hall_05_done"
+														],
+														"events": [
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "expressionless",
+																"text": "두 번째 잔까지 채웠군."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "normal",
+																"text": "흠. 생각보다 제법 오래 살아남는걸."
+															},
+															{
+																"type": "text",
+																"name": "나",
+																"text": "칭찬입니까?"
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "normal",
+																"text": "그렇게 듣고 싶으면 그렇게 들어라."
+															},
+															{
+																"type": "text",
+																"name": "나",
+																"text": "..."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "expressionless",
+																"text": "그런데 이상하군."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "expressionless",
+																"text": "첫 번째 잔을 채웠을 때보다 표정이 좋지 않아."
+															},
+															{
+																"type": "text",
+																"name": "나",
+																"text": "..."
+															},
+															{
+																"type": "text",
+																"name": "나",
+																"text": "수영장의 관리자라는 녀석에게 이야기를 들었습니다."
+															},
+															{
+																"type": "text",
+																"name": "나",
+																"text": "우리가 여기서 만나는 괴물들 중에는 원래 우리와 같은 사람들이 있었다고요."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "normal",
+																"text": "틀린 말은 아니다."
+															},
+															{
+																"type": "text",
+																"name": "나",
+																"text": "그럼 우리가 지금까지 죽인 것들도... 처음부터 괴물이었던 게 아닐 수도 있겠네요."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "normal",
+																"text": "그랬을 수도 있지."
+															},
+															{
+																"type": "portrait",
+																"character": "claire",
+																"emotion": "embarrassed",
+																"text": "당신은 아무렇지도 않습니까?"
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "expressionless",
+																"text": "아무렇지 않다고 한 적은 없다."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "normal",
+																"text": "다만 오래 고민한다고 이미 죽은 것이 다시 사람이 되지는 않지."
+															},
+															{
+																"type": "text",
+																"name": "나",
+																"text": "그런 말은 쉽죠."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "normal",
+																"text": "그래. 살아남은 자가 하기에는 아주 쉬운 말이다."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "expressionless",
+																"text": "그리고 죽은 자는 그런 말조차 할 수 없지."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "normal",
+																"text": "잘 들어라. 네 앞에 있는 것이 과거에 무엇이었는지 고민하는 건 네 자유다."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "normal",
+																"text": "하지만 그것이 지금 너를 죽이려 한다면, 먼저 살아남아라."
+															},
+															{
+																"type": "text",
+																"name": "나",
+																"text": "그러면 결국 아무 생각 없이 죽이라는 겁니까?"
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "angry",
+																"text": "멍청한 소리 하지 마라."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "expressionless",
+																"text": "아무 생각 없이 죽이는 것과, 필요할 때 죽이지 못하는 건 전혀 다른 문제다."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "normal",
+																"text": "괴물이 되는 것이 두렵다면 그 차이 정도는 기억해 둬라."
+															},
+															{
+																"type": "text",
+																"name": "나",
+																"text": "...그리고 그 녀석은 한 가지를 더 말했습니다."
+															},
+															{
+																"type": "text",
+																"name": "나",
+																"text": "제단의 잔은 괴물의 심장만을 원하는 게 아니라고요."
+															},
+															{
+																"type": "portrait",
+																"character": "claire",
+																"emotion": "pain",
+																"text": "사람의 심장으로도 잔을 채울 수 있다고 했어요."
+															},
+															{
+																"type": "portrait",
+																"character": "isaac",
+																"emotion": "normal",
+																"text": "그 말이 사실인지 알고 있나?"
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "expressionless",
+																"text": "그걸 왜 나에게 묻지?"
+															},
+															{
+																"type": "text",
+																"name": "나",
+																"text": "당신은 알고 있을 것 같으니까요."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "normal",
+																"text": "알고 있다고 해서 전부 말해 줄 이유는 없다."
+															},
+															{
+																"type": "portrait",
+																"character": "claire",
+																"emotion": "annoyed",
+																"text": "그런 식으로 말하면 더 수상하거든요."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "expressionless",
+																"text": "그럼 수상한 채로 두어라."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "pain",
+																"text": "어떤 질문은 답을 모를 때가 더 나을 수도 있으니까."
+															},
+															{
+																"type": "text",
+																"name": "나",
+																"text": "..."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "normal",
+																"text": "그리고 너희들이 아직 그런 고민을 하고 있다는 건..."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "expressionless",
+																"text": "적어도 아직은 괜찮다는 뜻이겠지."
+															},
+															{
+																"type": "text",
+																"name": "나",
+																"text": "아니, 그거 칭찬 맞죠?"
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "normal",
+																"text": "금화나 더 모아 와라."
+															},
+															{
+																"type": "portrait",
+																"character": "isaac",
+																"emotion": "normal",
+																"text": "흠. 자기 나름대로 걱정해 주는 모양이군."
+															},
+															{
+																"type": "portrait",
+																"character": "albus",
+																"emotion": "angry",
+																"text": "쓸데없는 해석 하지 마라."
 															}
 														]
 													}
@@ -13971,7 +14264,8 @@
 							},
 							{
 								"text": "열 번째 사물함을 연다.",
-								"events": [
+								"flag": "got_tranquilizer_c_classroom_35_02",
+								"already_events": [
 									{
 										"type": "sound",
 										"path": "res://sounds/locker_open.mp3",
@@ -13981,6 +14275,27 @@
 									{
 										"type": "text",
 										"text": "비어 있다."
+									}
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "무언가 있다."
+									},
+									{
+										"type": "item",
+										"item": "tranquilizer_c",
+										"count": 3
+									},
+									{
+										"type": "flag",
+										"flag": "got_tranquilizer_c_classroom_35_02"
 									}
 								]
 							}
@@ -14811,7 +15126,7 @@
 			}
 		},
 		"interactions": {
-			"classroom_31_door": {
+			"classroom_38_door": {
 				"click_rect": [
 					1390,
 					270,
@@ -17385,7 +17700,7 @@
 						"path": "res://imgs/events/locker_05.png",
 						"start_page": 1,
 						"sound": "res://sounds/locker_open.mp3",
-						"sound_volume_db": 15,
+						"sound_volume_db": 20,
 						"document_events": [
 							{
 								"type": "sound",
@@ -17920,7 +18235,7 @@
 			}
 		},
 		"interactions": {
-			"door": {
+			"swimming_pool_door_01_door": {
 				"click_rect": [
 					834,
 					366,
@@ -17943,9 +18258,9 @@
 										"type": "unlock_exit",
 										"direction": "left",
 										"required_item": "",
-										"master_key": "",
+										"master_key": "master_key",
 										"consume_required_key": false,
-										"consume_master_key": false,
+										"consume_master_key": true,
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
@@ -18102,6 +18417,10 @@
 									{
 										"type": "text",
 										"text": "아무 일도 일어나지 않았다."
+									},
+									{
+										"type": "text",
+										"text": "하지만 버튼은 눌려있다."
 									}
 								]
 							},
@@ -20907,7 +21226,7 @@
 			}
 		},
 		"interactions": {
-			"door": {
+			"swimming_pool_door_02_door": {
 				"click_rect": [
 					834,
 					366,
@@ -20930,9 +21249,9 @@
 										"type": "unlock_exit",
 										"direction": "left",
 										"required_item": "",
-										"master_key": "",
+										"master_key": "master_key",
 										"consume_required_key": false,
-										"consume_master_key": false,
+										"consume_master_key": true,
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
@@ -21102,14 +21421,16 @@
 				"event": "false_answer_swimming_pool_stadium_02",
 				"required_flag": "select_wrong_swimming_pool_stadium_02",
 				"required_flag_missing": [
-					"story_false_answer_swimming_pool_stadium_02_done"
+					"story_false_answer_swimming_pool_stadium_02_done",
+					"opened_swimming_pool_hallway_21"
 				]
 			},
 			{
 				"event": "true_answer_swimming_pool_stadium_02",
 				"required_flag": "opened_swimming_pool_hallway_21",
 				"required_flag_missing": [
-					"story_true_answer_swimming_pool_stadium_02_done"
+					"story_true_answer_swimming_pool_stadium_02_done",
+					"opened_swimming_pool_hallway_21"
 				]
 			}
 		],
@@ -27494,9 +27815,9 @@
 										"type": "unlock_exit",
 										"direction": "up",
 										"required_item": "",
-										"master_key": "",
+										"master_key": "master_key",
 										"consume_required_key": false,
-										"consume_master_key": false,
+										"consume_master_key": true,
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
