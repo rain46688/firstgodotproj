@@ -555,7 +555,7 @@
 					{
 						"projectile": "slash_basic",
 						"start": [
-							1400,
+							1300,
 							0
 						],
 						"rotation": 180,
@@ -818,7 +818,7 @@
 					{
 						"projectile": "slash_basic",
 						"start": [
-							1400,
+							1300,
 							0
 						],
 						"rotation": 180,
@@ -4009,7 +4009,7 @@
 			-55
 		],
 		"can_escape": false,
-		"encounter_text": "달이 당신의 기도에 응답하였다.",
+		"encounter_text": "달이 당신의 부름에 응답하였다.",
 		"observe_text": "달은 하늘에 있고, 사람이 이길 수 없다.",
 		"weakness_text": "",
 		"patterns": [
@@ -4381,7 +4381,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 5,
 						"delay": 0.2
 					},
 					{
@@ -4391,7 +4391,7 @@
 							0
 						],
 						"rotation": 180,
-						"damage": 10,
+						"damage": 5,
 						"delay": 0.2
 					},
 					{
@@ -4549,9 +4549,15 @@
 			},
 			{
 				"id": "basic_attack_05",
-				"weight": 10,
+				"weight": 50,
+				"priority": 1,
 				"warning_text": "달은 당신을 내려보면서 웃고 있다.",
 				"fire_mode": "parallel",
+				"turn_condition": {
+					"mode": "interval",
+					"every": 5,
+					"start_turn": 5
+				},
 				"projectiles": [
 					{
 						"projectile": "despair_slash",
@@ -4593,7 +4599,7 @@
 			},
 			{
 				"item": "holy_grail_relic",
-				"chance": 100,
+				"chance": 80,
 				"min": 1,
 				"max": 1
 			}
@@ -8121,7 +8127,7 @@
 					"id": "right_fish_man",
 					"name": "오른쪽 가면을 쓴 남성",
 					"rect": [
-						425,
+						430,
 						254,
 						140,
 						300
@@ -8385,7 +8391,7 @@
 				"image": "res://imgs/enemies/red_fish_man_02.png",
 				"observe_text": "다른 가면을 부르기 전에 두 가면을 한 번에 처리해야 될 거 같다.",
 				"size": [
-					450,
+					400,
 					560
 				],
 				"position": [
@@ -8400,7 +8406,7 @@
 					"rect": [
 						224,
 						254,
-						150,
+						140,
 						300
 					]
 				},
@@ -8686,7 +8692,7 @@
 					{
 						"type": "revive_part",
 						"part_id": "left_arm",
-						"hp_percent": 60,
+						"hp_percent": 50,
 						"text": "뜯겨 나갔던 거대한 왼쪽 팔이 불완전하게 다시 자라났다.",
 						"sound": "res://sounds/squeeze_sound.mp3",
 						"sound_volume_db": 3.0,
@@ -8702,7 +8708,7 @@
 					{
 						"type": "revive_part",
 						"part_id": "right_arm",
-						"hp_percent": 60,
+						"hp_percent": 50,
 						"text": "뜯겨 나갔던 거대한 오른쪽 팔이 불완전하게 다시 자라났다.",
 						"sound": "res://sounds/squeeze_sound.mp3",
 						"sound_volume_db": 3.0,
@@ -8808,7 +8814,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 8,
+								"damage": 15,
 								"delay": 0.3,
 								"danger_type": "parry_only"
 							},
@@ -8819,7 +8825,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 8,
+								"damage": 15,
 								"delay": 0.3,
 								"danger_type": "parry_only"
 							},
@@ -8830,7 +8836,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 15,
 								"delay": 0.6
 							},
 							{
@@ -8840,7 +8846,7 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 10,
+								"damage": 15,
 								"delay": 0.6
 							},
 							{
@@ -8850,8 +8856,8 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 8,
-								"delay": 1.2,
+								"damage": 10,
+								"delay": 1.3,
 								"danger_type": "parry_only"
 							},
 							{
@@ -8861,8 +8867,8 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 8,
-								"delay": 1.5,
+								"damage": 20,
+								"delay": 1.6,
 								"danger_type": "parry_only"
 							},
 							{
@@ -8872,8 +8878,8 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 8,
-								"delay": 1.8,
+								"damage": 20,
+								"delay": 1.9,
 								"danger_type": "parry_only"
 							},
 							{
@@ -8883,15 +8889,15 @@
 									0
 								],
 								"rotation": 180,
-								"damage": 8,
-								"delay": 2.1,
+								"damage": 20,
+								"delay": 2.2,
 								"danger_type": "parry_only"
 							}
 						]
 					},
 					{
 						"id": "basic_attack_02",
-						"weight": 30,
+						"weight": 40,
 						"priority": 1,
 						"warning_text": "거대한 오른쪽 주먹을 오른쪽 부터 사방으로 휘두른다.",
 						"fire_mode": "parallel",
@@ -9102,7 +9108,7 @@
 					},
 					{
 						"id": "basic_attack_04",
-						"weight": 40,
+						"weight": 30,
 						"priority": 1,
 						"warning_text": "거대한 왼쪽 주먹을 사방으로 강하게 휘두른다.",
 						"fire_mode": "sequential",

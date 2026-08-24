@@ -567,7 +567,7 @@
 	},
 	"rosary_fetish": {
 		"name": "묵주",
-		"description": "손때가 깊게 밴 낡은 묵주.소지시 받는 피해가 30% 감소하지만 장착한 무기의 최대 공격력이 5 감소한다.",
+		"description": "손때가 깊게 밴 낡은 묵주.소지시 받는 피해가 50% 감소하지만 장착한 무기의 최대 공격력이 5 감소한다.",
 		"image": "res://imgs/items/rosary_fetish180x180.png",
 		"width": 1,
 		"height": 1,

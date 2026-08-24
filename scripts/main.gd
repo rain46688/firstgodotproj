@@ -1724,9 +1724,9 @@ func apply_relic_and_fetish_effects(stats):
 			"metal_syringe":
 				stats["attack_max"] = int(stats.get("attack_max", 1)) + 5
 				add_applied_relic_to_stats(stats, item_id)
-			# 묵주 : 받는 피해 30% 감소(곱연산), 최대 공격력 5 하락(합연산)
+			# 묵주 : 받는 피해 50% 감소(곱연산), 최대 공격력 5 하락(합연산)
 			"rosary_fetish":
-				stats["damage_taken_multiplier"] = float(stats.get("damage_taken_multiplier", 1.0)) * 0.7
+				stats["damage_taken_multiplier"] = float(stats.get("damage_taken_multiplier", 1.0)) * 0.5
 				stats["attack_max"] = int(stats.get("attack_max", 1)) - 5
 				add_applied_relic_to_stats(stats, item_id)
 			# 운동화 : 방어 모드 이동 속도 50% 증가, 스윙 속도 30% 증가
@@ -1852,9 +1852,9 @@ func clamp_player_effective_stats(stats):
 	stats["attack_min"] = max(1, int(stats.get("attack_min", 1)))
 	stats["attack_max"] = max(1, int(stats.get("attack_max", stats["attack_min"])))
 
-	# 최소 공격력이 최대 공격력보다 커지면 최대 공격력을 최소 공격력에 맞춤
+	# 최소 공격력이 최대 공격력보다 커지면 최소 공격력을 최대 공격력에 맞춤
 	if int(stats["attack_min"]) > int(stats["attack_max"]):
-		stats["attack_max"] = int(stats["attack_min"])
+		stats["attack_min"] = int(stats["attack_max"])
 
 	stats["critical_chance"] = clamp(float(stats.get("critical_chance", 0.01)), 0.01, 1.0)
 	stats["critical_multiplier"] = max(1.1, float(stats.get("critical_multiplier", 1.1)))
