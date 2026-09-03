@@ -10755,7 +10755,7 @@
 																"type": "portrait",
 																"character": "albus",
 																"emotion": "normal",
-																"text": "흠. 생각보다 제법 오래 살아남는걸."
+																"text": "생각보다 제법 오래 살아남는걸."
 															},
 															{
 																"type": "text",
@@ -10783,7 +10783,7 @@
 																"type": "portrait",
 																"character": "albus",
 																"emotion": "expressionless",
-																"text": "첫 번째 잔을 채웠을 때보다 표정이 좋지 않아."
+																"text": "첫 번째 잔을 채웠을 때보다 표정이 좋지 않지?"
 															},
 															{
 																"type": "text",
@@ -10793,29 +10793,18 @@
 															{
 																"type": "text",
 																"name": "나",
-																"text": "수영장의 관리자라는 녀석에게 이야기를 들었습니다."
+																"text": "자신이 그곳의 관리자라고 하는 자에게 이야기를 들었습니다."
 															},
 															{
 																"type": "text",
 																"name": "나",
-																"text": "우리가 여기서 만나는 괴물들 중에는 원래 우리와 같은 사람들이 있었다고요."
+																"text": "우리가 이곳에서 만나는 괴물들 중에는 원래 우리와 같은 사람 들이었었다라고요..."
 															},
 															{
 																"type": "portrait",
 																"character": "albus",
 																"emotion": "normal",
 																"text": "틀린 말은 아니다."
-															},
-															{
-																"type": "text",
-																"name": "나",
-																"text": "그럼 우리가 지금까지 죽인 것들도... 처음부터 괴물이었던 게 아닐 수도 있겠네요."
-															},
-															{
-																"type": "portrait",
-																"character": "albus",
-																"emotion": "normal",
-																"text": "그랬을 수도 있지."
 															},
 															{
 																"type": "portrait",
@@ -10833,7 +10822,7 @@
 																"type": "portrait",
 																"character": "albus",
 																"emotion": "normal",
-																"text": "다만 오래 고민한다고 이미 죽은 것이 다시 사람이 되지는 않지."
+																"text": "다만 이미 변해버린 것이 다시 사람이 되지는 않지."
 															},
 															{
 																"type": "text",
@@ -10849,12 +10838,6 @@
 															{
 																"type": "portrait",
 																"character": "albus",
-																"emotion": "expressionless",
-																"text": "그리고 죽은 자는 그런 말조차 할 수 없지."
-															},
-															{
-																"type": "portrait",
-																"character": "albus",
 																"emotion": "normal",
 																"text": "잘 들어라. 네 앞에 있는 것이 과거에 무엇이었는지 고민하는 건 네 자유다."
 															},
@@ -10862,7 +10845,7 @@
 																"type": "portrait",
 																"character": "albus",
 																"emotion": "normal",
-																"text": "하지만 그것이 지금 너를 죽이려 한다면, 먼저 살아남아라."
+																"text": "하지만 그것이 지금 너를 죽이려 한다면, 우선 먼저 살아남아라."
 															},
 															{
 																"type": "text",
@@ -10879,13 +10862,13 @@
 																"type": "portrait",
 																"character": "albus",
 																"emotion": "expressionless",
-																"text": "아무 생각 없이 죽이는 것과, 필요할 때 죽이지 못하는 건 전혀 다른 문제다."
+																"text": "아무 생각 없이 죽이는 것과는 다른 문제다."
 															},
 															{
 																"type": "portrait",
 																"character": "albus",
 																"emotion": "normal",
-																"text": "괴물이 되는 것이 두렵다면 그 차이 정도는 기억해 둬라."
+																"text": "그것들처럼 변하는 것이 두렵다면 그 차이 정도는 기억해 둬라."
 															},
 															{
 																"type": "text",
@@ -10901,13 +10884,13 @@
 																"type": "portrait",
 																"character": "claire",
 																"emotion": "pain",
-																"text": "사람의 심장으로도 잔을 채울 수 있다고 했어요."
+																"text": "우리와 같은 사람의 심장으로도 잔을 채울 수 있다고 했어요."
 															},
 															{
 																"type": "portrait",
 																"character": "isaac",
 																"emotion": "normal",
-																"text": "그 말이 사실인지 알고 있나?"
+																"text": "그 말이 진짜인지 거짓인지 알고 있나?"
 															},
 															{
 																"type": "portrait",
@@ -10918,13 +10901,13 @@
 															{
 																"type": "text",
 																"name": "나",
-																"text": "당신은 알고 있을 것 같으니까요."
+																"text": "그야, 당신은 알고 있을 것 같으니까요."
 															},
 															{
 																"type": "portrait",
 																"character": "albus",
 																"emotion": "normal",
-																"text": "알고 있다고 해서 전부 말해 줄 이유는 없다."
+																"text": "설령 알고 있다고 해서 전부 말해 줄 이유는 없다."
 															},
 															{
 																"type": "portrait",
@@ -10937,12 +10920,6 @@
 																"character": "albus",
 																"emotion": "expressionless",
 																"text": "그럼 수상한 채로 두어라."
-															},
-															{
-																"type": "portrait",
-																"character": "albus",
-																"emotion": "pain",
-																"text": "어떤 질문은 답을 모를 때가 더 나을 수도 있으니까."
 															},
 															{
 																"type": "text",
@@ -10964,13 +10941,13 @@
 															{
 																"type": "text",
 																"name": "나",
-																"text": "아니, 그거 칭찬 맞죠?"
+																"text": "그거 칭찬 맞죠?"
 															},
 															{
 																"type": "portrait",
 																"character": "albus",
-																"emotion": "normal",
-																"text": "금화나 더 모아 와라."
+																"emotion": "angry",
+																"text": "쓸데없는 해석 하지 마라."
 															},
 															{
 																"type": "portrait",
@@ -10981,8 +10958,8 @@
 															{
 																"type": "portrait",
 																"character": "albus",
-																"emotion": "angry",
-																"text": "쓸데없는 해석 하지 마라."
+																"emotion": "normal",
+																"text": "금화나 더 모아 와라."
 															}
 														]
 													}
@@ -14819,8 +14796,7 @@
 					"story_first_enter_swimming_pool_room_10_done"
 				],
 				"required_flag_missing": [
-					"story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done",
-					"story_first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25_done"
+					"story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done"
 				]
 			}
 		],
@@ -20855,7 +20831,7 @@
 		}
 	},
 	"swimming_pool_hallway_11": {
-		"background": "res://imgs/backgrounds/swimming_pool_hallway_06.png",
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_13.png",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -20902,8 +20878,8 @@
 			"right": {
 				"target": "swimming_pool_door_01",
 				"position": [
-					1330,
-					664
+					1400,
+					600
 				],
 				"move_effect": "enter"
 			}
@@ -20911,15 +20887,15 @@
 		"interactions": {
 			"tunnel": {
 				"click_rect": [
-					292,
-					484,
-					557,
-					325
+					610,
+					214,
+					672,
+					566
 				],
 				"events": [
 					{
 						"type": "text",
-						"text": "거대한 터널이다."
+						"text": "어디서 본거 같은 익숙한 분위기의 장소다."
 					}
 				]
 			}
@@ -21748,13 +21724,13 @@
 		}
 	},
 	"swimming_pool_hallway_12": {
-		"background": "res://imgs/backgrounds/swimming_pool_hallway_07.png",
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_12.png",
 		"background_by_flags": [
 			{
 				"flags": [
 					"opened_swimming_pool_room_12"
 				],
-				"path": "res://imgs/backgrounds/swimming_pool_hallway_09.png"
+				"path": "res://imgs/backgrounds/swimming_pool_hallway_13.png"
 			}
 		],
 		"idle_motion": {
@@ -21803,8 +21779,8 @@
 			"right": {
 				"target": "swimming_pool_room_12",
 				"position": [
-					1330,
-					664
+					1400,
+					600
 				],
 				"move_effect": "enter",
 				"locked": true,
@@ -21814,24 +21790,24 @@
 		"interactions": {
 			"tunnel": {
 				"click_rect": [
-					292,
-					484,
-					557,
-					325
+					610,
+					214,
+					672,
+					566
 				],
 				"events": [
 					{
 						"type": "text",
-						"text": "거대한 터널이다."
+						"text": "어디서 본거 같은 익숙한 분위기의 장소다."
 					}
 				]
 			},
 			"swimming_pool_room_12_door": {
 				"click_rect": [
-					1390,
-					270,
-					300,
-					560
+					1359,
+					386,
+					185,
+					436
 				],
 				"hide_if_flag": "opened_swimming_pool_room_12",
 				"events": [
@@ -22165,7 +22141,7 @@
 		}
 	},
 	"swimming_pool_hallway_13": {
-		"background": "res://imgs/backgrounds/swimming_pool_hallway_06.png",
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_13.png",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -22212,8 +22188,8 @@
 			"right": {
 				"target": "swimming_pool_room_13",
 				"position": [
-					1330,
-					664
+					1400,
+					600
 				],
 				"move_effect": "enter"
 			}
@@ -22221,15 +22197,15 @@
 		"interactions": {
 			"tunnel": {
 				"click_rect": [
-					292,
-					484,
-					557,
-					325
+					610,
+					214,
+					672,
+					566
 				],
 				"events": [
 					{
 						"type": "text",
-						"text": "거대한 터널이다."
+						"text": "어디서 본거 같은 익숙한 분위기의 장소다."
 					}
 				]
 			}
@@ -22461,7 +22437,7 @@
 		}
 	},
 	"swimming_pool_hallway_14": {
-		"background": "res://imgs/backgrounds/swimming_pool_hallway_06.png",
+		"background": "res://imgs/backgrounds/swimming_pool_hallway_13.png",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -22508,8 +22484,8 @@
 			"right": {
 				"target": "swimming_pool_room_14",
 				"position": [
-					1330,
-					664
+					1400,
+					600
 				],
 				"move_effect": "enter"
 			}
@@ -22517,15 +22493,15 @@
 		"interactions": {
 			"tunnel": {
 				"click_rect": [
-					292,
-					484,
-					557,
-					325
+					610,
+					214,
+					672,
+					566
 				],
 				"events": [
 					{
 						"type": "text",
-						"text": "거대한 터널이다."
+						"text": "어디서 본거 같은 익숙한 분위기의 장소다."
 					}
 				]
 			}

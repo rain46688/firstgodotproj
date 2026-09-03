@@ -10821,6 +10821,10 @@
 			{
 				"type": "flag",
 				"flag": "story_first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25_done"
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done"
 			}
 		]
 	},

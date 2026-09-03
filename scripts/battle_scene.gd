@@ -8296,11 +8296,11 @@ func get_status_applied_text(effect_ids):
 
 		match effect_id:
 			"fear":
-				lines.append("공포에 질렸다.")
+				lines.append("공포에 질렸다. \n공격 무기의 스윙 스피드가 50% 빨라진다.")
 			"lethargy":
-				lines.append("무기력에 빠졌다.")
+				lines.append("무기력에 빠졌다. \n방어 무기의 이동속도가 30% 느려진다.")
 			"despair":
-				lines.append("절망에 짓눌렸다.")
+				lines.append("절망에 짓눌렸다. \n받는 데미지가 50% 증가한다.")
 			_:
 				lines.append(get_status_effect_name(effect_id) + " 상태가 되었다.")
 
