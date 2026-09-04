@@ -390,6 +390,18 @@
 		"heal": 40,
 		"consumed_on_use": true
 	},
+	"tuna_can_a": {
+		"name": "참치캔A",
+		"description": "맛있어 보인다 먹으면 에너지가 많이 회복될 것 같다.",
+		"image": "res://imgs/items/tuna_can180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "consumable",
+		"stackable": true,
+		"max_stack": 5,
+		"heal": 60,
+		"consumed_on_use": true
+	},
 	"tranquilizer_a": {
 		"name": "진정제A",
 		"description": "미지근 하다 마시면 두려운 마음이 안정될 것 같다.",
@@ -482,6 +494,16 @@
 		"name": "까마귀 시체",
 		"description": "죽어있는 까마귀의 시체이다.",
 		"image": "res://imgs/items/craw_180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "etc",
+		"effect_scope": "inventory",
+		"stackable": false
+	},
+	"unknown_eye": {
+		"name": "의문의 눈알",
+		"description": "진짜처럼 보이지만 인공적으로 만들어진 눈알이다.",
+		"image": "res://imgs/items/unknown_eye180x180.png",
 		"width": 1,
 		"height": 1,
 		"type": "etc",

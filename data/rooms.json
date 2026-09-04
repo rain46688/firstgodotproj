@@ -10107,6 +10107,13 @@
 					"story_first_enter_broadcasting_room_02_after_swimming_pool_hallway_01_done",
 					"defeated_hammerhead_mansion_master"
 				]
+			},
+			{
+				"event": "first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_03",
+				"required_flag": "started_episode_03",
+				"required_flag_missing": [
+					"story_first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_03_done"
+				]
 			}
 		],
 		"exits": {
@@ -10211,6 +10218,30 @@
 									{
 										"type": "flag",
 										"flag": "started_episode_02"
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"story_first_grail_filled_unknown_hall_03_done"
+								],
+								"required_flag_missing": [
+									"started_episode_03"
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/save_ui_open.mp3",
+										"volume_db": -5,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "모니터 화면에서는 여러 장소의 CCTV 화면이 비치고 있다."
+									},
+									{
+										"type": "flag",
+										"flag": "started_episode_03"
 									}
 								]
 							}
@@ -28114,5 +28145,100 @@
 				]
 			}
 		}
+	},
+	"dark_forest_hallway_01": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_hallway_02",
+				"position": [
+					650,
+					30
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_01",
+				"position": [
+					1500,
+					433
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_01",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_01": {
+		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_01",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {}
 	}
 }

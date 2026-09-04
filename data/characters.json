@@ -149,5 +149,72 @@
 			"expressionless": "res://imgs/characters/albus/portrait/expressionless.png",
 			"shy": "res://imgs/characters/albus/portrait/shy.png"
 		}
+	},
+	"pizzagom": {
+		"name": "피자곰",
+		"portrait": {
+			"normal": "res://imgs/characters/pizzagom/portrait/normal.png",
+			"pain": "res://imgs/characters/pizzagom/portrait/pain.png",
+			"embarrassed": "res://imgs/characters/pizzagom/portrait/embarrassed.png",
+			"angry": "res://imgs/characters/pizzagom/portrait/angry.png",
+			"annoyed": "res://imgs/characters/pizzagom/portrait/annoyed.png",
+			"expressionless": "res://imgs/characters/pizzagom/portrait/expressionless.png",
+			"shy": "res://imgs/characters/pizzagom/portrait/shy.png",
+			"joy": "res://imgs/characters/pizzagom/portrait/joy.png"
+		},
+		"standing": {
+			"normal": "res://imgs/characters/pizzagom/standing/normal.png",
+			"joy": "res://imgs/characters/pizzagom/standing/joy.png",
+			"pain": "res://imgs/characters/pizzagom/standing/pain.png",
+			"embarrassed": "res://imgs/characters/pizzagom/standing/embarrassed.png",
+			"angry": "res://imgs/characters/pizzagom/standing/angry.png",
+			"annoyed": "res://imgs/characters/pizzagom/standing/annoyed.png",
+			"shy": "res://imgs/characters/pizzagom/standing/shy.png",
+			"expressionless": "res://imgs/characters/pizzagom/standing/expressionless.png",
+			"unknown": "res://imgs/characters/pizzagom/standing/unknown.png"
+		},
+		"standing_layout": {
+			"offsets": {
+				"left": [
+					50,
+					-20
+				],
+				"center": [
+					0,
+					-20
+				],
+				"right": [
+					150,
+					-20
+				]
+			},
+			"emotion_offsets": {}
+		}
+	},
+	"mask_man": {
+		"name": "가면의 남성",
+		"portrait": {
+			"normal": "res://imgs/characters/pizzagom/portrait/mask.png"
+		},
+		"standing": {
+			"unknown": "res://imgs/characters/pizzagom/standing/mask.png"
+		},
+		"standing_layout": {
+			"offsets": {
+				"left": [
+					50,
+					-20
+				],
+				"center": [
+					0,
+					-20
+				],
+				"right": [
+					150,
+					-20
+				]
+			},
+			"emotion_offsets": {}
+		}
 	}
 }

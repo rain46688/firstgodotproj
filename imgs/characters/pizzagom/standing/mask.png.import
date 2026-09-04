@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c8u7lvqd0vhrw"
-path="res://.godot/imported/unkown_heat180x180.png-de508d17b3d2ba47b1981bae4205fb9a.ctex"
+uid="uid://tuxoltex3v45"
+path="res://.godot/imported/mask.png-701d963eb4c50373dc5077f9bb9f82a1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/items/unkown_heat180x180.png"
-dest_files=["res://.godot/imported/unkown_heat180x180.png-de508d17b3d2ba47b1981bae4205fb9a.ctex"]
+source_file="res://imgs/characters/pizzagom/standing/mask.png"
+dest_files=["res://.godot/imported/mask.png-701d963eb4c50373dc5077f9bb9f82a1.ctex"]
 
 [params]
 

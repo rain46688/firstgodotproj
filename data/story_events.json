@@ -13119,5 +13119,633 @@
 				"flag": "story_first_enter_broadcasting_room_02_after_swimming_pool_hallway_01_done"
 			}
 		]
+	},
+	"first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_03": {
+		"start_flag": "story_first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_03_done",
+		"events": [
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/broadcasting_room_01.png"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "수영장에서 돌아온 이후 우리는 한동안 쉬고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "아이작은 벽에 기대어 장비를 손질하고 있었고, 나는 알버스에게서 얻은 물건들을 정리하고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "클레어는 여전히 방송 장비 앞에 붙어 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "모니터 안에는 여러 알아볼 수 없는 장소들의 화면이 일정하지 않은 간격으로 나타났다 사라지고 있었다."
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/broadcasting_room_02.png"
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"text": "여러분 잠깐만요."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "클레어가 갑자기 의자를 밀치며 자리에서 일어났다."
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "normal",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "왜?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "무슨 일 있나요?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "우리는 클레어 옆으로 다가갔다."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "annoyed",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "두 분, 이것 좀 봐요."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그녀는 다른 모니터 화면중 하나를 손가락으로 가리켰다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "숲?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "화면에는 처음 보는 장소가 비치고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "화면 속에는 끝없이 늘어선 검은 나무들이 화면 전체를 가득 채우고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "오직 달빛 만이 빛나는 어두운 숲."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "바닥에는 축축한 낙엽이 깔려 있었고, 나무 사이로 희미한 안개가 흘러 다니는 것 같았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "아이작도 화면을 보더니 눈을 가늘게 떴다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "여기 본 적 있어."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "네?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "전에 네가 장비 조작하는 거 옆에서 보다가 화면이 잠깐 저기로 바뀐 적 있었어."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "그 이후에는 한 번도 못 봤어."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "그 녀석이 말했던 새로운 구역..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "그리고 저쪽에도 관리자가 있다면..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "그 말 아직 믿고 있는 거예요?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "저쪽에도 심장도 있을 가능성이 높겠죠."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "클레어는 대답하지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그녀의 표정만 봐도 무슨 생각을 하는지 알 수 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "두 번째 잔을 채운 이후 우리는 이전처럼 단순하게 심장을 찾는다는 말을 할 수 없게 되었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 심장이 원래 무엇이었는지."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 괴물이 누구였는지."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "생각하지 않으려 해도 자꾸 머릿속에 남았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그때였다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "camera_zoom",
+				"x": 850,
+				"y": 200,
+				"zoom": 1.5,
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "잠깐."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "화면 구석에서 무언가 움직였다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "처음에는 나뭇가지가 흔들린 줄 알았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 아니었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "사람의 형체였다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "사람...?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "희미한 형체가 나무 사이에서 천천히 걸어 나오고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "머리에는 새하얀 가면."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "몸에는 흙과 진흙으로 더럽혀진 천 같은 것을 뒤집어쓰고 있었다."
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "normal",
+				"text": "저거 사람 맞아요?"
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "normal",
+				"text": "모르지."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "가면의 인물은 천천히 CCTV 쪽으로 다가왔다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그리고 멈췄다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "마치 카메라의 위치를 정확히 알고 있는 것처럼 고개를 들어 렌즈를 바라보았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "우리는 동시에 긴장했다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "지금 우리를 보고 있는 걸까요...?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "잠시 아무 움직임도 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그러더니."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "가면의 인물이 천천히 한 손을 들어 올렸다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "..."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "annoyed",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "이 화면 봐주실래요?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "클레어 씨는 어떤 장소가 비치는 모니터 화면을 손가락으로 툭툭 치면서 말했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "화면 속에는 복도가 보였다."
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "normal",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "그런거 같기도 하고 수영장 같기도 하고."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 모니터를 바라보았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "화면 속 장소는 어둡고 축축했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "전등 몇 개가 깜빡이고 있었고, 물이 고인 바닥은 빛이 반사되고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "저곳에 가면, 다음 심장을 찾을 수 있을지도 몰라요."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "심장. 거대한 문. 클리어 조건. 다음 지역."
+			},
+			{
+				"type": "standing",
+				"character": "claire",
+				"emotion": "normal",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "그럴 수도 있죠. 하지만 어떻게 가는데요?"
+			},
+			{
+				"type": "standing",
+				"character": "isaac",
+				"emotion": "normal_02",
+				"position": "right"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "우리가 계속 학교 내부를 탐색하면서도 길을 못 찾았잖아."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "잠겨 있는 문이나 막혀있는 문들은 열을 단서가 없고."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "잠겨있는 문은 힘으로 어떻게 안 되나요?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "아이작",
+				"text": "무슨 원리인지 모르겠는데 강제로 부술 수도 없어..."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "camera_zoom",
+				"x": 850,
+				"y": 200,
+				"zoom": 1.5,
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/heartbeats.mp3",
+				"volume_db": 5,
+				"loop": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 무의식적으로 모니터에 손을 뻗었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "왜 그랬는지는 모르겠다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그냥, 화면 너머에서 누군가 나를 부르는 것 같은 느낌이 들었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "손끝이 화면에 닿는 순간."
+			},
+			{
+				"type": "camera_zoom",
+				"x": 850,
+				"y": 200,
+				"zoom": 1.6,
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "screen_color",
+				"color": "#002060",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "차가운 물속에 손을 넣은 것 같은 감각이 느껴졌다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "어?"
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"text": "잠깐, 뭐 하시는거에요?"
+			},
+			{
+				"type": "camera_zoom",
+				"x": 850,
+				"y": 200,
+				"zoom": 1.7,
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "screen_color",
+				"color": "#002060",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "모니터 화면이 크게 일그러졌다."
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "normal",
+				"text": "야, 떨어져!"
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"text": "손 빼요! 빨리!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 뒤로 물러나려고 했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 손이 빠지지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "아니, 손만이 아니었다."
+			},
+			{
+				"type": "camera_zoom",
+				"x": 850,
+				"y": 200,
+				"zoom": 1.8,
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "screen_color",
+				"color": "#002060",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "화면 안쪽에서 무언가가 나를 붙잡아 끌어당기고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "잠깐, 이게 무슨..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "아이작이 내 팔을 붙잡았다."
+			},
+			{
+				"type": "portrait",
+				"character": "isaac",
+				"emotion": "normal",
+				"text": "버텨!"
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"text": "안 돼, 잡아요!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "둘이서 나를 꺼내기 위해 안간힘을 쓰는 게 보였다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 힘이 부족했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "아니, 애초에 힘으로 어떻게 되는 게 아니다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#002060",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "portrait",
+				"character": "claire",
+				"emotion": "embarrassed",
+				"text": "들려요? 저기요! 정신 차려요!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "시야가 화면 속으로 빨려 들어갔다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그리고."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "모든 소리가 끊겼다..."
+			},
+			{
+				"type": "show_game_ui"
+			},
+			{
+				"type": "camera_reset",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "change_room",
+				"room": "swimming_pool_hallway_01"
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_03_done"
+			}
+		]
 	}
 }
