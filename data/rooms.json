@@ -9884,7 +9884,7 @@
 		},
 		"ambient_sound": {
 			"path": "res://sounds/light_buzz.mp3",
-			"volume_db": -10.0,
+			"volume_db": -15.0,
 			"loop": true
 		},
 		"bgm": {
@@ -10073,7 +10073,7 @@
 		},
 		"ambient_sound": {
 			"path": "res://sounds/light_buzz.mp3",
-			"volume_db": -10.0,
+			"volume_db": -15.0,
 			"loop": true
 		},
 		"bgm": {
@@ -10303,7 +10303,7 @@
 		},
 		"ambient_sound": {
 			"path": "res://sounds/light_buzz.mp3",
-			"volume_db": -10.0,
+			"volume_db": -15.0,
 			"loop": true
 		},
 		"bgm": {
