@@ -1,6 +1,7 @@
 {
 	"ghost": {
 		"name": "작은 유령",
+		"show_in_credits": true,
 		"max_hp": 150,
 		"battle_bgm": "res://sounds/bgm19.mp3",
 		"battle_bgm_volume_db": -5.0,
@@ -439,6 +440,7 @@
 	},
 	"candle_student_tutorial": {
 		"name": "밀랍을 뒤집어쓴 학생",
+		"show_in_credits": true,
 		"skip_if_flag": "defeated_tutorial_enemy",
 		"max_hp": 100,
 		"battle_bgm": "res://sounds/bgm13.mp3",
@@ -655,6 +657,7 @@
 	},
 	"candle_student": {
 		"name": "밀랍을 뒤집어쓴 학생",
+		"show_in_credits": true,
 		"max_hp": 100,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
@@ -937,6 +940,7 @@
 	},
 	"combined_candle_students_tutorial": {
 		"name": "합쳐진 밀랍 학생들",
+		"show_in_credits": true,
 		"max_hp": 100,
 		"battle_bgm": "res://sounds/bgm13.mp3",
 		"battle_bgm_volume_db": -5.0,
@@ -1195,6 +1199,7 @@
 	},
 	"candle_student_woman": {
 		"name": "밀랍을 뒤집어쓴 여학생",
+		"show_in_credits": true,
 		"max_hp": 100,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
@@ -1463,6 +1468,7 @@
 	},
 	"wax_slime": {
 		"name": "밀랍 액체 괴물",
+		"show_in_credits": true,
 		"max_hp": 200,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
@@ -1659,6 +1665,7 @@
 	},
 	"wax_slime_phalanx": {
 		"name": "밀랍 액체 괴물 방어병",
+		"show_in_credits": true,
 		"max_hp": 250,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
@@ -2225,6 +2232,7 @@
 	},
 	"combined_candle_students_phase_02": {
 		"name": "합쳐진 밀랍 학생들",
+		"show_in_credits": true,
 		"phase": 2,
 		"max_hp": 300,
 		"battle_bgm": "res://sounds/bgm19.mp3",
@@ -2658,6 +2666,7 @@
 	},
 	"combined_candle_students_charger": {
 		"name": "합쳐진 밀랍 돌격병",
+		"show_in_credits": true,
 		"max_hp": 500,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
@@ -2989,6 +2998,7 @@
 	},
 	"combined_candle_students_butcher": {
 		"name": "합쳐진 밀랍 도살자",
+		"show_in_credits": true,
 		"max_hp": 500,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
@@ -3502,6 +3512,7 @@
 	},
 	"monitor_mimic_pride": {
 		"name": "교만의 모니터 모방자",
+		"show_in_credits": true,
 		"max_hp": 999,
 		"battle_bgm": "res://sounds/bgm20.mp3",
 		"battle_bgm_volume_db": 0.0,
@@ -3989,6 +4000,7 @@
 	},
 	"moon": {
 		"name": "달",
+		"show_in_credits": true,
 		"max_hp": 2000,
 		"battle_bgm": "res://sounds/bgm21.mp3",
 		"battle_bgm_volume_db": 0.0,
@@ -5181,6 +5193,7 @@
 	},
 	"ghost_02": {
 		"name": "작은 유령",
+		"show_in_credits": true,
 		"max_hp": 220,
 		"battle_bgm": "res://sounds/bgm19.mp3",
 		"battle_bgm_volume_db": -5.0,
@@ -5619,6 +5632,7 @@
 	},
 	"human_flog": {
 		"name": "인간 개구리",
+		"show_in_credits": true,
 		"max_hp": 400,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
@@ -6041,6 +6055,7 @@
 	},
 	"sea_anemone_woman": {
 		"name": "말미잘 머리의 여성",
+		"show_in_credits": true,
 		"max_hp": 300,
 		"battle_bgm": "res://sounds/bgm22.mp3",
 		"battle_bgm_volume_db": 0.0,
@@ -6684,6 +6699,7 @@
 	},
 	"clione_little_girl": {
 		"name": "클리오네 소녀",
+		"show_in_credits": true,
 		"max_hp": 400,
 		"battle_bgm": "res://sounds/bgm23.mp3",
 		"battle_bgm_volume_db": 0.0,
@@ -7146,6 +7162,7 @@
 	},
 	"green_fish_man": {
 		"name": "초록 물고기 남성",
+		"show_in_credits": true,
 		"max_hp": 500,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
@@ -7585,6 +7602,7 @@
 	},
 	"blue_fish_man": {
 		"name": "파란 물고기 남성",
+		"show_in_credits": true,
 		"max_hp": 500,
 		"battle_bgm": "res://sounds/bgm15.mp3",
 		"battle_bgm_volume_db": -5.0,
@@ -8659,6 +8677,7 @@
 	},
 	"hammerhead_mansion_master_phase_02": {
 		"name": "저택의 주인",
+		"show_in_credits": true,
 		"phase": 2,
 		"max_hp": 300,
 		"battle_bgm": "res://sounds/bgm25.mp3",

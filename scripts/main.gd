@@ -151,6 +151,20 @@ var battle_scene = null
 var pause_ui_scene = null
 var is_game_paused = false
 
+# ============================================================
+# 게임 진행 통계
+# ============================================================
+
+# 현재 플레이의 누적 플레이 시간(초)
+var total_play_time_seconds = 0.0
+
+# 현재 플레이에서 처치한 적의 총 수
+var defeated_enemy_count = 0
+
+# 실제 게임 플레이 시간이 시작된 상태인지 여부
+# 데이터 로딩 시간 등은 플레이 시간에 포함하지 않기 위해 사용한다.
+var is_play_time_tracking = false
+
 # Pause UI ESC 입력이 같은 프레임에 다시 열리는 것을 막는 잠금
 var pause_input_locked = false
 
@@ -398,8 +412,21 @@ const CHOICE_VISIBLE_COUNT = 4
 # 게임 시작 관련 함수 모음
 # ============================================================
 
+# 새 게임용 게임 진행 통계 초기화 함수
+func reset_game_statistics():
+	total_play_time_seconds = 0.0
+	defeated_enemy_count = 0
+
+	print("게임 진행 통계 초기화")
+
 # 프레임 마다 실행 함수
 func _process(delta):
+	# 실제 게임 플레이 중일 때만 플레이 시간을 누적한다.
+	# Pause 상태에서는 SceneTree 자체가 paused 상태가 되므로
+	# 이 함수도 멈춰 Pause 시간은 자동으로 제외된다.
+	if is_play_time_tracking:
+		total_play_time_seconds += delta
+		
 	update_room_idle_motion(delta)
 	update_room_ambient_overlay_animation(delta)
 	update_mouse_cursor()
@@ -952,6 +979,13 @@ func run_new_game_prologue():
 	print("프롤로그 실행 종료")
 # 새 게임 시작 함수
 func start_new_game_from_session():
+	# 새 게임이므로 이전 진행 통계를 초기화한다.
+	reset_game_statistics()
+
+	# 실제 게임 플레이 시간 측정을 시작한다.
+	# 프롤로그도 플레이 시간에 포함한다.
+	is_play_time_tracking = true
+
 	# 새 게임일 때는 GameSession의 난이도를 현재 난이도로 사용한다.
 	current_difficulty = GameSession.difficulty
 
@@ -989,6 +1023,10 @@ func start_loaded_game_from_session():
 	if not success:
 		push_error("이어하기 실패. 저장 파일을 불러올 수 없음.")
 		return
+
+	# 세이브 데이터 불러오기가 완료된 시점부터
+	# 다시 실제 플레이 시간을 누적한다.
+	is_play_time_tracking = true
 
 	print("이어하기 완료")
 	
@@ -1160,6 +1198,12 @@ func end_battle(result_data):
 			await handle_battle_game_over_result(result_data)
 
 		return
+	
+	# 실제 전투에서 최종 승리했을 때만 적 처치 수를 1 증가시킨다.
+	# 적 도주, 플레이어 도주, 패배, 보스 페이즈 전환은 포함되지 않는다.
+	if result_type == "win":
+		defeated_enemy_count += 1
+		print("누적 적 처치 수: " + str(defeated_enemy_count))
 
 	# 승리/도주 직후 다음 방에서 바로 다시 랜덤 인카운터가
 	# 발생하지 않도록 안전 이동 횟수를 부여한다.
@@ -1780,10 +1824,10 @@ func apply_relic_and_fetish_effects(stats):
 			"character_figure_relic":
 				stats["attack_max"] = int(stats.get("attack_max", 1)) + 5
 				add_applied_relic_to_stats(stats, item_id)
-			# 손 뼈 모형 : 치명타 확률 50% 증가, 최대 체력 30 하락
+			# 손 뼈 모형 : 치명타 확률 50% 증가, 최대 체력 30 하락 -> 40 하락
 			"hand_bone_fetish":
 				stats["critical_chance"] = float(stats.get("critical_chance", 0.01)) + 0.5
-				stats["max_hp"] = int(stats.get("max_hp", player_max_hp)) - 30
+				stats["max_hp"] = int(stats.get("max_hp", player_max_hp)) - 40
 				add_applied_relic_to_stats(stats, item_id)
 			# 해골 모형 : 치명타 배율 50% 증가, 최대 체력 50 하락
 			"skull_model_fetish":
@@ -11785,6 +11829,10 @@ func get_save_data():
 			"difficulty": current_difficulty,
 			"is_hardcore": current_difficulty == GameSession.DIFFICULTY_HARDCORE
 		},
+		"statistics": {
+			"play_time_seconds": total_play_time_seconds,
+			"defeated_enemy_count": defeated_enemy_count
+		},
 		"room": {
 			"current_room": current_room
 		},
@@ -11870,13 +11918,32 @@ func load_game(slot_index):
 	var save_data = json.data
 
 	var system_data = save_data.get("system", {})
+	var statistics_data = save_data.get("statistics", {})
 	var room_data = save_data.get("room", {})
 	var player_data = save_data.get("player", {})
+	
+	# 이전 버전 세이브 파일에는 statistics 데이터가 없을 수 있으므로
+	# Dictionary가 아니면 빈 데이터로 안전하게 처리한다.
+	if typeof(statistics_data) != TYPE_DICTIONARY:
+		statistics_data = {}
 
 	# 저장된 난이도가 있으면 복구한다.
 	# 예전 세이브 파일처럼 system 데이터가 없으면 일반 난이도로 처리한다.
 	current_difficulty = system_data.get("difficulty", GameSession.DIFFICULTY_NORMAL)
 	GameSession.difficulty = current_difficulty
+
+	# 저장된 게임 진행 통계를 복구한다.
+	# 이전 세이브 파일에는 해당 데이터가 없으므로 기본값 0을 사용한다.
+	total_play_time_seconds = float(
+		statistics_data.get("play_time_seconds", 0.0)
+	)
+
+	defeated_enemy_count = int(
+		statistics_data.get("defeated_enemy_count", 0)
+	)
+
+	print("불러온 플레이 시간(초): " + str(total_play_time_seconds))
+	print("불러온 적 처치 수: " + str(defeated_enemy_count))
 
 	current_room = room_data.get("current_room", "hallway_1")
 

@@ -269,6 +269,29 @@
 	],
 	"swimming_pool_04": [
 		{
+			"enemy": "red_fish_man",
+			"weight": 60,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "blue_fish_man",
+			"weight": 35,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "ghost_02",
+			"weight": 5,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		}
+	],
+	"swimming_pool_05": [
+		{
 			"enemy": "ghost_02",
 			"weight": 100,
 			"required_flag": "",
@@ -276,7 +299,5 @@
 			"first_turn": ""
 		}
 	],
-	"dark_forest_01": [
-		
-	]
+	"dark_forest_01": []
 }

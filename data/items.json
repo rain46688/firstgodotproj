@@ -721,7 +721,7 @@
 	},
 	"hand_bone_fetish": {
 		"name": "손 뼈 모형",
-		"description": "손가락 마디가 제멋대로 움직이는 손 뼈 모형.장착 무기 주변 1칸에 있을 때 치명타 확률이 50% 증가하지만 최대 체력이 30 감소한다.",
+		"description": "손가락 마디가 제멋대로 움직이는 손 뼈 모형.장착 무기 주변 1칸에 있을 때 치명타 확률이 50% 증가하지만 최대 체력이 40 감소한다.",
 		"image": "res://imgs/items/hand_bone_fetish180x180.png",
 		"width": 1,
 		"height": 1,

@@ -16,6 +16,14 @@ var difficulty = DIFFICULTY_NORMAL
 var save_slot_index = 1
 
 # ------------------------------------------------------------
+# 엔딩 결과 전달 데이터
+# ------------------------------------------------------------
+
+# main.gd에서 엔딩 크레딧 씬으로 넘길 임시 결과 데이터
+# 세이브 데이터가 아니라 씬 전환 사이에서만 유지한다.
+var ending_result = {}
+
+# ------------------------------------------------------------
 # 오디오 설정
 # ------------------------------------------------------------
 # 0 ~ 100 기준
@@ -37,6 +45,9 @@ func setup_new_game(selected_difficulty):
 	difficulty = selected_difficulty
 	save_slot_index = 1
 
+	# 이전 플레이의 엔딩 결과 데이터가 남아있지 않도록 초기화
+	clear_ending_result()
+
 	print("새 게임 설정")
 	print("난이도: " + str(difficulty))
 
@@ -45,8 +56,30 @@ func setup_load_game(slot_index = 1):
 	start_mode = START_MODE_LOAD
 	save_slot_index = slot_index
 
+	# 이전 플레이의 엔딩 결과 데이터가 남아있지 않도록 초기화
+	clear_ending_result()
+
 	print("이어하기 설정")
 	print("세이브 슬롯: " + str(save_slot_index))
+
+# 엔딩 결과 데이터 설정
+func setup_ending_result(play_time_seconds, defeated_enemy_count):
+	ending_result = {
+		"play_time_seconds": float(play_time_seconds),
+		"defeated_enemy_count": int(defeated_enemy_count)
+	}
+
+	print("엔딩 결과 설정")
+	print("플레이 시간(초): " + str(play_time_seconds))
+	print("처치한 적 수: " + str(defeated_enemy_count))
+
+# 현재 엔딩 결과 데이터 반환
+func get_ending_result():
+	return ending_result.duplicate(true)
+
+# 엔딩 결과 데이터 초기화
+func clear_ending_result():
+	ending_result.clear()
 
 # 하드코어 모드 여부
 func is_hardcore_mode():
