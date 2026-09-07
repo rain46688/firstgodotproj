@@ -10824,7 +10824,7 @@
 															{
 																"type": "text",
 																"name": "나",
-																"text": "자신이 그곳의 관리자라고 하는 자에게 이야기를 들었습니다."
+																"text": "그곳의 관리자라고 하는 자에게 어떤 이야기를 들었습니다."
 															},
 															{
 																"type": "text",
@@ -14152,15 +14152,15 @@
 					},
 					{
 						"type": "text",
-						"text": "전부 읽을 수 없는 언어로 무언가 적혀있다."
-					},
-					{
-						"type": "text",
 						"text": "특정 문구에 밑줄이 쳐져 있다."
 					},
 					{
 						"type": "text",
 						"text": "\"모든 것을 바라보는 달이여.\""
+					},
+					{
+						"type": "text",
+						"text": "그 이외에는 전부 읽을 수 없는 언어로 무언가 적혀있다."
 					},
 					{
 						"type": "sound",
@@ -27034,7 +27034,6 @@
 					850,
 					30
 				],
-				"move_effect": "enter",
 				"footstep_sound": {
 					"path": "res://sounds/footsteps_water.mp3",
 					"volume_db": 5.0
@@ -27441,7 +27440,7 @@
 					30
 				],
 				"locked": true,
-				"open_flag": "story_first_enter_swimming_pool_room_25_after_touch_monitor_swimming_pool_room_25_done"
+				"open_flag": "opented_swimming_pool_stairs_01"
 			},
 			"down": {
 				"target": "swimming_pool_hallway_25",
@@ -27566,6 +27565,14 @@
 									{
 										"type": "flag",
 										"flag": "opented_swimming_pool_stairs_01"
+									},
+									{
+										"type": "flag",
+										"flag": "on_left_light_swimming_pool_room_26"
+									},
+									{
+										"type": "flag",
+										"flag": "on_right_light_swimming_pool_room_27"
 									}
 								]
 							},
@@ -27630,7 +27637,38 @@
 					650,
 					30
 				],
-				"move_effect": "enter"
+				"random_targets": [
+					{
+						"target": "swimming_pool_hallway_26",
+						"weight": 99,
+						"required_flag": [
+							"on_left_light_swimming_pool_room_26"
+						],
+						"required_flag_missing": [
+							"on_right_light_swimming_pool_room_26"
+						]
+					},
+					{
+						"target": "swimming_pool_hallway_26",
+						"weight": 99,
+						"required_flag": [
+							"on_left_light_swimming_pool_room_26",
+							"on_right_light_swimming_pool_room_26"
+						]
+					},
+					{
+						"target": "swimming_pool_hallway_26",
+						"weight": 99,
+						"required_flag_missing": [
+							"on_left_light_swimming_pool_room_26",
+							"on_right_light_swimming_pool_room_26"
+						]
+					},
+					{
+						"target": "swimming_pool_hallway_27",
+						"weight": 1
+					}
+				]
 			},
 			"down": {
 				"target": "swimming_pool_stairs_01",
@@ -27668,11 +27706,32 @@
 		"random_encounter": {
 			"enemy_table": "swimming_pool_04",
 			"event_table": "swimming_pool",
-			"chance": 40
+			"chance": 10
 		}
 	},
 	"swimming_pool_room_26": {
-		"background": "res://imgs/backgrounds/swimming_pool_room_10.png",
+		"background": "res://imgs/backgrounds/swimming_pool_room_13.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"on_left_light_swimming_pool_room_26",
+					"on_right_light_swimming_pool_room_26"
+				],
+				"path": "res://imgs/backgrounds/swimming_pool_room_10.png"
+			},
+			{
+				"flags": [
+					"on_left_light_swimming_pool_room_26"
+				],
+				"path": "res://imgs/backgrounds/swimming_pool_room_11.png"
+			},
+			{
+				"flags": [
+					"on_right_light_swimming_pool_room_26"
+				],
+				"path": "res://imgs/backgrounds/swimming_pool_room_12.png"
+			}
+		],
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -27843,6 +27902,218 @@
 									{
 										"type": "text",
 										"text": "특별한 건 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"light_01": {
+				"click_rect": [
+					277,
+					146,
+					143,
+					146
+				],
+				"required_flag_missing": [
+					"on_left_light_swimming_pool_room_26"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 전등이다."
+					},
+					{
+						"type": "text",
+						"text": "불을 켤 수 있는 버튼이 존재한다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "누른다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/click_02.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "버튼을 누르자 왼쪽 전등의 불이 켜졌다."
+									},
+									{
+										"type": "flag",
+										"flag": "on_left_light_swimming_pool_room_26"
+									},
+									{
+										"type": "clear_flag",
+										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"light_02": {
+				"click_rect": [
+					1579,
+					175,
+					150,
+					132
+				],
+				"required_flag_missing": [
+					"on_right_light_swimming_pool_room_26"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 전등이다."
+					},
+					{
+						"type": "text",
+						"text": "불을 켤 수 있는 버튼이 존재한다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "누른다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/click_02.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "버튼을 누르자 오른쪽 전등의 불이 켜졌다."
+									},
+									{
+										"type": "flag",
+										"flag": "on_right_light_swimming_pool_room_26"
+									},
+									{
+										"type": "clear_flag",
+										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"light_03": {
+				"click_rect": [
+					277,
+					146,
+					143,
+					146
+				],
+				"required_flag": [
+					"on_left_light_swimming_pool_room_26"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 전등이다."
+					},
+					{
+						"type": "text",
+						"text": "불을 끌 수 있는 버튼이 존재한다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "누른다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/click_02.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "버튼을 누르자 왼쪽 전등의 불이 꺼졌다."
+									},
+									{
+										"type": "clear_flag",
+										"flag": "on_left_light_swimming_pool_room_26"
+									},
+									{
+										"type": "clear_flag",
+										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"light_04": {
+				"click_rect": [
+					1579,
+					175,
+					150,
+					132
+				],
+				"required_flag": [
+					"on_right_light_swimming_pool_room_26"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 전등이다."
+					},
+					{
+						"type": "text",
+						"text": "불을 끌 수 있는 버튼이 존재한다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "누른다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/click_02.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "버튼을 누르자 오른쪽 전등의 불이 꺼졌다."
+									},
+									{
+										"type": "clear_flag",
+										"flag": "on_right_light_swimming_pool_room_26"
+									},
+									{
+										"type": "clear_flag",
+										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
 									}
 								]
 							},
@@ -27889,7 +28160,38 @@
 					650,
 					30
 				],
-				"move_effect": "enter"
+				"random_targets": [
+					{
+						"target": "swimming_pool_hallway_26",
+						"weight": 99,
+						"required_flag": [
+							"on_right_light_swimming_pool_room_27"
+						],
+						"required_flag_missing": [
+							"on_left_light_swimming_pool_room_27"
+						]
+					},
+					{
+						"target": "swimming_pool_hallway_26",
+						"weight": 99,
+						"required_flag": [
+							"on_left_light_swimming_pool_room_27",
+							"on_right_light_swimming_pool_room_27"
+						]
+					},
+					{
+						"target": "swimming_pool_hallway_26",
+						"weight": 99,
+						"required_flag_missing": [
+							"on_left_light_swimming_pool_room_27",
+							"on_right_light_swimming_pool_room_27"
+						]
+					},
+					{
+						"target": "swimming_pool_hallway_28",
+						"weight": 1
+					}
+				]
 			},
 			"down": {
 				"target": "swimming_pool_hallway_26",
@@ -27927,11 +28229,32 @@
 		"random_encounter": {
 			"enemy_table": "swimming_pool_04",
 			"event_table": "swimming_pool",
-			"chance": 40
+			"chance": 10
 		}
 	},
 	"swimming_pool_room_27": {
-		"background": "res://imgs/backgrounds/swimming_pool_room_10.png",
+		"background": "res://imgs/backgrounds/swimming_pool_room_13.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"on_left_light_swimming_pool_room_27",
+					"on_right_light_swimming_pool_room_27"
+				],
+				"path": "res://imgs/backgrounds/swimming_pool_room_10.png"
+			},
+			{
+				"flags": [
+					"on_left_light_swimming_pool_room_27"
+				],
+				"path": "res://imgs/backgrounds/swimming_pool_room_11.png"
+			},
+			{
+				"flags": [
+					"on_right_light_swimming_pool_room_27"
+				],
+				"path": "res://imgs/backgrounds/swimming_pool_room_12.png"
+			}
+		],
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -28025,7 +28348,7 @@
 									},
 									{
 										"type": "text",
-										"text": "특별한 건 없다."
+										"text": "안에는 알 수 없는 고기들로 가득하다."
 									}
 								]
 							},
@@ -28102,6 +28425,218 @@
 									{
 										"type": "text",
 										"text": "특별한 건 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"light_01": {
+				"click_rect": [
+					277,
+					146,
+					143,
+					146
+				],
+				"required_flag_missing": [
+					"on_left_light_swimming_pool_room_27"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 전등이다."
+					},
+					{
+						"type": "text",
+						"text": "불을 켤 수 있는 버튼이 존재한다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "누른다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/click_02.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "버튼을 누르자 왼쪽 전등의 불이 켜졌다."
+									},
+									{
+										"type": "flag",
+										"flag": "on_left_light_swimming_pool_room_27"
+									},
+									{
+										"type": "clear_flag",
+										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"light_02": {
+				"click_rect": [
+					1579,
+					175,
+					150,
+					132
+				],
+				"required_flag_missing": [
+					"on_right_light_swimming_pool_room_27"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 전등이다."
+					},
+					{
+						"type": "text",
+						"text": "불을 켤 수 있는 버튼이 존재한다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "누른다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/click_02.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "버튼을 누르자 오른쪽 전등의 불이 켜졌다."
+									},
+									{
+										"type": "flag",
+										"flag": "on_right_light_swimming_pool_room_27"
+									},
+									{
+										"type": "clear_flag",
+										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"light_03": {
+				"click_rect": [
+					277,
+					146,
+					143,
+					146
+				],
+				"required_flag": [
+					"on_left_light_swimming_pool_room_27"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 전등이다."
+					},
+					{
+						"type": "text",
+						"text": "불을 끌 수 있는 버튼이 존재한다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "누른다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/click_02.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "버튼을 누르자 왼쪽 전등의 불이 꺼졌다."
+									},
+									{
+										"type": "clear_flag",
+										"flag": "on_left_light_swimming_pool_room_27"
+									},
+									{
+										"type": "clear_flag",
+										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"light_04": {
+				"click_rect": [
+					1579,
+					175,
+					150,
+					132
+				],
+				"required_flag": [
+					"on_right_light_swimming_pool_room_27"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 전등이다."
+					},
+					{
+						"type": "text",
+						"text": "불을 끌 수 있는 버튼이 존재한다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "누른다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/click_02.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "버튼을 누르자 오른쪽 전등의 불이 꺼졌다."
+									},
+									{
+										"type": "clear_flag",
+										"flag": "on_right_light_swimming_pool_room_27"
+									},
+									{
+										"type": "clear_flag",
+										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
 									}
 								]
 							},
@@ -28148,7 +28683,68 @@
 					650,
 					30
 				],
-				"move_effect": "enter"
+				"random_targets": [
+					{
+						"target": "swimming_pool_hallway_26",
+						"weight": 50,
+						"required_flag": [
+							"on_right_light_swimming_pool_room_28"
+						],
+						"required_flag_missing": [
+							"on_left_light_swimming_pool_room_28"
+						]
+					},
+					{
+						"target": "swimming_pool_hallway_26",
+						"weight": 50,
+						"required_flag": [
+							"on_left_light_swimming_pool_room_28"
+						],
+						"required_flag_missing": [
+							"on_right_light_swimming_pool_room_28"
+						]
+					},
+					{
+						"target": "swimming_pool_hallway_26",
+						"weight": 50,
+						"required_flag_missing": [
+							"on_left_light_swimming_pool_room_28",
+							"on_right_light_swimming_pool_room_28"
+						]
+					},
+					{
+						"target": "swimming_pool_hallway_27",
+						"weight": 50,
+						"required_flag": [
+							"on_right_light_swimming_pool_room_28"
+						],
+						"required_flag_missing": [
+							"on_left_light_swimming_pool_room_28"
+						]
+					},
+					{
+						"target": "swimming_pool_hallway_27",
+						"weight": 50,
+						"required_flag": [
+							"on_left_light_swimming_pool_room_28"
+						],
+						"required_flag_missing": [
+							"on_right_light_swimming_pool_room_28"
+						]
+					},
+					{
+						"target": "swimming_pool_hallway_27",
+						"weight": 50,
+						"required_flag_missing": [
+							"on_left_light_swimming_pool_room_28",
+							"on_right_light_swimming_pool_room_28"
+						]
+					},
+					{
+						"target": "swimming_pool_huge_hall_01",
+						"weight": 1
+					}
+				]
 			},
 			"down": {
 				"target": "swimming_pool_hallway_27",
@@ -28186,11 +28782,32 @@
 		"random_encounter": {
 			"enemy_table": "swimming_pool_04",
 			"event_table": "swimming_pool",
-			"chance": 30
+			"chance": 10
 		}
 	},
 	"swimming_pool_room_28": {
-		"background": "res://imgs/backgrounds/swimming_pool_room_10.png",
+		"background": "res://imgs/backgrounds/swimming_pool_room_13.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"on_left_light_swimming_pool_room_28",
+					"on_right_light_swimming_pool_room_28"
+				],
+				"path": "res://imgs/backgrounds/swimming_pool_room_10.png"
+			},
+			{
+				"flags": [
+					"on_left_light_swimming_pool_room_28"
+				],
+				"path": "res://imgs/backgrounds/swimming_pool_room_11.png"
+			},
+			{
+				"flags": [
+					"on_right_light_swimming_pool_room_28"
+				],
+				"path": "res://imgs/backgrounds/swimming_pool_room_12.png"
+			}
+		],
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -28215,7 +28832,15 @@
 			"volume_db": 0.0,
 			"loop": true
 		},
-		"enter_stories": [],
+		"enter_stories": [
+			{
+				"event": "solve_light_puzzle_swimming_pool_hallway",
+				"required_flag": [
+					"on_left_light_swimming_pool_room_28",
+					"on_right_light_swimming_pool_room_28"
+				]
+			}
+		],
 		"exits": {
 			"down": {
 				"target": "swimming_pool_hallway_28",
@@ -28240,7 +28865,7 @@
 					},
 					{
 						"type": "text",
-						"text": "지독한 냄새에 인상이 저절로 찌푸려진다."
+						"text": "마치 무언가를 도축한 뒤 같다."
 					}
 				]
 			},
@@ -28255,6 +28880,10 @@
 					{
 						"type": "text",
 						"text": "선반에는 알 수 없는 용액들이 담겨있는 병이 나열되어 있다."
+					},
+					{
+						"type": "text",
+						"text": "몇몇 용액 안에는 알 수 없는 고기들이 담겨있다."
 					}
 				]
 			},
@@ -28284,7 +28913,7 @@
 									},
 									{
 										"type": "text",
-										"text": "특별한 건 없다."
+										"text": "안에는 알 수 없는 고기들로 가득하다."
 									}
 								]
 							},
@@ -28361,6 +28990,256 @@
 									{
 										"type": "text",
 										"text": "특별한 건 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"book": {
+				"click_rect": [
+					176,
+					511,
+					139,
+					67
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "책이 펼쳐져 있다."
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/paper.mp3",
+						"volume_db": 10,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "특정 문구에 밑줄이 쳐져 있다."
+					},
+					{
+						"type": "text",
+						"text": "\"별빛으로 치장한 불멸의 지배자여.\""
+					},
+					{
+						"type": "text",
+						"text": "그 이외에는 전부 읽을 수 없는 언어로 무언가 적혀있다."
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/paper.mp3",
+						"volume_db": 10,
+						"wait": false
+					}
+				]
+			},
+			"light_01": {
+				"click_rect": [
+					277,
+					146,
+					143,
+					146
+				],
+				"required_flag_missing": [
+					"on_left_light_swimming_pool_room_28"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 전등이다."
+					},
+					{
+						"type": "text",
+						"text": "불을 켤 수 있는 버튼이 존재한다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "누른다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/click_02.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "버튼을 누르자 왼쪽 전등의 불이 켜졌다."
+									},
+									{
+										"type": "flag",
+										"flag": "on_left_light_swimming_pool_room_28"
+									},
+									{
+										"type": "clear_flag",
+										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"light_02": {
+				"click_rect": [
+					1579,
+					175,
+					150,
+					132
+				],
+				"required_flag_missing": [
+					"on_right_light_swimming_pool_room_28"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 전등이다."
+					},
+					{
+						"type": "text",
+						"text": "불을 켤 수 있는 버튼이 존재한다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "누른다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/click_02.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "버튼을 누르자 오른쪽 전등의 불이 켜졌다."
+									},
+									{
+										"type": "flag",
+										"flag": "on_right_light_swimming_pool_room_28"
+									},
+									{
+										"type": "clear_flag",
+										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"light_03": {
+				"click_rect": [
+					277,
+					146,
+					143,
+					146
+				],
+				"required_flag": [
+					"on_left_light_swimming_pool_room_28"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 전등이다."
+					},
+					{
+						"type": "text",
+						"text": "불을 끌 수 있는 버튼이 존재한다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "누른다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/click_02.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "버튼을 누르자 왼쪽 전등의 불이 꺼졌다."
+									},
+									{
+										"type": "clear_flag",
+										"flag": "on_left_light_swimming_pool_room_28"
+									},
+									{
+										"type": "clear_flag",
+										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
+			"light_04": {
+				"click_rect": [
+					1579,
+					175,
+					150,
+					132
+				],
+				"required_flag": [
+					"on_right_light_swimming_pool_room_28"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 전등이다."
+					},
+					{
+						"type": "text",
+						"text": "불을 끌 수 있는 버튼이 존재한다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "누른다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/click_02.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "버튼을 누르자 오른쪽 전등의 불이 꺼졌다."
+									},
+									{
+										"type": "clear_flag",
+										"flag": "on_right_light_swimming_pool_room_28"
+									},
+									{
+										"type": "clear_flag",
+										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
 									}
 								]
 							},

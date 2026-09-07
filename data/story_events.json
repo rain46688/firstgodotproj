@@ -14256,5 +14256,37 @@
 				"flag": "story_first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_03_done"
 			}
 		]
+	},
+	"solve_light_puzzle_swimming_pool_hallway": {
+		"start_flag": "",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/sliding_rock.mp3",
+				"volume_db": 10,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "밖에서 무언가 움직이는 소리가 났다."
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "show_game_ui"
+			}
+		]
 	}
 }
