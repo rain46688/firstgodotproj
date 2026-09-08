@@ -27705,8 +27705,8 @@
 		},
 		"random_encounter": {
 			"enemy_table": "swimming_pool_04",
-			"event_table": "swimming_pool",
-			"chance": 10
+			"event_table": "swimming_pool_02",
+			"chance": 5
 		}
 	},
 	"swimming_pool_room_26": {
@@ -28124,6 +28124,46 @@
 						]
 					}
 				]
+			},
+			"memo": {
+				"click_rect": [
+					1350,
+					650,
+					50,
+					50
+				],
+				"required_flag": [
+					"on_right_light_swimming_pool_room_26"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "침대 밑에 쪽지가 떨어져있다."
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/documents/swimming_pool_document_02.png",
+						"start_page": 1,
+						"sound": "res://sounds/paper.mp3",
+						"sound_volume_db": 10,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "..."
+							},
+							{
+								"type": "text",
+								"text": "알 수 없는 숫자가 적혀있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/paper.mp3",
+						"volume_db": 10,
+						"wait": false
+					}
+				]
 			}
 		}
 	},
@@ -28228,8 +28268,8 @@
 		},
 		"random_encounter": {
 			"enemy_table": "swimming_pool_04",
-			"event_table": "swimming_pool",
-			"chance": 10
+			"event_table": "swimming_pool_02",
+			"chance": 5
 		}
 	},
 	"swimming_pool_room_27": {
@@ -28781,8 +28821,8 @@
 		},
 		"random_encounter": {
 			"enemy_table": "swimming_pool_04",
-			"event_table": "swimming_pool",
-			"chance": 10
+			"event_table": "swimming_pool_02",
+			"chance": 5
 		}
 	},
 	"swimming_pool_room_28": {

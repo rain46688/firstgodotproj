@@ -8095,7 +8095,7 @@
 		"can_escape": false,
 		"encounter_text": "가면을 쓴 남성이 다가왔다.",
 		"observe_text": "물고기...?",
-		"weakness_text": "",
+		"weakness_text": "머리가 약점인 것 같다.",
 		"patterns": [
 			{
 				"id": "basic_attack_01",
@@ -8199,28 +8199,6 @@
 						],
 						"rotation": 180,
 						"damage": 10,
-						"delay": 4.2,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "impact_basic",
-						"start": [
-							880,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
-						"delay": 4.2,
-						"danger_type": "parry_only"
-					},
-					{
-						"projectile": "impact_basic",
-						"start": [
-							800,
-							0
-						],
-						"rotation": 180,
-						"damage": 10,
 						"delay": 4.3,
 						"danger_type": "parry_only"
 					},
@@ -8255,6 +8233,28 @@
 						"rotation": 180,
 						"damage": 10,
 						"delay": 4.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 4.5,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "impact_basic",
+						"start": [
+							880,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 4.5,
 						"danger_type": "parry_only"
 					}
 				]
@@ -8290,7 +8290,8 @@
 					49,
 					133,
 					173
-				]
+				],
+				"damage_multiplier": 1.5
 			},
 			{
 				"id": "body",
@@ -8821,56 +8822,12 @@
 							{
 								"projectile": "impact_basic",
 								"start": [
-									600,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 1.0,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "impact_basic",
-								"start": [
-									680,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 1.0,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "impact_basic",
-								"start": [
-									600,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 1.4,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "impact_basic",
-								"start": [
-									680,
-									0
-								],
-								"rotation": 180,
-								"damage": 10,
-								"delay": 1.4,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "impact_basic",
-								"start": [
 									1200,
 									0
 								],
 								"rotation": 180,
 								"damage": 10,
-								"delay": 3.0,
+								"delay": 1.0,
 								"danger_type": "parry_only"
 							},
 							{
@@ -8881,13 +8838,57 @@
 								],
 								"rotation": 180,
 								"damage": 10,
-								"delay": 3.0,
+								"delay": 1.0,
 								"danger_type": "parry_only"
 							},
 							{
 								"projectile": "impact_basic",
 								"start": [
 									1200,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 1.4,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									1280,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 1.4,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									600,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 3.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									680,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 3.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "impact_basic",
+								"start": [
+									600,
 									0
 								],
 								"rotation": 180,
@@ -8898,7 +8899,7 @@
 							{
 								"projectile": "impact_basic",
 								"start": [
-									1280,
+									680,
 									0
 								],
 								"rotation": 180,

@@ -364,6 +364,7 @@ const BATTLE_SCENE_PATH = "res://scenes/battle_scene.tscn"
 const GAME_OVER_SCENE_PATH = "res://scenes/game_over_scene.tscn"
 const PAUSE_UI_SCENE_PATH = "res://scenes/pause_ui_scene.tscn"
 const MAIN_MENU_SCENE_PATH = "res://scenes/main_menu_scene.tscn"
+const ENDING_CREDITS_SCENE_PATH = "res://scenes/ending_credits_scene.tscn"
 const STAT_GOOD_COLOR = "#55ff77"
 const STAT_BAD_COLOR = "#ff5555"
 const STAT_INFO_COLOR = "#88ccff"
@@ -2915,8 +2916,6 @@ func get_room_bgm_data(room):
 	result["loop"] = bool(bgm_data.get("loop", true))
 
 	return result
-
-
 # 현재 방 데이터에 맞게 탐색 BGM 갱신
 func update_room_bgm(room):
 	if room.is_empty():
@@ -3419,7 +3418,6 @@ func set_random_encounter_cooldown(steps):
 		random_encounter_cooldown_steps,
 		safe_steps
 	)
-
 # 방 이동 후 랜덤 인카운터를 처리하는 함수
 # 랜덤 인카운터가 시작되면 true 반환
 func handle_random_encounter_after_move():
@@ -4338,6 +4336,7 @@ func show_npc_dialogue(character_id, emotion, text):
 		speaker_portrait.texture = null
 
 	await show_dialogue(text, "npc")
+
 # ============================================================
 # 조건부 이벤트 분기 함수 모음
 # ============================================================
@@ -5265,6 +5264,9 @@ func run_single_story_event(event):
 	elif event_type == "game_over":
 		await run_story_game_over_event(event)
 
+	elif event_type == "ending_credits":
+		run_story_ending_credits_event(event)
+
 	elif event_type == "auto_save":
 		await run_story_auto_save_event(event)
 		
@@ -5576,6 +5578,116 @@ func run_story_game_over_event(_event):
 		GameSession.delete_save_file(1)
 
 	get_tree().change_scene_to_file(GAME_OVER_SCENE_PATH)
+
+# ============================================================
+# 엔딩 관련 함수 모음
+# ============================================================
+
+# 엔딩 크레딧에 표시할 적별 처치 결과 생성 함수
+func make_ending_enemy_results():
+	var merged_results = {}
+	var result_order = []
+
+	for enemy_id in enemies.keys():
+		var enemy_data = enemies.get(enemy_id, {})
+
+		if typeof(enemy_data) != TYPE_DICTIONARY:
+			continue
+
+		# enemies.json에서 명시적으로 크레딧 표시 대상으로
+		# 지정한 적만 결과에 포함한다.
+		if not bool(enemy_data.get("show_in_credits", false)):
+			continue
+
+		# 기본적으로 enemies.json의 name을 사용한다.
+		# 추후 같은 이름의 적을 크레딧에서 따로 표시하고 싶을 경우
+		# credits_name을 별도로 지정할 수도 있다.
+		var display_name = str(
+			enemy_data.get(
+				"credits_name",
+				enemy_data.get("name", enemy_id)
+			)
+		)
+
+		var defeat_flags = enemy_data.get("defeat_flags", [])
+		var defeated = false
+
+		# 판정 기준은 오직 defeat_flags이다.
+		if typeof(defeat_flags) == TYPE_ARRAY:
+			for flag_id in defeat_flags:
+				if has_flag(str(flag_id)):
+					defeated = true
+					break
+
+		# 같은 이름의 난이도 변형 적이 있을 경우
+		# 크레딧에서는 하나의 항목으로 합친다.
+		if not merged_results.has(display_name):
+			merged_results[display_name] = {
+				"name": display_name,
+				"defeated": defeated
+			}
+
+			result_order.append(display_name)
+
+		# 같은 이름의 다른 변형을 처치했다면
+		# 기존 항목 역시 처치 완료로 변경한다.
+		elif defeated:
+			var existing_result = merged_results[display_name]
+			existing_result["defeated"] = true
+			merged_results[display_name] = existing_result
+
+	var enemy_results = []
+
+	# enemies.json에 등장하는 순서를 최대한 유지한다.
+	for display_name in result_order:
+		enemy_results.append(
+			merged_results[display_name].duplicate(true)
+		)
+
+	return enemy_results
+# 스토리 이벤트에서 엔딩 크레딧으로 이동하는 함수
+func run_story_ending_credits_event(_event):
+	# ending_credits 뒤에 있는 다른 스토리 이벤트가
+	# 계속 실행되지 않도록 현재 이벤트 흐름을 중단한다.
+	story_event_should_stop = true
+
+	# 크레딧 진입 시점부터 플레이 시간 측정을 종료한다.
+	is_play_time_tracking = false
+
+	# enemies.json과 현재 보유 플래그를 비교해서
+	# 크레딧에 사용할 적별 처치 결과를 만든다.
+	var enemy_results = make_ending_enemy_results()
+
+	# main.gd는 씬 전환과 함께 사라지므로,
+	# 최종 결과를 AutoLoad인 GameSession에 임시 보관한다.
+	GameSession.setup_ending_result(
+		total_play_time_seconds,
+		defeated_enemy_count,
+		enemy_results
+	)
+
+	print("엔딩 크레딧 진입")
+	print("최종 플레이 시간(초): " + str(total_play_time_seconds))
+	print("최종 적 처치 수: " + str(defeated_enemy_count))
+
+	# 방 이동/상호작용/스토리 상태 정리
+	is_moving = false
+	is_interacting = false
+	is_story_playing = false
+
+	# 방 연출/사운드 정리
+	stop_room_idle_motion(true)
+	clear_room_ambient_overlay()
+	stop_room_ambient_sound()
+
+	# 기존 게임 BGM 정지
+	if bgm_player != null and bgm_player.playing:
+		bgm_player.stop()
+
+	# 엔딩 크레딧 씬으로 이동
+	get_tree().change_scene_to_file(
+		ENDING_CREDITS_SCENE_PATH
+	)
 
 # ============================================================
 # 일시정지 UI 관련 함수 모음

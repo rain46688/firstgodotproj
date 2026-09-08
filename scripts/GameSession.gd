@@ -63,15 +63,21 @@ func setup_load_game(slot_index = 1):
 	print("세이브 슬롯: " + str(save_slot_index))
 
 # 엔딩 결과 데이터 설정
-func setup_ending_result(play_time_seconds, defeated_enemy_count):
+func setup_ending_result(
+	play_time_seconds,
+	defeated_enemy_count,
+	enemy_results = []
+):
 	ending_result = {
 		"play_time_seconds": float(play_time_seconds),
-		"defeated_enemy_count": int(defeated_enemy_count)
+		"defeated_enemy_count": int(defeated_enemy_count),
+		"enemy_results": enemy_results.duplicate(true)
 	}
 
 	print("엔딩 결과 설정")
 	print("플레이 시간(초): " + str(play_time_seconds))
 	print("처치한 적 수: " + str(defeated_enemy_count))
+	print("크레딧 적 기록 수: " + str(enemy_results.size()))
 
 # 현재 엔딩 결과 데이터 반환
 func get_ending_result():
