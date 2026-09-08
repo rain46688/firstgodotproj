@@ -36,7 +36,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "???",
-				"text": "어둠 속에서, 누군가의 목소리가 멀고 흐리게 들려왔다."
+				"text": "어둠 속에서, 누군가의 목소리가 희미하게 들려왔다."
 			},
 			{
 				"type": "story_dialogue",
@@ -744,11 +744,15 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "문고리는 녹이 슬어 있었지만 손잡이만은 누군가 닦아 놓은 것처럼 매끈했다."
+				"text": "사람이라고는 찾아볼 수 없었지만 문고리와 손잡이는 누군가 닦아 놓은 것처럼 매끈했다."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "나는 이곳이 현실이라고 확신할 수 없었다. 현실이라기엔 너무 낯설고, 꿈이라기엔 너무 선명했다."
+				"text": "나는 이곳이 현실이라고 확신할 수 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "처음에는 꿈이라고 생각했다. 하지만 차가운 공기와 모든 감촉이 너무 또렷해서, 꿈이라고 우기기도 어려웠다."
 			},
 			{
 				"type": "story_dialogue",
@@ -776,15 +780,11 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "처음에는 꿈이라고 생각했다. 하지만 차가운 공기와 발밑의 감촉이 너무 또렷해서, 꿈이라고 우기기도 어려웠다."
-			},
-			{
-				"type": "story_dialogue",
 				"text": "교실 안은 이상할 만큼 조용했다. 내 숨소리와 신발 밑창이 바닥을 스치는 소리만 크게 들렸다."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "책상과 의자는 누가 줄을 맞춰 놓은 것처럼 가지런했다. 창문으로 스미는 푸른빛은 낮도 밤도 아닌 색이었다."
+				"text": "책상과 의자는 누가 줄을 맞춰 놓은 것처럼 가지런했다. 창문으로 스미는 푸른빛만 교실 책상을 비추고 있었다."
 			},
 			{
 				"type": "stop_bgm"
@@ -807,7 +807,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "짧은 기합과 함께 누군가가 튀어나와 내 쪽으로 칼날을 휘둘렀다. 나는 생각할 틈도 없이 뒤로 물러났다."
+				"text": "짧은 기합과 함께 누군가가 튀어나와 내 쪽으로 무언가를 휘둘렀다. 나는 생각할 틈도 없이 뒤로 물러났다."
 			},
 			{
 				"type": "story_dialogue",
@@ -884,12 +884,12 @@
 			{
 				"type": "story_dialogue",
 				"name": "의문의 여성",
-				"text": "당신 뭐야?"
+				"text": "당신 뭐야? 말을 할 줄 알아?"
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "잠깐, 잠시만요, 저도 여기로 끌려온 사람이에요."
+				"text": "잠깐, 잠시만요, 전 여기로 끌려온 사람이에요."
 			},
 			{
 				"type": "story_dialogue",
@@ -967,7 +967,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "우연히 이 열쇠를 발견했어요."
+				"text": "우연히 열쇠를 발견했어요."
 			},
 			{
 				"type": "standing",
@@ -983,7 +983,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "그렇게 말하면 좀 이상한데... 아무튼 저도 이상한 공간으로 끌려왔고, 좀 전까지 집에 있었는데 정신 차려 보니까 이곳에 있었어요!"
+				"text": "그렇게 말하면 좀 이상한데... 아무튼 저도 이 이상한 공간으로 끌려왔고, 좀 전까지 집에 있었는데 정신 차려 보니까 이곳에 있었어요!"
 			},
 			{
 				"type": "standing",
@@ -1038,7 +1038,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "의문의 여성",
-				"text": "괴... 괴물?"
+				"text": "괴, 괴물..."
 			},
 			{
 				"type": "story_dialogue",
@@ -1315,7 +1315,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "거긴 안 돼. 복도 끝은 막혀 있어."
+				"text": "거긴 안 돼. 거기 복도 끝은 막혀 있어."
 			},
 			{
 				"type": "story_dialogue",
@@ -1888,7 +1888,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "의문의 여성",
-				"text": "괜찮아?"
+				"text": "괜찮아요?"
 			},
 			{
 				"type": "story_dialogue",
@@ -2241,7 +2241,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "출구... 맞겠지?"
+				"text": "출구... 맞겠죠?"
 			},
 			{
 				"type": "screen_color",
@@ -2922,7 +2922,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "사람...? 여자...? 이 공간에 나 말고 다른 생존자가 있는 건가?"
+				"text": "사람...? 여자...? 이 공간에 나 말고 다른 누군가가 있는 건가?"
 			},
 			{
 				"type": "story_dialogue",
@@ -2988,7 +2988,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "괴물...?"
+				"text": "...!?"
 			},
 			{
 				"type": "story_dialogue",
@@ -3027,7 +3027,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "하지만 나는 아무것도 하지 못했다. 몸이 굳어서 말을 듣지 않았다."
+				"text": "하지만 나는 아무것도 하지 못했다."
 			},
 			{
 				"type": "story_dialogue",
@@ -4017,7 +4017,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "나는 그 이후로 한동안 이 교실을 떠나지 못했다. 문밖으로 한 걸음 나가는 일조차, 생각보다 큰 용기가 필요했다."
+				"text": "나는 그 이후로 한동안 이곳을 떠나지 못했다. 한 걸음 나가는 일조차, 생각보다 큰 용기가 필요했다."
 			},
 			{
 				"type": "story_dialogue",
@@ -6317,6 +6317,12 @@
 				"type": "stop_bgm"
 			},
 			{
+				"type": "bgm",
+				"path": "res://sounds/bgm17.mp3",
+				"volume_db": -15,
+				"loop": false
+			},
+			{
 				"type": "background",
 				"path": "res://imgs/backgrounds/broadcasting_room_02.png"
 			},
@@ -6424,6 +6430,9 @@
 				"text": "닫혀 있는 문 너머로, 복도의 어둠이 스며들어 오는 것만 같았다."
 			},
 			{
+				"type": "stop_bgm"
+			},
+			{
 				"type": "story_dialogue",
 				"text": "그때였다."
 			},
@@ -6497,6 +6506,12 @@
 			{
 				"type": "story_dialogue",
 				"text": "쿠우우우웅!"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm15.mp3",
+				"volume_db": -5,
+				"loop": true
 			},
 			{
 				"type": "story_dialogue",
@@ -6629,6 +6644,12 @@
 			},
 			{
 				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm2.mp3",
+				"volume_db": -5,
+				"loop": true
 			},
 			{
 				"type": "background",
@@ -6771,6 +6792,9 @@
 				"alpha": 0.8,
 				"duration": 1.0,
 				"wait": true
+			},
+			{
+				"type": "stop_bgm"
 			},
 			{
 				"type": "bgm",
@@ -7649,14 +7673,14 @@
 				"type": "stop_bgm"
 			},
 			{
-				"type": "background",
-				"path": "res://imgs/backgrounds/broadcasting_room_01.png"
-			},
-			{
 				"type": "bgm",
 				"path": "res://sounds/bgm15.mp3",
 				"volume_db": -5,
 				"loop": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/broadcasting_room_01.png"
 			},
 			{
 				"type": "screen_color_clear",
@@ -7756,11 +7780,11 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "문은 여전히 살짝 열려 있었다. 안쪽의 빛은 마치 우리를 기다리고 있는 것처럼 흔들리지 않았다."
+				"text": "문은 여전히 살짝 열려 있었다. 안쪽의 빛은 마치 우리를 기다리고 있는 것처럼 흔들리고 있었다."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "안쪽에서는 희미하고 따뜻한 빛이 새어 나왔다. 이 학교의 빛과는 전혀 다른 색이었다."
+				"text": "안쪽에서는 희미하고 밝은 빛이 새어 나왔다. 이 공간과는 묘하게 분위기가 달랐다."
 			},
 			{
 				"type": "standing",
@@ -7862,7 +7886,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "거대한 존재가 앉아 있었다. 깃털은 눈처럼 희었지만, 눈빛은 이곳의 어둠보다 깊었다."
+				"text": "거대한 존재가 있었다. 깃털은 눈처럼 희었지만, 눈빛은 이곳의 어둠보다 깊었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -7887,7 +7911,12 @@
 			{
 				"type": "story_dialogue",
 				"name": "???",
-				"text": "무례하군. 처음 만난 상대에게 괴물이라니."
+				"text": "무례하군."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "???",
+				"text": "처음 만난 상대에게 괴물이라니."
 			},
 			{
 				"type": "portrait",
@@ -7947,6 +7976,12 @@
 				"type": "story_dialogue",
 				"name": "알버스",
 				"text": "그래. 내가 여기 있으니까."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/albus_wind.mp3",
+				"volume_db": 0,
+				"wait": false
 			},
 			{
 				"type": "story_dialogue",
