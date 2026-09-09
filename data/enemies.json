@@ -1995,7 +1995,7 @@
 		"can_escape": false,
 		"encounter_text": "합쳐진 생명체 덩어리가 둔탁한 발소리를 내며 몸을 다가온다.",
 		"observe_text": "사람의 형체가 뭉쳐져서 만들어진것 같다.",
-		"weakness_text": "중앙의 얼굴이 약점인 것 같다.",
+		"weakness_text": "몸체는 단단하지만 중앙의 얼굴이 약점인 것 같다.",
 		"next_phase_enemy_id": "combined_candle_students_phase_02",
 		"phase_transition_text": "합쳐진 중앙 부분이 녹아내리듯 뒤틀리기 시작한다.",
 		"patterns": [
@@ -2021,7 +2021,7 @@
 					100,
 					230
 				],
-				"damage_multiplier": 3.0
+				"damage_multiplier": 2.0
 			},
 			{
 				"id": "left_body",
@@ -2032,7 +2032,7 @@
 					160,
 					420
 				],
-				"damage_multiplier": 0.5
+				"damage_multiplier": 0.4
 			},
 			{
 				"id": "right_body",
@@ -2043,7 +2043,7 @@
 					160,
 					420
 				],
-				"damage_multiplier": 0.5
+				"damage_multiplier": 0.4
 			}
 		],
 		"parts": [
@@ -2256,7 +2256,7 @@
 		"can_escape": false,
 		"encounter_text": "뜯겨나간 팔 너머로, 두 개의 몸이 하나처럼 뒤틀리기 시작한다.",
 		"observe_text": "꺼져있던 양초에 불이 붙고 중앙의 얼굴에서는 소름끼치는 살기가 뿜어져나오고있다.",
-		"weakness_text": "중앙의 얼굴이 약점인 것 같다.",
+		"weakness_text": "몸체는 단단하지만 중앙의 얼굴이 약점인 것 같다.",
 		"phase_start_pattern_id": "phase2_start",
 		"patterns": [
 			{
@@ -2615,7 +2615,7 @@
 					100,
 					230
 				],
-				"damage_multiplier": 3.0
+				"damage_multiplier": 2.5
 			},
 			{
 				"id": "left_body",
@@ -2626,7 +2626,7 @@
 					160,
 					420
 				],
-				"damage_multiplier": 0.5
+				"damage_multiplier": 0.3
 			},
 			{
 				"id": "right_body",
@@ -2637,7 +2637,7 @@
 					160,
 					420
 				],
-				"damage_multiplier": 0.5
+				"damage_multiplier": 0.3
 			}
 		],
 		"drops": [

@@ -7323,7 +7323,18 @@ func setup_player_attack_projectile_visual():
 
 	slash_effect.size = projectile_size
 	slash_effect.pivot_offset = slash_effect.size / 2
-	slash_effect.position = weapon_sprite.position
+
+	# 무기의 중앙에서 투사체가 발사되도록 위치 계산
+	var weapon_center = (
+		weapon_sprite.position
+		+ weapon_sprite.pivot_offset
+	)
+
+	slash_effect.position = (
+		weapon_center
+		- slash_effect.pivot_offset
+	)
+
 	slash_effect.rotation_degrees = weapon_angle_offset
 	slash_effect.visible = true
 # 플레이어 공격 투사체 종료 정리 함수

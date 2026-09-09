@@ -1,5 +1,8 @@
 extends Control
 
+# 인벤토리 정리 화면이 완전히 닫혔을 때 발생
+signal inventory_arrange_closed(closing_mode)
+
 # onready 변수 모음
 @onready var background = $Background
 @onready var footstep_sound = $FootstepSound
@@ -1233,16 +1236,48 @@ func end_battle(result_data):
 	is_story_playing = false
 	await show_game_ui()
 
-	# 보상 아이템 지급 및 인벤토리 정리 화면 처리
+	# ============================================================
+	# 전투 보상 처리
+	# ============================================================
+
+	# 먼저 보상 아이템을 실제 가방에 넣는다.
+	#
+	# 가방에 들어가는 아이템은 즉시 inventory에 추가되고,
+	# 공간 부족으로 들어가지 못한 아이템은 pending_loot에 저장된다.
+	#
+	# 여기서는 아직 인벤토리 정리 화면을 열지 않는다.
 	await give_items_with_pending_loot(battle_rewards)
-	await open_inventory_arrange_if_pending_loot("loot")
-	
+
 	# 일반 전투 종료 후 컨텍스트 초기화
 	clear_current_battle_context()
-	
-	# 전투 승리 후 reward_flags 등으로 조건이 열린 스토리가 있으면 현재 room에서 자동 실행
+
+	# ============================================================
+	# 전투 후 스토리 처리
+	# ============================================================
+
+	# 전투 승리 후 reward_flags 등으로 조건이 열린
+	# 현재 방의 후속 스토리를 먼저 전부 실행한다.
 	if result_type == "win":
 		await check_room_enter_story()
+
+	# 후속 스토리 도중 또 다른 전투가 시작된 경우에는
+	# 인벤토리 정리 화면을 전투 위에 띄우면 안 된다.
+	#
+	# pending_loot는 그대로 남아 있으므로
+	# 새 전투까지 끝난 뒤 다시 처리할 수 있다.
+	if battle_scene != null:
+		return
+
+	# ============================================================
+	# 전투 후 전리품 정리
+	# ============================================================
+
+	# 모든 후속 스토리가 끝난 뒤에야
+	# 공간 부족으로 받지 못했던 전리품 정리 화면을 연다.
+	#
+	# 함수 내부에서 inventory_arrange_closed를 기다리므로
+	# 플레이어가 정리 화면을 닫을 때까지 여기서 대기한다.
+	await open_inventory_arrange_if_pending_loot(ARRANGE_MODE_LOOT)
 # 전투 게임오버 결과 처리 함수
 @warning_ignore("unused_parameter")
 func handle_battle_game_over_result(result_data):
@@ -10041,6 +10076,9 @@ func close_inventory_arrange():
 	
 	clear_arrange_slot_highlights()
 	print("인벤토리 정리 화면 종료")
+	
+	# 정리 화면이 실제로 닫혔음을 대기 중인 함수들에게 알린다.
+	inventory_arrange_closed.emit(closing_mode)
 # 인벤토리 정리 화면 스택 아이템 병합 시도 함수
 func try_merge_arrange_stack_item(source_item, from_source, to_source, target_slot):
 	if source_item == null:
@@ -11462,15 +11500,24 @@ func give_items_with_pending_loot(rewards):
 		results.append(result)
 
 	return results
-# pending_loot가 있으면 인벤토리 정리 화면을 여는 함수
+# pending_loot가 있으면 인벤토리 정리 화면을 열고,
+# 플레이어가 정리 화면을 완전히 닫을 때까지 기다리는 함수
 func open_inventory_arrange_if_pending_loot(mode = "loot"):
 	if pending_loot.size() <= 0:
-		return
+		return false
 
 	var loot_to_arrange = pending_loot.duplicate(true)
 	pending_loot.clear()
 
-	await open_inventory_arrange(mode, loot_to_arrange)
+	# 정리 화면 표시
+	open_inventory_arrange(mode, loot_to_arrange)
+
+	# 중요:
+	# open_inventory_arrange()는 UI만 열고 즉시 끝나므로
+	# 실제 정리 화면이 닫힐 때까지 signal을 기다린다.
+	await inventory_arrange_closed
+
+	return true
 # 아이템 이름 가져오기 함수
 func get_item_name(item_id):
 	var item_data = get_item_data_by_id(item_id)
