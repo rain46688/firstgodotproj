@@ -17,7 +17,6 @@ dest_files=["res://.godot/imported/cutter_knife360x180.png-82e58c9a6d800c03f9d6b
 
 compress/mode=0
 compress/high_quality=false
-compress/high_quality_mode=0
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
