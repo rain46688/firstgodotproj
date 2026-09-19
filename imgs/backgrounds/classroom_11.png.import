@@ -17,6 +17,7 @@ dest_files=["res://.godot/imported/classroom_11.png-28d26959df87f90d90be2b5b34ab
 
 compress/mode=0
 compress/high_quality=false
+compress/high_quality_mode=0
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

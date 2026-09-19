@@ -17,6 +17,7 @@ dest_files=["res://.godot/imported/teddy_bear_relic180x180.png-9e0e1835341dd5e1f
 
 compress/mode=0
 compress/high_quality=false
+compress/high_quality_mode=0
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

@@ -17,6 +17,7 @@ dest_files=["res://.godot/imported/pierce_09.png-0b24d6c156ff92c6b519f3e6ef78134
 
 compress/mode=0
 compress/high_quality=false
+compress/high_quality_mode=0
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

@@ -14823,7 +14823,6 @@
 			{
 				"event": "first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10",
 				"required_flag": [
-					"story_first_enter_swimming_pool_hallway_01_done",
 					"story_first_enter_swimming_pool_room_10_done"
 				],
 				"required_flag_missing": [

@@ -55,7 +55,7 @@
 				"product_id": "razor",
 				"item": "razor",
 				"count": 1,
-				"price": 45,
+				"price": 50,
 				"stock": 1,
 				"slot": 9,
 				"page": 0
@@ -91,7 +91,7 @@
 				"product_id": "axe",
 				"item": "axe",
 				"count": 1,
-				"price": 200,
+				"price": 180,
 				"stock": 1,
 				"slot": 0,
 				"page": 1

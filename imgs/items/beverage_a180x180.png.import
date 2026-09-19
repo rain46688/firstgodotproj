@@ -17,6 +17,7 @@ dest_files=["res://.godot/imported/beverage_a180x180.png-251bd1ee6a8130dbecb6089
 
 compress/mode=0
 compress/high_quality=false
+compress/high_quality_mode=0
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

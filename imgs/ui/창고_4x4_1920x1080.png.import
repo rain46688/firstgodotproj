@@ -17,6 +17,7 @@ dest_files=["res://.godot/imported/창고_4x4_1920x1080.png-21441ff052dd4d4bc2b8
 
 compress/mode=0
 compress/high_quality=false
+compress/high_quality_mode=0
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

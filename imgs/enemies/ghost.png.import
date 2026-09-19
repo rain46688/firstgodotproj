@@ -17,6 +17,7 @@ dest_files=["res://.godot/imported/ghost.png-16e5ceefb58c413cb329e7bcfe76b9f0.ct
 
 compress/mode=0
 compress/high_quality=false
+compress/high_quality_mode=0
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

@@ -17,6 +17,7 @@ dest_files=["res://.godot/imported/parry_06.png-06d02e580be45b32c6cff8c8f0738dbb
 
 compress/mode=0
 compress/high_quality=false
+compress/high_quality_mode=0
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

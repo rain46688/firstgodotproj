@@ -149,6 +149,17 @@ var player_max_hp = 100
 var characters = {}
 var story_events = {}
 var is_story_playing = false
+
+# ============================================================
+# 스토리 고속 진행
+# ============================================================
+
+# Ctrl을 누르고 있는 동안 스토리를 고속 진행 중인지 여부
+var is_story_fast_forwarding = false
+
+# 스토리 고속 진행 배속
+const STORY_FAST_FORWARD_SCALE := 8.0
+
 var enemies = {}
 var battle_scene = null
 var pause_ui_scene = null
@@ -423,6 +434,58 @@ func reset_game_statistics():
 
 	print("게임 진행 통계 초기화")
 
+# 현재 스토리 고속 진행을 사용할 수 있는 상태인지 확인
+func can_story_fast_forward() -> bool:
+	# 스토리 이벤트 중이 아니면 사용하지 않는다.
+	if not is_story_playing:
+		return false
+
+	# 선택지에서는 자동 진행 금지
+	if is_choosing:
+		return false
+
+	# 전투가 시작되었으면 사용 금지
+	if battle_scene != null:
+		return false
+
+	# 숫자/문자 입력창에서는 사용 금지
+	if is_input_prompt_open:
+		return false
+
+	# 문서 팝업에서는 사용 금지
+	if is_document_popup_open:
+		return false
+
+	# 인벤토리 관련 UI에서는 사용 금지
+	if is_inventory_open:
+		return false
+
+	if is_inventory_arrange_open:
+		return false
+
+	# Pause 중에는 사용 금지
+	if is_game_paused:
+		return false
+
+	return true
+# Ctrl 홀드 상태에 따라 스토리 고속 진행을 시작/종료한다.
+func update_story_fast_forward() -> void:
+	var should_fast_forward = (
+		can_story_fast_forward()
+		and Input.is_key_pressed(KEY_CTRL)
+	)
+
+	# 상태가 바뀌지 않았다면 아무것도 하지 않는다.
+	if should_fast_forward == is_story_fast_forwarding:
+		return
+
+	is_story_fast_forwarding = should_fast_forward
+
+	if is_story_fast_forwarding:
+		TimeController.set_time_scale_factor(STORY_FAST_FORWARD_SCALE)
+	else:
+		TimeController.reset_time_scale()
+
 # 프레임 마다 실행 함수
 func _process(delta):
 	# 실제 게임 플레이 중일 때만 플레이 시간을 누적한다.
@@ -437,6 +500,9 @@ func _process(delta):
 	update_arrange_page_arrow_animation(delta)
 	
 	update_pause_input_lock()
+	
+	# Ctrl 홀드 스토리 고속 진행 상태 갱신
+	update_story_fast_forward()
 
 	# ESC / ui_cancel은 선택지, 대사, 스토리 차단보다 먼저 검사한다.
 	# Pause UI를 ESC로 닫은 직후 같은 입력으로 다시 열리는 것은 pause_input_locked로 방지한다.
@@ -477,11 +543,30 @@ func _process(delta):
 		
 	# 대사 타이핑중이면 빠르게 넘기기 및 종료
 	if is_dialogue_showing:
+		# --------------------------------------------------------
+		# Ctrl 스토리 고속 진행
+		# --------------------------------------------------------
+		# Ctrl을 누르고 있는 동안 기존 Enter/Space 연타를
+		# 자동으로 수행하는 것과 같은 방식으로 대사를 진행한다.
+		if is_story_fast_forwarding:
+			if is_typing:
+				# 현재 문장의 타이핑을 즉시 끝낸다.
+				typing_finished = true
+			else:
+				# 이미 문장이 전부 표시되었다면 다음 대사로 넘어간다.
+				dialogue_finished = true
+
+			return
+
+		# --------------------------------------------------------
+		# 기존 수동 대사 진행
+		# --------------------------------------------------------
 		if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("mouse_left"):
 			if is_typing:
 				typing_finished = true
 			else:
 				dialogue_finished = true
+
 		return
 		
 	# 전투 씬이 떠 있으면 main.gd의 탐색 입력은 전부 막는다.
