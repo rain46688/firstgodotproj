@@ -16,7 +16,7 @@
 		},
 		{
 			"enemy": "candle_student_woman",
-			"weight": 10,
+			"weight": 5,
 			"required_flag": "opened_school_stairs_hall_02",
 			"missing_flag": "",
 			"first_turn": ""
@@ -46,7 +46,7 @@
 		},
 		{
 			"enemy": "candle_student",
-			"weight": 10,
+			"weight": 5,
 			"required_flag": "opened_school_stairs_hall_02",
 			"missing_flag": "",
 			"first_turn": ""
@@ -86,7 +86,7 @@
 		},
 		{
 			"enemy": "candle_student",
-			"weight": 10,
+			"weight": 5,
 			"required_flag": "opened_school_stairs_hall_03",
 			"missing_flag": "",
 			"first_turn": ""
@@ -120,14 +120,14 @@
 		},
 		{
 			"enemy": "wax_slime_phalanx",
-			"weight": 10,
+			"weight": 5,
 			"required_flag": "opened_school_stairs_hall_04",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "wax_slime",
-			"weight": 10,
+			"weight": 5,
 			"required_flag": "opened_school_stairs_hall_04",
 			"missing_flag": "",
 			"first_turn": ""
@@ -159,28 +159,28 @@
 		},
 		{
 			"enemy": "sea_anemone_woman",
-			"weight": 40,
+			"weight": 30,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "green_fish_man",
-			"weight": 20,
+			"weight": 5,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "clione_little_girl",
-			"weight": 10,
+			"weight": 5,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "ghost_02",
-			"weight": 5,
+			"weight": 1,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
@@ -203,28 +203,28 @@
 		},
 		{
 			"enemy": "sea_anemone_woman",
-			"weight": 20,
+			"weight": 5,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "blue_fish_man",
-			"weight": 10,
+			"weight": 5,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "human_flog",
-			"weight": 10,
+			"weight": 5,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "ghost_02",
-			"weight": 5,
+			"weight": 2,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
@@ -247,21 +247,28 @@
 		},
 		{
 			"enemy": "green_fish_man",
-			"weight": 20,
+			"weight": 5,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "sea_anemone_woman",
-			"weight": 10,
+			"weight": 5,
+			"required_flag": "",
+			"missing_flag": "",
+			"first_turn": ""
+		},
+		{
+			"enemy": "red_fish_man",
+			"weight": 5,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "ghost_02",
-			"weight": 5,
+			"weight": 3,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
@@ -270,14 +277,14 @@
 	"swimming_pool_04": [
 		{
 			"enemy": "red_fish_man",
-			"weight": 99,
+			"weight": 95,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""
 		},
 		{
 			"enemy": "ghost_02",
-			"weight": 1,
+			"weight": 5,
 			"required_flag": "",
 			"missing_flag": "",
 			"first_turn": ""

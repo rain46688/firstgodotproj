@@ -8411,7 +8411,7 @@
 			{
 				"type": "sound",
 				"path": "res://sounds/squeeze_sound.mp3",
-				"volume_db": 10,
+				"volume_db": 0,
 				"wait": false
 			},
 			{
@@ -8735,6 +8735,12 @@
 				"wait": true
 			},
 			{
+				"type": "sound",
+				"path": "res://sounds/squeeze_sound.mp3",
+				"volume_db": 0,
+				"wait": false
+			},
+			{
 				"type": "screen_color",
 				"color": "#002060",
 				"alpha": 1.0,
@@ -8768,6 +8774,12 @@
 				"zoom": 1.7,
 				"duration": 0.5,
 				"wait": true
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/squeeze_sound.mp3",
+				"volume_db": 0,
+				"wait": false
 			},
 			{
 				"type": "screen_color",
@@ -8818,6 +8830,12 @@
 				"wait": true
 			},
 			{
+				"type": "sound",
+				"path": "res://sounds/squeeze_sound.mp3",
+				"volume_db": 0,
+				"wait": false
+			},
+			{
 				"type": "screen_color",
 				"color": "#002060",
 				"alpha": 1.0,
@@ -8865,6 +8883,12 @@
 			{
 				"type": "story_dialogue",
 				"text": "아니, 애초에 힘으로 어떻게 되는 게 아니다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/squeeze_sound.mp3",
+				"volume_db": 0,
+				"wait": false
 			},
 			{
 				"type": "screen_color",
@@ -9299,7 +9323,11 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "잡음 사이로 클레어 씨와 아이작의 익숙한 목소리가 들려왔다."
+				"text": "잡음 사이로 누군가의 목소리가 들려왔다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "음질이 좋지 못하지만 아마도 클레어 씨와 아이작 씨의 목소리인 것 같다."
 			},
 			{
 				"type": "story_dialogue",
@@ -9307,7 +9335,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "타일과 콘크리트로 둘러싸인 이 공간에는 소리를 흡수할 만한 물건이 거의 없었다."
+				"text": "타일로 둘러싸인 이 공간에는 소리를 흡수할 만한 물건이 거의 없었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -10243,7 +10271,7 @@
 			{
 				"type": "sound",
 				"path": "res://sounds/squeeze_sound.mp3",
-				"volume_db": 5,
+				"volume_db": 0,
 				"wait": false
 			},
 			{

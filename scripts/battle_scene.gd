@@ -6009,9 +6009,9 @@ func apply_enemy_pattern_start_effect(effect):
 			var part = get_enemy_part_data_by_id(str(effect.get("part_id", "")))
 			fallback_text = get_enemy_part_name_from_data(part) + "이(가) 다시 자라났다."
 		elif effect_type == "heal":
-			fallback_text = "괴물의 상처가 회복되었다."
+			fallback_text = "적의 상처가 회복되었다."
 		elif effect_type == "reflect_damage":
-			fallback_text = "괴물이 받은 피해를 되돌리는 상태가 되었다."
+			fallback_text = "적이 받은 피해를 되돌리는 상태가 되었다."
 
 		await show_enemy_pattern_effect_text(effect, fallback_text)
 	elif not effect_applied and sound != null and is_instance_valid(sound):
@@ -6395,9 +6395,11 @@ func check_defense_hit_rect(projectile_rect):
 
 	var projectile_top = projectile_rect.position.y
 
+	# defense_hitbox의 방어선이 패링선의 30px 아래에 존재
 	var weapon_block_line_y = (
 		weapon_rect.position.y
-		+ weapon_rect.size.y
+		+ weapon_rect.size.y / 2.0
+		+ 30.0
 	)
 
 	var projectile_left = projectile_rect.position.x
@@ -8114,7 +8116,7 @@ func make_enemy_turn_life_drain_text():
 	if enemy_turn_total_heal <= 0:
 		return ""
 
-	return "괴물이 빼앗은 생명력으로 체력을 " + str(int(enemy_turn_total_heal)) + " 회복했다."
+	return "적이 빼앗은 생명력으로 체력을 " + str(int(enemy_turn_total_heal)) + " 회복했다."
 # 적 턴 상태이상 적용 텍스트 생성 함수
 func make_enemy_turn_status_effect_text():
 	if enemy_turn_applied_status_effects.size() == 0:

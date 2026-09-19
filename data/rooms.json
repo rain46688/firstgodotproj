@@ -15927,7 +15927,7 @@
 											{
 												"type": "sound",
 												"path": "res://sounds/squeeze_sound.mp3",
-												"volume_db": 10,
+												"volume_db": 0,
 												"wait": true
 											},
 											{
@@ -15968,7 +15968,7 @@
 											{
 												"type": "sound",
 												"path": "res://sounds/squeeze_sound.mp3",
-												"volume_db": 10,
+												"volume_db": 0,
 												"wait": true
 											},
 											{
@@ -17136,7 +17136,7 @@
 					{
 						"type": "text",
 						"name": "???",
-						"text": "이 수영장에 존재하는 색깔은 \"오직 노란색 하나\"."
+						"text": "이 방에 존재하는 색깔은 \"오직 노란색 하나\"."
 					},
 					{
 						"type": "text",
@@ -19973,7 +19973,7 @@
 					},
 					{
 						"type": "text",
-						"text": "이 수영장에 존재하는 색깔은 \"오직 빨간색 여섯\"."
+						"text": "이 방에 존재하는 색깔은 \"오직 빨간색 여섯\"."
 					}
 				]
 			},
