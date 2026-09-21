@@ -73,6 +73,8 @@ signal inventory_arrange_closed(closing_mode)
 @onready var arrange_left_page_prev_button = $InventoryArrangeUI/ArrangeLeftPagePrevButton
 @onready var arrange_left_page_next_button = $InventoryArrangeUI/ArrangeLeftPageNextButton
 
+@onready var battle_loading_label = $BattleLoadingLabel
+
 # ============================================================
 # 상점 / 창고 인벤토리 정리 UI 리소스
 # Inspector에서 각각 대응되는 PNG 파일을 연결한다.
@@ -162,6 +164,7 @@ const STORY_FAST_FORWARD_SCALE := 8.0
 
 var enemies = {}
 var battle_scene = null
+var is_battle_starting = false
 var pause_ui_scene = null
 var is_game_paused = false
 
@@ -1200,21 +1203,31 @@ func get_enemy_data_by_id(enemy_id, show_error = true):
 	return enemy_data
 # 전투 시작 함수
 func start_battle(enemy_id, first_turn = "", battle_context = {}):
+	# 전투가 이미 시작 중이거나 전투 씬이 존재하면 중복 실행 방지
+	if is_battle_starting:
+		return
+
+	if battle_scene != null:
+		return
+		
 	var enemy_data = get_enemy_data_by_id(enemy_id)
 
 	if enemy_data.is_empty():
 		return
-
-	# 이번 전투의 시작 정보를 저장한다.
-	# 일반 전투라면 빈 Dictionary가 들어오고,
-	# 스토리 전투라면 lose_story 같은 정보가 들어온다.
-	current_battle_context = battle_context.duplicate(true)
 
 	var skip_flag = enemy_data.get("skip_if_flag", "")
 
 	if skip_flag != "" and has_flag(skip_flag):
 		print("이미 처치한 적이라 전투 스킵: " + enemy_id)
 		return
+	
+	# 여기부터 실제 전투 진입 시작
+	is_battle_starting = true
+	
+	# 이번 전투의 시작 정보를 저장한다.
+	# 일반 전투라면 빈 Dictionary가 들어오고,
+	# 스토리 전투라면 lose_story 같은 정보가 들어온다.
+	current_battle_context = battle_context.duplicate(true)
 	
 	hide_room_name_immediately()
 		
@@ -1225,19 +1238,45 @@ func start_battle(enemy_id, first_turn = "", battle_context = {}):
 	is_story_playing = true
 	hide_game_ui()
 	
+	# --------------------------------------------------------
+	# 전투 로딩 화면
+	# --------------------------------------------------------
+
+	# 먼저 화면을 완전히 검게 만든다.
+	await show_battle_loading_screen()
+	
 	# 스토리에서 검은 화면 등을 사용했더라도
 	# 전투 씬으로 넘어갈 때는 자동으로 투명하게 초기화한다.
 	reset_story_color_overlay_for_battle()
 
+	# 탐색 BGM 종료
+	if bgm_player.playing:
+		bgm_player.stop()
+
+	# --------------------------------------------------------
+	# 여기부터 무거운 전투 초기화
+	# 유저에게는 NOW LOADING... 화면이 보이는 상태
+	# --------------------------------------------------------
+
 	var battle_scene_resource = load(BATTLE_SCENE_PATH)
+	
+	if battle_scene_resource == null:
+		push_error("전투 씬 로드 실패: " + BATTLE_SCENE_PATH)
+
+		await hide_battle_loading_screen()
+
+		is_battle_starting = false
+		is_story_playing = false
+		return
+	
 	battle_scene = battle_scene_resource.instantiate()
 
 	add_child(battle_scene)
+	
 	battle_scene.battle_finished.connect(end_battle)
 	
 	var effective_stats = get_player_effective_stats()
 	var battle_player_max_hp = int(effective_stats.get("max_hp", player_max_hp))
-	@warning_ignore("unused_variable")
 	var battle_player_hp = min(player_hp, battle_player_max_hp)
 
 	# 전투신으로 넘겨줄 로드한 데이터들 모음
@@ -1260,10 +1299,17 @@ func start_battle(enemy_id, first_turn = "", battle_context = {}):
 		"battle_difficulty": current_difficulty
 	}
 	
-	if bgm_player.playing:
-		bgm_player.stop()
-
+	# 이 부분에서 실제로 탄막/이미지/풀 등이 준비된다.
+	#
+	# setup_battle() 내부에서 첫 await에 도달하기 전까지
+	# 무거운 초기화가 동기적으로 실행된다.
 	battle_scene.setup_battle(battle_data)
+	
+	# setup_battle의 초기 준비가 끝났으므로
+	# 전투 화면 공개
+	await hide_battle_loading_screen()
+
+	is_battle_starting = false
 # 전투 종료 함수
 func end_battle(result_data):
 	var result_type = str(result_data.get("result", ""))
@@ -1457,6 +1503,47 @@ func handle_story_battle_lose_result(result_data):
 
 	# lose_story가 없으면 일반 탐색으로 복귀
 	await show_game_ui()
+# 전투 진입 로딩 화면 표시
+func show_battle_loading_screen():
+	# Fade를 항상 사용할 수 있게 표시
+	fade.visible = true
+
+	# 암전이 완료되기 전에는 로딩 문구 숨김
+	battle_loading_label.visible = false
+
+	var tween = create_tween()
+
+	tween.tween_property(
+		fade,
+		"color:a",
+		1.0,
+		0.25
+	)
+
+	await tween.finished
+
+	# 완전히 검어진 뒤 로딩 표시
+	battle_loading_label.visible = true
+
+	# 매우 중요:
+	# 로딩 문구가 실제 화면에 한 프레임 그려질 시간을 준다.
+	await get_tree().process_frame
+# 전투 진입 로딩 화면 종료
+func hide_battle_loading_screen():
+	battle_loading_label.visible = false
+
+	var tween = create_tween()
+
+	tween.tween_property(
+		fade,
+		"color:a",
+		0.0,
+		0.35
+	)
+
+	await tween.finished
+
+	fade.color.a = 0.0
 
 # =================================s===========================
 # 디버그 관련 함수 모음

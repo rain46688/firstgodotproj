@@ -24,6 +24,7 @@
 [ext_resource type="AudioStream" uid="uid://b4idj20vru21j" path="res://sounds/heartbeats.mp3" id="18_nfivy"]
 [ext_resource type="AudioStream" uid="uid://b3onferv05h72" path="res://sounds/result.mp3" id="20_1nqs0"]
 [ext_resource type="AudioStream" uid="uid://cfy0iquuvfhgu" path="res://sounds/click_02.mp3" id="24_y6deb"]
+[ext_resource type="FontFile" uid="uid://bhxde28nnpeiv" path="res://fonts/SB 어그로 L.ttf" id="25_og1vs"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bjd11"]
 bg_color = Color(0, 0, 0, 0)
@@ -558,6 +559,18 @@ volume_db = -10.0
 [node name="ClickSound" type="AudioStreamPlayer" parent="." unique_id=1772120888]
 stream = ExtResource("24_y6deb")
 volume_db = -5.0
+
+[node name="BattleLoadingLabel" type="Label" parent="." unique_id=2073063575]
+visible = false
+z_index = 4096
+layout_mode = 0
+offset_left = 1668.0
+offset_top = 986.0
+offset_right = 1841.0
+offset_bottom = 1010.0
+theme_override_fonts/font = ExtResource("25_og1vs")
+theme_override_font_sizes/font_size = 25
+text = "NOW LOADING..."
 
 [connection signal="pressed" from="BagButton" to="." method="_on_bag_button_pressed"]
 [connection signal="pressed" from="InventoryUI/InventoryContextMenu/MenuTexts/UseButton" to="." method="_on_use_button_pressed"]

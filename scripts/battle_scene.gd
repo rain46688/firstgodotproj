@@ -243,24 +243,11 @@ var battle_texture_cache = {}
 # speed / life_time / frame_time / frames를 다시 만들지 않는다.
 var enemy_projectile_runtime_cache = {}
 
-
 # 사용하지 않고 대기 중인 적 탄막 TextureRect
 var enemy_projectile_pool = []
 
-
 # 지금까지 만들어 놓은 적 탄막 노드 총 개수
 var enemy_projectile_pool_total_count = 0
-
-
-# 최소한 이 정도는 전투 시작 때 미리 만들어 둔다.
-const ENEMY_PROJECTILE_POOL_MIN_SIZE = 24
-
-# 해당 적의 가장 큰 병렬 패턴보다 여유 있게 추가
-const ENEMY_PROJECTILE_POOL_EXTRA_SIZE = 8
-
-# 실수로 지나치게 큰 패턴 때문에
-# 전투 시작 시 수백 개가 생성되는 것을 방지
-const ENEMY_PROJECTILE_POOL_MAX_PREWARM = 128
 
 # 현재 전투에서 사용할 계산 완료 무기 데이터 캐시
 var cached_current_weapon_data = {}
@@ -279,7 +266,17 @@ var cached_parry_hit_rect_frame = -1
 var cached_parry_hit_rect = Rect2()
 
 # 상수 변수 모음
-# 현재 없음
+
+# 최소한 이 정도는 전투 시작 때 미리 만들어 둔다.
+const ENEMY_PROJECTILE_POOL_MIN_SIZE = 24
+
+# 해당 적의 가장 큰 병렬 패턴보다 여유 있게 추가
+const ENEMY_PROJECTILE_POOL_EXTRA_SIZE = 8
+
+# 실수로 지나치게 큰 패턴 때문에
+# 전투 시작 시 수백 개가 생성되는 것을 방지
+const ENEMY_PROJECTILE_POOL_MAX_PREWARM = 128
+
 
 # ============================================================
 # 게임 시작 관련 함수 모음
@@ -895,25 +892,66 @@ func preload_projectile_data_textures(
 		frame_paths,
 		"projectile preload / " + str(projectile_id)
 	)
-# 이번 전투에서 사용하는 전체 투사체 프레임 미리 로드
-func preload_all_battle_projectile_textures():
-	for projectile_id in projectiles.keys():
-		var projectile_data = projectiles[projectile_id]
+# 지정한 projectile_id들의 텍스처만 미리 로드
+func preload_battle_projectile_textures(
+	projectile_ids
+):
+	if typeof(projectile_ids) != TYPE_ARRAY:
+		return
+
+	for projectile_id in projectile_ids:
+		var projectile_data = get_projectile_data_by_id(
+			projectile_id,
+			false
+		)
+
+		if projectile_data.is_empty():
+			push_warning(
+				"preload할 투사체 데이터 없음: "
+				+ str(projectile_id)
+			)
+			continue
 
 		preload_projectile_data_textures(
 			projectile_id,
 			projectile_data
 		)
-
-	# 피격 및 패링 이펙트도 함께 준비
+# 공통 전투 이펙트 텍스처 미리 로드
+func preload_common_battle_effect_textures():
+	# 피격 이펙트
 	preload_battle_frame_paths(
 		hit_frames,
 		"hit effect preload"
 	)
 
+	# 패링 이펙트
 	preload_battle_frame_paths(
 		parry_frames,
 		"parry effect preload"
+	)
+# 현재 장착 무기의 공격 투사체 미리 로드
+func preload_current_player_attack_projectile_texture():
+	var projectile_id = (
+		get_current_attack_projectile_id()
+	)
+
+	var projectile_data = (
+		get_projectile_data_by_id(
+			projectile_id,
+			false
+		)
+	)
+
+	if projectile_data.is_empty():
+		push_warning(
+			"플레이어 공격 투사체 데이터 없음: "
+			+ projectile_id
+		)
+		return
+
+	preload_projectile_data_textures(
+		projectile_id,
+		projectile_data
 	)
 # 플레이어 상태 초상화 텍스처 미리 로드 함수
 func preload_player_portrait_textures():
@@ -1038,18 +1076,17 @@ func setup_battle(data):
 	# 전투 시작 시 상태 변수 초기화 함수
 	reset_battle_runtime_state()
 
+	# --------------------------------------------------------
 	# 전투에서 참조할 전체 데이터
+	# --------------------------------------------------------
+	
 	items = get_setup_dictionary(data, "items")
 	projectiles = get_setup_dictionary(data, "projectiles")
 	enemies = get_setup_dictionary(data, "enemies")
 	
-	# 전투 도중 처음 이미지를 불러오며 끊기지 않도록
-	# 탄막과 공통 이펙트 프레임을 미리 캐싱한다.
-	preload_all_battle_projectile_textures()
-	
-	# 탄막 프레임 경로/속도 데이터도 전투 시작 때 한 번만 계산
-	# 탄막별 계산 완료 런타임 데이터도 미리 준비
-	preload_all_enemy_projectile_runtime_data()
+	# --------------------------------------------------------
+	# 현재 적 데이터
+	# --------------------------------------------------------
 
 	# 현재 전투 적 데이터
 	enemy_id = get_setup_string(data, "enemy_id", "")
@@ -1063,9 +1100,44 @@ func setup_battle(data):
 		push_error("전투 enemy_data가 비어있음: " + str(enemy_id))
 		return
 	
-	# 현재 적 패턴 기준으로 필요한 탄막 TextureRect를
-	# 전투 시작 시 미리 생성한다.
+	# --------------------------------------------------------
+	# 이번 전투에서 실제 사용하는 적 탄막만 선별
+	# --------------------------------------------------------
+
+	var required_enemy_projectile_ids = (
+		get_required_enemy_projectile_ids()
+	)
+
+	print(
+		"적 탄막 preload 대상: "
+		+ str(
+			required_enemy_projectile_ids.size()
+		)
+		+ " / 전체 "
+		+ str(projectiles.size())
+	)
+
+	# 실제 사용하는 적 탄막 Texture만 준비
+	preload_battle_projectile_textures(
+		required_enemy_projectile_ids
+	)
+	
+	# hit / parry 등 공통 효과
+	preload_common_battle_effect_textures()
+
+	# 실제 사용하는 적 탄막의 런타임 데이터만 준비
+	preload_enemy_projectile_runtime_data(
+		required_enemy_projectile_ids
+	)
+	
+	# 현재 적 패턴 기준으로 필요한
+	# TextureRect 풀을 미리 만든다.
 	prewarm_enemy_projectile_pool()
+	
+	# --------------------------------------------------------
+	# 이하 기존 코드 계속
+	# --------------------------------------------------------
+
 
 	# main.gd에서 넘겨받은 현재 난이도
 	battle_difficulty = get_setup_string(data, "battle_difficulty", GameSession.DIFFICULTY_NORMAL)
@@ -1101,6 +1173,10 @@ func setup_battle(data):
 	# 인벤토리는 main.gd와 연결되어야 하므로 duplicate하지 않음
 	inventory = get_setup_array(data, "inventory")
 	equipped_weapon = get_setup_equipped_weapon(data)
+
+	# 현재 장착 무기의 공격 투사체도
+	# 첫 공격 때 끊기지 않도록 미리 준비한다.
+	preload_current_player_attack_projectile_texture()
 
 	# 메인에서 넘겨받은 플래그
 	flags = get_setup_dictionary(data, "flags")
@@ -1244,20 +1320,41 @@ func get_enemy_name_by_id(target_enemy_id):
 		return str(target_enemy_id)
 
 	return str(target_enemy_data.get("name", target_enemy_id))
-# 현재 적 데이터에서 다음 페이즈 enemy_id 가져오기 함수
-func get_next_phase_enemy_id():
-	if enemy_data.is_empty():
+# 지정한 적 데이터에서 다음 페이즈 enemy_id 가져오기 함수
+func get_next_phase_enemy_id_from_data(target_enemy_data):
+	if target_enemy_data == null:
+		return ""
+
+	if typeof(target_enemy_data) != TYPE_DICTIONARY:
+		return ""
+
+	if target_enemy_data.is_empty():
 		return ""
 
 	# 현재 enemies.json에서 쓰는 기본 키
-	if enemy_data.has("next_phase_enemy_id"):
-		return str(enemy_data.get("next_phase_enemy_id", ""))
+	if target_enemy_data.has("next_phase_enemy_id"):
+		return str(
+			target_enemy_data.get(
+				"next_phase_enemy_id",
+				""
+			)
+		)
 
-	# 혹시 과거 리팩토링 중 next_phase로 작성된 데이터가 있을 경우 대비
-	if enemy_data.has("next_phase"):
-		return str(enemy_data.get("next_phase", ""))
+	# 과거 데이터 호환
+	if target_enemy_data.has("next_phase"):
+		return str(
+			target_enemy_data.get(
+				"next_phase",
+				""
+			)
+		)
 
 	return ""
+# 현재 적 데이터에서 다음 페이즈 enemy_id 가져오기 함수
+func get_next_phase_enemy_id():
+	return get_next_phase_enemy_id_from_data(
+		enemy_data
+	)
 # projectile_id 기준으로 투사체 데이터 가져오기 함수
 func get_projectile_data_by_id(projectile_id, show_error = false):
 	if projectile_id == "":
@@ -1287,6 +1384,147 @@ func get_projectile_id_from_info(projectile_info):
 		return "slash_basic"
 
 	return str(projectile_info.get("projectile", "slash_basic"))
+# 패턴 배열에서 사용되는 projectile_id를 수집하는 함수
+func collect_projectile_ids_from_patterns(
+	patterns,
+	result
+):
+	if typeof(patterns) != TYPE_ARRAY:
+		return
+
+	for pattern in patterns:
+		if typeof(pattern) != TYPE_DICTIONARY:
+			continue
+
+		var projectile_list = pattern.get(
+			"projectiles",
+			[]
+		)
+
+		if typeof(projectile_list) != TYPE_ARRAY:
+			continue
+
+		for projectile_info in projectile_list:
+			if typeof(projectile_info) != TYPE_DICTIONARY:
+				continue
+
+			var projectile_id = (
+				get_projectile_id_from_info(
+					projectile_info
+				)
+			)
+
+			if projectile_id == "":
+				continue
+
+			# Dictionary를 Set처럼 사용한다.
+			result[projectile_id] = true
+# 적 하나의 본체 + 파츠 패턴에서 사용하는 탄막 ID 수집
+func collect_projectile_ids_from_enemy_data(
+	target_enemy_data,
+	result
+):
+	if target_enemy_data == null:
+		return
+
+	if typeof(target_enemy_data) != TYPE_DICTIONARY:
+		return
+
+	if target_enemy_data.is_empty():
+		return
+
+	# 본체 패턴
+	collect_projectile_ids_from_patterns(
+		target_enemy_data.get(
+			"patterns",
+			[]
+		),
+		result
+	)
+
+	# 파츠 패턴
+	var parts = target_enemy_data.get(
+		"parts",
+		[]
+	)
+
+	if typeof(parts) != TYPE_ARRAY:
+		return
+
+	for part in parts:
+		if typeof(part) != TYPE_DICTIONARY:
+			continue
+
+		collect_projectile_ids_from_patterns(
+			part.get(
+				"patterns",
+				[]
+			),
+			result
+		)
+# 현재 전투에서 필요한 모든 적 탄막 ID 가져오기
+#
+# 현재 적뿐 아니라 next_phase_enemy_id로 연결된
+# 다음 페이즈까지 전부 조사한다.
+func get_required_enemy_projectile_ids():
+	var projectile_id_set = {}
+	var visited_enemy_ids = {}
+
+	var target_enemy_id = enemy_id
+	var target_enemy_data = enemy_data
+
+	while (
+		target_enemy_id != ""
+		and not target_enemy_data.is_empty()
+	):
+		# 잘못된 데이터로 페이즈가 순환되는 상황 방지
+		if visited_enemy_ids.has(
+			target_enemy_id
+		):
+			push_warning(
+				"적 페이즈 순환 참조 감지: "
+				+ target_enemy_id
+			)
+			break
+
+		visited_enemy_ids[
+			target_enemy_id
+		] = true
+
+		# 현재 페이즈 탄막 수집
+		collect_projectile_ids_from_enemy_data(
+			target_enemy_data,
+			projectile_id_set
+		)
+
+		# 다음 페이즈 확인
+		var next_enemy_id = (
+			get_next_phase_enemy_id_from_data(
+				target_enemy_data
+			)
+		)
+
+		if next_enemy_id == "":
+			break
+
+		var next_enemy_data = (
+			get_enemy_data_by_id(
+				next_enemy_id,
+				false
+			)
+		)
+
+		if next_enemy_data.is_empty():
+			push_warning(
+				"다음 페이즈 적 데이터 없음: "
+				+ next_enemy_id
+			)
+			break
+
+		target_enemy_id = next_enemy_id
+		target_enemy_data = next_enemy_data
+
+	return projectile_id_set.keys()
 # projectile_id 기준으로 투사체 지속 시간 가져오기 함수
 func get_projectile_life_time_by_id(projectile_id):
 	var projectile_data = get_projectile_data_by_id(projectile_id, false)
@@ -3438,14 +3676,25 @@ func make_enemy_projectile_runtime_data(
 	enemy_projectile_runtime_cache[cache_key] = runtime_data
 
 	return runtime_data
-# 현재 전투의 모든 적 탄막 런타임 데이터 미리 생성
-func preload_all_enemy_projectile_runtime_data():
+# 이번 전투에서 실제 사용하는 적 탄막만
+# 런타임 데이터를 미리 생성
+func preload_enemy_projectile_runtime_data(
+	projectile_ids
+):
 	enemy_projectile_runtime_cache.clear()
 
-	for projectile_id in projectiles.keys():
-		var projectile_data = projectiles[projectile_id]
+	if typeof(projectile_ids) != TYPE_ARRAY:
+		return
 
-		if typeof(projectile_data) != TYPE_DICTIONARY:
+	for projectile_id in projectile_ids:
+		var projectile_data = (
+			get_projectile_data_by_id(
+				projectile_id,
+				false
+			)
+		)
+
+		if projectile_data.is_empty():
 			continue
 
 		make_enemy_projectile_runtime_data(
