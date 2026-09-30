@@ -302,7 +302,7 @@
 		"attack_move_range": 420,
 		"attack_swing_speed": 2.0,
 		"weapon_angle_step": 5,
-		"attack_projectile": "pierce",
+		"attack_projectile": "pierce_basic",
 		"defense_hitbox": {
 			"offset": [
 				-300,
@@ -384,7 +384,7 @@
 		"attack_angle_min": -45,
 		"attack_angle_max": 45,
 		"defense_base_rotation": 90,
-		"defense_move_speed": 380,
+		"defense_move_speed": 360,
 		"parry_window": 0.1,
 		"defense_start_offset": [
 			0,
@@ -397,7 +397,7 @@
 		"attack_move_range": 380,
 		"attack_swing_speed": 1.5,
 		"weapon_angle_step": 5,
-		"attack_projectile": "impact_basic",
+		"attack_projectile": "impact_strong",
 		"defense_hitbox": {
 			"offset": [
 				-260,
@@ -431,7 +431,7 @@
 		"attack_angle_min": -45,
 		"attack_angle_max": 45,
 		"defense_base_rotation": 90,
-		"defense_move_speed": 360,
+		"defense_move_speed": 350,
 		"parry_window": 0.1,
 		"piercing": true,
 		"defense_start_offset": [
@@ -442,7 +442,7 @@
 			300,
 			300
 		],
-		"attack_move_range": 380,
+		"attack_move_range": 350,
 		"attack_swing_speed": 2.0,
 		"weapon_angle_step": 5,
 		"attack_projectile": "slash_basic",

@@ -18286,7 +18286,7 @@
 		}
 	},
 	"swimming_pool_angel_hall_01": {
-		"background": "res://imgs/backgrounds/swimming_pool_angel_hall_01.png",
+		"background": "res://imgs/backgrounds/swimming_pool_angel_hall_03.png",
 		"display_name": "수영장 1층 · 천사 석상",
 		"idle_motion": {
 			"enabled": true,
@@ -18344,7 +18344,7 @@
 					},
 					{
 						"type": "text",
-						"text": "얼굴이 없다."
+						"text": "머리가 없다."
 					}
 				]
 			},
@@ -18399,7 +18399,7 @@
 					},
 					{
 						"type": "text",
-						"text": "얼굴이 없다."
+						"text": "머리가 없다."
 					},
 					{
 						"type": "text",
@@ -21436,8 +21436,7 @@
 				"event": "true_answer_swimming_pool_stadium_02",
 				"required_flag": "opened_swimming_pool_hallway_21",
 				"required_flag_missing": [
-					"story_true_answer_swimming_pool_stadium_02_done",
-					"opened_swimming_pool_hallway_21"
+					"story_true_answer_swimming_pool_stadium_02_done"
 				]
 			}
 		],
@@ -21463,7 +21462,7 @@
 					{
 						"type": "text",
 						"name": "???",
-						"text": "가장 먼저 수영을 끝낸 자부터 차례대로 세워라."
+						"text": "가장 먼저 수영을 끝낸 자의 이름을 차례대로 말해라."
 					},
 					{
 						"type": "choices",
@@ -21760,7 +21759,7 @@
 				"flags": [
 					"opened_swimming_pool_room_12"
 				],
-				"path": "res://imgs/backgrounds/swimming_pool_hallway_13.png"
+				"path": "res://imgs/backgrounds/swimming_pool_hallway_15.png"
 			}
 		],
 		"idle_motion": {

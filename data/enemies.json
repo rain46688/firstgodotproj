@@ -35,7 +35,7 @@
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -46,7 +46,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -57,7 +57,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -68,7 +68,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -79,7 +79,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -90,7 +90,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -109,7 +109,7 @@
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -120,7 +120,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -131,7 +131,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -142,7 +142,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -153,7 +153,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -184,7 +184,7 @@
 				},
 				"projectiles": [
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -195,7 +195,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -206,7 +206,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -217,7 +217,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -228,7 +228,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -239,7 +239,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -250,7 +250,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -261,7 +261,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -1114,7 +1114,7 @@
 						"fire_mode": "sequential",
 						"projectiles": [
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									700,
 									0
@@ -1125,7 +1125,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									900,
 									0
@@ -1136,7 +1136,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									1100,
 									0
@@ -1155,7 +1155,7 @@
 						"fire_mode": "sequential",
 						"projectiles": [
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									450,
 									0
@@ -1166,7 +1166,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									900,
 									0
@@ -1177,7 +1177,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									1100,
 									0
@@ -2150,7 +2150,7 @@
 						"fire_mode": "sequential",
 						"projectiles": [
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									700,
 									0
@@ -2161,7 +2161,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									900,
 									0
@@ -2172,7 +2172,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									1100,
 									0
@@ -2191,7 +2191,7 @@
 						"fire_mode": "sequential",
 						"projectiles": [
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									450,
 									0
@@ -2202,7 +2202,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									900,
 									0
@@ -2213,7 +2213,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									1100,
 									0
@@ -2266,7 +2266,7 @@
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -2277,7 +2277,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -2288,7 +2288,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -2299,7 +2299,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -2310,7 +2310,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -2321,7 +2321,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -2332,7 +2332,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -2343,7 +2343,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -2354,7 +2354,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -2365,7 +2365,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -2384,7 +2384,7 @@
 				"fire_mode": "sequential",
 				"projectiles": [
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							500,
 							0
@@ -2395,7 +2395,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -2406,7 +2406,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							1100,
 							0
@@ -2465,7 +2465,7 @@
 						"delay": 0.6
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -2476,7 +2476,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							880,
 							0
@@ -2535,7 +2535,7 @@
 						"delay": 0.8
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							1200,
 							0
@@ -2546,7 +2546,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							1280,
 							0
@@ -2698,7 +2698,7 @@
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -2709,7 +2709,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -2720,7 +2720,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -2731,7 +2731,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -2742,7 +2742,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -2753,7 +2753,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -2764,7 +2764,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -2775,7 +2775,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -2786,7 +2786,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -2797,7 +2797,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -2858,7 +2858,7 @@
 						"delay": 0.8
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							1200,
 							0
@@ -2869,7 +2869,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							1280,
 							0
@@ -3030,7 +3030,7 @@
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -3041,7 +3041,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -3052,7 +3052,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -3063,7 +3063,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -3074,7 +3074,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -3085,7 +3085,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -3096,7 +3096,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -3107,7 +3107,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -3118,7 +3118,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -3129,7 +3129,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -3190,7 +3190,7 @@
 						"delay": 0.8
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							1200,
 							0
@@ -3201,7 +3201,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							1280,
 							0
@@ -3396,7 +3396,7 @@
 						"fire_mode": "sequential",
 						"projectiles": [
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									800,
 									0
@@ -3407,7 +3407,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									900,
 									0
@@ -3418,7 +3418,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									1100,
 									0
@@ -3437,7 +3437,7 @@
 						"fire_mode": "sequential",
 						"projectiles": [
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									450,
 									0
@@ -3448,7 +3448,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									900,
 									0
@@ -3459,7 +3459,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									1100,
 									0
@@ -3651,7 +3651,7 @@
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							850,
 							0
@@ -3661,7 +3661,7 @@
 						"delay": 0.0
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							850,
 							0
@@ -3672,7 +3672,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							850,
 							0
@@ -3683,7 +3683,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							850,
 							0
@@ -3693,7 +3693,7 @@
 						"delay": 1.3
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							850,
 							0
@@ -3704,7 +3704,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							850,
 							0
@@ -3715,7 +3715,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							850,
 							0
@@ -3726,7 +3726,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							850,
 							0
@@ -3737,7 +3737,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							850,
 							0
@@ -4216,7 +4216,7 @@
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							1300,
 							0
@@ -4227,7 +4227,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							1250,
 							0
@@ -4238,7 +4238,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							1200,
 							0
@@ -4249,7 +4249,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							1000,
 							0
@@ -4260,7 +4260,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							950,
 							0
@@ -4271,7 +4271,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							900,
 							0
@@ -4282,7 +4282,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							700,
 							0
@@ -4293,7 +4293,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							650,
 							0
@@ -4304,7 +4304,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							600,
 							0
@@ -4572,7 +4572,7 @@
 				},
 				"projectiles": [
 					{
-						"projectile": "despair_slash",
+						"projectile": "slash_despair",
 						"start": [
 							1100,
 							0
@@ -4695,7 +4695,7 @@
 				],
 				"projectiles": [
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -4706,7 +4706,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -4717,7 +4717,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -4728,7 +4728,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -4739,7 +4739,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -4750,7 +4750,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -4761,7 +4761,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -4772,7 +4772,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -4783,7 +4783,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							800,
 							0
@@ -4794,7 +4794,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -4882,7 +4882,7 @@
 						"delay": 0.8
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							1200,
 							0
@@ -4893,7 +4893,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							1280,
 							0
@@ -5104,7 +5104,7 @@
 						"fire_mode": "sequential",
 						"projectiles": [
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									450,
 									0
@@ -5115,7 +5115,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									900,
 									0
@@ -5126,7 +5126,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									1100,
 									0
@@ -5227,7 +5227,7 @@
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5238,7 +5238,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5249,7 +5249,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5260,7 +5260,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5271,7 +5271,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5282,7 +5282,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5301,7 +5301,7 @@
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5312,7 +5312,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5323,7 +5323,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5334,7 +5334,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5345,7 +5345,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5376,7 +5376,7 @@
 				},
 				"projectiles": [
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5387,7 +5387,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5398,7 +5398,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5409,7 +5409,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5420,7 +5420,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5431,7 +5431,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5442,7 +5442,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -5453,7 +5453,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "fear_slash",
+						"projectile": "slash_fear",
 						"start": [
 							900,
 							0
@@ -6314,7 +6314,7 @@
 						"fire_mode": "parallel",
 						"projectiles": [
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									1000,
 									0
@@ -6325,7 +6325,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									1000,
 									0
@@ -6335,7 +6335,7 @@
 								"delay": 0.4
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									1000,
 									0
@@ -6346,7 +6346,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									1000,
 									0
@@ -6356,7 +6356,7 @@
 								"delay": 0.8
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									1000,
 									0
@@ -6406,7 +6406,7 @@
 						"fire_mode": "parallel",
 						"projectiles": [
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									1100,
 									0
@@ -6417,7 +6417,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									1100,
 									0
@@ -6428,7 +6428,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									1100,
 									0
@@ -6439,7 +6439,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									1100,
 									0
@@ -6449,7 +6449,7 @@
 								"delay": 0.6
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									1100,
 									0
@@ -6498,7 +6498,7 @@
 						"fire_mode": "parallel",
 						"projectiles": [
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									800,
 									0
@@ -6508,7 +6508,7 @@
 								"delay": 0.0
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									800,
 									0
@@ -6518,7 +6518,7 @@
 								"delay": 0.2
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									800,
 									0
@@ -6528,7 +6528,7 @@
 								"delay": 0.4
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									800,
 									0
@@ -6538,7 +6538,7 @@
 								"delay": 0.6
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									800,
 									0
@@ -6587,7 +6587,7 @@
 						"fire_mode": "parallel",
 						"projectiles": [
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									900,
 									0
@@ -6598,7 +6598,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									900,
 									0
@@ -6609,7 +6609,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									900,
 									0
@@ -6620,7 +6620,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									900,
 									0
@@ -6631,7 +6631,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "fear_slash",
+								"projectile": "slash_fear",
 								"start": [
 									900,
 									0
@@ -6731,7 +6731,7 @@
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
-						"projectile": "lethargy_slash",
+						"projectile": "slash_lethargy",
 						"start": [
 							850,
 							0
@@ -6742,7 +6742,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "lethargy_slash",
+						"projectile": "slash_lethargy",
 						"start": [
 							850,
 							0
@@ -6753,7 +6753,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "lethargy_slash",
+						"projectile": "slash_lethargy",
 						"start": [
 							850,
 							0
@@ -6764,7 +6764,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "lethargy_slash",
+						"projectile": "slash_lethargy",
 						"start": [
 							650,
 							0
@@ -6774,7 +6774,7 @@
 						"delay": 1.3
 					},
 					{
-						"projectile": "lethargy_slash",
+						"projectile": "slash_lethargy",
 						"start": [
 							650,
 							0
@@ -6784,7 +6784,7 @@
 						"delay": 1.5
 					},
 					{
-						"projectile": "lethargy_slash",
+						"projectile": "slash_lethargy",
 						"start": [
 							650,
 							0
@@ -6794,7 +6794,7 @@
 						"delay": 1.7
 					},
 					{
-						"projectile": "lethargy_slash",
+						"projectile": "slash_lethargy",
 						"start": [
 							1050,
 							0
@@ -6804,7 +6804,7 @@
 						"delay": 2.6
 					},
 					{
-						"projectile": "lethargy_slash",
+						"projectile": "slash_lethargy",
 						"start": [
 							1050,
 							0
@@ -6814,7 +6814,7 @@
 						"delay": 2.8
 					},
 					{
-						"projectile": "lethargy_slash",
+						"projectile": "slash_lethargy",
 						"start": [
 							1050,
 							0
@@ -6842,7 +6842,7 @@
 				],
 				"projectiles": [
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							400,
 							0
@@ -6853,7 +6853,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							400,
 							0
@@ -6864,7 +6864,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							1400,
 							0
@@ -6875,7 +6875,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							1400,
 							0
@@ -6886,7 +6886,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							600,
 							0
@@ -6897,7 +6897,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							600,
 							0
@@ -6948,7 +6948,7 @@
 						"delay": 2.5
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							760,
 							0
@@ -6959,7 +6959,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							1000,
 							0
@@ -6997,7 +6997,7 @@
 				],
 				"projectiles": [
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							600,
 							0
@@ -7008,7 +7008,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							1000,
 							0
@@ -7019,7 +7019,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							800,
 							0
@@ -7030,7 +7030,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							850,
 							0
@@ -7073,7 +7073,7 @@
 						"danger_type": "parry_only"
 					},
 					{
-						"projectile": "pierce",
+						"projectile": "pierce_basic",
 						"start": [
 							900,
 							0
@@ -7190,7 +7190,7 @@
 			{
 				"id": "basic_attack_01",
 				"weight": 100,
-				"warning_text": "주먹을 양쪽으로 휘두른다.",
+				"warning_text": "주먹을 왼쪽 부터 양쪽으로 휘두른다.",
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
@@ -7376,7 +7376,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -7386,7 +7386,7 @@
 								"delay": 0.2
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -7426,7 +7426,7 @@
 								"delay": 0.8
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -7437,7 +7437,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -7447,7 +7447,7 @@
 								"delay": 0.1
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -7506,7 +7506,7 @@
 						"fire_mode": "parallel",
 						"projectiles": [
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									450,
 									0
@@ -7517,7 +7517,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									450,
 									0
@@ -7528,7 +7528,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									450,
 									0
@@ -7630,7 +7630,7 @@
 			{
 				"id": "basic_attack_01",
 				"weight": 100,
-				"warning_text": "주먹을 양쪽으로 휘두른다.",
+				"warning_text": "주먹을 왼쪽 부터 양쪽으로 휘두른다.",
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
@@ -7810,7 +7810,7 @@
 						"fire_mode": "parallel",
 						"projectiles": [
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -7821,7 +7821,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -7832,7 +7832,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -7843,7 +7843,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -7883,7 +7883,7 @@
 								"delay": 0.8
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -7894,7 +7894,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -7905,7 +7905,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -7965,7 +7965,7 @@
 						"fire_mode": "parallel",
 						"projectiles": [
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									450,
 									0
@@ -7976,7 +7976,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									450,
 									0
@@ -7987,7 +7987,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									450,
 									0
@@ -7998,7 +7998,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									450,
 									0
@@ -8100,7 +8100,7 @@
 			{
 				"id": "basic_attack_01",
 				"weight": 50,
-				"warning_text": "주먹을 양쪽으로 휘두른다.",
+				"warning_text": "주먹을 왼쪽 부터 양쪽으로 휘두른다.",
 				"fire_mode": "parallel",
 				"projectiles": [
 					{
@@ -8342,7 +8342,7 @@
 						"fire_mode": "parallel",
 						"projectiles": [
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -8353,7 +8353,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -8364,7 +8364,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -8375,7 +8375,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -8415,7 +8415,7 @@
 								"delay": 0.8
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -8426,7 +8426,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -8437,7 +8437,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -8497,7 +8497,7 @@
 						"fire_mode": "parallel",
 						"projectiles": [
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									450,
 									0
@@ -8508,7 +8508,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									450,
 									0
@@ -8519,7 +8519,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									450,
 									0
@@ -8530,7 +8530,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									450,
 									0
@@ -8712,7 +8712,7 @@
 								"delay": 0.8
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -8722,7 +8722,7 @@
 								"delay": 0.0
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -8732,7 +8732,7 @@
 								"delay": 0.1
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -8742,7 +8742,7 @@
 								"delay": 0.2
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -8816,7 +8816,7 @@
 						"id": "basic_attack_04",
 						"weight": 40,
 						"priority": 1,
-						"warning_text": "오른쪽 가면을 쓴 남성이 주먹을 양쪽으로 휘두른다.",
+						"warning_text": "오른쪽 가면을 쓴 남성이 주먹을 오른쪽 부터 양쪽으로 휘두른다.",
 						"fire_mode": "parallel",
 						"projectiles": [
 							{
@@ -8989,7 +8989,7 @@
 								"delay": 0.8
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -9000,7 +9000,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -9011,7 +9011,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -9022,7 +9022,7 @@
 								"danger_type": "parry_only"
 							},
 							{
-								"projectile": "pierce",
+								"projectile": "pierce_basic",
 								"start": [
 									850,
 									0
@@ -9097,7 +9097,7 @@
 						"id": "basic_attack_05",
 						"weight": 50,
 						"priority": 1,
-						"warning_text": "왼쪽 가면을 쓴 남성이 주먹을 양쪽으로 휘두른다.",
+						"warning_text": "왼쪽 가면을 쓴 남성이 주먹을 왼쪽 부터 양쪽으로 휘두른다.",
 						"fire_mode": "parallel",
 						"projectiles": [
 							{

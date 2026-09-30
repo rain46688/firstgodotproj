@@ -38,7 +38,15 @@
 			},
 			"emotion_offsets": {
 				"joy": {
+					"left": [
+						-13,
+						0
+					],
 					"center": [
+						-13,
+						0
+					],
+					"right": [
 						-13,
 						0
 					]
@@ -105,33 +113,45 @@
 				]
 			},
 			"emotion_offsets": {
-				"angry": {
+				"normal_02": {
+					"left": [
+						-100,
+						0
+					],
 					"center": [
-						30,
+						-100,
+						0
+					],
+					"right": [
+						-100,
 						0
 					]
 				},
 				"joy": {
+					"left": [
+						-35,
+						0
+					],
 					"center": [
-						0,
+						-35,
+						0
+					],
+					"right": [
+						-35,
 						0
 					]
 				},
-				"normal": {
-					"center": [
-						30,
-						5
-					]
-				},
-				"normal_02": {
-					"center": [
-						-40,
+				"embarrassed": {
+					"left": [
+						-20,
 						0
-					]
-				},
-				"expressionless": {
+					],
 					"center": [
-						30,
+						-20,
+						0
+					],
+					"right": [
+						-20,
 						0
 					]
 				}

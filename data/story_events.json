@@ -12809,9 +12809,6 @@
 			{
 				"type": "flag",
 				"flag": "story_defeated_hammerhead_mansion_master_done"
-			},
-			{
-				"type": "ending_credits"
 			}
 		]
 	},
@@ -13143,6 +13140,9 @@
 			{
 				"type": "flag",
 				"flag": "story_first_grail_filled_unknown_hall_03_done"
+			},
+			{
+				"type": "ending_credits"
 			}
 		]
 	},

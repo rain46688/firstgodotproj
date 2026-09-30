@@ -107,7 +107,7 @@ var active_enemy_projectile_count = 0
 var action_buttons = []
 var action_button_base_texts = []
 var action_button_index = 0
-var pierced_hitbox_ids = []
+var pierce_basicd_hitbox_ids = []
 var enemy_parts = {}
 var enemy_part_sprites = {}
 var enemy_part_hp = {}
@@ -7373,7 +7373,7 @@ func finish_player_attack_input_process():
 # 플레이어 공격 충돌 상태 초기화 함수
 func reset_player_attack_collision_state():
 	player_attack_hit = false
-	pierced_hitbox_ids.clear()
+	pierce_basicd_hitbox_ids.clear()
 	player_attack_hitbox_debug.visible = false
 # 플레이어 공격 투사체 상태 초기화 함수
 func reset_player_attack_projectile_state():
@@ -7912,21 +7912,21 @@ func get_attack_hitbox_unique_id(hitbox):
 
 	return "body:" + hitbox_id
 # 관통 공격에서 이미 맞은 히트박스인지 확인하는 함수
-func has_pierced_hitbox(hitbox):
+func has_pierce_basicd_hitbox(hitbox):
 	var unique_id = get_attack_hitbox_unique_id(hitbox)
 
 	if unique_id == "":
 		return false
 
-	return pierced_hitbox_ids.has(unique_id)
+	return pierce_basicd_hitbox_ids.has(unique_id)
 # 관통 공격에서 맞은 히트박스 기록 함수
-func mark_pierced_hitbox(hitbox):
+func mark_pierce_basicd_hitbox(hitbox):
 	var unique_id = get_attack_hitbox_unique_id(hitbox)
 
 	if unique_id == "":
 		return
 
-	pierced_hitbox_ids.append(unique_id)
+	pierce_basicd_hitbox_ids.append(unique_id)
 # 공격 충돌 hitbox 유효성 확인 함수
 func is_valid_attack_collided_hitbox(hitbox):
 	if hitbox == null:
@@ -7961,10 +7961,10 @@ func apply_piercing_player_attack_to_hitboxes(collided_hitboxes):
 		if not is_valid_attack_collided_hitbox(hitbox):
 			continue
 
-		if has_pierced_hitbox(hitbox):
+		if has_pierce_basicd_hitbox(hitbox):
 			continue
 
-		mark_pierced_hitbox(hitbox)
+		mark_pierce_basicd_hitbox(hitbox)
 		apply_player_attack_hit(hitbox)
 
 	return false

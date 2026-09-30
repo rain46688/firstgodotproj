@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cyaw4fn3xpx3n"
-path="res://.godot/imported/punching_02.png-97fa9e555ed397f41cea8903c9ccc00c.ctex"
+uid="uid://sy3mtas66pth"
+path="res://.godot/imported/punch_bullet_02.png-cfbb75d25f717a42da76eb0e3b21f828.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/effects/punching/punching_02.png"
-dest_files=["res://.godot/imported/punching_02.png-97fa9e555ed397f41cea8903c9ccc00c.ctex"]
+source_file="res://imgs/effects/punch_bullet/punch_bullet_02.png"
+dest_files=["res://.godot/imported/punch_bullet_02.png-cfbb75d25f717a42da76eb0e3b21f828.ctex"]
 
 [params]
 
