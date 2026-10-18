@@ -291,6 +291,10 @@ var story_event_should_stop = false
 # 현재 room 조건 스토리 체인을 검사 중인지 여부
 var is_checking_room_story_chain = false
 
+# 현재 방에서 이미 시작한 enter story 기록 (세이브하지 않는 런타임 상태)
+# 실제 방이 바뀌면 apply_room_change()에서 초기화한다.
+var room_enter_story_checked: Dictionary = {}
+
 # 문서 이미지 팝업 UI
 var document_popup_layer = null
 var document_popup_dim = null
@@ -3606,6 +3610,11 @@ func stop_room_ambient_sound():
 	room_ambient_sound_player.stream = null
 # 현재 방을 변경하고 방 UI를 갱신하는 함수
 func apply_room_change(target_room):
+	# 방이 실제로 바뀔 때만 enter story 중복 실행 방지 기록을 초기화한다.
+	# 같은 방의 UI를 새로 고치는 경우에는 초기화하지 않는다.
+	if current_room != target_room:
+		room_enter_story_checked.clear()
+
 	current_room = target_room
 	update_room()
 # 방 이동 후 방 진입 스토리 이벤트를 처리하는 함수
@@ -5631,10 +5640,8 @@ func can_run_enter_story_candidate(candidate):
 	if start_flag != "" and has_flag(start_flag):
 		return false
 
-	# 같은 room 진입 스토리 중복 실행 방지
-	var enter_story_flag = "room_enter_story_done_" + str(story_event_id)
-
-	if has_flag(enter_story_flag):
+	# 세이브용 flag 대신 현재 방의 임시 실행 기록을 확인한다.
+	if room_enter_story_checked.has(story_event_id):
 		return false
 
 	# 문자열 구조면 별도 조건 없음
@@ -5677,8 +5684,9 @@ func get_next_runnable_room_enter_story_id():
 	return ""
 # 방 진입/현재 방 조건 스토리 이벤트 확인 함수
 func check_room_enter_story():
-	# 이미 현재 room 스토리 체인을 검사 중이면 중복 실행 방지
-	if is_checking_room_story_chain:
+	# 이미 체인 검사 중이거나 별도 스토리 실행 중이면 재진입하지 않는다.
+	# 실행 중인 다른 스토리 때문에 run_story_event()가 무시되는 상황도 예방한다.
+	if is_checking_room_story_chain or is_story_playing:
 		return false
 
 	is_checking_room_story_chain = true
@@ -5687,15 +5695,24 @@ func check_room_enter_story():
 	var safety_count = 0
 	var max_chain_count = 20
 
+	# 하나의 체인 안에서 방을 왕복해도 같은 이벤트를 두 번 실행하지 않도록 한다.
+	var checked_in_this_chain: Dictionary = {}
+
 	while safety_count < max_chain_count:
 		var story_event_id = get_next_runnable_room_enter_story_id()
 
 		if story_event_id == "":
 			break
 
-		# 같은 room에서 같은 enter story가 반복 실행되지 않게 먼저 플래그 설정
-		var enter_story_flag = "room_enter_story_done_" + str(story_event_id)
-		set_flag(enter_story_flag)
+		if checked_in_this_chain.has(story_event_id):
+			push_warning("room enter story 체인에서 동일 이벤트 재선택 중단: " + story_event_id)
+			break
+
+		checked_in_this_chain[story_event_id] = true
+
+		# 스토리가 await 동안 재검사되더라도 반복 실행되지 않게 먼저 기록한다.
+		# 이 값은 flags에 넣지 않으므로 세이브 파일에는 저장되지 않는다.
+		room_enter_story_checked[story_event_id] = true
 
 		await run_story_event(story_event_id, false)
 
@@ -12283,7 +12300,19 @@ func load_game(slot_index):
 
 	inventory = save_data.get("inventory", [])
 	flags = save_data.get("flags", {})
-	
+
+	# 이전 버전 세이브 파일의 내부 중복 방지 플래그는 더 이상 사용하지 않는다.
+	# 불러올 때 제거하면 다음 저장부터 해당 키가 자동으로 사라진다.
+	if typeof(flags) != TYPE_DICTIONARY:
+		flags = {}
+	else:
+		for flag_id in flags.keys():
+			if str(flag_id).begins_with("room_enter_story_done_"):
+				flags.erase(flag_id)
+
+	# 불러오기 시 현재 방의 임시 실행 기록도 초기화한다.
+	room_enter_story_checked.clear()
+
 	# 이전 세이브 파일에는 창고 데이터가 없을 수 있으므로
 	# 없으면 빈 Dictionary로 안전하게 처리한다.
 	storage_inventories = save_data.get("storage_inventories", {})

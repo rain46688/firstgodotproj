@@ -4318,26 +4318,6 @@
 			{
 				"type": "flag",
 				"flag": "story_defeated_tutorial_candle_student_done"
-			},
-			{
-				"type": "flag",
-				"flag": "room_enter_story_done_first_enter_classroom_08_02"
-			},
-			{
-				"type": "flag",
-				"flag": "room_enter_story_done_first_enter_classroom_09"
-			},
-			{
-				"type": "flag",
-				"flag": "room_enter_story_done_first_enter_classroom_11"
-			},
-			{
-				"type": "flag",
-				"flag": "room_enter_story_done_first_enter_school_hallway_08_after_classroom_09_event"
-			},
-			{
-				"type": "flag",
-				"flag": "room_enter_story_done_defeated_tutorial_candle_student"
 			}
 		]
 	},
@@ -5009,26 +4989,6 @@
 			{
 				"type": "flag",
 				"flag": "story_defeated_tutorial_candle_student_done"
-			},
-			{
-				"type": "flag",
-				"flag": "room_enter_story_done_first_enter_classroom_08_02"
-			},
-			{
-				"type": "flag",
-				"flag": "room_enter_story_done_first_enter_classroom_09"
-			},
-			{
-				"type": "flag",
-				"flag": "room_enter_story_done_first_enter_classroom_11"
-			},
-			{
-				"type": "flag",
-				"flag": "room_enter_story_done_first_enter_school_hallway_08_after_classroom_09_event"
-			},
-			{
-				"type": "flag",
-				"flag": "room_enter_story_done_defeated_tutorial_candle_student"
 			}
 		]
 	},
@@ -5309,14 +5269,6 @@
 			{
 				"type": "flag",
 				"flag": "story_false_kill_statue_classroom_statue_classroom_18_02_done"
-			},
-			{
-				"type": "flag",
-				"flag": "room_enter_story_done_false_kill_statue_classroom_statue_classroom_17_02"
-			},
-			{
-				"type": "flag",
-				"flag": "room_enter_story_done_false_kill_statue_classroom_statue_classroom_18_02"
 			}
 		]
 	},
@@ -9203,15 +9155,7 @@
 			},
 			{
 				"type": "flag",
-				"flag": "room_enter_story_done_first_enter_classroom_09"
-			},
-			{
-				"type": "flag",
 				"flag": "story_first_enter_school_hallway_08_after_classroom_09_event_done"
-			},
-			{
-				"type": "flag",
-				"flag": "room_enter_story_done_first_enter_school_hallway_08_after_classroom_09_event"
 			},
 			{
 				"type": "flag",
@@ -9219,23 +9163,11 @@
 			},
 			{
 				"type": "flag",
-				"flag": "room_enter_story_done_defeated_tutorial_candle_student"
-			},
-			{
-				"type": "flag",
 				"flag": "story_first_enter_classroom_08_02_done"
 			},
 			{
 				"type": "flag",
-				"flag": "room_enter_story_done_first_enter_classroom_08_02"
-			},
-			{
-				"type": "flag",
 				"flag": "story_first_enter_classroom_11_done"
-			},
-			{
-				"type": "flag",
-				"flag": "room_enter_story_done_first_enter_classroom_11"
 			},
 			{
 				"type": "flag",
@@ -10955,7 +10887,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "우리는 계속해서 복도를 걸었다."
+				"text": "우리는 계속해서 이곳의 미로를 해결하여 복도의 끝에 도달하였다."
 			},
 			{
 				"type": "story_dialogue",
@@ -11751,7 +11683,7 @@
 			{
 				"type": "sound",
 				"path": "res://sounds/frog_sound.mp3",
-				"volume_db": -8,
+				"volume_db": 0,
 				"wait": true
 			},
 			{
@@ -12805,6 +12737,11 @@
 			},
 			{
 				"type": "standing_clear"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
 			},
 			{
 				"type": "flag",

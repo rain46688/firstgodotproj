@@ -5830,10 +5830,6 @@
 									{
 										"type": "flag",
 										"flag": "touch_motorboat_classroom_12_02"
-									},
-									{
-										"type": "clear_flag",
-										"flag": "room_enter_story_done_ride_motorboat_event_classroom_12_02"
 									}
 								]
 							},
@@ -27914,6 +27910,36 @@
 					}
 				]
 			},
+			"book": {
+				"click_rect": [
+					176,
+					511,
+					139,
+					67
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "책이 펼쳐져 있다."
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/paper.mp3",
+						"volume_db": 10,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "전부 읽을 수 없는 언어로 무언가 적혀있다."
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/paper.mp3",
+						"volume_db": 10,
+						"wait": false
+					}
+				]
+			},
 			"light_01": {
 				"click_rect": [
 					277,
@@ -27952,10 +27978,6 @@
 									{
 										"type": "flag",
 										"flag": "on_left_light_swimming_pool_room_26"
-									},
-									{
-										"type": "clear_flag",
-										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
 									}
 								]
 							},
@@ -28005,10 +28027,6 @@
 									{
 										"type": "flag",
 										"flag": "on_right_light_swimming_pool_room_26"
-									},
-									{
-										"type": "clear_flag",
-										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
 									}
 								]
 							},
@@ -28058,10 +28076,6 @@
 									{
 										"type": "clear_flag",
 										"flag": "on_left_light_swimming_pool_room_26"
-									},
-									{
-										"type": "clear_flag",
-										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
 									}
 								]
 							},
@@ -28111,10 +28125,6 @@
 									{
 										"type": "clear_flag",
 										"flag": "on_right_light_swimming_pool_room_26"
-									},
-									{
-										"type": "clear_flag",
-										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
 									}
 								]
 							},
@@ -28126,7 +28136,7 @@
 					}
 				]
 			},
-			"memo": {
+			"bed": {
 				"click_rect": [
 					1350,
 					650,
@@ -28477,6 +28487,36 @@
 					}
 				]
 			},
+			"book": {
+				"click_rect": [
+					176,
+					511,
+					139,
+					67
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "책이 펼쳐져 있다."
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/paper.mp3",
+						"volume_db": 10,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "전부 읽을 수 없는 언어로 무언가 적혀있다."
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/paper.mp3",
+						"volume_db": 10,
+						"wait": false
+					}
+				]
+			},
 			"light_01": {
 				"click_rect": [
 					277,
@@ -28515,10 +28555,6 @@
 									{
 										"type": "flag",
 										"flag": "on_left_light_swimming_pool_room_27"
-									},
-									{
-										"type": "clear_flag",
-										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
 									}
 								]
 							},
@@ -28568,10 +28604,6 @@
 									{
 										"type": "flag",
 										"flag": "on_right_light_swimming_pool_room_27"
-									},
-									{
-										"type": "clear_flag",
-										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
 									}
 								]
 							},
@@ -28621,10 +28653,6 @@
 									{
 										"type": "clear_flag",
 										"flag": "on_left_light_swimming_pool_room_27"
-									},
-									{
-										"type": "clear_flag",
-										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
 									}
 								]
 							},
@@ -28674,10 +28702,6 @@
 									{
 										"type": "clear_flag",
 										"flag": "on_right_light_swimming_pool_room_27"
-									},
-									{
-										"type": "clear_flag",
-										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
 									}
 								]
 							},
@@ -28686,6 +28710,27 @@
 								"events": []
 							}
 						]
+					}
+				]
+			},
+			"bed": {
+				"click_rect": [
+					1350,
+					650,
+					50,
+					50
+				],
+				"required_flag": [
+					"on_right_light_swimming_pool_room_27"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "오른쪽 전등이 켜지자 놓여있는 침대가 눈에 들어왔다."
+					},
+					{
+						"type": "text",
+						"text": "아래를 살펴보았지만 아무것도 없다."
 					}
 				]
 			}
@@ -29118,10 +29163,6 @@
 									{
 										"type": "flag",
 										"flag": "on_left_light_swimming_pool_room_28"
-									},
-									{
-										"type": "clear_flag",
-										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
 									}
 								]
 							},
@@ -29171,10 +29212,6 @@
 									{
 										"type": "flag",
 										"flag": "on_right_light_swimming_pool_room_28"
-									},
-									{
-										"type": "clear_flag",
-										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
 									}
 								]
 							},
@@ -29224,10 +29261,6 @@
 									{
 										"type": "clear_flag",
 										"flag": "on_left_light_swimming_pool_room_28"
-									},
-									{
-										"type": "clear_flag",
-										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
 									}
 								]
 							},
@@ -29277,10 +29310,6 @@
 									{
 										"type": "clear_flag",
 										"flag": "on_right_light_swimming_pool_room_28"
-									},
-									{
-										"type": "clear_flag",
-										"flag": "room_enter_story_done_solve_light_puzzle_swimming_pool_hallway"
 									}
 								]
 							},
@@ -29289,6 +29318,27 @@
 								"events": []
 							}
 						]
+					}
+				]
+			},
+			"bed": {
+				"click_rect": [
+					1350,
+					650,
+					50,
+					50
+				],
+				"required_flag": [
+					"on_right_light_swimming_pool_room_28"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "오른쪽 전등이 켜지자 놓여있는 침대가 눈에 들어왔다."
+					},
+					{
+						"type": "text",
+						"text": "아래를 살펴보았지만 아무것도 없다."
 					}
 				]
 			}
@@ -29428,10 +29478,6 @@
 						"type": "text",
 						"name": "저택의 주인",
 						"text": "마저 이야기를 해볼까?"
-					},
-					{
-						"type": "clear_flag",
-						"flag": "room_enter_story_done_first_swimming_pool_huge_hall_02"
 					}
 				]
 			}
@@ -29609,10 +29655,6 @@
 									{
 										"type": "flag",
 										"flag": "touch_motorboat_dark_forest_river_02"
-									},
-									{
-										"type": "clear_flag",
-										"flag": "room_enter_story_done_ride_motorboat_event_dark_forest_river_02"
 									}
 								]
 							},
@@ -29868,6 +29910,9 @@
 			"volume_db": 0.0,
 			"loop": true
 		},
+		"no_exit_messages": {
+			"down": "뒤로 끝없는 어둠이 이어져있다."
+		},
 		"footstep_sound": {
 			"path": "res://sounds/footsteps_forest.mp3",
 			"volume_db": 0.0
@@ -29933,6 +29978,407 @@
 					900,
 					950
 				]
+			}
+		},
+		"interactions": {}
+	},
+	"dark_forest_hallway_02": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_hallway_03",
+				"position": [
+					650,
+					30
+				]
+			},
+			"down": {
+				"target": "dark_forest_hallway_01",
+				"position": [
+					650,
+					950
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_02",
+				"position": [
+					1500,
+					433
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_01",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_02": {
+		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_02",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {}
+	},
+	"dark_forest_hallway_03": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_hallway_04",
+				"position": [
+					650,
+					30
+				]
+			},
+			"down": {
+				"target": "dark_forest_hallway_02",
+				"position": [
+					650,
+					950
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_03",
+				"position": [
+					1500,
+					433
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_01",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_03": {
+		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_03",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {}
+	},
+	"dark_forest_hallway_04": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_04.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_crossroad_01",
+				"position": [
+					650,
+					30
+				]
+			},
+			"down": {
+				"target": "dark_forest_hallway_03",
+				"position": [
+					650,
+					950
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_04",
+				"position": [
+					1500,
+					433
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_01",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_04": {
+		"background": "res://imgs/backgrounds/dark_forest_room_03.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"defeated_hammerhead_mansion_master"
+				],
+				"path": "res://imgs/backgrounds/dark_forest_room_02.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_04",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {}
+	},
+	"dark_forest_crossroad_01_맵구상중": {
+		"background": "res://imgs/events/swimming_pool_huge_hall_event_01.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"defeated_hammerhead_mansion_master"
+				],
+				"path": "res://imgs/backgrounds/swimming_pool_huge_hall_01.png"
+			}
+		],
+		"display_name": "어두운 숲 구역1 · 교차로",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"enter_stories": [],
+		"exits": {
+			"up": {
+				"target": "swimming_pool_huge_hall_door_01",
+				"position": [
+					900,
+					30
+				]
+			},
+			"down": {
+				"target": "swimming_pool_hallway_28",
+				"position": [
+					900,
+					950
+				],
+				"move_effect": "enter"
+			},
+			"left": {
+				"target": "dark_forest_river_02",
+				"position": [
+					60,
+					540
+				],
+				"move_effect": "enter",
+				"footstep_sound": {
+					"path": "res://sounds/footsteps_forest.mp3",
+					"volume_db": 0.0
+				},
+				"locked": true,
+				"open_flag": "defeated_hammerhead_mansion_master"
+			},
+			"right": {
+				"target": "dark_forest_river_01",
+				"position": [
+					1830,
+					540
+				],
+				"move_effect": "enter",
+				"footstep_sound": {
+					"path": "res://sounds/footsteps_forest.mp3",
+					"volume_db": 0.0
+				},
+				"locked": true,
+				"open_flag": "defeated_hammerhead_mansion_master"
 			}
 		},
 		"interactions": {}
