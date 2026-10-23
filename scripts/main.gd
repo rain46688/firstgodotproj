@@ -68,6 +68,7 @@ signal inventory_arrange_closed(closing_mode)
 @onready var inventory_portrait = get_node_or_null("InventoryUI/InventoryPortrait")
 @onready var result_sound = $ResultSound
 @onready var dialogue_type_sound = $ChoiceSound
+@onready var bush_rustling_sound = $BushRustlingSound
 
 # 왼쪽 창고 / 상점 목록 페이지 이동 버튼
 @onready var arrange_left_page_prev_button = $InventoryArrangeUI/ArrangeLeftPagePrevButton
@@ -2592,14 +2593,29 @@ func get_unlock_exit_target_data(event):
 		return {}
 
 	return exit_data
-# unlock_exit 이벤트에서 사용할 open_flag 가져오기
+# unlock_exit 이벤트에서 실제로 설정할 플래그 ID 가져오기
+# 출구의 open_flag 배열은 '모두 만족해야 하는 조건'이므로 직접 설정하지 않는다.
+# 배열을 사용하는 출구에서 열쇠로 조건 하나를 해제하려면
+# 이벤트의 open_flag(문자열) 또는 출구의 unlock_flag(문자열)를 지정한다.
 func get_unlock_exit_open_flag(event, exit_data):
-	var open_flag = str(event.get("open_flag", ""))
+	var event_flag = event.get("open_flag", "")
 
-	if open_flag != "":
-		return open_flag
+	if typeof(event_flag) == TYPE_STRING and event_flag.strip_edges() != "":
+		return event_flag.strip_edges()
 
-	return str(exit_data.get("open_flag", ""))
+	var exit_flag = exit_data.get("open_flag", "")
+
+	# 기존 단일 문자열 open_flag 지원
+	if typeof(exit_flag) == TYPE_STRING:
+		return exit_flag.strip_edges()
+
+	# 배열 open_flag인 경우 키로 설정할 플래그를 명시적으로 지정해야 한다.
+	var unlock_flag = exit_data.get("unlock_flag", "")
+
+	if typeof(unlock_flag) == TYPE_STRING:
+		return unlock_flag.strip_edges()
+
+	return ""
 # unlock_exit 이벤트에서 사용할 전용 열쇠 ID 가져오기
 func get_unlock_exit_required_item(event, exit_data):
 	var required_item = str(event.get("required_item", ""))
@@ -2728,15 +2744,31 @@ func run_unlock_exit_event(event):
 	if exit_data.is_empty():
 		return
 
+	var is_array_exit = typeof(exit_data.get("open_flag", "")) == TYPE_ARRAY
+
+	# 배열 조건의 출구가 이미 완전히 열렸다면 열쇠를 사용하지 않는다.
+	# 단일 문자열 출구의 기존 이벤트 플래그 우선순위는 변경하지 않는다.
+	if is_array_exit and is_exit_unlocked(exit_data):
+		await show_dialogue(get_unlock_exit_already_open_text(event))
+		return
+
 	var open_flag = get_unlock_exit_open_flag(event, exit_data)
 
 	if open_flag == "":
-		push_error("unlock_exit 대상 exit에 open_flag가 없음")
+		push_error("unlock_exit에 설정할 문자열 플래그가 없음. open_flag 배열을 사용하는 출구라면 이벤트의 open_flag 또는 출구의 unlock_flag를 문자열로 지정하세요.")
 		return
 
-	# 이미 열린 문이면 안내만 출력
+	# 배열 조건에 포함되지 않은 플래그를 열쇠로 설정하지 않도록 방지한다.
+	if is_array_exit and not exit_data["open_flag"].has(open_flag):
+		push_error("unlock_exit 플래그가 open_flag 배열 안에 없음: " + open_flag)
+		return
+
+	# 키로 해제할 조건만 이미 만족했고 다른 조건이 남은 경우
 	if has_flag(open_flag):
-		await show_dialogue(get_unlock_exit_already_open_text(event))
+		if is_array_exit:
+			await show_dialogue(str(event.get("already_done_text", "이 잠금장치는 이미 해제되어 있다.")))
+		else:
+			await show_dialogue(get_unlock_exit_already_open_text(event))
 		return
 
 	var key_info = get_unlock_exit_used_key_info(event, exit_data)
@@ -2750,22 +2782,25 @@ func run_unlock_exit_event(event):
 		await show_dialogue(get_unlock_exit_fail_text(event))
 		return
 
-	# 문 열기 성공
+	# 지정된 단일 플래그만 설정한다. 배열의 다른 조건은 자동 완료하지 않는다.
 	if unlocked_sound != null:
 		unlocked_sound.play()
 
 	set_flag(open_flag)
-
 	consume_unlock_exit_key_if_needed(event, key_info)
 
-	await show_dialogue(make_unlock_exit_success_text(event, key_info))
+	# 배열 조건이 일부만 충족됐으면 문을 열었다고 안내하지 않는다.
+	if is_array_exit and not is_exit_unlocked(exit_data):
+		await show_dialogue(str(event.get("partial_unlock_text", "잠금장치 하나를 해제했다.")))
+	else:
+		await show_dialogue(make_unlock_exit_success_text(event, key_info))
 
 	await run_unlock_exit_success_effect(event)
 
-	# open_flag가 켜졌으므로 배경과 이동 화살표 갱신
+	# 플래그가 변경되었으므로 배경과 이동 화살표 갱신
 	update_room()
 
-	# 문이 열린 결과로 조건 스토리가 열릴 수도 있으니 검사
+	# 플래그 변화로 조건 스토리가 열렸을 수 있으니 검사
 	await check_room_enter_story()
 # room_id 기준으로 방 데이터 가져오기 함수
 func get_room_data_by_id(room_id, show_error = true):
@@ -2823,16 +2858,35 @@ func is_exit_locked(exit_data):
 
 	return bool(exit_data.get("locked", false))
 # 잠긴 출구가 플래그로 열렸는지 확인하는 함수
+# 문자열은 기존처럼 단일 플래그 검사, 배열은 모든 플래그가 있어야 열린다(AND).
 func is_exit_unlocked(exit_data):
 	if exit_data.is_empty():
 		return false
 
 	var open_flag = exit_data.get("open_flag", "")
 
-	if open_flag == "":
-		return false
+	if typeof(open_flag) == TYPE_STRING:
+		var flag_id = open_flag.strip_edges()
+		return flag_id != "" and has_flag(flag_id)
 
-	return has_flag(open_flag)
+	if typeof(open_flag) == TYPE_ARRAY:
+		# 빈 배열이 잠금 해제 조건을 통과하지 못하도록 한다.
+		if open_flag.is_empty():
+			return false
+
+		for flag_value in open_flag:
+			# 잘못된 요소나 빈 문자열도 미충족으로 처리한다.
+			if typeof(flag_value) != TYPE_STRING:
+				return false
+
+			var flag_id = flag_value.strip_edges()
+
+			if flag_id == "" or not has_flag(flag_id):
+				return false
+
+		return true
+
+	return false
 # 현재 이동 입력으로 지나갈 수 없는 출구인지 확인하는 함수
 func is_exit_blocked_for_movement(exit_data):
 	return is_exit_locked(exit_data) and not is_exit_unlocked(exit_data)
@@ -4394,29 +4448,44 @@ func run_exit_interaction(direction):
 	is_interacting = true
 	set_interaction_buttons_disabled(true)
 
-	var required_item = exit_data.get("required_item", "")
+	var required_item = str(exit_data.get("required_item", ""))
+	var open_flag = exit_data.get("open_flag", "")
+	var flag_to_set = ""
 
-	# 필요한 아이템이 있으면 문 열기
-	if required_item != "" and has_item(required_item):
+	if typeof(open_flag) == TYPE_STRING:
+		# 기존: required_item을 쓰면 단일 open_flag를 설정한다.
+		flag_to_set = open_flag.strip_edges()
+	elif typeof(open_flag) == TYPE_ARRAY:
+		# 배열은 조건 목록이다. 열쇠로 설정할 플래그 하나를 별도로 명시한다.
+		var unlock_flag = exit_data.get("unlock_flag", "")
+
+		if typeof(unlock_flag) == TYPE_STRING:
+			flag_to_set = unlock_flag.strip_edges()
+
+		# 잘못 설정된 unlock_flag로 열쇠가 소모되지 않게 방지한다.
+		if flag_to_set != "" and not open_flag.has(flag_to_set):
+			push_error("unlock_flag가 open_flag 배열 안에 없음: " + flag_to_set)
+			flag_to_set = ""
+
+	# 필요한 아이템과 설정할 플래그가 있고, 아직 그 플래그가 없는 경우만 사용
+	if required_item != "" and has_item(required_item) and flag_to_set != "" and not has_flag(flag_to_set):
 		unlocked_sound.play()
-
-		var open_flag = exit_data.get("open_flag", "")
-
-		if open_flag != "":
-			set_flag(open_flag)
-
+		set_flag(flag_to_set)
 		consume_item_by_id(required_item)
-		
-		await show_dialogue(MSG_DOOR_UNLOCK)
+
+		if is_exit_unlocked(exit_data):
+			await show_dialogue(MSG_DOOR_UNLOCK)
+		else:
+			await show_dialogue("잠금장치 하나를 해제했다.")
 
 		await effect(false, false, true, "")
-
 		update_room()
 
 		set_interaction_buttons_disabled(false)
 		is_interacting = false
 		return
 
+	# 조건이 부족하면 문이 잠긴 상태를 유지하고 열쇠는 소모하지 않는다.
 	locked_sound.play()
 	await show_dialogue(MSG_DOOR_LOCKED)
 
@@ -6125,7 +6194,8 @@ func get_main_sfx_players():
 		save_complete_sound,
 		encounter_heartbeat_sound,
 		result_sound,
-		room_ambient_sound_player
+		room_ambient_sound_player,
+		bush_rustling_sound
 	]
 # 효과음들의 기본 볼륨을 저장하는 함수
 func register_sfx_base_volumes():

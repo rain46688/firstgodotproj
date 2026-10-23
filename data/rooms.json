@@ -29921,15 +29921,15 @@
 			"up": {
 				"target": "dark_forest_hallway_02",
 				"position": [
-					650,
+					620,
 					30
 				]
 			},
 			"right": {
 				"target": "dark_forest_room_01",
 				"position": [
-					1500,
-					433
+					1550,
+					420
 				],
 				"move_effect": "enter"
 			}
@@ -29980,7 +29980,86 @@
 				]
 			}
 		},
-		"interactions": {}
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"bush": {
+				"click_rect": [
+					136,
+					418,
+					1561,
+					144
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
 	},
 	"dark_forest_hallway_02": {
 		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
@@ -30016,22 +30095,22 @@
 			"up": {
 				"target": "dark_forest_hallway_03",
 				"position": [
-					650,
+					620,
 					30
 				]
 			},
 			"down": {
 				"target": "dark_forest_hallway_01",
 				"position": [
-					650,
+					900,
 					950
 				]
 			},
 			"right": {
 				"target": "dark_forest_room_02",
 				"position": [
-					1500,
-					433
+					1550,
+					420
 				],
 				"move_effect": "enter"
 			}
@@ -30082,7 +30161,86 @@
 				]
 			}
 		},
-		"interactions": {}
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"bush": {
+				"click_rect": [
+					136,
+					418,
+					1561,
+					144
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
 	},
 	"dark_forest_hallway_03": {
 		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
@@ -30118,22 +30276,22 @@
 			"up": {
 				"target": "dark_forest_hallway_04",
 				"position": [
-					650,
+					620,
 					30
 				]
 			},
 			"down": {
 				"target": "dark_forest_hallway_02",
 				"position": [
-					650,
+					900,
 					950
 				]
 			},
 			"right": {
 				"target": "dark_forest_room_03",
 				"position": [
-					1500,
-					433
+					1550,
+					420
 				],
 				"move_effect": "enter"
 			}
@@ -30184,7 +30342,86 @@
 				]
 			}
 		},
-		"interactions": {}
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"bush": {
+				"click_rect": [
+					136,
+					418,
+					1561,
+					144
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
 	},
 	"dark_forest_hallway_04": {
 		"background": "res://imgs/backgrounds/dark_forest_hallway_04.png",
@@ -30220,27 +30457,42 @@
 			"up": {
 				"target": "dark_forest_crossroad_01",
 				"position": [
-					650,
+					620,
 					30
 				]
 			},
 			"down": {
 				"target": "dark_forest_hallway_03",
 				"position": [
-					650,
+					900,
 					950
 				]
 			},
 			"right": {
 				"target": "dark_forest_room_04",
 				"position": [
-					1500,
-					433
+					1550,
+					420
 				],
 				"move_effect": "enter"
 			}
 		},
-		"interactions": {},
+		"interactions": {
+			"sign": {
+				"click_rect": [
+					1190,
+					221,
+					188,
+					382
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "모니터가 그려져있는 표지판이 세워져있다."
+					}
+				]
+			}
+		},
 		"random_encounter": {
 			"enemy_table": "dark_forest_01",
 			"event_table": "dark_forest",
@@ -30252,7 +30504,8 @@
 		"background_by_flags": [
 			{
 				"flags": [
-					"defeated_hammerhead_mansion_master"
+					"opened_left_eye_tree_a",
+					"opened_right_eye_tree_a"
 				],
 				"path": "res://imgs/backgrounds/dark_forest_room_02.png"
 			}
@@ -30272,7 +30525,7 @@
 			"alpha": 0.55
 		},
 		"ambient_sound": {
-			"path": "res://sounds/insect_sound.mp3",
+			"path": "res://sounds/monitor_buzz.mp3",
 			"volume_db": -5.0,
 			"loop": true
 		},
@@ -30294,16 +30547,71 @@
 				]
 			}
 		},
-		"interactions": {}
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"monitor": {
+				"click_rect": [
+					840,
+					444,
+					252,
+					214
+				],
+				"required_flag_missing": [
+					"opened_left_eye_tree_a",
+					"opened_right_eye_tree_a"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 모니터가 파묻혀있다."
+					},
+					{
+						"type": "text",
+						"text": "넝쿨을 먼저 어떻게 해야 될 거 같다."
+					}
+				]
+			},
+			"monitor_mimic": {
+				"click_rect": [
+					874,
+					664,
+					184,
+					122
+				],
+				"required_flag": [
+					"opened_left_eye_tree_a",
+					"opened_right_eye_tree_a"
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "미믹"
+					}
+				]
+			}
+		}
 	},
-	"dark_forest_crossroad_01_맵구상중": {
-		"background": "res://imgs/events/swimming_pool_huge_hall_event_01.png",
+	"dark_forest_crossroad_01": {
+		"background": "res://imgs/backgrounds/dark_forest_crossroad_03.png",
 		"background_by_flags": [
 			{
 				"flags": [
-					"defeated_hammerhead_mansion_master"
+					"opened_right_eye_tree_b"
 				],
-				"path": "res://imgs/backgrounds/swimming_pool_huge_hall_01.png"
+				"path": "res://imgs/backgrounds/dark_forest_crossroad_01.png"
 			}
 		],
 		"display_name": "어두운 숲 구역1 · 교차로",
@@ -30338,14 +30646,14 @@
 		"enter_stories": [],
 		"exits": {
 			"up": {
-				"target": "swimming_pool_huge_hall_door_01",
+				"target": "dark_forest_hallway_05",
 				"position": [
 					900,
 					30
 				]
 			},
 			"down": {
-				"target": "swimming_pool_hallway_28",
+				"target": "dark_forest_hallway_04",
 				"position": [
 					900,
 					950
@@ -30353,34 +30661,46 @@
 				"move_effect": "enter"
 			},
 			"left": {
-				"target": "dark_forest_river_02",
+				"target": "dark_forest_hallway_09",
 				"position": [
 					60,
-					540
+					450
 				],
-				"move_effect": "enter",
-				"footstep_sound": {
-					"path": "res://sounds/footsteps_forest.mp3",
-					"volume_db": 0.0
-				},
-				"locked": true,
-				"open_flag": "defeated_hammerhead_mansion_master"
+				"move_effect": "enter"
 			},
 			"right": {
-				"target": "dark_forest_river_01",
+				"target": "dark_forest_hallway_33",
 				"position": [
 					1830,
-					540
+					450
 				],
 				"move_effect": "enter",
-				"footstep_sound": {
-					"path": "res://sounds/footsteps_forest.mp3",
-					"volume_db": 0.0
-				},
 				"locked": true,
-				"open_flag": "defeated_hammerhead_mansion_master"
+				"open_flag": [
+					"opened_right_eye_tree_b"
+				]
 			}
 		},
-		"interactions": {}
+		"interactions": {
+			"vine": {
+				"click_rect": [
+					1267,
+					272,
+					631,
+					402
+				],
+				"required_flag_missing": "opened_right_eye_tree_b",
+				"events": [
+					{
+						"type": "text",
+						"text": "길이 막혀있다."
+					},
+					{
+						"type": "text",
+						"text": "넝쿨을 먼저 어떻게 해야 될 거 같다."
+					}
+				]
+			}
+		}
 	}
 }

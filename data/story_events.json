@@ -13077,9 +13077,6 @@
 			{
 				"type": "flag",
 				"flag": "story_first_grail_filled_unknown_hall_03_done"
-			},
-			{
-				"type": "ending_credits"
 			}
 		]
 	},
@@ -14387,17 +14384,34 @@
 				"text": "모든 빛이 사라졌다."
 			},
 			{
+				"type": "stop_sound",
+				"all": true,
+				"fade_time": 1.0
+			},
+			{
+				"type": "show_game_ui"
+			},
+			{
 				"type": "camera_reset",
 				"duration": 0.5,
 				"wait": true
 			},
 			{
 				"type": "change_room",
-				"room": "dark_forest_hallway_01"
+				"room": "dark_forest_hallway_03"
+			},
+			{
+				"type": "standing_clear"
 			},
 			{
 				"type": "flag",
 				"flag": "story_first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_03_done"
+			},
+			{
+				"type": "auto_save",
+				"slot": 1,
+				"show_message": false,
+				"play_sound": true
 			}
 		]
 	},
