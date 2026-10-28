@@ -52,6 +52,16 @@
 				"required_flag": "story_first_enter_swimming_pool_hallway_01_done"
 			},
 			{
+				"product_id": "tuna_can_a",
+				"item": "tuna_can_a",
+				"count": 1,
+				"price": 25,
+				"stock": 5,
+				"slot": 5,
+				"page": 0,
+				"required_flag": "story_first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_03_done"
+			},
+			{
 				"product_id": "razor",
 				"item": "razor",
 				"count": 1,

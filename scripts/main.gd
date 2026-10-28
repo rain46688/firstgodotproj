@@ -68,7 +68,6 @@ signal inventory_arrange_closed(closing_mode)
 @onready var inventory_portrait = get_node_or_null("InventoryUI/InventoryPortrait")
 @onready var result_sound = $ResultSound
 @onready var dialogue_type_sound = $ChoiceSound
-@onready var bush_rustling_sound = $BushRustlingSound
 
 # 왼쪽 창고 / 상점 목록 페이지 이동 버튼
 @onready var arrange_left_page_prev_button = $InventoryArrangeUI/ArrangeLeftPagePrevButton
@@ -6194,8 +6193,7 @@ func get_main_sfx_players():
 		save_complete_sound,
 		encounter_heartbeat_sound,
 		result_sound,
-		room_ambient_sound_player,
-		bush_rustling_sound
+		room_ambient_sound_player
 	]
 # 효과음들의 기본 볼륨을 저장하는 함수
 func register_sfx_base_volumes():

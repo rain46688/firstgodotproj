@@ -25,7 +25,6 @@
 [ext_resource type="AudioStream" uid="uid://b3onferv05h72" path="res://sounds/result.mp3" id="20_1nqs0"]
 [ext_resource type="AudioStream" uid="uid://cfy0iquuvfhgu" path="res://sounds/click_02.mp3" id="24_y6deb"]
 [ext_resource type="FontFile" uid="uid://bhxde28nnpeiv" path="res://fonts/SB 어그로 L.ttf" id="25_og1vs"]
-[ext_resource type="AudioStream" uid="uid://dwr7du5ld1gpt" path="res://sounds/bush_rustling_sound.mp3" id="26_2wyq8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bjd11"]
 bg_color = Color(0, 0, 0, 0)
@@ -572,10 +571,6 @@ offset_bottom = 1010.0
 theme_override_fonts/font = ExtResource("25_og1vs")
 theme_override_font_sizes/font_size = 25
 text = "NOW LOADING..."
-
-[node name="BushRustlingSound" type="AudioStreamPlayer" parent="." unique_id=2061797855]
-stream = ExtResource("26_2wyq8")
-volume_db = -5.0
 
 [connection signal="pressed" from="BagButton" to="." method="_on_bag_button_pressed"]
 [connection signal="pressed" from="InventoryUI/InventoryContextMenu/MenuTexts/UseButton" to="." method="_on_use_button_pressed"]

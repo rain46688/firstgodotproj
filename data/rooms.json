@@ -30021,7 +30021,7 @@
 									},
 									{
 										"type": "text",
-										"text": "비어 있다."
+										"text": "아무것도 없다."
 									}
 								]
 							},
@@ -30036,7 +30036,7 @@
 									},
 									{
 										"type": "text",
-										"text": "비어 있다."
+										"text": "아무것도 없다."
 									}
 								]
 							},
@@ -30051,7 +30051,7 @@
 									},
 									{
 										"type": "text",
-										"text": "비어 있다."
+										"text": "아무것도 없다."
 									}
 								]
 							}
@@ -30202,7 +30202,7 @@
 									},
 									{
 										"type": "text",
-										"text": "비어 있다."
+										"text": "아무것도 없다."
 									}
 								]
 							},
@@ -30217,7 +30217,7 @@
 									},
 									{
 										"type": "text",
-										"text": "비어 있다."
+										"text": "아무것도 없다."
 									}
 								]
 							},
@@ -30232,7 +30232,7 @@
 									},
 									{
 										"type": "text",
-										"text": "비어 있다."
+										"text": "아무것도 없다."
 									}
 								]
 							}
@@ -30383,7 +30383,7 @@
 									},
 									{
 										"type": "text",
-										"text": "비어 있다."
+										"text": "아무것도 없다."
 									}
 								]
 							},
@@ -30398,7 +30398,7 @@
 									},
 									{
 										"type": "text",
-										"text": "비어 있다."
+										"text": "아무것도 없다."
 									}
 								]
 							},
@@ -30413,7 +30413,7 @@
 									},
 									{
 										"type": "text",
-										"text": "비어 있다."
+										"text": "아무것도 없다."
 									}
 								]
 							}
@@ -30698,6 +30698,1639 @@
 					{
 						"type": "text",
 						"text": "넝쿨을 먼저 어떻게 해야 될 거 같다."
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_hallway_05": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_hallway_06",
+				"position": [
+					620,
+					30
+				]
+			},
+			"down": {
+				"target": "dark_forest_crossroad_01",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_05",
+				"position": [
+					1550,
+					420
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_01",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_05": {
+		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_05",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"bush": {
+				"click_rect": [
+					136,
+					418,
+					1561,
+					144
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"flag": "got_unknown_coin_dark_forest_room_05",
+								"already_events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "무언가 있다."
+									},
+									{
+										"type": "item",
+										"item": "unknown_coin",
+										"count": 10
+									},
+									{
+										"type": "flag",
+										"flag": "got_unknown_coin_dark_forest_room_05"
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_hallway_06": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_hallway_07",
+				"position": [
+					620,
+					30
+				]
+			},
+			"down": {
+				"target": "dark_forest_hallway_05",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_06",
+				"position": [
+					1550,
+					420
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_01",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_06": {
+		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_06",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"bush": {
+				"click_rect": [
+					136,
+					418,
+					1561,
+					144
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_hallway_07": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_03.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_hallway_08",
+				"position": [
+					620,
+					30
+				]
+			},
+			"down": {
+				"target": "dark_forest_hallway_06",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_07",
+				"position": [
+					1500,
+					420
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_01",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_07": {
+		"background": "res://imgs/backgrounds/dark_forest_room_04.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_07",
+				"position": [
+					900,
+					950
+				]
+			},
+			"left": {
+				"target": "dark_forest_room_07_02",
+				"footstep_sound": {
+					"path": "res://sounds/footsteps.mp3",
+					"volume_db": 20.0
+				},
+				"position": [
+					900,
+					500
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"cabin": {
+				"click_rect": [
+					511,
+					270,
+					827,
+					387
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 오두막이다."
+					},
+					{
+						"type": "text",
+						"text": "이곳에 누군가 살고 있는 걸까?"
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_room_07_02": {
+		"background": "res://imgs/backgrounds/dark_forest_room_inside_02.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_room_07",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					535,
+					90,
+					356,
+					235
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "창문 너머 달빛은 은은하게 방안을 비추고 있다."
+					}
+				]
+			},
+			"paper_01": {
+				"click_rect": [
+					1463,
+					575,
+					167,
+					81
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "종이에 무언가 적혀있다."
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/documents/document_01.png",
+						"start_page": 1,
+						"sound": "res://sounds/paper.mp3",
+						"sound_volume_db": 10,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "길을 가로막고 있는 나무뿌리들을 치우려면 거목을 깨워야 된다."
+							},
+							{
+								"type": "text",
+								"text": "녀석이 그 물건 하나를 갖고 도망가 버렸어."
+							},
+							{
+								"type": "text",
+								"text": "하지만 다른 하나는 철제 상자 안에 있다."
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/paper.mp3",
+						"volume_db": 10,
+						"wait": false
+					}
+				]
+			},
+			"paper_02": {
+				"click_rect": [
+					1702,
+					651,
+					165,
+					71
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "종이에 무언가 적혀있다."
+					},
+					{
+						"type": "document_dialogue",
+						"path": "res://imgs/documents/document_01.png",
+						"start_page": 1,
+						"sound": "res://sounds/paper.mp3",
+						"sound_volume_db": 10,
+						"document_events": [
+							{
+								"type": "text",
+								"text": "금속 접합 실험 기록"
+							},
+							{
+								"type": "text",
+								"text": "A-04 : 투명. 금속 표면에 유의미한 변화 없음."
+							},
+							{
+								"type": "text",
+								"text": "B-17 : 짙은 갈색. 금속 접합부의 강도가 급격히 저하됨."
+							},
+							{
+								"type": "text",
+								"text": "C-02 : 희끄무레한 색. B-17의 반응을 즉시 중화함."
+							},
+							{
+								"type": "text",
+								"text": "※ 피부에 닿지 않도록 주의할 것."
+							},
+							{
+								"type": "flag",
+								"flag": "check_paper_02_dark_forest_room_07_02"
+							}
+						]
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/paper.mp3",
+						"volume_db": 10,
+						"wait": false
+					}
+				]
+			},
+			"drawer_01": {
+				"click_rect": [
+					268,
+					570,
+					306,
+					248
+				],
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/drawer_open.mp3",
+						"volume_db": 10,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "서랍 안에는 녹슨 공구들과 잡다한 물건들이 뒤섞여있다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "작은 철사",
+								"events": [
+									{
+										"type": "conditional_events",
+										"branches": [
+											{
+												"required_flag": [
+													"box_status_02_dark_forest_room_07_02"
+												],
+												"events": [
+													{
+														"type": "text",
+														"text": "얇고 쉽게 구부러지는 철사다."
+													},
+													{
+														"type": "text",
+														"text": "끝을 조금 구부리면 상자의 벌어진 틈 사이로 밀어 넣을 수 있을 것 같다."
+													},
+													{
+														"type": "text",
+														"text": "안쪽에 보였던 걸쇠를 건드려볼 수 있지 않을까?"
+													},
+													{
+														"type": "flag",
+														"flag": "find_small_wire_dark_forest_room_07_02"
+													}
+												]
+											}
+										],
+										"default_events": [
+											{
+												"type": "text",
+												"text": "얇고 쉽게 구부러지는 철사다."
+											},
+											{
+												"type": "text",
+												"text": "지금 당장은 어디에 쓸 수 있을지 모르겠다."
+											}
+										]
+									}
+								]
+							},
+							{
+								"text": "녹슨 망치",
+								"events": [
+									{
+										"type": "text",
+										"text": "붉은 녹과 오래된 핏자국이 엉겨 붙은 망치다."
+									},
+									{
+										"type": "text",
+										"text": "손잡이를 쥐자 희미한 쇠비린내가 코를 찌른다."
+									},
+									{
+										"type": "flag",
+										"flag": "find_rusty_hammer_dark_forest_room_07_02"
+									}
+								]
+							},
+							{
+								"text": "빈 유리병",
+								"events": [
+									{
+										"type": "text",
+										"text": "투명하지만 안쪽에 정체를 알 수 없는 검은 자국이 남아있는 유리병들이다."
+									},
+									{
+										"type": "text",
+										"text": "무언가 액체를 담기에는 적당해 보인다."
+									},
+									{
+										"type": "flag",
+										"flag": "find_empty_glass_bottle_dark_forest_room_07_02"
+									}
+								]
+							},
+							{
+								"text": "닫는다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/drawer_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									}
+								]
+							}
+						]
+					}
+				]
+			},
+			"drawer_02": {
+				"click_rect": [
+					634,
+					546,
+					261,
+					235
+				],
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/drawer_open.mp3",
+						"volume_db": 10,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "서랍 안을 열자 시야를 가릴 정도의 먼지들이 뿜어져 나왔다."
+					},
+					{
+						"type": "text",
+						"text": "이곳에는 딱히 살펴볼 만한 게 없는 것 같다."
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/drawer_open.mp3",
+						"volume_db": 10,
+						"wait": false
+					}
+				]
+			},
+			"drawer_03": {
+				"click_rect": [
+					1602,
+					757,
+					212,
+					251
+				],
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/drawer_open.mp3",
+						"volume_db": 10,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "서랍 안에는 녹슨 공구들과 잡다한 물건들이 뒤섞여있다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "부러진 드라이버",
+								"events": [
+									{
+										"type": "text",
+										"text": "끝부분이 날카롭게 부러진 십자드라이버다. "
+									},
+									{
+										"type": "text",
+										"text": "나사를 돌릴 수는 없지만, 무언가를 긁어내거나 찌르는 용도로는 쓸 수 있을 것 같다."
+									},
+									{
+										"type": "flag",
+										"flag": "find_broken_screwdriver_dark_forest_room_07_02"
+									}
+								]
+							},
+							{
+								"text": "단단한 송곳",
+								"events": [
+									{
+										"type": "text",
+										"text": "끝이 기묘할 정도로 뾰족하고 매끄러운 송곳이다. 차가운 금속 날을 보고 있으면 괜히 소름이 돋는다."
+									},
+									{
+										"type": "flag",
+										"flag": "find_sturdy_awl_dark_forest_room_07_02"
+									}
+								]
+							},
+							{
+								"text": "낡은 천",
+								"events": [
+									{
+										"type": "text",
+										"text": "먼지와 곰팡이 냄새가 가득한 헝겊 조각이다. 찢어질 듯 아슬아슬하지만 상처를 묶거나 무언가를 감싸기엔 충분해 보인다."
+									},
+									{
+										"type": "flag",
+										"flag": "find_old_rag_dark_forest_room_07_02"
+									}
+								]
+							},
+							{
+								"text": "닫는다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/drawer_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									}
+								]
+							}
+						]
+					}
+				]
+			},
+			"chemical_substances_01": {
+				"click_rect": [
+					442,
+					392,
+					205,
+					110
+				],
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/acid_bottle.mp3",
+						"volume_db": 5,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "알 수 없는 화학 약품들이 늘어있다."
+					}
+				]
+			},
+			"chemical_substances_02": {
+				"click_rect": [
+					900,
+					372,
+					206,
+					94
+				],
+				"events": [
+					{
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag": [
+									"box_status_01_dark_forest_room_07_02",
+									"check_paper_02_dark_forest_room_07_02"
+								],
+								"required_flag_missing": [
+									"box_status_02_dark_forest_room_07_02"
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/acid_bottle.mp3",
+										"volume_db": 5,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "알 수 없는 화학 약품들이 늘어있다."
+									},
+									{
+										"type": "text",
+										"text": "약품을 사용해서 상자의 용접 부분을 녹일 수 있을 거 같다."
+									},
+									{
+										"type": "choices",
+										"choices": [
+											{
+												"text": "짙은 갈색 액체",
+												"events": [
+													{
+														"type": "sound",
+														"path": "res://sounds/acid_bottle.mp3",
+														"volume_db": 5,
+														"wait": false
+													},
+													{
+														"type": "text",
+														"text": "유리병 안에서 부글부글 끓어오르듯 기포가 터지는 짙은 갈색 액체다. 코를 찌르는 매캐한 냄새가 새어 나온다."
+													},
+													{
+														"type": "flag",
+														"flag": "find_dark_brown_liquid"
+													}
+												]
+											},
+											{
+												"text": "희끄무레한색 액체",
+												"events": [
+													{
+														"type": "sound",
+														"path": "res://sounds/acid_bottle.mp3",
+														"volume_db": 5,
+														"wait": false
+													},
+													{
+														"type": "text",
+														"text": "탁하고 불투명한 희끄무레한 액체다. 표면에 묘한 유막이 떠 있어 보기만 해도 불쾌한 기분이 든다."
+													},
+													{
+														"type": "flag",
+														"flag": "find_whitish_liquid"
+													}
+												]
+											},
+											{
+												"text": "투명색 액체",
+												"events": [
+													{
+														"type": "sound",
+														"path": "res://sounds/acid_bottle.mp3",
+														"volume_db": 5,
+														"wait": false
+													},
+													{
+														"type": "text",
+														"text": "너무 깨끗해서 오히려 위험해 보이는 투명한 액체다."
+													},
+													{
+														"type": "flag",
+														"flag": "find_transparent_liquid"
+													}
+												]
+											},
+											{
+												"text": "그만둔다.",
+												"events": [
+													{
+														"type": "sound",
+														"path": "res://sounds/acid_bottle.mp3",
+														"volume_db": 5,
+														"wait": false
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "sound",
+								"path": "res://sounds/acid_bottle.mp3",
+								"volume_db": 5,
+								"wait": false
+							},
+							{
+								"type": "text",
+								"text": "알 수 없는 화학 약품들이 늘어있다."
+							}
+						]
+					}
+				]
+			},
+			"pencil_holder": {
+				"click_rect": [
+					1585,
+					445,
+					86,
+					127
+				],
+				"events": [
+					{
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag": [
+									"box_status_01_dark_forest_room_07_02",
+									"find_dark_brown_liquid"
+								],
+								"required_flag_missing": [
+									"box_status_02_dark_forest_room_07_02"
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/metal_box.mp3",
+										"volume_db": 5,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "연필과 볼펜 사이를 뒤적이다 작은 유리 스포이드를 발견했다."
+									},
+									{
+										"type": "text",
+										"text": "끝부분이 상당히 가늘다."
+									},
+									{
+										"type": "text",
+										"text": "송곳으로 벌려놓은 상자의 틈에도 충분히 들어갈 것 같다."
+									},
+									{
+										"type": "flag",
+										"flag": "find_liquid_dropper_dark_forest_room_07_02"
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "sound",
+								"path": "res://sounds/metal_box.mp3",
+								"volume_db": 5,
+								"wait": false
+							},
+							{
+								"type": "text",
+								"text": "연필과 볼펜 등이 들어있는 것 같다."
+							}
+						]
+					}
+				]
+			},
+			"locked_box": {
+				"click_rect": [
+					1400,
+					482,
+					149,
+					78
+				],
+				"events": [
+					{
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag": [
+									"find_rusty_hammer_dark_forest_room_07_02"
+								],
+								"required_flag_missing": [
+									"find_sturdy_awl_dark_forest_room_07_02",
+									"box_status_01_dark_forest_room_07_02"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "망치로 상자의 모서리를 힘껏 내려쳤다."
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/metal_box.mp3",
+										"volume_db": 15,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "...쾅!"
+									},
+									{
+										"type": "text",
+										"text": "둔탁한 금속음만 방 안에 울려 퍼졌다."
+									},
+									{
+										"type": "text",
+										"text": "표면에 작은 흠집조차 생기지 않았다."
+									},
+									{
+										"type": "text",
+										"text": "힘으로 부술 수 있는 물건은 아닌 것 같다."
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"find_sturdy_awl_dark_forest_room_07_02"
+								],
+								"required_flag_missing": [
+									"box_status_01_dark_forest_room_07_02"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "송곳 끝을 뚜껑과 몸체 사이에 억지로 밀어 넣었다."
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/metal_box_open_01.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "...딱."
+									},
+									{
+										"type": "text",
+										"text": "금속이 뒤틀리며 손톱 하나 들어갈 정도의 틈이 생겼다."
+									},
+									{
+										"type": "text",
+										"text": "하지만 이 정도로는 뚜껑을 들어 올릴 수 없을 것 같다."
+									},
+									{
+										"type": "flag",
+										"flag": "box_status_01_dark_forest_room_07_02"
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"box_status_01_dark_forest_room_07_02"
+								],
+								"required_flag_missing": [
+									"find_dark_brown_liquid",
+									"find_liquid_dropper_dark_forest_room_07_02",
+									"box_status_02_dark_forest_room_07_02"
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/metal_box.mp3",
+										"volume_db": 15,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "송곳으로 벌려놓은 작은 틈이 보인다."
+									},
+									{
+										"type": "text",
+										"text": "이 틈을 이용할 다른 방법을 찾아봐야 할 것 같다."
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"box_status_01_dark_forest_room_07_02",
+									"find_dark_brown_liquid"
+								],
+								"required_flag_missing": [
+									"find_liquid_dropper_dark_forest_room_07_02",
+									"box_status_02_dark_forest_room_07_02"
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/metal_box.mp3",
+										"volume_db": 15,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "금속 접합부를 약하게 만드는 갈색 액체가 있다."
+									},
+									{
+										"type": "text",
+										"text": "하지만 병째로 들이부으면 대부분 밖으로 흘러내릴 것 같다."
+									},
+									{
+										"type": "text",
+										"text": "좁은 틈 안쪽으로 소량의 액체를 흘려보낼 방법이 필요하다."
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"box_status_01_dark_forest_room_07_02",
+									"find_dark_brown_liquid",
+									"find_liquid_dropper_dark_forest_room_07_02"
+								],
+								"required_flag_missing": [
+									"box_status_02_dark_forest_room_07_02"
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/acid_bottle.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "스포이드로 갈색 액체를 조금 빨아들였다."
+									},
+									{
+										"type": "text",
+										"text": "끝부분을 송곳으로 벌려놓은 틈에 밀어 넣고 액체를 천천히 흘려 넣었다."
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/acid_effect.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "...치이익."
+									},
+									{
+										"type": "text",
+										"text": "액체가 접합부를 따라 스며들자 금속 표면에서 작은 기포가 끓어오르기 시작했다."
+									},
+									{
+										"type": "text",
+										"text": "코를 찌르는 매캐한 냄새에 머리가 지끈거린다."
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/metal_box.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "잠시 뒤 뚜껑을 들어 올려보니 전보다 훨씬 쉽게 움직인다."
+									},
+									{
+										"type": "text",
+										"text": "...하지만 완전히 열리지는 않는다."
+									},
+									{
+										"type": "flag",
+										"flag": "box_status_02_dark_forest_room_07_02"
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"box_status_02_dark_forest_room_07_02"
+								],
+								"required_flag_missing": [
+									"box_status_03_dark_forest_room_07_02",
+									"find_small_wire_dark_forest_room_07_02"
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/metal_box.mp3",
+										"volume_db": 5,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "벌어진 틈 사이로 상자 안쪽이 희미하게 보인다."
+									},
+									{
+										"type": "text",
+										"text": "뚜껑 안쪽에 작은 금속 걸쇠가 걸려 있다."
+									},
+									{
+										"type": "text",
+										"text": "걸쇠만 풀 수 있다면 상자를 열 수 있을 것 같다."
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"box_status_02_dark_forest_room_07_02",
+									"find_small_wire_dark_forest_room_07_02"
+								],
+								"required_flag_missing": [
+									"box_status_03_dark_forest_room_07_02",
+									"got_unknown_eye_dark_forest_room_07_02"
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/metal_box.mp3",
+										"volume_db": 5,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "철사 끝을 살짝 구부린 뒤 벌어진 틈 사이로 밀어 넣었다."
+									},
+									{
+										"type": "text",
+										"text": "안쪽의 걸쇠를 더듬어 본다."
+									},
+									{
+										"type": "text",
+										"text": "...달칵."
+									},
+									{
+										"type": "text",
+										"text": "손끝에 무언가 걸리는 감촉이 전해진다."
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/metal_clink.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "...딸깍."
+									},
+									{
+										"type": "text",
+										"text": "안쪽의 걸쇠가 풀렸다."
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/metal_box_open_02.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "천천히 뚜껑을 들어 올렸다."
+									},
+									{
+										"type": "item",
+										"item": "unknown_eye",
+										"count": 1
+									},
+									{
+										"type": "flag",
+										"flag": "box_status_03_dark_forest_room_07_02"
+									},
+									{
+										"type": "flag",
+										"flag": "got_unknown_eye_dark_forest_room_07_02"
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"box_status_03_dark_forest_room_07_02",
+									"got_unknown_eye_dark_forest_room_07_02"
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/metal_box_open_02.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "상자 안은 비어있다."
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "단단하고 오래된 철제 상자다."
+							},
+							{
+								"type": "sound",
+								"path": "res://sounds/metal_box.mp3",
+								"volume_db": 15,
+								"wait": false
+							},
+							{
+								"type": "text",
+								"text": "들어보니 안쪽에서 무언가 굴러가는 소리가 난다."
+							},
+							{
+								"type": "text",
+								"text": "힘껏 잡아당겨 봤지만 꿈쩍도 하지 않는다."
+							},
+							{
+								"type": "text",
+								"text": "뚜껑과 몸체가 안쪽에서 용접된 것처럼 단단하게 붙어있다."
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_hallway_08": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"no_exit_messages": {
+			"up": "뒤로 끝없는 어둠이 이어져있다."
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_07",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_08",
+				"position": [
+					1550,
+					420
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_01",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_08": {
+		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_08",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"bush": {
+				"click_rect": [
+					136,
+					418,
+					1561,
+					144
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							}
+						]
 					}
 				]
 			}
