@@ -4900,6 +4900,9 @@ func run_single_event(event):
 	elif event_type == "choices":
 		await run_event_choices(event.get("choices", []))
 		
+	elif event_type == "game_over":
+		await run_story_game_over_event(event)
+		
 	elif event_type == "unlock_exit":
 		await run_unlock_exit_event(event)
 
@@ -4992,6 +4995,11 @@ func run_events(events):
 
 	for event in events:
 		await run_single_event(event)
+		
+		# 게임오버 등 현재 이벤트 흐름 중단을 요청한 경우
+		# 뒤쪽 이벤트는 실행하지 않는다.
+		if story_event_should_stop:
+			break
 # 선택지 Dictionary에서 표시 텍스트 가져오기 함수
 func get_choice_data_text(choice):
 	if choice == null:

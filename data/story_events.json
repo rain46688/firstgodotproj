@@ -14408,6 +14408,10 @@
 				"flag": "story_first_enter_broadcasting_room_02_after_grail_filled_unknown_hall_03_done"
 			},
 			{
+				"type": "flag",
+				"flag": "opened_first_eye_tree_a"
+			},
+			{
 				"type": "auto_save",
 				"slot": 1,
 				"show_message": false,
