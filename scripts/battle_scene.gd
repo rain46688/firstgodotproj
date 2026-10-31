@@ -3142,13 +3142,8 @@ func get_enemy_projectile_result_type(result):
 func should_enemy_projectile_damage_player(result):
 	var result_type = get_enemy_projectile_result_type(result)
 
-	if result_type == "parried":
-		return false
-
-	if result_type == "blocked":
-		return false
-
-	return true
+	# 실제 플레이어 피해 판정선에 도달한 경우에만 피해
+	return result_type == "hit_player"
 # 적 탄막이 피해 판정선에 도달했는지 확인하는 함수
 func has_enemy_projectile_reached_damage_line(projectile, projectile_data):
 	var projectile_hit_rect = get_projectile_hit_rect(projectile, projectile_data)
@@ -3820,13 +3815,51 @@ func run_enemy_projectile_and_get_result(
 	runtime_data,
 	initial_elapsed_time = 0.0
 ):
+	var projectile_speed = float(runtime_data.get("speed", 1200.0))
+	var projectile_life_time = float(runtime_data.get("life_time", 0.9))
+
+	# 탄막의 현재 히트박스와 방어선 사이의 거리 계산
+	if projectile_speed > 0.0:
+		var hit_rect = get_projectile_hit_rect(
+			projectile,
+			projectile_data
+		)
+
+		var hit_bottom_y = (
+			hit_rect.position.y
+			+ hit_rect.size.y
+		)
+
+		var damage_line_y = (
+			defense_area_rect.position.y
+			+ defense_area_rect.size.y
+			- 20.0
+		)
+
+		var remaining_distance = max(
+			0.0,
+			damage_line_y - hit_bottom_y
+		)
+
+		# 방어선까지 도달하는 데 필요한 시간
+		var required_life_time = (
+			remaining_distance / projectile_speed
+		)
+
+		# 원래 수명보다 필요한 시간이 길면 자동 연장
+		# 0.1초는 안전 여유 시간
+		projectile_life_time = max(
+			projectile_life_time,
+			required_life_time + 0.1
+		)
+
 	return await run_enemy_projectile_motion(
 		projectile,
 		projectile_data,
 		projectile_id,
 		danger_type,
-		float(runtime_data.get("speed", 1200.0)),
-		float(runtime_data.get("life_time", 0.9)),
+		projectile_speed,
+		projectile_life_time,
 		float(runtime_data.get("frame_time", 0.04)),
 		runtime_data.get("frames", []),
 		initial_elapsed_time
@@ -4135,11 +4168,24 @@ func create_enemy_projectile_node(
 		projectile_size / 2.0
 	)
 
-	projectile.position = (
-		get_enemy_projectile_start_position(
-			projectile_info
-		)
+	# JSON에 설정된 탄막 시작 위치
+	var spawn_position = get_enemy_projectile_start_position(
+		projectile_info
 	)
+
+	# 탄막 크기와 관계없이 화면 맨 위에서 등장하도록 보정
+	if bool(projectile_info.get("spawn_from_top", true)):
+		var scene_top_y = get_global_rect().position.y
+		var container_top_y = enemy_projectile_container.get_global_rect().position.y
+
+		spawn_position.y = (
+			scene_top_y
+			- container_top_y
+			- projectile_size.y
+		)
+
+	# 보정된 탄막 위치 적용
+	projectile.position = spawn_position
 
 	projectile.rotation_degrees = (
 		get_enemy_projectile_rotation(
@@ -4720,16 +4766,46 @@ func is_enemy_pattern_start_effect_available(effect, pattern):
 		return is_enemy_effect_target_active(reflect_target)
 
 	return true
-# 패턴 시작 효과 전체가 현재 사용 가능한지 확인하는 함수
+# 적 패턴 시작 효과 전체가 현재 사용 가능한지 확인하는 함수
 func are_enemy_pattern_start_effects_available(pattern):
 	var effects = pattern.get("start_effects", [])
 
 	if typeof(effects) != TYPE_ARRAY:
 		return true
 
+	# 이 패턴에서 앞서 재생될 예정인 부위 목록
+	var revived_part_ids = []
+
 	for effect in effects:
+		if typeof(effect) == TYPE_DICTIONARY:
+			var effect_type = str(effect.get("type", ""))
+
+			# 앞선 revive_part로 활성화될 부위라면
+			# reflect_damage 사용을 허용
+			if effect_type == "reflect_damage":
+				var target_data = resolve_enemy_target_data(
+					effect.get("target", "owner"),
+					pattern.get("owner_type", "body"),
+					pattern.get("owner_id", ""),
+					effect.get("part_id", "")
+				)
+
+				var target_type = str(target_data.get("target_type", ""))
+				var target_id = str(target_data.get("target_id", ""))
+
+				if target_type == "part" and revived_part_ids.has(target_id):
+					continue
+
+		# 기존 효과 사용 가능 여부 검사
 		if not is_enemy_pattern_start_effect_available(effect, pattern):
 			return false
+
+		# 사용 가능한 재생 효과를 순서대로 기록
+		if typeof(effect) == TYPE_DICTIONARY:
+			if str(effect.get("type", "")) == "revive_part":
+				revived_part_ids.append(
+					str(effect.get("part_id", ""))
+				)
 
 	return true
 # 적 패턴이 현재 후보에 들어갈 수 있는지 확인하는 함수
@@ -5489,6 +5565,16 @@ func setup_enemy_parts():
 		enemy_parts[part_id] = part
 		enemy_part_hp[part_id] = get_enemy_part_max_hp_from_data(part)
 
+		# 처음부터 활성화할 부위인지 확인
+		# 옵션이 없으면 기존처럼 활성화
+		var initially_active = bool(part.get("initially_active", true))
+
+		# 초기 비활성 부위는 파괴 상태로 등록
+		# 이후 revive_part 효과를 통해 활성화할 수 있다.
+		if not initially_active:
+			enemy_part_hp[part_id] = 0
+			destroyed_parts.append(part_id)
+
 		var part_image_path = get_enemy_part_image_path_from_data(part)
 		var part_texture = load_texture_by_path(
 			part_image_path,
@@ -5502,6 +5588,7 @@ func setup_enemy_parts():
 		part_sprite.name = "EnemyPart_" + part_id
 		part_sprite.texture = part_texture
 		part_sprite.modulate.a = 1.0
+		part_sprite.visible = initially_active
 		
 		part_sprite.ignore_texture_size = true
 		part_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -6402,15 +6489,59 @@ func decrease_enemy_reflect_turns():
 			expired_keys.append(target_key)
 
 	for target_key in expired_keys:
+		if not enemy_damage_reflect_states.has(target_key):
+			continue
+
+		var state = enemy_damage_reflect_states[target_key]
 		enemy_damage_reflect_states.erase(target_key)
+
+		# 버프 종료 시 부위 제거 옵션이 없다면 기존대로 처리
+		if not bool(state.get("remove_part_on_expire", false)):
+			continue
+
+		if str(state.get("target_type", "")) != "part":
+			continue
+
+		var part_id = str(state.get("target_id", ""))
+
+		if part_id == "":
+			continue
+
+		if not enemy_part_hp.has(part_id):
+			continue
+
+		if destroyed_parts.has(part_id):
+			continue
+
+		# 버프 종료 연출 설정
+		var expire_effect = {
+			"effect_duration": float(state.get("expire_effect_duration", 0.8)),
+			"text": str(state.get("expire_text", "")),
+			"text_duration": float(state.get("expire_text_duration", 1.2)),
+			"sound": str(state.get("expire_sound", "")),
+			"sound_volume_db": float(state.get("expire_sound_volume_db", 0.0))
+		}
+
+		# 버프 종료 사운드 실행
+		play_enemy_pattern_effect_sound(expire_effect)
+
+		# 기존 부위 제거 함수로 페이드아웃과 텍스트 출력
+		# 연출이 완료될 때까지 다음 패턴 진행 대기
+		await remove_enemy_part_by_pattern(part_id, expire_effect)
 # 플레이어 턴 종료 특수 효과 전체 처리 함수
 func finish_player_turn_special_effects():
 	# 반사 처리 대기 중 플레이어가 다른 행동을 고르지 못하게 턴을 먼저 닫는다.
 	is_player_turn = false
 
 	var can_continue = await apply_pending_reflected_damage()
-	decrease_enemy_reflect_turns()
-	return can_continue
+
+	if not can_continue:
+		return false
+
+	# 반사 버프 종료 연출이 완료될 때까지 대기
+	await decrease_enemy_reflect_turns()
+
+	return true
 # 플레이어 턴 종료 후 적 턴 시작 공통 함수
 func finish_player_turn_and_start_enemy_turn():
 	if not await finish_player_turn_special_effects():

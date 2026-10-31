@@ -32788,7 +32788,7 @@
 									{
 										"type": "sound",
 										"path": "res://sounds/tree_monster.mp3",
-										"volume_db": 5,
+										"volume_db": 0,
 										"wait": false
 									},
 									{
@@ -32888,7 +32888,7 @@
 									{
 										"type": "sound",
 										"path": "res://sounds/tree_monster.mp3",
-										"volume_db": 5,
+										"volume_db": 0,
 										"wait": false
 									},
 									{
@@ -32905,7 +32905,7 @@
 													{
 														"type": "sound",
 														"path": "res://sounds/tree_monster.mp3",
-														"volume_db": 5,
+														"volume_db": 0,
 														"wait": false
 													},
 													{
@@ -32945,7 +32945,7 @@
 													{
 														"type": "sound",
 														"path": "res://sounds/tree_monster.mp3",
-														"volume_db": 5,
+														"volume_db": 0,
 														"wait": false
 													},
 													{
@@ -32980,7 +32980,7 @@
 													{
 														"type": "sound",
 														"path": "res://sounds/tree_monster.mp3",
-														"volume_db": 5,
+														"volume_db": 0,
 														"wait": false
 													},
 													{
@@ -33016,7 +33016,7 @@
 													{
 														"type": "sound",
 														"path": "res://sounds/tree_monster.mp3",
-														"volume_db": 5,
+														"volume_db": 0,
 														"wait": false
 													},
 													{
@@ -33046,7 +33046,7 @@
 													{
 														"type": "sound",
 														"path": "res://sounds/tree_monster.mp3",
-														"volume_db": 5,
+														"volume_db": 0,
 														"wait": false
 													},
 													{

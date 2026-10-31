@@ -9661,8 +9661,8 @@
 						"id": "basic_attack_04",
 						"weight": 30,
 						"priority": 1,
-						"warning_text": "거대한 왼쪽 주먹을 사방으로 강하게 휘두른다.",
-						"fire_mode": "sequential",
+						"warning_text": "거대한 왼쪽 주먹을 중앙으로 강하게 마구 휘두른다.",
+						"fire_mode": "parallel",
 						"projectiles": [
 							{
 								"projectile": "punch_bullet_slow",
@@ -9683,7 +9683,7 @@
 								],
 								"rotation": 180,
 								"damage": 25,
-								"delay": 0.1,
+								"delay": 0.2,
 								"danger_type": "parry_only"
 							},
 							{
@@ -9694,7 +9694,7 @@
 								],
 								"rotation": 180,
 								"damage": 25,
-								"delay": 0.2,
+								"delay": 0.4,
 								"danger_type": "parry_only"
 							},
 							{
@@ -9705,7 +9705,7 @@
 								],
 								"rotation": 180,
 								"damage": 25,
-								"delay": 0.6,
+								"delay": 1.5,
 								"danger_type": "parry_only"
 							},
 							{
@@ -9716,7 +9716,29 @@
 								],
 								"rotation": 180,
 								"damage": 25,
-								"delay": 0.7,
+								"delay": 1.7,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_slow",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 25,
+								"delay": 1.9,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 25,
+								"delay": 2.9,
 								"danger_type": "parry_only"
 							},
 							{
@@ -9727,29 +9749,7 @@
 								],
 								"rotation": 180,
 								"damage": 25,
-								"delay": 0.8,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "punch_bullet_slow",
-								"start": [
-									400,
-									0
-								],
-								"rotation": 180,
-								"damage": 25,
-								"delay": 1.0,
-								"danger_type": "parry_only"
-							},
-							{
-								"projectile": "punch_bullet_slow",
-								"start": [
-									600,
-									0
-								],
-								"rotation": 180,
-								"damage": 25,
-								"delay": 1.0,
+								"delay": 3.1,
 								"danger_type": "parry_only"
 							}
 						]
@@ -9779,6 +9779,503 @@
 		],
 		"defeat_flags": [
 			"defeated_hammerhead_mansion_master"
+		]
+	},
+	"forest_evil": {
+		"name": "숲의 괴수",
+		"show_in_credits": true,
+		"max_hp": 1000,
+		"battle_bgm": "res://sounds/bgm27.mp3",
+		"battle_bgm_volume_db": 5.0,
+		"battle_bgm_loop": true,
+		"battle_bgm_fade_in": true,
+		"battle_bgm_fade_time": 3.0,
+		"encounter_sound": "res://sounds/enemy_encounter.mp3",
+		"encounter_sound_volume_db": 0.0,
+		"image": "res://imgs/enemies/forest_evil.png",
+		"battle_background": "",
+		"battle_background_alpha": 0.2,
+		"enemy_size": [
+			1254,
+			706
+		],
+		"enemy_position": [
+			400,
+			0
+		],
+		"can_escape": false,
+		"encounter_text": "등장 설명.",
+		"observe_text": "관찰 설명.",
+		"weakness_text": "",
+		"patterns": [
+			{
+				"id": "shell",
+				"weight": 50,
+				"priority": 1,
+				"warning_text": "무언가 변화하기 시작한다.",
+				"turn_condition": {
+					"mode": "interval",
+					"every": 6,
+					"start_turn": 3
+				},
+				"start_effects": [
+					{
+						"type": "revive_part",
+						"part_id": "shell",
+						"hp_percent": 100,
+						"text": "몸이 가시와 화염으로 뒤덮였다.",
+						"sound": "res://sounds/squeeze_sound.mp3",
+						"sound_volume_db": 0.0,
+						"effect_duration": 0.8
+					},
+					{
+						"type": "reflect_damage",
+						"target": "part",
+						"part_id": "shell",
+						"turns": 3,
+						"damage_ratio": 1.0,
+						"remove_part_on_expire": true,
+						"expire_text": "가시와 화염이 힘을 잃고 떨어져 나갔다.",
+						"expire_text_duration": 1.5,
+						"expire_effect_duration": 1.0,
+						"expire_sound": "res://sounds/squeeze_sound.mp3",
+						"expire_sound_volume_db": 0.0,
+						"text": "받은 피해를 되돌리는 상태가 되었다.",
+						"sound": "res://sounds/shield.mp3",
+						"sound_volume_db": 3.0,
+						"trigger_sound": "res://sounds/parry.mp3",
+						"trigger_sound_volume_db": 4.0
+					}
+				],
+				"projectiles": []
+			},
+			{
+				"id": "basic_attack_01",
+				"weight": 10,
+				"priority": 1,
+				"warning_text": "테스트 패턴1",
+				"fire_mode": "sequential",
+				"projectiles": [
+					{
+						"projectile": "punch_bullet",
+						"start": [
+							200,
+							0
+						],
+						"rotation": 180,
+						"damage": 15,
+						"delay": 1.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "punch_bullet",
+						"start": [
+							1150,
+							0
+						],
+						"rotation": 180,
+						"damage": 25,
+						"delay": 1.5
+					},
+					{
+						"projectile": "punch_bullet",
+						"start": [
+							200,
+							0
+						],
+						"rotation": 180,
+						"damage": 25,
+						"delay": 2.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "punch_bullet",
+						"start": [
+							1150,
+							0
+						],
+						"rotation": 180,
+						"damage": 25,
+						"delay": 2.5
+					},
+					{
+						"projectile": "punch_bullet",
+						"start": [
+							200,
+							0
+						],
+						"rotation": 180,
+						"damage": 25,
+						"delay": 3.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "punch_bullet",
+						"start": [
+							1150,
+							0
+						],
+						"rotation": 180,
+						"damage": 25,
+						"delay": 3.5,
+						"danger_type": "parry_only"
+					}
+				]
+			},
+			{
+				"id": "basic_attack_02",
+				"weight": 10,
+				"priority": 1,
+				"warning_text": "테스트 패턴4",
+				"fire_mode": "parallel",
+				"projectiles": [
+					{
+						"projectile": "punch_bullet_slow",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 25,
+						"delay": 0.0,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "punch_bullet_slow",
+						"start": [
+							600,
+							0
+						],
+						"rotation": 180,
+						"damage": 25,
+						"delay": 0.2,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "punch_bullet_slow",
+						"start": [
+							400,
+							0
+						],
+						"rotation": 180,
+						"damage": 25,
+						"delay": 0.4,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "punch_bullet_slow",
+						"start": [
+							600,
+							0
+						],
+						"rotation": 180,
+						"damage": 25,
+						"delay": 1.5,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "punch_bullet_slow",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 25,
+						"delay": 1.7,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "punch_bullet_slow",
+						"start": [
+							1000,
+							0
+						],
+						"rotation": 180,
+						"damage": 25,
+						"delay": 1.9,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "punch_bullet_slow",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 25,
+						"delay": 2.9,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "punch_bullet_slow",
+						"start": [
+							600,
+							0
+						],
+						"rotation": 180,
+						"damage": 25,
+						"delay": 3.1,
+						"danger_type": "parry_only"
+					}
+				]
+			}
+		],
+		"hitbox_base_size": [
+			1086,
+			1448
+		],
+		"hitboxes": [
+			{
+				"id": "head",
+				"name": "머리",
+				"rect": [
+					752,
+					552,
+					163,
+					232
+				],
+				"damage_multiplier": 1.0
+			},
+			{
+				"id": "body",
+				"name": "몸통",
+				"rect": [
+					386,
+					360,
+					389,
+					312
+				],
+				"damage_multiplier": 1.0
+			},
+			{
+				"id": "tail_01",
+				"name": "몸통",
+				"rect": [
+					183,
+					565,
+					200,
+					383
+				],
+				"damage_multiplier": 1.0
+			},
+			{
+				"id": "tail_02",
+				"name": "몸통",
+				"rect": [
+					22,
+					931,
+					164,
+					295
+				],
+				"damage_multiplier": 1.0
+			}
+		],
+		"parts": [
+			{
+				"id": "shell",
+				"name": "가시와 화염으로 뒤덮인 외피",
+				"max_hp": 300,
+				"initially_active": false,
+				"z_index": 10,
+				"image": "res://imgs/enemies/forest_evil_buffed.png",
+				"observe_text": "이 상태에서는 직접 공격하면 안될 것 같다.",
+				"size": [
+					1086,
+					1448
+				],
+				"position": [
+					0,
+					0
+				],
+				"destroyable": true,
+				"destroy_text": ".",
+				"hitbox": {
+					"id": "shell",
+					"name": "가시와 화염으로 뒤덮인 외피",
+					"rect": [
+						129,
+						747,
+						800,
+						295
+					]
+				},
+				"patterns": [
+					{
+						"id": "basic_attack_03",
+						"weight": 10,
+						"priority": 2,
+						"warning_text": "테스트 패턴3",
+						"fire_mode": "sequential",
+						"projectiles": [
+							{
+								"projectile": "punch_bullet",
+								"start": [
+									200,
+									0
+								],
+								"rotation": 180,
+								"damage": 15,
+								"delay": 1.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet",
+								"start": [
+									1150,
+									0
+								],
+								"rotation": 180,
+								"damage": 25,
+								"delay": 1.5
+							},
+							{
+								"projectile": "punch_bullet",
+								"start": [
+									200,
+									0
+								],
+								"rotation": 180,
+								"damage": 25,
+								"delay": 2.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet",
+								"start": [
+									1150,
+									0
+								],
+								"rotation": 180,
+								"damage": 25,
+								"delay": 2.5
+							},
+							{
+								"projectile": "punch_bullet",
+								"start": [
+									200,
+									0
+								],
+								"rotation": 180,
+								"damage": 25,
+								"delay": 3.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet",
+								"start": [
+									1150,
+									0
+								],
+								"rotation": 180,
+								"damage": 25,
+								"delay": 3.5,
+								"danger_type": "parry_only"
+							}
+						]
+					},
+					{
+						"id": "basic_attack_04",
+						"weight": 10,
+						"priority": 2,
+						"warning_text": "테스트 패턴4",
+						"fire_mode": "parallel",
+						"projectiles": [
+							{
+								"projectile": "punch_bullet_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 25,
+								"delay": 0.0,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_slow",
+								"start": [
+									600,
+									0
+								],
+								"rotation": 180,
+								"damage": 25,
+								"delay": 0.2,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_slow",
+								"start": [
+									400,
+									0
+								],
+								"rotation": 180,
+								"damage": 25,
+								"delay": 0.4,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_slow",
+								"start": [
+									600,
+									0
+								],
+								"rotation": 180,
+								"damage": 25,
+								"delay": 1.5,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 25,
+								"delay": 1.7,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_slow",
+								"start": [
+									1000,
+									0
+								],
+								"rotation": 180,
+								"damage": 25,
+								"delay": 1.9,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_slow",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 25,
+								"delay": 2.9,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_slow",
+								"start": [
+									600,
+									0
+								],
+								"rotation": 180,
+								"damage": 25,
+								"delay": 3.1,
+								"danger_type": "parry_only"
+							}
+						]
+					}
+				]
+			}
+		],
+		"drops": [],
+		"defeat_flags": [
+			"defeated_forest_evil"
 		]
 	}
 }
