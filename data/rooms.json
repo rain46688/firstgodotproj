@@ -33983,5 +33983,549 @@
 				]
 			}
 		}
+	},
+	"dark_forest_hallway_14": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_02.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"opened_dark_forest_room_14"
+				],
+				"path": "res://imgs/backgrounds/dark_forest_hallway_03.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_hallway_15",
+				"position": [
+					620,
+					30
+				]
+			},
+			"down": {
+				"target": "dark_forest_hallway_13",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_14",
+				"position": [
+					1500,
+					420
+				],
+				"move_effect": "enter",
+				"locked": true,
+				"open_flag": "opened_dark_forest_room_14"
+			}
+		},
+		"interactions": {
+			"dark_forest_room_14_door": {
+				"click_rect": [
+					1390,
+					270,
+					300,
+					560
+				],
+				"hide_if_flag": "opened_dark_forest_room_14",
+				"events": [
+					{
+						"type": "text",
+						"text": "철문으로 굳게 닫혀있다. 문을 열을까?"
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "right",
+										"required_item": "forest_key_a",
+										"master_key": "master_key",
+										"consume_required_key": true,
+										"consume_master_key": true,
+										"success_effect": "fade",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "dark_forest_01",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_14": {
+		"background": "res://imgs/backgrounds/dark_forest_room_04.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_14",
+				"position": [
+					900,
+					950
+				]
+			},
+			"left": {
+				"target": "dark_forest_room_14_02",
+				"footstep_sound": {
+					"path": "res://sounds/footsteps.mp3",
+					"volume_db": 20.0
+				},
+				"position": [
+					900,
+					500
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"cabin": {
+				"click_rect": [
+					511,
+					270,
+					827,
+					387
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 오두막이다."
+					},
+					{
+						"type": "text",
+						"text": "이곳에 누군가 살고 있는 걸까?"
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_room_14_02": {
+		"background": "res://imgs/backgrounds/dark_forest_room_inside_02.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_room_14",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					535,
+					90,
+					356,
+					235
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "창문 너머 달빛은 은은하게 방안을 비추고 있다."
+					}
+				]
+			},
+			"paper_02": {
+				"click_rect": [
+					1702,
+					651,
+					165,
+					71
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "종이에 무언가 그려있다."
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/paper.mp3",
+						"volume_db": 10,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "대략적인 이곳의 지도인 것 같다."
+					},
+					{
+						"type": "text",
+						"text": "가장 가까운 네 갈래 길에서 서쪽으로 가면 동굴이 있는 것 같다."
+					},
+					{
+						"type": "text",
+						"text": "그 방향은 넝쿨로 막혀있던 길이다."
+					},
+					{
+						"type": "text",
+						"text": "그리고 지도에 X 표시가 그려져있다."
+					},
+					{
+						"type": "text",
+						"text": "무언가 있는 걸까?"
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/paper.mp3",
+						"volume_db": 10,
+						"wait": false
+					}
+				]
+			},
+			"drawer_01": {
+				"click_rect": [
+					268,
+					570,
+					306,
+					248
+				],
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/drawer_open.mp3",
+						"volume_db": 10,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "서랍 안에는 잡다한 물건들이 뒤섞여있다."
+					},
+					{
+						"type": "text",
+						"text": "이곳에는 딱히 살펴볼 만한 게 없는 것 같다."
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/drawer_open.mp3",
+						"volume_db": 10,
+						"wait": false
+					}
+				]
+			},
+			"drawer_02": {
+				"click_rect": [
+					634,
+					546,
+					261,
+					235
+				],
+				"required_flag_missing": "got_tuna_can_a_dark_forest_room_14_02",
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/drawer_open.mp3",
+						"volume_db": 10,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "서랍 안을 열자 시야를 가릴 정도의 먼지들이 뿜어져 나왔다."
+					},
+					{
+						"type": "text",
+						"text": "무언가 있다."
+					},
+					{
+						"type": "item",
+						"item": "tuna_can_a",
+						"count": 5
+					},
+					{
+						"type": "text",
+						"text": "오래됐지만 충분히 먹을 수 있을 것 같다."
+					},
+					{
+						"type": "flag",
+						"flag": "got_tuna_can_a_dark_forest_room_14_02"
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/drawer_open.mp3",
+						"volume_db": 10,
+						"wait": false
+					}
+				]
+			},
+			"drawer_02_02": {
+				"click_rect": [
+					634,
+					546,
+					261,
+					235
+				],
+				"required_flag": "got_tuna_can_a_dark_forest_room_14_02",
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/drawer_open.mp3",
+						"volume_db": 10,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "이곳에는 더 이상 쓸 만한 게 없는 것 같다."
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/drawer_open.mp3",
+						"volume_db": 10,
+						"wait": false
+					}
+				]
+			},
+			"drawer_03": {
+				"click_rect": [
+					1602,
+					757,
+					212,
+					251
+				],
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/drawer_open.mp3",
+						"volume_db": 10,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "서랍 안에는 잡다한 물건들이 뒤섞여있다."
+					},
+					{
+						"type": "text",
+						"text": "이곳에는 딱히 살펴볼 만한 게 없는 것 같다."
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/drawer_open.mp3",
+						"volume_db": 10,
+						"wait": false
+					}
+				]
+			},
+			"chemical_substances_01": {
+				"click_rect": [
+					442,
+					392,
+					205,
+					110
+				],
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/acid_bottle.mp3",
+						"volume_db": 5,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "알 수 없는 화학 약품들이 늘어있다."
+					}
+				]
+			},
+			"chemical_substances_02": {
+				"click_rect": [
+					900,
+					372,
+					206,
+					94
+				],
+				"events": [
+					{
+						"type": "sound",
+						"path": "res://sounds/acid_bottle.mp3",
+						"volume_db": 5,
+						"wait": false
+					},
+					{
+						"type": "text",
+						"text": "알 수 없는 화학 약품들이 늘어있다."
+					}
+				]
+			},
+			"box": {
+				"click_rect": [
+					1400,
+					482,
+					149,
+					78
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "단단하고 오래된 철제 상자다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "상자를 열어본다.",
+								"flag": "got_unknown_eye_dark_forest_room_14_02",
+								"already_events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/metal_box_open_02.mp3",
+										"volume_db": 15,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "안에는 아무것도 없다."
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/metal_box_open_02.mp3",
+										"volume_db": 15,
+										"wait": false
+									}
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/metal_box_open_02.mp3",
+										"volume_db": 15,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "무언가 있다."
+									},
+									{
+										"type": "item",
+										"item": "unknown_eye",
+										"count": 1
+									},
+									{
+										"type": "flag",
+										"flag": "got_unknown_eye_dark_forest_room_14_02"
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/metal_box_open_02.mp3",
+										"volume_db": 15,
+										"wait": false
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		}
 	}
 }

@@ -79,6 +79,16 @@
 		"stackable": false,
 		"consumed_on_use": true
 	},
+	"forest_key_a": {
+		"name": "철제키A",
+		"description": "어두운 숲 어딘가의 문을 열 수 있는 열쇠인 것 같다.",
+		"image": "res://imgs/items/forest_key180x180.png",
+		"width": 1,
+		"height": 1,
+		"type": "key",
+		"stackable": false,
+		"consumed_on_use": true
+	},
 	"fist": {
 		"name": "맨주먹",
 		"description": "아무것도 쥐고 있지 않은 상태이다.",
@@ -572,7 +582,6 @@
 		"width": 1,
 		"height": 1,
 		"type": "etc",
-		"effect_scope": "inventory",
 		"stackable": false
 	},
 	"scales_heart": {
@@ -582,7 +591,6 @@
 		"width": 1,
 		"height": 1,
 		"type": "etc",
-		"effect_scope": "inventory",
 		"stackable": false
 	},
 	"craw_body": {
@@ -592,8 +600,8 @@
 		"width": 1,
 		"height": 1,
 		"type": "etc",
-		"effect_scope": "inventory",
-		"stackable": false
+		"stackable": true,
+		"max_stack": 2
 	},
 	"unknown_eye": {
 		"name": "의문의 눈알",
@@ -602,8 +610,8 @@
 		"width": 1,
 		"height": 1,
 		"type": "etc",
-		"effect_scope": "inventory",
-		"stackable": false
+		"stackable": true,
+		"max_stack": 3
 	},
 	"old_water_ball": {
 		"name": "오래된 워터볼",
