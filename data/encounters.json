@@ -299,13 +299,6 @@
 			"first_turn": ""
 		}
 	],
-	"dark_forest_01": [
-		{
-			"enemy": "forest_evil",
-			"weight": 100,
-			"required_flag": "",
-			"missing_flag": "",
-			"first_turn": ""
-		}
-	]
+	"dark_forest_01": [],
+	"dark_forest_02": []
 }

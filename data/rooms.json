@@ -29587,6 +29587,7 @@
 	},
 	"dark_forest_river_02": {
 		"background": "res://imgs/backgrounds/dark_forest_river_02.png",
+		"display_name": "어두운 숲 구역2 · 강가",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -29670,6 +29671,7 @@
 	},
 	"dark_forest_river_01": {
 		"background": "res://imgs/backgrounds/dark_forest_river_01.png",
+		"display_name": "어두운 숲 구역2 · 강가",
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -30743,7 +30745,8 @@
 				"move_effect": "enter",
 				"locked": true,
 				"open_flag": [
-					"opened_right_eye_tree_b"
+					"opened_first_eye_tree_b",
+					"opened_second_eye_tree_b"
 				]
 			}
 		},
@@ -30755,15 +30758,33 @@
 					631,
 					402
 				],
-				"required_flag_missing": "opened_right_eye_tree_b",
 				"events": [
 					{
-						"type": "text",
-						"text": "길이 막혀있다."
-					},
-					{
-						"type": "text",
-						"text": "넝쿨을 먼저 어떻게 해야 될 거 같다."
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag": [
+									"opened_first_eye_tree_b",
+									"opened_second_eye_tree_b"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "길을 막고 있던 넝쿨들이 사라져있다."
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "길이 막혀있다."
+							},
+							{
+								"type": "text",
+								"text": "넝쿨을 먼저 어떻게 해야 될 거 같다."
+							}
+						]
 					}
 				]
 			}
@@ -33111,6 +33132,849 @@
 									{
 										"text": "그만둔다.",
 										"events": []
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_hallway_10": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_hallway_11",
+				"position": [
+					620,
+					30
+				]
+			},
+			"down": {
+				"target": "dark_forest_hallway_09",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_10",
+				"position": [
+					1550,
+					420
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_01",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_10": {
+		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_10",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"bush": {
+				"click_rect": [
+					136,
+					418,
+					1561,
+					144
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_hallway_11": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_hallway_12",
+				"position": [
+					620,
+					30
+				]
+			},
+			"down": {
+				"target": "dark_forest_hallway_10",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_11",
+				"position": [
+					1550,
+					420
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_01",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_11": {
+		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_11",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"bush": {
+				"click_rect": [
+					136,
+					418,
+					1561,
+					144
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_hallway_12": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_06.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_crossroad_02",
+				"position": [
+					620,
+					30
+				]
+			},
+			"down": {
+				"target": "dark_forest_hallway_11",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_12",
+				"position": [
+					1550,
+					420
+				],
+				"move_effect": "enter",
+				"locked": true,
+				"open_flag": [
+					"숲보스클리어"
+				]
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_01",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_12": {
+		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_12",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"bush": {
+				"click_rect": [
+					136,
+					418,
+					1561,
+					144
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_crossroad_02": {
+		"background": "res://imgs/backgrounds/dark_forest_crossroad_02.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"opened_first_eye_tree_a",
+					"opened_second_eye_tree_a"
+				],
+				"path": "res://imgs/backgrounds/dark_forest_crossroad_01.png"
+			}
+		],
+		"display_name": "어두운 숲 구역2 · 교차로",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"enter_stories": [],
+		"exits": {
+			"up": {
+				"target": "dark_forest_hallway_17",
+				"position": [
+					900,
+					30
+				]
+			},
+			"down": {
+				"target": "dark_forest_hallway_16",
+				"position": [
+					900,
+					950
+				],
+				"move_effect": "enter"
+			},
+			"left": {
+				"target": "dark_forest_hallway_21",
+				"position": [
+					60,
+					450
+				],
+				"move_effect": "enter",
+				"locked": true,
+				"open_flag": [
+					"opened_first_eye_tree_a",
+					"opened_second_eye_tree_a"
+				]
+			},
+			"right": {
+				"target": "dark_forest_hallway_12",
+				"position": [
+					1830,
+					450
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"vine": {
+				"click_rect": [
+					86,
+					256,
+					698,
+					300
+				],
+				"events": [
+					{
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag": [
+									"opened_first_eye_tree_a",
+									"opened_second_eye_tree_a"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "길을 막고 있던 넝쿨들이 사라져있다."
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "길이 막혀있다."
+							},
+							{
+								"type": "text",
+								"text": "넝쿨을 먼저 어떻게 해야 될 거 같다."
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_hallway_13": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"no_exit_messages": {
+			"down": "뒤로 끝없는 어둠이 이어져있다."
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_hallway_14",
+				"position": [
+					620,
+					30
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_13",
+				"position": [
+					1550,
+					420
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_02",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_13": {
+		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_13",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"bush": {
+				"click_rect": [
+					136,
+					418,
+					1561,
+					144
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
 									}
 								]
 							}

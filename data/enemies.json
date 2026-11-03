@@ -9785,8 +9785,8 @@
 		"name": "숲의 괴수",
 		"show_in_credits": true,
 		"max_hp": 1000,
-		"battle_bgm": "res://sounds/bgm27.mp3",
-		"battle_bgm_volume_db": 5.0,
+		"battle_bgm": "res://sounds/bgm28.mp3",
+		"battle_bgm_volume_db": -3.0,
 		"battle_bgm_loop": true,
 		"battle_bgm_fade_in": true,
 		"battle_bgm_fade_time": 3.0,
@@ -9811,7 +9811,7 @@
 			{
 				"id": "shell",
 				"weight": 50,
-				"priority": 1,
+				"priority": 2,
 				"warning_text": "무언가 변화하기 시작한다.",
 				"turn_condition": {
 					"mode": "interval",
@@ -9823,22 +9823,22 @@
 						"type": "revive_part",
 						"part_id": "shell",
 						"hp_percent": 100,
-						"text": "몸이 가시와 화염으로 뒤덮였다.",
-						"sound": "res://sounds/squeeze_sound.mp3",
-						"sound_volume_db": 0.0,
+						"text": "괴물의 외피가 가시와 화염으로 뒤덮였다.",
+						"sound": "res://sounds/fire_spell.mp3",
+						"sound_volume_db": -3.0,
 						"effect_duration": 0.8
 					},
 					{
 						"type": "reflect_damage",
 						"target": "part",
 						"part_id": "shell",
-						"turns": 3,
+						"turns": 1,
 						"damage_ratio": 1.0,
 						"remove_part_on_expire": true,
-						"expire_text": "가시와 화염이 힘을 잃고 떨어져 나갔다.",
+						"expire_text": "가시와 화염이 사그라들었다.",
 						"expire_text_duration": 1.5,
 						"expire_effect_duration": 1.0,
-						"expire_sound": "res://sounds/squeeze_sound.mp3",
+						"expire_sound": "res://sounds/fire_whoosh.mp3",
 						"expire_sound_volume_db": 0.0,
 						"text": "받은 피해를 되돌리는 상태가 되었다.",
 						"sound": "res://sounds/shield.mp3",
@@ -9854,70 +9854,92 @@
 				"weight": 10,
 				"priority": 1,
 				"warning_text": "테스트 패턴1",
-				"fire_mode": "sequential",
+				"fire_mode": "parallel",
 				"projectiles": [
 					{
-						"projectile": "punch_bullet",
+						"projectile": "punch_bullet_small",
 						"start": [
-							200,
+							800,
 							0
 						],
 						"rotation": 180,
 						"damage": 15,
-						"delay": 1.0,
+						"delay": 0.3,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "punch_bullet_small",
+						"start": [
+							860,
+							0
+						],
+						"rotation": 180,
+						"damage": 15,
+						"delay": 0.3,
+						"danger_type": "parry_only"
+					},
+					{
+						"projectile": "punch_bullet_small",
+						"start": [
+							800,
+							0
+						],
+						"rotation": 180,
+						"damage": 15,
+						"delay": 0.6
+					},
+					{
+						"projectile": "punch_bullet_small",
+						"start": [
+							860,
+							0
+						],
+						"rotation": 180,
+						"damage": 15,
+						"delay": 0.6
+					},
+					{
+						"projectile": "punch_bullet",
+						"start": [
+							650,
+							0
+						],
+						"rotation": 180,
+						"damage": 10,
+						"delay": 1.3,
 						"danger_type": "parry_only"
 					},
 					{
 						"projectile": "punch_bullet",
 						"start": [
-							1150,
+							650,
 							0
 						],
 						"rotation": 180,
-						"damage": 25,
-						"delay": 1.5
-					},
-					{
-						"projectile": "punch_bullet",
-						"start": [
-							200,
-							0
-						],
-						"rotation": 180,
-						"damage": 25,
-						"delay": 2.0,
+						"damage": 20,
+						"delay": 1.6,
 						"danger_type": "parry_only"
 					},
 					{
 						"projectile": "punch_bullet",
 						"start": [
-							1150,
+							650,
 							0
 						],
 						"rotation": 180,
-						"damage": 25,
-						"delay": 2.5
-					},
-					{
-						"projectile": "punch_bullet",
-						"start": [
-							200,
-							0
-						],
-						"rotation": 180,
-						"damage": 25,
-						"delay": 3.0,
+						"damage": 20,
+						"delay": 1.9,
 						"danger_type": "parry_only"
 					},
 					{
 						"projectile": "punch_bullet",
 						"start": [
-							1150,
+							650,
 							0
 						],
 						"rotation": 180,
-						"damage": 25,
-						"delay": 3.5,
+						"damage": 20,
+						"delay": 2.2,
 						"danger_type": "parry_only"
 					}
 				]
@@ -10045,7 +10067,7 @@
 					389,
 					312
 				],
-				"damage_multiplier": 1.0
+				"damage_multiplier": 0.0
 			},
 			{
 				"id": "tail_01",
@@ -10056,7 +10078,7 @@
 					200,
 					383
 				],
-				"damage_multiplier": 1.0
+				"damage_multiplier": 0.0
 			},
 			{
 				"id": "tail_02",
@@ -10067,7 +10089,7 @@
 					164,
 					295
 				],
-				"damage_multiplier": 1.0
+				"damage_multiplier": 0.0
 			}
 		],
 		"parts": [
@@ -10088,7 +10110,7 @@
 					0
 				],
 				"destroyable": true,
-				"destroy_text": ".",
+				"destroy_text": "가시와 화염이 힘을 잃고 떨어져 나갔다.",
 				"hitbox": {
 					"id": "shell",
 					"name": "가시와 화염으로 뒤덮인 외피",
@@ -10105,70 +10127,92 @@
 						"weight": 10,
 						"priority": 2,
 						"warning_text": "테스트 패턴3",
-						"fire_mode": "sequential",
+						"fire_mode": "parallel",
 						"projectiles": [
 							{
-								"projectile": "punch_bullet",
+								"projectile": "punch_bullet_small",
 								"start": [
-									200,
+									800,
 									0
 								],
 								"rotation": 180,
 								"damage": 15,
-								"delay": 1.0,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_small",
+								"start": [
+									860,
+									0
+								],
+								"rotation": 180,
+								"damage": 15,
+								"delay": 0.3,
+								"danger_type": "parry_only"
+							},
+							{
+								"projectile": "punch_bullet_small",
+								"start": [
+									800,
+									0
+								],
+								"rotation": 180,
+								"damage": 15,
+								"delay": 0.6
+							},
+							{
+								"projectile": "punch_bullet_small",
+								"start": [
+									860,
+									0
+								],
+								"rotation": 180,
+								"damage": 15,
+								"delay": 0.6
+							},
+							{
+								"projectile": "punch_bullet",
+								"start": [
+									650,
+									0
+								],
+								"rotation": 180,
+								"damage": 10,
+								"delay": 1.3,
 								"danger_type": "parry_only"
 							},
 							{
 								"projectile": "punch_bullet",
 								"start": [
-									1150,
+									650,
 									0
 								],
 								"rotation": 180,
-								"damage": 25,
-								"delay": 1.5
-							},
-							{
-								"projectile": "punch_bullet",
-								"start": [
-									200,
-									0
-								],
-								"rotation": 180,
-								"damage": 25,
-								"delay": 2.0,
+								"damage": 20,
+								"delay": 1.6,
 								"danger_type": "parry_only"
 							},
 							{
 								"projectile": "punch_bullet",
 								"start": [
-									1150,
+									650,
 									0
 								],
 								"rotation": 180,
-								"damage": 25,
-								"delay": 2.5
-							},
-							{
-								"projectile": "punch_bullet",
-								"start": [
-									200,
-									0
-								],
-								"rotation": 180,
-								"damage": 25,
-								"delay": 3.0,
+								"damage": 20,
+								"delay": 1.9,
 								"danger_type": "parry_only"
 							},
 							{
 								"projectile": "punch_bullet",
 								"start": [
-									1150,
+									650,
 									0
 								],
 								"rotation": 180,
-								"damage": 25,
-								"delay": 3.5,
+								"damage": 20,
+								"delay": 2.2,
 								"danger_type": "parry_only"
 							}
 						]
