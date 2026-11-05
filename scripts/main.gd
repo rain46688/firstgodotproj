@@ -2617,37 +2617,38 @@ func get_unlock_exit_open_flag(event, exit_data):
 	return ""
 # unlock_exit 이벤트에서 사용할 전용 열쇠 ID 가져오기
 func get_unlock_exit_required_item(event, exit_data):
-	var required_item = str(event.get("required_item", ""))
+	# 이벤트에 빈 문자열을 명시한 경우에는 출구의 구형 required_item을 사용하지 않는다.
+	# 속성 자체가 없는 구형 이벤트에서만 exits.required_item을 읽는다.
+	if event.has("required_item"):
+		return str(event.get("required_item", "")).strip_edges()
 
-	if required_item != "":
-		return required_item
-
-	# 이전 구조와의 호환용.
-	# exits 안에 required_item이 남아 있어도 읽을 수 있게 둔다.
-	return str(exit_data.get("required_item", ""))
+	return str(exit_data.get("required_item", "")).strip_edges()
 # unlock_exit 이벤트에서 사용할 만능 열쇠 후보 목록 가져오기
 func get_unlock_exit_master_key_ids(event):
 	var result = []
 
-	# 단일 만능 열쇠
-	var master_key = str(event.get("master_key", ""))
+	# 명시적 빈 문자열은 만능 열쇠 사용 금지.
+	# 기존 JSON에서 속성이 아예 없던 경우는 아래에서 기본 master_key를 허용한다.
+	if event.has("master_key"):
+		var master_key = str(event.get("master_key", "")).strip_edges()
 
-	if master_key != "":
-		result.append(master_key)
+		if master_key != "":
+			result.append(master_key)
 
-	# 여러 후보를 쓰고 싶을 때를 위한 확장용
+	# 기존 master_keys 배열 기능 유지: 등록된 후보만 사용한다.
 	if event.has("master_keys"):
 		var master_keys = event["master_keys"]
 
 		if typeof(master_keys) == TYPE_ARRAY:
 			for key_id in master_keys:
-				var key_text = str(key_id)
+				var key_text = str(key_id).strip_edges()
 
 				if key_text != "" and not result.has(key_text):
 					result.append(key_text)
 
-	# 아무것도 지정하지 않으면 기본 master_key 사용
-	if result.size() == 0:
+	# master_key 필드 자체가 없는 기존 이벤트의 하위 호환성 유지.
+	# master_keys에 후보가 명시되어 있다면 기본 키를 추가하지 않는다.
+	if result.is_empty() and not event.has("master_key"):
 		result.append(DEFAULT_MASTER_KEY_ID)
 
 	return result
@@ -2663,6 +2664,15 @@ func find_owned_master_key_id(event):
 # unlock_exit에 실제 사용할 열쇠 결정
 func get_unlock_exit_used_key_info(event, exit_data):
 	var required_item = get_unlock_exit_required_item(event, exit_data)
+	var master_key_ids = get_unlock_exit_master_key_ids(event)
+
+	# 전용 열쇠와 사용 가능한 만능 열쇠 후보가 모두 비어 있으면 열쇠 없이 연다.
+	# (기존 이벤트에서 master_key 자체를 생략한 경우는 기본 만능 열쇠 후보가 있다.)
+	if required_item == "" and master_key_ids.is_empty():
+		return {
+			"item_id": "",
+			"key_type": "none"
+		}
 
 	# 1순위: 전용 열쇠
 	if required_item != "" and has_item(required_item):
@@ -2671,7 +2681,7 @@ func get_unlock_exit_used_key_info(event, exit_data):
 			"key_type": "required"
 		}
 
-	# 2순위: 만능 열쇠
+	# 2순위: 만능 열쇠. master_key=""로 명시되었다면 탐색하지 않는다.
 	var master_key_id = find_owned_master_key_id(event)
 
 	if master_key_id != "":
@@ -2688,22 +2698,29 @@ func get_unlock_exit_used_key_info(event, exit_data):
 func make_unlock_exit_success_text(event, key_info):
 	var item_id = str(key_info.get("item_id", ""))
 	var key_type = str(key_info.get("key_type", ""))
-	var item_name = get_item_name(item_id)
-
 	var text = ""
 
 	if key_type == "required":
 		text = str(event.get("required_key_success_text", ""))
 	elif key_type == "master":
 		text = str(event.get("master_key_success_text", ""))
+	elif key_type == "none":
+		text = str(event.get("no_key_success_text", ""))
 
 	if text == "":
 		text = str(event.get("success_text", ""))
 
 	if text == "":
-		text = "{item_name}로 문을 열었다."
+		if key_type == "none":
+			text = MSG_DOOR_UNLOCK
+		else:
+			text = "{item_name}로 문을 열었다."
 
-	return text.replace("{item_name}", item_name)
+	# 열쇠 없는 문은 아이템 이름을 조회할 필요가 없다.
+	if key_type == "none":
+		return text
+
+	return text.replace("{item_name}", get_item_name(item_id))
 # unlock_exit 실패 대사 가져오기
 func get_unlock_exit_fail_text(event):
 	return str(event.get("fail_text", MSG_DOOR_LOCKED))
@@ -2725,6 +2742,29 @@ func consume_unlock_exit_key_if_needed(event, key_info):
 	elif key_type == "master":
 		if bool(event.get("consume_master_key", false)):
 			consume_item_by_id(item_id)
+# 잠긴 문 효과음 재생 함수 (unlock_exit와 exits 클릭 처리에서 공통 사용)
+# 우선순위: unlock_exit 이벤트 옵션 -> exits 옵션 -> 씬의 기본 효과음 노드
+# 옵션: locked_sound_path / unlocked_sound_path, 각각 *_volume_db
+func play_unlock_exit_sound(event, exit_data, is_success):
+	var sound_key = "unlocked_sound" if is_success else "locked_sound"
+	var path_key = sound_key + "_path"
+	var volume_key = sound_key + "_volume_db"
+
+	var sound_path = str(event.get(path_key, exit_data.get(path_key, ""))).strip_edges()
+	var volume_db = float(event.get(volume_key, exit_data.get(volume_key, 0.0)))
+
+	if sound_path != "":
+		if ResourceLoader.exists(sound_path):
+			# 기존 sound 이벤트 구현을 재사용해 SFX 설정, 재생 후 노드 정리를 유지한다.
+			play_story_sound(sound_path, volume_db, false)
+			return
+
+		push_warning("문 효과음 파일이 없음. 기본 효과음을 사용함: " + sound_path)
+
+	var default_player = unlocked_sound if is_success else locked_sound
+
+	if default_player != null:
+		default_player.play()
 # unlock_exit 성공 연출 처리
 func run_unlock_exit_success_effect(event):
 	var success_effect = str(event.get("success_effect", "fade"))
@@ -2771,19 +2811,17 @@ func run_unlock_exit_event(event):
 		return
 
 	var key_info = get_unlock_exit_used_key_info(event, exit_data)
-	var used_key_id = str(key_info.get("item_id", ""))
+	var key_type = str(key_info.get("key_type", ""))
 
-	# 사용할 수 있는 열쇠가 없음
-	if used_key_id == "":
-		if locked_sound != null:
-			locked_sound.play()
-
+	# key_type="none"은 의도적인 열쇠 없는 문으로 성공 처리한다.
+	# ""만 열쇠가 필요한데 보유하지 않은 실패 상태다.
+	if key_type == "":
+		play_unlock_exit_sound(event, exit_data, false)
 		await show_dialogue(get_unlock_exit_fail_text(event))
 		return
 
 	# 지정된 단일 플래그만 설정한다. 배열의 다른 조건은 자동 완료하지 않는다.
-	if unlocked_sound != null:
-		unlocked_sound.play()
+	play_unlock_exit_sound(event, exit_data, true)
 
 	set_flag(open_flag)
 	consume_unlock_exit_key_if_needed(event, key_info)
@@ -4468,7 +4506,7 @@ func run_exit_interaction(direction):
 
 	# 필요한 아이템과 설정할 플래그가 있고, 아직 그 플래그가 없는 경우만 사용
 	if required_item != "" and has_item(required_item) and flag_to_set != "" and not has_flag(flag_to_set):
-		unlocked_sound.play()
+		play_unlock_exit_sound({}, exit_data, true)
 		set_flag(flag_to_set)
 		consume_item_by_id(required_item)
 
@@ -4485,7 +4523,7 @@ func run_exit_interaction(direction):
 		return
 
 	# 조건이 부족하면 문이 잠긴 상태를 유지하고 열쇠는 소모하지 않는다.
-	locked_sound.play()
+	play_unlock_exit_sound({}, exit_data, false)
 	await show_dialogue(MSG_DOOR_LOCKED)
 
 	set_interaction_buttons_disabled(false)

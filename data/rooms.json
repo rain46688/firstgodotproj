@@ -1840,6 +1840,8 @@
 										"consume_required_key": true,
 										"consume_master_key": true,
 										"success_effect": "fade",
+										"locked_sound_path": "res://sounds/iron_door_locked.mp3",
+										"unlocked_sound_path": "res://sounds/iron_door_open.mp3",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
 										"fail_text": "단단하게 잠겨있어서 열 수 없다."
@@ -1881,6 +1883,8 @@
 										"consume_required_key": true,
 										"consume_master_key": true,
 										"success_effect": "fade",
+										"locked_sound_path": "res://sounds/iron_door_locked.mp3",
+										"unlocked_sound_path": "res://sounds/iron_door_open.mp3",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
 										"fail_text": "단단하게 잠겨있어서 열 수 없다."
@@ -6784,6 +6788,8 @@
 										"consume_required_key": true,
 										"consume_master_key": true,
 										"success_effect": "fade",
+										"locked_sound_path": "res://sounds/iron_door_locked.mp3",
+										"unlocked_sound_path": "res://sounds/iron_door_open.mp3",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
 										"fail_text": "단단하게 잠겨있어서 열 수 없다."
@@ -6822,9 +6828,11 @@
 										"direction": "left",
 										"required_item": "",
 										"master_key": "master_key",
-										"consume_required_key": false,
+										"consume_required_key": true,
 										"consume_master_key": true,
 										"success_effect": "fade",
+										"locked_sound_path": "res://sounds/iron_door_locked.mp3",
+										"unlocked_sound_path": "res://sounds/iron_door_open.mp3",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
 										"fail_text": "단단하게 잠겨있어서 열 수 없다."
@@ -9784,9 +9792,11 @@
 										"direction": "left",
 										"required_item": "",
 										"master_key": "master_key",
-										"consume_required_key": false,
+										"consume_required_key": true,
 										"consume_master_key": true,
 										"success_effect": "fade",
+										"locked_sound_path": "res://sounds/iron_door_locked.mp3",
+										"unlocked_sound_path": "res://sounds/iron_door_open.mp3",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
 										"fail_text": "단단하게 잠겨있어서 열 수 없다."
@@ -10363,7 +10373,7 @@
 										"direction": "left",
 										"required_item": "",
 										"master_key": "master_key",
-										"consume_required_key": false,
+										"consume_required_key": true,
 										"consume_master_key": true,
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
@@ -18262,7 +18272,7 @@
 										"direction": "left",
 										"required_item": "",
 										"master_key": "master_key",
-										"consume_required_key": false,
+										"consume_required_key": true,
 										"consume_master_key": true,
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
@@ -21253,7 +21263,7 @@
 										"direction": "left",
 										"required_item": "",
 										"master_key": "master_key",
-										"consume_required_key": false,
+										"consume_required_key": true,
 										"consume_master_key": true,
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
@@ -29566,7 +29576,7 @@
 										"direction": "up",
 										"required_item": "",
 										"master_key": "master_key",
-										"consume_required_key": false,
+										"consume_required_key": true,
 										"consume_master_key": true,
 										"success_effect": "fade",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
@@ -30594,7 +30604,6 @@
 					214
 				],
 				"required_flag_missing": [
-					"opened_first_eye_tree_a",
 					"opened_second_eye_tree_a"
 				],
 				"events": [
@@ -30677,7 +30686,8 @@
 			{
 				"flags": [
 					"opened_first_eye_tree_b",
-					"opened_second_eye_tree_b"
+					"opened_second_eye_tree_b",
+					"first_told_tree_b"
 				],
 				"path": "res://imgs/backgrounds/dark_forest_crossroad_01.png"
 			}
@@ -30746,7 +30756,8 @@
 				"locked": true,
 				"open_flag": [
 					"opened_first_eye_tree_b",
-					"opened_second_eye_tree_b"
+					"opened_second_eye_tree_b",
+					"first_told_tree_b"
 				]
 			}
 		},
@@ -30765,7 +30776,8 @@
 							{
 								"required_flag": [
 									"opened_first_eye_tree_b",
-									"opened_second_eye_tree_b"
+									"opened_second_eye_tree_b",
+									"first_told_tree_b"
 								],
 								"events": [
 									{
@@ -32814,7 +32826,7 @@
 									},
 									{
 										"type": "story_dialogue",
-										"name": "???",
+										"name": "얼굴 달린 거목",
 										"text": "으으음... 흐아아아암..."
 									},
 									{
@@ -32824,12 +32836,12 @@
 									{
 										"type": "story_dialogue",
 										"name": "얼굴 달린 거목",
-										"text": "으으음... 대체 얼마나 오래 잔 게야..."
+										"text": "대체 얼마나 오래 잔 게야."
 									},
 									{
 										"type": "story_dialogue",
 										"name": "얼굴 달린 거목",
-										"text": "응...? 너희는 또 뭐냐? 못 보던 얼굴들이구나."
+										"text": "응? 너희는 또 뭐냐?"
 									},
 									{
 										"type": "text",
@@ -32838,7 +32850,7 @@
 									{
 										"type": "story_dialogue",
 										"name": "얼굴 달린 거목",
-										"text": "허어... 그랬군. 내 눈을 찾아 준 것이 너희였구나."
+										"text": "허어. 그랬군. 내 눈을 찾아 준 것이 너희였구나."
 									},
 									{
 										"type": "story_dialogue",
@@ -32875,19 +32887,54 @@
 										"text": "그 정도면 충분한 보답이겠지?"
 									},
 									{
-										"type": "story_dialogue",
-										"name": "얼굴 달린 거목",
-										"text": "아, 그리고 이 숲에는 나 말고도 잠들어 있는 녀석이 하나 더 있단다."
+										"type": "conditional_events",
+										"branches": [
+											{
+												"required_flag": [
+													"opened_first_eye_tree_b",
+													"opened_second_eye_tree_b"
+												],
+												"events": [
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "나 말고 이 숲을 관리하는 다른 녀석이 하나 더 있단다."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "그 녀석 먼저 깨어있었구먼."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "나와 마찬가지로 너희가 깨워줬구나."
+													}
+												]
+											}
+										],
+										"default_events": [
+											{
+												"type": "story_dialogue",
+												"name": "얼굴 달린 거목",
+												"text": "아, 그리고 이 숲을 관리하는 나 말고도 잠들어 있는 녀석이 하나 더 있단다."
+											},
+											{
+												"type": "story_dialogue",
+												"name": "얼굴 달린 거목",
+												"text": "그 녀석도 한번 깨워 보거라."
+											},
+											{
+												"type": "story_dialogue",
+												"name": "얼굴 달린 거목",
+												"text": "너희에게 도움이 되는 게 있을지도 모르니."
+											}
+										]
 									},
 									{
 										"type": "story_dialogue",
 										"name": "얼굴 달린 거목",
-										"text": "그 녀석도 한번 깨워 보거라. 나보다 더 많은 것을 알고 있을지도 모르니."
-									},
-									{
-										"type": "story_dialogue",
-										"name": "얼굴 달린 거목",
-										"text": "자, 궁금한 게 있다면 언제든 물어보거라. 오랜만에 깨어났더니 심심하기도 하구나."
+										"text": "음. 오랜만에 깨어났더니 심심하기도 하구나."
 									},
 									{
 										"type": "flag",
@@ -32900,6 +32947,9 @@
 									"opened_first_eye_tree_a",
 									"opened_second_eye_tree_a",
 									"first_told_tree_a"
+								],
+								"required_flag_missing": [
+									"first_told_tree_b"
 								],
 								"events": [
 									{
@@ -32932,17 +32982,23 @@
 													{
 														"type": "story_dialogue",
 														"name": "얼굴 달린 거목",
-														"text": "숲이라... 너희 눈에는 그렇게 보이는 모양이구나."
+														"text": "숲이라. 너희 눈에는 그렇게 보이는 모양이구나."
 													},
 													{
 														"type": "story_dialogue",
 														"name": "얼굴 달린 거목",
-														"text": "이곳의 나무들은 햇빛을 먹고 자라지 않는다. 땅속 깊은 곳에서 흘러나오는 무언가를 먹고 자라지."
+														"text": "이곳의 생명들은 햇빛을 먹고 자라지 않는다. 땅속 깊은 곳에서 흘러나오는 무언가를 먹고 자라지."
 													},
 													{
 														"type": "story_dialogue",
 														"name": "얼굴 달린 거목",
-														"text": "그리고 가끔은... 길을 잃은 것들이 좋은 양분이 되기도 하고."
+														"text": "그리고 가끔은. 길을 잃은 것들이 좋은 양분이 되기도 하고."
+													},
+													{
+														"type": "sound",
+														"path": "res://sounds/tree_monster.mp3",
+														"volume_db": 0,
+														"wait": false
 													},
 													{
 														"type": "text",
@@ -32951,7 +33007,12 @@
 													{
 														"type": "story_dialogue",
 														"name": "얼굴 달린 거목",
-														"text": "너희가 먹이가 될지, 이곳을 빠져나갈지는 내가 알 바 아니지만... 한 가지는 기억해 두거라."
+														"text": "물론, 도와준 너희를 먹을 생각은 없다."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "단 한 가지는 기억해 두거라."
 													},
 													{
 														"type": "story_dialogue",
@@ -32980,6 +33041,12 @@
 														"text": "대신 땅 아래에는 아주 많은 손이 있단다."
 													},
 													{
+														"type": "sound",
+														"path": "res://sounds/squeeze_sound.mp3",
+														"volume_db": 0,
+														"wait": false
+													},
+													{
 														"type": "text",
 														"text": "나무의 뿌리가 땅속에서 꿈틀거리는 소리가 들린다."
 													},
@@ -32987,11 +33054,6 @@
 														"type": "story_dialogue",
 														"name": "얼굴 달린 거목",
 														"text": "얼마나 오래 여기에 있었는지는 나도 잊었어. 오래 잠들어 있었으니까."
-													},
-													{
-														"type": "story_dialogue",
-														"name": "얼굴 달린 거목",
-														"text": "그런데... 참 이상한 냄새가 나는구나. 너흰 이 숲의 것들과는 달라."
 													}
 												]
 											},
@@ -33017,7 +33079,7 @@
 													{
 														"type": "story_dialogue",
 														"name": "얼굴 달린 거목",
-														"text": "다만 그 녀석도 지금은 깊이 잠들어 있을 게다. 워낙 잠이 많은 녀석이라..."
+														"text": "다만 그 녀석도 지금은 깊이 잠들어 있을 게다. 워낙 잠이 많은 녀석이라."
 													},
 													{
 														"type": "story_dialogue",
@@ -33053,7 +33115,7 @@
 													{
 														"type": "story_dialogue",
 														"name": "얼굴 달린 거목",
-														"text": "아직 치워지지 않은 넝쿨이 있다면 친구 녀석을 깨워보거라."
+														"text": "아직 치워지지 않은 넝쿨이 있다면 그 녀석을 깨워보거라."
 													},
 													{
 														"type": "text",
@@ -33074,10 +33136,46 @@
 														"type": "story_dialogue",
 														"name": "얼굴 달린 거목",
 														"text": "가거라. 그리고 발밑을 조심하고. 내 뿌리를 밟는 건 별로 좋아하지 않으니까."
+													},
+													{
+														"type": "flag",
+														"flag": "first_told_tree_a_02"
 													}
 												]
 											}
 										]
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"opened_first_eye_tree_a",
+									"opened_second_eye_tree_a",
+									"opened_first_eye_tree_b",
+									"opened_second_eye_tree_b",
+									"first_told_tree_a",
+									"first_told_tree_b"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "나무에 박힌 두 눈이 천천히 당신을 바라본다."
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/tree_monster.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "story_dialogue",
+										"name": "얼굴 달린 거목",
+										"text": "그 녀석을 깨워줘서 고맙구나."
+									},
+									{
+										"type": "story_dialogue",
+										"name": "얼굴 달린 거목",
+										"text": "오랜만에 쌓인 이야기를 해봐야겠구나."
 									}
 								]
 							}
@@ -33093,17 +33191,13 @@
 							},
 							{
 								"type": "text",
-								"text": "눈동자가 미세하게 움직이며 당신을 따라온다. 하지만 나무는 여전히 아무런 말이 없다."
-							},
-							{
-								"type": "text",
 								"text": "나머지 눈구멍도 채워 주어야 할 것 같다."
 							},
 							{
 								"type": "choices",
 								"choices": [
 									{
-										"text": "나머지 눈을 끼워 넣는다.",
+										"text": "눈을 끼워 넣는다.",
 										"events": [
 											{
 												"type": "item_payment",
@@ -33113,13 +33207,19 @@
 												"fail_events": [
 													{
 														"type": "text",
-														"text": "나머지 눈구멍에 넣을 만한 물건이 없다."
+														"text": "눈구멍에 넣을 만한 물건이 없다."
 													}
 												],
 												"success_events": [
 													{
+														"type": "sound",
+														"path": "res://sounds/squeeze_sound.mp3",
+														"volume_db": 0,
+														"wait": false
+													},
+													{
 														"type": "text",
-														"text": "남은 눈구멍에 눈알을 조심스럽게 밀어 넣었다."
+														"text": "눈구멍에 눈알을 조심스럽게 밀어 넣었다."
 													},
 													{
 														"type": "flag",
@@ -33694,7 +33794,8 @@
 			{
 				"flags": [
 					"opened_first_eye_tree_a",
-					"opened_second_eye_tree_a"
+					"opened_second_eye_tree_a",
+					"first_told_tree_a"
 				],
 				"path": "res://imgs/backgrounds/dark_forest_crossroad_01.png"
 			}
@@ -33755,7 +33856,8 @@
 				"locked": true,
 				"open_flag": [
 					"opened_first_eye_tree_a",
-					"opened_second_eye_tree_a"
+					"opened_second_eye_tree_a",
+					"first_told_tree_a"
 				]
 			},
 			"right": {
@@ -33782,7 +33884,8 @@
 							{
 								"required_flag": [
 									"opened_first_eye_tree_a",
-									"opened_second_eye_tree_a"
+									"opened_second_eye_tree_a",
+									"first_told_tree_a"
 								],
 								"events": [
 									{
@@ -34076,9 +34179,11 @@
 										"consume_required_key": true,
 										"consume_master_key": true,
 										"success_effect": "fade",
+										"locked_sound_path": "res://sounds/iron_door_locked.mp3",
+										"unlocked_sound_path": "res://sounds/iron_door_open.mp3",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-										"fail_text": "잠겨있어서 열 수 없다."
+										"fail_text": "단단하게 잠겨있어서 열 수 없다."
 									}
 								]
 							},
@@ -34092,7 +34197,7 @@
 			}
 		},
 		"random_encounter": {
-			"enemy_table": "dark_forest_01",
+			"enemy_table": "dark_forest_02",
 			"event_table": "dark_forest",
 			"chance": 50
 		}
@@ -34237,6 +34342,26 @@
 					}
 				]
 			},
+			"paper_01": {
+				"click_rect": [
+					1463,
+					575,
+					167,
+					81
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "종이에 알 수 없는 글자로 무언가 적혀있다."
+					},
+					{
+						"type": "sound",
+						"path": "res://sounds/paper.mp3",
+						"volume_db": 10,
+						"wait": false
+					}
+				]
+			},
 			"paper_02": {
 				"click_rect": [
 					1702,
@@ -34250,10 +34375,12 @@
 						"text": "종이에 무언가 그려있다."
 					},
 					{
-						"type": "sound",
-						"path": "res://sounds/paper.mp3",
-						"volume_db": 10,
-						"wait": false
+						"type": "document_popup",
+						"path": "res://imgs/documents/dark_forest_document_01.png",
+						"start_page": 1,
+						"sound": "res://sounds/paper.mp3",
+						"sound_volume_db": 10,
+						"close_on_last_page": true
 					},
 					{
 						"type": "text",
@@ -34262,10 +34389,6 @@
 					{
 						"type": "text",
 						"text": "가장 가까운 네 갈래 길에서 서쪽으로 가면 동굴이 있는 것 같다."
-					},
-					{
-						"type": "text",
-						"text": "그 방향은 넝쿨로 막혀있던 길이다."
 					},
 					{
 						"type": "text",
@@ -34521,6 +34644,765 @@
 							{
 								"text": "그만둔다.",
 								"events": []
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_hallway_15": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_hallway_16",
+				"position": [
+					620,
+					30
+				]
+			},
+			"down": {
+				"target": "dark_forest_hallway_14",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_15",
+				"position": [
+					1550,
+					420
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_02",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_15": {
+		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_15",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"bush": {
+				"click_rect": [
+					136,
+					418,
+					1561,
+					144
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_hallway_16": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_05.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_crossroad_02",
+				"position": [
+					620,
+					30
+				]
+			},
+			"down": {
+				"target": "dark_forest_hallway_15",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_16",
+				"position": [
+					1550,
+					420
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {
+			"mirror_sign": {
+				"click_rect": [
+					1190,
+					221,
+					188,
+					382
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길에서 볼 수 있는 익숙한 물체가 세워져있다."
+					}
+				]
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "dark_forest_02",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_16": {
+		"background": "res://imgs/backgrounds/dark_forest_room_05.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"opened_first_eye_tree_b",
+					"opened_second_eye_tree_b"
+				],
+				"path": "res://imgs/backgrounds/dark_forest_room_07.png"
+			},
+			{
+				"flags": [
+					"opened_first_eye_tree_b"
+				],
+				"path": "res://imgs/backgrounds/dark_forest_room_06.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_16",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"tree": {
+				"click_rect": [
+					597,
+					76,
+					748,
+					669
+				],
+				"events": [
+					{
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag": [
+									"opened_first_eye_tree_b"
+								],
+								"required_flag_missing": [
+									"opened_second_eye_tree_b"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "남은 눈구멍을 채우면 깨어날지도 모른다."
+									},
+									{
+										"type": "choices",
+										"choices": [
+											{
+												"text": "눈을 끼워 넣는다.",
+												"events": [
+													{
+														"type": "item_payment",
+														"item": "unknown_eye",
+														"count": 1,
+														"show_success_text": false,
+														"fail_events": [
+															{
+																"type": "text",
+																"text": "눈구멍에 넣을 만한 물건이 없다."
+															}
+														],
+														"success_events": [
+															{
+																"type": "text",
+																"text": "다른 눈구멍에 눈알을 조심스럽게 끼워 넣었다."
+															},
+															{
+																"type": "sound",
+																"path": "res://sounds/squeeze_sound.mp3",
+																"volume_db": 0,
+																"wait": false
+															},
+															{
+																"type": "flag",
+																"flag": "opened_second_eye_tree_b"
+															},
+															{
+																"type": "text",
+																"text": "두 눈이 번갈아 움직이다가 갑자기 꼭 감긴다."
+															},
+															{
+																"type": "text",
+																"text": "나무 속에서 우지끈거리는 소리가 들린다."
+															}
+														]
+													}
+												]
+											},
+											{
+												"text": "그만둔다.",
+												"events": []
+											}
+										]
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"opened_first_eye_tree_b",
+									"opened_second_eye_tree_b"
+								],
+								"required_flag_missing": [
+									"first_told_tree_b"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "두 눈을 되찾은 거목이 한참 동안 입을 굳게 다물고 있다."
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/tree_monster.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "story_dialogue",
+										"name": "얼굴 달린 거목",
+										"text": "누구냐..."
+									},
+									{
+										"type": "text",
+										"text": "갈라진 입술이 조금 벌어졌다가 다시 닫힌다."
+									},
+									{
+										"type": "story_dialogue",
+										"name": "얼굴 달린 거목",
+										"text": "가, 가까이 오지 마라. 아니, 이미 가까이 있군."
+									},
+									{
+										"type": "story_dialogue",
+										"name": "얼굴 달린 거목",
+										"text": "눈을... 돌려준 건 너희냐?"
+									},
+									{
+										"type": "text",
+										"text": "나무의 시선이 일행을 차례로 훑더니 땅으로 내려간다."
+									},
+									{
+										"type": "story_dialogue",
+										"name": "얼굴 달린 거목",
+										"text": "고맙다... 이런 말은 오랜만이라 좀 어색하군."
+									},
+									{
+										"type": "conditional_events",
+										"branches": [
+											{
+												"required_flag": [
+													"opened_first_eye_tree_a",
+													"opened_second_eye_tree_a"
+												],
+												"events": [
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "설마... 저쪽의 말 많은 녀석이 여기로 보냈나?"
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "그 녀석 먼저 깨어있었군..."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "예나 지금이나 남의 일에 참견하는 걸 좋아하지..."
+													}
+												]
+											}
+										],
+										"default_events": [
+											{
+												"type": "story_dialogue",
+												"name": "얼굴 달린 거목",
+												"text": "내가 여기 있다는 건... 어떻게 알았지?"
+											},
+											{
+												"type": "story_dialogue",
+												"name": "얼굴 달린 거목",
+												"text": "뭐, 됐다. 굳이 대답하지 않아도 된다."
+											}
+										]
+									},
+									{
+										"type": "story_dialogue",
+										"name": "얼굴 달린 거목",
+										"text": "그냥 보내기에는... 신세를 졌군."
+									},
+									{
+										"type": "text",
+										"text": "거목은 머뭇거리더니 천천히 땅속으로 뿌리를 뻗는다."
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/squeeze_sound.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "멀리서 넝쿨이 뜯겨 나가고 나뭇가지가 부러지는 소리가 울린다."
+									},
+									{
+										"type": "story_dialogue",
+										"name": "얼굴 달린 거목",
+										"text": "이거면 너희들한테 도움이 됬겠지? 아니, 딱히... 특별한 의미가 있는 건 아니다."
+									},
+									{
+										"type": "story_dialogue",
+										"name": "얼굴 달린 거목",
+										"text": "뭐... 궁금한 게 있으면 하나 정도는 물어봐도 된다."
+									},
+									{
+										"type": "flag",
+										"flag": "first_told_tree_b"
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"opened_first_eye_tree_b",
+									"opened_second_eye_tree_b",
+									"first_told_tree_b"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "거목의 두 눈이 당신을 향하다가 잠시 다른 곳을 본다."
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/tree_monster.mp3",
+										"volume_db": 0,
+										"wait": false
+									},
+									{
+										"type": "story_dialogue",
+										"name": "얼굴 달린 거목",
+										"text": "또 무슨 일이냐?"
+									},
+									{
+										"type": "choices",
+										"choices": [
+											{
+												"text": "이 숲에서 조심해야 할 것은?",
+												"events": [
+													{
+														"type": "sound",
+														"path": "res://sounds/tree_monster.mp3",
+														"volume_db": 0,
+														"wait": false
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "이곳에선 길이 사라지기도 하고, 처음 보는 길이 오래전부터 있었던 것처럼 나타나기도 해."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "그리고... 동굴에는 함부로 들어가지 마라."
+													},
+													{
+														"type": "text",
+														"text": "거목은 잠시 말을 멈춘다. 두 눈이 숲 안쪽의 어둠을 향한다."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "동굴 안에는 절대 들어가지 말도록 해라."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "이 이상은 묻지 마라. 나도 그곳은 꺼림칙하다."
+													}
+												]
+											},
+											{
+												"text": "당신이 수다쟁이 거목?",
+												"required_flag": [
+													"opened_second_eye_tree_a"
+												],
+												"events": [
+													{
+														"type": "sound",
+														"path": "res://sounds/tree_monster.mp3",
+														"volume_db": 0,
+														"wait": false
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "아, 그 녀석."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "혹시 나더러 수다쟁이라고 했다지?"
+													},
+													{
+														"type": "text",
+														"text": "거목의 눈이 빠르게 좌우로 흔들린다."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "그 녀석 앞에서만 말이 많아지는 거다. 아주 오래 알고 지냈으니까."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "모르는 자들하고까지 시끄럽게 떠들고 싶은 건 아니야."
+													}
+												]
+											},
+											{
+												"text": "왜 눈을 잃고 잠들어 있었지?",
+												"events": [
+													{
+														"type": "sound",
+														"path": "res://sounds/tree_monster.mp3",
+														"volume_db": 0,
+														"wait": false
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "기억이 흐릿하다."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "눈이 없어진 뒤로는 소리와 땅의 떨림만 느껴졌지. 그러다 어느 순간 아무것도 들리지 않게 됐어."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "누가 가져갔는지... 아니, 나 보고 뭘 지키라고 했던 거 같은데..."
+													},
+													{
+														"type": "text",
+														"text": "거목은 말없이 눈을 꾹 감았다가 뜬다."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "뭐... 다시 눈을 뜬 것만으로도 충분하다."
+													}
+												]
+											},
+											{
+												"text": "넝쿨을 치워 준 건 당신이야?",
+												"events": [
+													{
+														"type": "sound",
+														"path": "res://sounds/tree_monster.mp3",
+														"volume_db": 0,
+														"wait": false
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "그래. 내 뿌리가 닿는 곳에 엉켜 있던 것들을 치웠다."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "너희를 위해서라기보다는... 빚을 남겨 두는 게 싫었을 뿐이다."
+													},
+													{
+														"type": "text",
+														"text": "거목이 괜히 나뭇가지를 한 번 흔든다."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "... 그래도 길을 찾는 데 도움이 됐다면, 다행이고."
+													}
+												]
+											},
+											{
+												"text": "대화를 끝낸다.",
+												"events": [
+													{
+														"type": "sound",
+														"path": "res://sounds/tree_monster.mp3",
+														"volume_db": 0,
+														"wait": false
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "조심해서 가라."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "그리고, 또 와도 괜찮다. 말이 길지만 않다면."
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "거목의 얼굴에는 눈이 있어야 할 자리가 텅 비어 있다."
+							},
+							{
+								"type": "choices",
+								"choices": [
+									{
+										"text": "눈을 끼워 넣는다.",
+										"events": [
+											{
+												"type": "item_payment",
+												"item": "unknown_eye",
+												"count": 1,
+												"show_success_text": false,
+												"fail_events": [
+													{
+														"type": "text",
+														"text": "눈구멍에 넣을 만한 물건이 없다."
+													}
+												],
+												"success_events": [
+													{
+														"type": "text",
+														"text": "기묘한 눈알을 한쪽 눈구멍에 밀어 넣었다."
+													},
+													{
+														"type": "sound",
+														"path": "res://sounds/squeeze_sound.mp3",
+														"volume_db": 0,
+														"wait": false
+													},
+													{
+														"type": "flag",
+														"flag": "opened_first_eye_tree_b"
+													},
+													{
+														"type": "text",
+														"text": "눈알이 천천히 돌아간다."
+													},
+													{
+														"type": "text",
+														"text": "아직 반대쪽 눈구멍은 비어 있다."
+													}
+												]
+											}
+										]
+									},
+									{
+										"text": "그만둔다.",
+										"events": []
+									}
+								]
 							}
 						]
 					}
