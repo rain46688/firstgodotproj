@@ -171,104 +171,106 @@
 					320,
 					400
 				],
-				"hide_if_flag": "search_box_02_prologue",
 				"events": [
 					{
-						"type": "text",
-						"text": "잡동사니를 모아놓은곳이다."
-					},
-					{
-						"type": "text",
-						"text": "무언가 주머니에 넣을까?"
-					},
-					{
-						"type": "text",
-						"text": "하나만 고르자."
-					},
-					{
-						"type": "choices",
-						"choices": [
+						"type": "conditional_events",
+						"branches": [
 							{
-								"text": "이상한 모양의 열쇠",
+								"required_flag_missing": [
+									"search_box_02_prologue"
+								],
 								"events": [
 									{
-										"type": "item",
-										"item": "master_key",
-										"count": 1
+										"type": "text",
+										"text": "잡동사니를 모아놓은곳이다."
 									},
 									{
-										"type": "flag",
-										"flag": "search_box_02_prologue"
-									}
-								]
-							},
-							{
-								"text": "비상용 칼",
-								"events": [
-									{
-										"type": "item",
-										"item": "cutter_knife",
-										"count": 1
+										"type": "text",
+										"text": "무언가 주머니에 넣을까?"
 									},
 									{
-										"type": "flag",
-										"flag": "search_box_02_prologue"
-									}
-								]
-							},
-							{
-								"text": "묵직한 주머니",
-								"events": [
-									{
-										"type": "item",
-										"item": "unknown_coin",
-										"count": 30
+										"type": "text",
+										"text": "하나만 고르자."
 									},
 									{
-										"type": "flag",
-										"flag": "search_box_02_prologue"
-									}
-								]
-							},
-							{
-								"text": "비상용 식품",
-								"events": [
-									{
-										"type": "item",
-										"item": "chocolate_bar_a",
-										"count": 5
-									},
-									{
-										"type": "flag",
-										"flag": "search_box_02_prologue"
-									}
-								]
-							},
-							{
-								"text": "아무것도 고르지 않는다.",
-								"events": [
-									{
-										"type": "flag",
-										"flag": "search_box_02_prologue"
+										"type": "choices",
+										"choices": [
+											{
+												"text": "이상한 모양의 열쇠",
+												"events": [
+													{
+														"type": "item",
+														"item": "master_key",
+														"count": 1
+													},
+													{
+														"type": "flag",
+														"flag": "search_box_02_prologue"
+													}
+												]
+											},
+											{
+												"text": "비상용 칼",
+												"events": [
+													{
+														"type": "item",
+														"item": "cutter_knife",
+														"count": 1
+													},
+													{
+														"type": "flag",
+														"flag": "search_box_02_prologue"
+													}
+												]
+											},
+											{
+												"text": "묵직한 주머니",
+												"events": [
+													{
+														"type": "item",
+														"item": "unknown_coin",
+														"count": 30
+													},
+													{
+														"type": "flag",
+														"flag": "search_box_02_prologue"
+													}
+												]
+											},
+											{
+												"text": "비상용 식품",
+												"events": [
+													{
+														"type": "item",
+														"item": "chocolate_bar_a",
+														"count": 5
+													},
+													{
+														"type": "flag",
+														"flag": "search_box_02_prologue"
+													}
+												]
+											},
+											{
+												"text": "아무것도 고르지 않는다.",
+												"events": [
+													{
+														"type": "flag",
+														"flag": "search_box_02_prologue"
+													}
+												]
+											}
+										]
 									}
 								]
 							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "잡동사니를 모아놓은곳이다."
+							}
 						]
-					}
-				]
-			},
-			"box_02_after_search": {
-				"click_rect": [
-					40,
-					415,
-					320,
-					400
-				],
-				"required_flag": "search_box_02_prologue",
-				"events": [
-					{
-						"type": "text",
-						"text": "잡동사니를 모아놓은곳이다."
 					}
 				]
 			}
@@ -765,60 +767,60 @@
 			}
 		},
 		"interactions": {
-			"black_board_before_claire": {
+			"black_board": {
 				"click_rect": [
 					451,
 					288,
 					900,
 					344
 				],
-				"required_flag_missing": "story_first_enter_school_hallway_08_after_classroom_09_event_done",
 				"events": [
 					{
-						"type": "text",
-						"text": "칠판 가득 무언가 적혀있다."
-					},
-					{
-						"type": "text",
-						"text": "가까이에서 보니 멀리선 보이지 않던 문양이 그려져있다."
-					}
-				]
-			},
-			"black_board_after_claire": {
-				"click_rect": [
-					451,
-					288,
-					900,
-					344
-				],
-				"required_flag": "story_first_enter_school_hallway_08_after_classroom_09_event_done",
-				"required_flag_missing": "story_first_enter_classroom_08_02_done",
-				"events": [
-					{
-						"type": "portrait",
-						"character": "claire",
-						"emotion": "normal",
-						"text": "맞는 문양을 찾아야 되는 거 같은데 X 표시된 것들은 제외라는 의미겠지?"
-					},
-					{
-						"type": "text",
-						"name": "나",
-						"text": "아마도 그럴 거 같아, 다른 교실을 다시 확인해 보자."
-					}
-				]
-			},
-			"black_board_after_claire_died": {
-				"click_rect": [
-					451,
-					288,
-					900,
-					344
-				],
-				"required_flag": "story_first_enter_classroom_08_02_done",
-				"events": [
-					{
-						"type": "text",
-						"text": "..."
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag_missing": [
+									"story_first_enter_school_hallway_08_after_classroom_09_event_done"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "칠판 가득 무언가 적혀있다."
+									},
+									{
+										"type": "text",
+										"text": "가까이에서 보니 멀리선 보이지 않던 문양이 그려져있다."
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"story_first_enter_school_hallway_08_after_classroom_09_event_done"
+								],
+								"required_flag_missing": [
+									"story_first_enter_classroom_08_02_done"
+								],
+								"events": [
+									{
+										"type": "portrait",
+										"character": "claire",
+										"emotion": "normal",
+										"text": "맞는 문양을 찾아야 되는 거 같은데 X 표시된 것들은 제외라는 의미겠지?"
+									},
+									{
+										"type": "text",
+										"name": "나",
+										"text": "아마도 그럴 거 같아, 다른 교실을 다시 확인해 보자."
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "..."
+							}
+						]
 					}
 				]
 			},
@@ -908,83 +910,83 @@
 					}
 				]
 			},
-			"classroom_document_before_claire": {
+			"classroom_document": {
 				"click_rect": [
 					1396,
 					485,
 					70,
 					105
 				],
-				"required_flag_missing": "story_first_enter_school_hallway_08_after_classroom_09_event_done",
 				"events": [
 					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_01_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "text",
-						"text": "종이를 위로 넘겨보니 무언가 붙어있다."
-					},
-					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_02_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					}
-				]
-			},
-			"classroom_document_after_claire": {
-				"click_rect": [
-					1396,
-					485,
-					70,
-					105
-				],
-				"required_flag": "story_first_enter_school_hallway_08_after_classroom_09_event_done",
-				"required_flag_missing": "story_first_enter_classroom_08_02_done",
-				"events": [
-					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_01_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "portrait",
-						"character": "claire",
-						"emotion": "normal",
-						"text": "이거 봐봐 X 표시의 위치가 다 달라."
-					},
-					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_02_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					}
-				]
-			},
-			"classroom_document_after_claire_died": {
-				"click_rect": [
-					1396,
-					485,
-					70,
-					105
-				],
-				"required_flag": "story_first_enter_classroom_08_02_done",
-				"events": [
-					{
-						"type": "text",
-						"text": "..."
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag_missing": [
+									"story_first_enter_school_hallway_08_after_classroom_09_event_done"
+								],
+								"events": [
+									{
+										"type": "document_popup",
+										"path": "res://imgs/documents/school_document_01_01.png",
+										"start_page": 1,
+										"sound": "res://sounds/paper.mp3",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									},
+									{
+										"type": "text",
+										"text": "종이를 위로 넘겨보니 무언가 붙어있다."
+									},
+									{
+										"type": "document_popup",
+										"path": "res://imgs/documents/school_document_02_01.png",
+										"start_page": 1,
+										"sound": "res://sounds/paper.mp3",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"story_first_enter_school_hallway_08_after_classroom_09_event_done"
+								],
+								"required_flag_missing": [
+									"story_first_enter_classroom_08_02_done"
+								],
+								"events": [
+									{
+										"type": "document_popup",
+										"path": "res://imgs/documents/school_document_01_01.png",
+										"start_page": 1,
+										"sound": "res://sounds/paper.mp3",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									},
+									{
+										"type": "portrait",
+										"character": "claire",
+										"emotion": "normal",
+										"text": "이거 봐봐 X 표시의 위치가 다 달라."
+									},
+									{
+										"type": "document_popup",
+										"path": "res://imgs/documents/school_document_02_01.png",
+										"start_page": 1,
+										"sound": "res://sounds/paper.mp3",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "..."
+							}
+						]
 					}
 				]
 			}
@@ -1155,77 +1157,77 @@
 			}
 		},
 		"interactions": {
-			"black_board_before_claire": {
+			"black_board": {
 				"click_rect": [
 					451,
 					288,
 					900,
 					344
 				],
-				"required_flag_missing": "story_first_enter_school_hallway_08_after_classroom_09_event_done",
 				"events": [
 					{
-						"type": "text",
-						"text": "칠판 가득 무언가 적혀있다."
-					},
-					{
-						"type": "text",
-						"text": "가까이에서 보니 멀리선 보이지 않던 문양이 그려져있다."
-					}
-				]
-			},
-			"black_board_after_claire": {
-				"click_rect": [
-					451,
-					288,
-					900,
-					344
-				],
-				"required_flag": "story_first_enter_school_hallway_08_after_classroom_09_event_done",
-				"required_flag_missing": "story_first_enter_classroom_08_02_done",
-				"events": [
-					{
-						"type": "portrait",
-						"character": "claire",
-						"emotion": "normal",
-						"text": "이런 거 특기야?"
-					},
-					{
-						"type": "text",
-						"name": "나",
-						"text": "뭐... 잘한다기 보단 이런 퍼즐류는 공포 게임에서 많이 해봤지."
-					},
-					{
-						"type": "portrait",
-						"character": "claire",
-						"emotion": "annoyed",
-						"text": "참나, 이 상황에 뭔 태평한 소리를..."
-					},
-					{
-						"type": "portrait",
-						"character": "claire",
-						"emotion": "annoyed",
-						"text": "난 퍼즐류 게임은 질색이야..."
-					},
-					{
-						"type": "text",
-						"name": "나",
-						"text": "뭔가 알거같아, 특정 교실에 있는 문양으로 봐서는 이 수수께끼를 풀어야만 여기서 나갈 수 있을 거 같아."
-					}
-				]
-			},
-			"black_board_after_claire_died": {
-				"click_rect": [
-					451,
-					288,
-					900,
-					344
-				],
-				"required_flag": "story_first_enter_classroom_08_02_done",
-				"events": [
-					{
-						"type": "text",
-						"text": "..."
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag_missing": [
+									"story_first_enter_school_hallway_08_after_classroom_09_event_done"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "칠판 가득 무언가 적혀있다."
+									},
+									{
+										"type": "text",
+										"text": "가까이에서 보니 멀리선 보이지 않던 문양이 그려져있다."
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"story_first_enter_school_hallway_08_after_classroom_09_event_done"
+								],
+								"required_flag_missing": [
+									"story_first_enter_classroom_08_02_done"
+								],
+								"events": [
+									{
+										"type": "portrait",
+										"character": "claire",
+										"emotion": "normal",
+										"text": "이런 거 특기야?"
+									},
+									{
+										"type": "text",
+										"name": "나",
+										"text": "뭐... 잘한다기 보단 이런 퍼즐류는 공포 게임에서 많이 해봤지."
+									},
+									{
+										"type": "portrait",
+										"character": "claire",
+										"emotion": "annoyed",
+										"text": "참나, 이 상황에 뭔 태평한 소리를..."
+									},
+									{
+										"type": "portrait",
+										"character": "claire",
+										"emotion": "annoyed",
+										"text": "난 퍼즐류 게임은 질색이야..."
+									},
+									{
+										"type": "text",
+										"name": "나",
+										"text": "뭔가 알거같아, 특정 교실에 있는 문양으로 봐서는 이 수수께끼를 풀어야만 여기서 나갈 수 있을 거 같아."
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "..."
+							}
+						]
 					}
 				]
 			},
@@ -1293,94 +1295,94 @@
 					}
 				]
 			},
-			"classroom_document_before_claire": {
+			"classroom_document": {
 				"click_rect": [
 					1396,
 					485,
 					70,
 					105
 				],
-				"required_flag_missing": "story_first_enter_school_hallway_08_after_classroom_09_event_done",
 				"events": [
 					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_01_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "text",
-						"text": "종이를 위로 넘겨보니 무언가 붙어있다."
-					},
-					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_03_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					}
-				]
-			},
-			"classroom_document_after_claire": {
-				"click_rect": [
-					1396,
-					485,
-					70,
-					105
-				],
-				"required_flag": "story_first_enter_school_hallway_08_after_classroom_09_event_done",
-				"required_flag_missing": "story_first_enter_classroom_08_02_done",
-				"events": [
-					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_01_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "portrait",
-						"character": "claire",
-						"emotion": "normal",
-						"text": "이건 주기율표?"
-					},
-					{
-						"type": "text",
-						"name": "나",
-						"text": "맞아, 군데군데 X 표시가 되어있어, 무슨 의미가 있는거같아."
-					},
-					{
-						"type": "portrait",
-						"character": "claire",
-						"emotion": "pain",
-						"text": "에효... 자기 이름은 기억이 안나는데, 다른건 또 기억하고 있네."
-					},
-					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_03_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					}
-				]
-			},
-			"classroom_document_after_claire_died": {
-				"click_rect": [
-					1396,
-					485,
-					70,
-					105
-				],
-				"required_flag": "story_first_enter_classroom_08_02_done",
-				"events": [
-					{
-						"type": "text",
-						"text": "..."
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag_missing": [
+									"story_first_enter_school_hallway_08_after_classroom_09_event_done"
+								],
+								"events": [
+									{
+										"type": "document_popup",
+										"path": "res://imgs/documents/school_document_01_01.png",
+										"start_page": 1,
+										"sound": "res://sounds/paper.mp3",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									},
+									{
+										"type": "text",
+										"text": "종이를 위로 넘겨보니 무언가 붙어있다."
+									},
+									{
+										"type": "document_popup",
+										"path": "res://imgs/documents/school_document_03_01.png",
+										"start_page": 1,
+										"sound": "res://sounds/paper.mp3",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"story_first_enter_school_hallway_08_after_classroom_09_event_done"
+								],
+								"required_flag_missing": [
+									"story_first_enter_classroom_08_02_done"
+								],
+								"events": [
+									{
+										"type": "document_popup",
+										"path": "res://imgs/documents/school_document_01_01.png",
+										"start_page": 1,
+										"sound": "res://sounds/paper.mp3",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									},
+									{
+										"type": "portrait",
+										"character": "claire",
+										"emotion": "normal",
+										"text": "이건 주기율표?"
+									},
+									{
+										"type": "text",
+										"name": "나",
+										"text": "맞아, 군데군데 X 표시가 되어있어, 무슨 의미가 있는거같아."
+									},
+									{
+										"type": "portrait",
+										"character": "claire",
+										"emotion": "pain",
+										"text": "에효... 자기 이름은 기억이 안나는데, 다른건 또 기억하고 있네."
+									},
+									{
+										"type": "document_popup",
+										"path": "res://imgs/documents/school_document_03_01.png",
+										"start_page": 1,
+										"sound": "res://sounds/paper.mp3",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "..."
+							}
+						]
 					}
 				]
 			}
@@ -2903,66 +2905,61 @@
 					1236,
 					263
 				],
-				"required_flag_missing": [
-					"got_cutter_knife_classroom_08",
-					"defeated_combined_candle_students_tutorial"
-				],
 				"events": [
 					{
-						"type": "text",
-						"text": "낡은 책상들이 늘어져있다."
-					},
-					{
-						"type": "text",
-						"text": "소름끼칠 정도로 깨끗하게 정리 되어있다."
-					}
-				]
-			},
-			"desk_after_got_cutter_knife": {
-				"click_rect": [
-					1,
-					634,
-					1236,
-					263
-				],
-				"required_flag": "got_cutter_knife_classroom_08",
-				"events": [
-					{
-						"type": "text",
-						"text": "낡은 책상들이 늘어져있다."
-					},
-					{
-						"type": "text",
-						"text": "소름끼칠 정도로 깨끗하게 정리 되어있다."
-					}
-				]
-			},
-			"desk_defeated_combined_candle_students_tutorial": {
-				"click_rect": [
-					1,
-					634,
-					1236,
-					263
-				],
-				"required_flag": "defeated_combined_candle_students_tutorial",
-				"required_flag_missing": "got_cutter_knife_classroom_08",
-				"events": [
-					{
-						"type": "text",
-						"text": "낡은 책상들이 늘어져있다."
-					},
-					{
-						"type": "text",
-						"text": "책상 아래에서 무언가를 발견했다."
-					},
-					{
-						"type": "item",
-						"item": "cutter_knife",
-						"count": 1
-					},
-					{
-						"type": "flag",
-						"flag": "got_cutter_knife_classroom_08"
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag_missing": [
+									"got_cutter_knife_classroom_08",
+									"defeated_combined_candle_students_tutorial"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "낡은 책상들이 늘어져있다."
+									},
+									{
+										"type": "text",
+										"text": "소름끼칠 정도로 깨끗하게 정리 되어있다."
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"got_cutter_knife_classroom_08"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "낡은 책상들이 늘어져있다."
+									},
+									{
+										"type": "text",
+										"text": "소름끼칠 정도로 깨끗하게 정리 되어있다."
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "낡은 책상들이 늘어져있다."
+							},
+							{
+								"type": "text",
+								"text": "책상 아래에서 무언가를 발견했다."
+							},
+							{
+								"type": "item",
+								"item": "cutter_knife",
+								"count": 1
+							},
+							{
+								"type": "flag",
+								"flag": "got_cutter_knife_classroom_08"
+							}
+						]
 					}
 				]
 			},
@@ -3074,123 +3071,125 @@
 					163,
 					130
 				],
-				"required_flag_missing": "story_first_enter_classroom_08_02_done",
 				"events": [
 					{
-						"type": "sound",
-						"path": "res://sounds/save_ui_open.mp3",
-						"volume_db": -5,
-						"wait": false
-					},
-					{
-						"type": "text",
-						"text": "모니터가 교탁 위에 있다."
-					},
-					{
-						"type": "input_prompt",
-						"message": "패스워드를 입력하시겠습니까?",
-						"placeholder": "0000",
-						"allow_letters": false,
-						"allow_numbers": true,
-						"min_length": 4,
-						"max_length": 4,
-						"answer": "8775",
-						"success_events": [
+						"type": "conditional_events",
+						"branches": [
 							{
-								"type": "sound",
-								"path": "res://sounds/save_complete.mp3",
-								"volume_db": -5,
-								"wait": false
-							},
-							{
-								"type": "text",
-								"text": "승인되었습니다."
-							},
-							{
-								"type": "flag",
-								"flag": "opened_classroom_08_ladder"
-							},
-							{
-								"type": "flag",
-								"flag": "opened_school_stairs_hall_02"
-							},
-							{
-								"type": "sound",
-								"path": "res://sounds/ladder_down.mp3",
-								"volume_db": -5,
-								"wait": false
-							},
-							{
-								"type": "text",
-								"text": "갑자기 큰 소리가 났다."
-							}
-						],
-						"fail_events": [
-							{
-								"type": "sound",
-								"path": "res://sounds/save_ui_close.mp3",
-								"volume_db": -5,
-								"wait": false
-							},
-							{
-								"type": "text",
-								"text": "거절되었습니다."
-							}
-						]
-					}
-				]
-			},
-			"monitor_after_claire_died": {
-				"click_rect": [
-					870,
-					670,
-					163,
-					130
-				],
-				"required_flag": "story_first_enter_classroom_08_02_done",
-				"events": [
-					{
-						"type": "sound",
-						"path": "res://sounds/save_ui_open.mp3",
-						"volume_db": -5,
-						"wait": false
-					},
-					{
-						"type": "text",
-						"text": "모니터가 교탁 위에 있다."
-					},
-					{
-						"type": "text",
-						"text": "현재 상태를 저장하시겠습니까?"
-					},
-					{
-						"type": "choices",
-						"choices": [
-							{
-								"text": "예",
-								"events": [
-									{
-										"type": "save_to_slot",
-										"slot": 1,
-										"success_text": "저장 완료.",
-										"fail_text": "저장에 실패했다.",
-										"success_sound": "res://sounds/save_complete.mp3",
-										"sound_volume_db": -5
-									}
-								]
-							},
-							{
-								"text": "아니오",
+								"required_flag_missing": [
+									"story_first_enter_classroom_08_02_done"
+								],
 								"events": [
 									{
 										"type": "sound",
-										"path": "res://sounds/save_ui_close.mp3",
+										"path": "res://sounds/save_ui_open.mp3",
 										"volume_db": -5,
 										"wait": false
 									},
 									{
 										"type": "text",
-										"text": "저장을 취소했다."
+										"text": "모니터가 교탁 위에 있다."
+									},
+									{
+										"type": "input_prompt",
+										"message": "패스워드를 입력하시겠습니까?",
+										"placeholder": "0000",
+										"allow_letters": false,
+										"allow_numbers": true,
+										"min_length": 4,
+										"max_length": 4,
+										"answer": "8775",
+										"success_events": [
+											{
+												"type": "sound",
+												"path": "res://sounds/save_complete.mp3",
+												"volume_db": -5,
+												"wait": false
+											},
+											{
+												"type": "text",
+												"text": "승인되었습니다."
+											},
+											{
+												"type": "flag",
+												"flag": "opened_classroom_08_ladder"
+											},
+											{
+												"type": "flag",
+												"flag": "opened_school_stairs_hall_02"
+											},
+											{
+												"type": "sound",
+												"path": "res://sounds/ladder_down.mp3",
+												"volume_db": -5,
+												"wait": false
+											},
+											{
+												"type": "text",
+												"text": "갑자기 큰 소리가 났다."
+											}
+										],
+										"fail_events": [
+											{
+												"type": "sound",
+												"path": "res://sounds/save_ui_close.mp3",
+												"volume_db": -5,
+												"wait": false
+											},
+											{
+												"type": "text",
+												"text": "거절되었습니다."
+											}
+										]
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "sound",
+								"path": "res://sounds/save_ui_open.mp3",
+								"volume_db": -5,
+								"wait": false
+							},
+							{
+								"type": "text",
+								"text": "모니터가 교탁 위에 있다."
+							},
+							{
+								"type": "text",
+								"text": "현재 상태를 저장하시겠습니까?"
+							},
+							{
+								"type": "choices",
+								"choices": [
+									{
+										"text": "예",
+										"events": [
+											{
+												"type": "save_to_slot",
+												"slot": 1,
+												"success_text": "저장 완료.",
+												"fail_text": "저장에 실패했다.",
+												"success_sound": "res://sounds/save_complete.mp3",
+												"sound_volume_db": -5
+											}
+										]
+									},
+									{
+										"text": "아니오",
+										"events": [
+											{
+												"type": "sound",
+												"path": "res://sounds/save_ui_close.mp3",
+												"volume_db": -5,
+												"wait": false
+											},
+											{
+												"type": "text",
+												"text": "저장을 취소했다."
+											}
+										]
 									}
 								]
 							}
@@ -3198,88 +3197,88 @@
 					}
 				]
 			},
-			"classroom_document_before_claire": {
+			"classroom_document": {
 				"click_rect": [
 					1500,
 					535,
 					70,
 					105
 				],
-				"required_flag_missing": "story_first_enter_school_hallway_08_after_classroom_09_event_done",
 				"events": [
 					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_01_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "text",
-						"text": "종이를 위로 넘겨보니 무언가 붙어있다."
-					},
-					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_04_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					}
-				]
-			},
-			"classroom_document_after_claire": {
-				"click_rect": [
-					1500,
-					535,
-					70,
-					105
-				],
-				"required_flag": "story_first_enter_school_hallway_08_after_classroom_09_event_done",
-				"required_flag_missing": "story_first_enter_classroom_08_02_done",
-				"events": [
-					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_01_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "portrait",
-						"character": "claire",
-						"emotion": "normal",
-						"text": "표에 적혀있는 문자들이 비밀번호랑 연관이 되어있는거같아."
-					},
-					{
-						"type": "text",
-						"name": "나",
-						"text": "그런거 같아, 다시 한번 비교해보자."
-					},
-					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_04_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					}
-				]
-			},
-			"classroom_document_after_claire_died": {
-				"click_rect": [
-					1500,
-					535,
-					70,
-					105
-				],
-				"required_flag": "story_first_enter_classroom_08_02_done",
-				"events": [
-					{
-						"type": "text",
-						"text": "..."
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag_missing": [
+									"story_first_enter_school_hallway_08_after_classroom_09_event_done"
+								],
+								"events": [
+									{
+										"type": "document_popup",
+										"path": "res://imgs/documents/school_document_01_01.png",
+										"start_page": 1,
+										"sound": "res://sounds/paper.mp3",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									},
+									{
+										"type": "text",
+										"text": "종이를 위로 넘겨보니 무언가 붙어있다."
+									},
+									{
+										"type": "document_popup",
+										"path": "res://imgs/documents/school_document_04_01.png",
+										"start_page": 1,
+										"sound": "res://sounds/paper.mp3",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"story_first_enter_school_hallway_08_after_classroom_09_event_done"
+								],
+								"required_flag_missing": [
+									"story_first_enter_classroom_08_02_done"
+								],
+								"events": [
+									{
+										"type": "document_popup",
+										"path": "res://imgs/documents/school_document_01_01.png",
+										"start_page": 1,
+										"sound": "res://sounds/paper.mp3",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									},
+									{
+										"type": "portrait",
+										"character": "claire",
+										"emotion": "normal",
+										"text": "표에 적혀있는 문자들이 비밀번호랑 연관이 되어있는거같아."
+									},
+									{
+										"type": "text",
+										"name": "나",
+										"text": "그런거 같아, 다시 한번 비교해보자."
+									},
+									{
+										"type": "document_popup",
+										"path": "res://imgs/documents/school_document_04_01.png",
+										"start_page": 1,
+										"sound": "res://sounds/paper.mp3",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "..."
+							}
+						]
 					}
 				]
 			}
@@ -3536,66 +3535,66 @@
 			}
 		},
 		"interactions": {
-			"black_board_before_claire": {
+			"black_board": {
 				"click_rect": [
 					451,
 					288,
 					900,
 					344
 				],
-				"required_flag_missing": "story_first_enter_school_hallway_08_after_classroom_09_event_done",
 				"events": [
 					{
-						"type": "text",
-						"text": "칠판 가득 무언가 적혀있다."
-					},
-					{
-						"type": "text",
-						"text": "가까이에서 보니 멀리선 보이지 않던 문양이 그려져있다."
-					}
-				]
-			},
-			"black_board_after_claire": {
-				"click_rect": [
-					451,
-					288,
-					900,
-					344
-				],
-				"required_flag": "story_first_enter_school_hallway_08_after_classroom_09_event_done",
-				"required_flag_missing": "story_first_enter_classroom_08_02_done",
-				"events": [
-					{
-						"type": "portrait",
-						"character": "claire",
-						"emotion": "normal",
-						"text": "가운데 그려져있는 글자는 무슨 상형문자?"
-					},
-					{
-						"type": "text",
-						"name": "나",
-						"text": "내가 보기엔 무슨 알파벳 모양을 나타내는 거 같아."
-					},
-					{
-						"type": "portrait",
-						"character": "claire",
-						"emotion": "normal",
-						"text": "음... 오른쪽에 붙어있는 종이랑 한번 비교해 보죠."
-					}
-				]
-			},
-			"black_board_after_claire_died": {
-				"click_rect": [
-					451,
-					288,
-					900,
-					344
-				],
-				"required_flag": "story_first_enter_classroom_08_02_done",
-				"events": [
-					{
-						"type": "text",
-						"text": "..."
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag_missing": [
+									"story_first_enter_school_hallway_08_after_classroom_09_event_done"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "칠판 가득 무언가 적혀있다."
+									},
+									{
+										"type": "text",
+										"text": "가까이에서 보니 멀리선 보이지 않던 문양이 그려져있다."
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"story_first_enter_school_hallway_08_after_classroom_09_event_done"
+								],
+								"required_flag_missing": [
+									"story_first_enter_classroom_08_02_done"
+								],
+								"events": [
+									{
+										"type": "portrait",
+										"character": "claire",
+										"emotion": "normal",
+										"text": "가운데 그려져있는 글자는 무슨 상형문자?"
+									},
+									{
+										"type": "text",
+										"name": "나",
+										"text": "내가 보기엔 무슨 알파벳 모양을 나타내는 거 같아."
+									},
+									{
+										"type": "portrait",
+										"character": "claire",
+										"emotion": "normal",
+										"text": "음... 오른쪽에 붙어있는 종이랑 한번 비교해 보죠."
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "..."
+							}
+						]
 					}
 				]
 			},
@@ -3663,83 +3662,83 @@
 					}
 				]
 			},
-			"classroom_document_before_claire": {
+			"classroom_document": {
 				"click_rect": [
 					1396,
 					485,
 					70,
 					105
 				],
-				"required_flag_missing": "story_first_enter_school_hallway_08_after_classroom_09_event_done",
 				"events": [
 					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_01_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "text",
-						"text": "종이를 위로 넘겨보니 무언가 붙어있다."
-					},
-					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_05_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					}
-				]
-			},
-			"classroom_document_after_claire": {
-				"click_rect": [
-					1396,
-					485,
-					70,
-					105
-				],
-				"required_flag": "story_first_enter_school_hallway_08_after_classroom_09_event_done",
-				"required_flag_missing": "story_first_enter_classroom_08_02_done",
-				"events": [
-					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_01_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "portrait",
-						"character": "claire",
-						"emotion": "normal",
-						"text": "이거 봐봐 X 표시의 위치가 다 달라."
-					},
-					{
-						"type": "document_popup",
-						"path": "res://imgs/documents/school_document_05_01.png",
-						"start_page": 1,
-						"sound": "res://sounds/paper.mp3",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					}
-				]
-			},
-			"classroom_document_claire_died": {
-				"click_rect": [
-					1396,
-					485,
-					70,
-					105
-				],
-				"required_flag": "story_first_enter_classroom_08_02_done",
-				"events": [
-					{
-						"type": "text",
-						"text": "..."
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag_missing": [
+									"story_first_enter_school_hallway_08_after_classroom_09_event_done"
+								],
+								"events": [
+									{
+										"type": "document_popup",
+										"path": "res://imgs/documents/school_document_01_01.png",
+										"start_page": 1,
+										"sound": "res://sounds/paper.mp3",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									},
+									{
+										"type": "text",
+										"text": "종이를 위로 넘겨보니 무언가 붙어있다."
+									},
+									{
+										"type": "document_popup",
+										"path": "res://imgs/documents/school_document_05_01.png",
+										"start_page": 1,
+										"sound": "res://sounds/paper.mp3",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"story_first_enter_school_hallway_08_after_classroom_09_event_done"
+								],
+								"required_flag_missing": [
+									"story_first_enter_classroom_08_02_done"
+								],
+								"events": [
+									{
+										"type": "document_popup",
+										"path": "res://imgs/documents/school_document_01_01.png",
+										"start_page": 1,
+										"sound": "res://sounds/paper.mp3",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									},
+									{
+										"type": "portrait",
+										"character": "claire",
+										"emotion": "normal",
+										"text": "이거 봐봐 X 표시의 위치가 다 달라."
+									},
+									{
+										"type": "document_popup",
+										"path": "res://imgs/documents/school_document_05_01.png",
+										"start_page": 1,
+										"sound": "res://sounds/paper.mp3",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "..."
+							}
+						]
 					}
 				]
 			}
@@ -4634,13 +4633,46 @@
 					1500,
 					300
 				],
-				"required_flag_missing": [
-					"defeated_hammerhead_mansion_master"
-				],
 				"events": [
 					{
-						"type": "text",
-						"text": "수평선 그 너머까지 끝없이 검푸른 바다가 깔려 있다."
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag_missing": [
+									"defeated_hammerhead_mansion_master"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "수평선 그 너머까지 끝없이 검푸른 바다가 깔려 있다."
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "낡은 모터 보트다."
+							},
+							{
+								"type": "choices",
+								"choices": [
+									{
+										"text": "올라탄다.",
+										"events": [
+											{
+												"type": "flag",
+												"flag": "touch_motorboat_classroom_12_02"
+											}
+										]
+									},
+									{
+										"text": "그만둔다.",
+										"events": []
+									}
+								]
+							}
+						]
 					}
 				]
 			},
@@ -4651,63 +4683,146 @@
 					160,
 					100
 				],
-				"required_flag_missing": [
-					"defeated_moon"
-				],
 				"events": [
 					{
-						"type": "clear_flag",
-						"flag": "fail_answer_moon"
-					},
-					{
-						"type": "text",
-						"text": "달빛은 잘게 부서지는 가루가 되어 검은 바다 표면 위에서 잔잔하게 일렁이고 있다."
-					},
-					{
-						"type": "choices",
-						"choices": [
+						"type": "conditional_events",
+						"branches": [
 							{
-								"text": "모든 것을 바라보는 달이여.",
+								"required_flag_missing": [
+									"defeated_moon"
+								],
 								"events": [
+									{
+										"type": "clear_flag",
+										"flag": "fail_answer_moon"
+									},
+									{
+										"type": "text",
+										"text": "달빛은 잘게 부서지는 가루가 되어 검은 바다 표면 위에서 잔잔하게 일렁이고 있다."
+									},
 									{
 										"type": "choices",
 										"choices": [
 											{
-												"text": "눈을 들어 그 빛을 바라보지 말라.",
+												"text": "모든 것을 바라보는 달이여.",
 												"events": [
 													{
 														"type": "choices",
 														"choices": [
 															{
-																"text": "그 빛을 오래 바라본 자는",
+																"text": "눈을 들어 그 빛을 바라보지 말라.",
 																"events": [
 																	{
 																		"type": "choices",
 																		"choices": [
 																			{
-																				"text": "다시는 아침의 빛을 보지 못하리라.",
+																				"text": "그 빛을 오래 바라본 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "다시는 아침의 빛을 보지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "달이 사라질 때 함께 이름을 잃으리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																				"text": "달에게 자신의 이름을 들킨 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "달이 사라질 때 함께 이름을 잃으리라.",
+																				"text": "핏빛 원반 아래 무릎 꿇지 않은 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "다시는 아침의 빛을 보지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "달이 사라질 때 함께 이름을 잃으리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			}
@@ -4716,35 +4831,119 @@
 																]
 															},
 															{
-																"text": "달에게 자신의 이름을 들킨 자는",
+																"text": "별빛으로 치장한 불멸의 지배자여.",
 																"events": [
 																	{
 																		"type": "choices",
 																		"choices": [
 																			{
-																				"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
+																				"text": "무릎을 굽히며",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "길을 인도하는 달에게 찬양을 드리리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "praise_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
+																				"text": "밤하늘에서 눈을 떼지 못한 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "다시는 아침의 빛을 보지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
+																				"text": "달빛이 만든 그림자를 밟은 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "달이 사라질 때 함께 이름을 잃으리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			}
@@ -4753,35 +4952,119 @@
 																]
 															},
 															{
-																"text": "핏빛 원반 아래 무릎 꿇지 않은 자는",
+																"text": "창문을 닫고 그 이름을 부르지 말라.",
 																"events": [
 																	{
 																		"type": "choices",
 																		"choices": [
 																			{
-																				"text": "다시는 아침의 빛을 보지 못하리라.",
+																				"text": "창가에 선 채 달의 속삭임을 들은 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "다시는 아침의 빛을 보지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																				"text": "그 빛을 오래 바라본 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "달이 사라질 때 함께 이름을 잃으리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "달이 사라질 때 함께 이름을 잃으리라.",
+																				"text": "달에게 자신의 이름을 들킨 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "다시는 아침의 빛을 보지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			}
@@ -4794,41 +5077,125 @@
 												]
 											},
 											{
-												"text": "별빛으로 치장한 불멸의 지배자여.",
+												"text": "피로 물든 달이 떠오르면.",
 												"events": [
 													{
 														"type": "choices",
 														"choices": [
 															{
-																"text": "무릎을 굽히며",
+																"text": "그림자가 달을 향해 길어지는 것을 경계하라.",
 																"events": [
 																	{
 																		"type": "choices",
 																		"choices": [
 																			{
-																				"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
+																				"text": "핏빛 원반 아래 무릎 꿇지 않은 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "달이 사라질 때 함께 이름을 잃으리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
+																				"text": "밤하늘에서 눈을 떼지 못한 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "다시는 아침의 빛을 보지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "길을 인도하는 달에게 찬양을 드리리라.",
+																				"text": "달빛이 만든 그림자를 밟은 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "praise_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "달이 사라질 때 함께 이름을 잃으리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			}
@@ -4837,35 +5204,119 @@
 																]
 															},
 															{
-																"text": "밤하늘에서 눈을 떼지 못한 자는",
+																"text": "밤의 공포가 문밖을 배회하기 시작하니,",
 																"events": [
 																	{
 																		"type": "choices",
 																		"choices": [
 																			{
-																				"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
+																				"text": "창가에 선 채 달의 속삭임을 들은 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "다시는 아침의 빛을 보지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "다시는 아침의 빛을 보지 못하리라.",
+																				"text": "그 빛을 오래 바라본 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "달이 사라질 때 함께 이름을 잃으리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																				"text": "달에게 자신의 이름을 들킨 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "다시는 아침의 빛을 보지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			}
@@ -4874,35 +5325,119 @@
 																]
 															},
 															{
-																"text": "달빛이 만든 그림자를 밟은 자는",
+																"text": "하늘의 권세가 흔들리고 별들이 숨을 죽이니,",
 																"events": [
 																	{
 																		"type": "choices",
 																		"choices": [
 																			{
-																				"text": "달이 사라질 때 함께 이름을 잃으리라.",
+																				"text": "핏빛 원반 아래 무릎 꿇지 않은 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "달이 사라질 때 함께 이름을 잃으리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
+																				"text": "밤하늘에서 눈을 떼지 못한 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "다시는 아침의 빛을 보지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
+																				"text": "달빛이 만든 그림자를 밟은 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "달이 사라질 때 함께 이름을 잃으리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			}
@@ -4915,41 +5450,125 @@
 												]
 											},
 											{
-												"text": "창문을 닫고 그 이름을 부르지 말라.",
+												"text": "달이 구름 뒤에서 우리를 엿볼 때.",
 												"events": [
 													{
 														"type": "choices",
 														"choices": [
 															{
-																"text": "창가에 선 채 달의 속삭임을 들은 자는",
+																"text": "달빛 아래에서 들려오는 목소리에 대답하지 말라.",
 																"events": [
 																	{
 																		"type": "choices",
 																		"choices": [
 																			{
-																				"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
+																				"text": "창가에 선 채 달의 속삭임을 들은 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "다시는 아침의 빛을 보지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "다시는 아침의 빛을 보지 못하리라.",
+																				"text": "그 빛을 오래 바라본 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "달이 사라질 때 함께 이름을 잃으리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																				"text": "달에게 자신의 이름을 들킨 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "다시는 아침의 빛을 보지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			}
@@ -4958,35 +5577,119 @@
 																]
 															},
 															{
-																"text": "그 빛을 오래 바라본 자는",
+																"text": "눈을 들어 그 빛을 바라보지 말라.",
 																"events": [
 																	{
 																		"type": "choices",
 																		"choices": [
 																			{
-																				"text": "달이 사라질 때 함께 이름을 잃으리라.",
+																				"text": "핏빛 원반 아래 무릎 꿇지 않은 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "달이 사라질 때 함께 이름을 잃으리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
+																				"text": "밤하늘에서 눈을 떼지 못한 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "다시는 아침의 빛을 보지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
+																				"text": "달빛이 만든 그림자를 밟은 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "달이 사라질 때 함께 이름을 잃으리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			}
@@ -4995,35 +5698,119 @@
 																]
 															},
 															{
-																"text": "달에게 자신의 이름을 들킨 자는",
+																"text": "창문을 닫고 그 이름을 부르지 말라.",
 																"events": [
 																	{
 																		"type": "choices",
 																		"choices": [
 																			{
-																				"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
+																				"text": "창가에 선 채 달의 속삭임을 들은 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "다시는 아침의 빛을 보지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "다시는 아침의 빛을 보지 못하리라.",
+																				"text": "그 빛을 오래 바라본 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "달이 사라질 때 함께 이름을 잃으리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			},
 																			{
-																				"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																				"text": "달에게 자신의 이름을 들킨 자는",
 																				"events": [
 																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
+																						"type": "choices",
+																						"choices": [
+																							{
+																								"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "다시는 아침의 빛을 보지 못하리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							},
+																							{
+																								"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
+																								"events": [
+																									{
+																										"type": "flag",
+																										"flag": "fail_answer_moon"
+																									}
+																								]
+																							}
+																						]
 																					}
 																				]
 																			}
@@ -5034,812 +5821,20 @@
 														]
 													}
 												]
+											},
+											{
+												"text": "그만둔다.",
+												"events": []
 											}
 										]
 									}
 								]
-							},
-							{
-								"text": "피로 물든 달이 떠오르면.",
-								"events": [
-									{
-										"type": "choices",
-										"choices": [
-											{
-												"text": "그림자가 달을 향해 길어지는 것을 경계하라.",
-												"events": [
-													{
-														"type": "choices",
-														"choices": [
-															{
-																"text": "핏빛 원반 아래 무릎 꿇지 않은 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "달이 사라질 때 함께 이름을 잃으리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															},
-															{
-																"text": "밤하늘에서 눈을 떼지 못한 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "다시는 아침의 빛을 보지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															},
-															{
-																"text": "달빛이 만든 그림자를 밟은 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "달이 사라질 때 함께 이름을 잃으리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															}
-														]
-													}
-												]
-											},
-											{
-												"text": "밤의 공포가 문밖을 배회하기 시작하니,",
-												"events": [
-													{
-														"type": "choices",
-														"choices": [
-															{
-																"text": "창가에 선 채 달의 속삭임을 들은 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "다시는 아침의 빛을 보지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															},
-															{
-																"text": "그 빛을 오래 바라본 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "달이 사라질 때 함께 이름을 잃으리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															},
-															{
-																"text": "달에게 자신의 이름을 들킨 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "다시는 아침의 빛을 보지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															}
-														]
-													}
-												]
-											},
-											{
-												"text": "하늘의 권세가 흔들리고 별들이 숨을 죽이니,",
-												"events": [
-													{
-														"type": "choices",
-														"choices": [
-															{
-																"text": "핏빛 원반 아래 무릎 꿇지 않은 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "달이 사라질 때 함께 이름을 잃으리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															},
-															{
-																"text": "밤하늘에서 눈을 떼지 못한 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "다시는 아침의 빛을 보지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															},
-															{
-																"text": "달빛이 만든 그림자를 밟은 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "달이 사라질 때 함께 이름을 잃으리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															}
-														]
-													}
-												]
-											}
-										]
-									}
-								]
-							},
-							{
-								"text": "달이 구름 뒤에서 우리를 엿볼 때.",
-								"events": [
-									{
-										"type": "choices",
-										"choices": [
-											{
-												"text": "달빛 아래에서 들려오는 목소리에 대답하지 말라.",
-												"events": [
-													{
-														"type": "choices",
-														"choices": [
-															{
-																"text": "창가에 선 채 달의 속삭임을 들은 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "다시는 아침의 빛을 보지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															},
-															{
-																"text": "그 빛을 오래 바라본 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "달이 사라질 때 함께 이름을 잃으리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															},
-															{
-																"text": "달에게 자신의 이름을 들킨 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "다시는 아침의 빛을 보지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															}
-														]
-													}
-												]
-											},
-											{
-												"text": "눈을 들어 그 빛을 바라보지 말라.",
-												"events": [
-													{
-														"type": "choices",
-														"choices": [
-															{
-																"text": "핏빛 원반 아래 무릎 꿇지 않은 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "달이 사라질 때 함께 이름을 잃으리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															},
-															{
-																"text": "밤하늘에서 눈을 떼지 못한 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "다시는 아침의 빛을 보지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															},
-															{
-																"text": "달빛이 만든 그림자를 밟은 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "달이 사라질 때 함께 이름을 잃으리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															}
-														]
-													}
-												]
-											},
-											{
-												"text": "창문을 닫고 그 이름을 부르지 말라.",
-												"events": [
-													{
-														"type": "choices",
-														"choices": [
-															{
-																"text": "창가에 선 채 달의 속삭임을 들은 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "다시는 아침의 빛을 보지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															},
-															{
-																"text": "그 빛을 오래 바라본 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "달이 사라질 때 함께 이름을 잃으리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "밤이 끝나도 영원히 잠에서 깨어나지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "붉어진 달의 눈동자 속에 붙잡히리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															},
-															{
-																"text": "달에게 자신의 이름을 들킨 자는",
-																"events": [
-																	{
-																		"type": "choices",
-																		"choices": [
-																			{
-																				"text": "별들이 꺼진 뒤에도 홀로 그 부름을 듣게 되리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "다시는 아침의 빛을 보지 못하리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			},
-																			{
-																				"text": "어둠 속에서 자신의 그림자에게 쫓기리라.",
-																				"events": [
-																					{
-																						"type": "flag",
-																						"flag": "fail_answer_moon"
-																					}
-																				]
-																			}
-																		]
-																	}
-																]
-															}
-														]
-													}
-												]
-											}
-										]
-									}
-								]
-							},
-							{
-								"text": "그만둔다.",
-								"events": []
 							}
-						]
-					}
-				]
-			},
-			"moon_02": {
-				"click_rect": [
-					870,
-					82,
-					160,
-					100
-				],
-				"required_flag": [
-					"defeated_moon"
-				],
-				"events": [
-					{
-						"type": "text",
-						"text": "달빛은 잘게 부서지는 가루가 되어 검은 바다 표면 위에서 잔잔하게 일렁이고 있다."
-					}
-				]
-			},
-			"boat": {
-				"click_rect": [
-					185,
-					415,
-					1500,
-					300
-				],
-				"required_flag": [
-					"defeated_hammerhead_mansion_master"
-				],
-				"events": [
-					{
-						"type": "text",
-						"text": "낡은 모터 보트다."
-					},
-					{
-						"type": "choices",
-						"choices": [
+						],
+						"default_events": [
 							{
-								"text": "올라탄다.",
-								"events": [
-									{
-										"type": "flag",
-										"flag": "touch_motorboat_classroom_12_02"
-									}
-								]
-							},
-							{
-								"text": "그만둔다.",
-								"events": []
+								"type": "text",
+								"text": "달빛은 잘게 부서지는 가루가 되어 검은 바다 표면 위에서 잔잔하게 일렁이고 있다."
 							}
 						]
 					}
@@ -9987,75 +9982,68 @@
 					200,
 					138
 				],
-				"required_flag_missing": "grail_filled_unknown_hall_03_done",
 				"events": [
 					{
-						"type": "text",
-						"text": "잡동사니를 넣을 수 있는 박스다."
-					},
-					{
-						"type": "text",
-						"text": "특별한 건 없다."
-					}
-				]
-			},
-			"box_02": {
-				"click_rect": [
-					1066,
-					577,
-					200,
-					138
-				],
-				"required_flag": [
-					"grail_filled_unknown_hall_03_done",
-					"open_storage_system"
-				],
-				"events": [
-					{
-						"type": "text",
-						"text": "잡동사니를 넣을 수 있는 박스다."
-					},
-					{
-						"type": "open_storage",
-						"storage_id": "broadcasting_room_01_box_01"
-					}
-				]
-			},
-			"box_03": {
-				"click_rect": [
-					1066,
-					577,
-					200,
-					138
-				],
-				"required_flag": [
-					"grail_filled_unknown_hall_03_done"
-				],
-				"required_flag_missing": "open_storage_system",
-				"events": [
-					{
-						"type": "text",
-						"text": "잡동사니를 넣을 수 있는 박스다."
-					},
-					{
-						"type": "portrait",
-						"character": "isaac",
-						"emotion": "expressionless",
-						"text": "그 상자 네가 사용해."
-					},
-					{
-						"type": "portrait",
-						"character": "isaac",
-						"emotion": "expressionless",
-						"text": "가방에 다 들고 다닐 수는 없으니깐 당장 필요 없는 건 거기에 넣어둬."
-					},
-					{
-						"type": "flag",
-						"flag": "open_storage_system"
-					},
-					{
-						"type": "open_storage",
-						"storage_id": "broadcasting_room_01_box_01"
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag_missing": [
+									"grail_filled_unknown_hall_03_done"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "잡동사니를 넣을 수 있는 박스다."
+									},
+									{
+										"type": "text",
+										"text": "특별한 건 없다."
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"grail_filled_unknown_hall_03_done",
+									"open_storage_system"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "잡동사니를 넣을 수 있는 박스다."
+									},
+									{
+										"type": "open_storage",
+										"storage_id": "broadcasting_room_01_box_01"
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "잡동사니를 넣을 수 있는 박스다."
+							},
+							{
+								"type": "portrait",
+								"character": "isaac",
+								"emotion": "expressionless",
+								"text": "그 상자 네가 사용해."
+							},
+							{
+								"type": "portrait",
+								"character": "isaac",
+								"emotion": "expressionless",
+								"text": "가방에 다 들고 다닐 수는 없으니깐 당장 필요 없는 건 거기에 넣어둬."
+							},
+							{
+								"type": "flag",
+								"flag": "open_storage_system"
+							},
+							{
+								"type": "open_storage",
+								"storage_id": "broadcasting_room_01_box_01"
+							}
+						]
 					}
 				]
 			}
@@ -13488,56 +13476,53 @@
 					95
 				],
 				"required_flag_missing": [
-					"got_craw_classroom_33_02",
-					"got_craw_classroom_39_02"
-				],
-				"events": [
-					{
-						"type": "text",
-						"text": "죽어있는 까마귀의 시체이다, 어떻게 할까?"
-					},
-					{
-						"type": "choices",
-						"choices": [
-							{
-								"text": "들고간다.",
-								"events": [
-									{
-										"type": "item",
-										"item": "craw_body",
-										"count": 1
-									},
-									{
-										"type": "flag",
-										"flag": "got_craw_classroom_33_02"
-									}
-								]
-							},
-							{
-								"text": "그만둔다.",
-								"events": []
-							}
-						]
-					}
-				]
-			},
-			"craw_02": {
-				"click_rect": [
-					694,
-					627,
-					302,
-					95
-				],
-				"required_flag": [
-					"got_craw_classroom_39_02"
-				],
-				"required_flag_missing": [
 					"got_craw_classroom_33_02"
 				],
 				"events": [
 					{
-						"type": "text",
-						"text": "죽어있는 까마귀의 시체이다"
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag_missing": [
+									"got_craw_classroom_39_02"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "죽어있는 까마귀의 시체이다, 어떻게 할까?"
+									},
+									{
+										"type": "choices",
+										"choices": [
+											{
+												"text": "들고간다.",
+												"events": [
+													{
+														"type": "item",
+														"item": "craw_body",
+														"count": 1
+													},
+													{
+														"type": "flag",
+														"flag": "got_craw_classroom_33_02"
+													}
+												]
+											},
+											{
+												"text": "그만둔다.",
+												"events": []
+											}
+										]
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "죽어있는 까마귀의 시체이다"
+							}
+						]
 					}
 				]
 			}
@@ -14572,130 +14557,128 @@
 				],
 				"required_flag_missing": [
 					"defeated_monitor_mimic_pride",
-					"story_fight_mimic_classroom_36_02_done",
-					"story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done"
-				],
-				"events": [
-					{
-						"type": "sound",
-						"path": "res://sounds/save_ui_open.mp3",
-						"volume_db": -5,
-						"wait": false
-					},
-					{
-						"type": "text",
-						"text": "모니터가 교탁 위에 있다."
-					},
-					{
-						"type": "text",
-						"text": "현재 상태를 저장하시겠습니까?"
-					},
-					{
-						"type": "choices",
-						"choices": [
-							{
-								"text": "예",
-								"events": [
-									{
-										"type": "sound",
-										"path": "res://sounds/save_ui_close.mp3",
-										"volume_db": -5,
-										"wait": false
-									},
-									{
-										"type": "flag",
-										"flag": "monitor_mimic_classroom_36_02"
-									}
-								]
-							},
-							{
-								"text": "아니오",
-								"events": [
-									{
-										"type": "sound",
-										"path": "res://sounds/save_ui_close.mp3",
-										"volume_db": -5,
-										"wait": false
-									},
-									{
-										"type": "text",
-										"text": "저장을 취소했다."
-									}
-								]
-							}
-						]
-					}
-				]
-			},
-			"monitor_02": {
-				"click_rect": [
-					889,
-					454,
-					139,
-					118
-				],
-				"required_flag": "story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done",
-				"required_flag_missing": [
-					"defeated_monitor_mimic_pride",
 					"story_fight_mimic_classroom_36_02_done"
 				],
 				"events": [
 					{
-						"type": "portrait",
-						"character": "claire",
-						"emotion": "normal",
-						"text": "이 물건은 건드리지 않는 게 좋을 거 같아요."
-					},
-					{
-						"type": "portrait",
-						"character": "claire",
-						"emotion": "pain",
-						"text": "안 좋은 예감이 들어요."
-					},
-					{
-						"type": "sound",
-						"path": "res://sounds/save_ui_open.mp3",
-						"volume_db": -5,
-						"wait": false
-					},
-					{
-						"type": "text",
-						"text": "모니터가 교탁 위에 있다."
-					},
-					{
-						"type": "text",
-						"text": "현재 상태를 저장하시겠습니까?"
-					},
-					{
-						"type": "choices",
-						"choices": [
+						"type": "conditional_events",
+						"branches": [
 							{
-								"text": "예",
+								"required_flag_missing": [
+									"story_first_enter_school_hallway_37_after_first_enter_swimming_pool_room_10_done"
+								],
 								"events": [
 									{
 										"type": "sound",
-										"path": "res://sounds/save_ui_close.mp3",
-										"volume_db": -5,
-										"wait": false
-									},
-									{
-										"type": "flag",
-										"flag": "monitor_mimic_classroom_36_02"
-									}
-								]
-							},
-							{
-								"text": "아니오",
-								"events": [
-									{
-										"type": "sound",
-										"path": "res://sounds/save_ui_close.mp3",
+										"path": "res://sounds/save_ui_open.mp3",
 										"volume_db": -5,
 										"wait": false
 									},
 									{
 										"type": "text",
-										"text": "저장을 취소했다."
+										"text": "모니터가 교탁 위에 있다."
+									},
+									{
+										"type": "text",
+										"text": "현재 상태를 저장하시겠습니까?"
+									},
+									{
+										"type": "choices",
+										"choices": [
+											{
+												"text": "예",
+												"events": [
+													{
+														"type": "sound",
+														"path": "res://sounds/save_ui_close.mp3",
+														"volume_db": -5,
+														"wait": false
+													},
+													{
+														"type": "flag",
+														"flag": "monitor_mimic_classroom_36_02"
+													}
+												]
+											},
+											{
+												"text": "아니오",
+												"events": [
+													{
+														"type": "sound",
+														"path": "res://sounds/save_ui_close.mp3",
+														"volume_db": -5,
+														"wait": false
+													},
+													{
+														"type": "text",
+														"text": "저장을 취소했다."
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "portrait",
+								"character": "claire",
+								"emotion": "normal",
+								"text": "이 물건은 건드리지 않는 게 좋을 거 같아요."
+							},
+							{
+								"type": "portrait",
+								"character": "claire",
+								"emotion": "pain",
+								"text": "안 좋은 예감이 들어요."
+							},
+							{
+								"type": "sound",
+								"path": "res://sounds/save_ui_open.mp3",
+								"volume_db": -5,
+								"wait": false
+							},
+							{
+								"type": "text",
+								"text": "모니터가 교탁 위에 있다."
+							},
+							{
+								"type": "text",
+								"text": "현재 상태를 저장하시겠습니까?"
+							},
+							{
+								"type": "choices",
+								"choices": [
+									{
+										"text": "예",
+										"events": [
+											{
+												"type": "sound",
+												"path": "res://sounds/save_ui_close.mp3",
+												"volume_db": -5,
+												"wait": false
+											},
+											{
+												"type": "flag",
+												"flag": "monitor_mimic_classroom_36_02"
+											}
+										]
+									},
+									{
+										"text": "아니오",
+										"events": [
+											{
+												"type": "sound",
+												"path": "res://sounds/save_ui_close.mp3",
+												"volume_db": -5,
+												"wait": false
+											},
+											{
+												"type": "text",
+												"text": "저장을 취소했다."
+											}
+										]
 									}
 								]
 							}
@@ -15902,141 +15885,138 @@
 					412
 				],
 				"required_flag_missing": [
-					"opened_swimming_pool_hallway_01",
-					"story_first_enter_broadcasting_room_01_done"
-				],
-				"events": [
-					{
-						"type": "text",
-						"text": "거대한 생명체의 머리가 수면 위로 올라와 있다."
-					},
-					{
-						"type": "text",
-						"text": "눈 앞의 생명체는 살아있다, 조심해야 될 거 같다."
-					},
-					{
-						"type": "choices",
-						"choices": [
-							{
-								"text": "까마귀의 시체를 입에 넣는다.",
-								"required_flag": [
-									"got_craw_classroom_33_02"
-								],
-								"events": [
-									{
-										"type": "item_payment",
-										"item": "craw_body",
-										"count": 1,
-										"success_text": "거대한 생명체의 입에 던져 넣었다.",
-										"fail_text": "아무 일도 일어나지 않았다.",
-										"success_events": [
-											{
-												"type": "sound",
-												"path": "res://sounds/squeeze_sound.mp3",
-												"volume_db": 0,
-												"wait": true
-											},
-											{
-												"type": "text",
-												"text": "우드득... 우드득..."
-											},
-											{
-												"type": "sound",
-												"path": "res://sounds/splash.mp3",
-												"volume_db": 10,
-												"wait": true
-											},
-											{
-												"type": "text",
-												"text": "거대한 생명체 만족한 듯 꿈틀거렸다."
-											},
-											{
-												"type": "flag",
-												"flag": "opened_swimming_pool_hallway_01"
-											}
-										]
-									}
-								]
-							},
-							{
-								"text": "까마귀의 시체를 입에 넣는다.",
-								"required_flag": [
-									"got_craw_classroom_39_02"
-								],
-								"events": [
-									{
-										"type": "item_payment",
-										"item": "craw_body",
-										"count": 1,
-										"success_text": "거대한 생명체의 입에 던져 넣었다.",
-										"fail_text": "아무 일도 일어나지 않았다.",
-										"success_events": [
-											{
-												"type": "sound",
-												"path": "res://sounds/squeeze_sound.mp3",
-												"volume_db": 0,
-												"wait": true
-											},
-											{
-												"type": "text",
-												"text": "우드득... 우드득..."
-											},
-											{
-												"type": "sound",
-												"path": "res://sounds/splash.mp3",
-												"volume_db": 10,
-												"wait": true
-											},
-											{
-												"type": "text",
-												"text": "거대한 생명체 만족한 듯 꿈틀거렸다."
-											},
-											{
-												"type": "flag",
-												"flag": "opened_swimming_pool_hallway_01"
-											}
-										]
-									}
-								]
-							},
-							{
-								"text": "입속을 들여다본다.",
-								"events": [
-									{
-										"type": "flag",
-										"flag": "select_wrong_classroom_40"
-									}
-								]
-							},
-							{
-								"text": "그만둔다.",
-								"events": []
-							}
-						]
-					}
-				]
-			},
-			"fish_02": {
-				"click_rect": [
-					148,
-					664,
-					955,
-					412
-				],
-				"required_flag": [
-					"story_first_enter_broadcasting_room_01_done"
-				],
-				"required_flag_missing": [
 					"opened_swimming_pool_hallway_01"
 				],
 				"events": [
 					{
-						"type": "text",
-						"text": "거대한 생명체의 머리가 수면 위로 올라와 있다."
-					},
-					{
-						"type": "text",
-						"text": "눈 앞의 생명체는 살아있다, 조심해야 될 거 같다."
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag_missing": [
+									"story_first_enter_broadcasting_room_01_done"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "거대한 생명체의 머리가 수면 위로 올라와 있다."
+									},
+									{
+										"type": "text",
+										"text": "눈 앞의 생명체는 살아있다, 조심해야 될 거 같다."
+									},
+									{
+										"type": "choices",
+										"choices": [
+											{
+												"text": "까마귀의 시체를 입에 넣는다.",
+												"required_flag": [
+													"got_craw_classroom_33_02"
+												],
+												"events": [
+													{
+														"type": "item_payment",
+														"item": "craw_body",
+														"count": 1,
+														"success_text": "거대한 생명체의 입에 던져 넣었다.",
+														"fail_text": "아무 일도 일어나지 않았다.",
+														"success_events": [
+															{
+																"type": "sound",
+																"path": "res://sounds/squeeze_sound.mp3",
+																"volume_db": 0,
+																"wait": true
+															},
+															{
+																"type": "text",
+																"text": "우드득... 우드득..."
+															},
+															{
+																"type": "sound",
+																"path": "res://sounds/splash.mp3",
+																"volume_db": 10,
+																"wait": true
+															},
+															{
+																"type": "text",
+																"text": "거대한 생명체 만족한 듯 꿈틀거렸다."
+															},
+															{
+																"type": "flag",
+																"flag": "opened_swimming_pool_hallway_01"
+															}
+														]
+													}
+												]
+											},
+											{
+												"text": "까마귀의 시체를 입에 넣는다.",
+												"required_flag": [
+													"got_craw_classroom_39_02"
+												],
+												"events": [
+													{
+														"type": "item_payment",
+														"item": "craw_body",
+														"count": 1,
+														"success_text": "거대한 생명체의 입에 던져 넣었다.",
+														"fail_text": "아무 일도 일어나지 않았다.",
+														"success_events": [
+															{
+																"type": "sound",
+																"path": "res://sounds/squeeze_sound.mp3",
+																"volume_db": 0,
+																"wait": true
+															},
+															{
+																"type": "text",
+																"text": "우드득... 우드득..."
+															},
+															{
+																"type": "sound",
+																"path": "res://sounds/splash.mp3",
+																"volume_db": 10,
+																"wait": true
+															},
+															{
+																"type": "text",
+																"text": "거대한 생명체 만족한 듯 꿈틀거렸다."
+															},
+															{
+																"type": "flag",
+																"flag": "opened_swimming_pool_hallway_01"
+															}
+														]
+													}
+												]
+											},
+											{
+												"text": "입속을 들여다본다.",
+												"events": [
+													{
+														"type": "flag",
+														"flag": "select_wrong_classroom_40"
+													}
+												]
+											},
+											{
+												"text": "그만둔다.",
+												"events": []
+											}
+										]
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "거대한 생명체의 머리가 수면 위로 올라와 있다."
+							},
+							{
+								"type": "text",
+								"text": "눈 앞의 생명체는 살아있다, 조심해야 될 거 같다."
+							}
+						]
 					}
 				]
 			},
@@ -17137,89 +17117,91 @@
 					464,
 					598
 				],
-				"required_flag_missing": "opened_swimming_pool_hallway_11",
 				"events": [
 					{
-						"type": "text",
-						"name": "???",
-						"text": "이 방에 존재하는 색깔은 \"오직 노란색 하나\"."
-					},
-					{
-						"type": "text",
-						"name": "???",
-						"text": "암호를 말해라."
-					},
-					{
-						"type": "choices",
-						"choices": [
+						"type": "conditional_events",
+						"branches": [
 							{
-								"text": "말한다.",
+								"required_flag_missing": [
+									"opened_swimming_pool_hallway_11"
+								],
 								"events": [
 									{
-										"type": "input_prompt",
-										"message": "...",
-										"placeholder": "0000",
-										"allow_letters": false,
-										"allow_numbers": true,
-										"min_length": 4,
-										"max_length": 4,
-										"answer": "8960",
-										"success_events": [
+										"type": "text",
+										"name": "???",
+										"text": "이 방에 존재하는 색깔은 \"오직 노란색 하나\"."
+									},
+									{
+										"type": "text",
+										"name": "???",
+										"text": "암호를 말해라."
+									},
+									{
+										"type": "choices",
+										"choices": [
 											{
-												"type": "text",
-												"name": "???",
-												"text": "정답이다."
+												"text": "말한다.",
+												"events": [
+													{
+														"type": "input_prompt",
+														"message": "...",
+														"placeholder": "0000",
+														"allow_letters": false,
+														"allow_numbers": true,
+														"min_length": 4,
+														"max_length": 4,
+														"answer": "8960",
+														"success_events": [
+															{
+																"type": "text",
+																"name": "???",
+																"text": "정답이다."
+															},
+															{
+																"type": "flag",
+																"flag": "opened_swimming_pool_hallway_11"
+															},
+															{
+																"type": "sound",
+																"path": "res://sounds/unlockeddoor.mp3",
+																"volume_db": 10,
+																"wait": false
+															},
+															{
+																"type": "text",
+																"text": "어디선가 문이 열리는 소리가 났다."
+															}
+														],
+														"fail_events": [
+															{
+																"type": "flag",
+																"flag": "select_wrong_swimming_pool_room_03"
+															}
+														]
+													}
+												]
 											},
 											{
-												"type": "flag",
-												"flag": "opened_swimming_pool_hallway_11"
-											},
-											{
-												"type": "sound",
-												"path": "res://sounds/unlockeddoor.mp3",
-												"volume_db": 10,
-												"wait": false
-											},
-											{
-												"type": "text",
-												"text": "어디선가 문이 열리는 소리가 났다."
-											}
-										],
-										"fail_events": [
-											{
-												"type": "flag",
-												"flag": "select_wrong_swimming_pool_room_03"
+												"text": "그만둔다.",
+												"events": []
 											}
 										]
 									}
 								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"name": "???",
+								"text": "다음 층으로 올라가라."
 							},
 							{
-								"text": "그만둔다.",
-								"events": []
+								"type": "text",
+								"name": "???",
+								"text": "얼굴 없는 천사의 왼쪽 복도 문 너머로 가면 된다."
 							}
 						]
-					}
-				]
-			},
-			"rubber_duck_after_opened_swimming_pool_hallway_11": {
-				"click_rect": [
-					721,
-					139,
-					464,
-					598
-				],
-				"required_flag": "opened_swimming_pool_hallway_11",
-				"events": [
-					{
-						"type": "text",
-						"name": "???",
-						"text": "다음 층으로 올라가라."
-					},
-					{
-						"type": "text",
-						"name": "???",
-						"text": "얼굴 없는 천사의 왼쪽 복도 문 너머로 가면 된다."
 					}
 				]
 			},
@@ -17698,86 +17680,88 @@
 					121,
 					283
 				],
-				"required_flag_missing": "select_wrong_swimming_pool_room_04",
 				"events": [
 					{
-						"type": "document_popup",
-						"path": "res://imgs/events/locker_01.png",
-						"start_page": 1,
-						"sound": "",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "document_dialogue",
-						"path": "res://imgs/events/locker_05.png",
-						"start_page": 1,
-						"sound": "res://sounds/locker_open.mp3",
-						"sound_volume_db": 20,
-						"document_events": [
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag_missing": [
+									"select_wrong_swimming_pool_room_04"
+								],
+								"events": [
+									{
+										"type": "document_popup",
+										"path": "res://imgs/events/locker_01.png",
+										"start_page": 1,
+										"sound": "",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									},
+									{
+										"type": "document_dialogue",
+										"path": "res://imgs/events/locker_05.png",
+										"start_page": 1,
+										"sound": "res://sounds/locker_open.mp3",
+										"sound_volume_db": 20,
+										"document_events": [
+											{
+												"type": "sound",
+												"path": "res://sounds/jump_scare.mp3",
+												"volume_db": 15,
+												"wait": false
+											},
+											{
+												"type": "flag",
+												"flag": "select_wrong_swimming_pool_room_04"
+											},
+											{
+												"type": "text",
+												"text": "..."
+											}
+										]
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 15,
+										"wait": true
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "document_popup",
+								"path": "res://imgs/events/locker_01.png",
+								"start_page": 1,
+								"sound": "",
+								"sound_volume_db": 10,
+								"close_on_last_page": true
+							},
+							{
+								"type": "document_dialogue",
+								"path": "res://imgs/events/locker_02.png",
+								"start_page": 1,
+								"sound": "res://sounds/locker_open.mp3",
+								"sound_volume_db": 15,
+								"document_events": [
+									{
+										"type": "text",
+										"text": "문을 열었다."
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
+							},
 							{
 								"type": "sound",
-								"path": "res://sounds/jump_scare.mp3",
+								"path": "res://sounds/locker_open.mp3",
 								"volume_db": 15,
-								"wait": false
-							},
-							{
-								"type": "flag",
-								"flag": "select_wrong_swimming_pool_room_04"
-							},
-							{
-								"type": "text",
-								"text": "..."
+								"wait": true
 							}
 						]
-					},
-					{
-						"type": "sound",
-						"path": "res://sounds/locker_open.mp3",
-						"volume_db": 15,
-						"wait": true
-					}
-				]
-			},
-			"left_locker_01_02": {
-				"click_rect": [
-					140,
-					343,
-					121,
-					283
-				],
-				"required_flag": "select_wrong_swimming_pool_room_04",
-				"events": [
-					{
-						"type": "document_popup",
-						"path": "res://imgs/events/locker_01.png",
-						"start_page": 1,
-						"sound": "",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "document_dialogue",
-						"path": "res://imgs/events/locker_02.png",
-						"start_page": 1,
-						"sound": "res://sounds/locker_open.mp3",
-						"sound_volume_db": 15,
-						"document_events": [
-							{
-								"type": "text",
-								"text": "문을 열었다."
-							},
-							{
-								"type": "text",
-								"text": "비어 있다."
-							}
-						]
-					},
-					{
-						"type": "sound",
-						"path": "res://sounds/locker_open.mp3",
-						"volume_db": 15,
-						"wait": true
 					}
 				]
 			},
@@ -17911,85 +17895,87 @@
 					109,
 					259
 				],
-				"required_flag_missing": "got_chocolate_bar_a_swimming_pool_room_04",
 				"events": [
 					{
-						"type": "document_popup",
-						"path": "res://imgs/events/locker_01.png",
-						"start_page": 1,
-						"sound": "",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "document_dialogue",
-						"path": "res://imgs/events/locker_02.png",
-						"start_page": 1,
-						"sound": "res://sounds/locker_open.mp3",
-						"sound_volume_db": 15,
-						"document_events": [
+						"type": "conditional_events",
+						"branches": [
 							{
-								"type": "text",
-								"text": "무언가 있다."
+								"required_flag_missing": [
+									"got_chocolate_bar_a_swimming_pool_room_04"
+								],
+								"events": [
+									{
+										"type": "document_popup",
+										"path": "res://imgs/events/locker_01.png",
+										"start_page": 1,
+										"sound": "",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									},
+									{
+										"type": "document_dialogue",
+										"path": "res://imgs/events/locker_02.png",
+										"start_page": 1,
+										"sound": "res://sounds/locker_open.mp3",
+										"sound_volume_db": 15,
+										"document_events": [
+											{
+												"type": "text",
+												"text": "무언가 있다."
+											},
+											{
+												"type": "item",
+												"item": "chocolate_bar_a",
+												"count": 5
+											},
+											{
+												"type": "flag",
+												"flag": "got_chocolate_bar_a_swimming_pool_room_04"
+											}
+										]
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 15,
+										"wait": true
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "document_popup",
+								"path": "res://imgs/events/locker_01.png",
+								"start_page": 1,
+								"sound": "",
+								"sound_volume_db": 10,
+								"close_on_last_page": true
 							},
 							{
-								"type": "item",
-								"item": "chocolate_bar_a",
-								"count": 5
+								"type": "document_dialogue",
+								"path": "res://imgs/events/locker_02.png",
+								"start_page": 1,
+								"sound": "res://sounds/locker_open.mp3",
+								"sound_volume_db": 15,
+								"document_events": [
+									{
+										"type": "text",
+										"text": "문을 열었다."
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
 							},
 							{
-								"type": "flag",
-								"flag": "got_chocolate_bar_a_swimming_pool_room_04"
+								"type": "sound",
+								"path": "res://sounds/locker_open.mp3",
+								"volume_db": 15,
+								"wait": true
 							}
 						]
-					},
-					{
-						"type": "sound",
-						"path": "res://sounds/locker_open.mp3",
-						"volume_db": 15,
-						"wait": true
-					}
-				]
-			},
-			"right_locker_01_02": {
-				"click_rect": [
-					1648,
-					361,
-					109,
-					259
-				],
-				"required_flag": "got_chocolate_bar_a_swimming_pool_room_04",
-				"events": [
-					{
-						"type": "document_popup",
-						"path": "res://imgs/events/locker_01.png",
-						"start_page": 1,
-						"sound": "",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "document_dialogue",
-						"path": "res://imgs/events/locker_02.png",
-						"start_page": 1,
-						"sound": "res://sounds/locker_open.mp3",
-						"sound_volume_db": 15,
-						"document_events": [
-							{
-								"type": "text",
-								"text": "문을 열었다."
-							},
-							{
-								"type": "text",
-								"text": "비어 있다."
-							}
-						]
-					},
-					{
-						"type": "sound",
-						"path": "res://sounds/locker_open.mp3",
-						"volume_db": 15,
-						"wait": true
 					}
 				]
 			},
@@ -20495,85 +20481,87 @@
 					121,
 					283
 				],
-				"required_flag_missing": "got_chocolate_bar_a_swimming_pool_room_10",
 				"events": [
 					{
-						"type": "document_popup",
-						"path": "res://imgs/events/locker_01.png",
-						"start_page": 1,
-						"sound": "",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "document_dialogue",
-						"path": "res://imgs/events/locker_02.png",
-						"start_page": 1,
-						"sound": "res://sounds/locker_open.mp3",
-						"sound_volume_db": 15,
-						"document_events": [
+						"type": "conditional_events",
+						"branches": [
 							{
-								"type": "text",
-								"text": "무언가 있다."
+								"required_flag_missing": [
+									"got_chocolate_bar_a_swimming_pool_room_10"
+								],
+								"events": [
+									{
+										"type": "document_popup",
+										"path": "res://imgs/events/locker_01.png",
+										"start_page": 1,
+										"sound": "",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									},
+									{
+										"type": "document_dialogue",
+										"path": "res://imgs/events/locker_02.png",
+										"start_page": 1,
+										"sound": "res://sounds/locker_open.mp3",
+										"sound_volume_db": 15,
+										"document_events": [
+											{
+												"type": "text",
+												"text": "무언가 있다."
+											},
+											{
+												"type": "item",
+												"item": "chocolate_bar_a",
+												"count": 5
+											},
+											{
+												"type": "flag",
+												"flag": "got_chocolate_bar_a_swimming_pool_room_10"
+											}
+										]
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 15,
+										"wait": true
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "document_popup",
+								"path": "res://imgs/events/locker_01.png",
+								"start_page": 1,
+								"sound": "",
+								"sound_volume_db": 10,
+								"close_on_last_page": true
 							},
 							{
-								"type": "item",
-								"item": "chocolate_bar_a",
-								"count": 5
+								"type": "document_dialogue",
+								"path": "res://imgs/events/locker_02.png",
+								"start_page": 1,
+								"sound": "res://sounds/locker_open.mp3",
+								"sound_volume_db": 15,
+								"document_events": [
+									{
+										"type": "text",
+										"text": "문을 열었다."
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
 							},
 							{
-								"type": "flag",
-								"flag": "got_chocolate_bar_a_swimming_pool_room_10"
+								"type": "sound",
+								"path": "res://sounds/locker_open.mp3",
+								"volume_db": 15,
+								"wait": true
 							}
 						]
-					},
-					{
-						"type": "sound",
-						"path": "res://sounds/locker_open.mp3",
-						"volume_db": 15,
-						"wait": true
-					}
-				]
-			},
-			"left_locker_01_02": {
-				"click_rect": [
-					140,
-					343,
-					121,
-					283
-				],
-				"required_flag": "got_chocolate_bar_a_swimming_pool_room_10",
-				"events": [
-					{
-						"type": "document_popup",
-						"path": "res://imgs/events/locker_01.png",
-						"start_page": 1,
-						"sound": "",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "document_dialogue",
-						"path": "res://imgs/events/locker_02.png",
-						"start_page": 1,
-						"sound": "res://sounds/locker_open.mp3",
-						"sound_volume_db": 15,
-						"document_events": [
-							{
-								"type": "text",
-								"text": "문을 열었다."
-							},
-							{
-								"type": "text",
-								"text": "비어 있다."
-							}
-						]
-					},
-					{
-						"type": "sound",
-						"path": "res://sounds/locker_open.mp3",
-						"volume_db": 15,
-						"wait": true
 					}
 				]
 			},
@@ -21021,30 +21009,32 @@
 					465,
 					564
 				],
-				"required_flag_missing": "opened_classroom_35",
 				"events": [
 					{
-						"type": "text",
-						"text": "천사 조각상이다."
-					},
-					{
-						"type": "text",
-						"text": "얼굴이 없다."
-					}
-				]
-			},
-			"angel_statue_ladder": {
-				"click_rect": [
-					721,
-					61,
-					465,
-					564
-				],
-				"required_flag": "opened_classroom_35",
-				"events": [
-					{
-						"type": "text",
-						"text": "천장에서 사다리가 내려와 있다."
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag_missing": [
+									"opened_classroom_35"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "천사 조각상이다."
+									},
+									{
+										"type": "text",
+										"text": "얼굴이 없다."
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "천장에서 사다리가 내려와 있다."
+							}
+						]
 					}
 				]
 			},
@@ -23280,85 +23270,87 @@
 					62,
 					160
 				],
-				"required_flag_missing": "got_chocolate_bar_a_swimming_pool_room_15",
 				"events": [
 					{
-						"type": "document_popup",
-						"path": "res://imgs/events/locker_01.png",
-						"start_page": 1,
-						"sound": "",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "document_dialogue",
-						"path": "res://imgs/events/locker_02.png",
-						"start_page": 1,
-						"sound": "res://sounds/locker_open.mp3",
-						"sound_volume_db": 15,
-						"document_events": [
+						"type": "conditional_events",
+						"branches": [
 							{
-								"type": "text",
-								"text": "무언가 있다."
+								"required_flag_missing": [
+									"got_chocolate_bar_a_swimming_pool_room_15"
+								],
+								"events": [
+									{
+										"type": "document_popup",
+										"path": "res://imgs/events/locker_01.png",
+										"start_page": 1,
+										"sound": "",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									},
+									{
+										"type": "document_dialogue",
+										"path": "res://imgs/events/locker_02.png",
+										"start_page": 1,
+										"sound": "res://sounds/locker_open.mp3",
+										"sound_volume_db": 15,
+										"document_events": [
+											{
+												"type": "text",
+												"text": "무언가 있다."
+											},
+											{
+												"type": "item",
+												"item": "chocolate_bar_a",
+												"count": 5
+											},
+											{
+												"type": "flag",
+												"flag": "got_chocolate_bar_a_swimming_pool_room_15"
+											}
+										]
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 15,
+										"wait": true
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "document_popup",
+								"path": "res://imgs/events/locker_01.png",
+								"start_page": 1,
+								"sound": "",
+								"sound_volume_db": 10,
+								"close_on_last_page": true
 							},
 							{
-								"type": "item",
-								"item": "chocolate_bar_a",
-								"count": 5
+								"type": "document_dialogue",
+								"path": "res://imgs/events/locker_02.png",
+								"start_page": 1,
+								"sound": "res://sounds/locker_open.mp3",
+								"sound_volume_db": 15,
+								"document_events": [
+									{
+										"type": "text",
+										"text": "문을 열었다."
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
 							},
 							{
-								"type": "flag",
-								"flag": "got_chocolate_bar_a_swimming_pool_room_15"
+								"type": "sound",
+								"path": "res://sounds/locker_open.mp3",
+								"volume_db": 15,
+								"wait": true
 							}
 						]
-					},
-					{
-						"type": "sound",
-						"path": "res://sounds/locker_open.mp3",
-						"volume_db": 15,
-						"wait": true
-					}
-				]
-			},
-			"right_locker_03_02": {
-				"click_rect": [
-					1368,
-					406,
-					62,
-					160
-				],
-				"required_flag": "got_chocolate_bar_a_swimming_pool_room_15",
-				"events": [
-					{
-						"type": "document_popup",
-						"path": "res://imgs/events/locker_01.png",
-						"start_page": 1,
-						"sound": "",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "document_dialogue",
-						"path": "res://imgs/events/locker_02.png",
-						"start_page": 1,
-						"sound": "res://sounds/locker_open.mp3",
-						"sound_volume_db": 15,
-						"document_events": [
-							{
-								"type": "text",
-								"text": "문을 열었다."
-							},
-							{
-								"type": "text",
-								"text": "비어 있다."
-							}
-						]
-					},
-					{
-						"type": "sound",
-						"path": "res://sounds/locker_open.mp3",
-						"volume_db": 15,
-						"wait": true
 					}
 				]
 			},
@@ -25873,85 +25865,87 @@
 					62,
 					160
 				],
-				"required_flag_missing": "got_chocolate_bar_a_swimming_pool_room_20",
 				"events": [
 					{
-						"type": "document_popup",
-						"path": "res://imgs/events/locker_01.png",
-						"start_page": 1,
-						"sound": "",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "document_dialogue",
-						"path": "res://imgs/events/locker_02.png",
-						"start_page": 1,
-						"sound": "res://sounds/locker_open.mp3",
-						"sound_volume_db": 15,
-						"document_events": [
+						"type": "conditional_events",
+						"branches": [
 							{
-								"type": "text",
-								"text": "무언가 있다."
+								"required_flag_missing": [
+									"got_chocolate_bar_a_swimming_pool_room_20"
+								],
+								"events": [
+									{
+										"type": "document_popup",
+										"path": "res://imgs/events/locker_01.png",
+										"start_page": 1,
+										"sound": "",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									},
+									{
+										"type": "document_dialogue",
+										"path": "res://imgs/events/locker_02.png",
+										"start_page": 1,
+										"sound": "res://sounds/locker_open.mp3",
+										"sound_volume_db": 15,
+										"document_events": [
+											{
+												"type": "text",
+												"text": "무언가 있다."
+											},
+											{
+												"type": "item",
+												"item": "chocolate_bar_a",
+												"count": 5
+											},
+											{
+												"type": "flag",
+												"flag": "got_chocolate_bar_a_swimming_pool_room_20"
+											}
+										]
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 15,
+										"wait": true
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "document_popup",
+								"path": "res://imgs/events/locker_01.png",
+								"start_page": 1,
+								"sound": "",
+								"sound_volume_db": 10,
+								"close_on_last_page": true
 							},
 							{
-								"type": "item",
-								"item": "chocolate_bar_a",
-								"count": 5
+								"type": "document_dialogue",
+								"path": "res://imgs/events/locker_02.png",
+								"start_page": 1,
+								"sound": "res://sounds/locker_open.mp3",
+								"sound_volume_db": 15,
+								"document_events": [
+									{
+										"type": "text",
+										"text": "문을 열었다."
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
 							},
 							{
-								"type": "flag",
-								"flag": "got_chocolate_bar_a_swimming_pool_room_20"
+								"type": "sound",
+								"path": "res://sounds/locker_open.mp3",
+								"volume_db": 15,
+								"wait": true
 							}
 						]
-					},
-					{
-						"type": "sound",
-						"path": "res://sounds/locker_open.mp3",
-						"volume_db": 15,
-						"wait": true
-					}
-				]
-			},
-			"right_locker_03_02": {
-				"click_rect": [
-					1368,
-					406,
-					62,
-					160
-				],
-				"required_flag": "got_chocolate_bar_a_swimming_pool_room_20",
-				"events": [
-					{
-						"type": "document_popup",
-						"path": "res://imgs/events/locker_01.png",
-						"start_page": 1,
-						"sound": "",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "document_dialogue",
-						"path": "res://imgs/events/locker_02.png",
-						"start_page": 1,
-						"sound": "res://sounds/locker_open.mp3",
-						"sound_volume_db": 15,
-						"document_events": [
-							{
-								"type": "text",
-								"text": "문을 열었다."
-							},
-							{
-								"type": "text",
-								"text": "비어 있다."
-							}
-						]
-					},
-					{
-						"type": "sound",
-						"path": "res://sounds/locker_open.mp3",
-						"volume_db": 15,
-						"wait": true
 					}
 				]
 			},
@@ -26798,85 +26792,87 @@
 					135,
 					503
 				],
-				"required_flag_missing": "got_chocolate_bar_a_swimming_pool_room_24",
 				"events": [
 					{
-						"type": "document_popup",
-						"path": "res://imgs/events/locker_01.png",
-						"start_page": 1,
-						"sound": "",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "document_dialogue",
-						"path": "res://imgs/events/locker_02.png",
-						"start_page": 1,
-						"sound": "res://sounds/locker_open.mp3",
-						"sound_volume_db": 15,
-						"document_events": [
+						"type": "conditional_events",
+						"branches": [
 							{
-								"type": "text",
-								"text": "무언가 있다."
+								"required_flag_missing": [
+									"got_chocolate_bar_a_swimming_pool_room_24"
+								],
+								"events": [
+									{
+										"type": "document_popup",
+										"path": "res://imgs/events/locker_01.png",
+										"start_page": 1,
+										"sound": "",
+										"sound_volume_db": 10,
+										"close_on_last_page": true
+									},
+									{
+										"type": "document_dialogue",
+										"path": "res://imgs/events/locker_02.png",
+										"start_page": 1,
+										"sound": "res://sounds/locker_open.mp3",
+										"sound_volume_db": 15,
+										"document_events": [
+											{
+												"type": "text",
+												"text": "무언가 있다."
+											},
+											{
+												"type": "item",
+												"item": "chocolate_bar_a",
+												"count": 5
+											},
+											{
+												"type": "flag",
+												"flag": "got_chocolate_bar_a_swimming_pool_room_24"
+											}
+										]
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/locker_open.mp3",
+										"volume_db": 15,
+										"wait": true
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "document_popup",
+								"path": "res://imgs/events/locker_01.png",
+								"start_page": 1,
+								"sound": "",
+								"sound_volume_db": 10,
+								"close_on_last_page": true
 							},
 							{
-								"type": "item",
-								"item": "chocolate_bar_a",
-								"count": 5
+								"type": "document_dialogue",
+								"path": "res://imgs/events/locker_02.png",
+								"start_page": 1,
+								"sound": "res://sounds/locker_open.mp3",
+								"sound_volume_db": 15,
+								"document_events": [
+									{
+										"type": "text",
+										"text": "문을 열었다."
+									},
+									{
+										"type": "text",
+										"text": "비어 있다."
+									}
+								]
 							},
 							{
-								"type": "flag",
-								"flag": "got_chocolate_bar_a_swimming_pool_room_24"
+								"type": "sound",
+								"path": "res://sounds/locker_open.mp3",
+								"volume_db": 15,
+								"wait": true
 							}
 						]
-					},
-					{
-						"type": "sound",
-						"path": "res://sounds/locker_open.mp3",
-						"volume_db": 15,
-						"wait": true
-					}
-				]
-			},
-			"left_locker_01_02": {
-				"click_rect": [
-					77,
-					158,
-					135,
-					503
-				],
-				"required_flag": "got_chocolate_bar_a_swimming_pool_room_24",
-				"events": [
-					{
-						"type": "document_popup",
-						"path": "res://imgs/events/locker_01.png",
-						"start_page": 1,
-						"sound": "",
-						"sound_volume_db": 10,
-						"close_on_last_page": true
-					},
-					{
-						"type": "document_dialogue",
-						"path": "res://imgs/events/locker_02.png",
-						"start_page": 1,
-						"sound": "res://sounds/locker_open.mp3",
-						"sound_volume_db": 15,
-						"document_events": [
-							{
-								"type": "text",
-								"text": "문을 열었다."
-							},
-							{
-								"type": "text",
-								"text": "비어 있다."
-							}
-						]
-					},
-					{
-						"type": "sound",
-						"path": "res://sounds/locker_open.mp3",
-						"volume_db": 15,
-						"wait": true
 					}
 				]
 			},
@@ -27957,43 +27953,90 @@
 					143,
 					146
 				],
-				"required_flag_missing": [
-					"on_left_light_swimming_pool_room_26"
-				],
 				"events": [
 					{
-						"type": "text",
-						"text": "낡은 전등이다."
-					},
-					{
-						"type": "text",
-						"text": "불을 켤 수 있는 버튼이 존재한다."
-					},
-					{
-						"type": "choices",
-						"choices": [
+						"type": "conditional_events",
+						"branches": [
 							{
-								"text": "누른다.",
+								"required_flag_missing": [
+									"on_left_light_swimming_pool_room_26"
+								],
 								"events": [
 									{
-										"type": "sound",
-										"path": "res://sounds/click_02.mp3",
-										"volume_db": 0,
-										"wait": false
+										"type": "text",
+										"text": "낡은 전등이다."
 									},
 									{
 										"type": "text",
-										"text": "버튼을 누르자 왼쪽 전등의 불이 켜졌다."
+										"text": "불을 켤 수 있는 버튼이 존재한다."
 									},
 									{
-										"type": "flag",
-										"flag": "on_left_light_swimming_pool_room_26"
+										"type": "choices",
+										"choices": [
+											{
+												"text": "누른다.",
+												"events": [
+													{
+														"type": "sound",
+														"path": "res://sounds/click_02.mp3",
+														"volume_db": 0,
+														"wait": false
+													},
+													{
+														"type": "text",
+														"text": "버튼을 누르자 왼쪽 전등의 불이 켜졌다."
+													},
+													{
+														"type": "flag",
+														"flag": "on_left_light_swimming_pool_room_26"
+													}
+												]
+											},
+											{
+												"text": "그만둔다.",
+												"events": []
+											}
+										]
 									}
 								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "낡은 전등이다."
 							},
 							{
-								"text": "그만둔다.",
-								"events": []
+								"type": "text",
+								"text": "불을 끌 수 있는 버튼이 존재한다."
+							},
+							{
+								"type": "choices",
+								"choices": [
+									{
+										"text": "누른다.",
+										"events": [
+											{
+												"type": "sound",
+												"path": "res://sounds/click_02.mp3",
+												"volume_db": 0,
+												"wait": false
+											},
+											{
+												"type": "text",
+												"text": "버튼을 누르자 왼쪽 전등의 불이 꺼졌다."
+											},
+											{
+												"type": "clear_flag",
+												"flag": "on_left_light_swimming_pool_room_26"
+											}
+										]
+									},
+									{
+										"text": "그만둔다.",
+										"events": []
+									}
+								]
 							}
 						]
 					}
@@ -28006,141 +28049,90 @@
 					150,
 					132
 				],
-				"required_flag_missing": [
-					"on_right_light_swimming_pool_room_26"
-				],
 				"events": [
 					{
-						"type": "text",
-						"text": "낡은 전등이다."
-					},
-					{
-						"type": "text",
-						"text": "불을 켤 수 있는 버튼이 존재한다."
-					},
-					{
-						"type": "choices",
-						"choices": [
+						"type": "conditional_events",
+						"branches": [
 							{
-								"text": "누른다.",
+								"required_flag_missing": [
+									"on_right_light_swimming_pool_room_26"
+								],
 								"events": [
 									{
-										"type": "sound",
-										"path": "res://sounds/click_02.mp3",
-										"volume_db": 0,
-										"wait": false
+										"type": "text",
+										"text": "낡은 전등이다."
 									},
 									{
 										"type": "text",
-										"text": "버튼을 누르자 오른쪽 전등의 불이 켜졌다."
+										"text": "불을 켤 수 있는 버튼이 존재한다."
 									},
 									{
-										"type": "flag",
-										"flag": "on_right_light_swimming_pool_room_26"
+										"type": "choices",
+										"choices": [
+											{
+												"text": "누른다.",
+												"events": [
+													{
+														"type": "sound",
+														"path": "res://sounds/click_02.mp3",
+														"volume_db": 0,
+														"wait": false
+													},
+													{
+														"type": "text",
+														"text": "버튼을 누르자 오른쪽 전등의 불이 켜졌다."
+													},
+													{
+														"type": "flag",
+														"flag": "on_right_light_swimming_pool_room_26"
+													}
+												]
+											},
+											{
+												"text": "그만둔다.",
+												"events": []
+											}
+										]
 									}
 								]
-							},
-							{
-								"text": "그만둔다.",
-								"events": []
 							}
-						]
-					}
-				]
-			},
-			"light_03": {
-				"click_rect": [
-					277,
-					146,
-					143,
-					146
-				],
-				"required_flag": [
-					"on_left_light_swimming_pool_room_26"
-				],
-				"events": [
-					{
-						"type": "text",
-						"text": "낡은 전등이다."
-					},
-					{
-						"type": "text",
-						"text": "불을 끌 수 있는 버튼이 존재한다."
-					},
-					{
-						"type": "choices",
-						"choices": [
+						],
+						"default_events": [
 							{
-								"text": "누른다.",
-								"events": [
-									{
-										"type": "sound",
-										"path": "res://sounds/click_02.mp3",
-										"volume_db": 0,
-										"wait": false
-									},
-									{
-										"type": "text",
-										"text": "버튼을 누르자 왼쪽 전등의 불이 꺼졌다."
-									},
-									{
-										"type": "clear_flag",
-										"flag": "on_left_light_swimming_pool_room_26"
-									}
-								]
+								"type": "text",
+								"text": "낡은 전등이다."
 							},
 							{
-								"text": "그만둔다.",
-								"events": []
-							}
-						]
-					}
-				]
-			},
-			"light_04": {
-				"click_rect": [
-					1579,
-					175,
-					150,
-					132
-				],
-				"required_flag": [
-					"on_right_light_swimming_pool_room_26"
-				],
-				"events": [
-					{
-						"type": "text",
-						"text": "낡은 전등이다."
-					},
-					{
-						"type": "text",
-						"text": "불을 끌 수 있는 버튼이 존재한다."
-					},
-					{
-						"type": "choices",
-						"choices": [
-							{
-								"text": "누른다.",
-								"events": [
-									{
-										"type": "sound",
-										"path": "res://sounds/click_02.mp3",
-										"volume_db": 0,
-										"wait": false
-									},
-									{
-										"type": "text",
-										"text": "버튼을 누르자 오른쪽 전등의 불이 꺼졌다."
-									},
-									{
-										"type": "clear_flag",
-										"flag": "on_right_light_swimming_pool_room_26"
-									}
-								]
+								"type": "text",
+								"text": "불을 끌 수 있는 버튼이 존재한다."
 							},
 							{
-								"text": "그만둔다.",
-								"events": []
+								"type": "choices",
+								"choices": [
+									{
+										"text": "누른다.",
+										"events": [
+											{
+												"type": "sound",
+												"path": "res://sounds/click_02.mp3",
+												"volume_db": 0,
+												"wait": false
+											},
+											{
+												"type": "text",
+												"text": "버튼을 누르자 오른쪽 전등의 불이 꺼졌다."
+											},
+											{
+												"type": "clear_flag",
+												"flag": "on_right_light_swimming_pool_room_26"
+											}
+										]
+									},
+									{
+										"text": "그만둔다.",
+										"events": []
+									}
+								]
 							}
 						]
 					}
@@ -28534,43 +28526,90 @@
 					143,
 					146
 				],
-				"required_flag_missing": [
-					"on_left_light_swimming_pool_room_27"
-				],
 				"events": [
 					{
-						"type": "text",
-						"text": "낡은 전등이다."
-					},
-					{
-						"type": "text",
-						"text": "불을 켤 수 있는 버튼이 존재한다."
-					},
-					{
-						"type": "choices",
-						"choices": [
+						"type": "conditional_events",
+						"branches": [
 							{
-								"text": "누른다.",
+								"required_flag_missing": [
+									"on_left_light_swimming_pool_room_27"
+								],
 								"events": [
 									{
-										"type": "sound",
-										"path": "res://sounds/click_02.mp3",
-										"volume_db": 0,
-										"wait": false
+										"type": "text",
+										"text": "낡은 전등이다."
 									},
 									{
 										"type": "text",
-										"text": "버튼을 누르자 왼쪽 전등의 불이 켜졌다."
+										"text": "불을 켤 수 있는 버튼이 존재한다."
 									},
 									{
-										"type": "flag",
-										"flag": "on_left_light_swimming_pool_room_27"
+										"type": "choices",
+										"choices": [
+											{
+												"text": "누른다.",
+												"events": [
+													{
+														"type": "sound",
+														"path": "res://sounds/click_02.mp3",
+														"volume_db": 0,
+														"wait": false
+													},
+													{
+														"type": "text",
+														"text": "버튼을 누르자 왼쪽 전등의 불이 켜졌다."
+													},
+													{
+														"type": "flag",
+														"flag": "on_left_light_swimming_pool_room_27"
+													}
+												]
+											},
+											{
+												"text": "그만둔다.",
+												"events": []
+											}
+										]
 									}
 								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "낡은 전등이다."
 							},
 							{
-								"text": "그만둔다.",
-								"events": []
+								"type": "text",
+								"text": "불을 끌 수 있는 버튼이 존재한다."
+							},
+							{
+								"type": "choices",
+								"choices": [
+									{
+										"text": "누른다.",
+										"events": [
+											{
+												"type": "sound",
+												"path": "res://sounds/click_02.mp3",
+												"volume_db": 0,
+												"wait": false
+											},
+											{
+												"type": "text",
+												"text": "버튼을 누르자 왼쪽 전등의 불이 꺼졌다."
+											},
+											{
+												"type": "clear_flag",
+												"flag": "on_left_light_swimming_pool_room_27"
+											}
+										]
+									},
+									{
+										"text": "그만둔다.",
+										"events": []
+									}
+								]
 							}
 						]
 					}
@@ -28583,141 +28622,90 @@
 					150,
 					132
 				],
-				"required_flag_missing": [
-					"on_right_light_swimming_pool_room_27"
-				],
 				"events": [
 					{
-						"type": "text",
-						"text": "낡은 전등이다."
-					},
-					{
-						"type": "text",
-						"text": "불을 켤 수 있는 버튼이 존재한다."
-					},
-					{
-						"type": "choices",
-						"choices": [
+						"type": "conditional_events",
+						"branches": [
 							{
-								"text": "누른다.",
+								"required_flag_missing": [
+									"on_right_light_swimming_pool_room_27"
+								],
 								"events": [
 									{
-										"type": "sound",
-										"path": "res://sounds/click_02.mp3",
-										"volume_db": 0,
-										"wait": false
+										"type": "text",
+										"text": "낡은 전등이다."
 									},
 									{
 										"type": "text",
-										"text": "버튼을 누르자 오른쪽 전등의 불이 켜졌다."
+										"text": "불을 켤 수 있는 버튼이 존재한다."
 									},
 									{
-										"type": "flag",
-										"flag": "on_right_light_swimming_pool_room_27"
+										"type": "choices",
+										"choices": [
+											{
+												"text": "누른다.",
+												"events": [
+													{
+														"type": "sound",
+														"path": "res://sounds/click_02.mp3",
+														"volume_db": 0,
+														"wait": false
+													},
+													{
+														"type": "text",
+														"text": "버튼을 누르자 오른쪽 전등의 불이 켜졌다."
+													},
+													{
+														"type": "flag",
+														"flag": "on_right_light_swimming_pool_room_27"
+													}
+												]
+											},
+											{
+												"text": "그만둔다.",
+												"events": []
+											}
+										]
 									}
 								]
-							},
-							{
-								"text": "그만둔다.",
-								"events": []
 							}
-						]
-					}
-				]
-			},
-			"light_03": {
-				"click_rect": [
-					277,
-					146,
-					143,
-					146
-				],
-				"required_flag": [
-					"on_left_light_swimming_pool_room_27"
-				],
-				"events": [
-					{
-						"type": "text",
-						"text": "낡은 전등이다."
-					},
-					{
-						"type": "text",
-						"text": "불을 끌 수 있는 버튼이 존재한다."
-					},
-					{
-						"type": "choices",
-						"choices": [
+						],
+						"default_events": [
 							{
-								"text": "누른다.",
-								"events": [
-									{
-										"type": "sound",
-										"path": "res://sounds/click_02.mp3",
-										"volume_db": 0,
-										"wait": false
-									},
-									{
-										"type": "text",
-										"text": "버튼을 누르자 왼쪽 전등의 불이 꺼졌다."
-									},
-									{
-										"type": "clear_flag",
-										"flag": "on_left_light_swimming_pool_room_27"
-									}
-								]
+								"type": "text",
+								"text": "낡은 전등이다."
 							},
 							{
-								"text": "그만둔다.",
-								"events": []
-							}
-						]
-					}
-				]
-			},
-			"light_04": {
-				"click_rect": [
-					1579,
-					175,
-					150,
-					132
-				],
-				"required_flag": [
-					"on_right_light_swimming_pool_room_27"
-				],
-				"events": [
-					{
-						"type": "text",
-						"text": "낡은 전등이다."
-					},
-					{
-						"type": "text",
-						"text": "불을 끌 수 있는 버튼이 존재한다."
-					},
-					{
-						"type": "choices",
-						"choices": [
-							{
-								"text": "누른다.",
-								"events": [
-									{
-										"type": "sound",
-										"path": "res://sounds/click_02.mp3",
-										"volume_db": 0,
-										"wait": false
-									},
-									{
-										"type": "text",
-										"text": "버튼을 누르자 오른쪽 전등의 불이 꺼졌다."
-									},
-									{
-										"type": "clear_flag",
-										"flag": "on_right_light_swimming_pool_room_27"
-									}
-								]
+								"type": "text",
+								"text": "불을 끌 수 있는 버튼이 존재한다."
 							},
 							{
-								"text": "그만둔다.",
-								"events": []
+								"type": "choices",
+								"choices": [
+									{
+										"text": "누른다.",
+										"events": [
+											{
+												"type": "sound",
+												"path": "res://sounds/click_02.mp3",
+												"volume_db": 0,
+												"wait": false
+											},
+											{
+												"type": "text",
+												"text": "버튼을 누르자 오른쪽 전등의 불이 꺼졌다."
+											},
+											{
+												"type": "clear_flag",
+												"flag": "on_right_light_swimming_pool_room_27"
+											}
+										]
+									},
+									{
+										"text": "그만둔다.",
+										"events": []
+									}
+								]
 							}
 						]
 					}
@@ -29142,43 +29130,90 @@
 					143,
 					146
 				],
-				"required_flag_missing": [
-					"on_left_light_swimming_pool_room_28"
-				],
 				"events": [
 					{
-						"type": "text",
-						"text": "낡은 전등이다."
-					},
-					{
-						"type": "text",
-						"text": "불을 켤 수 있는 버튼이 존재한다."
-					},
-					{
-						"type": "choices",
-						"choices": [
+						"type": "conditional_events",
+						"branches": [
 							{
-								"text": "누른다.",
+								"required_flag_missing": [
+									"on_left_light_swimming_pool_room_28"
+								],
 								"events": [
 									{
-										"type": "sound",
-										"path": "res://sounds/click_02.mp3",
-										"volume_db": 0,
-										"wait": false
+										"type": "text",
+										"text": "낡은 전등이다."
 									},
 									{
 										"type": "text",
-										"text": "버튼을 누르자 왼쪽 전등의 불이 켜졌다."
+										"text": "불을 켤 수 있는 버튼이 존재한다."
 									},
 									{
-										"type": "flag",
-										"flag": "on_left_light_swimming_pool_room_28"
+										"type": "choices",
+										"choices": [
+											{
+												"text": "누른다.",
+												"events": [
+													{
+														"type": "sound",
+														"path": "res://sounds/click_02.mp3",
+														"volume_db": 0,
+														"wait": false
+													},
+													{
+														"type": "text",
+														"text": "버튼을 누르자 왼쪽 전등의 불이 켜졌다."
+													},
+													{
+														"type": "flag",
+														"flag": "on_left_light_swimming_pool_room_28"
+													}
+												]
+											},
+											{
+												"text": "그만둔다.",
+												"events": []
+											}
+										]
 									}
 								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "낡은 전등이다."
 							},
 							{
-								"text": "그만둔다.",
-								"events": []
+								"type": "text",
+								"text": "불을 끌 수 있는 버튼이 존재한다."
+							},
+							{
+								"type": "choices",
+								"choices": [
+									{
+										"text": "누른다.",
+										"events": [
+											{
+												"type": "sound",
+												"path": "res://sounds/click_02.mp3",
+												"volume_db": 0,
+												"wait": false
+											},
+											{
+												"type": "text",
+												"text": "버튼을 누르자 왼쪽 전등의 불이 꺼졌다."
+											},
+											{
+												"type": "clear_flag",
+												"flag": "on_left_light_swimming_pool_room_28"
+											}
+										]
+									},
+									{
+										"text": "그만둔다.",
+										"events": []
+									}
+								]
 							}
 						]
 					}
@@ -29191,141 +29226,90 @@
 					150,
 					132
 				],
-				"required_flag_missing": [
-					"on_right_light_swimming_pool_room_28"
-				],
 				"events": [
 					{
-						"type": "text",
-						"text": "낡은 전등이다."
-					},
-					{
-						"type": "text",
-						"text": "불을 켤 수 있는 버튼이 존재한다."
-					},
-					{
-						"type": "choices",
-						"choices": [
+						"type": "conditional_events",
+						"branches": [
 							{
-								"text": "누른다.",
+								"required_flag_missing": [
+									"on_right_light_swimming_pool_room_28"
+								],
 								"events": [
 									{
-										"type": "sound",
-										"path": "res://sounds/click_02.mp3",
-										"volume_db": 0,
-										"wait": false
+										"type": "text",
+										"text": "낡은 전등이다."
 									},
 									{
 										"type": "text",
-										"text": "버튼을 누르자 오른쪽 전등의 불이 켜졌다."
+										"text": "불을 켤 수 있는 버튼이 존재한다."
 									},
 									{
-										"type": "flag",
-										"flag": "on_right_light_swimming_pool_room_28"
+										"type": "choices",
+										"choices": [
+											{
+												"text": "누른다.",
+												"events": [
+													{
+														"type": "sound",
+														"path": "res://sounds/click_02.mp3",
+														"volume_db": 0,
+														"wait": false
+													},
+													{
+														"type": "text",
+														"text": "버튼을 누르자 오른쪽 전등의 불이 켜졌다."
+													},
+													{
+														"type": "flag",
+														"flag": "on_right_light_swimming_pool_room_28"
+													}
+												]
+											},
+											{
+												"text": "그만둔다.",
+												"events": []
+											}
+										]
 									}
 								]
-							},
-							{
-								"text": "그만둔다.",
-								"events": []
 							}
-						]
-					}
-				]
-			},
-			"light_03": {
-				"click_rect": [
-					277,
-					146,
-					143,
-					146
-				],
-				"required_flag": [
-					"on_left_light_swimming_pool_room_28"
-				],
-				"events": [
-					{
-						"type": "text",
-						"text": "낡은 전등이다."
-					},
-					{
-						"type": "text",
-						"text": "불을 끌 수 있는 버튼이 존재한다."
-					},
-					{
-						"type": "choices",
-						"choices": [
+						],
+						"default_events": [
 							{
-								"text": "누른다.",
-								"events": [
-									{
-										"type": "sound",
-										"path": "res://sounds/click_02.mp3",
-										"volume_db": 0,
-										"wait": false
-									},
-									{
-										"type": "text",
-										"text": "버튼을 누르자 왼쪽 전등의 불이 꺼졌다."
-									},
-									{
-										"type": "clear_flag",
-										"flag": "on_left_light_swimming_pool_room_28"
-									}
-								]
+								"type": "text",
+								"text": "낡은 전등이다."
 							},
 							{
-								"text": "그만둔다.",
-								"events": []
-							}
-						]
-					}
-				]
-			},
-			"light_04": {
-				"click_rect": [
-					1579,
-					175,
-					150,
-					132
-				],
-				"required_flag": [
-					"on_right_light_swimming_pool_room_28"
-				],
-				"events": [
-					{
-						"type": "text",
-						"text": "낡은 전등이다."
-					},
-					{
-						"type": "text",
-						"text": "불을 끌 수 있는 버튼이 존재한다."
-					},
-					{
-						"type": "choices",
-						"choices": [
-							{
-								"text": "누른다.",
-								"events": [
-									{
-										"type": "sound",
-										"path": "res://sounds/click_02.mp3",
-										"volume_db": 0,
-										"wait": false
-									},
-									{
-										"type": "text",
-										"text": "버튼을 누르자 오른쪽 전등의 불이 꺼졌다."
-									},
-									{
-										"type": "clear_flag",
-										"flag": "on_right_light_swimming_pool_room_28"
-									}
-								]
+								"type": "text",
+								"text": "불을 끌 수 있는 버튼이 존재한다."
 							},
 							{
-								"text": "그만둔다.",
-								"events": []
+								"type": "choices",
+								"choices": [
+									{
+										"text": "누른다.",
+										"events": [
+											{
+												"type": "sound",
+												"path": "res://sounds/click_02.mp3",
+												"volume_db": 0,
+												"wait": false
+											},
+											{
+												"type": "text",
+												"text": "버튼을 누르자 오른쪽 전등의 불이 꺼졌다."
+											},
+											{
+												"type": "clear_flag",
+												"flag": "on_right_light_swimming_pool_room_28"
+											}
+										]
+									},
+									{
+										"text": "그만둔다.",
+										"events": []
+									}
+								]
 							}
 						]
 					}
@@ -29530,11 +29514,15 @@
 		},
 		"exits": {
 			"up": {
-				"target": "dark_forest_hallway_10",
+				"target": "dark_forest_door_01",
 				"position": [
 					900,
 					30
 				],
+				"footstep_sound": {
+					"path": "res://sounds/footsteps_forest.mp3",
+					"volume_db": 0.0
+				},
 				"locked": true,
 				"open_flag": "opened_swimming_pool_huge_hall_door_01",
 				"move_effect": "enter"
@@ -33605,6 +33593,14 @@
 	},
 	"dark_forest_hallway_12": {
 		"background": "res://imgs/backgrounds/dark_forest_hallway_06.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"숲보스클리어"
+				],
+				"path": "res://imgs/backgrounds/dark_forest_hallway_01.png"
+			}
+		],
 		"idle_motion": {
 			"enabled": true,
 			"scale": 1.012,
@@ -33661,7 +33657,40 @@
 				]
 			}
 		},
-		"interactions": {},
+		"interactions": {
+			"vine": {
+				"click_rect": [
+					1190,
+					221,
+					698,
+					300
+				],
+				"events": [
+					{
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag": [
+									"숲보스클리어"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "길을 막고 있던 넝쿨들이 사라져있다."
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "길이 막혀있다."
+							}
+						]
+					}
+				]
+			}
+		},
 		"random_encounter": {
 			"enemy_table": "dark_forest_01",
 			"event_table": "dark_forest",
@@ -34443,67 +34472,69 @@
 					261,
 					235
 				],
-				"required_flag_missing": "got_tuna_can_a_dark_forest_room_14_02",
 				"events": [
 					{
-						"type": "sound",
-						"path": "res://sounds/drawer_open.mp3",
-						"volume_db": 10,
-						"wait": false
-					},
-					{
-						"type": "text",
-						"text": "서랍 안을 열자 시야를 가릴 정도의 먼지들이 뿜어져 나왔다."
-					},
-					{
-						"type": "text",
-						"text": "무언가 있다."
-					},
-					{
-						"type": "item",
-						"item": "tuna_can_a",
-						"count": 5
-					},
-					{
-						"type": "text",
-						"text": "오래됐지만 충분히 먹을 수 있을 것 같다."
-					},
-					{
-						"type": "flag",
-						"flag": "got_tuna_can_a_dark_forest_room_14_02"
-					},
-					{
-						"type": "sound",
-						"path": "res://sounds/drawer_open.mp3",
-						"volume_db": 10,
-						"wait": false
-					}
-				]
-			},
-			"drawer_02_02": {
-				"click_rect": [
-					634,
-					546,
-					261,
-					235
-				],
-				"required_flag": "got_tuna_can_a_dark_forest_room_14_02",
-				"events": [
-					{
-						"type": "sound",
-						"path": "res://sounds/drawer_open.mp3",
-						"volume_db": 10,
-						"wait": false
-					},
-					{
-						"type": "text",
-						"text": "이곳에는 더 이상 쓸 만한 게 없는 것 같다."
-					},
-					{
-						"type": "sound",
-						"path": "res://sounds/drawer_open.mp3",
-						"volume_db": 10,
-						"wait": false
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag_missing": [
+									"got_tuna_can_a_dark_forest_room_14_02"
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/drawer_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "서랍 안을 열자 시야를 가릴 정도의 먼지들이 뿜어져 나왔다."
+									},
+									{
+										"type": "text",
+										"text": "무언가 있다."
+									},
+									{
+										"type": "item",
+										"item": "tuna_can_a",
+										"count": 5
+									},
+									{
+										"type": "text",
+										"text": "오래됐지만 충분히 먹을 수 있을 것 같다."
+									},
+									{
+										"type": "flag",
+										"flag": "got_tuna_can_a_dark_forest_room_14_02"
+									},
+									{
+										"type": "sound",
+										"path": "res://sounds/drawer_open.mp3",
+										"volume_db": 10,
+										"wait": false
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "sound",
+								"path": "res://sounds/drawer_open.mp3",
+								"volume_db": 10,
+								"wait": false
+							},
+							{
+								"type": "text",
+								"text": "이곳에는 더 이상 쓸 만한 게 없는 것 같다."
+							},
+							{
+								"type": "sound",
+								"path": "res://sounds/drawer_open.mp3",
+								"volume_db": 10,
+								"wait": false
+							}
+						]
 					}
 				]
 			},
@@ -35403,6 +35434,909 @@
 										"events": []
 									}
 								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_hallway_17": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_hallway_18",
+				"position": [
+					620,
+					30
+				]
+			},
+			"down": {
+				"target": "dark_forest_crossroad_02",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_17",
+				"position": [
+					1550,
+					420
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_02",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_17": {
+		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_17",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"bush": {
+				"click_rect": [
+					136,
+					418,
+					1561,
+					144
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_hallway_18": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_hallway_19",
+				"position": [
+					620,
+					30
+				]
+			},
+			"down": {
+				"target": "dark_forest_hallway_17",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_18",
+				"position": [
+					1550,
+					420
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_02",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_18": {
+		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_18",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"bush": {
+				"click_rect": [
+					136,
+					418,
+					1561,
+					144
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_hallway_19": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_hallway_20",
+				"position": [
+					620,
+					30
+				]
+			},
+			"down": {
+				"target": "dark_forest_hallway_18",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_19",
+				"position": [
+					1550,
+					420
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_02",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_19": {
+		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_19",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"bush": {
+				"click_rect": [
+					136,
+					418,
+					1561,
+					144
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"flag": "got_unknown_coin_dark_forest_room_19",
+								"already_events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								],
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "무언가 있다."
+									},
+									{
+										"type": "item",
+										"item": "unknown_coin",
+										"count": 20
+									},
+									{
+										"type": "flag",
+										"flag": "got_unknown_coin_dark_forest_room_19"
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_hallway_20": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_06.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"숲보스클리어"
+				],
+				"path": "res://imgs/backgrounds/dark_forest_hallway_01.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_door_01",
+				"position": [
+					620,
+					30
+				]
+			},
+			"down": {
+				"target": "dark_forest_hallway_19",
+				"position": [
+					900,
+					950
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_20",
+				"position": [
+					1550,
+					420
+				],
+				"move_effect": "enter",
+				"locked": true,
+				"open_flag": [
+					"숲보스클리어"
+				]
+			}
+		},
+		"interactions": {
+			"vine": {
+				"click_rect": [
+					1190,
+					221,
+					698,
+					300
+				],
+				"events": [
+					{
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag": [
+									"숲보스클리어"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "길을 막고 있던 넝쿨들이 사라져있다."
+									}
+								]
+							}
+						],
+						"default_events": [
+							{
+								"type": "text",
+								"text": "길이 막혀있다."
+							}
+						]
+					}
+				]
+			}
+		},
+		"random_encounter": {
+			"enemy_table": "dark_forest_02",
+			"event_table": "dark_forest",
+			"chance": 50
+		}
+	},
+	"dark_forest_room_20": {
+		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_20",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845,
+					8,
+					255,
+					195
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"bush": {
+				"click_rect": [
+					136,
+					418,
+					1561,
+					144
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_door_01": {
+		"background": "res://imgs/backgrounds/dark_forest_door_02.png",
+		"display_name": "어두운 숲 구역2 · 철문 앞",
+		"background_by_flags": [
+			{
+				"flags": [
+					"opened_swimming_pool_huge_hall_door_01"
+				],
+				"path": "res://imgs/backgrounds/dark_forest_door_01.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1,
+			"frame_count": 10,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "swimming_pool_huge_hall_door_01",
+				"position": [
+					900,
+					30
+				],
+				"footstep_sound": {
+					"path": "res://sounds/footsteps.mp3",
+					"volume_db": 20.0
+				},
+				"locked": true,
+				"open_flag": "opened_swimming_pool_huge_hall_door_01",
+				"move_effect": "enter"
+			},
+			"down": {
+				"target": "dark_forest_hallway_20",
+				"position": [
+					900,
+					950
+				]
+			}
+		},
+		"interactions": {
+			"door": {
+				"click_rect": [
+					661,
+					188,
+					587,
+					547
+				],
+				"required_flag_missing": "opened_swimming_pool_huge_hall_door_01",
+				"events": [
+					{
+						"type": "text",
+						"text": "어떤 건물 내부로 연결되어 있는 철문이다."
+					},
+					{
+						"type": "text",
+						"text": "문을 열을까?"
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "up",
+										"required_item": "",
+										"master_key": "",
+										"consume_required_key": true,
+										"consume_master_key": true,
+										"success_effect": "fade",
+										"locked_sound_path": "res://sounds/iron_door_locked.mp3",
+										"unlocked_sound_path": "res://sounds/iron_door_open.mp3",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
 							}
 						]
 					}
