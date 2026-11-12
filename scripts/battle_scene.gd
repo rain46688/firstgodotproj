@@ -6419,8 +6419,9 @@ func record_pending_reflected_damage(target_type, target_id, damage):
 
 	if reflected_damage <= 0:
 		return
-
-	pending_reflected_damage += reflected_damage
+		
+	# 반사 데미지 너무 낮아서 수정
+	pending_reflected_damage += (reflected_damage * 5)
 
 	var saved_trigger_sound = str(
 		pending_reflection_trigger_effect.get("trigger_sound", "")

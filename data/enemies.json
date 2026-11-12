@@ -9825,14 +9825,14 @@
 						"hp_percent": 100,
 						"text": "괴물의 외피가 가시와 화염으로 뒤덮였다.",
 						"sound": "res://sounds/fire_spell.mp3",
-						"sound_volume_db": -3.0,
+						"sound_volume_db": -5.0,
 						"effect_duration": 0.8
 					},
 					{
 						"type": "reflect_damage",
 						"target": "part",
 						"part_id": "shell",
-						"turns": 1,
+						"turns": 4,
 						"damage_ratio": 1.0,
 						"remove_part_on_expire": true,
 						"expire_text": "가시와 화염이 사그라들었다.",

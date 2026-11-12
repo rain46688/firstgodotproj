@@ -378,8 +378,8 @@ const MSG_NO_FORWARD = "더 이상 앞으로 갈 수 없다..."
 const MSG_NO_BACK = "더 이상 뒤로 갈 수 없다..."
 const MSG_NO_LEFT = "그쪽으로는 갈 수 없다..."
 const MSG_NO_RIGHT = "그쪽으로는 갈 수 없다..."
-const MSG_DOOR_LOCKED = "문이 굳게 잠겨있다..."
-const MSG_DOOR_UNLOCK = "문을 열었다."
+const MSG_DOOR_LOCKED = "갈 수 없다..."
+const MSG_DOOR_UNLOCK = "길을 열었다."
 const MSG_ITEM_GAINED_SUFFIX = "을 얻었다."
 const BATTLE_SCENE_PATH = "res://scenes/battle_scene.tscn"
 const GAME_OVER_SCENE_PATH = "res://scenes/game_over_scene.tscn"
@@ -429,6 +429,9 @@ const RANDOM_ENCOUNTER_COOLDOWN_STEPS = 2
 
 # 한 화면에 표시할 선택지 수
 const CHOICE_VISIBLE_COUNT = 4
+
+# 기본 분위기: 검은색 60%
+const DEFAULT_ATMOSPHERE_COLOR = Color(0.0, 0.0, 0.0, 0.6)
 
 # ============================================================
 # 게임 시작 관련 함수 모음
@@ -3298,9 +3301,32 @@ func update_room():
 	update_room_ambient_sound(room)
 	update_room_idle_motion_setting(room)
 	update_room_move_arrows(room)
+	update_room_atmosphere(room)
 
 	create_interaction_buttons(room)
 	create_exit_buttons(room)
+# 현재 방 분위기 갱신
+func update_room_atmosphere(room):
+	var target_color = DEFAULT_ATMOSPHERE_COLOR
+
+	var data = room.get("atmosphere", {})
+
+	if typeof(data) == TYPE_DICTIONARY:
+		if not data.is_empty():
+			var color_text = str(data.get("color", "#000000"))
+
+			target_color = Color.from_string(
+				color_text,
+				Color.BLACK
+			)
+
+			target_color.a = clampf(
+				float(data.get("alpha", 0.6)),
+				0.0,
+				1.0
+			)
+
+	atmosphere_fade.color = target_color
 # 현재 방 idle motion 설정 갱신 함수
 func update_room_idle_motion_setting(room):
 	stop_room_idle_motion(true)
