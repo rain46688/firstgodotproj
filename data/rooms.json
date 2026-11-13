@@ -9745,6 +9745,15 @@
 			"loop": true
 		},
 		"exits": {
+			"right": {
+				"target": "school_stairs_hall_05",
+				"position": [
+					1300.0,
+					500.0
+				],
+				"locked": true,
+				"open_flag": "opened_school_stairs_hall_05"
+			},
 			"left": {
 				"target": "school_stairs_hall_02",
 				"position": [
@@ -9763,6 +9772,49 @@
 			}
 		},
 		"interactions": {
+			"school_stairs_hall_05_door": {
+				"click_rect": [
+					1036.0,
+					219.0,
+					324.0,
+					544.0
+				],
+				"hide_if_flag": "opened_school_stairs_hall_05",
+				"events": [
+					{
+						"type": "text",
+						"text": "철문으로 굳게 닫혀있다. 문을 열을까?"
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "right",
+										"required_item": "",
+										"master_key": "master_key",
+										"consume_required_key": true,
+										"consume_master_key": true,
+										"success_effect": "fade",
+										"locked_sound_path": "res://sounds/iron_door_locked.mp3",
+										"unlocked_sound_path": "res://sounds/iron_door_open.mp3",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "단단하게 잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			},
 			"school_stairs_hall_03_door": {
 				"click_rect": [
 					564.0,
@@ -16054,6 +16106,251 @@
 						"path": "res://sounds/paper.mp3",
 						"volume_db": 10.0,
 						"wait": false
+					}
+				]
+			}
+		}
+	},
+	"school_stairs_hall_05": {
+		"background": "res://imgs/backgrounds/school_stairs_hall_01.png",
+		"display_name": "학교 4층 · 중앙홀",
+		"background_by_flags": [
+			{
+				"flags": [
+					"opened_school_stairs_hall_06",
+					"opened_school_stairs_hall_05"
+				],
+				"path": "res://imgs/backgrounds/school_stairs_hall_04.png"
+			},
+			{
+				"flags": [
+					"opened_school_stairs_hall_05"
+				],
+				"path": "res://imgs/backgrounds/school_stairs_hall_02.png"
+			},
+			{
+				"flags": [
+					"opened_school_stairs_hall_06"
+				],
+				"path": "res://imgs/backgrounds/school_stairs_hall_03.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1.0,
+			"frame_count": 10.0,
+			"fps": 6.0,
+			"alpha": 0.35
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"enter_stories": [],
+		"exits": {
+			"up": {
+				"target": "school_stairs_hall_05_02",
+				"position": [
+					900.0,
+					30.0
+				]
+			},
+			"down": {
+				"target": "school_stairs_hall_elevator_01",
+				"position": [
+					900.0,
+					950.0
+				]
+			}
+		},
+		"interactions": {}
+	},
+	"school_stairs_hall_05_02": {
+		"background": "res://imgs/backgrounds/school_stairs_hall_door_01.png",
+		"background_by_flags": [
+			{
+				"flags": [
+					"opened_school_stairs_hall_06",
+					"opened_school_stairs_hall_05"
+				],
+				"path": "res://imgs/backgrounds/school_stairs_hall_door_04.png"
+			},
+			{
+				"flags": [
+					"opened_school_stairs_hall_05"
+				],
+				"path": "res://imgs/backgrounds/school_stairs_hall_door_02.png"
+			},
+			{
+				"flags": [
+					"opened_school_stairs_hall_06"
+				],
+				"path": "res://imgs/backgrounds/school_stairs_hall_door_03.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1.0,
+			"frame_count": 10.0,
+			"fps": 6.0,
+			"alpha": 0.35
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"exits": {
+			"left": {
+				"target": "school_stairs_hall_03",
+				"position": [
+					500.0,
+					500.0
+				],
+				"locked": true,
+				"open_flag": "opened_school_stairs_hall_05"
+			},
+			"down": {
+				"target": "school_stairs_hall_05",
+				"position": [
+					900.0,
+					950.0
+				]
+			}
+		},
+		"interactions": {
+			"school_stairs_hall_05_door": {
+				"click_rect": [
+					564.0,
+					219.0,
+					324.0,
+					544.0
+				],
+				"hide_if_flag": "opened_school_stairs_hall_05",
+				"events": [
+					{
+						"type": "text",
+						"text": "철문으로 굳게 닫혀있다. 문을 열을까?"
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "left",
+										"required_item": "",
+										"master_key": "master_key",
+										"consume_required_key": true,
+										"consume_master_key": true,
+										"success_effect": "fade",
+										"locked_sound_path": "res://sounds/iron_door_locked.mp3",
+										"unlocked_sound_path": "res://sounds/iron_door_open.mp3",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "단단하게 잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"school_stairs_hall_elevator_01": {
+		"background": "res://imgs/backgrounds/school_stairs_hall_elevator_01.png",
+		"display_name": "학교 4층 · 승강기",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1.0,
+			"frame_count": 10.0,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"enter_stories": [
+			{
+				"event": "ride_elevator_school_stairs_hall_elevator_01",
+				"required_flag": [
+					"touch_elevator_school_stairs_hall_elevator_01"
+				],
+				"required_flag_missing": [
+					"story_ride_elevator_school_stairs_hall_elevator_01_done"
+				]
+			}
+		],
+		"exits": {
+			"down": {
+				"target": "school_stairs_hall_05",
+				"position": [
+					900.0,
+					950.0
+				]
+			}
+		},
+		"interactions": {
+			"elevator_door": {
+				"click_rect": [
+					771,
+					261,
+					395,
+					553
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "엘리베이터?"
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "이용한다.",
+								"events": [
+									{
+										"type": "flag",
+										"flag": "touch_elevator_school_stairs_hall_elevator_01"
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
 					}
 				]
 			}
@@ -29562,11 +29859,13 @@
 									{
 										"type": "unlock_exit",
 										"direction": "up",
-										"required_item": "",
-										"master_key": "master_key",
+										"required_item": "locked",
+										"master_key": "",
 										"consume_required_key": true,
 										"consume_master_key": true,
 										"success_effect": "fade",
+										"locked_sound_path": "res://sounds/iron_door_locked.mp3",
+										"unlocked_sound_path": "res://sounds/iron_door_open.mp3",
 										"required_key_success_text": "{item_name}로 문을 열었다.",
 										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
 										"fail_text": "잠겨있어서 열 수 없다."
@@ -37613,6 +37912,116 @@
 		"interactions": {},
 		"random_encounter": {}
 	},
+	"dark_forest_door_02": {
+		"background": "res://imgs/backgrounds/dark_forest_door_03.png",
+		"display_name": "어두운 숲 구역3 · 방공호 앞",
+		"background_by_flags": [
+			{
+				"flags": [
+					"defeated_forest_evil"
+				],
+				"path": "res://imgs/backgrounds/dark_forest_door_04.png"
+			}
+		],
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1.0,
+			"frame_count": 10.0,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "swimming_pool_huge_hall_door_01",
+				"position": [
+					900.0,
+					30.0
+				],
+				"footstep_sound": {
+					"path": "res://sounds/footsteps.mp3",
+					"volume_db": 20.0
+				},
+				"locked": true,
+				"open_flag": "defeated_forest_evil",
+				"move_effect": "enter"
+			},
+			"down": {
+				"target": "dark_forest_hallway_25",
+				"position": [
+					900.0,
+					950.0
+				]
+			}
+		},
+		"interactions": {
+			"door": {
+				"click_rect": [
+					661.0,
+					188.0,
+					587.0,
+					547.0
+				],
+				"required_flag_missing": "defeated_forest_evil",
+				"events": [
+					{
+						"type": "text",
+						"text": "어떤 건물 내부로 연결되어 있는 문이다."
+					},
+					{
+						"type": "text",
+						"text": "문을 열을까?"
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "문을 연다.",
+								"events": [
+									{
+										"type": "unlock_exit",
+										"direction": "up",
+										"required_item": "locked",
+										"master_key": "",
+										"consume_required_key": true,
+										"consume_master_key": true,
+										"success_effect": "fade",
+										"required_key_success_text": "{item_name}로 문을 열었다.",
+										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
+										"fail_text": "잠겨있어서 열 수 없다."
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
+							}
+						]
+					}
+				]
+			}
+		}
+	},
 	"dark_forest_hallway_25": {
 		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
 		"idle_motion": {
@@ -37652,7 +38061,7 @@
 				]
 			},
 			"down": {
-				"target": "dark_forest_hospital_01",
+				"target": "dark_forest_door_02",
 				"position": [
 					900.0,
 					950.0
@@ -38129,6 +38538,70 @@
 						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
 					}
 				]
+			},
+			"bush": {
+				"click_rect": [
+					136.0,
+					418.0,
+					1561.0,
+					144.0
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10.0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10.0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10.0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							}
+						]
+					}
+				]
 			}
 		}
 	},
@@ -38205,6 +38678,503 @@
 							{
 								"type": "text",
 								"text": "길이 막혀있다."
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_hallway_28": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1.0,
+			"frame_count": 10.0,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_hallway_29",
+				"position": [
+					620.0,
+					30.0
+				]
+			},
+			"down": {
+				"target": "dark_forest_crossroad_03",
+				"position": [
+					900.0,
+					950.0
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_28",
+				"position": [
+					1550.0,
+					420.0
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_03",
+			"event_table": "dark_forest",
+			"chance": 50.0
+		}
+	},
+	"dark_forest_room_28": {
+		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1.0,
+			"frame_count": 10.0,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_28",
+				"position": [
+					900.0,
+					950.0
+				]
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845.0,
+					8.0,
+					255.0,
+					195.0
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"bush": {
+				"click_rect": [
+					136.0,
+					418.0,
+					1561.0,
+					144.0
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10.0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10.0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10.0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_hallway_29": {
+		"background": "res://imgs/backgrounds/dark_forest_hallway_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1.0,
+			"frame_count": 10.0,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_door_03",
+				"position": [
+					620.0,
+					30.0
+				]
+			},
+			"down": {
+				"target": "dark_forest_hallway_28",
+				"position": [
+					900.0,
+					950.0
+				]
+			},
+			"right": {
+				"target": "dark_forest_room_29",
+				"position": [
+					1550.0,
+					420.0
+				],
+				"move_effect": "enter"
+			}
+		},
+		"interactions": {},
+		"random_encounter": {
+			"enemy_table": "dark_forest_03",
+			"event_table": "dark_forest",
+			"chance": 50.0
+		}
+	},
+	"dark_forest_room_29": {
+		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1.0,
+			"frame_count": 10.0,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"down": {
+				"target": "dark_forest_hallway_29",
+				"position": [
+					900.0,
+					950.0
+				]
+			}
+		},
+		"interactions": {
+			"moon": {
+				"click_rect": [
+					845.0,
+					8.0,
+					255.0,
+					195.0
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "어두운 구름 사이의 달빛은 은은하게 숲속을 비추고 있다."
+					}
+				]
+			},
+			"bush": {
+				"click_rect": [
+					136.0,
+					418.0,
+					1561.0,
+					144.0
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "길게 자란 수풀은 칠흑 같은 어둠 속에 뒤엉켜 있고, 안쪽에서 무언가 소리가 들리는 듯하다."
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "왼쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10.0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "중앙을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10.0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							},
+							{
+								"text": "오른쪽을 뒤져본다.",
+								"events": [
+									{
+										"type": "sound",
+										"path": "res://sounds/bush_rustling_sound.mp3",
+										"volume_db": 10.0,
+										"wait": false
+									},
+									{
+										"type": "text",
+										"text": "아무것도 없다."
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"dark_forest_door_03": {
+		"background": "res://imgs/backgrounds/dark_forest_door_01.png",
+		"display_name": "어두운 숲 구역3 · 철문 앞",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1.0,
+			"frame_count": 10.0,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/insect_sound.mp3",
+			"volume_db": -5.0,
+			"loop": true
+		},
+		"bgm": {
+			"path": "res://sounds/forest.mp3",
+			"volume_db": 0.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"exits": {
+			"up": {
+				"target": "dark_forest_elevator_01",
+				"position": [
+					900.0,
+					30.0
+				],
+				"footstep_sound": {
+					"path": "res://sounds/footsteps.mp3",
+					"volume_db": 20.0
+				},
+				"move_effect": "enter"
+			},
+			"down": {
+				"target": "dark_forest_hallway_29",
+				"position": [
+					900.0,
+					950.0
+				]
+			}
+		},
+		"interactions": {}
+	},
+	"dark_forest_elevator_01": {
+		"background": "res://imgs/backgrounds/school_stairs_hall_elevator_01.png",
+		"display_name": "어두운 숲 구역3 · 승강기",
+		"idle_motion": {
+			"enabled": true,
+			"scale": 1.012,
+			"amplitude_x": 4.0,
+			"amplitude_y": 1.0,
+			"speed": 0.3
+		},
+		"ambient_overlay": {
+			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
+			"frame_start": 1.0,
+			"frame_count": 10.0,
+			"fps": 6.0,
+			"alpha": 0.55
+		},
+		"ambient_sound": {
+			"path": "res://sounds/light_buzz.mp3",
+			"volume_db": -10.0,
+			"loop": true
+		},
+		"footstep_sound": {
+			"path": "res://sounds/footsteps_forest.mp3",
+			"volume_db": 0.0
+		},
+		"enter_stories": [
+			{
+				"event": "ride_elevator_dark_forest_elevator_01",
+				"required_flag": [
+					"touch_elevator_dark_forest_elevator_01"
+				],
+				"required_flag_missing": [
+					"story_ride_elevator_dark_forest_elevator_01_done"
+				]
+			}
+		],
+		"exits": {
+			"down": {
+				"target": "dark_forest_door_03",
+				"position": [
+					900.0,
+					950.0
+				]
+			}
+		},
+		"interactions": {
+			"elevator_door": {
+				"click_rect": [
+					771,
+					261,
+					395,
+					553
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "엘리베이터?"
+					},
+					{
+						"type": "choices",
+						"choices": [
+							{
+								"text": "이용한다.",
+								"events": [
+									{
+										"type": "flag",
+										"flag": "touch_elevator_dark_forest_elevator_01"
+									}
+								]
+							},
+							{
+								"text": "그만둔다.",
+								"events": []
 							}
 						]
 					}
