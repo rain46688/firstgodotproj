@@ -14897,14 +14897,14 @@
 				"text": "조심스럽게 무기를 들고 주위를 살폈다."
 			},
 			{
+				"type": "story_dialogue",
+				"text": "그 순간."
+			},
+			{
 				"type": "sound",
 				"path": "res://sounds/bush_rustling_sound.mp3",
 				"volume_db": 10,
 				"wait": false
-			},
-			{
-				"type": "story_dialogue",
-				"text": "그 순간."
 			},
 			{
 				"type": "story_dialogue",
@@ -14932,7 +14932,7 @@
 			{
 				"type": "portrait",
 				"character": "mask_man",
-				"emotion": "normal",
+				"emotion": "mask",
 				"text": "..."
 			},
 			{
@@ -15010,17 +15010,20 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "나는 무기로 받아냈다."
+				"text": "쨍!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 가까스로 무기를 들어 그의 공격을 받아냈다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "손목이 저릴 정도로 묵직한 충격이 팔을 타고 올라왔다."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
 				"text": "잠..."
-			},
-			{
-				"type": "story_dialogue",
-				"name": "나",
-				"text": "잠깐, 이야기 좀!"
 			},
 			{
 				"type": "sound",
@@ -15034,46 +15037,165 @@
 			},
 			{
 				"type": "story_dialogue",
+				"name": "나",
+				"text": "잠깐, 이야기 좀!"
+			},
+			{
+				"type": "story_dialogue",
 				"name": "가면의 남성",
-				"text": "으윽..."
+				"text": "!!!"
 			},
 			{
 				"type": "story_dialogue",
-				"text": "우리는 좁은 숲길에서 몇 번이나 무기를 부딪쳤다."
+				"text": "하지만 가면의 남성은 대답하지 않았다."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "상대는 괴물처럼 압도적인 힘을 가진 것은 아니었다."
-			},
-			{
-				"type": "story_dialogue",
-				"text": "하지만 녀석은 싸움에 익숙했다."
-			},
-			{
-				"type": "story_dialogue",
-				"text": "몸을 숨기는 법."
-			},
-			{
-				"type": "story_dialogue",
-				"text": "거리를 벌리는 법."
-			},
-			{
-				"type": "story_dialogue",
-				"text": "상대가 공격하는 순간을 노리는 법."
-			},
-			{
-				"type": "story_dialogue",
-				"text": "어쩌면 이곳에서 오래 살아남으며 익힌 것일지도 몰랐다."
+				"text": "대신 한 걸음 뒤로 물러나는가 싶더니, 곧바로 몸을 낮추며 다시 파고들었다."
 			},
 			{
 				"type": "sound",
 				"path": "res://sounds/impact_02.mp3",
 				"volume_db": 0,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "큭!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이번에는 공격이 빨랐다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 무기를 비틀어 궤도를 흘려냈지만, 그의 어깨가 그대로 가슴을 들이받았다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.5,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.2,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "숨이 순간적으로 막혔다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 비틀거리며 두어 걸음 뒤로 밀려났다."
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "녀석은 그 틈을 놓치지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "우리는 몇 번이나 무기를 부딪쳤다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/bush_rustling_sound.mp3",
+				"volume_db": 5,
 				"wait": false
 			},
 			{
 				"type": "story_dialogue",
-				"text": "가면의 남성이 다시 달려들었다."
+				"text": "순간 수풀을 밟고 옆으로 사라졌다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "어디..."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/impact_02.mp3",
+				"volume_db": 10,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "윽!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "옆구리에 강한 충격이 들어왔다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "보이지 않는 곳으로 빠졌다가 사각에서 다시 공격해온 것이다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "괴물처럼 압도적으로 강한 것은 아니다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 이 남자는 이 숲에서 싸우는 법을 알고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "수풀로 시야를 가리고."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나무를 등지고 움직임을 제한하고."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "상대가 반격하려는 순간에는 이미 거리를 벌린다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "싸움이라기보다는 사냥에 가까웠다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "이 사람..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이런 식으로 싸운 게 한두 번이 아니다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/bush_rustling_sound.mp3",
+				"volume_db": 8,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "다시 왼쪽 수풀이 흔들렸다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 반사적으로 그쪽으로 몸을 돌렸다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/impact_02.mp3",
+				"volume_db": 5,
+				"wait": false
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/events/slash_01.png"
 			},
 			{
 				"type": "sound",
@@ -15083,17 +15205,291 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "나는 공격을 피한 뒤 그의 팔을 붙잡았다."
+				"text": "쨍!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이번에는 제대로 막았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그리고 막는 것으로 끝내지 않았다."
 			},
 			{
 				"type": "sound",
-				"path": "res://sounds/crush_bone.mp3",
-				"volume_db": 5.0,
+				"path": "res://sounds/impact_02.mp3",
+				"volume_db": 5,
+				"wait": false
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/events/mask_man_02.png"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그의 무기를 옆으로 밀어낸 동시에 몸을 밀어붙였다."
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "큭!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "가면의 남성이 뒤로 밀려나 나무에 등을 부딪쳤다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 그대로 끝날 상대가 아니었다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/impact_02.mp3",
+				"volume_db": 5,
 				"wait": false
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그리고 꺽었다."
+				"text": "그는 내 손을 쳐내고 그대로 무릎을 올렸다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "허억!"
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.5,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.2,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "복부에 무릎이 꽂혔다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 이를 악물고 그의 옷자락을 붙잡았다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "놔!"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "싫은데!"
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/impact_02.mp3",
+				"volume_db": 8,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이번에는 내가 어깨로 그를 들이받았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "둘이 뒤엉킨 채 젖은 흙바닥 위를 굴렀다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "누가 먼저랄 것도 없이 서로를 밀쳐냈다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 급하게 몸을 일으켰다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "가면의 남성도 동시에 일어났다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "서로 몇 걸음 떨어진 채 숨을 몰아쉬었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "하아... 하..."
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "하아..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "조금 전까지와는 달랐다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "녀석도 이제 내가 쉽게 쓰러질 상대가 아니라는 걸 알았을 것이다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나 역시 마찬가지였다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "상대는 괴물처럼 압도적인 힘을 가진 것은 아니었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "힘도, 속도도 나와 크게 다르지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "어쩌면 이곳에서 살아남으며 익힌 것일지도 몰랐다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그렇다면 승부를 가르는 건..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "누가 먼저 상대의 움직임을 읽느냐였다."
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "가면의 남성이 다시 자세를 낮췄다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "오른발이 반 걸음 뒤로 빠졌다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "아까랑 비슷한 패턴이다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "저 자세 다음에는 반드시 오른쪽에서 크게 휘두른다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/bush_rustling_sound.mp3",
+				"volume_db": 10,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "예상대로 녀석이 수풀을 걷어차며 달려들었다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/impact_02.mp3",
+				"volume_db": 10,
+				"wait": false
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/events/slash_01.png"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "무기가 크게 휘둘러졌다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 일부러 막지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "한 발 뒤로 물러나 공격이 코앞을 스쳐 지나가게 만들었다."
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "!!!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "처음으로 가면의 남성이 당황했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "가면을 쓰고 있어서 표정을 읽을 수는 없었지만 그의 움직임에서 알 수 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "무게 중심이 무너지고 크게 벌어진 자세."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 순간을 기다렸다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/impact_02.mp3",
+				"volume_db": 10,
+				"wait": false
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/events/mask_man_02.png"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 무기를 쥔 그의 손목을 붙잡았다."
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "이새끼가...!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "녀석이 반대손으로 내 얼굴을 후려치려 했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "고개를 숙였다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "주먹이 머리 위를 스쳤다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/impact_02.mp3",
+				"volume_db": 5,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그대로 몸 안쪽으로 파고들었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "팔꿈치를 잠그고."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "손목을 비틀고."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "체중을 앞으로 실었다."
 			},
 			{
 				"type": "screen_color",
@@ -15103,22 +15499,83 @@
 				"wait": true
 			},
 			{
-				"type": "portrait",
-				"character": "mask_man",
-				"emotion": "normal",
-				"text": "아아악!"
+				"type": "sound",
+				"path": "res://sounds/fall_down.mp3",
+				"volume_db": 5,
+				"wait": false
 			},
 			{
 				"type": "portrait",
 				"character": "mask_man",
-				"emotion": "normal",
-				"text": "싸발... 놔!!"
+				"emotion": "mask",
+				"text": "잠깐...!"
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/crush_bone.mp3",
+				"volume_db": 7,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "우드득."
 			},
 			{
 				"type": "portrait",
 				"character": "mask_man",
-				"emotion": "normal",
-				"text": "빨리 놓으라고 이 개새끼야!!!"
+				"emotion": "mask",
+				"text": "아아악!!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "완전히 부러뜨린 것은 아니었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 더 힘을 주면 팔이 버티지 못할 정도로 관절이 꺾였다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "가면의 남성이 손에서 무기를 놓쳤다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/impact_02.mp3",
+				"volume_db": 0,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 떨어지는 무기를 발로 걷어찼다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "무기는 수풀 안쪽으로 굴러가 모습을 감췄다."
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "놔!!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그가 반대쪽 손으로 흙을 마구 뿌리며 몸을 비틀며 빠져나오려 했다."
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "놔!! 씨발!"
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "놓으라고 이 개새끼야!!!"
 			},
 			{
 				"type": "story_dialogue",
@@ -15127,29 +15584,53 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "그니깐 사람 말 좀 쳐들어 미친새끼야!!!"
+				"text": "그니깐 말 좀 쳐들어 미친새끼야!!!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 팔을 놓지 않은 채 그의 등을 나무에 밀어붙였다."
 			},
 			{
 				"type": "portrait",
 				"character": "mask_man",
-				"emotion": "normal",
-				"text": "내가 씨발 니가 뭔지 알고?"
+				"emotion": "mask",
+				"text": "씨발... 니가 뭔지 알고?"
 			},
 			{
 				"type": "story_dialogue",
-				"text": "가면을 쓴 남성은 벗어나려고 안간힘을 쓰고 발버둥 쳤다."
+				"text": "가면의 남성은 벗어나려고 안간힘을 쓰고 발버둥 쳤다."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "나는 꺾은 팔은 살짝 느슨하게 풀어줬지만, 나는 여전히 몸무게를 실어서 그를 누르며 그대로 압박을 유지했다."
+				"text": "나는 꺾은 팔은 살짝 느슨하게 풀어줬지만, 여전히 몸무게를 실어서 그대로 압박을 유지했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나도 숨이 턱 끝까지 차올라 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "옆구리는 욱신거렸고 복부는 아직도 숨을 쉴 때마다 아팠다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "조금만 판단이 늦었어도 바닥에 쓰러져 있는 쪽은 나였을 것이다."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "그... 수상한 링크 알지!?"
+				"text": "너... 링크, 하아..."
 			},
 			{
-				"type": "stop_bgm"
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "수상한 링크 뭔지 알지?"
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "!?"
 			},
 			{
 				"type": "story_dialogue",
@@ -15163,22 +15644,27 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "이곳에 끌려온 사람이라고."
+				"text": "그 링크를 누르고 이곳에 끌려온 사람이라고요."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "하아... 아마 너도 마찬가지 일 테고..."
+				"text": "하아... 당신도 그렇지 않아?"
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "그리고 저 말고도 생존자가 두 명 더 있어."
+				"text": "그리고 다른곳에, 하아..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "나 말고 다른 생존자가 두 명 더 있어."
 			},
 			{
 				"type": "portrait",
 				"character": "mask_man",
-				"emotion": "normal",
+				"emotion": "mask",
 				"text": "..."
 			},
 			{
@@ -15188,18 +15674,22 @@
 			{
 				"type": "portrait",
 				"character": "mask_man",
-				"emotion": "normal",
-				"text": "알았어."
+				"emotion": "mask",
+				"text": "알았어..."
 			},
 			{
 				"type": "portrait",
 				"character": "mask_man",
-				"emotion": "normal",
-				"text": "일단 놔봐."
+				"emotion": "mask",
+				"text": "일단 놔줘..."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그 이후 서로 잠시 진정한 후."
+				"text": "서로 잠시 진정한 후."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 천천히 그를 풀어주었다."
 			},
 			{
 				"type": "sound",
@@ -15220,7 +15710,7 @@
 			{
 				"type": "standing",
 				"character": "mask_man",
-				"emotion": "unknown",
+				"emotion": "mask",
 				"position": "center"
 			},
 			{
@@ -15230,16 +15720,20 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "일어나서 조금씩 거리를 벌렸다."
+				"text": "우리는 일어나서 적당히 거리를 벌렸다."
 			},
 			{
 				"type": "story_dialogue",
-				"text": "하지만 서로 무기는 내려놓지 않았다."
+				"text": "하지만 서로 긴장의 끈을 내려놓지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그리고 그는 잠시 후 수풀 속에서 자신의 무기를 집어 들으며 말했다."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "가면의 남성",
-				"text": "너 어디서 왔어."
+				"text": "너 여기로 어떻게 왔어."
 			},
 			{
 				"type": "story_dialogue",
@@ -15249,12 +15743,12 @@
 			{
 				"type": "story_dialogue",
 				"name": "가면의 남성",
-				"text": "학교?"
+				"text": "학교???"
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "정확히는 다른 구역에서 넘어왔어."
+				"text": "정확히는 학교 비슷한 다른 구역에서 넘어왔어."
 			},
 			{
 				"type": "story_dialogue",
@@ -15278,7 +15772,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "이상한 침묵이 흘렀다."
+				"text": "나는 낡은 모니터 안으로 들어가서 이곳으로 왔다고 말하려다 그 말을 삼켰다."
 			},
 			{
 				"type": "story_dialogue",
@@ -15288,12 +15782,12 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "아, 우리는 다른 구역에 있는 방송실을 거점으로 쓰고 있어."
+				"text": "어, 우리는 다른 구역에 있는 방송실을 거점으로 쓰고 있어."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "거기라면 지금 이 곳보다는 훨씬 안전해."
+				"text": "거기라면 지금 이곳보다는 훨씬 안전하고 생존 물자들도 넉넉해."
 			},
 			{
 				"type": "story_dialogue",
@@ -15303,27 +15797,27 @@
 			{
 				"type": "story_dialogue",
 				"name": "가면의 남성",
-				"text": "왜 나한테 그걸 알려준거지?"
+				"text": "근데 왜 나한테 그걸 알려주는거지?"
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "..."
+				"text": "그야..."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "그야, 우리랑 같은 사람 같으니까."
+				"text": "네가 우리랑 같은 사람 같으니까."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "가면의 남성",
-				"text": "방금 널 죽이려고 한 놈인데?"
+				"text": "방금 널 죽이려고 했는데?"
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "나도 반격했으니까 서로 퉁치자."
+				"text": "나도 같이 반격했으니까 서로 퉁치자."
 			},
 			{
 				"type": "story_dialogue",
@@ -15333,7 +15827,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "너도 ㅋㅋ"
+				"text": "그건 너도."
 			},
 			{
 				"type": "story_dialogue",
@@ -15342,8 +15836,21 @@
 			},
 			{
 				"type": "story_dialogue",
+				"name": "나",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이상한 침묵이 흘렀다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "잠시 뒤 그 침묵을 깨고 그가 다시 말을 꺼냈다."
+			},
+			{
+				"type": "story_dialogue",
 				"name": "가면의 남성",
-				"text": "네가 말한 그 두놈 다 남자냐?"
+				"text": "네가 말한 그 두 녀석 다 남자냐?"
 			},
 			{
 				"type": "story_dialogue",
@@ -15353,12 +15860,17 @@
 			{
 				"type": "story_dialogue",
 				"name": "가면의 남성",
-				"text": "아니, 별 뜻은 없고 그 놈들이 전력이 되는지 알아두려고."
+				"text": "딱히, 별 뜻은 없고 그 놈들이 전력이 되는지 알아두려고."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "한 사람은 여성이고 한 사람은 나보다 강한 남성이야."
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "한 명은 여자고 다른 한 명은 남자."
 			},
 			{
 				"type": "story_dialogue",
@@ -15372,22 +15884,27 @@
 			{
 				"type": "story_dialogue",
 				"name": "가면의 남성",
-				"text": "방송실인지 뭔지까지 가는 길을 알고 있어?"
+				"text": "너 거기로 가는 길 알아?"
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "아니."
+				"text": "..."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "가면의 남성",
-				"text": "그러면, 그 두 녀석도 여기로 데려올 수 있어?"
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "그러면, 가는 방향은 알아?"
 			},
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "아니..."
+				"text": "뭐... 대충?"
 			},
 			{
 				"type": "story_dialogue",
@@ -15397,16 +15914,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "그게... 길을 잃어버렸어."
-			},
-			{
-				"type": "story_dialogue",
-				"text": "모니터 안으로 빨려 들어가서 일어나 보니 이곳으로 왔다고 말하려다 말을 삼켰다."
-			},
-			{
-				"type": "story_dialogue",
-				"name": "나",
-				"text": "하지만 여기서 그곳으로 갈 수 있는 문이 분명 있어."
+				"text": "하지만 거기로 갈 수 있는 통로가 분명 있어."
 			},
 			{
 				"type": "story_dialogue",
@@ -15431,7 +15939,47 @@
 			{
 				"type": "story_dialogue",
 				"name": "가면의 남성",
-				"text": "길을 찾자."
+				"text": "네가 그 방송실인지 뭔지 거기로 안내해."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "그리고 너도 나 같은 전력이 있으면 유리하잖아?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "너 나한테 아까 '놔줘' 이러지 않았나?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "뒤질래?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "내가 진심으로 싸우면 네 모가지는 순식간에 날아가는 거야."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "그래, 미안해 진정해."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "대신 먼저 물자를 챙겨야 돼."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "근처 네 갈래 길에서 왼쪽으로 쭉 가면 내 은신처가 있으니깐 거기로 먼저 간다."
 			},
 			{
 				"type": "story_dialogue",
@@ -15439,7 +15987,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그 가면 너머에 무슨 표정을 하고 있는지 알 수가 없었다."
+				"text": "그 가면 너머에 무슨 표정을 하고 있는지 알 수 없었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -15453,7 +16001,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그렇게 우리는 함께 길을 찾아 걷기 시작했다."
+				"text": "그렇게 우리는 함께 걷기 시작했다."
 			},
 			{
 				"type": "screen_color",

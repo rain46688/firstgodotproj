@@ -214,24 +214,24 @@
 	"mask_man": {
 		"name": "가면의 남성",
 		"portrait": {
-			"normal": "res://imgs/characters/pizzagom/portrait/mask.png"
+			"mask": "res://imgs/characters/pizzagom/portrait/mask.png"
 		},
 		"standing": {
-			"unknown": "res://imgs/characters/pizzagom/standing/mask.png"
+			"mask": "res://imgs/characters/pizzagom/standing/mask.png"
 		},
 		"standing_layout": {
 			"offsets": {
 				"left": [
-					50,
-					-20
+					-200,
+					0
 				],
 				"center": [
-					0,
-					-20
+					-200,
+					0
 				],
 				"right": [
-					150,
-					-20
+					0,
+					0
 				]
 			},
 			"emotion_offsets": {}
