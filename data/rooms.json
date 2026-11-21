@@ -30914,11 +30914,7 @@
 			}
 		},
 		"interactions": {},
-		"random_encounter": {
-			"enemy_table": "dark_forest_01",
-			"event_table": "dark_forest",
-			"chance": 50.0
-		}
+		"random_encounter": {}
 	},
 	"dark_forest_room_03": {
 		"background": "res://imgs/backgrounds/dark_forest_room_01.png",
@@ -31366,6 +31362,32 @@
 									{
 										"type": "text",
 										"text": "길을 막고 있던 넝쿨들이 사라져있다."
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"story_first_enter_dark_forest_hallway_03_done"
+								],
+								"required_flag_missing": [
+									"bad_ending_flag"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "길이 막혀있다."
+									},
+									{
+										"type": "portrait",
+										"character": "mask_man",
+										"emotion": "mask",
+										"text": "그거 가까이 가지 마."
+									},
+									{
+										"type": "portrait",
+										"character": "mask_man",
+										"emotion": "mask",
+										"text": "넝쿨에 잡아먹혀 죽고 싶지 않으면..."
 									}
 								]
 							}
@@ -31991,15 +32013,40 @@
 						"document_events": [
 							{
 								"type": "text",
-								"text": "길을 가로막고 있는 나무뿌리들을 치우려면 거목을 깨워야 된다."
+								"text": "종이에 지저분한 글자로 무언가 적혀있다."
 							},
 							{
 								"type": "text",
-								"text": "녀석이 그 물건 하나를 갖고 도망가 버렸어."
+								"text": "하지만 일부는 읽을 수 있다."
 							},
 							{
 								"type": "text",
-								"text": "하지만 다른 하나는 철제 상자 안에 있다."
+								"text": "녀석이 하나를 갖고 도망가 버렸어."
+							},
+							{
+								"type": "text",
+								"text": "다른 하나는 철제 상자 안에 있다."
+							},
+							{
+								"type": "conditional_events",
+								"branches": [
+									{
+										"required_flag": [
+											"story_first_enter_dark_forest_hallway_03_done"
+										],
+										"required_flag_missing": [
+											"bad_ending_flag"
+										],
+										"events": [
+											{
+												"type": "portrait",
+												"character": "mask_man",
+												"emotion": "mask",
+												"text": "이 안에 뭔가 중요한 게 있는 건 틀림없네."
+											}
+										]
+									}
+								]
 							}
 						]
 					},
@@ -32049,6 +32096,27 @@
 							{
 								"type": "text",
 								"text": "※ 약품 사용 시 피부 접촉 및 증기 흡입에 주의할 것."
+							},
+							{
+								"type": "conditional_events",
+								"branches": [
+									{
+										"required_flag": [
+											"story_first_enter_dark_forest_hallway_03_done"
+										],
+										"required_flag_missing": [
+											"bad_ending_flag"
+										],
+										"events": [
+											{
+												"type": "portrait",
+												"character": "mask_man",
+												"emotion": "mask",
+												"text": "저쪽에 놓여 있는 화학 약품에 대한 설명 같은데."
+											}
+										]
+									}
+								]
 							},
 							{
 								"type": "flag",
@@ -32111,10 +32179,6 @@
 														"text": "끝을 조금 구부리면 상자의 벌어진 틈 사이로 밀어 넣을 수 있을 것 같다."
 													},
 													{
-														"type": "text",
-														"text": "안쪽에 보였던 걸쇠를 건드려볼 수 있지 않을까?"
-													},
-													{
 														"type": "flag",
 														"flag": "find_small_wire_dark_forest_room_07_02"
 													}
@@ -32125,10 +32189,6 @@
 											{
 												"type": "text",
 												"text": "얇고 쉽게 구부러지는 철사다."
-											},
-											{
-												"type": "text",
-												"text": "지금 당장은 어디에 쓸 수 있을지 모르겠다."
 											}
 										]
 									}
@@ -32581,7 +32641,42 @@
 									},
 									{
 										"type": "text",
-										"text": "둔탁한 금속음만 방 안에 울려 퍼졌다."
+										"text": "둔탁한 금속음만 울려 퍼졌다."
+									},
+									{
+										"type": "conditional_events",
+										"branches": [
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "mask_man",
+														"emotion": "mask",
+														"text": "비켜봐."
+													},
+													{
+														"type": "text",
+														"text": "쾅쾅쾅!"
+													},
+													{
+														"type": "text",
+														"text": "금속음이 몇번 울려 퍼졌다."
+													},
+													{
+														"type": "portrait",
+														"character": "mask_man",
+														"emotion": "mask",
+														"text": "뭐야 이거 존나 단단하네..."
+													}
+												]
+											}
+										]
 									},
 									{
 										"type": "text",
@@ -32623,6 +32718,27 @@
 									{
 										"type": "text",
 										"text": "조금 더 날카로운 게 필요할 것 같다."
+									},
+									{
+										"type": "conditional_events",
+										"branches": [
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "mask_man",
+														"emotion": "mask",
+														"text": "서랍에 송곳이 있던데 그거 쓰는 거 어떠냐."
+													}
+												]
+											}
+										]
 									}
 								]
 							},
@@ -32772,6 +32888,33 @@
 										"wait": false
 									},
 									{
+										"type": "conditional_events",
+										"branches": [
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "mask_man",
+														"emotion": "mask",
+														"text": "야 이 새끼야! 뭐 어떻게 된 거야!"
+													},
+													{
+														"type": "portrait",
+														"character": "mask_man",
+														"emotion": "mask",
+														"text": "으아악!"
+													}
+												]
+											}
+										]
+									},
+									{
 										"type": "text",
 										"text": "그 순간, 생전 느껴보지 못한 고통과 함께 얼굴 피부가 녹아내렸다."
 									},
@@ -32843,6 +32986,27 @@
 										"text": "그 순간, 목 안쪽이 타들어 가는 듯한 통증이 밀려온다."
 									},
 									{
+										"type": "conditional_events",
+										"branches": [
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "mask_man",
+														"emotion": "mask",
+														"text": "으악!... 목이..."
+													}
+												]
+											}
+										]
+									},
+									{
 										"type": "text",
 										"text": "눈앞이 흐려진다. 무색의 증기가 이미 방 안에 퍼지고 있었다."
 									},
@@ -32902,6 +33066,27 @@
 									{
 										"type": "text",
 										"text": "잠시 뒤 뚜껑을 들어 올려보니 전보다 훨씬 쉽게 움직인다."
+									},
+									{
+										"type": "conditional_events",
+										"branches": [
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "mask_man",
+														"emotion": "mask",
+														"text": "오!?"
+													}
+												]
+											}
+										]
 									},
 									{
 										"type": "text",
@@ -33058,6 +33243,33 @@
 							{
 								"type": "text",
 								"text": "뚜껑과 몸체가 안쪽에서 용접된 것처럼 단단하게 붙어있다."
+							},
+							{
+								"type": "conditional_events",
+								"branches": [
+									{
+										"required_flag": [
+											"story_first_enter_dark_forest_hallway_03_done"
+										],
+										"required_flag_missing": [
+											"bad_ending_flag"
+										],
+										"events": [
+											{
+												"type": "portrait",
+												"character": "mask_man",
+												"emotion": "mask",
+												"text": "이런 건 망치 같은 걸로 내려 쳐보면 열리겠지."
+											},
+											{
+												"type": "portrait",
+												"character": "mask_man",
+												"emotion": "mask",
+												"text": "야 뭐 좀 없나 서랍 한번 뒤져봐."
+											}
+										]
+									}
+								]
 							}
 						]
 					}
@@ -33508,6 +33720,43 @@
 										"type": "story_dialogue",
 										"name": "얼굴 달린 거목",
 										"text": "이제야 세상이 제대로 보이는군. 하마터면 영영 잠들어 있을 뻔했어."
+									},
+									{
+										"type": "conditional_events",
+										"branches": [
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "mask_man",
+														"emotion": "mask",
+														"text": "넝쿨로 길을 막은 게 당신인가?"
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "뭐, 반은 맞고 반은 틀리다네."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "그리고 내가 워낙 잠을 뒤척여서... 허허..."
+													},
+													{
+														"type": "portrait",
+														"character": "mask_man",
+														"emotion": "mask",
+														"text": "..."
+													}
+												]
+											}
+										]
 									},
 									{
 										"type": "story_dialogue",
@@ -34335,7 +34584,9 @@
 						"branches": [
 							{
 								"required_flag": [
-									"defeated_forest_evil"
+									"opened_first_eye_tree_b",
+									"opened_second_eye_tree_b",
+									"first_told_tree_b"
 								],
 								"events": [
 									{
@@ -34478,6 +34729,20 @@
 						]
 					}
 				]
+			},
+			"crow": {
+				"click_rect": [
+					500.0,
+					500.0,
+					500.0,
+					500.0
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "까마귀 상호작용 추가 예정"
+					}
+				]
 			}
 		}
 	},
@@ -34584,6 +34849,26 @@
 									{
 										"type": "text",
 										"text": "길을 막고 있던 넝쿨들이 사라져있다."
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"story_first_enter_dark_forest_hallway_03_done"
+								],
+								"required_flag_missing": [
+									"bad_ending_flag"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "길이 막혀있다."
+									},
+									{
+										"type": "portrait",
+										"character": "mask_man",
+										"emotion": "mask",
+										"text": "이 넘어가 내 은신처로 가는 길이야."
 									}
 								]
 							}
@@ -35077,19 +35362,32 @@
 					},
 					{
 						"type": "text",
-						"text": "대략적인 이곳의 지도인 것 같다."
+						"text": "이곳 지도의 일부인 것 같다."
 					},
 					{
 						"type": "text",
-						"text": "가장 가까운 네 갈래 길에서 서쪽으로 가면 동굴이 있는 것 같다."
+						"text": "가까운 네 갈래 길에서 서쪽으로 가면 무언가 있는 것 같다."
 					},
 					{
-						"type": "text",
-						"text": "그리고 지도에 X 표시가 그려져있다."
-					},
-					{
-						"type": "text",
-						"text": "무언가 있는 걸까?"
+						"type": "conditional_events",
+						"branches": [
+							{
+								"required_flag": [
+									"story_first_enter_dark_forest_hallway_03_done"
+								],
+								"required_flag_missing": [
+									"bad_ending_flag"
+								],
+								"events": [
+									{
+										"type": "portrait",
+										"character": "mask_man",
+										"emotion": "mask",
+										"text": "왼쪽 X 표시로 가는 길에 내 은신처가 있어."
+									}
+								]
+							}
+						]
 					},
 					{
 						"type": "sound",
@@ -35314,6 +35612,33 @@
 										"path": "res://sounds/metal_box_open_02.mp3",
 										"volume_db": 15.0,
 										"wait": false
+									},
+									{
+										"type": "conditional_events",
+										"branches": [
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "mask_man",
+														"emotion": "mask",
+														"text": "뭐야 이거."
+													},
+													{
+														"type": "portrait",
+														"character": "mask_man",
+														"emotion": "mask",
+														"text": "마치 누가 잠금장치를 풀어놓은 거 같은데?"
+													}
+												]
+											}
+										]
 									},
 									{
 										"type": "text",
@@ -35828,7 +36153,7 @@
 									{
 										"type": "story_dialogue",
 										"name": "얼굴 달린 거목",
-										"text": "뭐 넝쿨을 치워달라고?"
+										"text": "넝쿨을 치워달라고?"
 									},
 									{
 										"type": "text",
@@ -35848,6 +36173,27 @@
 										"type": "story_dialogue",
 										"name": "얼굴 달린 거목",
 										"text": "이거면 도움이 됬겠지? 아니, 딱히... 특별한 의미가 있는 건 아니다."
+									},
+									{
+										"type": "conditional_events",
+										"branches": [
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "mask_man",
+														"emotion": "mask",
+														"text": "..."
+													}
+												]
+											}
+										]
 									},
 									{
 										"type": "story_dialogue",
@@ -39825,7 +40171,9 @@
 						"target": "dark_forest_hallway_33_02",
 						"chance": 100.0,
 						"required_flag_missing": [
-							"opened_first_eye_tree_b"
+							"opened_first_eye_tree_b",
+							"opened_second_eye_tree_b",
+							"first_told_tree_b"
 						]
 					}
 				],
@@ -39917,11 +40265,11 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "넝쿨이 길을 막고 있다."
+						"text": "길이 막혀있다."
 					},
 					{
 						"type": "text",
-						"text": "앞으로 나아갈 수 없다."
+						"text": "넝쿨을 먼저 어떻게 해야 될 거 같다."
 					}
 				]
 			}

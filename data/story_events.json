@@ -14798,6 +14798,10 @@
 			},
 			{
 				"type": "story_dialogue",
+				"text": "만약 저게 상반신이나 목까지 올라왔으면 어땠을지 떠올리자 간담이 서늘해졌다."
+			},
+			{
+				"type": "story_dialogue",
 				"text": "생각해 보니 모니터로 넘어올 때마다 험한 꼴을 당하는 것 같다."
 			},
 			{
@@ -14869,7 +14873,23 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그리고 수상한 가면이 사라졌던 방향으로 계속 걷기 시작했다."
+				"text": "자세히 보니 아무런 스피커도 달려있지 않았고 오직 카메라만 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 그저 나무 꼭대기에 달린 화면을 향해 손을 한번 흔들어 보였다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "이거면 저쪽도 안심했겠지."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 이후 나는 수상한 가면이 사라졌던 방향으로 계속 걷기 시작했다."
+			},
+			{
+				"type": "fade"
 			},
 			{
 				"type": "stop_bgm"
@@ -14891,6 +14911,10 @@
 			{
 				"type": "story_dialogue",
 				"text": "나는 멈췄다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "무언가 주변에 있다 그게 적일지 CCTV 화면 속 가면일지는 알 수 없었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -15508,7 +15532,7 @@
 				"type": "portrait",
 				"character": "mask_man",
 				"emotion": "mask",
-				"text": "잠깐...!"
+				"text": "!!!!"
 			},
 			{
 				"type": "sound",
@@ -15728,7 +15752,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "그리고 그는 잠시 후 수풀 속에서 자신의 무기를 집어 들으며 말했다."
+				"text": "그리고 그는 잠시 후 말을 꺼냈다."
 			},
 			{
 				"type": "story_dialogue",
@@ -15964,7 +15988,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "그래, 미안해 진정해."
+				"text": "그래, 알았어 진정해."
 			},
 			{
 				"type": "story_dialogue",
@@ -15979,7 +16003,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "가면의 남성",
-				"text": "근처 네 갈래 길에서 왼쪽으로 쭉 가면 내 은신처가 있으니깐 거기로 먼저 간다."
+				"text": "이 앞 네 갈래 길에서 서쪽으로 쭉 가면 내 은신처가 있으니깐."
 			},
 			{
 				"type": "story_dialogue",

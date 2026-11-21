@@ -317,6 +317,9 @@ func _input(event):
 	handle_enemy_hitbox_rect_debug_input(event)
 # F7 적 본체 hitbox rect 제작 디버그 입력 처리 함수
 func handle_enemy_hitbox_rect_debug_input(event):
+	if not OS.is_debug_build():
+		return
+
 	# Input Map의 debug_click_rect 등록 여부와 무관하게 F7 키를 직접 처리한다.
 	if event is InputEventKey:
 		if event.pressed and not event.echo and (
@@ -487,6 +490,9 @@ func make_enemy_hitbox_rect_debug_positive_rect(start_pos, end_pos):
 	)
 # 디버그 토글 입력 처리 함수
 func update_debug_toggle_input():
+	if not OS.is_debug_build():
+		return
+
 	if Input.is_action_just_pressed("debug_toggle"):
 		debug_mode = !debug_mode
 		update_hitbox_debug()

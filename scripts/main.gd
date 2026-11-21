@@ -355,6 +355,13 @@ const DEBUG_START_ITEM_PRESET = "consumable_test"
 # 랜덤 인카운터 발생 시 콘솔에 선택된 적 / 확률 정보 출력
 const DEBUG_PRINT_RANDOM_ENCOUNTER_INFO = true
 
+# 즉시 저장 디버그 키 (F8은 Godot 실행 중지 단축키)
+const DEBUG_QUICK_SAVE_KEY = KEY_K
+
+# 시작 흐름 완료 여부 / 전투 종료 후처리 중 중복 저장 차단
+var debug_quick_save_ready = false
+var battle_result_processing_count = 0
+
 # 상호작용 클릭 영역 디버그 변수
 var click_rect_debug_enabled = false
 var click_rect_debug_dragging = false
@@ -1049,6 +1056,9 @@ func _ready():
 
 	# GameSession에 저장된 시작 모드에 따라 새 게임/이어하기 분기
 	await start_game_from_session()
+
+	# 새 게임/이어하기의 초기 처리까지 끝나야 즉시 저장을 허용한다.
+	debug_quick_save_ready = is_play_time_tracking
 # GameSession 정보에 따라 새 게임 또는 이어하기를 시작하는 함수
 func start_game_from_session():
 	# 메인 메뉴에서 선택한 난이도를 main.gd에도 저장한다.
@@ -1319,6 +1329,12 @@ func start_battle(enemy_id, first_turn = "", battle_context = {}):
 	is_battle_starting = false
 # 전투 종료 함수
 func end_battle(result_data):
+	# 연속 전투의 후처리가 겹쳐도 모든 보상/스토리 처리가 끝날 때까지 저장 차단.
+	battle_result_processing_count += 1
+	await process_battle_result(result_data)
+	battle_result_processing_count -= 1
+# 기존 전투 종료 처리 함수
+func process_battle_result(result_data):
 	var result_type = str(result_data.get("result", ""))
 
 	# 전투 종료 시 이동/상호작용 잠금이 남지 않게 정리
@@ -1558,6 +1574,9 @@ func hide_battle_loading_screen():
 
 # 개발 테스트용 시작 아이템 추가 함수
 func add_debug_start_items():
+	if not OS.is_debug_build():
+		return
+
 	if not DEBUG_ADD_START_ITEMS:
 		return
 
@@ -1571,6 +1590,9 @@ func add_debug_start_items():
 		await add_item(item_id)
 # 방 갱신 전에 실행할 개발 테스트 흐름
 func run_debug_before_room_update_flow():
+	if not OS.is_debug_build():
+		return
+
 	# 전리품 정리 화면 테스트
 	if DEBUG_OPEN_PENDING_LOOT_TEST:
 		open_inventory_arrange(
@@ -1595,6 +1617,9 @@ func run_debug_before_room_update_flow():
 		open_shop("debug_shop_01")
 # 방 갱신 후 실행할 개발 테스트 흐름
 func run_debug_after_room_update_flow():
+	if not OS.is_debug_build():
+		return
+
 	if DEBUG_START_BATTLE_TEST:
 		await get_tree().create_timer(DEBUG_BATTLE_START_DELAY).timeout
 		start_battle(DEBUG_TEST_BATTLE_ENEMY_ID)
@@ -1709,11 +1734,83 @@ func get_debug_start_item_ids():
 		_:
 			push_warning("알 수 없는 DEBUG_START_ITEM_PRESET: " + str(DEBUG_START_ITEM_PRESET))
 			return []
-# 클릭 영역 디버그 입력 처리 함수
+# 디버그 입력 처리 함수
 func _input(event):
+	if not OS.is_debug_build():
+		return
+
+	# 키를 길게 눌러도 한 번만 저장한다.
+	if event is InputEventKey:
+		if event.pressed and not event.echo and (
+			event.keycode == DEBUG_QUICK_SAVE_KEY
+			or event.physical_keycode == DEBUG_QUICK_SAVE_KEY
+		) and not (event.ctrl_pressed or event.alt_pressed or event.shift_pressed or event.meta_pressed):
+			# 저장 불가 상태에서는 입력을 소비하지 않는다.
+			# 특히 입력 프롬프트에서 K 문자를 정상적으로 입력할 수 있어야 한다.
+			if run_debug_quick_save():
+				get_viewport().set_input_as_handled()
+			return
+
 	handle_click_rect_debug_input(event)
+# 디버그 즉시 저장 가능 여부 확인
+func can_debug_quick_save():
+	if not OS.is_debug_build():
+		return false
+
+	if not debug_quick_save_ready or not is_play_time_tracking or not is_inside_tree():
+		return false
+
+	# 기존 탐색 입력 차단 조건 재사용 (전투/이동/스토리/대사/선택지 등).
+	if not can_click_move_arrow():
+		return false
+
+	# 전투 종료 직후에는 battle_scene이 null이어도 보상 처리 중일 수 있다.
+	if (
+		is_battle_starting
+		or battle_result_processing_count > 0
+		or is_checking_room_story_chain
+		or is_document_popup_open
+		or is_input_prompt_open
+		or is_quitting_to_title
+		or pause_ui_scene != null
+		or get_tree().paused
+		or not pending_loot.is_empty()
+		or player_hp <= 0
+		or not bag_button.is_visible_in_tree()
+		or get_current_room_data(false).is_empty()
+	):
+		return false
+
+	return true
+# 디버그 전용 즉시 저장 함수
+func run_debug_quick_save():
+	if not OS.is_debug_build():
+		return false
+
+	if not can_debug_quick_save():
+		# 문자 입력이 필요한 상태에서는 불필요한 로그도 생략한다.
+		if not is_input_prompt_open:
+			print("[DEBUG] 현재 저장할 수 없는 상태입니다.")
+		return false
+
+	# 기존 저장 포인트와 동일한 1번 슬롯에 저장한다.
+	var success = save_game(1)
+
+	if success:
+		if save_complete_sound != null:
+			save_complete_sound.play()
+
+		print("[DEBUG] 즉시 저장 완료: " + current_room)
+	else:
+		push_error("[DEBUG] 즉시 저장 실패")
+
+	# 실제로 저장을 시도한 키 입력만 처리 완료로 표시한다.
+	return true
 # 클릭 영역 디버그 입력 처리 함수
 func handle_click_rect_debug_input(event):
+	if not OS.is_debug_build():
+		return
+
 	# 전투가 떠 있는 동안 F7은 battle_scene.gd의 적 hitbox 제작 도구가 처리한다.
 	# queue_free()된 이전 전투 씬 참조가 남아 있는 경우까지 안전하게 제외한다.
 	if battle_scene != null and is_instance_valid(battle_scene):
@@ -12571,6 +12668,9 @@ func get_random_encounter_event_table_id(encounter_data, enemy_table_id):
 	return str(encounter_data.get("event_table", enemy_table_id))
 # 랜덤 인카운터에서 실제 선택된 적과 확률 정보를 콘솔에 출력
 func print_random_encounter_info(encounter_data, enemy_table_id, enemy_id):
+	if not OS.is_debug_build():
+		return
+
 	if not DEBUG_PRINT_RANDOM_ENCOUNTER_INFO:
 		return
 
