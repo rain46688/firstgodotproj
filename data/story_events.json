@@ -5895,6 +5895,11 @@
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
 				"text": "그것보다, 저를 아세요?"
 			},
 			{
@@ -5947,7 +5952,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "클레어",
-				"text": "하아?"
+				"text": "???"
 			},
 			{
 				"type": "standing",
@@ -6168,6 +6173,11 @@
 				"character": "claire",
 				"emotion": "joy",
 				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "클레어",
+				"text": "헤헤."
 			},
 			{
 				"type": "story_dialogue",

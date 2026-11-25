@@ -8088,7 +8088,7 @@
 							},
 							{
 								"type": "text",
-								"text": "분명 나가는 문이 있을 거야. 중앙 홀 쪽 문 넘어는 아직 안 가봤으니까 거기로 가볼래. 난 살아서 돌아갈 수 있어. 절대 포기 안 해."
+								"text": "분명 나가는 문이 있을 거야. 중앙 홀 쪽 문 너머는 아직 안 가봤으니까 거기로 가볼래. 난 살아서 돌아갈 수 있어. 절대 포기 안 해."
 							}
 						]
 					},
@@ -31192,7 +31192,7 @@
 					},
 					{
 						"type": "text",
-						"text": "넝쿨을 먼저 어떻게 해야 될 거 같다."
+						"text": "넝쿨을 먼저 어떻게 해야 할 것 같다."
 					}
 				]
 			},
@@ -31370,7 +31370,8 @@
 									"story_first_enter_dark_forest_hallway_03_done"
 								],
 								"required_flag_missing": [
-									"bad_ending_flag"
+									"bad_ending_flag",
+									"normal_ending_flag"
 								],
 								"events": [
 									{
@@ -31390,6 +31391,60 @@
 										"text": "넝쿨에 잡아먹혀 죽고 싶지 않으면..."
 									}
 								]
+							},
+							{
+								"required_flag": [
+									"story_first_enter_dark_forest_hallway_03_done",
+									"normal_ending_flag"
+								],
+								"required_flag_missing": [
+									"bad_ending_flag"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "길이 막혀있다."
+									},
+									{
+										"type": "portrait",
+										"character": "pizzagom",
+										"emotion": "normal",
+										"text": "그거 가까이 가지 마."
+									},
+									{
+										"type": "portrait",
+										"character": "claire",
+										"emotion": "annoyed",
+										"text": "식물...?"
+									},
+									{
+										"type": "portrait",
+										"character": "isaac",
+										"emotion": "normal",
+										"text": "다른 길을 찾아보자."
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"story_first_enter_dark_forest_hallway_03_done",
+									"bad_ending_flag"
+								],
+								"required_flag_missing": [
+									"normal_ending_flag"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "길이 막혀있다."
+									},
+									{
+										"type": "portrait",
+										"character": "isaac",
+										"emotion": "normal",
+										"text": "다른 길을 찾아보자."
+									}
+								]
 							}
 						],
 						"default_events": [
@@ -31399,7 +31454,7 @@
 							},
 							{
 								"type": "text",
-								"text": "넝쿨을 먼저 어떻게 해야 될 거 같다."
+								"text": "넝쿨을 먼저 어떻게 해야 할 것 같다."
 							}
 						]
 					}
@@ -31929,10 +31984,6 @@
 					{
 						"type": "text",
 						"text": "낡은 오두막이다."
-					},
-					{
-						"type": "text",
-						"text": "이곳에 누군가 살고 있는 걸까?"
 					}
 				]
 			}
@@ -32035,7 +32086,9 @@
 											"story_first_enter_dark_forest_hallway_03_done"
 										],
 										"required_flag_missing": [
-											"bad_ending_flag"
+											"bad_ending_flag",
+											"normal_ending_flag",
+											"got_unknown_eye_dark_forest_room_07_02"
 										],
 										"events": [
 											{
@@ -32043,6 +32096,60 @@
 												"character": "mask_man",
 												"emotion": "mask",
 												"text": "이 안에 뭔가 중요한 게 있는 건 틀림없네."
+											}
+										]
+									},
+									{
+										"required_flag": [
+											"story_first_enter_dark_forest_hallway_03_done",
+											"normal_ending_flag"
+										],
+										"required_flag_missing": [
+											"bad_ending_flag",
+											"got_unknown_eye_dark_forest_room_07_02"
+										],
+										"events": [
+											{
+												"type": "portrait",
+												"character": "pizzagom",
+												"emotion": "normal",
+												"text": "이 안에 뭔가 중요한 게 있는 건 틀림없네."
+											},
+											{
+												"type": "portrait",
+												"character": "claire",
+												"emotion": "annoyed",
+												"text": "다른 하나... 대체 뭘 말하는 거지?"
+											},
+											{
+												"type": "portrait",
+												"character": "isaac",
+												"emotion": "normal",
+												"text": "일단 철제 상자부터 확인해 보자. 열어 보면 알겠지."
+											}
+										]
+									},
+									{
+										"required_flag": [
+											"story_first_enter_dark_forest_hallway_03_done",
+											"bad_ending_flag"
+										],
+										"required_flag_missing": [
+											"normal_ending_flag",
+											"got_unknown_eye_dark_forest_room_07_02"
+										],
+										"events": [
+											{
+												"type": "portrait",
+												"character": "isaac",
+												"emotion": "normal",
+												"text": "무언가를 상자 안에 숨겨둔 모양이군."
+											},
+											{
+												"type": "portrait",
+												"character": "isaac",
+												"emotion": "normal",
+												"text": "일단 그 상자부터 확인해 보자."
 											}
 										]
 									}
@@ -32105,7 +32212,9 @@
 											"story_first_enter_dark_forest_hallway_03_done"
 										],
 										"required_flag_missing": [
-											"bad_ending_flag"
+											"bad_ending_flag",
+											"normal_ending_flag",
+											"got_unknown_eye_dark_forest_room_07_02"
 										],
 										"events": [
 											{
@@ -32113,6 +32222,60 @@
 												"character": "mask_man",
 												"emotion": "mask",
 												"text": "저쪽에 놓여 있는 화학 약품에 대한 설명 같은데."
+											}
+										]
+									},
+									{
+										"required_flag": [
+											"story_first_enter_dark_forest_hallway_03_done",
+											"normal_ending_flag"
+										],
+										"required_flag_missing": [
+											"bad_ending_flag",
+											"got_unknown_eye_dark_forest_room_07_02"
+										],
+										"events": [
+											{
+												"type": "portrait",
+												"character": "pizzagom",
+												"emotion": "normal",
+												"text": "저쪽에 놓여 있는 화학 약품에 대한 설명 같은데."
+											},
+											{
+												"type": "portrait",
+												"character": "claire",
+												"emotion": "normal",
+												"text": "실험 기록이네. 약품마다 반응이 다른가 봐요."
+											},
+											{
+												"type": "portrait",
+												"character": "isaac",
+												"emotion": "normal",
+												"text": "기록을 잘 읽어두자. 상자를 조사할 때 도움이 될지도 몰라."
+											}
+										]
+									},
+									{
+										"required_flag": [
+											"story_first_enter_dark_forest_hallway_03_done",
+											"bad_ending_flag"
+										],
+										"required_flag_missing": [
+											"normal_ending_flag",
+											"got_unknown_eye_dark_forest_room_07_02"
+										],
+										"events": [
+											{
+												"type": "portrait",
+												"character": "isaac",
+												"emotion": "normal",
+												"text": "저쪽 약품에 대한 기록 같아."
+											},
+											{
+												"type": "portrait",
+												"character": "isaac",
+												"emotion": "normal",
+												"text": "어떤 반응을 일으키는지 잘 읽어두자."
 											}
 										]
 									}
@@ -32651,7 +32814,8 @@
 													"story_first_enter_dark_forest_hallway_03_done"
 												],
 												"required_flag_missing": [
-													"bad_ending_flag"
+													"bad_ending_flag",
+													"normal_ending_flag"
 												],
 												"events": [
 													{
@@ -32673,6 +32837,66 @@
 														"character": "mask_man",
 														"emotion": "mask",
 														"text": "뭐야 이거 존나 단단하네..."
+													}
+												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"normal_ending_flag"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "normal",
+														"text": "비켜봐."
+													},
+													{
+														"type": "text",
+														"text": "쾅쾅!"
+													},
+													{
+														"type": "text",
+														"text": "금속음이 몇번 울려 퍼졌다."
+													},
+													{
+														"type": "portrait",
+														"character": "pizzagom",
+														"emotion": "angry",
+														"text": "뭐야 이거 존나 단단하네..."
+													},
+													{
+														"type": "portrait",
+														"character": "claire",
+														"emotion": "embarrassed",
+														"text": "흠집 하나 안 났잖아."
+													},
+													{
+														"type": "portrait",
+														"character": "pizzagom",
+														"emotion": "normal",
+														"text": "힘으로는 안 되겠어. 다른 방법을 찾아보자."
+													}
+												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"bad_ending_flag"
+												],
+												"required_flag_missing": [
+													"normal_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "normal",
+														"text": "이 정도로도 흠집이 안 나면 다른 방법을 찾아야겠어."
 													}
 												]
 											}
@@ -32727,7 +32951,8 @@
 													"story_first_enter_dark_forest_hallway_03_done"
 												],
 												"required_flag_missing": [
-													"bad_ending_flag"
+													"bad_ending_flag",
+													"normal_ending_flag"
 												],
 												"events": [
 													{
@@ -32735,6 +32960,52 @@
 														"character": "mask_man",
 														"emotion": "mask",
 														"text": "서랍에 송곳이 있던데 그거 쓰는 거 어떠냐."
+													}
+												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"normal_ending_flag"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "pizzagom",
+														"emotion": "normal",
+														"text": "서랍에 송곳이 있던데 그거 쓰는 거 어떠냐."
+													},
+													{
+														"type": "portrait",
+														"character": "claire",
+														"emotion": "normal",
+														"text": "드라이버보다 끝이 뾰족한 게 필요하지 않을까요?"
+													},
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "expressionless",
+														"text": "서랍을 다시 확인해 보자."
+													}
+												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"bad_ending_flag"
+												],
+												"required_flag_missing": [
+													"normal_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "expressionless",
+														"text": "끝이 더 뾰족한 도구가 있는지 찾아보자."
 													}
 												]
 											}
@@ -32895,7 +33166,8 @@
 													"story_first_enter_dark_forest_hallway_03_done"
 												],
 												"required_flag_missing": [
-													"bad_ending_flag"
+													"bad_ending_flag",
+													"normal_ending_flag"
 												],
 												"events": [
 													{
@@ -32909,6 +33181,58 @@
 														"character": "mask_man",
 														"emotion": "mask",
 														"text": "으아악!"
+													}
+												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"normal_ending_flag"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "pizzagom",
+														"emotion": "pain",
+														"text": "야 이 새끼야! 뭐 어떻게 된 거야!"
+													},
+													{
+														"type": "portrait",
+														"character": "pizzagom",
+														"emotion": "pain",
+														"text": "으아악!"
+													},
+													{
+														"type": "portrait",
+														"character": "claire",
+														"emotion": "pain",
+														"text": "뜨거워!"
+													},
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "angry",
+														"text": "으윽... 위험해!"
+													}
+												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"bad_ending_flag"
+												],
+												"required_flag_missing": [
+													"normal_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "normal",
+														"text": "으윽... 위험해!"
 													}
 												]
 											}
@@ -32993,7 +33317,8 @@
 													"story_first_enter_dark_forest_hallway_03_done"
 												],
 												"required_flag_missing": [
-													"bad_ending_flag"
+													"bad_ending_flag",
+													"normal_ending_flag"
 												],
 												"events": [
 													{
@@ -33001,6 +33326,58 @@
 														"character": "mask_man",
 														"emotion": "mask",
 														"text": "으악!... 목이..."
+													}
+												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"normal_ending_flag"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "pizzagom",
+														"emotion": "pain",
+														"text": "으악!... 목이..."
+													},
+													{
+														"type": "portrait",
+														"character": "claire",
+														"emotion": "pain",
+														"text": "숨을 못 쉬겠어..."
+													},
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "angry",
+														"text": "밖으로 나가야..."
+													}
+												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"bad_ending_flag"
+												],
+												"required_flag_missing": [
+													"normal_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "angry",
+														"text": "목이... 숨을 쉴 수가 없어..."
+													},
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "angry",
+														"text": "밖으로 나가야..."
 													}
 												]
 											}
@@ -33075,7 +33452,8 @@
 													"story_first_enter_dark_forest_hallway_03_done"
 												],
 												"required_flag_missing": [
-													"bad_ending_flag"
+													"bad_ending_flag",
+													"normal_ending_flag"
 												],
 												"events": [
 													{
@@ -33083,6 +33461,58 @@
 														"character": "mask_man",
 														"emotion": "mask",
 														"text": "오!?"
+													}
+												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"normal_ending_flag"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "pizzagom",
+														"emotion": "joy",
+														"text": "오!?"
+													},
+													{
+														"type": "portrait",
+														"character": "claire",
+														"emotion": "normal",
+														"text": "아까보다 잘 움직이네요."
+													},
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "normal",
+														"text": "제법인데?"
+													}
+												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"bad_ending_flag"
+												],
+												"required_flag_missing": [
+													"normal_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "normal",
+														"text": "제법인데?"
+													},
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "normal",
+														"text": "열린거 같은데."
 													}
 												]
 											}
@@ -33180,6 +33610,80 @@
 										"wait": false
 									},
 									{
+										"type": "conditional_events",
+										"branches": [
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag",
+													"normal_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "mask_man",
+														"emotion": "mask",
+														"text": "제법인걸?"
+													}
+												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"normal_ending_flag"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "pizzagom",
+														"emotion": "joy",
+														"text": "제법인걸?"
+													},
+													{
+														"type": "portrait",
+														"character": "claire",
+														"emotion": "embarrassed",
+														"text": "드디어 열렸네요."
+													},
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "expressionless",
+														"text": "안에 뭐가 있는지 확인해 보자."
+													}
+												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"bad_ending_flag"
+												],
+												"required_flag_missing": [
+													"normal_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "expressionless",
+														"text": "잘했어."
+													},
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "expressionless",
+														"text": "상자 안을 확인해 보자."
+													}
+												]
+											}
+										]
+									},
+									{
 										"type": "text",
 										"text": "천천히 뚜껑을 들어 올렸다."
 									},
@@ -33252,7 +33756,8 @@
 											"story_first_enter_dark_forest_hallway_03_done"
 										],
 										"required_flag_missing": [
-											"bad_ending_flag"
+											"bad_ending_flag",
+											"normal_ending_flag"
 										],
 										"events": [
 											{
@@ -33266,6 +33771,58 @@
 												"character": "mask_man",
 												"emotion": "mask",
 												"text": "야 뭐 좀 없나 서랍 한번 뒤져봐."
+											}
+										]
+									},
+									{
+										"required_flag": [
+											"story_first_enter_dark_forest_hallway_03_done",
+											"normal_ending_flag"
+										],
+										"required_flag_missing": [
+											"bad_ending_flag"
+										],
+										"events": [
+											{
+												"type": "portrait",
+												"character": "pizzagom",
+												"emotion": "angry",
+												"text": "이런 건 망치 같은 걸로 내려 쳐보면 열리겠지."
+											},
+											{
+												"type": "portrait",
+												"character": "pizzagom",
+												"emotion": "annoyed",
+												"text": "야 뭐 좀 없나 서랍 한번 뒤져봐."
+											},
+											{
+												"type": "portrait",
+												"character": "claire",
+												"emotion": "annoyed",
+												"text": "힘으로 열 수 있을까요?"
+											},
+											{
+												"type": "portrait",
+												"character": "isaac",
+												"emotion": "normal",
+												"text": "우선 주변에 쓸 만한 도구가 있는지 찾아보자."
+											}
+										]
+									},
+									{
+										"required_flag": [
+											"story_first_enter_dark_forest_hallway_03_done",
+											"bad_ending_flag"
+										],
+										"required_flag_missing": [
+											"normal_ending_flag"
+										],
+										"events": [
+											{
+												"type": "portrait",
+												"character": "isaac",
+												"emotion": "normal",
+												"text": "주변에 상자를 열 만한 도구가 있는지 찾아보자."
 											}
 										]
 									}
@@ -33729,14 +34286,15 @@
 													"story_first_enter_dark_forest_hallway_03_done"
 												],
 												"required_flag_missing": [
-													"bad_ending_flag"
+													"bad_ending_flag",
+													"normal_ending_flag"
 												],
 												"events": [
 													{
 														"type": "portrait",
 														"character": "mask_man",
 														"emotion": "mask",
-														"text": "넝쿨로 길을 막은 게 당신인가?"
+														"text": "넝쿨로 길을 막은 게 너냐?"
 													},
 													{
 														"type": "story_dialogue",
@@ -33755,6 +34313,90 @@
 														"text": "..."
 													}
 												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"normal_ending_flag"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "pizzagom",
+														"emotion": "angry",
+														"text": "넝쿨로 길을 막은 게 너냐?"
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "뭐, 반은 맞고 반은 틀리다네."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "그리고 내가 워낙 잠을 뒤척여서... 허허..."
+													},
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "normal",
+														"text": "..."
+													},
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "normal",
+														"text": "그럼 넝쿨을 치워줄 수도 있겠군."
+													},
+													{
+														"type": "portrait",
+														"character": "claire",
+														"emotion": "annoyed",
+														"text": "저 혹시 넝쿨을 치워주실 수 없을까요?"
+													}
+												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"bad_ending_flag"
+												],
+												"required_flag_missing": [
+													"normal_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "normal",
+														"text": "혹시 숲의 길을 막고 있는 넝쿨도 당신이 자라게 한 건가?"
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "뭐, 반은 맞고 반은 틀리다네."
+													},
+													{
+														"type": "story_dialogue",
+														"name": "얼굴 달린 거목",
+														"text": "그리고 내가 워낙 잠을 뒤척여서... 허허..."
+													},
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "normal",
+														"text": "..."
+													},
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "normal",
+														"text": "그렇다면 길을 열어줄 수 있겠군."
+													}
+												]
 											}
 										]
 									},
@@ -33765,7 +34407,7 @@
 									},
 									{
 										"type": "text",
-										"text": "얼굴 달린 거목가 무언가를 중얼거리자 발밑에서 나무뿌리들이 꿈틀거리기 시작한다."
+										"text": "얼굴 달린 거목이 무언가를 중얼거리자 발밑에서 나무뿌리들이 꿈틀거리기 시작한다."
 									},
 									{
 										"type": "sound",
@@ -34857,7 +35499,8 @@
 									"story_first_enter_dark_forest_hallway_03_done"
 								],
 								"required_flag_missing": [
-									"bad_ending_flag"
+									"bad_ending_flag",
+									"normal_ending_flag"
 								],
 								"events": [
 									{
@@ -34868,7 +35511,61 @@
 										"type": "portrait",
 										"character": "mask_man",
 										"emotion": "mask",
-										"text": "이 넘어가 내 은신처로 가는 길이야."
+										"text": "이 너머가 내 은신처로 가는 길이야."
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"story_first_enter_dark_forest_hallway_03_done",
+									"normal_ending_flag"
+								],
+								"required_flag_missing": [
+									"bad_ending_flag"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "길이 막혀있다."
+									},
+									{
+										"type": "portrait",
+										"character": "pizzagom",
+										"emotion": "normal",
+										"text": "이 너머는 동굴로 가는 길이야."
+									},
+									{
+										"type": "portrait",
+										"character": "claire",
+										"emotion": "normal",
+										"text": "거기에 중요한 뭔가 있을까요?"
+									},
+									{
+										"type": "portrait",
+										"character": "isaac",
+										"emotion": "normal",
+										"text": "일단, 넝쿨을 치울 방법부터 찾아보자."
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"story_first_enter_dark_forest_hallway_03_done",
+									"bad_ending_flag"
+								],
+								"required_flag_missing": [
+									"normal_ending_flag"
+								],
+								"events": [
+									{
+										"type": "text",
+										"text": "길이 막혀있다."
+									},
+									{
+										"type": "portrait",
+										"character": "isaac",
+										"emotion": "normal",
+										"text": "이쪽으로는 지나갈 수 없겠어. 넝쿨을 치울 방법을 찾아보자."
 									}
 								]
 							}
@@ -34880,7 +35577,7 @@
 							},
 							{
 								"type": "text",
-								"text": "넝쿨을 먼저 어떻게 해야 될 거 같다."
+								"text": "넝쿨을 먼저 어떻게 해야 할 것 같다."
 							}
 						]
 					}
@@ -35257,10 +35954,6 @@
 					{
 						"type": "text",
 						"text": "낡은 오두막이다."
-					},
-					{
-						"type": "text",
-						"text": "이곳에 누군가 살고 있는 걸까?"
 					}
 				]
 			}
@@ -35350,7 +36043,7 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "종이에 무언가 그려있다."
+						"text": "종이에 무언가 그려져 있다."
 					},
 					{
 						"type": "document_popup",
@@ -35376,7 +36069,9 @@
 									"story_first_enter_dark_forest_hallway_03_done"
 								],
 								"required_flag_missing": [
-									"bad_ending_flag"
+									"bad_ending_flag",
+									"normal_ending_flag",
+									"story_first_enter_dark_forest_hallway_21_done"
 								],
 								"events": [
 									{
@@ -35384,6 +36079,54 @@
 										"character": "mask_man",
 										"emotion": "mask",
 										"text": "왼쪽 X 표시로 가는 길에 내 은신처가 있어."
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"story_first_enter_dark_forest_hallway_03_done",
+									"normal_ending_flag"
+								],
+								"required_flag_missing": [
+									"bad_ending_flag",
+									"story_first_enter_dark_forest_hallway_21_done"
+								],
+								"events": [
+									{
+										"type": "portrait",
+										"character": "pizzagom",
+										"emotion": "normal",
+										"text": "왼쪽 X 표시 끝에 동굴로 통하는 길이 있어."
+									},
+									{
+										"type": "portrait",
+										"character": "claire",
+										"emotion": "normal",
+										"text": "그럼 가까운 네 갈래 길에서 서쪽으로 가면 되겠네요."
+									},
+									{
+										"type": "portrait",
+										"character": "isaac",
+										"emotion": "normal",
+										"text": "갈림길을 지나면 표시에 해당하는 곳을 확인해 보자."
+									}
+								]
+							},
+							{
+								"required_flag": [
+									"story_first_enter_dark_forest_hallway_03_done",
+									"bad_ending_flag"
+								],
+								"required_flag_missing": [
+									"normal_ending_flag",
+									"story_first_enter_dark_forest_hallway_21_done"
+								],
+								"events": [
+									{
+										"type": "portrait",
+										"character": "isaac",
+										"emotion": "normal",
+										"text": "왼쪽 X 표시가 신경 쓰이는군. 서쪽 길을 확인해 보자."
 									}
 								]
 							}
@@ -35621,7 +36364,8 @@
 													"story_first_enter_dark_forest_hallway_03_done"
 												],
 												"required_flag_missing": [
-													"bad_ending_flag"
+													"bad_ending_flag",
+													"normal_ending_flag"
 												],
 												"events": [
 													{
@@ -35635,6 +36379,58 @@
 														"character": "mask_man",
 														"emotion": "mask",
 														"text": "마치 누가 잠금장치를 풀어놓은 거 같은데?"
+													}
+												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"normal_ending_flag"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "pizzagom",
+														"emotion": "normal",
+														"text": "뭐야 이거."
+													},
+													{
+														"type": "portrait",
+														"character": "pizzagom",
+														"emotion": "normal",
+														"text": "마치 누가 잠금장치를 풀어놓은 거 같은데?"
+													},
+													{
+														"type": "portrait",
+														"character": "claire",
+														"emotion": "annoyed",
+														"text": "누가 먼저 열어본 걸까요?"
+													},
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "normal",
+														"text": "안에 뭐가 있는지 확인해 보자."
+													}
+												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"bad_ending_flag"
+												],
+												"required_flag_missing": [
+													"normal_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "normal",
+														"text": "잠금장치가 이미 풀려 있군. 안을 확인해 보자."
 													}
 												]
 											}
@@ -36172,7 +36968,7 @@
 									{
 										"type": "story_dialogue",
 										"name": "얼굴 달린 거목",
-										"text": "이거면 도움이 됬겠지? 아니, 딱히... 특별한 의미가 있는 건 아니다."
+										"text": "이거면 도움이 됐겠지? 아니, 딱히... 특별한 의미가 있는 건 아니다."
 									},
 									{
 										"type": "conditional_events",
@@ -36182,7 +36978,8 @@
 													"story_first_enter_dark_forest_hallway_03_done"
 												],
 												"required_flag_missing": [
-													"bad_ending_flag"
+													"bad_ending_flag",
+													"normal_ending_flag"
 												],
 												"events": [
 													{
@@ -36190,6 +36987,58 @@
 														"character": "mask_man",
 														"emotion": "mask",
 														"text": "..."
+													}
+												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"normal_ending_flag"
+												],
+												"required_flag_missing": [
+													"bad_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "pizzagom",
+														"emotion": "annoyed",
+														"text": "..."
+													},
+													{
+														"type": "portrait",
+														"character": "claire",
+														"emotion": "annoyed",
+														"text": "부끄럼이 많으신가 보네요."
+													},
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "normal",
+														"text": "덕분에 길을 지나갈 수 있겠어."
+													}
+												]
+											},
+											{
+												"required_flag": [
+													"story_first_enter_dark_forest_hallway_03_done",
+													"bad_ending_flag"
+												],
+												"required_flag_missing": [
+													"normal_ending_flag"
+												],
+												"events": [
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "normal",
+														"text": "고맙네."
+													},
+													{
+														"type": "portrait",
+														"character": "isaac",
+														"emotion": "normal",
+														"text": "덕분에 길을 지나갈 수 있겠어."
 													}
 												]
 											}
@@ -38766,7 +39615,7 @@
 					},
 					{
 						"type": "text",
-						"text": "넝쿨을 먼저 어떻게 해야 될 거 같다."
+						"text": "넝쿨을 먼저 어떻게 해야 할 것 같다."
 					}
 				]
 			},
@@ -40269,7 +41118,7 @@
 					},
 					{
 						"type": "text",
-						"text": "넝쿨을 먼저 어떻게 해야 될 거 같다."
+						"text": "넝쿨을 먼저 어떻게 해야 할 것 같다."
 					}
 				]
 			}
