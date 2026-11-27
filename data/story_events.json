@@ -16108,7 +16108,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "이전까지만 해도 서로 무기를 겨누고 싸우던 사이였다."
+				"text": "얼마 전까지만 해도 서로 무기를 겨누고 싸우던 사이였다."
 			},
 			{
 				"type": "story_dialogue",
@@ -16220,12 +16220,17 @@
 			{
 				"type": "story_dialogue",
 				"name": "가면의 남성",
-				"text": "가면도 안 쓰고 숲 한가운데를 대놓고 돌아다니잖아."
+				"text": "무방비 상태로 숲 한가운데를 대놓고 돌아다니잖아."
 			},
 			{
 				"type": "story_dialogue",
 				"name": "가면의 남성",
 				"text": "미끼 맞지."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "뭐 네가 강한 건 어느 정도 인정하지만."
 			},
 			{
 				"type": "story_dialogue",
@@ -16290,7 +16295,11 @@
 				"text": "수상한 가면을 쓰고 사람을 기습해 놓고도, 이상하게 말은 통했다."
 			},
 			{
-				"type": "fade"
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
 			},
 			{
 				"type": "standing_clear"
@@ -16298,6 +16307,11 @@
 			{
 				"type": "background",
 				"path": "res://imgs/backgrounds/dark_forest_hallway_03.png"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
 			},
 			{
 				"type": "story_dialogue",
@@ -16319,7 +16333,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "나",
-				"text": "저쪽이 더 빠른 길 아니야?"
+				"text": "저쪽 길은 뭐야?"
 			},
 			{
 				"type": "standing",
@@ -16445,16 +16459,6 @@
 			},
 			{
 				"type": "story_dialogue",
-				"name": "가면의 남성",
-				"text": "자고 일어났는데 표시가 열 개쯤 늘어나 있던 적도 있었고."
-			},
-			{
-				"type": "story_dialogue",
-				"name": "가면의 남성",
-				"text": "반대로 며칠은 지난 것 같은데 하나도 안 늘어난 적도 있었어."
-			},
-			{
-				"type": "story_dialogue",
 				"name": "나",
 				"text": "그래서 그만둔 거야?"
 			},
@@ -16489,7 +16493,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "하지만 그 말투에는 실제로 그 과정을 겪어본 사람 특유의 피로가 묻어 있었다."
+				"text": "하지만 그 말투에는 실제로 그 과정을 겪어본 사람이었다."
 			},
 			{
 				"type": "story_dialogue",
@@ -16523,7 +16527,7 @@
 			},
 			{
 				"type": "story_dialogue",
-				"text": "처음으로 대답이 바로 돌아오지 않았다."
+				"text": "대답이 바로 돌아오지 않았다."
 			},
 			{
 				"type": "story_dialogue",
@@ -16558,7 +16562,11 @@
 				"text": "나 역시 처음 만난 상대에게 모든 걸 이야기한 것은 아니었으니까."
 			},
 			{
-				"type": "fade"
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
 			},
 			{
 				"type": "standing_clear"
@@ -16566,6 +16574,11 @@
 			{
 				"type": "background",
 				"path": "res://imgs/backgrounds/dark_forest_room_inside_01.png"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
 			},
 			{
 				"type": "story_dialogue",
@@ -16647,7 +16660,11 @@
 				"text": "어느 날 가보니 그대로 되돌려있었어."
 			},
 			{
-				"type": "fade"
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
 			},
 			{
 				"type": "standing_clear"
@@ -16664,6 +16681,11 @@
 				"path": "res://sounds/cave_sound_01.mp3",
 				"volume_db": 0,
 				"loop": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
 			},
 			{
 				"type": "portrait",
@@ -16796,7 +16818,7 @@
 			{
 				"type": "sound",
 				"path": "res://sounds/block.mp3",
-				"volume_db": 0,
+				"volume_db": 5,
 				"wait": false
 			},
 			{
@@ -16831,7 +16853,7 @@
 			{
 				"type": "story_dialogue",
 				"name": "가면의 남성",
-				"text": "그리고 네 동료들 있는 곳까지 가려면 멀쩡히 걸을 정도는 돼야 할 거 아냐."
+				"text": "그리고 네 동료들 있는 곳까지 가려면 이것저것 필요할 거 아냐."
 			},
 			{
 				"type": "story_dialogue",
@@ -16854,10 +16876,6 @@
 				"type": "story_dialogue",
 				"name": "가면의 남성",
 				"text": "마음대로 해."
-			},
-			{
-				"type": "story_dialogue",
-				"text": "나는 아무런 의심 없이 상자 쪽으로 다가갔다."
 			},
 			{
 				"type": "screen_color",
@@ -16884,6 +16902,549 @@
 			{
 				"type": "flag",
 				"flag": "story_first_enter_dark_forest_hallway_21_done"
+			}
+		]
+	},
+	"first_enter_dark_forest_room_21_02": {
+		"start_flag": "story_first_enter_dark_forest_room_21_02_done",
+		"events": [
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/dark_forest_cave_outside_03.png"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 가면의 남성이 내민 상자 안을 살펴보았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "안에는 이곳에서 쉽게 구하기 힘들어 보이는 물건들이 제법 들어 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "이 정도면 꽤 쓸 만하겠는데..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 상자 안쪽에 손을 뻗었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 순간."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/footsteps.mp3",
+				"volume_db": 20,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "등 뒤에서 아주 짧은 발소리가 들렸다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "응?"
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/kick.mp3",
+				"volume_db": 20,
+				"wait": false
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.7,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.2,
+				"wait": true
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/bgm11.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "퍽!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "등 한가운데에 강한 충격이 들어왔다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "상자를 향해 숙이고 있던 몸이 그대로 앞으로 밀려났다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "뭐 하는..."
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "잘가라~"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "한 걸음."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "두 걸음."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "박스를 밟고 앞으로 휘청이던 발끝이 허공을 밟았다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/ui/black.png"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "...뭐?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "상자 바로 뒤쪽이라고 생각했던 바닥이 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 아래로는 끝을 알 수 없는 검은 구멍이 벌어져 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "잠깐...!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 반사적으로 손을 뻗었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 붙잡을 수 있는 것은 아무것도 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "야!!"
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/falling_rocks_01.mp3",
+				"volume_db": 10,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "몸이 어둠 속으로 떨어졌다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "쾅!"
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.15,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "으아악!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "어깨가 돌벽에 세게 부딪혔다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "몸이 한 번 크게 튕겨 나갔다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/falling_rocks_02.mp3",
+				"volume_db": 15,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그대로 가파른 바위 비탈을 따라 정신없이 굴러 떨어졌다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "등."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "팔."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "옆구리."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "어디가 어디에 부딪히는지도 알 수 없을 정도로 온몸에 충격이 이어졌다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#FF0000",
+				"alpha": 0.8,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.15,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "으윽...!"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "마지막으로 바닥에 등을 강하게 부딪친 뒤에야 몸이 멈췄다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/fall_down.mp3",
+				"volume_db": 10,
+				"wait": false
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "wait",
+				"time": 1.0
+			},
+			{
+				"type": "story_dialogue",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "한동안 숨조차 제대로 쉴 수 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "폐가 찌그러진 것처럼 숨을 들이마실 때마다 가슴과 옆구리가 아팠다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "하아... 하..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "손끝은 움직였다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "다리도 어떻게든 움직일 수 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "적어도 어디가 완전히 부러진 것 같지는 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 사실에 안도해야 할지 화를 내야 할지 알 수 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "그 새끼..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "위쪽을 바라봤다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "내가 떨어진 구멍은 너무 높고 어두워서 이제는 입구조차 제대로 보이지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "처음부터 이럴 생각이었던 거야...?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "조금 전까지 나눴던 대화가 머릿속을 스쳤다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "가면을 쓰는 이유."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이 숲에서 살아남는 방법."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "다른 사람들을 만난 적이 있다는 애매한 대답."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그리고 필요하면 물자를 쓰라며 내 앞으로 밀어줬던 상자."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "...씨발."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "처음부터 상자 안의 물건이 목적이 아니었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "내가 상자 앞으로 가기를 기다리고 있었던 거다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "화가 났다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 그보다 먼저 밀려온 것은 배신감이었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "믿지 않는다고 서로 몇 번이나 말했으면서도."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "어느 순간부터 나는 녀석을 조금은 믿고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "나가면 진짜 죽여버린다..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 이를 악물고 몸을 일으켰다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 0.8,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "set_player_hp",
+				"hp": 50
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/dark_forest_cave_outside_03.png"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/cave_sound_01.mp3",
+				"volume_db": -5,
+				"loop": true
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 5.0,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "동굴 아래쪽은 빛 한 점 보이지 않을 정도로 어두웠다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "바위벽을 손으로 더듬으며 천천히 앞으로 걸었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "윽..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "걸음을 옮길 때마다 옆구리가 욱신거렸다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "다리에 힘을 제대로 주기도 어려웠다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그래도 여기에 가만히 누워 있을 수는 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "가면의 남성이 다시 내려올지도 모른다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "아니면 그보다 더 좋지 않은 무언가가 이곳에 있을지도 모른다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "얼마나 걸었을까."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "시간 감각이 흐려질 즈음."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "앞쪽 어둠에 아주 희미한 빛이 보였다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "...빛?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 벽을 짚으며 그쪽으로 걸어갔다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "한 걸음."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "또 한 걸음."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "가까워질수록 빛은 조금씩 선명해졌다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "동굴 천장 어딘가에 벌어진 작은 틈 사이로 희미한 빛줄기가 내려오고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 아래만큼은 어둠이 완전히 물러나 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "조금만..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "빛 아래까지 도착하자 긴장이 풀린 탓인지 갑자기 다리에서 힘이 빠졌다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "아..."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/fall_down.mp3",
+				"volume_db": 5,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 그대로 바닥에 무릎을 꿇었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "손으로 바닥을 짚으려 했지만 팔에도 더 이상 힘이 들어가지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "잠깐만..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "시야가 흐려졌다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "눈앞에 내려오던 빛이 천천히 번져갔다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 1.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "...젠장."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 말을 마지막으로 나는 정신을 잃었다."
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "change_room",
+				"room": "dark_forest_cave_10"
+			},
+			{
+				"type": "show_game_ui"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_dark_forest_room_21_02_done"
 			}
 		]
 	}

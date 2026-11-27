@@ -10076,10 +10076,14 @@
 								"text": "잡동사니를 넣을 수 있는 박스다."
 							},
 							{
+								"type": "text",
+								"text": "메모가 붙어있다."
+							},
+							{
 								"type": "portrait",
 								"character": "isaac",
 								"emotion": "expressionless",
-								"text": "그 상자 네가 사용해."
+								"text": "이 상자 네가 사용해."
 							},
 							{
 								"type": "portrait",
@@ -38492,8 +38496,8 @@
 										"success_effect": "fade",
 										"locked_sound_path": "res://sounds/bush_rustling_sound.mp3",
 										"unlocked_sound_path": "res://sounds/result.mp3",
-										"required_key_success_text": "!!",
-										"master_key_success_text": "!!",
+										"required_key_success_text": "!!!",
+										"master_key_success_text": "!!!",
 										"fail_text": "지나갈 수 없다."
 									}
 								]
@@ -38550,6 +38554,18 @@
 			"path": "res://sounds/footsteps_forest.mp3",
 			"volume_db": 0.0
 		},
+		"enter_stories": [
+			{
+				"event": "first_enter_dark_forest_room_21_02",
+				"required_flag": [
+					"story_first_enter_dark_forest_hallway_21_done",
+					"search_boxs_dark_forest_hallway_21_02"
+				],
+				"required_flag_missing": [
+					"story_first_enter_dark_forest_room_21_02_done"
+				]
+			}
+		],
 		"exits": {
 			"down": {
 				"target": "dark_forest_room_21",
@@ -38570,7 +38586,11 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "낡은 책상이다. 위에는 구겨진 종이들과 정체를 알 수 없는 잡동사니가 어지럽게 쌓여 있다."
+						"text": "낡은 책상이다."
+					},
+					{
+						"type": "text",
+						"text": "위에는 구겨진 종이들과 정체를 알 수 없는 잡동사니가 어지럽게 쌓여 있다."
 					}
 				]
 			},
@@ -38584,7 +38604,45 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "해진 옷가지들이 수북이 덮여 있는 플라스틱 상자들이다. 겉모습은 평범하지만 안에는 생존에 필요한 물자들이 숨겨져 있다."
+						"text": "해진 옷가지들이 수북이 덮여 있는 플라스틱 상자들이다."
+					},
+					{
+						"type": "text",
+						"text": "겉모습은 평범하지만 안에는 생존에 필요한 물자들이 숨겨져 있다."
+					},
+					{
+						"type": "open_storage",
+						"storage_id": "dark_forest_room_21_02_box_01",
+						"initial_items": [
+							{
+								"id": "chocolate_bar_a",
+								"count": 5,
+								"slot": 0,
+								"page": 0
+							},
+							{
+								"id": "tuna_can_a",
+								"count": 2,
+								"slot": 1,
+								"page": 0
+							},
+							{
+								"id": "unknown_coin",
+								"count": 10,
+								"slot": 2,
+								"page": 0
+							},
+							{
+								"id": "first_aid_box_fetish",
+								"count": 1,
+								"slot": 3,
+								"page": 0
+							}
+						]
+					},
+					{
+						"type": "flag",
+						"flag": "search_boxs_dark_forest_hallway_21_02"
 					}
 				]
 			},
@@ -38598,7 +38656,11 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "동굴 깊숙한 어둠 속에 웅크린 듯 자리 잡은 구멍이다. 시야가 닿지 않는 아래쪽으로 깊게 이어져 있다."
+						"text": "동굴 깊숙한 어둠 속에 웅크린 듯 자리 잡은 구멍이다."
+					},
+					{
+						"type": "text",
+						"text": "시야가 닿지 않는 아래쪽으로 깊게 이어져 있다."
 					}
 				]
 			},
@@ -38612,7 +38674,11 @@
 				"events": [
 					{
 						"type": "text",
-						"text": "모닥불 자리다. 하얗게 굳은 재만 남았지만, 주변에 남은 흔적들이 이곳에 사람이 머물렀음을 말해준다."
+						"text": "모닥불 자리다. "
+					},
+					{
+						"type": "text",
+						"text": "하얗게 굳은 재만 남았지만, 주변에 남은 흔적들이 이곳에 사람이 머물렀음을 말해준다."
 					}
 				]
 			}

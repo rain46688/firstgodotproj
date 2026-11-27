@@ -4948,14 +4948,24 @@ func run_single_event(event):
 		
 	elif event_type == "input_prompt":
 		await run_input_prompt_event(event)
-	
+		
 	elif event_type == "open_storage":
 		# initial_items는 해당 창고가 처음 생성될 때만 적용된다.
 		# 이미 한 번 열었던 storage_id라면 기존 저장 내용을 그대로 사용한다.
 		var storage_id = str(event.get("storage_id", ""))
 		var initial_items = event.get("initial_items", event.get("items", []))
 
+		var was_arrange_open = is_inventory_arrange_open
+
 		open_storage(storage_id, initial_items)
+
+		# 창고가 정상적으로 열렸다면 창고를 닫을 때까지 대기한다.
+		if (
+			not was_arrange_open
+			and is_inventory_arrange_open
+			and inventory_arrange_mode == ARRANGE_MODE_STORAGE
+		):
+			await inventory_arrange_closed
 		
 	elif event_type == "open_shop":
 		# shops.json에 등록된 shop_id의 상점을 연다.
@@ -4990,6 +5000,11 @@ func run_single_event(event):
 
 	elif event_type == "increase_max_hp":
 		await run_increase_player_max_hp_event(event)
+		
+	elif event_type == "set_player_hp":
+		player_hp = int(event.get("hp", player_hp))
+		player_hp = clamp(player_hp, 1, get_current_player_max_hp())
+		update_player_status_ui()
 		
 	elif event_type == "item":
 		var item_id = event.get("item", "")
@@ -5672,6 +5687,11 @@ func run_single_story_event(event):
 
 	elif event_type == "increase_max_hp":
 		await run_increase_player_max_hp_event(event)
+		
+	elif event_type == "set_player_hp":
+		player_hp = int(event.get("hp", player_hp))
+		player_hp = clamp(player_hp, 1, get_current_player_max_hp())
+		update_player_status_ui()
 			
 	elif event_type == "stop_bgm":
 		stop_bgm()
