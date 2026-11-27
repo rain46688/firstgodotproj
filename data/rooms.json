@@ -33917,8 +33917,8 @@
 			"loop": true
 		},
 		"bgm": {
-			"path": "res://sounds/forest.mp3",
-			"volume_db": 0.0,
+			"path": "res://sounds/wind_sound.mp3",
+			"volume_db": -5.0,
 			"loop": true
 		},
 		"footstep_sound": {
@@ -34422,7 +34422,7 @@
 									{
 										"type": "story_dialogue",
 										"name": "얼굴 달린 거목",
-										"text": "됐다. 편하도록 넝쿨들을 치워 두었다."
+										"text": "됐다. 넝쿨들을 치워 두었다."
 									},
 									{
 										"type": "story_dialogue",
@@ -35242,6 +35242,10 @@
 							{
 								"type": "text",
 								"text": "길이 막혀있다."
+							},
+							{
+								"type": "text",
+								"text": "넝쿨을 먼저 어떻게 해야 할 것 같다."
 							}
 						]
 					}
@@ -38238,6 +38242,19 @@
 			"path": "res://sounds/footsteps_forest.mp3",
 			"volume_db": 0.0
 		},
+		"enter_stories": [
+			{
+				"event": "first_enter_dark_forest_hallway_21",
+				"required_flag": [
+					"story_first_enter_dark_forest_hallway_03_done"
+				],
+				"required_flag_missing": [
+					"story_first_enter_dark_forest_hallway_21_done",
+					"bad_ending_flag",
+					"normal_ending_flag"
+				]
+			}
+		],
 		"exits": {
 			"up": {
 				"target": "dark_forest_hallway_22",
@@ -38316,7 +38333,7 @@
 		},
 		"exits": {
 			"up": {
-				"target": "dark_forest_cave_outside_01",
+				"target": "dark_forest_room_21_02",
 				"position": [
 					900.0,
 					450.0
@@ -38326,7 +38343,7 @@
 					"volume_db": 10.0
 				},
 				"locked": true,
-				"open_flag": "opened_dark_forest_cave_outside_01",
+				"open_flag": "opened_dark_forest_room_21_02",
 				"move_effect": "enter"
 			},
 			"down": {
@@ -38359,7 +38376,7 @@
 					1561.0,
 					144.0
 				],
-				"required_flag": "opened_dark_forest_cave_outside_01",
+				"required_flag": "opened_dark_forest_room_21_02",
 				"events": [
 					{
 						"type": "text",
@@ -38424,7 +38441,7 @@
 					1561.0,
 					144.0
 				],
-				"required_flag_missing": "opened_dark_forest_cave_outside_01",
+				"required_flag_missing": "opened_dark_forest_room_21_02",
 				"events": [
 					{
 						"type": "text",
@@ -38475,9 +38492,9 @@
 										"success_effect": "fade",
 										"locked_sound_path": "res://sounds/bush_rustling_sound.mp3",
 										"unlocked_sound_path": "res://sounds/result.mp3",
-										"required_key_success_text": "{item_name}로 문을 열었다.",
-										"master_key_success_text": "{item_name}를 사용하여 문을 열었다.",
-										"fail_text": "잠겨있어서 열 수 없다."
+										"required_key_success_text": "!!",
+										"master_key_success_text": "!!",
+										"fail_text": "지나갈 수 없다."
 									}
 								]
 							},
@@ -38502,8 +38519,8 @@
 			}
 		}
 	},
-	"dark_forest_cave_outside_01": {
-		"background": "res://imgs/backgrounds/dark_forest_cave_outside_01.png",
+	"dark_forest_room_21_02": {
+		"background": "res://imgs/backgrounds/dark_forest_cave_outside_03.png",
 		"display_name": "어두운 숲 구역2 · 숨겨진 은신처",
 		"idle_motion": {
 			"enabled": true,
@@ -38542,41 +38559,64 @@
 				]
 			}
 		},
-		"interactions": {},
-		"random_encounter": {}
-	},
-	"dark_forest_cave_outside_01_02": {
-		"background": "res://imgs/backgrounds/dark_forest_cave_outside_01.png",
-		"idle_motion": {
-			"enabled": true,
-			"scale": 1.012,
-			"amplitude_x": 4.0,
-			"amplitude_y": 1.0,
-			"speed": 0.3
+		"interactions": {
+			"desk": {
+				"click_rect": [
+					1431,
+					407,
+					463,
+					341
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "낡은 책상이다. 위에는 구겨진 종이들과 정체를 알 수 없는 잡동사니가 어지럽게 쌓여 있다."
+					}
+				]
+			},
+			"boxs": {
+				"click_rect": [
+					158,
+					302,
+					573,
+					372
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "해진 옷가지들이 수북이 덮여 있는 플라스틱 상자들이다. 겉모습은 평범하지만 안에는 생존에 필요한 물자들이 숨겨져 있다."
+					}
+				]
+			},
+			"hole": {
+				"click_rect": [
+					883,
+					196,
+					458,
+					299
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "동굴 깊숙한 어둠 속에 웅크린 듯 자리 잡은 구멍이다. 시야가 닿지 않는 아래쪽으로 깊게 이어져 있다."
+					}
+				]
+			},
+			"bone_fire": {
+				"click_rect": [
+					841,
+					767,
+					498,
+					218
+				],
+				"events": [
+					{
+						"type": "text",
+						"text": "모닥불 자리다. 하얗게 굳은 재만 남았지만, 주변에 남은 흔적들이 이곳에 사람이 머물렀음을 말해준다."
+					}
+				]
+			}
 		},
-		"ambient_overlay": {
-			"frame_pattern": "res://imgs/effects/dust/dust_%02d.png",
-			"frame_start": 1.0,
-			"frame_count": 10.0,
-			"fps": 6.0,
-			"alpha": 0.55
-		},
-		"ambient_sound": {
-			"path": "res://sounds/insect_sound.mp3",
-			"volume_db": -5.0,
-			"loop": true
-		},
-		"bgm": {
-			"path": "res://sounds/cave_sound_01.mp3",
-			"volume_db": -5.0,
-			"loop": true
-		},
-		"footstep_sound": {
-			"path": "res://sounds/footsteps_forest.mp3",
-			"volume_db": 0.0
-		},
-		"exits": {},
-		"interactions": {},
 		"random_encounter": {}
 	},
 	"dark_forest_hallway_22": {
@@ -38973,7 +39013,7 @@
 		},
 		"exits": {
 			"up": {
-				"target": "dark_forest_cave_outside_02",
+				"target": "dark_forest_hallway_24_02",
 				"position": [
 					620.0,
 					30.0
@@ -39122,7 +39162,7 @@
 			}
 		}
 	},
-	"dark_forest_cave_outside_02": {
+	"dark_forest_hallway_24_02": {
 		"background": "res://imgs/backgrounds/dark_forest_cave_outside_02.png",
 		"display_name": "어두운 숲 구역2 · 동굴 앞",
 		"idle_motion": {

@@ -16070,5 +16070,821 @@
 				"play_sound": true
 			}
 		]
+	},
+	"first_enter_dark_forest_hallway_21": {
+		"start_flag": "story_first_enter_dark_forest_hallway_21_done",
+		"events": [
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "hide_game_ui"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/forest.mp3",
+				"volume_db": 0,
+				"loop": true
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/dark_forest_hallway_01.png"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 이후로 우리는 가면의 남성이 말한 은신처를 향해 걷고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이전까지만 해도 서로 무기를 겨누고 싸우던 사이였다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그런 두 사람이 나란히 숲길을 걷고 있다는 상황이 생각할수록 이상했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "녀석은 내게 등을 보이고 앞장서고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나를 믿는 건지, 아니면 내가 뒤에서 덤벼도 상관없다고 생각하는 건지는 알 수 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "야, 가면."
+			},
+			{
+				"type": "standing",
+				"character": "mask_man",
+				"emotion": "mask",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "왜?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "근데 이제 와서 물어보는 건데."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "그 가면은 왜 쓰고 있는 거야?"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "가면의 남성의 손이 순간 얼굴 쪽으로 올라갔다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "이거?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "여기 돌아다니는 것들 중에 이런 거 쓰고 다니는 놈들이 있잖아."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "그놈들이 쓰는 거랑 비슷하게 만든 거야."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "직접 만든 거라고?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "처음부터 이 모양은 아니었어."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "주운 것들 뜯어다가 붙이고, 깎고, 몇 번 고친 거지."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "호신용이야."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "어두운 데서 멀리 보면 놈들이 바로 구분 못 해."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "몇 초 정도지만 그걸로 충분할 때가 많아."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "전혀 안전해 보이지는 않는데..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "덕분에 지금까지 살아 있잖아."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "애초에 너랑 같이 다니고 있으니까 놈들이 더 꼬이는 거야."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "내가 뭐 미끼야?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "가면도 안 쓰고 숲 한가운데를 대놓고 돌아다니잖아."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "미끼 맞지."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "딱히 반박할 말도 없었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "그래도 계속 쓰고 있으면 불편하지 않아?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "익숙해."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "벗을 생각은 없고?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "없어."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "왜?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "안전하다는 확신이 들기 전까진."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "그리고 아직 널 그렇게 믿는 것도 아니고."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "그건 나도 마찬가지야."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "그럼 됐네."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "이상한 녀석이었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "수상한 가면을 쓰고 사람을 기습해 놓고도, 이상하게 말은 통했다."
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/dark_forest_hallway_03.png"
+			},
+			{
+				"type": "story_dialogue",
+				"text": "우리는 숲속을 꽤 오래 걸었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "가면의 남성은 이곳의 길을 상당히 잘 알고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "갈림길이 나올 때마다 망설임 없이 방향을 정했고, 어떤 곳에서는 멀쩡해 보이는 길을 놔두고 굳이 수풀 사이를 돌아갔다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "잠깐."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "저쪽이 더 빠른 길 아니야?"
+			},
+			{
+				"type": "standing",
+				"character": "mask_man",
+				"emotion": "mask",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "가지 마."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "왜?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "가보면 알아."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "그렇게 말하면 더 궁금하잖아."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "궁금해서 확인하러 간 놈들이 몇 명 있었어."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "그래서?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "다음 날부터 안 궁금해하더라."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "죽었으니까."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "처음부터 그렇게 말하면 되잖아."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "말했잖아. 가지 말라고."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "말투는 여전히 마음에 들지 않았지만, 그의 판단만큼은 믿을 만해 보였다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "몇 번은 그가 갑자기 걸음을 멈춰 세웠다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "잠시 뒤 우리가 가려던 길을 무언가 형체가 지나가기도 했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "내가 알아차리기도 전에 그는 위험을 먼저 알아채고 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "여기 오래 있었다고 했지?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "어."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "얼마나?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "몰라, 그건."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "대충이라도."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "처음에는 셌어."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "벽에 표시도 해보고, 잠들 때마다 하나씩 추가하고."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "근데 어느 순간 표시한 숫자랑 내가 기억하는 숫자가 안 맞더라."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "자고 일어났는데 표시가 열 개쯤 늘어나 있던 적도 있었고."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "반대로 며칠은 지난 것 같은데 하나도 안 늘어난 적도 있었어."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "그래서 그만둔 거야?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "어."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "여기서 날짜 세는 놈은 얼마 못 버틴다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "왜?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "자기가 틀린 건지, 이곳이 틀린 건지 계속 생각하게 되거든."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "그러다 보면 미쳐."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그는 아무렇지 않게 말했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 그 말투에는 실제로 그 과정을 겪어본 사람 특유의 피로가 묻어 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "혼자 계속 있었던 거야?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "계속은 아니지."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "다른 사람도 만났어?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "가끔."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "그 사람들은?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "처음으로 대답이 바로 돌아오지 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "여기 오래 남아 있는 사람은 별로 없어."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "죽었다는 뜻이야?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "그런 경우도 있고."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "그냥 서로 갈 길 간 경우도 있고."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "애매한 대답이었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "하지만 굳이 더 캐묻지는 않았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나 역시 처음 만난 상대에게 모든 걸 이야기한 것은 아니었으니까."
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/dark_forest_room_inside_01.png"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "거의 다 왔다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/bush_rustling_sound.mp3",
+				"volume_db": 5,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "가면의 남성이 빽빽한 수풀을 손으로 밀어냈다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그 너머로 숲 깊숙한 곳에 작은 동굴 같은 것이 모습을 드러냈다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "사람 키만큼 자란 수풀과 굵은 나무뿌리에 가려져 있어 몇 걸음만 떨어져도 입구가 보이지 않을 정도였다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "이런 곳을 어떻게 찾았어?"
+			},
+			{
+				"type": "standing",
+				"character": "mask_man",
+				"emotion": "mask",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "도망치다가."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "..."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "여기서 괜찮은 장소 찾는 방법은 대부분 그래."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "죽을 것 같아서 아무 데나 들어갔는데 살아 있으면 기억해두는 거지."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "참 건전한 탐험 방법이네."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "효과는 확실해."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "그리고 여기 말고 다른 장소들은 마치 이 숲의 일부인 것 같아."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "전에는 내가 호기심에 숲과 목재로 만들어진 건물에 불을 붙였고, 활활 타오르는 것까지 봤지만."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "어느 날 가보니 그대로 되돌려있었어."
+			},
+			{
+				"type": "fade"
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "background",
+				"path": "res://imgs/backgrounds/dark_forest_cave_outside_03.png"
+			},
+			{
+				"type": "stop_bgm"
+			},
+			{
+				"type": "bgm",
+				"path": "res://sounds/cave_sound_01.mp3",
+				"volume_db": 0,
+				"loop": true
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "여기면 그나마 안전해."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "동굴 안쪽은 생각보다 넓었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "한쪽에는 옷가지가 걸려 있었고, 벽 근처에는 낡은 상자와 주워온 것으로 보이는 잡동사니들이 정리되어 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "바닥에는 오래전에 꺼진 듯한 모닥불 흔적도 남아 있었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "오랫동안 사람이 머문 흔적이었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "생각보다 제대로 살고 있었네."
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "살고 있는 건지는 모르겠지만."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 동굴 안을 천천히 둘러보았다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "물건의 종류는 생각보다 다양했다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "크기가 다른 옷가지, 낡은 가방, 손전등, 녹슨 공구."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "한 사람이 필요해서 모았다고 보기에는 조금 지나치게 뒤죽박죽이었다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "이걸 전부 혼자 모은 거야?"
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "응."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "대단한데?"
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "살려고 모은 거지."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "옷 크기가 전부 다른데?"
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "숲에 버려진 게 많아."
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "죽은 놈들은 물건 필요 없잖아."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "말은 냉정했지만 틀린 말은 아니었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나 역시 이곳에서 살아남기 위해 괴물이 남긴 물건을 여러 번 챙겼다."
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "너도 상태 안 좋아 보이는데."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "누구 때문에요."
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "그건 아까 서로 퉁친 거 아니었냐?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "내 옆구리는 아직 합의 안 했는데."
+			},
+			{
+				"type": "portrait",
+				"character": "mask_man",
+				"emotion": "mask",
+				"text": "까다롭네."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "녀석은 그렇게 말하면서 동굴 구석으로 걸어갔다."
+			},
+			{
+				"type": "sound",
+				"path": "res://sounds/block.mp3",
+				"volume_db": 0,
+				"wait": false
+			},
+			{
+				"type": "story_dialogue",
+				"text": "툭."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "그는 천으로 덮여 있던 상자 하나를 끌어내 내 쪽으로 발로 밀었다."
+			},
+			{
+				"type": "standing",
+				"character": "mask_man",
+				"emotion": "mask",
+				"position": "center"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "필요한 거 있으면 써."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "정말로?"
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "어차피 다 들고 갈 수도 없어."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "그리고 네 동료들 있는 곳까지 가려면 멀쩡히 걸을 정도는 돼야 할 거 아냐."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "생각보다 순순히 물자를 내주는 모습에 조금 의외라는 생각이 들었다."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "처음 만났을 때만 해도 서로 죽일 듯이 싸웠는데."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "적어도 지금만큼은 이 녀석과 협력해도 괜찮을 것 같았다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "나",
+				"text": "그럼 사양 안 하고 좀 쓴다."
+			},
+			{
+				"type": "story_dialogue",
+				"name": "가면의 남성",
+				"text": "마음대로 해."
+			},
+			{
+				"type": "story_dialogue",
+				"text": "나는 아무런 의심 없이 상자 쪽으로 다가갔다."
+			},
+			{
+				"type": "screen_color",
+				"color": "#000000",
+				"alpha": 1.0,
+				"duration": 0.1,
+				"wait": true
+			},
+			{
+				"type": "show_game_ui"
+			},
+			{
+				"type": "standing_clear"
+			},
+			{
+				"type": "change_room",
+				"room": "dark_forest_room_21_02"
+			},
+			{
+				"type": "screen_color_clear",
+				"duration": 0.5,
+				"wait": true
+			},
+			{
+				"type": "flag",
+				"flag": "story_first_enter_dark_forest_hallway_21_done"
+			}
+		]
 	}
 }
